@@ -7,14 +7,13 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -37,9 +36,9 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
-import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -62,6 +61,10 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
+	@Inject
+	@Named(ENABLE_HIRE_COST_ONLY_END_RULE)
+	private boolean enabelHireCostEndRule;
+
 	@Override
 	public List<IPortTimesRecord> scheduleEndEvent(final IResource resource, final IVesselAvailability vesselAvailability, final PortTimesRecord partialPortTimesRecord, final int scheduledTime,
 			@NonNull final IPortSlot endEventSlot) {
@@ -72,7 +75,9 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		if ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 
 			if (endRequirement.isHireCostOnlyEndRule()) {
-				return scheduleOpenEndedVessel(vesselAvailability, partialPortTimesRecord, scheduledTime, endEventSlot);
+				if (enabelHireCostEndRule) {
+					return scheduleOpenEndedVessel(vesselAvailability, partialPortTimesRecord, scheduledTime, endEventSlot);
+				}
 			}
 		}
 		if (endRequirement.hasTimeRequirement()) {
@@ -110,7 +115,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), endEventSlot.getPort(),
 				vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), partialPortTimesRecord.getSlotNextVoyageOptions(prevPortSlot)).getSecond();
 		final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
-		
+
 		partialPortTimesRecord.setReturnSlotTime(endEventSlot, shortCargoReturnArrivalTime);
 		partialPortTimesRecord.setSlotDuration(endEventSlot, 0);
 
@@ -135,16 +140,14 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		if (false && extraExtent > 0) {
 			// TODO: Cacheable!
 
-//			Plan
+			// Plan
 			// Assume spot charter only (end cold, NBO ballast)
 			// Assume choice is best speed for FBO vs Base and routechoice
-			// Generate big table per vessel class of speed (to .1 knots) to LNG (mmbtu) and base fuel (MT) per day, canal lump sums. 
+			// Generate big table per vessel class of speed (to .1 knots) to LNG (mmbtu) and base fuel (MT) per day, canal lump sums.
 			// Iterate of .5 knot intervals to find best interval, reduce to .1 knots within interval (nbo speed to max speed).
 			// Find lowest cost! Prefer NBO speed DIRECT if conflict.
-//			 Assume can switch to nbo+base if needed for capacity constraint.
-			
-			
-			
+			// Assume can switch to nbo+base if needed for capacity constraint.
+
 			// >>>>>>>>>>>>>SPLIT OFF INTO OVERRIABLE METHOD
 
 			// There are some cases where we wish to evaluate the best time to
