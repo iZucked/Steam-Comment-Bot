@@ -1166,6 +1166,8 @@ public class LNGScenarioTransformer {
 			}
 
 			boolean isSoftRequired = false;
+			// Compulsary slots on nominals are considered to be unused. This marks all slots in the prompt as compulsary too.
+			// TODO: Is this really a good idea?
 			if (noNominalsInPrompt) {
 				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
 					final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
