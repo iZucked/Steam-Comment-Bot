@@ -368,6 +368,7 @@ public class PortTimesRecordMaker {
 						updateFirstRecordStartTime = false;
 					}
 
+					// FIXME: There is a conflict with this code and the min/max duration code (which assumes end event duration is 0).
 					// Delegate to the end event schedule to determine correct end time.
 					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTime, returnSlot));
 					updateEndEvent = true;
