@@ -759,6 +759,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			}
 		}
 
+		ColumnHeaderRenderer columnHeaderCenteredRenderer = new ColumnHeaderRenderer();
+		columnHeaderCenteredRenderer.setCenter(true);
+		
 		// Feed the element to be displayed
 		for (final Object selectedObject : validObjects) {
 			// Currently only CargoAllocations
@@ -768,6 +771,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
+				
 				gvc.getColumn().setText(cargoAllocation.getName());
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
@@ -776,8 +780,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
 					gvc.getColumn().setImage(pinImage);
 					gvc.getColumn().setText("");
-
-					gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				}
 			// Diff of cargo
 			} else if (selectedObject instanceof DeltaPair) {
@@ -787,7 +789,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					GridViewerHelper.configureLookAndFeel(gvc);
 					// Mark column for disposal on selection change
 					dataColumns.add(gvc);
-					gvc.getColumn().setAlignment(SWT.CENTER);
+
+					gvc.getColumn().setHeaderRenderer(columnHeaderCenteredRenderer);
 					gvc.getColumn().setText("𝚫");
 					gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 					gvc.getColumn().setWidth(100);
@@ -798,9 +801,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
-				gvc.getColumn().setAlignment(SWT.CENTER);
+				
+				gvc.getColumn().setHeaderRenderer(columnHeaderCenteredRenderer);
 				gvc.getColumn().setText("Σ");
-
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
 			} else if (selectedObject instanceof VesselEventVisit) {
@@ -810,6 +813,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
+				
 				gvc.getColumn().setText(vesselEventVisit.name());
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
