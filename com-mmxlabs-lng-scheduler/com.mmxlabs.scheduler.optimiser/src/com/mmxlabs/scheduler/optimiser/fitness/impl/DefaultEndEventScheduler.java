@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -63,6 +64,10 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
+	@Inject
+	@Named(ENABLE_HIRE_COST_ONLY_END_RULE)
+	private boolean enabelHireCostEndRule;
+
 	@Override
 	public List<IPortTimesRecord> scheduleEndEvent(final IResource resource, final IVesselAvailability vesselAvailability, final PortTimesRecord partialPortTimesRecord, final int scheduledTime,
 			@NonNull final IPortSlot endEventSlot) {
@@ -73,7 +78,9 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		if ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 
 			if (endRequirement.isHireCostOnlyEndRule()) {
-				return scheduleOpenEndedVessel(vesselAvailability, partialPortTimesRecord, scheduledTime, endEventSlot);
+				if (enabelHireCostEndRule) {
+					return scheduleOpenEndedVessel(vesselAvailability, partialPortTimesRecord, scheduledTime, endEventSlot);
+				}
 			}
 		}
 		if (endRequirement.hasTimeRequirement()) {
@@ -111,7 +118,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), endEventSlot.getPort(), vesselAvailability.getVessel().getMaxSpeed(),
 				partialPortTimesRecord.getSlotNextVoyageOptions(prevPortSlot)).getSecond();
 		final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
-		
+
 		partialPortTimesRecord.setReturnSlotTime(endEventSlot, shortCargoReturnArrivalTime);
 		partialPortTimesRecord.setSlotDuration(endEventSlot, 0);
 

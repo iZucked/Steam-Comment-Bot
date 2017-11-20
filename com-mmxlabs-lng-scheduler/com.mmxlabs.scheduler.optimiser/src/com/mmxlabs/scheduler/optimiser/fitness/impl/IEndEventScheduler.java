@@ -24,6 +24,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 public interface IEndEventScheduler {
 
 	/**
+	 * Key for injection framework to inject a boolean to enable or disable the hire cost only end rule.
+	 */
+	static final String ENABLE_HIRE_COST_ONLY_END_RULE =  "ENABLE_HIRE_COST_ONLY_END_RULE";
+	
+	/**
 	 * Given the partially complete {@link PortTimesRecord} (where the return slot is not yet defined) determine the return slot details. Always return an additional {@link IPortTimesRecord} for the
 	 * end event for correctly allocating P&L. We do this here so we can modify the end event dates correctly - for example an additional {@link IPortTimesRecord} could be returned with an extended
 	 * end event. It is not intended to return further voyages.
