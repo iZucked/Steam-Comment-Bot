@@ -200,7 +200,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 										accInt += Integer.parseInt(computeCompositeRow(compositeRow, path, col, formatter, false));
 									}
 								}
-								deltaValue = String.valueOf(accInt);
+								deltaValue = NumberFormat.getInstance().format(accInt);
 							} else if (valuePinned instanceof Long) {
 								for (CompositeRow compositeRow : compositeRows) {
 									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
@@ -209,7 +209,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 										accLong += Long.parseLong(res);
 									}
 								}
-								deltaValue = String.valueOf(accInt);
+								deltaValue = NumberFormat.getInstance().format(accLong);
 							} else if (valuePinned instanceof Double) {
 								for (CompositeRow compositeRow : compositeRows) {
 									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
@@ -218,7 +218,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 										accDouble += Double.parseDouble(res);
 									}
 								}
-								deltaValue = String.valueOf(accInt);
+								deltaValue = NumberFormat.getInstance().format(accDouble);
 							}
 						}
 						
