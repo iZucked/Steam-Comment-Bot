@@ -33,6 +33,8 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerRow;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -40,6 +42,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
@@ -213,11 +216,10 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			return null;
 		}
 
-		// @Override
-		// public void update(final ViewerCell cell) {
-		// cell.setText(getText(cell.getElement()));
-		//
-		// }
+//		@Override
+//		public void update(final ViewerCell cell) {
+//			cell.setText(getText(cell.getElement()));
+//		}
 
 	}
 
@@ -268,6 +270,37 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				}
 			}
 			return null;
+		}
+		
+		@Override
+		public void update(final ViewerCell cell) {
+			cell.setText(getText(cell.getElement()));
+			Object element = cell.getElement();
+			if (element instanceof CargoEconsReportRow) {
+				final CargoEconsReportRow row = (CargoEconsReportRow) element;
+				
+				if (columnElement instanceof DeltaPair || columnElement instanceof List<?>) {
+					String formattedValue = getText(element);
+					
+					if (row.isCost && formattedValue.contains("-")) {
+						final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/green_arrow_down.png");
+						Image cellImage = imageDescriptor.createImage();
+						cell.setImage(cellImage);
+					} else if (row.isCost && !formattedValue.contains("-")) {
+						final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/red_arrow_up.png");
+						Image cellImage = imageDescriptor.createImage();
+						cell.setImage(cellImage);
+					} else if (!row.isCost && !formattedValue.contains("-")) {
+						final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/green_arrow_up.png");
+						Image cellImage = imageDescriptor.createImage();
+						cell.setImage(cellImage);
+					} else if (!row.isCost && formattedValue.contains("-")) {
+						final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/red_arrow_down.png");
+						Image cellImage = imageDescriptor.createImage();
+						cell.setImage(cellImage);
+					}
+				}
+			}
 		}
 	}
 
