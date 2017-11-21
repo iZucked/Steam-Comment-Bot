@@ -22,6 +22,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
@@ -52,6 +53,7 @@ import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialSt
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl;
@@ -107,6 +109,99 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	
 	public void toggleDiffMode() {
 		diffMode = !diffMode;
+		
+		if (diffMode) {
+			viewer.setComparator(new ViewerComparator() {
+				@Override
+				public int compare(final Viewer viewer, Object e1, Object e2) {
+					RowGroup g1 = null;
+					RowGroup g2 = null;
+					
+					Boolean firstIsComposite = false;
+					Boolean secondIsComposite = false;
+					
+					if (e1 instanceof Row) {
+						g1 = ((Row) e1).getRowGroup();
+					}
+					
+					if (e2 instanceof Row) {
+						g2 = ((Row) e2).getRowGroup();
+					}
+					
+					if (e1 instanceof CompositeRow) {
+						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
+						e1 = ((CompositeRow) e1).getPreviousRow();
+						firstIsComposite = true;
+					}
+					
+					if (e2 instanceof CompositeRow) {
+						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
+						e2 = ((CompositeRow) e2).getPreviousRow();
+						secondIsComposite = true;
+					}
+					
+					if (e1 instanceof List) {
+						return Integer.MAX_VALUE;
+					}
+					
+					if (e2 instanceof List) {
+						return Integer.MIN_VALUE;
+					}
+					
+					int res = ((Row) e1).getName().compareTo(((Row) e2).getName());
+					return res;
+				}
+			});
+		} else {
+			final ViewerComparator vc = viewer.getComparator();
+
+			viewer.setComparator(new ViewerComparator() {
+				@Override
+				public int compare(final Viewer viewer, Object e1, Object e2) {
+					RowGroup g1 = null;
+					RowGroup g2 = null;
+					
+					Boolean firstIsComposite = false;
+					Boolean secondIsComposite = false;
+					
+					if (e1 instanceof Row) {
+						g1 = ((Row) e1).getRowGroup();
+					}
+					if (e2 instanceof Row) {
+						g2 = ((Row) e2).getRowGroup();
+					}
+					
+					if (e1 instanceof CompositeRow) {
+						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
+						e1 = ((CompositeRow) e1).getPreviousRow();
+						firstIsComposite = true;
+					}
+					if (e2 instanceof CompositeRow) {
+						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
+						e2 = ((CompositeRow) e2).getPreviousRow();
+						secondIsComposite = true;
+					}
+					
+					if (e1 instanceof List) {
+						return Integer.MAX_VALUE;
+					}
+					
+					if (e2 instanceof List) {
+						return Integer.MIN_VALUE;
+					}
+					
+					if (g1 == g2) {
+						int res = vc.compare(viewer, e1, e2);
+						return res;
+					} else {
+						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
+						final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
+						return vc.compare(viewer, rd1, rd2);
+					}
+				}
+			});
+
+		}
 	}
 	
 	@Override
