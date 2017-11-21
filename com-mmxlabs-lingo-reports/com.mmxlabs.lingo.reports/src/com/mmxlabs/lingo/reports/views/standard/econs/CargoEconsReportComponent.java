@@ -231,6 +231,18 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		private final Object columnElement;
 
+		private final static ImageDescriptor imageDescriptorSteadyArrow = Activator.getPlugin().getImageDescriptor("icons/steady_arrow.png");
+		private final static ImageDescriptor imageDescriptorGreenArrowDown = Activator.getPlugin().getImageDescriptor("icons/green_arrow_down.png");
+		private final static ImageDescriptor imageDescriptorRedArrowDown = Activator.getPlugin().getImageDescriptor("icons/red_arrow_up.png");
+		private final static ImageDescriptor imageDescriptorGreenArrowUp = Activator.getPlugin().getImageDescriptor("icons/green_arrow_up.png");
+		private final static ImageDescriptor imageDescriptorRedArrowUp = Activator.getPlugin().getImageDescriptor("icons/red_arrow_down.png");
+		
+		private final Image cellImageSteadyArrow = imageDescriptorSteadyArrow.createImage();
+		private final Image cellImageGreenArrowDown = imageDescriptorGreenArrowDown.createImage();
+		private final Image cellImageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
+		private final Image cellImageRedArrowDown = imageDescriptorRedArrowDown.createImage();
+		private final Image cellImageRedArrowUp = imageDescriptorRedArrowUp.createImage();
+
 		public FieldTypeMapperLabelProvider(final Object columnElement) {
 			this.columnElement = columnElement;
 		}
@@ -281,23 +293,23 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				
 				if (columnElement instanceof DeltaPair || columnElement instanceof List<?>) {
 					String formattedValue = getText(element);
+					List<String> nullValues = new ArrayList<>();
+					nullValues.add("$0");
+					nullValues.add("$0/mmBtu");
+					nullValues.add("0mmBtu");
 					
-					if (row.isCost && formattedValue.contains("-")) {
-						final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/green_arrow_down.png");
-						Image cellImage = imageDescriptor.createImage();
-						cell.setImage(cellImage);
-					} else if (row.isCost && !formattedValue.contains("-")) {
-						final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/red_arrow_up.png");
-						Image cellImage = imageDescriptor.createImage();
-						cell.setImage(cellImage);
-					} else if (!row.isCost && !formattedValue.contains("-")) {
-						final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/green_arrow_up.png");
-						Image cellImage = imageDescriptor.createImage();
-						cell.setImage(cellImage);
-					} else if (!row.isCost && formattedValue.contains("-")) {
-						final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/red_arrow_down.png");
-						Image cellImage = imageDescriptor.createImage();
-						cell.setImage(cellImage);
+					if (nullValues.contains(formattedValue)) {
+						cell.setImage(cellImageSteadyArrow);
+					} else {
+						if (row.isCost && formattedValue.contains("-")) {
+							cell.setImage(cellImageGreenArrowDown);
+						} else if (row.isCost && !formattedValue.contains("-")) {
+							cell.setImage(cellImageRedArrowUp);
+						} else if (!row.isCost && !formattedValue.contains("-")) {
+							cell.setImage(cellImageGreenArrowUp);
+						} else if (!row.isCost && formattedValue.contains("-")) {
+							cell.setImage(cellImageRedArrowDown);
+						}
 					}
 				}
 			}
