@@ -86,7 +86,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -126,7 +126,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -166,7 +166,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -207,7 +207,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -252,7 +252,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -295,7 +295,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -334,7 +334,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -375,7 +375,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -437,7 +437,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -485,7 +485,7 @@ public class LNGVoyageCalculatorTest {
 		routeCostProvider.setDefaultRouteCost(routeName, routeCost);
 		routeCostProvider.setRouteTransitTime(routeName, vessel, 24);
 		routeCostProvider.setRouteFuel(routeName, vessel, VesselState.Laden, 1000, 50000);
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -539,7 +539,7 @@ public class LNGVoyageCalculatorTest {
 		routeCostProvider.setRouteTransitTime(routeName, vessel, 24);
 		routeCostProvider.setRouteFuel(routeName, vessel, VesselState.Laden, 1000, 50000);
 
-		calc.calculateVoyageFuelRequirements(options, details);
+		calc.calculateVoyageFuelRequirements(options, details, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertSame(options, details.getOptions());
@@ -940,11 +940,10 @@ public class LNGVoyageCalculatorTest {
 		final IVesselBaseFuelCalculator baseFuelCalculator = createVesselBaseFuelCalculator(baseFuelCurve);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
-		
 		IHeelPriceCalculator heelPriceCalculator = Mockito.mock(IHeelPriceCalculator.class);
 		IHeelOptionSupplier supplier = Mockito.mock(IHeelOptionSupplier.class);
 		Mockito.when(supplier.getHeelPriceCalculator()).thenReturn(heelPriceCalculator);
-		
+
 		final PortSlot otherSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), supplier);
 		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
 		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
