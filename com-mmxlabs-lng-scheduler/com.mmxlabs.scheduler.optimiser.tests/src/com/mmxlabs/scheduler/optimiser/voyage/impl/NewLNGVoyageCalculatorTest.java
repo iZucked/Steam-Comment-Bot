@@ -248,7 +248,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		IVessel vessel = options.getVessel();
-		calc.calculateTravelFuelRequirements(options, details, vessel, vesselState, travelTime, OptimiserUnitConvertor.convertToInternalSpeed(speed));
+		calc.calculateTravelFuelRequirements(options, details, vessel, vesselState, travelTime, OptimiserUnitConvertor.convertToInternalSpeed(speed), Long.MAX_VALUE);
 
 		// Check results
 		final long nboRate = vessel.getNBORate(vesselState);
@@ -293,7 +293,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		IVessel vessel = options.getVessel();
-		calc.calculateTravelFuelRequirements(options, details, vessel, vesselState, travelTime, internalSpeed);
+		calc.calculateTravelFuelRequirements(options, details, vessel, vesselState, travelTime, internalSpeed, Long.MAX_VALUE);
 
 		// Expected NBO rate
 		final long nboRate = vessel.getNBORate(vesselState);
@@ -347,7 +347,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		IVessel vessel = options.getVessel();
-		calc.calculateTravelFuelRequirements(options, details, vessel, vesselState, travelTime, internalSpeed);
+		calc.calculateTravelFuelRequirements(options, details, vessel, vesselState, travelTime, internalSpeed, Long.MAX_VALUE);
 
 		// Expected NBO rate
 		final long nboRate = vessel.getNBORate(vesselState);
@@ -397,7 +397,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		IVessel vessel = options.getVessel();
-		calc.calculateTravelFuelRequirements(options, details, vessel, vesselState, travelTime, internalSpeed);
+		calc.calculateTravelFuelRequirements(options, details, vessel, vesselState, travelTime, internalSpeed, Long.MAX_VALUE);
 
 		// Expected pure base consumption rates
 		final long expectedBaseConsumption = vessel.getConsumptionRate(vesselState).getRate(internalSpeed);
@@ -438,7 +438,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		IVessel vessel = options.getVessel();
-		calc.calculateIdleFuelRequirements(options, details, vessel, vesselState, idleTime);
+		calc.calculateIdleFuelRequirements(options, details, vessel, vesselState, idleTime, Long.MAX_VALUE);
 
 		// Check results
 		final long nboIdleRate = vessel.getIdleNBORate(vesselState);
@@ -480,7 +480,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		IVessel vessel = options.getVessel();
-		calc.calculateIdleFuelRequirements(options, details, vessel, vesselState, idleTime);
+		calc.calculateIdleFuelRequirements(options, details, vessel, vesselState, idleTime, Long.MAX_VALUE);
 
 		// Check results
 		final long baseRate = vessel.getIdleConsumptionRate(vesselState);
@@ -518,7 +518,7 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime);
+		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime, Long.MAX_VALUE);
 
 		// Check results
 		final long cooldownVolume = options.getVessel().getCooldownVolume();
@@ -551,7 +551,7 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime);
+		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime, Long.MAX_VALUE);
 
 		// Check results
 		final long cooldownVolume = options.getVessel().getCooldownVolume();
@@ -584,7 +584,7 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime);
+		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
@@ -614,7 +614,7 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime);
+		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime, Long.MAX_VALUE);
 
 		// Check results
 		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));

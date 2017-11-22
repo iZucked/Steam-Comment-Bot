@@ -320,7 +320,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 							finalOptions.setAvailableTime(availableTime);
 
 							final VoyageDetails voyageDetails = new VoyageDetails(finalOptions);
-							lngVoyageCalculator.calculateVoyageFuelRequirements(finalOptions, voyageDetails);
+							lngVoyageCalculator.calculateVoyageFuelRequirements(finalOptions, voyageDetails, Long.MAX_VALUE);
 
 							// Too slow now on this route option, flip to another one.
 							if (voyageDetails.getIdleTime() > 0) {

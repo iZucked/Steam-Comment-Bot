@@ -242,7 +242,6 @@ public class VoyagePlanner {
 		} else if (thisPortSlot.getPortType() == PortType.Discharge) {
 			options.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 			options.setAllowCooldown(false);
-
 		} else if (thisPortSlot instanceof IHeelOptionConsumerPortSlot) {
 			IHeelOptionConsumerPortSlot heelOptionsPortSlot = (IHeelOptionConsumerPortSlot) thisPortSlot;
 			options.setShouldBeCold(heelOptionsPortSlot.getHeelOptionsConsumer().getExpectedTankState());
