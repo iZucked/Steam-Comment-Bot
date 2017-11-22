@@ -17,12 +17,11 @@ class ClampedSpeedVesselClass implements IVesselClass {
 	private final IVesselClass vesselClass;
 	private final int maxSpeed;
 	private final int minSpeed;
-	
+
 	public ClampedSpeedVesselClass(@NonNull final IVesselClass vesselClass, final int clampedSpeed) {
 		this.vesselClass = vesselClass;
 		this.maxSpeed = clampedSpeed;
-		this.minSpeed = vesselClass.getMinSpeed() <= clampedSpeed ? vesselClass.getMinSpeed() : clampedSpeed ;
-		
+		this.minSpeed = vesselClass.getMinSpeed() <= clampedSpeed ? vesselClass.getMinSpeed() : clampedSpeed;
 	}
 
 	@Override
@@ -61,11 +60,6 @@ class ClampedSpeedVesselClass implements IVesselClass {
 	}
 
 	@Override
-	public long getIdlePilotLightRate() {
-		return vesselClass.getIdlePilotLightRate();
-	}
-
-	@Override
 	public int getMaxSpeed() {
 		return maxSpeed;
 	}
@@ -89,11 +83,6 @@ class ClampedSpeedVesselClass implements IVesselClass {
 	public long getNBORate(final VesselState vesselState) {
 		return vesselClass.getNBORate(vesselState);
 	}
-
-//	@Override
-//	public int getBaseFuelConversionFactor() {
-//		return vesselClass.getBaseFuelConversionFactor();
-//	}
 
 	@Override
 	public int getWarmupTime() {
@@ -119,12 +108,12 @@ class ClampedSpeedVesselClass implements IVesselClass {
 	public boolean equals(Object obj) {
 		return vesselClass.equals(obj);
 	}
-	
+
 	@Override
 	public IBaseFuel getBaseFuel() {
 		return vesselClass.getBaseFuel();
 	}
-	
+
 	@Override
 	public void setBaseFuel(IBaseFuel baseFuel) {
 		vesselClass.setBaseFuel(baseFuel);
@@ -139,5 +128,4 @@ class ClampedSpeedVesselClass implements IVesselClass {
 	public long getInPortNBORate(VesselState vesselState) {
 		return vesselClass.getInPortNBORate(vesselState);
 	}
-
 }

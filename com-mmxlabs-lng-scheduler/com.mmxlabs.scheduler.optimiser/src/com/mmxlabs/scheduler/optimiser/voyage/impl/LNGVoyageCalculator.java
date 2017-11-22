@@ -262,7 +262,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, nboRequiredInMT);
 				output.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, 0);
 
-				final long idlePilotLightRateINMTPerDay = vesselClass.getIdlePilotLightRate();
+				final long idlePilotLightRateINMTPerDay = vesselClass.getPilotLightRate();
 				final long idlePilotLightConsumptionInMT = Calculator.quantityFromRateTime(idlePilotLightRateINMTPerDay, idleTimeInHours) / 24L;
 				output.setFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT, idlePilotLightConsumptionInMT);
 			} else {

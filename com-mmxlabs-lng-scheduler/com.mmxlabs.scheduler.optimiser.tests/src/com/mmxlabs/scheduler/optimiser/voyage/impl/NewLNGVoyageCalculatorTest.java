@@ -431,7 +431,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Check results
 		final long nboIdleRate = options.getVessel().getVesselClass().getIdleNBORate(vesselState);
-		final long pilotLightRate = options.getVessel().getVesselClass().getIdlePilotLightRate();
+		final long pilotLightRate = options.getVessel().getVesselClass().getPilotLightRate();
 
 		Assert.assertEquals(nboIdleRate * idleTime / 24, details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 		// Expect some pilot light
@@ -1154,7 +1154,6 @@ public class NewLNGVoyageCalculatorTest {
 		vesselClass.setIdleConsumptionRate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(10));
 
 		vesselClass.setPilotLightRate(OptimiserUnitConvertor.convertToInternalDailyRate(1));
-		vesselClass.setIdlePilotLightRate(OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 
 		vesselClass.setName("class-1");
 
