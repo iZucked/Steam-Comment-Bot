@@ -149,6 +149,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testLowLevelCosts() throws Exception {
+		
+		Assert.fail("Alex - fix me!");
+		
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
