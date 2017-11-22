@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
@@ -84,7 +85,7 @@ public class KPIReportTransformer {
 
 	public final List<RowData> transform(final Schedule schedule, final ScenarioResult scenarioResult, @Nullable final List<RowData> pinnedData) {
 		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-		
+
 		final List<RowData> output = new LinkedList<>();
 		long totalCost = 0l;
 		long totalMtMPNL = 0l;
@@ -134,8 +135,11 @@ public class KPIReportTransformer {
 		output.add(createRow(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL + totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), UPSTREAM_PNL, TYPE_COST, totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
+		if (LicenseFeatures.isPermitted("features:report-equity-book")) {
+			output.add(createRow(scenarioInstance.getName(), UPSTREAM_PNL, TYPE_COST, totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
+		}
+		// Disabled
+		// output.add(createRow(scenarioInstance.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
 
 		output.add(createRow(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), LATENESS, TYPE_TIME, totalLatenessHoursExcludingFlex, LatenessReportView.ID, true, pinnedData));
