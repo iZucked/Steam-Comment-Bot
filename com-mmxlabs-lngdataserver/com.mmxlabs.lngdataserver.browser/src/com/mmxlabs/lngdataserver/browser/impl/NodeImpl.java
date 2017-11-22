@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#getDisplayName <em>Display Name</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#getParent <em>Parent</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#isPublished <em>Published</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,6 +58,26 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	 * @ordered
 	 */
 	protected Node parent;
+
+	/**
+	 * The default value of the '{@link #isPublished() <em>Published</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPublished()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PUBLISHED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPublished() <em>Published</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPublished()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean published = PUBLISHED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -141,6 +162,27 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isPublished() {
+		return published;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPublished(boolean newPublished) {
+		boolean oldPublished = published;
+		published = newPublished;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BrowserPackage.NODE__PUBLISHED, oldPublished, published));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -150,6 +192,8 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 			if (resolve)
 				return getParent();
 			return basicGetParent();
+		case BrowserPackage.NODE__PUBLISHED:
+			return isPublished();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -167,6 +211,9 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 			return;
 		case BrowserPackage.NODE__PARENT:
 			setParent((Node) newValue);
+			return;
+		case BrowserPackage.NODE__PUBLISHED:
+			setPublished((Boolean) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -186,6 +233,9 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 		case BrowserPackage.NODE__PARENT:
 			setParent((Node) null);
 			return;
+		case BrowserPackage.NODE__PUBLISHED:
+			setPublished(PUBLISHED_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -202,6 +252,8 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 			return DISPLAY_NAME_EDEFAULT == null ? displayName != null : !DISPLAY_NAME_EDEFAULT.equals(displayName);
 		case BrowserPackage.NODE__PARENT:
 			return parent != null;
+		case BrowserPackage.NODE__PUBLISHED:
+			return published != PUBLISHED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -219,6 +271,8 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (displayName: ");
 		result.append(displayName);
+		result.append(", published: ");
+		result.append(published);
 		result.append(')');
 		return result.toString();
 	}

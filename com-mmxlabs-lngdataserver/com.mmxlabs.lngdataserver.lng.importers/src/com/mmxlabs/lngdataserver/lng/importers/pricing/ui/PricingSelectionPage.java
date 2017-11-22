@@ -43,7 +43,7 @@ public class PricingSelectionPage extends WizardPage{
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 		
 		try {
-			pricingRepository.getVersions().forEach(v -> combo.add(v));
+			pricingRepository.getVersions().forEach(v -> combo.add(v.getIdentifier()));
 		} catch (IOException e1) {
 			LOGGER.error("Error retrieving pricing versions", e1);
 		}

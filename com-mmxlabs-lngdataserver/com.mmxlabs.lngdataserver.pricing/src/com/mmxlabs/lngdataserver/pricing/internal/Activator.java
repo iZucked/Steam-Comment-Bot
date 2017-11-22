@@ -11,6 +11,7 @@ import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.pricing.PricingRepository;
+import com.mmxlabs.lngdataserver.pricing.PricingVersion;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
@@ -94,10 +95,11 @@ public class Activator extends AbstractUIPlugin {
 			LOGGER.debug("Pricing back-end ready, retrieving versions...");
 			try {
 				pricingDataRoot.getChildren().clear();
-				for (String v : pricingRepository.getVersions()) {
+				for (PricingVersion v : pricingRepository.getVersions()) {
 					Node version = BrowserFactory.eINSTANCE.createNode();
 					version.setParent(pricingDataRoot);
-					version.setDisplayName(v);
+					version.setDisplayName(v.getIdentifier());
+					version.setPublished(v.isPublished());
 					RunnerHelper.asyncExec(c -> pricingDataRoot.getChildren().add(version));
 				}
 				pricingDataRoot.setDisplayName("Pricing");

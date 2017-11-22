@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ public class PricingClient {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PricingClient.class);
 	private static final OkHttpClient CLIENT = new OkHttpClient();
 
-	public static List<String> getVersions(String baseUrl) throws IOException {
+	public static List<PricingVersion> getVersions(String baseUrl) throws IOException {
 		Request pricingRequest = new Request.Builder().url(baseUrl + "/pricing/versions").build();
 		Response pricingResponse = CLIENT.newCall(pricingRequest).execute();
 
@@ -32,7 +31,7 @@ public class PricingClient {
 		
 		return pricingVersions.stream()
 				.sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
-				.map(v -> v.getIdentifier())
+				.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished()))
 				.collect(Collectors.toList());
 	}
 	

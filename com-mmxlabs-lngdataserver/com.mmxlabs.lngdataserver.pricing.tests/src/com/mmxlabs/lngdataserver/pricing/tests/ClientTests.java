@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.mmxlabs.lngdataserver.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.pricing.PricingVersion;
 import com.mmxlabs.lngdataserver.pricing.model.Curve;
 import com.mmxlabs.lngdataserver.pricing.model.DataCurve;
 import com.mmxlabs.lngdataserver.pricing.model.ExpressionCurve;
@@ -25,13 +26,13 @@ public class ClientTests extends AbstractTest {
 	
 	@Test
 	public void getVersionTest() throws IOException {
-		List<String> result = PricingClient.getVersions(BASE_URL);
-		assertEquals("ba38bae0-4849-4a99-9449-54685b4c832d", result.get(0));
+		List<PricingVersion> result = PricingClient.getVersions(BASE_URL);
+		assertEquals("ba38bae0-4849-4a99-9449-54685b4c832d", result.get(0).getIdentifier());
 	}
 	
 	@Test
 	public void getCurvesTest() throws IOException {
-		String latest = PricingClient.getVersions(BASE_URL).get(0);
+		String latest = PricingClient.getVersions(BASE_URL).get(0).getIdentifier();
 		List<Curve> charterCurves = PricingClient.getCharterCurves(BASE_URL, latest);
 		List<Curve> currencyCurves = PricingClient.getCurrencyCurves(BASE_URL, latest);
 		List<Curve> baseFuelCurves = PricingClient.getFuelCurves(BASE_URL, latest);
@@ -49,7 +50,7 @@ public class ClientTests extends AbstractTest {
 	
 	@Test
 	public void polymorphismTest() throws IOException {
-		String latest = PricingClient.getVersions(BASE_URL).get(0);
+		String latest = PricingClient.getVersions(BASE_URL).get(0).getIdentifier();
 		DataCurve dataCurve = PricingClient.getCurve(BASE_URL, latest, "HH", DataCurve.class);
 		ExpressionCurve expressionCurve = PricingClient.getCurve(BASE_URL, latest, "REL_HH", ExpressionCurve.class);
 		List<Curve> commodityCurves = PricingClient.getCommodityCurves(BASE_URL, latest);
