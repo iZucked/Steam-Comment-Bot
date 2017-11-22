@@ -142,13 +142,4 @@ public class VesselTest {
 		vessel.setPilotLightRate(value);
 		Assert.assertEquals(value, vessel.getPilotLightRate());
 	}
-
-	@Test
-	public void testGetSetIdlePilotLightRate() {
-		final long value = 100;
-		final Vessel vessel = new Vessel("name", 123456);
-		Assert.assertEquals(0, vessel.getIdlePilotLightRate());
-		vessel.setIdlePilotLightRate(value);
-		Assert.assertEquals(value, vessel.getIdlePilotLightRate());
-	}
 }

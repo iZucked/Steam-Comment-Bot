@@ -81,13 +81,6 @@ public interface IVessel {
 	long getPilotLightRate();
 
 	/**
-	 * Returns the idle pilot light rate in MT/Day for vessels which require a pilot light when running on just LNG. Vessels with no pilot light rate can return 0.
-	 * 
-	 * @return
-	 */
-	long getIdlePilotLightRate();
-
-	/**
 	 * Returns the fastest usable speed of this vessel.
 	 * 
 	 * @return

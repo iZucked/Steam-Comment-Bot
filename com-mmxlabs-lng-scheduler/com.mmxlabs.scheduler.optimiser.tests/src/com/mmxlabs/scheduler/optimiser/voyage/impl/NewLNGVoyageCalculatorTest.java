@@ -442,7 +442,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Check results
 		final long nboIdleRate = vessel.getIdleNBORate(vesselState);
-		final long pilotLightRate = vessel.getIdlePilotLightRate();
+		final long pilotLightRate = vessel.getPilotLightRate();
 		final IBaseFuel idleBaseFuel = vessel.getIdleBaseFuel();
 		final IBaseFuel pilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 
@@ -1170,7 +1170,6 @@ public class NewLNGVoyageCalculatorTest {
 		vessel.setIdleConsumptionRate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(10));
 
 		vessel.setPilotLightRate(OptimiserUnitConvertor.convertToInternalDailyRate(1));
-		vessel.setIdlePilotLightRate(OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 
 		final IBaseFuel baseFuel = new BaseFuel(indexingContext, "test");
 		baseFuel.setEquivalenceFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));

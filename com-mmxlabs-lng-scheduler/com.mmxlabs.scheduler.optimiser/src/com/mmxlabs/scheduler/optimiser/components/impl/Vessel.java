@@ -43,8 +43,6 @@ public final class Vessel implements IVessel {
 
 	private long pilotLightRate;
 
-	private long idlePilotLightRate;
-
 	private long safetyHeel;
 
 	private int minBaseFuelConsumptionInMTPerDay;
@@ -209,15 +207,6 @@ public final class Vessel implements IVessel {
 
 	public final void setPilotLightRate(final long pilotLightRate) {
 		this.pilotLightRate = pilotLightRate;
-	}
-
-	@Override
-	public final long getIdlePilotLightRate() {
-		return idlePilotLightRate;
-	}
-
-	public final void setIdlePilotLightRate(final long idlePilotLightRate) {
-		this.idlePilotLightRate = idlePilotLightRate;
 	}
 
 	@Override

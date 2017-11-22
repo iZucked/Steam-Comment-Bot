@@ -63,11 +63,6 @@ public class ClampedSpeedVessel implements IVessel {
 	}
 
 	@Override
-	public long getIdlePilotLightRate() {
-		return vessel.getIdlePilotLightRate();
-	}
-
-	@Override
 	public int getMaxSpeed() {
 		return maxSpeed;
 	}
