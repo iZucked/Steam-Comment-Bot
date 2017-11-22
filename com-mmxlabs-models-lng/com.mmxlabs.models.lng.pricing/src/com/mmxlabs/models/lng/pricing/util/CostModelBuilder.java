@@ -22,6 +22,13 @@ public class CostModelBuilder {
 
 	public @NonNull BaseFuelCost createBaseFuelCost(@NonNull final BaseFuel baseFuel, @NonNull final BaseFuelIndex baseFuelIndex) {
 
+		for (BaseFuelCost cost : costModel.getBaseFuelCosts()) {
+			if (cost.getFuel() == baseFuel) {
+				cost.setIndex(baseFuelIndex);
+				return cost;
+			}
+		}
+
 		final BaseFuelCost baseFuelCost = PricingFactory.eINSTANCE.createBaseFuelCost();
 		baseFuelCost.setIndex(baseFuelIndex);
 		baseFuelCost.setFuel(baseFuel);
