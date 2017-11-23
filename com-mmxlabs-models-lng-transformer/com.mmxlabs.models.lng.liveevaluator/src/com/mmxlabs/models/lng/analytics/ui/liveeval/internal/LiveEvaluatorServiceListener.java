@@ -58,9 +58,11 @@ public class LiveEvaluatorServiceListener implements ILiveEvaluatorService, IPos
 				if (!scheduleModel.isDirty()) {
 					return;
 				}
-				// Run in display thread as the IScenarioInstanceEvaluator should also execute changes with the display thread using syncExec. This can cause deadlock if some other process has acquired
+				// Run in display thread as the IScenarioInstanceEvaluator should also execute
+				// changes with the display thread using syncExec. This can cause deadlock if
+				// some other process has acquired
 				// the display thread before the read/write lock.
-				RunnerHelper.syncExec(() -> ref.executeWithTryLock(() -> {
+				RunnerHelper.syncExec(() -> ref.executeWithTryLock(false, () -> {
 
 					// Do not try to re-evaluate failed evaluation
 					if (ref.isLastEvaluationFailed()) {
