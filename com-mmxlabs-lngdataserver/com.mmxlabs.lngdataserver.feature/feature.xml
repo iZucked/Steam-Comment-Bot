@@ -53,7 +53,7 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.dataserver.port-distances"
+         id="com.mmxlabs.lngdataserver.port-distances"
          download-size="0"
          install-size="0"
          version="0.0.0"

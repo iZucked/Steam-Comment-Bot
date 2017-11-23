@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.lngdataserver.distances.DistanceRepository;
+import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -54,9 +55,8 @@ public class DistancesSelectionPage extends WizardPage {
 		
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 		
-		ServiceHelper.withServiceConsumer(DistanceRepository.class, dr -> {
+		DistanceRepository dr = new DistanceRepository(BackEndUrlProvider.INSTANCE.getUrl() );
 			dr.getVersions().forEach(v -> combo.add(v));
-		});
 		
 	    combo.addSelectionListener(new SelectionListener() {
 	        public void widgetSelected(SelectionEvent e) {

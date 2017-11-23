@@ -25,8 +25,17 @@ import com.mmxlabs.lngdataserver.distances.preferences.PreferenceConstants;
 public class DistanceRepository {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DistanceRepository.class);
+	private Triple<String, String, String> auth;
 
-	private Triple<String, String, String> getServiceAuth() {
+	public DistanceRepository() {
+		auth = getUserServiceAuth();
+	}
+
+	public DistanceRepository(String url) {
+		auth = new Triple<>(url, "", "");
+	}
+
+	private Triple<String, String, String> getUserServiceAuth() {
 		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
 		final String url = prefs.getString(PreferenceConstants.P_URL_KEY);
 		if ("".equals(url)) {
@@ -58,6 +67,10 @@ public class DistanceRepository {
 			LOG.error("Error fetching versions from upstream service", e);
 			throw new RuntimeException("Error fetching versions from upstream service", e);
 		}
+	}
+
+	private Triple<String, String, String> getServiceAuth() {
+		return auth;
 	}
 
 	public @Nullable IDistanceProvider getLatestDistances() {
