@@ -149,7 +149,8 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 				}
 
 				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-				modelRecord.execute(ref -> ref.executeWithLock(() -> {
+				// 
+				modelRecord.execute(ref -> ref.executeWithLock(true, () -> {
 
 					if (importTarget != FieldChoice.CHOICE_ALL_INDICIES) {
 						doImportAction(importTarget, filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems, false);
