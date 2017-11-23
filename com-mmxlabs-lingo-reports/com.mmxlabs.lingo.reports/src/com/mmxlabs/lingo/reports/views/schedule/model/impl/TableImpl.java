@@ -335,10 +335,13 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 		
 		for (Row row: rows) {
 			if (row.isReference()) {
+				
 				Row lhs = row.getLhsLink();
 				if (lhs != null) {
+					RowGroup rowGroup = new RowGroupImpl();
 					CompositeRow compositeRow = new CompositeRowImpl();
-					
+					row.setRowGroup(rowGroup);
+					lhs.setRowGroup(rowGroup);
 					compositeRow.setPinnedRow(row);
 					compositeRow.setPreviousRow(lhs);
 					

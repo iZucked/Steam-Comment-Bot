@@ -49,7 +49,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		this.sortingSupport = sortingSupport;
 		this.filterSupport = filterSupport;
 	}
-	
+
 	private String computeCompositeRow(CompositeRow element, EMFPath[] path, GridColumn col, ICellRenderer formatter, boolean withFormatting) {
 
 		Object pinnedElement = null;
@@ -94,15 +94,15 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						int delta = ((int) valuePrevious) - ((int) valuePinned);
 
 						if (withFormatting) {
-							deltaValue = NumberFormat.getInstance().format(delta) ;
+							deltaValue = NumberFormat.getInstance().format(delta);
 						} else {
 							deltaValue = String.valueOf(delta);
 						}
 					} else if (valuePrevious instanceof Long) {
 						long delta = ((long) valuePrevious) - ((long) valuePinned);
-							
+
 						if (withFormatting) {
-							deltaValue = NumberFormat.getInstance().format(delta) ;
+							deltaValue = NumberFormat.getInstance().format(delta);
 						} else {
 							deltaValue = String.valueOf(delta);
 						}
@@ -111,7 +111,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						double epsilon = 0.0001f;
 
 						if (withFormatting) {
-							deltaValue = NumberFormat.getInstance().format(delta) ;
+							deltaValue = NumberFormat.getInstance().format(delta);
 						} else {
 							deltaValue = String.valueOf(delta);
 						}
@@ -138,7 +138,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		}
 		return "";
 	}
-	
+
 	@Override
 	public GridViewerColumn createColumn(final ColumnHandler handler) {
 		GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
@@ -159,7 +159,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		column.getColumn().setText(title);
 		column.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, formatter);
-
+		column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
 		// Set a default label provider
 		column.setLabelProvider(new CellLabelProvider() {
 
@@ -167,17 +167,17 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 			public void update(final ViewerCell cell) {
 
 				Object element = cell.getElement();
-				
+
 				if (element instanceof List) {
 					int accInt = 0;
 					long accLong = 0L;
 					double accDouble = 0.0f;
-					
+
 					if (((ArrayList<CompositeRow>) element).size() > 0) {
-						// Fetch the first element of the list and pass it through the column formatter 
+						// Fetch the first element of the list and pass it through the column formatter
 						// to get its type
 						CompositeRow firstCompositeRow = ((ArrayList<CompositeRow>) element).get(0);
-						
+
 						Object pinnedElement = null;
 						for (final EMFPath p : path) {
 							pinnedElement = p.get((EObject) firstCompositeRow.getPinnedRow());
@@ -185,10 +185,10 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 								break;
 							}
 						}
-						
+
 						String deltaValue = "";
 						Object valuePinned = formatter.getComparable(pinnedElement);
-						
+
 						// Sum the value depending on the column type
 						if (valuePinned != null) {
 							List<CompositeRow> compositeRows = (ArrayList<CompositeRow>) element;
@@ -204,7 +204,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							} else if (valuePinned instanceof Long) {
 								for (CompositeRow compositeRow : compositeRows) {
 									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
-									
+
 									if (res.compareTo("") != 0) {
 										accLong += Long.parseLong(res);
 									}
@@ -221,17 +221,17 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 								deltaValue = NumberFormat.getInstance().format(accDouble);
 							}
 						}
-						
+
 						setRowSpan(formatter, cell, pinnedElement);
 						cell.setText(deltaValue);
 						if (col.getText().equals("Scenario")) {
 							cell.setText("Δ Total");
-						} 
+						}
 					}
 				} else if (element instanceof CompositeRow) {
 					CompositeRow compositeRow = (CompositeRow) element;
 					String deltaValue = computeCompositeRow(compositeRow, path, col, formatter, true);
-					
+
 					// Get the underlying pinned element object to set the row span in the grid
 					Object pinnedElement = null;
 					for (final EMFPath p : path) {
@@ -240,7 +240,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							break;
 						}
 					}
-					
+
 					setRowSpan(formatter, cell, pinnedElement);
 
 					if (col.getText().equals("Scenario")) {

@@ -24,6 +24,8 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
@@ -108,8 +110,9 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	}
 	
 	public void toggleDiffMode() {
-		diffMode = !diffMode;
 		
+		diffMode = !diffMode;
+		colorRow();
 		if (diffMode) {
 			viewer.setComparator(new ViewerComparator() {
 				@Override
@@ -129,13 +132,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 					
 					if (e1 instanceof CompositeRow) {
-						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
+						g1 = ((CompositeRow) e1).getPinnedRow().getRowGroup();
 						e1 = ((CompositeRow) e1).getPreviousRow();
 						firstIsComposite = true;
 					}
 					
 					if (e2 instanceof CompositeRow) {
-						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
+						g2 = ((CompositeRow) e2).getPinnedRow().getRowGroup();
 						e2 = ((CompositeRow) e2).getPreviousRow();
 						secondIsComposite = true;
 					}
@@ -147,9 +150,17 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					if (e2 instanceof List) {
 						return Integer.MIN_VALUE;
 					}
-					
-					int res = ((Row) e1).getName().compareTo(((Row) e2).getName());
-					return res;
+					if (g1 != null) {
+						if (g1 == g2) {
+							return 0;
+						} else {
+							return ((Row) e1).getName().compareTo(((Row) e2).getName());
+						}
+					} 
+					else {
+						return ((Row) e1).getName().compareTo(((Row) e2).getName());
+					}
+					//return res;
 				}
 			});
 		} else {
@@ -478,6 +489,10 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				}
 			}
 		}
+	}
+	
+	public void colorRow() {
+		Grid grid = viewer.getGrid();
 	}
 
 	public void processInputs(final List<Row> result) {
