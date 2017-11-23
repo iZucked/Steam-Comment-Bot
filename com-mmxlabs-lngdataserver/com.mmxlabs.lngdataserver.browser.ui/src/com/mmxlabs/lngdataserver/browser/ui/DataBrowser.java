@@ -28,40 +28,46 @@ import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.provider.BrowserItemProviderAdapterFactory;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
-public class DataBrowser extends ViewPart{
-	
+public class DataBrowser extends ViewPart {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataBrowser.class);
 
 	private TreeViewer viewer;
 	private CompositeNode root;
-	
 
 	@Override
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.NONE);
 		viewer.setContentProvider(new DataBrowserContentProvider(createNewAdapterFactory()));
 		viewer.setLabelProvider(new DataBrowserLabelProvider(createNewAdapterFactory()));
-		
+
 		root = BrowserFactory.eINSTANCE.createCompositeNode();
 		root.setDisplayName("Versions");
 		viewer.setInput(root);
 
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				System.out.println("selection changed");
-				
+
 			}
 		});
 		getSite().setSelectionProvider(viewer);
-		
+
 		Injector injector = Guice.createInjector(new DataExtensionsModule());
 		Iterable<DataExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<DataExtensionPoint>>() {
 		}));
 		LOGGER.debug("Found " + Iterables.size(extensions) + " extensions");
-		for(DataExtensionPoint extensionPoint : extensions) {
-			root.getChildren().add(extensionPoint.getDataExtension().getDataRoot());
+		for (DataExtensionPoint extensionPoint : extensions) {
+			DataExtension dataExtension = extensionPoint.getDataExtension();
+			if (dataExtension != null) {
+				try {
+					root.getChildren().add(dataExtension.getDataRoot());
+				} catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			}
 		}
 	}
 
@@ -69,17 +75,17 @@ public class DataBrowser extends ViewPart{
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
 	}
-	
+
 	private static ComposedAdapterFactory createNewAdapterFactory() {
 		// Hook in the global registry to get other adapter factories
 		final ComposedAdapterFactory factory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		factory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		factory.addAdapterFactory(new BrowserItemProviderAdapterFactory());
 		factory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		
+
 		return factory;
 	}
-	
+
 	private static class DataExtensionsModule extends AbstractModule {
 		@Override
 		protected void configure() {
