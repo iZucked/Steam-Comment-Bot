@@ -12,6 +12,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+
 public class ModelReference implements Closeable {
 
 	private @NonNull final ModelRecord record;
@@ -28,12 +30,12 @@ public class ModelReference implements Closeable {
 	}
 
 	public static ModelReference createSharedReference(final @NonNull ModelRecord record, final @NonNull String referenceID, @NonNull final InstanceData data) {
-		ModelReference ref = new ModelReference(record, referenceID, data);
+		final ModelReference ref = new ModelReference(record, referenceID, data);
 		ref.setShared(true);
 		return ref;
 	}
 
-	private void setShared(boolean shared) {
+	private void setShared(final boolean shared) {
 		this.shared = shared;
 	}
 
@@ -95,11 +97,27 @@ public class ModelReference implements Closeable {
 	/**
 	 * Execute some code within the context of a write lock.
 	 */
-	public void executeWithLock(final Runnable hook) {
+	public void executeWithLock(final boolean disableCommandProviders, final Runnable hook) {
 		final ScenarioLock lock = getLock();
 		lock.lock();
+
 		try {
-			hook.run();
+			CommandProviderAwareEditingDomain commandProviderEditingDomain = null;
+			try {
+				if (disableCommandProviders) {
+					final EditingDomain editingDomain = getEditingDomain();
+					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+						commandProviderEditingDomain = (CommandProviderAwareEditingDomain) editingDomain;
+						commandProviderEditingDomain.setCommandProvidersDisabled(true);
+					}
+				}
+
+				hook.run();
+			} finally {
+				if (commandProviderEditingDomain != null) {
+					commandProviderEditingDomain.setCommandProvidersDisabled(false);
+				}
+			}
 		} finally {
 			lock.unlock();
 		}
@@ -108,11 +126,26 @@ public class ModelReference implements Closeable {
 	/**
 	 * Execute some code within the context of a write lock.
 	 */
-	public boolean executeWithTryLock(final Runnable hook) {
+	public boolean executeWithTryLock(final boolean disableCommandProviders, final Runnable hook) {
 		final ScenarioLock lock = getLock();
 		if (lock.tryLock()) {
 			try {
-				hook.run();
+				CommandProviderAwareEditingDomain commandProviderEditingDomain = null;
+				try {
+					if (disableCommandProviders) {
+						final EditingDomain editingDomain = getEditingDomain();
+						if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+							commandProviderEditingDomain = (CommandProviderAwareEditingDomain) editingDomain;
+							commandProviderEditingDomain.setCommandProvidersDisabled(true);
+						}
+					}
+
+					hook.run();
+				} finally {
+					if (commandProviderEditingDomain != null) {
+						commandProviderEditingDomain.setCommandProvidersDisabled(false);
+					}
+				}
 			} finally {
 				lock.unlock();
 			}
@@ -125,8 +158,10 @@ public class ModelReference implements Closeable {
 	@Override
 	protected void finalize() throws Throwable {
 		if (valid) {
-			// No need for this warning - we tend to just leave it up to the GC to free up ram now.
-			// final String msg = String.format("ModelReference from %s is valid during finalisation", referenceID);
+			// No need for this warning - we tend to just leave it up to the GC to free up
+			// ram now.
+			// final String msg = String.format("ModelReference from %s is valid during
+			// finalisation", referenceID);
 			// LOGGER.error(msg);
 			// System.err.println(msg);
 		}
@@ -141,7 +176,7 @@ public class ModelReference implements Closeable {
 		return valid;
 	}
 
-	public void setLastEvaluationFailed(boolean value) {
+	public void setLastEvaluationFailed(final boolean value) {
 		data.setLastEvaluationFailed(value);
 	}
 
