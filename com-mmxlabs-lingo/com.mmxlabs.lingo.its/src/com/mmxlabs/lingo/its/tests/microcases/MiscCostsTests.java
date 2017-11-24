@@ -90,10 +90,10 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			Assert.assertEquals(cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 6042139L);
+			Assert.assertEquals(6042139L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
 			StartEvent start = getStartEvent(vesselAvailability);
-			Assert.assertEquals(start.getGroupProfitAndLoss().getProfitAndLoss(), 0);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 6042139L);
+			Assert.assertEquals(0, start.getGroupProfitAndLoss().getProfitAndLoss());
+			Assert.assertEquals(6042139L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 
@@ -150,9 +150,8 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			Assert.assertEquals(String.format("Expected %s was %s", 6042139, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()), cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(),
-					6_042_139L - 1_000_000L);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 6_042_139L - 1_000_000L);
+			Assert.assertEquals(String.format("Expected %s was %s", 6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()),6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+			Assert.assertEquals( 6_042_139L - 1_000_000L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 
@@ -190,7 +189,8 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
 				.withVisitDuration(24) //
 				.withWindowSize(0, TimePeriod.HOURS) //
-				.withMiscCosts(1_000_000).build() //
+				.withMiscCosts(1_000_000) //
+				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
@@ -208,9 +208,8 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			Assert.assertEquals(String.format("Expected %s was %s", 6042139, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()), cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(),
-					6_042_139L - 1_000_000L);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 6_042_139L - 1_000_000L);
+			Assert.assertEquals(String.format("Expected %s was %s",  6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()),  6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+			Assert.assertEquals(6_042_139L - 1_000_000L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 

@@ -262,16 +262,19 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = initialSequences.getResources().get(0);
-				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
+				final IPortTimeWindowsRecord ptr_r0_startevent = records.get(r0).get(0);
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
-				// Assert expected result (Truncated end window)
-				// TODO: NO RETURN SLOT HERE
-				assertEquals(8, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				// Assert expected start window result
+				final ITimeWindow startEvent = ptr_r0_startevent.getFirstSlotFeasibleTimeWindow();
+				assertEquals(0, startEvent.getInclusiveStart());
+				assertEquals(8, startEvent.getExclusiveEnd());
 
-				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
-				assertEquals(24 * 11 + 24 + 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 11 + 24, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
+				final ITimeWindow returnEvent = ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot());
+
+				// Max sure the max range is correct
+				final int diff = returnEvent.getExclusiveEnd() - startEvent.getExclusiveEnd();
+				assertEquals(24 * 26, diff);
 			}
 		});
 	}
@@ -370,8 +373,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 				// FIXME: Off by one (+1)
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
-				assertEquals(24 * 90, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 90 - 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
+				assertEquals(24 * 90 + 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
+				assertEquals(24 * 90, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
 			}
 		});
 	}
@@ -423,7 +426,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void minMaxDurationPriceBasedTrimmingCargoTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
 		vesselAvailability.setMaxDuration(30);
@@ -478,6 +481,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		});
 	}
 
+	// FIXME: Bad test! (mismatching max-duration and end window, panama not used at all)
 	@Test
 	@Category({ MicroTest.class })
 	public void maxDurationWithPanamaBookingTest() {
@@ -486,12 +490,12 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		// Create vessel with a default availability
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 		// Set vessel time constraints
 		vesselAvailability.setMaxDuration(90);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.SEPTEMBER, 30, 0, 0, 0));
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.SEPTEMBER, 25, 0, 0, 0));
+		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.SEPTEMBER, 30, 0, 0, 0));
 
 		// Create cargo
 		@NonNull
@@ -526,11 +530,19 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
 
 				final IResource r0 = manipulatedSequences.getResources().get(0);
+				final IPortTimeWindowsRecord ptr_r0_startevent = records.get(r0).get(0);
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
-				// Check expectation
 				assertNotNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
-				assertEquals(24 * 90 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
+
+				final ITimeWindow startEvent = ptr_r0_startevent.getFirstSlotFeasibleTimeWindow();
+				// Should be fixed time window
+				Assert.assertEquals(startEvent.getInclusiveStart(), startEvent.getExclusiveEnd() - 1);
+				final ITimeWindow returnEvent = ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot());
+
+				// Check expectation
+				final int diff = returnEvent.getExclusiveEnd() - 1 - startEvent.getInclusiveStart();
+				assertEquals(24 * 90, diff);
 			}
 		});
 	}
