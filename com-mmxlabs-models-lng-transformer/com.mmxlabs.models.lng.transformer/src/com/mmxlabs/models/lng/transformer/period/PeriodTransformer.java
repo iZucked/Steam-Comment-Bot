@@ -1378,7 +1378,7 @@ public class PeriodTransformer {
 				vesselAvailability.getStartHeel().setPriceExpression("0.0");
 			} else {
 				vesselAvailability.getStartHeel().setMinVolumeAvailable(heelAtStart);
-				vesselAvailability.getStartHeel().setMinVolumeAvailable(heelAtStart);
+				vesselAvailability.getStartHeel().setMaxVolumeAvailable(heelAtStart);
 				vesselAvailability.getStartHeel().setCvValue(22.8);
 				vesselAvailability.getStartHeel().setPriceExpression("0.01");
 			}
