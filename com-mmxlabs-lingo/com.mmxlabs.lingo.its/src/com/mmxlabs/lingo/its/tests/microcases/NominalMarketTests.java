@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -49,9 +48,12 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCore;
 
 @SuppressWarnings("unused")
 @RunWith(value = ShiroRunner.class)
@@ -251,12 +253,12 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 			final Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
 
-			LoadSlot l1 = (LoadSlot) optCargo1.getSlots().get(0);
-			DischargeSlot d1 = (DischargeSlot) optCargo1.getSlots().get(1);
-			LoadSlot l2 = (LoadSlot) optCargo2.getSlots().get(0);
-			DischargeSlot d2 = (DischargeSlot) optCargo2.getSlots().get(1);
+			final LoadSlot l1 = (LoadSlot) optCargo1.getSlots().get(0);
+			final DischargeSlot d1 = (DischargeSlot) optCargo1.getSlots().get(1);
+			final LoadSlot l2 = (LoadSlot) optCargo2.getSlots().get(0);
+			final DischargeSlot d2 = (DischargeSlot) optCargo2.getSlots().get(1);
 
-			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
+			final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 			final ISequences initialRawSequences = dataTransformer.getInitialSequences();
 
 			// Validate the initial sequences are valid
@@ -266,7 +268,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_1, -1, l1, d2, l2, d1);
 
 			// Validate the swapped discharges are invalid
-			List<IConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateConstraintCheckers(dataTransformer, lsoSolution);
+			final List<IConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateConstraintCheckers(dataTransformer, lsoSolution);
 			Assert.assertNotNull(failedConstraintCheckers);
 
 			// Expect just this one to fail
@@ -366,9 +368,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		evaluateWithLSOTest(true, plan -> {
-			plan.getUserSettings().setShippingOnly(true);
-
+		evaluateWithLSOTest(false, plan -> {
 			plan.getUserSettings().setShippingOnly(true);
 			ScenarioUtils.setLSOStageIterations(plan, 10_000);
 			// No hill climb
@@ -382,15 +382,28 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
-			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
+			final long beforePNL = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), optimiserScenario.getScheduleModel().getSchedule()).getGroupProfitAndLoss().getProfitAndLoss();
+			scenarioRunner.run();
+			final long afterPNL = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), optimiserScenario.getScheduleModel().getSchedule()).getGroupProfitAndLoss().getProfitAndLoss();
+
+			Assert.assertTrue(beforePNL > afterPNL);
+
+			// Check correct cargoes remain and spot index has changed.
 			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// Validate the initial sequences are valid
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+			final NonOptionalSlotFitnessCore core = new NonOptionalSlotFitnessCore("");
+			scenarioToOptimiserBridge.getDataTransformer().getInjector().injectMembers(core);
+			core.init(scenarioToOptimiserBridge.getDataTransformer().getInjector().getInstance(IOptimisationData.class));
+			core.evaluate(initialRawSequences, new EvaluationState(), null);
+			Assert.assertTrue(core.getFitness() > 0);
+
 		}, null);
 	}
 
@@ -448,6 +461,12 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 			// Validate the initial sequences are valid
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+			final NonOptionalSlotFitnessCore core = new NonOptionalSlotFitnessCore("");
+			scenarioToOptimiserBridge.getDataTransformer().getInjector().injectMembers(core);
+			core.init(scenarioToOptimiserBridge.getDataTransformer().getInjector().getInstance(IOptimisationData.class));
+			core.evaluate(initialRawSequences, new EvaluationState(), null);
+			Assert.assertTrue(core.getFitness() > 0);
 		});
 	}
 

@@ -15,7 +15,6 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -94,10 +93,11 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			Assert.assertEquals(cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 6042139L);
+			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+
 			StartEvent start = getStartEvent(vesselAvailability);
-			Assert.assertEquals(start.getGroupProfitAndLoss().getProfitAndLoss(), 0);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 6042139L);
+			Assert.assertEquals(0,start.getGroupProfitAndLoss().getProfitAndLoss());
+			Assert.assertEquals(cargoPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 
@@ -110,7 +110,9 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(true).withRepositioning("1000000").build();
+				.withOptionality(true) //
+				.withRepositioning("1000000") //
+				.build();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
@@ -154,11 +156,12 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			Assert.assertEquals(String.format("Expected %s was %s", 6042139, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()), cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(),
-					6042139L);
+			
+			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+			
 			StartEvent start = getStartEvent(vesselAvailability);
-			Assert.assertEquals(start.getGroupProfitAndLoss().getProfitAndLoss(), -1_000_000);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 6042139 - 1_000_000);
+			Assert.assertEquals(-1_000_000, start.getGroupProfitAndLoss().getProfitAndLoss());
+			Assert.assertEquals(cargoPNL - 1_000_000, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 

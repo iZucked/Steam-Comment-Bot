@@ -82,6 +82,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 	}
 
 	@Before
+	@Override
 	public void constructor() throws MalformedURLException {
 
 		scenarioDataProvider = importReferenceData();
@@ -106,6 +107,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 	}
 
 	@After
+	@Override
 	public void destructor() {
 		lngScenarioModel = null;
 		scenarioModelFinder = null;
@@ -118,19 +120,12 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 		spotMarketsModelBuilder = null;
 		pricingModelBuilder = null;
 		entity = null;
-	}
-
-	private VesselAvailability createTestVesselAvailability(LocalDateTime startStart, LocalDateTime startEnd, LocalDateTime endStart) {
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withCharterRate("30000") //
-				.withStartWindow(startStart, startEnd) //
-				// .withEndWindow(endStart) //
-				.withEndWindow(null, null).build();
+		
+		super.destructor();
 	}
 
 	/**
-	 * Test: Expected time windows = [5, 1216]
+	 * Test: Expected time windows = [0, 1216]
 	 * 
 	 * @throws Exception
 	 */
@@ -198,8 +193,8 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// Tests
-				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
-				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1216);
+				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assert.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
 				// try {
 				// MicroCaseUtils.storeToFile(optimiserScenario, "alex_test");
