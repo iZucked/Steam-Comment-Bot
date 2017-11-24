@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1365,13 +1367,14 @@ public class CargoEditorMenuHelper {
 
 		final MenuManager reassignMenuManager = new MenuManager("Assign canal booking...", null);
 		menuManager.add(reassignMenuManager);
-		List<CanalBookingSlot> canalbookings = cargoModel.getCanalBookings().getCanalBookingSlots();
+		List<CanalBookingSlot> canalbookings = new ArrayList(cargoModel.getCanalBookings().getCanalBookingSlots());
 
 		IMenuManager northBoundCanalBookingMenu = new MenuManager("North Bound");
 		IMenuManager southBoundCanalBookingMenu = new MenuManager("South Bound");
 
 		reassignMenuManager.add(northBoundCanalBookingMenu);
 		reassignMenuManager.add(southBoundCanalBookingMenu);
+		Collections.sort(canalbookings, (a, b)->{return (int) b.getBookingDate().until(a.getBookingDate(), ChronoUnit.DAYS);});
 
 		for (CanalBookingSlot canalbooking : canalbookings) {
 			String canalBookingHandle = String.format("%s", canalbooking.getBookingDate());
