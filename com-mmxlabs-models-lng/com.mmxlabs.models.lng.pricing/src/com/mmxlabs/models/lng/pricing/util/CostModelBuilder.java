@@ -71,6 +71,13 @@ public class CostModelBuilder {
 			}
 		}
 
+		for (BaseFuelCost cost : costModel.getBaseFuelCosts()) {
+			if (cost.getFuel() == baseFuel) {
+				cost.setExpression(baseFuelExpression);
+				return cost;
+			}
+		}
+
 		final BaseFuelCost baseFuelCost = PricingFactory.eINSTANCE.createBaseFuelCost();
 		baseFuelCost.setExpression(baseFuelExpression);
 		baseFuelCost.setFuel(baseFuel);

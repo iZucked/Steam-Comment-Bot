@@ -143,6 +143,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.ui.ImageConstants;
 import com.mmxlabs.models.lng.ui.LngUIActivator;
 import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
@@ -930,6 +931,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
+			public String renderSetValue(final Object owner, final Object object) {
+				final String v = super.renderSetValue(owner, object);
+				if (v != "") {
+					final String suffix = getTimeWindowSuffix(owner);
+					return v + suffix;
+				}
+				return v;
+			}
+
+			@Override
 			public Comparable<?> getComparable(final Object object) {
 
 				if (object instanceof RowData) {
@@ -947,6 +958,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
 		final GridViewerColumn dischargeDateColumn = addTradesColumn(dischargeColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+
+			@Override
+			public String renderSetValue(final Object owner, final Object object) {
+				final String v = super.renderSetValue(owner, object);
+				if (v != "") {
+					final String suffix = getTimeWindowSuffix(owner);
+					return v + suffix;
+				}
+				return v;
+			}
+
 			@Override
 			public Comparable<?> getComparable(final Object object) {
 				if (object instanceof RowData) {
@@ -1161,6 +1183,34 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				super.dragStart(event);
 			}
 		});
+	}
+
+	protected String getTimeWindowSuffix(final Object owner) {
+		if (owner instanceof Slot) {
+			final Slot slot = (Slot) owner;
+			final int size = slot.getSlotOrPortWindowSize();
+			final TimePeriod units = slot.getSlotOrPortWindowSizeUnits();
+			String suffix = "h";
+			switch (units) {
+			case DAYS:
+				suffix = "d";
+				break;
+			case HOURS:
+				suffix = "h";
+				break;
+			case MONTHS:
+				suffix = "m";
+				break;
+			default:
+				return "";
+
+			}
+			if (size > 0) {
+				return String.format(" +%d%s", size, suffix);
+			}
+
+		}
+		return "";
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator,

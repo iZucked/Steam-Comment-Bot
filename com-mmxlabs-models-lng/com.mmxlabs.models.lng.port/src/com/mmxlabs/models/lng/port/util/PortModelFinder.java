@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 
@@ -53,5 +54,14 @@ public class PortModelFinder {
 			}
 		}
 		throw new IllegalStateException("Special " + capabilityGroup.getName() + " port group does not exist");
+	}
+
+	public Route findCanal(final @NonNull RouteOption option) {
+		for (final Route route : getPortModel().getRoutes()) {
+			if (option == route.getRouteOption()) {
+				return route;
+			}
+		}
+		throw new IllegalArgumentException("Unknown route");
 	}
 }

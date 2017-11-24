@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.fleet.util;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -81,16 +82,25 @@ public class FleetModelBuilder {
 	public void setRouteParameters(final Vessel vessel, @NonNull final RouteOption routeOption, final int ladenConsumptionRatePerDay, final int ballastConsumptionRatePerDay,
 			final int ladenNBORatePerDay, final int ballastNBORatePerDay, final int canalTransitHours) {
 
-		final VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
-
-		params.setRouteOption(routeOption);
+		VesselClassRouteParameters params = null;
+		for (final VesselClassRouteParameters p : vessel.getRouteParameters()) {
+			if (Objects.equals(routeOption, p.getRouteOption())) {
+				params = p;
+				break;
+			}
+		}
+		if (params == null) {
+			params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+			params.setRouteOption(routeOption);
+			vessel.getVesselOrDelegateRouteParameters().add(params);
+		}
+		
 		params.setLadenConsumptionRate(ladenConsumptionRatePerDay);
 		params.setBallastConsumptionRate(ballastConsumptionRatePerDay);
 		params.setLadenNBORate(ladenNBORatePerDay);
 		params.setBallastNBORate(ballastNBORatePerDay);
 		params.setExtraTransitTime(canalTransitHours);
 
-		vessel.getVesselOrDelegateRouteParameters().add(params);
 	}
 
 	public @NonNull Vessel createVessel(@NonNull final String vesselName, final int capacityInM3, final double fillCapacity, final double minSpeed, final double maxSpeed,
