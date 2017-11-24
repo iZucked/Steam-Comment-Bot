@@ -304,4 +304,10 @@ public class ScheduleTestModule extends AbstractModule {
 		return true;
 	}
 
+	@Provides
+	@Named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)
+	private boolean enableHireCostonlyRule() {
+		return true;
+	}
+
 }
