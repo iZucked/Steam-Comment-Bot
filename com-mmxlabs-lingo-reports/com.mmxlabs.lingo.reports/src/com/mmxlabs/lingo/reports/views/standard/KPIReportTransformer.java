@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
@@ -134,9 +135,12 @@ public class KPIReportTransformer {
 		output.add(createRow(modelRecord.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL + totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(modelRecord.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(modelRecord.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
-		output.add(createRow(modelRecord.getName(), UPSTREAM_PNL, TYPE_COST, totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
-		output.add(createRow(modelRecord.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
-
+		
+		if (LicenseFeatures.isPermitted("features:report-equity-book")) {
+			output.add(createRow(modelRecord.getName(), UPSTREAM_PNL, TYPE_COST, totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
+		}
+		// Disabled
+		// output.add(createRow(modelRecord.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(modelRecord.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true, pinnedData));
 		output.add(createRow(modelRecord.getName(), LATENESS, TYPE_TIME, totalLatenessHoursExcludingFlex, LatenessReportView.ID, true, pinnedData));
 		output.add(createRow(modelRecord.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true, pinnedData));
