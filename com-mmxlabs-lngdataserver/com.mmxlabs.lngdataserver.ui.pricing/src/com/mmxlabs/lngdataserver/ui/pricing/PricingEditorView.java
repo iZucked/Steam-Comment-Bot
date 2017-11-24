@@ -72,7 +72,7 @@ public class PricingEditorView extends ViewPart {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
-		String url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/pricing" + "?apiBaseUrl=" + encodedBackend;
+		String url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/pricing/latest" + "?apiBaseUrl=" + encodedBackend;
 		if (version != "") {
 			url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX  + "#/pricing" + "/" + version + "?apiBaseUrl=" + encodedBackend;
 		}

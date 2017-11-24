@@ -51,6 +51,10 @@ public class PricingRepository {
 		return PricingClient.getVersions(backendUrl);
 	}
 	
+	public void publishVersion(String version) throws IOException {
+		PricingClient.publishVersion(version, backendUrl);
+	}
+	
 	public void registerVersionListener(Consumer<String> versionConsumer) {
 		newVersionCallbacks.add(versionConsumer);
 	}

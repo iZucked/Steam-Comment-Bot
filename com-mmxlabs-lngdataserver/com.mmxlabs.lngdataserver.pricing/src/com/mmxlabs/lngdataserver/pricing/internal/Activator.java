@@ -81,6 +81,10 @@ public class Activator extends AbstractUIPlugin {
 		return pricingDataRoot;
 	}
 	
+	public PricingRepository getPricingRepository() {
+		return pricingRepository;
+	}
+	
 	private void loadVersions() {
 		while(!pricingRepository.isReady() && active) {
 			try {
