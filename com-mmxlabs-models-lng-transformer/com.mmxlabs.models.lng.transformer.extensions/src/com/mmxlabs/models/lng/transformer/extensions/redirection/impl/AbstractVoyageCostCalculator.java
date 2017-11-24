@@ -83,7 +83,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		final VoyageOptions voyageOptions = createVoyageOptions(vesselState, vessel, route, distance, routeCost, availableTime, from, to, cargoCV);
 		final VoyageDetails voyageDetails = new VoyageDetails(voyageOptions);
 
-		voyageCalculator.calculateVoyageFuelRequirements(voyageOptions, voyageDetails);
+		voyageCalculator.calculateVoyageFuelRequirements(voyageOptions, voyageDetails, Long.MAX_VALUE);
 
 		return voyageDetails;
 	}
