@@ -299,22 +299,24 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				
 				if (columnElement instanceof DeltaPair || columnElement instanceof List<?>) {
 					String formattedValue = getText(element);
-					List<String> nullValues = new ArrayList<>();
-					nullValues.add("$0");
-					nullValues.add("$0/mmBtu");
-					nullValues.add("0mmBtu");
-					
-					if (nullValues.contains(formattedValue)) {
-						cell.setImage(cellImageSteadyArrow);
-					} else {
-						if (row.isCost && formattedValue.contains("-")) {
-							cell.setImage(cellImageGreenArrowDown);
-						} else if (row.isCost && !formattedValue.contains("-")) {
-							cell.setImage(cellImageRedArrowUp);
-						} else if (!row.isCost && !formattedValue.contains("-")) {
-							cell.setImage(cellImageGreenArrowUp);
-						} else if (!row.isCost && formattedValue.contains("-")) {
-							cell.setImage(cellImageRedArrowDown);
+					if (formattedValue != null) {
+						List<String> nullValues = new ArrayList<>();
+						nullValues.add("$0");
+						nullValues.add("$0/mmBtu");
+						nullValues.add("0mmBtu");
+
+						if (nullValues.contains(formattedValue)) {
+							cell.setImage(cellImageSteadyArrow);
+						} else {
+							if (row.isCost && formattedValue.contains("-")) {
+								cell.setImage(cellImageGreenArrowDown);
+							} else if (row.isCost && !formattedValue.contains("-")) {
+								cell.setImage(cellImageRedArrowUp);
+							} else if (!row.isCost && !formattedValue.contains("-")) {
+								cell.setImage(cellImageGreenArrowUp);
+							} else if (!row.isCost && formattedValue.contains("-")) {
+								cell.setImage(cellImageRedArrowDown);
+							}
 						}
 					}
 				}
