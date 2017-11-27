@@ -348,9 +348,12 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					rows.addAll(table.getRows());
 					
 					if (diffMode) {
-						rows.addAll(table.getCompositeRows());
-						List<CompositeRow> aggregate = new ArrayList(table.getCompositeRows());
-						rows.add(aggregate);
+						List<CompositeRow> compositeRows = new ArrayList<>(table.getCompositeRows());
+						
+						createDeltaRowGroup(compositeRows);
+						
+						rows.addAll(compositeRows);
+						rows.add(compositeRows);
 					}
 					
 					
