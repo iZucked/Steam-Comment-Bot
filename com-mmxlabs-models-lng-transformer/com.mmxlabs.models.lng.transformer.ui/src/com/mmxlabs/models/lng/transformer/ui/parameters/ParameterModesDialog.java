@@ -7,16 +7,18 @@ package com.mmxlabs.models.lng.transformer.ui.parameters;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.ValidationStatusProvider;
 import org.eclipse.core.databinding.conversion.Converter;
 import org.eclipse.core.databinding.conversion.IConverter;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -105,6 +107,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		@NonNull
 		public final List<IValidator> validators = new LinkedList<>();
+		public final List<Consumer<IObservableValue<?>>> validatorCallbacks = new LinkedList<>();
 
 		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
 				final DataType dataType, final ChoiceData choiceData, String swtBotId, final EStructuralFeature... features) {
@@ -125,6 +128,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	@Nullable
 	private String title;
+
+	private List<ValidationStatusProvider> extraValidators = new LinkedList<>();;
 
 	public ParameterModesDialog(final Shell parentShell) {
 		super(parentShell);
@@ -173,6 +178,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		final GridLayout layout = new GridLayout(1, true);
 		form.getBody().setLayout(layout);
+
+		extraValidators.forEach(v -> dbc.addValidationStatusProvider(v));
 
 		// Add in standard options
 		final Map<OptionGroup, Composite> groupMap = new HashMap<>();
@@ -235,7 +242,6 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			}
 			advanced.setClient(area);
 		}
-
 		hookAggregatedValidationStatusWithResize();
 	}
 
@@ -314,6 +320,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Binding bindValue = dbc.bindValue(WidgetProperties.selection().observe(btn), prop.observe(option.data), stringToValueStrategy, null);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 
+		for (Consumer<IObservableValue<?>> callback : option.validatorCallbacks) {
+			callback.accept(prop.observe(option.data));
+		}
+
 		return btn;
 	}
 
@@ -367,6 +377,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			text.setToolTipText("Module not licensed");
 		}
 
+		for (Consumer<IObservableValue<?>> callback : option.validatorCallbacks) {
+			callback.accept(prop.observe(option.data));
+		}
+
 		return area;
 	}
 
@@ -377,7 +391,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Label lbl = toolkit.createLabel(area, option.label);
 		final DateTimeFormatter format = DateTimeFormatter.ofPattern("d/M/yyyy");
 
-//		final DateTimeFormatter format = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+		// final DateTimeFormatter format = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 		// Strict parse mode
 		final IValidator validator = new IValidator() {
 			@Override
@@ -386,9 +400,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					if (value.equals("") == false) {
 						try {
 							LocalDate.parse((String) value, format);
+							return ValidationStatus.ok();
 						} catch (final IllegalArgumentException e) {
-							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
+						return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 					}
 				}
 				return ValidationStatus.ok();
@@ -438,10 +453,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		};
 
 		final CompositeValidator v = new CompositeValidator();
-		v.addValidator(validator);
 		v.addValidators(option.validators);
 
-		stringToDateStrategy.setAfterGetValidator(v);
+		stringToDateStrategy.setAfterGetValidator(validator);
+		stringToDateStrategy.setAfterConvertValidator(v);
 
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
@@ -451,7 +466,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			text.setEnabled(false);
 			text.setToolTipText("Module not licensed");
 		}
-
+		for (Consumer<IObservableValue<?>> callback : option.validatorCallbacks) {
+			callback.accept(prop.observe(option.data));
+		}
 		return area;
 
 	}
@@ -471,9 +488,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					if (value.equals("") == false) {
 						try {
 							YearMonth.parse((String) value, format);
+							return ValidationStatus.ok();
 						} catch (final IllegalArgumentException e) {
-							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
+						return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 					}
 				}
 				return ValidationStatus.ok();
@@ -523,10 +541,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		};
 
 		final CompositeValidator v = new CompositeValidator();
-		v.addValidator(validator);
 		v.addValidators(option.validators);
-		stringToDateStrategy.setAfterGetValidator(v);
-
+		stringToDateStrategy.setAfterGetValidator(validator);
+		stringToDateStrategy.setAfterConvertValidator(v);
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 
@@ -534,6 +551,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			lbl.setEnabled(false);
 			text.setEnabled(false);
 			text.setToolTipText("Module not licensed");
+		}
+
+		for (Consumer<IObservableValue<?>> callback : option.validatorCallbacks) {
+			callback.accept(prop.observe(option.data));
 		}
 
 		return area;
@@ -657,6 +678,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		return option;
 	}
 
+	public void addValidationCallback(final Option option, final Consumer<IObservableValue<?>> callback) {
+		option.validatorCallbacks.add(callback);
+	}
+
 	public void addValidation(final Option option, final IValidator validator) {
 		option.validators.add(validator);
 	}
@@ -738,5 +763,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public void addValidationStatusProvider(ValidationStatusProvider validator) {
+		this.extraValidators.add(validator);
+
 	}
 }

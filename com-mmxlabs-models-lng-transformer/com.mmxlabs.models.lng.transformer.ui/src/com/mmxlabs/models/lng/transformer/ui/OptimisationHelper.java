@@ -20,7 +20,9 @@ import java.util.function.Supplier;
 import javax.management.relation.Relation;
 
 import org.apache.shiro.SecurityUtils;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -284,6 +286,61 @@ public final class OptimisationHelper {
 					optEnd.enabled = false;
 				} else {
 					enabledOptionAdded = true;
+
+					final IObservableValue[] values = new IObservableValue[2];
+
+					MultiValidator validator = new MultiValidator() {
+
+						@Override
+						protected IStatus validate() {
+							LocalDate periodStart = null;
+							if (values[0].getValue() instanceof LocalDate) {
+								periodStart = (LocalDate) values[0].getValue();
+							}
+							YearMonth periodEnd = null;
+							if (values[1].getValue() instanceof YearMonth) {
+								periodEnd = (YearMonth) values[1].getValue();
+							}
+							if (periodStart != null && periodEnd != null) {
+								if (periodEnd.atDay(1).isBefore(periodStart)) {
+									return ValidationStatus.error("Period start must be before period end");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					};
+
+					dialog.addValidation(optStart, new IValidator() {
+
+						@Override
+						public IStatus validate(final Object value) {
+							if (value instanceof LocalDate) {
+								final LocalDate startDate = (LocalDate) value;
+								if (startDate.getYear() < 2010) {
+									return ValidationStatus.error("Invalid period start date");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					});
+					dialog.addValidation(optEnd, new IValidator() {
+
+						@Override
+						public IStatus validate(final Object value) {
+							if (value instanceof YearMonth) {
+								final YearMonth endDate = (YearMonth) value;
+								if (endDate.getYear() < 2010) {
+									return ValidationStatus.error("Invalid period end date");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					});
+
+					dialog.addValidationCallback(optStart, (v) -> values[0] = v);
+					dialog.addValidationCallback(optEnd, (v) -> values[1] = v);
+
+					dialog.addValidationStatusProvider(validator);
 				}
 				optionAdded = true;
 			}
