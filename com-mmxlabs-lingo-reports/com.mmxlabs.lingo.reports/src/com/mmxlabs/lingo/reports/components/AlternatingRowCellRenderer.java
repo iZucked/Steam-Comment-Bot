@@ -282,11 +282,12 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 				gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 			} else {
 //				if (getRow() % 2 == 1) {
-					gc.setForeground(alternativeLineColour);
+					gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 //				} else {
 //					gc.setForeground(item.getParent().getLineColor());
 //				}
 			}
+			gc.setLineWidth(1);
 			gc.drawLine(getBounds().x, getBounds().y + getBounds().height, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height);
 			gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height);
 		}
