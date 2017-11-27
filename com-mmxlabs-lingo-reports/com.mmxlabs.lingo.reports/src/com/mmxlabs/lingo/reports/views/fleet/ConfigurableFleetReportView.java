@@ -595,4 +595,17 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		// Create the actual columns instances.
 		manager.addColumns(FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID, getBlockManager());
 	}
+	
+	private void createDeltaRowGroup(List<CompositeRow> compositeRows) {
+		for (CompositeRow compositeRow: compositeRows) {
+			RowGroup rowGroup = ScheduleReportFactory.eINSTANCE.createRowGroup();
+			
+			Row previousRow = compositeRow.getPreviousRow();
+			Row pinnedRow = compositeRow.getPinnedRow();
+			
+			previousRow.setRowGroup(rowGroup);
+			pinnedRow.setRowGroup(rowGroup);
+		}
+		
+	}
 }

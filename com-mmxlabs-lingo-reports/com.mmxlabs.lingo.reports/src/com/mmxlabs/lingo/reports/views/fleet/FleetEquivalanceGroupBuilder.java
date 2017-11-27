@@ -169,7 +169,14 @@ public class FleetEquivalanceGroupBuilder {
 	public String getElementKey(EObject element) {
 		if (element instanceof Sequence) {
 			Sequence sequence = (Sequence) element;
-			return "sequence-" + sequence.getName();
+			String spotIndex = "";
+			String spotMarket = "";
+			if (sequence.getCharterInMarket() != null) {
+				spotMarket = sequence.getCharterInMarket().getName();
+				spotIndex = String.valueOf(sequence.getSpotIndex());
+			}
+			
+			return "sequence-" + sequence.getName() + spotMarket + spotIndex;
 		}
 		return element.toString();
 	}
