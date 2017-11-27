@@ -523,10 +523,10 @@ public class ScheduleModelKPIUtils {
 					if (costType == ShippingCostType.ALL || costType == ShippingCostType.LNG_COSTS) {
 						// // Start event and charter out events pay for LNG use
 						if (priceBOG //
-								|| grouping instanceof StartEvent //
-								|| grouping instanceof EndEvent //
-								|| grouping instanceof VesselEventVisit //
-								|| grouping instanceof GeneratedCharterOut //
+//								|| grouping instanceof StartEvent //
+//								|| grouping instanceof EndEvent //
+//								|| grouping instanceof VesselEventVisit //
+//								|| grouping instanceof GeneratedCharterOut //
 						) {
 							total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 						}
