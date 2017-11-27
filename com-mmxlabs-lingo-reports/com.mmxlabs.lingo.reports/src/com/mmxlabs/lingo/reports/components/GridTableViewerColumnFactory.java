@@ -159,7 +159,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		column.getColumn().setText(title);
 		column.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, formatter);
-		column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
+		
 		// Set a default label provider
 		column.setLabelProvider(new CellLabelProvider() {
 

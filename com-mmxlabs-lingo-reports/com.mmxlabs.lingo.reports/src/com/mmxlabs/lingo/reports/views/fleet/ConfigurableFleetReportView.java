@@ -118,13 +118,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	public void toggleDiffMode() {
 		
 		diffMode = !diffMode;
-		colorRow();
 		if (diffMode) {
 			
 			GridColumn[] columns = viewer.getGrid().getColumns();
 			for (GridColumn column: columns) {
 				column.setCellRenderer(new AlternatingRowCellRenderer());
 			}
+			
 			viewer.setComparator(new ViewerComparator() {
 				@Override
 				public int compare(final Viewer viewer, Object e1, Object e2) {
@@ -172,18 +172,6 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 						return -1;
 					}
 					return 1;
-//					if (g1 != null) {
-//						if (g1 == g2) {
-//							return 0;
-//						} else {
-//							return ((Row) e1).getName().compareTo(((Row) e2).getName());
-//						}
-//					} 
-//					else {
-//						return ((Row) e1).getName().compareTo(((Row) e2).getName());
-//					}
-					
-					//return res;
 				}
 			});
 		} else {
