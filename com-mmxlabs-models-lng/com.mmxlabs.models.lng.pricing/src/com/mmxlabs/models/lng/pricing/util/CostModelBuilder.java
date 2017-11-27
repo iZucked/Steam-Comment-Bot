@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 
@@ -36,5 +37,12 @@ public class CostModelBuilder {
 		costModel.getBaseFuelCosts().add(baseFuelCost);
 
 		return baseFuelCost;
+	}
+
+	public void setAllExistingCooldownCosts(boolean lumpsum, @NonNull final String expression) {
+		for (CooldownPrice cost : costModel.getCooldownCosts()) {
+			cost.setExpression(expression);
+			cost.setLumpsum(lumpsum);
+		}
 	}
 }
