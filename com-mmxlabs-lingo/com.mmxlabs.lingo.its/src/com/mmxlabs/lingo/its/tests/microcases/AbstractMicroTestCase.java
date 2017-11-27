@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
+import com.mmxlabs.models.lng.pricing.util.CostModelBuilder;
 import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
@@ -55,6 +56,7 @@ public abstract class AbstractMicroTestCase {
 	protected PortModelBuilder portModelBuilder;
 	protected PortModelFinder portFinder;
 	protected CargoModelBuilder cargoModelBuilder;
+	protected CostModelBuilder costModelBuilder;
 	protected CommercialModelBuilder commercialModelBuilder;
 	protected FleetModelBuilder fleetModelBuilder;
 	protected SpotMarketsModelBuilder spotMarketsModelBuilder;
@@ -97,6 +99,7 @@ public abstract class AbstractMicroTestCase {
 		portFinder = scenarioModelFinder.getPortModelFinder();
 		spotMarketsModelFinder = scenarioModelFinder.getSpotMarketsModelFinder();
 
+		costModelBuilder = scenarioModelBuilder.getCostModelBuilder();
 		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
 		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
