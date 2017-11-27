@@ -7,10 +7,12 @@ package com.mmxlabs.lingo.reports.views.standard.econs;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -732,7 +734,42 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		}
 		return null;
 	}
+	
+	public Map<String, GridColumnGroup> createColumnGroups(Collection<Object> objects) {
+		Map<String, GridColumnGroup> columnGroups = new HashMap<>();
+		
+		for(Object object: objects) {
+			String name = "";
+			
+			if (object instanceof VesselEventVisit) {
+				name = ((VesselEventVisit) object).name();
+			}
+			
+			if (object instanceof CargoAllocation) {
+				name = ((CargoAllocation) object).getName();
+			}
+			
+			if (object instanceof DeltaPair) {
+				name = ((DeltaPair) object).getName();
+			}
 
+			if (object instanceof MarketAllocation) {
+				name = ((MarketAllocation) object).getSlot().getName();
+			}
+			
+			if (!columnGroups.containsKey(name)) {
+				final GridColumnGroup gridColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
+				gridColumnGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
+				createCenteringGroupRenderer(gridColumnGroup);
+				gridColumnGroup.setText(name);
+
+				columnGroups.put(name, gridColumnGroup);
+			}
+		}
+		
+		return columnGroups;
+	}  
+	
 	public void rebuild() {
 		Collection<Object> validObjects = new ArrayList<Object>(getSelectedObject());
 		toggleCompare();
@@ -809,19 +846,28 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		}
 
 		ColumnHeaderRenderer columnHeaderCenteredRenderer = new ColumnHeaderRenderer();
+
 		columnHeaderCenteredRenderer.setCenter(true);
 		
 		// Feed the element to be displayed
+		
+		
+		
+		Map<String, GridColumnGroup> gridColumnGroupsMap = createColumnGroups(validObjects);
 		for (final Object selectedObject : validObjects) {
 			// Currently only CargoAllocations
+
 			if (selectedObject instanceof CargoAllocation) {
 				final CargoAllocation cargoAllocation = (CargoAllocation) selectedObject;
-				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(cargoAllocation.getName());
+				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
 				
-				gvc.getColumn().setText(cargoAllocation.getName());
+				gvc.getColumn().setText("");
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
 				@Nullable
@@ -834,7 +880,10 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			} else if (selectedObject instanceof DeltaPair) {
 				final DeltaPair pair = (DeltaPair) selectedObject;
 				if (pair.second() != null || onlyDiffMode == true) {
-					final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+
+					final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(pair.getName());
+					final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
+					final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 					GridViewerHelper.configureLookAndFeel(gvc);
 					// Mark column for disposal on selection change
 					dataColumns.add(gvc);
@@ -858,12 +907,14 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			} else if (selectedObject instanceof VesselEventVisit) {
 				final VesselEventVisit vesselEventVisit = (VesselEventVisit) selectedObject;
 
-				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(vesselEventVisit.name());
+				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
 				
-				gvc.getColumn().setText(vesselEventVisit.name());
+				gvc.getColumn().setText("");
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
 				@Nullable
@@ -894,4 +945,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		// Trigger view refresh
 		ViewerHelper.refresh(viewer, true);
 	}
+	
+	private void createCenteringGroupRenderer(final GridColumnGroup gcg) {
+		final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
+		gcg.setHeaderRenderer(renderer);
+	}	
 }
