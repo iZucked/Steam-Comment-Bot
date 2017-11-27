@@ -173,10 +173,10 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					long accLong = 0L;
 					double accDouble = 0.0f;
 
-					if (((ArrayList<CompositeRow>) element).size() > 0) {
+					if (((List<CompositeRow>) element).size() > 0) {
 						// Fetch the first element of the list and pass it through the column formatter
 						// to get its type
-						CompositeRow firstCompositeRow = ((ArrayList<CompositeRow>) element).get(0);
+						CompositeRow firstCompositeRow = ((List<CompositeRow>) element).get(0);
 
 						Object pinnedElement = null;
 						for (final EMFPath p : path) {
@@ -191,7 +191,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 
 						// Sum the value depending on the column type
 						if (valuePinned != null) {
-							List<CompositeRow> compositeRows = (ArrayList<CompositeRow>) element;
+							List<CompositeRow> compositeRows = (List<CompositeRow>) element;
 							if (valuePinned instanceof Integer) {
 								for (CompositeRow compositeRow : compositeRows) {
 									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
