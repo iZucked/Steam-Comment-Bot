@@ -25,6 +25,9 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridCellRenderer;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
@@ -35,7 +38,9 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.lingo.reports.components.AlternatingRowCellRenderer;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
@@ -60,6 +65,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -114,6 +120,11 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		diffMode = !diffMode;
 		colorRow();
 		if (diffMode) {
+			
+			GridColumn[] columns = viewer.getGrid().getColumns();
+			for (GridColumn column: columns) {
+				column.setCellRenderer(new AlternatingRowCellRenderer());
+			}
 			viewer.setComparator(new ViewerComparator() {
 				@Override
 				public int compare(final Viewer viewer, Object e1, Object e2) {
@@ -150,21 +161,38 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					if (e2 instanceof List) {
 						return Integer.MIN_VALUE;
 					}
-					if (g1 != null) {
-						if (g1 == g2) {
-							return 0;
-						} else {
-							return ((Row) e1).getName().compareTo(((Row) e2).getName());
-						}
-					} 
-					else {
+					
+					if (g1 == null && g2 == null) {
 						return ((Row) e1).getName().compareTo(((Row) e2).getName());
+					} else if (g1 != null && g2 != null) {
+						return g1.hashCode() - g2.hashCode();
+					} else if (g1 == null){
+						return 1;
+					} else if (g2 == null) {
+						return -1;
 					}
+					return 1;
+//					if (g1 != null) {
+//						if (g1 == g2) {
+//							return 0;
+//						} else {
+//							return ((Row) e1).getName().compareTo(((Row) e2).getName());
+//						}
+//					} 
+//					else {
+//						return ((Row) e1).getName().compareTo(((Row) e2).getName());
+//					}
+					
 					//return res;
 				}
 			});
 		} else {
 			final ViewerComparator vc = viewer.getComparator();
+
+			GridColumn[] columns = viewer.getGrid().getColumns();
+			for (GridColumn column: columns) {
+				column.setCellRenderer(new DefaultCellRenderer());
+			}
 
 			viewer.setComparator(new ViewerComparator() {
 				@Override

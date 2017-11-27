@@ -25,6 +25,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
@@ -338,10 +339,9 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				
 				Row lhs = row.getLhsLink();
 				if (lhs != null) {
-					RowGroup rowGroup = new RowGroupImpl();
-					CompositeRow compositeRow = new CompositeRowImpl();
-					row.setRowGroup(rowGroup);
-					lhs.setRowGroup(rowGroup);
+					CompositeRow compositeRow = ScheduleReportFactory.eINSTANCE.createCompositeRow();
+					
+					
 					compositeRow.setPinnedRow(row);
 					compositeRow.setPreviousRow(lhs);
 					
