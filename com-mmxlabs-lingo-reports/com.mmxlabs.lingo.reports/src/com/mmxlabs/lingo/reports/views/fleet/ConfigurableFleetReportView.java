@@ -437,10 +437,6 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		}
 	}
 	
-	public void colorRow() {
-		Grid grid = viewer.getGrid();
-	}
-
 	public void processInputs(final List<Row> result) {
 		clearInputEquivalents();
 		for (final Row row : result) {
