@@ -80,6 +80,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnImageCenterHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -852,6 +853,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		}
 
 		ColumnHeaderRenderer columnHeaderCenteredRenderer = new ColumnHeaderRenderer();
+		ColumnImageCenterHeaderRenderer columnImageHeaderCenteredRenderer = new ColumnImageCenterHeaderRenderer();
 
 		columnHeaderCenteredRenderer.setCenter(true);
 		
@@ -873,12 +875,12 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
 				
-				gvc.getColumn().setText("");
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
 				@Nullable
 				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 					gvc.getColumn().setText("");
 				}
@@ -926,6 +928,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				@Nullable
 				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(vesselEventVisit)) {
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 				}
 			} else if (selectedObject instanceof MarketAllocation) {
@@ -944,6 +947,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				@Nullable
 				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 				}
 			}
