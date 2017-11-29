@@ -289,6 +289,14 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
 				if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences() && !scenarioComparisonService.getSelectedElements().isEmpty()) {
+					
+					if (element instanceof CompositeRow) {
+						final Row row = ((CompositeRow) element).getPreviousRow();
+						if (!scenarioComparisonService.getSelectedElements().contains(row.getSequence())) {
+							return false;
+						}
+					}
+
 					if (element instanceof Row) {
 						final Row row = (Row) element;
 						if (!scenarioComparisonService.getSelectedElements().contains(row.getSequence())) {
@@ -308,6 +316,12 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					// Only show visible rows
 					return row.isVisible();
 				}
+				
+				if (element instanceof CompositeRow) {
+					final Row row = ((CompositeRow) element).getPreviousRow();
+					return row.isVisible();
+				}
+				
 				return true;
 			}
 		} });

@@ -194,28 +194,54 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							List<CompositeRow> compositeRows = (List<CompositeRow>) element;
 							if (valuePinned instanceof Integer) {
 								for (CompositeRow compositeRow : compositeRows) {
-									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
+									boolean included = true;
+									for(ViewerFilter viewerFilter: viewer.getFilters()) {
+										included &= viewerFilter.select(viewer, null, compositeRow.getPinnedRow());
+										included &= viewerFilter.select(viewer, null, compositeRow.getPreviousRow());
+									}
+									
+									if (included) {
+										String res = computeCompositeRow(compositeRow, path, col, formatter, false);
 
-									if (res.compareTo("") != 0) {
-										accInt += Integer.parseInt(computeCompositeRow(compositeRow, path, col, formatter, false));
+										if (res.compareTo("") != 0) {
+											accInt += Integer.parseInt(computeCompositeRow(compositeRow, path, col, formatter, false));
+										}
 									}
 								}
 								deltaValue = NumberFormat.getInstance().format(accInt);
 							} else if (valuePinned instanceof Long) {
 								for (CompositeRow compositeRow : compositeRows) {
-									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
 
-									if (res.compareTo("") != 0) {
-										accLong += Long.parseLong(res);
+									boolean included = true;
+									for (ViewerFilter viewerFilter : viewer.getFilters()) {
+										included &= viewerFilter.select(viewer, null, compositeRow.getPinnedRow());
+										included &= viewerFilter.select(viewer, null, compositeRow.getPreviousRow());
+									}
+
+									if (included) {
+
+										String res = computeCompositeRow(compositeRow, path, col, formatter, false);
+										if (res.compareTo("") != 0) {
+											accLong += Long.parseLong(res);
+										}
 									}
 								}
 								deltaValue = NumberFormat.getInstance().format(accLong);
 							} else if (valuePinned instanceof Double) {
 								for (CompositeRow compositeRow : compositeRows) {
-									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
 
-									if (res.compareTo("") != 0) {
-										accDouble += Double.parseDouble(res);
+									boolean included = true;
+									for (ViewerFilter viewerFilter : viewer.getFilters()) {
+										included &= viewerFilter.select(viewer, null, compositeRow.getPinnedRow());
+										included &= viewerFilter.select(viewer, null, compositeRow.getPreviousRow());
+									}
+
+									if (included) {
+										String res = computeCompositeRow(compositeRow, path, col, formatter, false);
+
+										if (res.compareTo("") != 0) {
+											accDouble += Double.parseDouble(res);
+										}
 									}
 								}
 								deltaValue = NumberFormat.getInstance().format(accDouble);
