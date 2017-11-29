@@ -15,19 +15,38 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  */
 public class CostFormatter extends IntegerFormatter {
 
+	public enum Type {
+	    COST, REVENUE, UNSET 
+	}
+	
 	private final boolean includeUnits;
-
+	private Type type = Type.UNSET;
+	
 	public CostFormatter(final boolean includeUnits) {
 		this.includeUnits = includeUnits;
 	}
+	
+	public CostFormatter(final boolean includeUnits, Type type) {
+		this.includeUnits = includeUnits;
+		this.type = type;
+	}
 
+	public CostFormatter(Type type) {
+		this.type = type;
+		this.includeUnits = false;
+	}
+	
 	public Integer getIntValue(final Object object) {
 		if (object == null) {
 			return null;
 		}
 		return ((Number) object).intValue();
 	}
-
+	
+	public Type getType() {
+		return type;
+	}
+	
 	@Override
 	public String render(final Object object) {
 		if (object == null) {
@@ -58,7 +77,7 @@ public class CostFormatter extends IntegerFormatter {
 	public Object getFilterValue(final Object object) {
 		return getComparable(object);
 	}
-
+	
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
 		return null;

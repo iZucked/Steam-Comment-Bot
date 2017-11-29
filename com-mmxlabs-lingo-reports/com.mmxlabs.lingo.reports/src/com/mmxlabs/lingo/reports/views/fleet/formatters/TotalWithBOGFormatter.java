@@ -18,24 +18,29 @@ public class TotalWithBOGFormatter extends CostFormatter {
 		this.withBOG = withBOG;
 	}
 
+	public TotalWithBOGFormatter(boolean includeUnits, boolean withBOG, Type type) {
+		super(includeUnits, type);
+		this.withBOG = withBOG;
+	}
+
 	@Override
 	public Integer getIntValue(Object object) {
 		List<IntegerFormatter> revenueFormatters = new ArrayList<>(2);
 		List<IntegerFormatter> costFormatters = new ArrayList<>(7);
 		
-		costFormatters.add(new BaseFuelCostFormatter());
-		costFormatters.add(new HeelCostFormatter(false));
-		costFormatters.add(new CanalCostFormatter());
-		costFormatters.add(new BallastBonusFormatter(false));
-		costFormatters.add(new CharterCostFormatter(false));
-		costFormatters.add(new PortCostFormatter());
-		costFormatters.add(new RepositioningFeeFormatter(false));
+		costFormatters.add(new BaseFuelCostFormatter(CostFormatter.Type.COST));
+		costFormatters.add(new HeelCostFormatter(false, CostFormatter.Type.COST));
+		costFormatters.add(new CanalCostFormatter(CostFormatter.Type.COST));
+		costFormatters.add(new BallastBonusFormatter(false, CostFormatter.Type.COST));
+		costFormatters.add(new CharterCostFormatter(false, CostFormatter.Type.COST));
+		costFormatters.add(new PortCostFormatter(CostFormatter.Type.COST));
+		costFormatters.add(new RepositioningFeeFormatter(false, CostFormatter.Type.COST));
 		if (withBOG) {
-			costFormatters.add(new LNGCostFormatter());
+			costFormatters.add(new LNGCostFormatter(CostFormatter.Type.COST));
 		}
 
-		revenueFormatters.add(new GeneratedCharterRevenueFormatter(true, true));
-		revenueFormatters.add(new HeelRevenueFormatter(false));
+		revenueFormatters.add(new GeneratedCharterRevenueFormatter(true, true, CostFormatter.Type.REVENUE));
+		revenueFormatters.add(new HeelRevenueFormatter(false, CostFormatter.Type.REVENUE));
 
 		Integer cost = 0;
 		for (IntegerFormatter formatter : costFormatters) {

@@ -6,14 +6,19 @@ package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
 import java.util.List;
 
+import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
-public class CanalCostFormatter extends IntegerFormatter {
+public class CanalCostFormatter extends CostFormatter {
 
+	public CanalCostFormatter(Type type) {
+		super(type);
+	}
+	
 	@Override
 	public Integer getIntValue(Object object) {
 

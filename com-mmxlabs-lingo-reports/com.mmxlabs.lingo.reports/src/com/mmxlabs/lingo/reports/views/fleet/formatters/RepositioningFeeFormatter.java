@@ -22,6 +22,10 @@ public class RepositioningFeeFormatter extends CostFormatter {
 		super(includeUnits);
 	}
 
+	public RepositioningFeeFormatter(boolean includeUnits, Type type) {
+		super(includeUnits, type);
+	}
+
 	@Override
 	public Integer getIntValue(Object object) {
 

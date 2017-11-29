@@ -20,6 +20,10 @@ public class HeelRevenueFormatter extends CostFormatter {
 		super(includeUnits);
 	}
 
+	public HeelRevenueFormatter(boolean includeUnits, Type type) {
+		super(includeUnits, type);
+	}
+
 	@Override
 	public Integer getIntValue(Object object) {
 
