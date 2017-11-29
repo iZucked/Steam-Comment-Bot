@@ -9,6 +9,7 @@ package com.mmxlabs.lingo.reports.views.schedule.model;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -144,13 +145,31 @@ public interface ScheduleReportPackage extends EPackage {
 	int TABLE__SELECTED_ELEMENTS = 7;
 
 	/**
+	 * The feature id for the '<em><b>Composite Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TABLE__COMPOSITE_ROWS = 8;
+
+	/**
 	 * The number of structural features of the '<em>Table</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE_FEATURE_COUNT = 8;
+	int TABLE_FEATURE_COUNT = 9;
+
+	/**
+	 * The operation id for the '<em>Get Composite Row</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TABLE___GET_COMPOSITE_ROW = 0;
 
 	/**
 	 * The number of operations of the '<em>Table</em>' class.
@@ -159,7 +178,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE_OPERATION_COUNT = 0;
+	int TABLE_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl <em>Row</em>}' class.
@@ -593,6 +612,52 @@ public interface ScheduleReportPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CompositeRowImpl <em>Composite Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.CompositeRowImpl
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getCompositeRow()
+	 * @generated
+	 */
+	int COMPOSITE_ROW = 6;
+
+	/**
+	 * The feature id for the '<em><b>Previous Row</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_ROW__PREVIOUS_ROW = 0;
+
+	/**
+	 * The feature id for the '<em><b>Pinned Row</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_ROW__PINNED_ROW = 1;
+
+	/**
+	 * The number of structural features of the '<em>Composite Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_ROW_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Composite Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_ROW_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType <em>Change Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -600,7 +665,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getChangeType()
 	 * @generated
 	 */
-	int CHANGE_TYPE = 6;
+	int CHANGE_TYPE = 7;
 
 
 	/**
@@ -700,6 +765,27 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getTable_SelectedElements();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRows <em>Composite Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Composite Rows</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRows()
+	 * @see #getTable()
+	 * @generated
+	 */
+	EReference getTable_CompositeRows();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRow() <em>Get Composite Row</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Composite Row</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRow()
+	 * @generated
+	 */
+	EOperation getTable__GetCompositeRow();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row <em>Row</em>}'.
@@ -1105,6 +1191,38 @@ public interface ScheduleReportPackage extends EPackage {
 	EAttribute getDiffOptions_FilterSelectedSequences();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow <em>Composite Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Composite Row</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow
+	 * @generated
+	 */
+	EClass getCompositeRow();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow#getPreviousRow <em>Previous Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Previous Row</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow#getPreviousRow()
+	 * @see #getCompositeRow()
+	 * @generated
+	 */
+	EReference getCompositeRow_PreviousRow();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow#getPinnedRow <em>Pinned Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Pinned Row</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow#getPinnedRow()
+	 * @see #getCompositeRow()
+	 * @generated
+	 */
+	EReference getCompositeRow_PinnedRow();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType <em>Change Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1210,6 +1328,22 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TABLE__SELECTED_ELEMENTS = eINSTANCE.getTable_SelectedElements();
+
+		/**
+		 * The meta object literal for the '<em><b>Composite Rows</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TABLE__COMPOSITE_ROWS = eINSTANCE.getTable_CompositeRows();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Composite Row</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TABLE___GET_COMPOSITE_ROW = eINSTANCE.getTable__GetCompositeRow();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl <em>Row</em>}' class.
@@ -1517,6 +1651,32 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES = eINSTANCE.getDiffOptions_FilterSelectedSequences();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CompositeRowImpl <em>Composite Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.CompositeRowImpl
+		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getCompositeRow()
+		 * @generated
+		 */
+		EClass COMPOSITE_ROW = eINSTANCE.getCompositeRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Previous Row</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPOSITE_ROW__PREVIOUS_ROW = eINSTANCE.getCompositeRow_PreviousRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Pinned Row</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPOSITE_ROW__PINNED_ROW = eINSTANCE.getCompositeRow_PinnedRow();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType <em>Change Type</em>}' enum.

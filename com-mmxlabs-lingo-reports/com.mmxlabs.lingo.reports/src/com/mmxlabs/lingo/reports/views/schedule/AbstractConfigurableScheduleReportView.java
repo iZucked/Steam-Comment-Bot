@@ -45,6 +45,7 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialColumn;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -120,6 +121,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 			TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 			processInputs(table.getRows(), newSelectedDataProvider);
+			processCompositeInputs(table.getCompositeRows());
 
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
@@ -128,7 +130,13 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			}
 			setCurrentSelectedDataProvider(newSelectedDataProvider);
 
-			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
+			List<Object> rows = new ArrayList<>(table.getRows().size() + table.getCompositeRows().size());
+			rows.addAll(table.getRows());
+			
+			/* We don't need to diff the schedule summary for now */
+			//rows.addAll(table.getCompositeRows());
+			
+			ViewerHelper.setInput(viewer, true, rows);
 		}
 
 		@Override
@@ -189,7 +197,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 						}
 					}
 				}
-
+				
 				if (element instanceof Row) {
 					final Row row = (Row) element;
 					// Filter out reference scenario if required
@@ -206,6 +214,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 					// Only show visible rows
 					return row.isVisible();
+				} else if (element instanceof CompositeRow) {
+					return true;
 				}
 				return true;
 			}
@@ -270,7 +280,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			for (final IScheduleBasedReportInitialStateExtension ext : initialStates) {
 
 				final String viewId = ext.getViewID();
-
+				
 				// Is this a matching view definition?
 				if (viewId != null && viewId.equals(getViewSite().getId())) {
 					// Get visible columns and order
@@ -361,7 +371,14 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			}
 		}
 	}
-
+	
+	public void processCompositeInputs(final List<CompositeRow> result) {
+		for (final CompositeRow row : result) {
+			setInputEquivalents(row, row.getPinnedRow().getInputEquivalents());
+			setInputEquivalents(row, row.getPreviousRow().getInputEquivalents());
+		}
+	}
+	
 	@Override
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return builder.adaptSelectionFromWidget(selection);

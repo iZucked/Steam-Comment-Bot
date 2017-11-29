@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.components;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
@@ -23,6 +27,9 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
+import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
+import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
@@ -42,6 +49,95 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		this.viewer = viewer;
 		this.sortingSupport = sortingSupport;
 		this.filterSupport = filterSupport;
+	}
+
+	private String computeCompositeRow(CompositeRow element, EMFPath[] path, GridColumn col, ICellRenderer formatter, boolean withFormatting) {
+
+		Object pinnedElement = null;
+		Object previousElement = null;
+
+		String deltaValue = "";
+		if (element instanceof CompositeRow) {
+			Row pinnedRow = ((CompositeRow) element).getPinnedRow();
+			Row previousRow = ((CompositeRow) element).getPreviousRow();
+
+			for (final EMFPath p : path) {
+				pinnedElement = p.get((EObject) pinnedRow);
+				if (pinnedElement != null) {
+					break;
+				}
+			}
+
+			for (final EMFPath p : path) {
+				previousElement = p.get((EObject) previousRow);
+				if (previousElement != null) {
+					break;
+				}
+			}
+
+			if (pinnedElement != null && previousElement != null) {
+				Object valuePinned = formatter.getComparable(pinnedElement);
+				Object valuePrevious = formatter.getComparable(previousElement);
+
+				// Those formatters will also return -MAX_VALUE for the reference row
+				// Bug ?
+				if (formatter instanceof GeneratedCharterDaysFormatter) {
+					valuePinned = new Double(0);
+				}
+
+				if (formatter instanceof GeneratedCharterRevenueFormatter) {
+					valuePinned = new Integer(0);
+				}
+
+				deltaValue = "";
+				if (valuePrevious != null && valuePinned != null) {
+					if (valuePrevious instanceof Integer) {
+						int delta = ((int) valuePrevious) - ((int) valuePinned);
+
+						if (withFormatting) {
+							deltaValue = NumberFormat.getInstance().format(delta);
+						} else {
+							deltaValue = String.valueOf(delta);
+						}
+					} else if (valuePrevious instanceof Long) {
+						long delta = ((long) valuePrevious) - ((long) valuePinned);
+
+						if (withFormatting) {
+							deltaValue = NumberFormat.getInstance().format(delta);
+						} else {
+							deltaValue = String.valueOf(delta);
+						}
+					} else if (valuePrevious instanceof Double) {
+						double delta = ((double) valuePrevious) - ((double) valuePinned);
+						double epsilon = 0.0001f;
+
+						if (withFormatting) {
+							deltaValue = NumberFormat.getInstance().format(delta);
+						} else {
+							deltaValue = String.valueOf(delta);
+						}
+					} else if (valuePrevious instanceof String) {
+						if (col.getText().compareTo("Scenario") == 0) {
+							deltaValue = " ";
+						}
+
+						if (col.getText().compareTo("Vessel") == 0) {
+							deltaValue = (String) valuePinned;
+						}
+
+						if (col.getText().compareTo("L-ID") == 0) {
+							deltaValue = (String) valuePinned;
+						}
+
+						if (col.getText().compareTo("D-ID") == 0) {
+							deltaValue = (String) valuePinned;
+						}
+					}
+					return deltaValue;
+				}
+			}
+		}
+		return "";
 	}
 
 	@Override
@@ -72,51 +168,134 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 			public void update(final ViewerCell cell) {
 
 				Object element = cell.getElement();
-				if (element != null) {
-					boolean found = false;
+
+				if (element instanceof List) {
+					int accInt = 0;
+					long accLong = 0L;
+					double accDouble = 0.0f;
+
+					if (((List<CompositeRow>) element).size() > 0) {
+						// Fetch the first element of the list and pass it through the column formatter
+						// to get its type
+						CompositeRow firstCompositeRow = ((List<CompositeRow>) element).get(0);
+
+						Object pinnedElement = null;
+						for (final EMFPath p : path) {
+							pinnedElement = p.get((EObject) firstCompositeRow.getPinnedRow());
+							if (pinnedElement != null) {
+								break;
+							}
+						}
+
+						String deltaValue = "";
+						Object valuePinned = formatter.getComparable(pinnedElement);
+
+						// Sum the value depending on the column type
+						if (valuePinned != null) {
+							List<CompositeRow> compositeRows = (List<CompositeRow>) element;
+							if (valuePinned instanceof Integer) {
+								for (CompositeRow compositeRow : compositeRows) {
+									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
+
+									if (res.compareTo("") != 0) {
+										accInt += Integer.parseInt(computeCompositeRow(compositeRow, path, col, formatter, false));
+									}
+								}
+								deltaValue = NumberFormat.getInstance().format(accInt);
+							} else if (valuePinned instanceof Long) {
+								for (CompositeRow compositeRow : compositeRows) {
+									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
+
+									if (res.compareTo("") != 0) {
+										accLong += Long.parseLong(res);
+									}
+								}
+								deltaValue = NumberFormat.getInstance().format(accLong);
+							} else if (valuePinned instanceof Double) {
+								for (CompositeRow compositeRow : compositeRows) {
+									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
+
+									if (res.compareTo("") != 0) {
+										accDouble += Double.parseDouble(res);
+									}
+								}
+								deltaValue = NumberFormat.getInstance().format(accDouble);
+							}
+						}
+
+						setRowSpan(formatter, cell, pinnedElement);
+						cell.setText(deltaValue);
+						if (col.getText().equals("Scenario")) {
+							cell.setText("Δ Total");
+						}
+					}
+				} else if (element instanceof CompositeRow) {
+					CompositeRow compositeRow = (CompositeRow) element;
+					String deltaValue = computeCompositeRow(compositeRow, path, col, formatter, true);
+
+					// Get the underlying pinned element object to set the row span in the grid
+					Object pinnedElement = null;
 					for (final EMFPath p : path) {
-						final Object x = p.get((EObject) element);
-						if (x != null) {
-							element = x;
-							found = true;
+						pinnedElement = p.get((EObject) compositeRow.getPinnedRow());
+						if (pinnedElement != null) {
 							break;
 						}
 					}
-					if (!found) {
-						element = null;
-					}
-				}
+					setRowSpan(formatter, cell, pinnedElement);
 
-				if (element instanceof Row) {
-					for (final EMFPath p : path) {
-						final Object x = p.get((EObject) element);
-						if (x != null) {
-							element = x;
-							break;
+					if (col.getText().equals("Scenario")) {
+						cell.setText("Δ");
+					} else {
+						cell.setText(deltaValue);
+					}
+				} else {
+					if (element != null) {
+						boolean found = false;
+						for (final EMFPath p : path) {
+							final Object x = p.get((EObject) element);
+							if (x != null) {
+								element = x;
+								found = true;
+								break;
+							}
+						}
+						if (!found) {
+							element = null;
 						}
 					}
 
-				}
-				if (col.isVisible()) {
-					setRowSpan(formatter, cell, element);
-				}
-				cell.setText(formatter.render(element));
-				cell.setImage(null);
-				if (formatter instanceof IImageProvider) {
-					Image image = ((IImageProvider) formatter).getImage(cell.getElement());
-					if (image != null && !image.isDisposed()) {
-						cell.setImage(image);
+					if (element instanceof Row) {
+						for (final EMFPath p : path) {
+							final Object x = p.get((EObject) element);
+							if (x != null) {
+								element = x;
+								break;
+							}
+						}
+					}
+					if (col.isVisible()) {
+						setRowSpan(formatter, cell, element);
+					}
+					cell.setText(formatter.render(element));
+					cell.setImage(null);
+					if (formatter instanceof IImageProvider) {
+						Image image = ((IImageProvider) formatter).getImage(cell.getElement());
+						if (image != null && !image.isDisposed()) {
+							cell.setImage(image);
+						}
 					}
 				}
 			}
 		});
 
-		// But try and create an observable based label provider for better data linkage.
+		// But try and create an observable based label provider for better data
+		// linkage.
 		try {
 			if (viewer.getContentProvider() instanceof ObservableListContentProvider) {
 
 				final ObservableListContentProvider contentProvider = (ObservableListContentProvider) viewer.getContentProvider();
-				// We can pass EOperations into this, if so, throw a class cast exception to break out.
+				// We can pass EOperations into this, if so, throw a class cast exception to
+				// break out.
 
 				final IObservableMap[] attributeMap = new IObservableMap[features.length];
 

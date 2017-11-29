@@ -835,6 +835,30 @@
             handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.fleet.chartercosts">
       </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.heel_revenue">
+      </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.ballast_bonus">
+      </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.repositioning_fee">
+      </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.heel_cost">
+      </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.total_without_BOG">
+      </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.total_with_BOG">
+      </FleetBasedColumn>
    </extension>
    <extension
          point="com.mmxlabs.lingo.reports.FleetBasedReportInitialState">

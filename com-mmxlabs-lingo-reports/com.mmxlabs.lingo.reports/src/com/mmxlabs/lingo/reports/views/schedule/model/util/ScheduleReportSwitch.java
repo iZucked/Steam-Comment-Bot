@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.util;
 
+import com.mmxlabs.lingo.reports.views.schedule.model.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -110,6 +111,12 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ScheduleReportPackage.COMPOSITE_ROW: {
+				CompositeRow compositeRow = (CompositeRow)theEObject;
+				T result = caseCompositeRow(compositeRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -126,7 +133,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTable(Table object) {
-		return (T) null;
+		return null;
 	}
 
 	/**
@@ -141,7 +148,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRow(Row object) {
-		return (T) null;
+		return null;
 	}
 
 	/**
@@ -156,7 +163,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCycleGroup(CycleGroup object) {
-		return (T) null;
+		return null;
 	}
 
 	/**
@@ -171,7 +178,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRowGroup(RowGroup object) {
-		return (T) null;
+		return null;
 	}
 
 	/**
@@ -186,7 +193,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseUserGroup(UserGroup object) {
-		return (T) null;
+		return null;
 	}
 
 	/**
@@ -201,7 +208,22 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDiffOptions(DiffOptions object) {
-		return (T) null;
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Composite Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Composite Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCompositeRow(CompositeRow object) {
+		return null;
 	}
 
 	/**
@@ -217,7 +239,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 */
 	@Override
 	public T defaultCase(EObject object) {
-		return (T) null;
+		return null;
 	}
 
 } //ScheduleReportSwitch

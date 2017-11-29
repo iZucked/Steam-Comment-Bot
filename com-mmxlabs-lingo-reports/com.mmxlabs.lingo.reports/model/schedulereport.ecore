@@ -3,6 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.mmxlabs.com/models/lingo/reports/schedule/1"
     nsPrefix="reports.schedule">
   <eClassifiers xsi:type="ecore:EClass" name="Table">
+    <eOperations name="getCompositeRow" eType="#//CompositeRow"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//DiffOptions"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
@@ -18,6 +19,8 @@
         eType="#//UserGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="selectedElements" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compositeRows" upperBound="-1"
+        eType="#//CompositeRow" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Row">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
@@ -83,5 +86,9 @@
     <eLiterals name="CHARTERING" value="2"/>
     <eLiterals name="VESSEL" value="3"/>
     <eLiterals name="WIRING" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeRow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previousRow" eType="#//Row"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pinnedRow" eType="#//Row"/>
   </eClassifiers>
 </ecore:EPackage>

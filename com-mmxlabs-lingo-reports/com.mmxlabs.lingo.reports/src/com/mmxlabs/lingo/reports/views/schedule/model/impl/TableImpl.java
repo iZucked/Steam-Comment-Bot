@@ -6,8 +6,8 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -25,9 +25,11 @@ import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -45,6 +47,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getPinnedScenario <em>Pinned Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getUserGroups <em>User Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getSelectedElements <em>Selected Elements</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getCompositeRows <em>Composite Rows</em>}</li>
  * </ul>
  *
  * @generated
@@ -129,6 +132,16 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	 * @ordered
 	 */
 	protected EList<EObject> selectedElements;
+
+	/**
+	 * The cached value of the '{@link #getCompositeRows() <em>Composite Rows</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCompositeRows()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CompositeRow> compositeRows;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -312,6 +325,48 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EList<CompositeRow> getCompositeRows() {
+		if (compositeRows == null) {
+			compositeRows = new EObjectContainmentEList<CompositeRow>(CompositeRow.class, this, ScheduleReportPackage.TABLE__COMPOSITE_ROWS);
+		}
+		EList<Row> rows = getRows();
+		compositeRows.clear();
+		
+		for (Row row: rows) {
+			if (row.isReference()) {
+				
+				Row lhs = row.getLhsLink();
+				if (lhs != null) {
+					CompositeRow compositeRow = ScheduleReportFactory.eINSTANCE.createCompositeRow();
+					
+					
+					compositeRow.setPinnedRow(row);
+					compositeRow.setPreviousRow(lhs);
+					
+					compositeRows.add(compositeRow);
+				}
+			}
+		}
+		
+		return compositeRows;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CompositeRow getCompositeRow() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -342,6 +397,8 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				return ((InternalEList<?>)getRowGroups()).basicRemove(otherEnd, msgs);
 			case ScheduleReportPackage.TABLE__USER_GROUPS:
 				return ((InternalEList<?>)getUserGroups()).basicRemove(otherEnd, msgs);
+			case ScheduleReportPackage.TABLE__COMPOSITE_ROWS:
+				return ((InternalEList<?>)getCompositeRows()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -371,6 +428,8 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				return getUserGroups();
 			case ScheduleReportPackage.TABLE__SELECTED_ELEMENTS:
 				return getSelectedElements();
+			case ScheduleReportPackage.TABLE__COMPOSITE_ROWS:
+				return getCompositeRows();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -414,6 +473,10 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				getSelectedElements().clear();
 				getSelectedElements().addAll((Collection<? extends EObject>)newValue);
 				return;
+			case ScheduleReportPackage.TABLE__COMPOSITE_ROWS:
+				getCompositeRows().clear();
+				getCompositeRows().addAll((Collection<? extends CompositeRow>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -450,6 +513,9 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 			case ScheduleReportPackage.TABLE__SELECTED_ELEMENTS:
 				getSelectedElements().clear();
 				return;
+			case ScheduleReportPackage.TABLE__COMPOSITE_ROWS:
+				getCompositeRows().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -478,8 +544,24 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				return userGroups != null && !userGroups.isEmpty();
 			case ScheduleReportPackage.TABLE__SELECTED_ELEMENTS:
 				return selectedElements != null && !selectedElements.isEmpty();
+			case ScheduleReportPackage.TABLE__COMPOSITE_ROWS:
+				return compositeRows != null && !compositeRows.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ScheduleReportPackage.TABLE___GET_COMPOSITE_ROW:
+				return getCompositeRow();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //TableImpl

@@ -16,6 +16,7 @@ public class CargoEconsReportRow {
 	public String unit;
 	public ICellRenderer formatter;
 	public IColorProvider colourProvider;
-
+	public boolean isCost;
+	
 	public Supplier<String> tooltip;
 }

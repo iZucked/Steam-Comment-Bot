@@ -72,6 +72,7 @@ import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
@@ -165,17 +166,42 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			// Wrap around with group sorter
 			viewer.setComparator(new ViewerComparator() {
 				@Override
-				public int compare(final Viewer viewer, final Object e1, final Object e2) {
+				public int compare(final Viewer viewer, Object e1, Object e2) {
 					RowGroup g1 = null;
 					RowGroup g2 = null;
+					
+					Boolean firstIsComposite = false;
+					Boolean secondIsComposite = false;
+					
 					if (e1 instanceof Row) {
 						g1 = ((Row) e1).getRowGroup();
 					}
 					if (e2 instanceof Row) {
 						g2 = ((Row) e2).getRowGroup();
 					}
+					
+					if (e1 instanceof CompositeRow) {
+						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
+						e1 = ((CompositeRow) e1).getPreviousRow();
+						firstIsComposite = true;
+					}
+					if (e2 instanceof CompositeRow) {
+						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
+						e2 = ((CompositeRow) e2).getPreviousRow();
+						secondIsComposite = true;
+					}
+					
+					if (e1 instanceof List) {
+						return Integer.MAX_VALUE;
+					}
+					
+					if (e2 instanceof List) {
+						return Integer.MIN_VALUE;
+					}
+					
 					if (g1 == g2) {
-						return vc.compare(viewer, e1, e2);
+						int res = vc.compare(viewer, e1, e2);
+						return res;
 					} else {
 						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
 						final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);

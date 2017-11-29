@@ -70,6 +70,12 @@ public class CargoEconsReport extends ViewPart {
 				ContextInjectionFactory.invoke(component, SetEconsMarginMode.class, componentContext, actionCtx, null);
 			});
 			getViewSite().getActionBars().getMenuManager().add(volumeBySell);
+
+			final Action showOnlyDiff = new RunnableAction("Δ", () -> {
+				component.toggleShowDiffOnly();
+				component.rebuild();
+			});
+			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
 		}
 
 		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);

@@ -80,6 +80,15 @@ public interface ScheduleReportFactory extends EFactory {
 	DiffOptions createDiffOptions();
 
 	/**
+	 * Returns a new object of class '<em>Composite Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Composite Row</em>'.
+	 * @generated
+	 */
+	CompositeRow createCompositeRow();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
