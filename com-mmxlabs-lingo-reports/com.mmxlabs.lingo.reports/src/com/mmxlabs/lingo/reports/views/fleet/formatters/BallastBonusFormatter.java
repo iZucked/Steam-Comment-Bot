@@ -21,7 +21,11 @@ public class BallastBonusFormatter extends CostFormatter {
 	public BallastBonusFormatter(boolean includeUnits) {
 		super(includeUnits);
 	}
-
+	
+	public BallastBonusFormatter(boolean includeUnits, Type type) {
+		super(includeUnits, type);
+	}
+	
 	@Override
 	public Integer getIntValue(Object object) {
 

@@ -21,7 +21,11 @@ public class HeelCostFormatter extends CostFormatter {
 	public HeelCostFormatter(boolean includeUnits) {
 		super(includeUnits);
 	}
-
+	
+	public HeelCostFormatter(boolean includeUnits, Type type ) {
+		super(includeUnits, type);
+	}
+	
 	@Override
 	public Integer getIntValue(Object object) {
 
