@@ -17,7 +17,7 @@ public class DiffAction extends Action {
 	private final ConfigurableFleetReportView reportView;
 	
 	public DiffAction(final Viewer viewer, ConfigurableFleetReportView reportView) {
-		super("Show diff");
+		super("Show only diff");
 		this.viewer = viewer;
 		this.reportView = reportView;
 

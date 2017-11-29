@@ -116,9 +116,12 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	}
 	
 	public void toggleDiffMode() {
-		
 		diffMode = !diffMode;
-		if (diffMode) {
+	}
+	
+	public void setDiffMode(boolean enabled) {
+		
+		if (enabled) {
 			
 			GridColumn[] columns = viewer.getGrid().getColumns();
 			for (GridColumn column: columns) {
@@ -327,21 +330,31 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					elementCollector.endCollecting();
 					
 					int numberOfRow = table.getRows().size();
-					if (diffMode) {
+					if (pinned != null) {
 						numberOfRow += table.getCompositeRows().size() + 1;
 					}
 					
 					List<Object> rows = new ArrayList<>(numberOfRow);
 					
-					rows.addAll(table.getRows());
+					if ((pinned != null && !diffMode) || (pinned == null)) {
+						rows.addAll(table.getRows());
+					}
 					
-					if (diffMode) {
+					if (pinned != null) {
 						List<CompositeRow> compositeRows = new ArrayList<>(table.getCompositeRows());
 						
 						createDeltaRowGroup(compositeRows);
 						
 						rows.addAll(compositeRows);
 						rows.add(compositeRows);
+						
+						if(diffMode) {
+							setDiffMode(false);
+						} else {
+							setDiffMode(true);
+						}
+					} else {
+						setDiffMode(false);
 					}
 					
 					
