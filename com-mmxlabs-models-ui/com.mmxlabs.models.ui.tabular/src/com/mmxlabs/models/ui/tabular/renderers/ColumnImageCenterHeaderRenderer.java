@@ -28,7 +28,7 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
  * @since 2.0.0
  */
 @SuppressWarnings("restriction")
-public class ColumnHeaderRenderer extends GridHeaderRenderer {
+public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 
 	int leftMargin = 6;
 
@@ -118,18 +118,20 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 		}
 
 		int x = leftMargin;
-
 		if (column.getImage() != null) {
-			int y = bottomMargin;
+			Rectangle bounds = getBounds();
+			Rectangle imgBounds = column.getImage().getBounds();
+			bounds.width /= 2;
+			bounds.width -= imgBounds.width / 2;
+			bounds.height /= 2;
+			bounds.height -= imgBounds.height / 2;
 
-			if (column.getHeaderControl() == null) {
-				y = getBounds().y + pushedDrawingOffset + getBounds().height - bottomMargin - column.getImage().getBounds().height;
-			}
+			x = bounds.width > 0 ? bounds.x + bounds.width : bounds.x;
+			int y = bounds.height > 0 ? bounds.y + bounds.height : bounds.y;
 
-			gc.drawImage(column.getImage(), getBounds().x + x + pushedDrawingOffset, y);
-			x += column.getImage().getBounds().width + imageSpacing;
+			gc.drawImage(column.getImage(), x, y);
 		}
-
+		x = leftMargin;
 		int width = getBounds().width - x;
 
 		if (column.getSort() == SWT.NONE) {
