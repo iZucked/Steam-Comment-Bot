@@ -122,115 +122,15 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	public void setDiffMode(boolean enabled) {
 		
 		if (enabled) {
-			
 			GridColumn[] columns = viewer.getGrid().getColumns();
 			for (GridColumn column: columns) {
 				column.setCellRenderer(new AlternatingRowCellRenderer());
 			}
-			
-			viewer.setComparator(new ViewerComparator() {
-				@Override
-				public int compare(final Viewer viewer, Object e1, Object e2) {
-					RowGroup g1 = null;
-					RowGroup g2 = null;
-					
-					Boolean firstIsComposite = false;
-					Boolean secondIsComposite = false;
-					
-					if (e1 instanceof Row) {
-						g1 = ((Row) e1).getRowGroup();
-					}
-					
-					if (e2 instanceof Row) {
-						g2 = ((Row) e2).getRowGroup();
-					}
-					
-					if (e1 instanceof CompositeRow) {
-						g1 = ((CompositeRow) e1).getPinnedRow().getRowGroup();
-						e1 = ((CompositeRow) e1).getPreviousRow();
-						firstIsComposite = true;
-					}
-					
-					if (e2 instanceof CompositeRow) {
-						g2 = ((CompositeRow) e2).getPinnedRow().getRowGroup();
-						e2 = ((CompositeRow) e2).getPreviousRow();
-						secondIsComposite = true;
-					}
-					
-					if (e1 instanceof List) {
-						return Integer.MAX_VALUE;
-					}
-					
-					if (e2 instanceof List) {
-						return Integer.MIN_VALUE;
-					}
-					
-					if (g1 == null && g2 == null) {
-						return ((Row) e1).getName().compareTo(((Row) e2).getName());
-					} else if (g1 != null && g2 != null) {
-						return g1.hashCode() - g2.hashCode();
-					} else if (g1 == null){
-						return 1;
-					} else if (g2 == null) {
-						return -1;
-					}
-					return 1;
-				}
-			});
 		} else {
-			final ViewerComparator vc = viewer.getComparator();
-
 			GridColumn[] columns = viewer.getGrid().getColumns();
 			for (GridColumn column: columns) {
 				column.setCellRenderer(new DefaultCellRenderer());
 			}
-
-			viewer.setComparator(new ViewerComparator() {
-				@Override
-				public int compare(final Viewer viewer, Object e1, Object e2) {
-					RowGroup g1 = null;
-					RowGroup g2 = null;
-					
-					Boolean firstIsComposite = false;
-					Boolean secondIsComposite = false;
-					
-					if (e1 instanceof Row) {
-						g1 = ((Row) e1).getRowGroup();
-					}
-					if (e2 instanceof Row) {
-						g2 = ((Row) e2).getRowGroup();
-					}
-					
-					if (e1 instanceof CompositeRow) {
-						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
-						e1 = ((CompositeRow) e1).getPreviousRow();
-						firstIsComposite = true;
-					}
-					if (e2 instanceof CompositeRow) {
-						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
-						e2 = ((CompositeRow) e2).getPreviousRow();
-						secondIsComposite = true;
-					}
-					
-					if (e1 instanceof List) {
-						return Integer.MAX_VALUE;
-					}
-					
-					if (e2 instanceof List) {
-						return Integer.MIN_VALUE;
-					}
-					
-					if (g1 == g2) {
-						int res = vc.compare(viewer, e1, e2);
-						return res;
-					} else {
-						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
-						final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
-						return vc.compare(viewer, rd1, rd2);
-					}
-				}
-			});
-
 		}
 	}
 	
