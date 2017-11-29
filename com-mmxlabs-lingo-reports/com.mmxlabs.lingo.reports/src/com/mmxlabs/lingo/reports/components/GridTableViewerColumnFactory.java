@@ -16,8 +16,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapCellLabelProvider;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.DataVisualizer;
@@ -25,6 +27,7 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
@@ -39,11 +42,25 @@ import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
+import com.mmxlabs.lingo.reports.internal.Activator;
+
 public class GridTableViewerColumnFactory implements IColumnFactory {
 
 	private final GridTableViewer viewer;
 	private final EObjectTableViewerSortingSupport sortingSupport;
 	private final EObjectTableViewerFilterSupport filterSupport;
+
+	private static final ImageDescriptor imageDescriptorSteadyArrow = Activator.getPlugin().getImageDescriptor("icons/steady_arrow.png");
+	private static final ImageDescriptor imageDescriptorGreenArrowDown = Activator.getPlugin().getImageDescriptor("icons/green_arrow_down.png");
+	private static final ImageDescriptor imageDescriptorGreenArrowUp = Activator.getPlugin().getImageDescriptor("icons/green_arrow_up.png");
+	private static final ImageDescriptor imageDescriptorRedArrowDown = Activator.getPlugin().getImageDescriptor("icons/red_arrow_down.png");
+	private static final ImageDescriptor imageDescriptorRedArrowUp = Activator.getPlugin().getImageDescriptor("icons/red_arrow_up.png");
+
+	private static final Image cellImageSteadyArrow = imageDescriptorSteadyArrow.createImage();
+	private static final Image cellImageGreenArrowDown = imageDescriptorGreenArrowDown.createImage();
+	private static final Image cellImageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
+	private static final Image cellImageRedArrowDown = imageDescriptorRedArrowDown.createImage();
+	private static final Image cellImageRedArrowUp = imageDescriptorRedArrowUp.createImage();
 
 	public GridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport) {
 		this.viewer = viewer;
@@ -164,6 +181,56 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		// Set a default label provider
 		column.setLabelProvider(new CellLabelProvider() {
 
+			public void setIndicationArrow(ViewerCell cell, ICellRenderer formatter) {
+				if (formatter instanceof CostFormatter) {
+					CostFormatter costFormatter = (CostFormatter) formatter;
+					CostFormatter.Type typeFormatter = costFormatter.getType();
+					if (typeFormatter == CostFormatter.Type.COST) {
+						// pin pin !
+						String formattedValue = cell.getText();
+						if (formattedValue != null) {
+							List<String> nullValues = new ArrayList<>();
+							nullValues.add("0");
+							nullValues.add("$0");
+							nullValues.add("$0/mmBtu");
+							nullValues.add("0mmBtu");
+
+							if (nullValues.contains(formattedValue)) {
+								cell.setImage(cellImageSteadyArrow);
+							} else {
+								if (formattedValue.contains("-")) {
+									cell.setImage(cellImageGreenArrowDown);
+								} else if (!formattedValue.contains("-")) {
+									cell.setImage(cellImageRedArrowUp);
+								}
+							}
+						}
+
+					} else if (typeFormatter == CostFormatter.Type.REVENUE) {
+						// pon pon !
+						String formattedValue = cell.getText();
+						if (formattedValue != null) {
+							List<String> nullValues = new ArrayList<>();
+							nullValues.add("0");
+							nullValues.add("$0");
+							nullValues.add("$0/mmBtu");
+							nullValues.add("0mmBtu");
+
+							if (nullValues.contains(formattedValue)) {
+								cell.setImage(cellImageSteadyArrow);
+							} else {
+								if (formattedValue.contains("-")) {
+
+									cell.setImage(cellImageGreenArrowUp);
+								} else if (!formattedValue.contains("-")) {
+									cell.setImage(cellImageRedArrowDown);
+								}
+							}
+						}
+					}
+				}
+			}
+			
 			@Override
 			public void update(final ViewerCell cell) {
 
@@ -254,6 +321,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						if (col.getText().equals("Scenario")) {
 							cell.setText("Δ Total");
 						}
+						setIndicationArrow(cell, formatter);
 					}
 				} else if (element instanceof CompositeRow) {
 					CompositeRow compositeRow = (CompositeRow) element;
@@ -269,11 +337,12 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					}
 
 					setRowSpan(formatter, cell, pinnedElement);
-
+					
 					if (col.getText().equals("Scenario")) {
 						cell.setText("Δ");
 					} else {
 						cell.setText(deltaValue);
+						setIndicationArrow(cell, formatter);
 					}
 				} else {
 					if (element != null) {
@@ -408,6 +477,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 	@Override
 	public void destroy(final GridViewerColumn gvc) {
 		// filterSupport.removeColum(column);
+
 		if (gvc != null) {
 			if (sortingSupport != null) {
 				sortingSupport.removeSortableColumn(gvc.getColumn());

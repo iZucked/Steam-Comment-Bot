@@ -171,7 +171,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		if (pinImage != null) {
 			pinImage.dispose();
 			pinImage = null;
-
 		}
 		selectedObjects.clear();
 		for (final Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener> p : selectionListeners) {
