@@ -63,14 +63,5 @@
          </constraints>
       </constraintProvider>
    </extension>
-   <extension
-         id="com.mmxlabs.models.mmxcore.validation.bindings"
-         point="org.eclipse.emf.validation.constraintBindings">
-      <clientContext
-            default="true"
-            id="com.mmxlabs.models.mmxcore.validation.clientContext2">
-         <enablement></enablement>
-      </clientContext>
-   </extension>
 
 </plugin>
