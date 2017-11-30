@@ -63,7 +63,7 @@ import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
-import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 enum SetMode {
@@ -617,7 +617,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	}
 }
 
-class MultiFeatureAction extends AbstractMenuAction {
+class MultiFeatureAction extends AbstractMenuLockableAction {
 	public static final SetMode[] MODES = new SetMode[] { SetMode.REPLACE, SetMode.INTERSECTION, SetMode.UNION };
 
 	private SetMode mode = SetMode.REPLACE;

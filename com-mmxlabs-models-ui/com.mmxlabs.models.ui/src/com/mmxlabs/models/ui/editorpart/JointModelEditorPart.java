@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -20,9 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -57,9 +54,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -93,6 +88,7 @@ import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDirtyListener;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -124,6 +120,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	private final Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
 
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
+
+	private final @NonNull IScenarioDirtyListener scenarioDirtyListener = new IScenarioDirtyListener() {
+
+		@Override
+		public void dirtyStatusChanged(@NonNull ModelRecord modelRecord, boolean isDirty) {
+			firePropertyChange(PROP_DIRTY);
+		}
+	};
 
 	/**
 	 * This caches reference value provider providers.
@@ -208,7 +212,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	 */
 	private CommandProviderAwareEditingDomain editingDomain;
 	private AdapterFactory adapterFactory;
-	private BasicCommandStack commandStack;
 
 	public JointModelEditorPart() {
 	}
@@ -369,12 +372,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			scenarioInstance = instance;
 			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(scenarioInstance);
 
-			commandStack = (BasicCommandStack) modelReference.getCommandStack();
 			editingDomain = (CommandProviderAwareEditingDomain) modelReference.getEditingDomain();
 
 			adapterFactory = editingDomain.getAdapterFactory();
 
 			modelReference.getLock().addLockListener(lockedAdapter);
+			modelRecord.addDirtyListener(scenarioDirtyListener);
 
 			scenarioNameAttributeAdapter = new AdapterImpl() {
 				@Override
@@ -403,19 +406,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			this.rootObject = root;
 
 			{
-				commandStack.addCommandStackListener(new CommandStackListener() {
-
-					@Override
-					public void commandStackChanged(final EventObject event) {
-						RunnerHelper.asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								firePropertyChange(IEditorPart.PROP_DIRTY);
-							}
-						});
-					}
-				});
-
 				// initialise extensions
 				contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, rootObject);
 
@@ -425,7 +415,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			site.setSelectionProvider(this);
 
 			validationContextStack.clear();
-			
+
 			boolean relaxedValidation = false;
 			final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
 			if (scenarioInstance != null) {
@@ -581,12 +571,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	protected void cleanup() {
 
-		if (modelReference != null) {
-			modelReference.getLock().removeLockListener(lockedAdapter);
-			modelReference.close();
-			modelReference = null;
-		}
-
 		if (scenarioNameAttributeAdapter != null) {
 			scenarioInstance.eAdapters().remove(scenarioNameAttributeAdapter);
 			this.scenarioNameAttributeAdapter = null;
@@ -616,7 +600,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		}
 
 		this.adapterFactory = null;
-		this.commandStack = null;
 		this.currentViewer = null;
 		this.editingDomain = null;
 		this.editorSelection = null;
@@ -626,15 +609,20 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		this.selectionChangedListeners.clear();
 
 		this.rootObject = null;
-		if (this.modelReference != null) {
-			this.modelReference.close();
-			this.modelReference = null;
+		if (modelReference != null) {
+			modelReference.getLock().removeLockListener(lockedAdapter);
+			modelReference.close();
+			modelReference = null;
 		}
+		if (modelRecord != null) {
+			modelRecord.removeDirtyListener(scenarioDirtyListener);
+		}
+		this.modelRecord = null;
 	}
 
 	@Override
 	public boolean isDirty() {
-		return commandStack != null && commandStack.isSaveNeeded();
+		return modelReference != null && modelReference.isDirty();
 	}
 
 	@Override
