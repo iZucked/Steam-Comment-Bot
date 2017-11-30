@@ -91,8 +91,15 @@ public abstract class AbstractReportBuilder {
 		for (final Object obj : selection) {
 			if (obj instanceof CompositeRow) {
 				CompositeRow compositeRow = (CompositeRow) obj;
-				adaptedSelection.add(((EObject) compositeRow.getPinnedRow()).eGet(ScheduleReportPackage.Literals.ROW__TARGET));
-				adaptedSelection.add(((EObject) compositeRow.getPreviousRow()).eGet(ScheduleReportPackage.Literals.ROW__TARGET));
+				
+				if (compositeRow.getPinnedRow() != null) {
+					adaptedSelection.add(compositeRow.getPinnedRow());
+				}
+				
+				if (compositeRow.getPreviousRow() != null) {
+					adaptedSelection.add(compositeRow.getPreviousRow());
+				}
+				
 			} else {
 				if (obj instanceof EObject) {
 					adaptedSelection.add(((EObject) obj).eGet(ScheduleReportPackage.Literals.ROW__TARGET));

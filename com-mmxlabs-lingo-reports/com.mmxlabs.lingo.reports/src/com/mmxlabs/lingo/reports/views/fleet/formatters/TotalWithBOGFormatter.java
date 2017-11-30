@@ -22,7 +22,7 @@ public class TotalWithBOGFormatter extends CostFormatter {
 		super(includeUnits, type);
 		this.withBOG = withBOG;
 	}
-
+    
 	@Override
 	public Integer getIntValue(Object object) {
 		List<IntegerFormatter> revenueFormatters = new ArrayList<>(2);

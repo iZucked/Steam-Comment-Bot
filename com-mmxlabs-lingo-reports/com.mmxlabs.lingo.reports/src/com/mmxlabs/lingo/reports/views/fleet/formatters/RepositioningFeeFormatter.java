@@ -35,13 +35,13 @@ public class RepositioningFeeFormatter extends CostFormatter {
 		int repositioningFee = 0;
 		if (object instanceof Sequence) {
 			Sequence sequence = (Sequence) object;
-			repositioningFee += getBallastBonus(sequence);
+			repositioningFee += getRepositioningFee(sequence);
 		} else if (object instanceof List) {
 			List objects = (List) object;
 			if (objects.size() > 0) {
 				for (Object o : objects) {
 					if (o instanceof Sequence) {
-					repositioningFee += getBallastBonus((Sequence) o);
+					repositioningFee += getRepositioningFee((Sequence) o);
 					}
 				}
 			}
@@ -50,7 +50,7 @@ public class RepositioningFeeFormatter extends CostFormatter {
 		return repositioningFee;
 	}
 
-	private int getBallastBonus(Sequence sequence) {
+	private int getRepositioningFee(Sequence sequence) {
 		int repositioningFee = 0;
 		for (Event evt : sequence.getEvents()) {
 			if (evt instanceof VesselEventVisit) {

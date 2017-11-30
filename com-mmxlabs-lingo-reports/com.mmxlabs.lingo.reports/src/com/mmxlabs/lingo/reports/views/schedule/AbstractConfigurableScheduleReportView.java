@@ -130,7 +130,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			}
 			setCurrentSelectedDataProvider(newSelectedDataProvider);
 
-			List<Object> rows = new ArrayList<>(table.getRows().size() + table.getCompositeRows().size());
+			List<Object> rows = new ArrayList<>(table.getRows().size());
 			rows.addAll(table.getRows());
 			
 			/* We don't need to diff the schedule summary for now */
@@ -374,8 +374,15 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	
 	public void processCompositeInputs(final List<CompositeRow> result) {
 		for (final CompositeRow row : result) {
-			setInputEquivalents(row, row.getPinnedRow().getInputEquivalents());
-			setInputEquivalents(row, row.getPreviousRow().getInputEquivalents());
+			if (row != null) {
+				if (row.getPinnedRow() != null) {
+					setInputEquivalents(row, row.getPinnedRow().getInputEquivalents());
+				}
+
+				if (row.getPreviousRow() != null) {
+					setInputEquivalents(row, row.getPreviousRow().getInputEquivalents());
+				}
+			}
 		}
 	}
 	
