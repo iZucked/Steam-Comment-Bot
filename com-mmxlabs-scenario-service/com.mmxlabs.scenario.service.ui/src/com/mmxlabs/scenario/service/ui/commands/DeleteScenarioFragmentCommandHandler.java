@@ -12,6 +12,7 @@ import java.util.Map;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.ecore.EObject;
@@ -53,16 +54,23 @@ public class DeleteScenarioFragmentCommandHandler extends AbstractHandler {
 						if (element instanceof ScenarioFragment) {
 							final ScenarioFragment fragment = (ScenarioFragment) element;
 							final ScenarioInstance instance = fragment.getScenarioInstance();
-							
+
 							@NonNull
 							ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 							modelRecord.execute(ref -> {
 								final EditingDomain domain = ref.getEditingDomain();
 								final EObject fragmentObject = fragment.getFragment();
 								if (fragmentObject != null) {
-									domain.getCommandStack().execute(DeleteCommand.create(domain, fragmentObject));
+									Command cmd = RemoveCommand.create(domain, fragmentObject);
+									assert cmd.canExecute();
+									if (fragment.isUseCommandStack()) {
+										domain.getCommandStack().execute(cmd);
+									} else {
+										cmd.execute();
+										ref.setDirty();
+									}
 								}
-							});					
+							});
 						}
 					}
 				}

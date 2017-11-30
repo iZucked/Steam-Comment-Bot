@@ -35,6 +35,8 @@ public final class InstanceData {
 
 	private final @NonNull BasicCommandStack commandStack;
 
+	private boolean externallyChanged = false;
+
 	private final @NonNull ScenarioLock lock;
 
 	private boolean isDirty;
@@ -62,7 +64,7 @@ public final class InstanceData {
 			@Override
 			public void commandStackChanged(final EventObject event) {
 				// TODO: Determine Undo/Redo
-				final boolean newDirty = commandStack.isSaveNeeded();
+				final boolean newDirty = commandStack.isSaveNeeded() | externallyChanged;
 				final boolean fireEvent = newDirty != isDirty;
 				isDirty = newDirty;
 				if (fireEvent) {
@@ -87,7 +89,7 @@ public final class InstanceData {
 	}
 
 	public boolean isDirty() {
-		return isDirty;
+		return commandStack.isSaveNeeded() | isDirty | externallyChanged;
 	}
 
 	public EditingDomain getEditingDomain() {
@@ -96,6 +98,8 @@ public final class InstanceData {
 
 	public void save() throws IOException {
 		saveCallback.accept(this);
+		externallyChanged = false;
+		assert !commandStack.isSaveNeeded();
 		final boolean newDirty = commandStack.isSaveNeeded();
 		final boolean fireEvent = newDirty != isDirty;
 		isDirty = newDirty;
@@ -103,10 +107,16 @@ public final class InstanceData {
 			fireDirtyEvent(isDirty);
 		}
 	}
-	
+
+	/**
+	 * Mark dirty status changed outside of command stack
+	 * 
+	 * @param newDirty
+	 */
 	public void setDirty(boolean newDirty) {
+		externallyChanged |= newDirty;
 		final boolean fireEvent = newDirty != isDirty;
-		isDirty = newDirty;
+		isDirty = newDirty | externallyChanged;
 		if (fireEvent) {
 			fireDirtyEvent(isDirty);
 		}

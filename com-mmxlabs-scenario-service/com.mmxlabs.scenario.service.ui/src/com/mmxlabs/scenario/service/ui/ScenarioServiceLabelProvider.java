@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
@@ -112,6 +113,19 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 						return showDisabledImage;
 					}
 				}
+			}
+			else if (object instanceof ScenarioFragment) {
+//				ScenarioFragment scenarioFragment = (ScenarioFragment) object;
+//				final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
+//				if (service != null) {
+//					if (service.isPinned((ScenarioFragment) object)) {
+//						return pinImage;
+//					} else if (service.isSelected((ScenarioFragment) object)) {
+//						return showEnabledImage;
+//					} else {
+//						return showDisabledImage;
+//					}
+//				}
 			}
 			return null;
 		case ScenarioServiceNavigator.COLUMN_NAME_IDX:

@@ -5,12 +5,12 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.Iterator;
+import java.util.concurrent.ForkJoinPool;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
@@ -54,27 +53,11 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 						if (element instanceof ScenarioInstance) {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
 
-							@NonNull
-							ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+							final @NonNull ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 							ScenarioServiceModelUtils.closeReferences(scenarioInstance);
-							modelRecord.revert();
-							
-//							@Nullable
-//							ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("RevertScenarioCommandHandler");
-//							if (modelReference != null) {
-//								try {
-//									modelReference.executeWithLock(() -> {
-//
-////										// Set to false
-////										scenarioInstance.setDirty(false);
-////										// Force unload.
-////										scenarioInstance.unload();
-//									});
-//								} finally {
-//									modelReference.close();
-//								}
-//							}
+							// Run revert in BG to free up UI thread
+							ForkJoinPool.commonPool().submit(() -> modelRecord.revert());
 						}
 					}
 				}
