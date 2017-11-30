@@ -30,12 +30,8 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.PortCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.RepositioningFeeFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.TotalWithBOGFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.models.lng.schedule.EventGrouping;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardFleetColumnFactory implements IFleetColumnFactory {

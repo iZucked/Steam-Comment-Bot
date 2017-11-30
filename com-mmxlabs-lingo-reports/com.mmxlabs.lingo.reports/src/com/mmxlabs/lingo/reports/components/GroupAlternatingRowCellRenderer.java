@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.components;
 
-import org.eclipse.jface.viewers.Viewer;
+import java.util.List;
+
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -59,7 +60,6 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 
 	private TextLayout textLayout;
 	private GridItem item;
-	private int lastGroupIndex = 0;
 	
 	/**
 	 * {@inheritDoc}

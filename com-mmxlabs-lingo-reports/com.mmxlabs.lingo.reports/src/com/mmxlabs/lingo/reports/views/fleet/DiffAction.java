@@ -4,13 +4,9 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet;
 
-import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.Viewer;
-
-import com.mmxlabs.lingo.reports.components.ColumnHandler;
-
 
 public class DiffAction extends Action {
 	private final Viewer viewer;
