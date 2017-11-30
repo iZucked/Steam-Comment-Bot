@@ -140,22 +140,22 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 			final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
 
 			// TODO: Maybe separate API here?
-			startBatchCommand();
+			try {
+				startBatchCommand();
 
-			for (final IModelCommandProvider provider : providers) {
-				final Command addition = provider.provideAdditionalBeforeCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
-				if (addition != null) {
-					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
-					if (addition.canExecute() == false) {
-						log.error("Provided command was not executable, ignoring it", new RuntimeException());
-					} else {
+				for (final IModelCommandProvider provider : providers) {
+					final Command addition = provider.provideAdditionalBeforeCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
+					if (addition != null) {
+						log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
+						if (addition.canExecute() == false) {
+							log.error("Provided command was not executable", new RuntimeException());
+						}
 						wrapper.append(addition);
 					}
 				}
+			} finally {
+				endBatchCommand();
 			}
-
-			endBatchCommand();
-
 			wrapper.append(normal);
 
 			startBatchCommand();
@@ -165,10 +165,9 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 					if (addition.canExecute() == false) {
-						log.error("Provided command was not executable, ignoring it", new RuntimeException());
-					} else {
-						wrapper.append(addition);
+						log.error("Provided command was not executable", new RuntimeException());
 					}
+					wrapper.append(addition);
 				}
 			}
 

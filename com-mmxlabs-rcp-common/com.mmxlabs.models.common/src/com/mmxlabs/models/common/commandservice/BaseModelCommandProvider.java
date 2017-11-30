@@ -23,11 +23,10 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 /**
  * A typical command provider. Specialise by implementing
  * <ol>
- * <li>
- * {@link #shouldHandleAddition(Object)}</li>
- * <li> {@link #shouldHandleDeletion(Object)}</li>
- * <li> {@link #objectAdded(EditingDomain, MMXRootObject, Object)}</li>
- * <li> {@link #objectDeleted(EditingDomain, MMXRootObject, Object)}</li>
+ * <li>{@link #shouldHandleAddition(Object)}</li>
+ * <li>{@link #shouldHandleDeletion(Object)}</li>
+ * <li>{@link #objectAdded(EditingDomain, MMXRootObject, Object)}</li>
+ * <li>{@link #objectDeleted(EditingDomain, MMXRootObject, Object)}</li>
  * <ol>
  * 
  * @author hinton
@@ -71,9 +70,12 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 	}
 
 	protected Command unwrap(final CompoundCommand cc) {
-		final Command result = cc.unwrap();
-		if (result == UnexecutableCommand.INSTANCE)
+		if (cc.isEmpty()) {
 			return null;
+		}
+		final Command result = cc.unwrap();
+//		if (result == UnexecutableCommand.INSTANCE)
+//			return null;
 		return result;
 	}
 
@@ -81,7 +83,7 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 		final CompoundCommand compound = new CompoundCommand();
 
 		for (final Object o : added) {
-			if (shouldHandleAddition(o, overrides, editSet)) {
+			if (shouldHandleAddition(o, overrides, editSet, root)) {
 				final Command a = objectAdded(domain, root, o, overrides, editSet);
 				if (a != null)
 					compound.append(a);
@@ -98,7 +100,7 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 		final CompoundCommand compound = new CompoundCommand();
 
 		for (final Object o : deleted) {
-			if (shouldHandleDeletion(o, overrides, editSet)) {
+			if (shouldHandleDeletion(o, overrides, editSet, rootObject)) {
 				final Command a = objectDeleted(editingDomain, rootObject, o, overrides, editSet);
 				if (a != null)
 					compound.append(a);
@@ -110,13 +112,14 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 
 	/**
 	 */
-	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
+	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet, MMXRootObject rootObject) {
 		return false;
 	}
 
 	/**
+	 * @param rootObject
 	 */
-	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
+	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet, MMXRootObject rootObject) {
 		return false;
 	}
 

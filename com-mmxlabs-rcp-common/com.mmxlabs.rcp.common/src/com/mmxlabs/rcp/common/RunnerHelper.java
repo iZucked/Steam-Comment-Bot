@@ -131,6 +131,16 @@ public final class RunnerHelper {
 		display.asyncExec(() -> consumer.accept(display));
 		return true;
 	}
+	
+	public static boolean syncExec(@NonNull final Consumer<@NonNull Display> consumer) {
+		
+		final Display display = getWorkbenchDisplay();
+		if (display == null) {
+			return false;
+		}
+		display.syncExec(() -> consumer.accept(display));
+		return true;
+	}
 
 	public static boolean exec(@NonNull final Runnable runnable, final boolean syncExec) {
 		if (syncExec) {
