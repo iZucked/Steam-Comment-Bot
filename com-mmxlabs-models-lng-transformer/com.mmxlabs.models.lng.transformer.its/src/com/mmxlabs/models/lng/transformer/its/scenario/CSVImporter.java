@@ -28,6 +28,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FileCSVReader;
 import com.mmxlabs.models.lng.actuals.importer.ActualsModelExtraImporter;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -210,9 +211,11 @@ public class CSVImporter {
 		final LNGScenarioModel scenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 
 		scenarioModel.setCargoModel((CargoModel) importSubModel(importerRegistry, context, dataMap, CargoPackage.eINSTANCE.getCargoModel()));
-		// scenarioModel.setAssignmentModel((AssignmentModel) importSubModel(importerRegistry, context, dataMap, AssignmentPackage.eINSTANCE.getAssignmentModel()));
 		scenarioModel.setScheduleModel((ScheduleModel) importSubModel(importerRegistry, context, dataMap, SchedulePackage.eINSTANCE.getScheduleModel()));
 		scenarioModel.setAnalyticsModel(((AnalyticsModel) importSubModel(importerRegistry, context, dataMap, AnalyticsPackage.eINSTANCE.getAnalyticsModel())));
+		if (scenarioModel.getAnalyticsModel() == null) {
+			scenarioModel.setAnalyticsModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
+		}
 
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		scenarioModel.setReferenceModel(referenceModel);
@@ -223,7 +226,6 @@ public class CSVImporter {
 		referenceModel.setCostModel((CostModel) importSubModel(importerRegistry, context, dataMap, PricingPackage.eINSTANCE.getCostModel()));
 		referenceModel.setCommercialModel((CommercialModel) importSubModel(importerRegistry, context, dataMap, CommercialPackage.eINSTANCE.getCommercialModel()));
 		referenceModel.setSpotMarketsModel((SpotMarketsModel) importSubModel(importerRegistry, context, dataMap, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel()));
-		// scenarioModel.setParametersModel((ParametersModel) importSubModel(importerRegistry, context, dataMap, ParametersPackage.eINSTANCE.getParametersModel()));
 
 		importExtraModels(scenarioModel, importerRegistry, context, dataMap);
 
@@ -265,7 +267,7 @@ public class CSVImporter {
 					subModelImporters.put(CommercialPackage.eINSTANCE.getCommercialModel(), new CommercialModelImporter());
 					subModelImporters.put(FleetPackage.eINSTANCE.getFleetModel(), new FleetModelImporter());
 					// subModelImporters.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), new AssignmentModelImporter());
-//					subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
+					// subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
 					subModelImporters.put(PortPackage.eINSTANCE.getPortModel(), new PortModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getCostModel(), new CostModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getPricingModel(), new PricingModelImporter());

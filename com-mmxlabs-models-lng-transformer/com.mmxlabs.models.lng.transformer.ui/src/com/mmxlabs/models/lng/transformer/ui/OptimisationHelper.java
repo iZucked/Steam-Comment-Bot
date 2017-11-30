@@ -62,6 +62,7 @@ import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -427,7 +428,7 @@ public final class OptimisationHelper {
 				choiceData.addChoice("Low", SimilarityMode.LOW);
 				choiceData.addChoice("Med", SimilarityMode.MEDIUM);
 				choiceData.addChoice("High", SimilarityMode.HIGH);
-				// choiceData.addChoice("All", SimilarityMode.ALL);
+				choiceData.addChoice("All", SimilarityMode.ALL);
 
 				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
 
@@ -457,8 +458,8 @@ public final class OptimisationHelper {
 						if (value instanceof UserSettings) {
 							final UserSettings userSettings = (UserSettings) value;
 							if (userSettings.isBuildActionSets()) {
-								if (userSettings.getSimilarityMode() == SimilarityMode.OFF) {
-									return ValidationStatus.error("Similarity must be enabled to use action sets");
+								if (userSettings.getSimilarityMode() == SimilarityMode.OFF || userSettings.getSimilarityMode() == SimilarityMode.ALL) {
+									return ValidationStatus.error("Similarity (low, medium, high) must be enabled to use action sets");
 								}
 								final LocalDate periodStart = userSettings.getPeriodStartDate();
 								final YearMonth periodEnd = userSettings.getPeriodEnd();
@@ -768,7 +769,9 @@ public final class OptimisationHelper {
 
 		switch (similarityMode) {
 		case ALL:
-			assert false;
+			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = true;
+				userSettings.setBuildActionSets(false);
 			break;
 		case HIGH:
 			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
@@ -813,8 +816,14 @@ public final class OptimisationHelper {
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
 		}
-		{
+		if (similarityMode != SimilarityMode.ALL) {
 			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
+			plan.getStages().add(stage);
+		} else {
+			final MultipleSolutionSimilarityOptimisationStage stage =
+					ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(constraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 			plan.getStages().add(stage);
@@ -835,6 +844,14 @@ public final class OptimisationHelper {
 			}
 		}
 		return LNGScenarioRunnerUtils.createExtendedSettings(plan);
+	}
+
+	private static boolean shouldCreateDefaultSaveStage(@NonNull UserSettings userSettings) {
+		if (userSettings.getSimilarityMode() != SimilarityMode.ALL) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private static boolean shouldDisableActionSets(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {

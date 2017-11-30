@@ -4,15 +4,19 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.util.OptionalLong;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -25,6 +29,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUni
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGNoNominalInPromptTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransformerUnit;
+import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 
 public class LNGScenarioChainBuilder {
 
@@ -62,18 +67,31 @@ public class LNGScenarioChainBuilder {
 				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
 
-			BiConsumer<LNGScenarioToOptimiserBridge, ContainerProvider> exportCallback = null;
+			BiConsumer<LNGScenarioToOptimiserBridge, ContainerProvider> exportCallback = (bridge, resultProvider) -> {
+				SolutionSetExporterUnit.exportMultipleSolutions(builder, 1, bridge, () -> {
+					OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+					options.setName("Optimisation");
+					options.setUserSettings(EcoreUtil.copy(dataTransformer.getUserSettings()));
+					return options;
+				}, OptionalLong.empty());
+			};
+
 			if (!optimisationPlan.getStages().isEmpty()) {
 
 				UserSettings userSettings = optimisationPlan.getUserSettings();
 				for (final OptimisationStage stage : optimisationPlan.getStages()) {
+					BiConsumer<LNGScenarioToOptimiserBridge, ContainerProvider> callback;
 					if (stage instanceof ParallelOptimisationStage<?>) {
 						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
 						final OptimisationStage template = parallelOptimisationStage.getTemplate();
 						assert template != null;
-						exportCallback = LNGScenarioChainUnitFactory.chainUp(builder, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
+						callback = LNGScenarioChainUnitFactory.chainUp(builder, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
+
 					} else {
-						exportCallback = LNGScenarioChainUnitFactory.chainUp(builder, executorService, stage, 1, userSettings);
+						callback = LNGScenarioChainUnitFactory.chainUp(builder, executorService, stage, 1, userSettings);
+					}
+					if (callback != null) {
+						exportCallback = callback;
 					}
 				}
 			}
@@ -115,6 +133,7 @@ public class LNGScenarioChainBuilder {
 				LNGEvaluationTransformerUnit.chain(builder, 1);
 			}
 		}
+
 		return builder.build();
 	}
 

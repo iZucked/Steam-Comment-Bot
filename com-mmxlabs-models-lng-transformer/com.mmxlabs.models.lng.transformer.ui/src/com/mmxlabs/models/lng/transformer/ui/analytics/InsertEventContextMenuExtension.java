@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -34,14 +32,12 @@ import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.events.IVesselEventsTableContextMenuExtension;
-import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -135,18 +131,16 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			UserSettings userSettings = null;
-			{
 
-				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
-				try (final ModelReference modelReference = modelRecord.aquireReference("InsertEventContextMenuExtension:1")) {
+			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
+			try (final ModelReference modelReference = modelRecord.aquireReference("InsertEventContextMenuExtension:1")) {
 
-					final EObject object = modelReference.getInstance();
+				final EObject object = modelReference.getInstance();
 
-					if (object instanceof LNGScenarioModel) {
-						final LNGScenarioModel root = (LNGScenarioModel) object;
+				if (object instanceof LNGScenarioModel) {
+					final LNGScenarioModel root = (LNGScenarioModel) object;
 
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
-					}
+					userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 				}
 			}
 			if (userSettings == null) {
@@ -159,54 +153,29 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 			final UserSettings pUserSettings = userSettings;
 
-			final ScenarioInstance duplicate;
-			try {
-				duplicate = ScenarioServiceCommandUtil.copyTo(original, original, generateActionName(originalTargetEvents));
-			} catch (final Exception e) {
-				throw new RuntimeException(e);
-			}
 			final String taskName = "Insert " + generateActionName(originalTargetEvents);
-
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
 
 			final List<VesselEvent> targetEvents = new LinkedList<>();
 
-			// Map between original and fork
-			final BiFunction<ModelReference, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
-				// Map between original and fork
-				final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
-				for (final VesselEvent originalEvent : originalTargetEvents) {
-					targetEvents.add(finder.findVesselEvent(originalEvent.getName()));
-				}
-				return true;
-			};
-
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSlotInsertionJobDescriptor(generateName(targetEvents), duplicate, pUserSettings, Collections.emptyList(), targetEvents);
+				return new LNGSlotInsertionJobDescriptor(generateName(targetEvents), original, pUserSettings, Collections.emptyList(), targetEvents);
 			};
 
 			final TriConsumer<IJobControl, EJobState, ModelReference> jobCompletedCallback = (jobControl, newState, ref) -> {
 				if (newState == EJobState.COMPLETED) {
-					try {
-						ref.save();
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
 
 					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 					if (plan != null) {
 
-						duplicate.setReadonly(true);
-
 						final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-						final AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
+						final AnalyticsSolution data = new AnalyticsSolution(original, plan, generateName(plan));
 						data.setCreateInsertionOptions(true);
 						eventBroker.post(ChangeSetViewCreatorService_Topic, data);
 					}
 				}
 			};
 
-			jobRunner.run(taskName, duplicate, modelRecord, prepareCallback, createJobDescriptorCallback, jobCompletedCallback);
+			jobRunner.run(taskName, original, modelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
 		}
 	}
 

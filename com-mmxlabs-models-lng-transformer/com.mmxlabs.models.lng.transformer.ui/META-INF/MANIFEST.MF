@@ -52,7 +52,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.cargo.editor,
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.e4.core.services,
- org.eclipse.e4.ui.workbench
+ org.eclipse.e4.ui.workbench,
+ com.google.inject
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",

@@ -248,6 +248,8 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		switch (userSettings.getSimilarityMode()) {
 		case OFF:
 			return SimilarityFitnessMode.OFF;
+		case ALL:
+			return SimilarityFitnessMode.LOW;
 		case LOW:
 			return SimilarityFitnessMode.LOW;
 		case MEDIUM:

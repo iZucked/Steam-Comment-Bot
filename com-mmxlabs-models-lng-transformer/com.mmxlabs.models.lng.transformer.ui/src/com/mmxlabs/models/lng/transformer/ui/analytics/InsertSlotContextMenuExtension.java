@@ -131,8 +131,8 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			}
 
 			if (noCargoSelected && slots.size() > 0) {
-				if (slots.size() != 2 || (slots.size() == 2 && !(slots.stream().filter(s -> (s instanceof LoadSlot)).findAny().isPresent() &&
-						slots.stream().filter(s -> (s instanceof DischargeSlot)).findAny().isPresent()))) {
+				if (slots.size() != 2 || (slots.size() == 2
+						&& !(slots.stream().filter(s -> (s instanceof LoadSlot)).findAny().isPresent() && slots.stream().filter(s -> (s instanceof DischargeSlot)).findAny().isPresent()))) {
 					slots = Lists.newArrayList(slots.get(0));
 				}
 				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
@@ -196,13 +196,13 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 	private static class InsertSlotAction extends Action {
 
-		private final List<Slot> originalTargetSlots;
+		private final List<Slot> targetSlots;
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot> targetSlots) {
 			super(generateActionName(targetSlots) + " (Beta)");
 			this.scenarioEditingLocation = scenarioEditingLocation;
-			this.originalTargetSlots = targetSlots;
+			this.targetSlots = targetSlots;
 		}
 
 		@Override
@@ -212,20 +212,20 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			UserSettings userSettings = null;
-			{
+			// {
 
-				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
-				try (final ModelReference modelReference = modelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
+			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
+			try (final ModelReference modelReference = modelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
 
-					final EObject object = modelReference.getInstance();
+				final EObject object = modelReference.getInstance();
 
-					if (object instanceof LNGScenarioModel) {
-						final LNGScenarioModel root = (LNGScenarioModel) object;
+				if (object instanceof LNGScenarioModel) {
+					final LNGScenarioModel root = (LNGScenarioModel) object;
 
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
-					}
+					userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 				}
 			}
+			// }
 			if (userSettings == null) {
 				return;
 			}
@@ -236,57 +236,51 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 			final UserSettings pUserSettings = userSettings;
 
-			final ScenarioInstance duplicate;
-			try {
-				duplicate = ScenarioServiceCommandUtil.copyTo(original, original, generateActionName(originalTargetSlots));
-			} catch (final Exception e) {
-				throw new RuntimeException(e);
-			}
-			final String taskName = "Insert " + generateActionName(originalTargetSlots);
+			// final ScenarioInstance duplicate;
+			// try {
+			// duplicate = ScenarioServiceCommandUtil.copyTo(original, original, generateActionName(originalTargetSlots));
+			// } catch (final Exception e) {
+			// throw new RuntimeException(e);
+			// }
+			final String taskName = "Insert " + generateActionName(targetSlots);
 
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
+			// final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
 
-			final List<Slot> targetSlots = new LinkedList<Slot>();
+			// final List<Slot> targetSlots = new LinkedList<Slot>();
 
-			// Map between original and fork
-			final BiFunction<ModelReference, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
-				// Map between original and fork
-				final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
-				for (final Slot originalSlot : originalTargetSlots) {
-					if (originalSlot instanceof LoadSlot) {
-						targetSlots.add(finder.findLoadSlot(originalSlot.getName()));
-					} else if (originalSlot instanceof DischargeSlot) {
-						targetSlots.add(finder.findDischargeSlot(originalSlot.getName()));
-					}
-				}
-				return true;
-			};
+			// // Map between original and fork
+			// final BiFunction<ModelReference, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
+			// // Map between original and fork
+			// final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
+			// for (final Slot originalSlot : originalTargetSlots) {
+			// if (originalSlot instanceof LoadSlot) {
+			// targetSlots.add(finder.findLoadSlot(originalSlot.getName()));
+			// } else if (originalSlot instanceof DischargeSlot) {
+			// targetSlots.add(finder.findDischargeSlot(originalSlot.getName()));
+			// }
+			// }
+			// return true;
+			// };
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSlotInsertionJobDescriptor(generateName(targetSlots), duplicate, pUserSettings, targetSlots, Collections.emptyList());
+				return new LNGSlotInsertionJobDescriptor(generateName(targetSlots), original, pUserSettings, targetSlots, Collections.emptyList());
 			};
 
 			final TriConsumer<IJobControl, EJobState, ModelReference> jobCompletedCallback = (jobControl, newState, ref) -> {
 				if (newState == EJobState.COMPLETED) {
-					try {
-						ref.save();
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
-
 					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 					if (plan != null) {
 
-						duplicate.setReadonly(true);
+						// duplicate.setReadonly(true);
 
 						final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-						final AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
+						final AnalyticsSolution data = new AnalyticsSolution(original, plan, generateName(plan));
 						data.setCreateInsertionOptions(true);
 						eventBroker.post(ChangeSetViewCreatorService_Topic, data);
 					}
 				}
 			};
 
-			jobRunner.run(taskName, duplicate, modelRecord, prepareCallback, createJobDescriptorCallback, jobCompletedCallback);
+			jobRunner.run(taskName, original, modelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
 
 		}
 	}

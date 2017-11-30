@@ -33,7 +33,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGScenarioRunner {
 
-	@SuppressWarnings("null")
 	@NonNull
 	private static final Logger log = LoggerFactory.getLogger(LNGScenarioRunner.class);
 
@@ -154,11 +153,6 @@ public class LNGScenarioRunner {
 
 		final IMultiStateResult result = chainRunner.run(progressMonitor);
 
-		Schedule[] v = new Schedule[1];
-		RunnerHelper.syncExecDisplayOptional(() -> {
-			v[0] = scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
-		});
-		schedule = v[0];
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 
 		return result;
