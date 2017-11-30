@@ -13,7 +13,9 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 public class CargoEconsReportRow {
 	public int order;
 	public String name;
-	public String unit;
+	public boolean includeUnits;
+	public String prefixUnit;
+	public String suffixUnit;
 	public ICellRenderer formatter;
 	public IColorProvider colourProvider;
 	public boolean isCost;

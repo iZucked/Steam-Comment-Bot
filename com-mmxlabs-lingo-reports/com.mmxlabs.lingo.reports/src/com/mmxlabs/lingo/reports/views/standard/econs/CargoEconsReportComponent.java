@@ -42,6 +42,7 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -266,7 +267,11 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		public String getText(final Object element) {
 			if (element instanceof CargoEconsReportRow) {
 				final CargoEconsReportRow row = (CargoEconsReportRow) element;
-				return row.formatter.render(columnElement);
+				if (row.includeUnits) {
+					return row.prefixUnit + row.formatter.render(columnElement) + row.suffixUnit;
+				} else {
+					return row.formatter.render(columnElement);
+				}
 			}
 			return null;
 		}
@@ -324,6 +329,15 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	public void setIncludedUnit(boolean includeUnit) {
+		for (GridItem item: viewer.getGrid().getItems()) {
+			Object obj = item.getData();
+			if (obj instanceof CargoEconsReportRow) {
+				((CargoEconsReportRow) obj).includeUnits = includeUnit;
 			}
 		}
 	}

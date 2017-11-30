@@ -63,11 +63,15 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 	}
 
-	public static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
-	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
-	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
+	public static final DecimalFormat DollarsFormat = new DecimalFormat("##,###,###,###");
+	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###");
+	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("###.###");
 	public static final DecimalFormat DaysFormat = new DecimalFormat("##");
-
+//
+//	public static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
+//	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
+//	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
+//	public static final DecimalFormat DaysFormat = new DecimalFormat("##");
 	public Collection<CargoEconsReportRow> createRows(@NonNull final EconsOptions options, @Nullable final Collection<Object> targets) {
 
 		boolean containsCargo = false;
@@ -92,34 +96,34 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 		final List<CargoEconsReportRow> rows = new LinkedList<>();
 		if (containsCargo) {
-			rows.add(createRow(10, "Purchase", "$", true, createBuyValuePrice(options)));
-			rows.add(createRow(20, "    Price", "$/mmBTu", true, createBuyPrice(options)));
-			rows.add(createRow(30, "    Volume", "mmBTu", false, createBuyVolumeMMBTuPrice(options)));
+			rows.add(createRow(10, "Purchase", true, "$", "", true, createBuyValuePrice(options)));
+			rows.add(createRow(20, "    Price", true, "$", "mmBTu", true, createBuyPrice(options)));
+			rows.add(createRow(30, "    Volume", true, "", "mmBTu", false, createBuyVolumeMMBTuPrice(options)));
 		}
-		rows.add(createRow(40, "Shipping", "$", true, createShippingCosts(options)));
-		rows.add(createRow(50, "    Bunkers", "$", true, createShippingBunkersTotal(options)));
-		rows.add(createRow(60, "    Port", "$", true, createShippingPortCosts(options)));
-		rows.add(createRow(70, "    Canal", "$", true, createShippingCanalCosts(options)));
-		rows.add(createRow(80, "    Boil-off", "$", true, createShippingBOGTotal(options), createBOGColourProvider(options)));
-		rows.add(createRow(90, "    Charter Cost", "$", true, createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
+		rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options)));
+		rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options)));
+		rows.add(createRow(60, "    Port", true, "$", "", true, createShippingPortCosts(options)));
+		rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options)));
+		rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options), createBOGColourProvider(options)));
+		rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
 		if (containsCharterOut) {
-			rows.add(createRow(100, "Charter Revenue", "$", false, createShippingCharterRevenue(options)));
-			rows.add(createRow(110, "Repositioning", "$", true, createShippingRepositioning(options)));
-			rows.add(createRow(120, "Ballast bonus", "$", false, createShippingBallastBonus(options)));
-			rows.add(createRow(130, "Charter Duration", "", false, createCharterDays(options)));
+			rows.add(createRow(100, "Charter Revenue", true, "$", "", false, createShippingCharterRevenue(options)));
+			rows.add(createRow(110, "Repositioning", true, "$", "", true, createShippingRepositioning(options)));
+			rows.add(createRow(120, "Ballast bonus", true, "$", "", false, createShippingBallastBonus(options)));
+			rows.add(createRow(130, "Charter Duration", true, "", "", false, createCharterDays(options)));
 		}
 		if (containsCargo) {
-			rows.add(createRow(140, "Sale", "$", false, createSellValuePrice(options)));
-			rows.add(createRow(150, "    Price", "$/mmBTu", false, createSellPrice(options)));
-			rows.add(createRow(160, "    Volume", "mmBtu", false, createSellVolumeMMBTuPrice(options)));
+			rows.add(createRow(140, "Sale", true, "$", "", false, createSellValuePrice(options)));
+			rows.add(createRow(150, "    Price", true, "$", "mmBTu", false, createSellPrice(options)));
+			rows.add(createRow(160, "    Volume", true, "", "mmBtu", false, createSellVolumeMMBTuPrice(options)));
 			if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
-				rows.add(createRow(170, "Equity P&L", "$", false, createPNLEquity(options)));
+				rows.add(createRow(170, "Equity P&L", true, "$", "", false, createPNLEquity(options)));
 			}
-			rows.add(createRow(180, "Addn. P&L", "$", false, createPNLAdditional(options)));
+			rows.add(createRow(180, "Addn. P&L", true, "$", "", false, createPNLAdditional(options)));
 		}
-		rows.add(createRow(190, "P&L", "$", false, createPNLTotal(options)));
+		rows.add(createRow(190, "P&L", true, "$", "", false, createPNLTotal(options)));
 		if (containsCargo) {
-			final CargoEconsReportRow row = createRow(200, "Margin", "$/mmBTu", false, createPNLPerMMBTU(options));
+			final CargoEconsReportRow row = createRow(200, "Margin", true, "$", "mmBTu", false, createPNLPerMMBTU(options));
 			row.tooltip = () -> {
 				switch (options.marginBy) {
 				case PURCHASE_VOLUME:
@@ -187,16 +191,18 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, final @NonNull String unit, boolean isCost, final @NonNull ICellRenderer renderer) {
-		return createRow(order, name, unit, isCost, renderer, null);
+	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, boolean includeUnits, final @NonNull String prefixUnit, String suffixUnit, boolean isCost, final @NonNull ICellRenderer renderer) {
+		return createRow(order, name, true, prefixUnit, suffixUnit, isCost, renderer, null);
 	}
 
-	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, final @NonNull String unit, boolean isCost, final @NonNull ICellRenderer formatter,
-			@Nullable final IColorProvider colourProvider) {
+	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, boolean includeUnits, final @NonNull String prefixUnit, String suffixUnit,
+			boolean isCost, final @NonNull ICellRenderer formatter, @Nullable final IColorProvider colourProvider) {
 		final CargoEconsReportRow row = new CargoEconsReportRow();
 		row.order = order;
 		row.name = name;
-		row.unit = unit;
+		row.includeUnits = includeUnits;
+		row.prefixUnit = prefixUnit;
+		row.suffixUnit = suffixUnit;
 		row.formatter = formatter;
 		row.colourProvider = colourProvider;
 		row.isCost = isCost;
@@ -397,7 +403,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		}
 		return cost;
 	}
-
+	
 	public @NonNull ICellRenderer createBuyValuePrice(final EconsOptions options) {
 		return new BaseFormatter() {
 			@Override

@@ -17,7 +17,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
+import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -76,10 +79,22 @@ public class CargoEconsReport extends ViewPart {
 				component.rebuild();
 			});
 			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
+		
+			
 		}
 
+		Runnable preOperation = () -> {
+			component.setIncludedUnit(false);
+			ViewerHelper.refresh(component.getViewer(), true);
+		};
+
+		Runnable postOperation = () -> {
+			component.setIncludedUnit(true);
+			ViewerHelper.refresh(component.getViewer(), true);
+		};
+
 		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
-		final Action copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(viewer);
+		final Action copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(viewer, preOperation, postOperation);
 		getViewSite().getActionBars().getToolBarManager().add(packAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
