@@ -51,6 +51,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	public static final String MULTIOBJECTIVE_OBJECTIVE_NAMES = "MULTIOBJECTIVE_OBJECTIVE_NAMES";
 	public static final String SIMILARITY_SETTING = "LSO_MODULE_SIMILARITY_SETTING";
 	public static final String NEW_SIMILARITY_OPTIMISER = "LSO_MODULE_SIMILARITY_OPTIMISER";
+	public static final String MULTIOBJECTIVE_OBJECTIVE_FITNESS_COMPONENTS = "MULTIOBJECTIVE_FITNESS_COMPONENTS";
 
 	@Override
 	protected void configure() {

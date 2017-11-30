@@ -290,6 +290,10 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	public ISequences getBestRawSequences() {
 		return getBestRawSequences(archive, 4, 0);
 	}
+	
+	public List<Pair<ISequences,long[]>> getSortedArchive() {
+		return getSortedArchive(archive, 0);
+	}
 
 	public ISequences getBestRawSequences(List<Pair<ISequences, long[]>> unsortedArchive, int noGroups, int objectiveIndex) {
 		return findSolutionWhichReachesQuartile(archive, objectiveIndex, mapSimilarityModeToQuartile(similarityFitnessMode), true).getFirst();
