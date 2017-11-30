@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.databinding.observable;bundle-version="1.4.0",
  org.eclipse.emf.databinding.edit;bundle-version="1.2.0",
  org.eclipse.jface.databinding;bundle-version="1.5.0",
- org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.models.lng.analytics.editor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*.xml

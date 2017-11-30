@@ -11,8 +11,6 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
-import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;

@@ -8,8 +8,6 @@ package com.mmxlabs.models.lng.port.provider;
 
 
 import com.mmxlabs.models.lng.port.PortCountryGroup;
-import com.mmxlabs.models.lng.port.PortPackage;
-
 import com.mmxlabs.models.lng.types.provider.APortSetItemProvider;
 
 import java.util.Collection;
@@ -18,10 +16,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.port.PortCountryGroup} object.

@@ -13,18 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
-import com.mmxlabs.models.lng.analytics.CargoSandbox;
-import com.mmxlabs.models.lng.analytics.CostComponent;
-import com.mmxlabs.models.lng.analytics.FuelCost;
-import com.mmxlabs.models.lng.analytics.Journey;
-import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
-import com.mmxlabs.models.lng.analytics.ShippingCostRow;
-import com.mmxlabs.models.lng.analytics.UnitCostLine;
-import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
-import com.mmxlabs.models.lng.analytics.Visit;
-import com.mmxlabs.models.lng.analytics.Voyage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -91,84 +80,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				T result = caseAnalyticsModel(analyticsModel);
 				if (result == null) result = caseUUIDObject(analyticsModel);
 				if (result == null) result = caseMMXObject(analyticsModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.UNIT_COST_MATRIX: {
-				UnitCostMatrix unitCostMatrix = (UnitCostMatrix)theEObject;
-				T result = caseUnitCostMatrix(unitCostMatrix);
-				if (result == null) result = caseUUIDObject(unitCostMatrix);
-				if (result == null) result = caseNamedObject(unitCostMatrix);
-				if (result == null) result = caseMMXObject(unitCostMatrix);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.UNIT_COST_LINE: {
-				UnitCostLine unitCostLine = (UnitCostLine)theEObject;
-				T result = caseUnitCostLine(unitCostLine);
-				if (result == null) result = caseMMXObject(unitCostLine);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.VOYAGE: {
-				Voyage voyage = (Voyage)theEObject;
-				T result = caseVoyage(voyage);
-				if (result == null) result = caseCostComponent(voyage);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.VISIT: {
-				Visit visit = (Visit)theEObject;
-				T result = caseVisit(visit);
-				if (result == null) result = caseCostComponent(visit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.COST_COMPONENT: {
-				CostComponent costComponent = (CostComponent)theEObject;
-				T result = caseCostComponent(costComponent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.FUEL_COST: {
-				FuelCost fuelCost = (FuelCost)theEObject;
-				T result = caseFuelCost(fuelCost);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.JOURNEY: {
-				Journey journey = (Journey)theEObject;
-				T result = caseJourney(journey);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.SHIPPING_COST_PLAN: {
-				ShippingCostPlan shippingCostPlan = (ShippingCostPlan)theEObject;
-				T result = caseShippingCostPlan(shippingCostPlan);
-				if (result == null) result = caseNamedObject(shippingCostPlan);
-				if (result == null) result = caseMMXObject(shippingCostPlan);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.SHIPPING_COST_ROW: {
-				ShippingCostRow shippingCostRow = (ShippingCostRow)theEObject;
-				T result = caseShippingCostRow(shippingCostRow);
-				if (result == null) result = caseMMXObject(shippingCostRow);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.CARGO_SANDBOX: {
-				CargoSandbox cargoSandbox = (CargoSandbox)theEObject;
-				T result = caseCargoSandbox(cargoSandbox);
-				if (result == null) result = caseNamedObject(cargoSandbox);
-				if (result == null) result = caseMMXObject(cargoSandbox);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.PROVISIONAL_CARGO: {
-				ProvisionalCargo provisionalCargo = (ProvisionalCargo)theEObject;
-				T result = caseProvisionalCargo(provisionalCargo);
-				if (result == null) result = caseMMXObject(provisionalCargo);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -347,24 +258,31 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.ACTIONABLE_SET_PLAN: {
-				ActionableSetPlan actionableSetPlan = (ActionableSetPlan)theEObject;
-				T result = caseActionableSetPlan(actionableSetPlan);
-				if (result == null) result = caseUUIDObject(actionableSetPlan);
-				if (result == null) result = caseMMXObject(actionableSetPlan);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET: {
+				AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet)theEObject;
+				T result = caseAbstractSolutionSet(abstractSolutionSet);
+				if (result == null) result = caseUUIDObject(abstractSolutionSet);
+				if (result == null) result = caseNamedObject(abstractSolutionSet);
+				if (result == null) result = caseMMXObject(abstractSolutionSet);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.ACTIONABLE_SET: {
-				ActionableSet actionableSet = (ActionableSet)theEObject;
-				T result = caseActionableSet(actionableSet);
+			case AnalyticsPackage.ACTIONABLE_SET_PLAN: {
+				ActionableSetPlan actionableSetPlan = (ActionableSetPlan)theEObject;
+				T result = caseActionableSetPlan(actionableSetPlan);
+				if (result == null) result = caseAbstractSolutionSet(actionableSetPlan);
+				if (result == null) result = caseUUIDObject(actionableSetPlan);
+				if (result == null) result = caseNamedObject(actionableSetPlan);
+				if (result == null) result = caseMMXObject(actionableSetPlan);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS: {
 				SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions)theEObject;
 				T result = caseSlotInsertionOptions(slotInsertionOptions);
+				if (result == null) result = caseAbstractSolutionSet(slotInsertionOptions);
 				if (result == null) result = caseUUIDObject(slotInsertionOptions);
+				if (result == null) result = caseNamedObject(slotInsertionOptions);
 				if (result == null) result = caseMMXObject(slotInsertionOptions);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -372,6 +290,23 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.SLOT_INSERTION_OPTION: {
 				SlotInsertionOption slotInsertionOption = (SlotInsertionOption)theEObject;
 				T result = caseSlotInsertionOption(slotInsertionOption);
+				if (result == null) result = caseSolutionOption(slotInsertionOption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SOLUTION_OPTION: {
+				SolutionOption solutionOption = (SolutionOption)theEObject;
+				T result = caseSolutionOption(solutionOption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.OPTIMISATION_RESULT: {
+				OptimisationResult optimisationResult = (OptimisationResult)theEObject;
+				T result = caseOptimisationResult(optimisationResult);
+				if (result == null) result = caseAbstractSolutionSet(optimisationResult);
+				if (result == null) result = caseUUIDObject(optimisationResult);
+				if (result == null) result = caseNamedObject(optimisationResult);
+				if (result == null) result = caseMMXObject(optimisationResult);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -391,171 +326,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAnalyticsModel(AnalyticsModel object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Unit Cost Matrix</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Unit Cost Matrix</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseUnitCostMatrix(UnitCostMatrix object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Unit Cost Line</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Unit Cost Line</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseUnitCostLine(UnitCostLine object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Voyage</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Voyage</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseVoyage(Voyage object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Visit</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Visit</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseVisit(Visit object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Cost Component</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Cost Component</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCostComponent(CostComponent object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Fuel Cost</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Fuel Cost</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseFuelCost(FuelCost object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Journey</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Journey</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseJourney(Journey object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Shipping Cost Plan</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Shipping Cost Plan</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseShippingCostPlan(ShippingCostPlan object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Shipping Cost Row</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Shipping Cost Row</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseShippingCostRow(ShippingCostRow object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Cargo Sandbox</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Cargo Sandbox</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCargoSandbox(CargoSandbox object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Provisional Cargo</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Provisional Cargo</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseProvisionalCargo(ProvisionalCargo object) {
 		return null;
 	}
 
@@ -950,6 +720,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Abstract Solution Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Abstract Solution Set</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAbstractSolutionSet(AbstractSolutionSet object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Actionable Set Plan</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -961,21 +746,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseActionableSetPlan(ActionableSetPlan object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Actionable Set</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Actionable Set</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseActionableSet(ActionableSet object) {
 		return null;
 	}
 
@@ -1006,6 +776,36 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSlotInsertionOption(SlotInsertionOption object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Solution Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Solution Option</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSolutionOption(SolutionOption object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Optimisation Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Optimisation Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOptimisationResult(OptimisationResult object) {
 		return null;
 	}
 

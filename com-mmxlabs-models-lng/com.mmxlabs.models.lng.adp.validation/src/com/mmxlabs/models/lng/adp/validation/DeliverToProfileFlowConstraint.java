@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.adp.BindingRule;
 import com.mmxlabs.models.lng.adp.DeliverToProfileFlow;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
-import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
 import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;

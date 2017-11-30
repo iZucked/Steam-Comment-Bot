@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.adp;
 
-import com.mmxlabs.models.lng.cargo.Slot;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Cargo By Quarter Distribution Model</b></em>'.

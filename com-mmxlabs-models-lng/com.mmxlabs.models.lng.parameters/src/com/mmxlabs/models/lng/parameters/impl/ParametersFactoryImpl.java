@@ -13,8 +13,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
@@ -96,6 +94,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.RESET_INITIAL_SEQUENCES_STAGE: return createResetInitialSequencesStage();
 			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: return createBreakEvenOptimisationStage();
 			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: return createSolutionBuilderSettings();
+			case ParametersPackage.MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: return createMultipleSolutionSimilarityOptimisationStage();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -315,6 +314,16 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public SolutionBuilderSettings createSolutionBuilderSettings() {
 		SolutionBuilderSettingsImpl solutionBuilderSettings = new SolutionBuilderSettingsImpl();
 		return solutionBuilderSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MultipleSolutionSimilarityOptimisationStage createMultipleSolutionSimilarityOptimisationStage() {
+		MultipleSolutionSimilarityOptimisationStageImpl multipleSolutionSimilarityOptimisationStage = new MultipleSolutionSimilarityOptimisationStageImpl();
+		return multipleSolutionSimilarityOptimisationStage;
 	}
 
 	/**

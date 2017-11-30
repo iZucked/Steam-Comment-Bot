@@ -11,7 +11,6 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -49,31 +48,8 @@ public class AnalyticsModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addSelectedMatrixPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Selected Matrix feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSelectedMatrixPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AnalyticsModel_selectedMatrix_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AnalyticsModel_selectedMatrix_feature", "_UI_AnalyticsModel_type"),
-				 AnalyticsPackage.Literals.ANALYTICS_MODEL__SELECTED_MATRIX,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -88,12 +64,8 @@ public class AnalyticsModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__INSERTION_OPTIONS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS);
+			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS);
 		}
 		return childrenFeatures;
 	}
@@ -148,12 +120,8 @@ public class AnalyticsModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(AnalyticsModel.class)) {
-			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
-			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
-			case AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES:
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
-			case AnalyticsPackage.ANALYTICS_MODEL__INSERTION_OPTIONS:
-			case AnalyticsPackage.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS:
+			case AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -173,33 +141,23 @@ public class AnalyticsModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES,
-				 AnalyticsFactory.eINSTANCE.createUnitCostMatrix()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS,
-				 AnalyticsFactory.eINSTANCE.createShippingCostPlan()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES,
-				 AnalyticsFactory.eINSTANCE.createCargoSandbox()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS,
 				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__INSERTION_OPTIONS,
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
+				 AnalyticsFactory.eINSTANCE.createActionableSetPlan()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
 				 AnalyticsFactory.eINSTANCE.createSlotInsertionOptions()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS,
-				 AnalyticsFactory.eINSTANCE.createActionableSetPlan()));
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
+				 AnalyticsFactory.eINSTANCE.createOptimisationResult()));
 	}
 
 }

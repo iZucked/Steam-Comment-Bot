@@ -38,13 +38,13 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public class RouteParametersCommandProvider extends BaseModelCommandProvider<Object> {
 	@Override
-	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
+	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet, MMXRootObject rootObject) {
 		return addedObject instanceof Route || addedObject instanceof VesselClass;
 	}
 
 	@Override
-	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		return shouldHandleAddition(deletedObject, overrides, editSet);
+	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet, MMXRootObject rootObject) {
+		return shouldHandleAddition(deletedObject, overrides, editSet, rootObject);
 	}
 
 	private VesselClassRouteParameters createRouteParameters(final Route route, final VesselClass vesselClass) {

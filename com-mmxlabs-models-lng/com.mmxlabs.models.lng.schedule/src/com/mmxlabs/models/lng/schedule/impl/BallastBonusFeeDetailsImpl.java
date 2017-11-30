@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
-
 import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
 import com.mmxlabs.models.lng.schedule.MatchingContractDetails;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;

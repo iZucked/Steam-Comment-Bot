@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.migration.units;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;

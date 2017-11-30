@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
-
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**

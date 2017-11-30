@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.analytics.validation;
 
-import java.awt.image.IndexColorModel;
 import java.time.LocalDate;
 import java.util.List;
 

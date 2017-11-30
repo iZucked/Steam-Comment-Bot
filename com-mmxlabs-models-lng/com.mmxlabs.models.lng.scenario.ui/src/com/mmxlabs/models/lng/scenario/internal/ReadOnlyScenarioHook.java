@@ -21,6 +21,11 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 public class ReadOnlyScenarioHook implements IPostChangeHook {
 	@Override
 	public void changed(@NonNull final ModelRecord modelRecord) {
+
+		if (true) {
+			return;
+		}
+
 		try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ReadOnlyScenarioHandler:1")) {
 			if (ref != null) {
 				@NonNull
@@ -31,8 +36,7 @@ public class ReadOnlyScenarioHook implements IPostChangeHook {
 					if (analyticsModel == null) {
 						return;
 					}
-					final boolean makeReadOnly = !analyticsModel.getInsertionOptions().isEmpty() //
-							|| !analyticsModel.getActionableSetPlans().isEmpty() //
+					final boolean makeReadOnly = false;//!analyticsModel.getInsertionOptions().isEmpty() //
 					;
 
 					if (makeReadOnly) {

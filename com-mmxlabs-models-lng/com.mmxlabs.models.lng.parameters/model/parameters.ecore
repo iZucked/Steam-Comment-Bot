@@ -138,4 +138,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraintAndFitnessSettings"
         eType="#//ConstraintAndFitnessSettings" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultipleSolutionSimilarityOptimisationStage"
+      eSuperTypes="#//LocalSearchOptimisationStage"/>
 </ecore:EPackage>

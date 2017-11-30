@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
@@ -99,7 +100,17 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		// Initialize simple dependencies
 		ActualsPackage.eINSTANCE.eClass();
 		AnalyticsPackage.eINSTANCE.eClass();
+		CargoPackage.eINSTANCE.eClass();
+		CommercialPackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
 		ParametersPackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
+		PricingPackage.eINSTANCE.eClass();
+		SchedulePackage.eINSTANCE.eClass();
+		SpotMarketsPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theLNGScenarioPackage.createPackageContents();

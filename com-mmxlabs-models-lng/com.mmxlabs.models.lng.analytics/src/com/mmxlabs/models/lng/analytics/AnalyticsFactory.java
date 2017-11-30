@@ -33,105 +33,6 @@ public interface AnalyticsFactory extends EFactory {
 	AnalyticsModel createAnalyticsModel();
 
 	/**
-	 * Returns a new object of class '<em>Unit Cost Matrix</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Unit Cost Matrix</em>'.
-	 * @generated
-	 */
-	UnitCostMatrix createUnitCostMatrix();
-
-	/**
-	 * Returns a new object of class '<em>Unit Cost Line</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Unit Cost Line</em>'.
-	 * @generated
-	 */
-	UnitCostLine createUnitCostLine();
-
-	/**
-	 * Returns a new object of class '<em>Voyage</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Voyage</em>'.
-	 * @generated
-	 */
-	Voyage createVoyage();
-
-	/**
-	 * Returns a new object of class '<em>Visit</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Visit</em>'.
-	 * @generated
-	 */
-	Visit createVisit();
-
-	/**
-	 * Returns a new object of class '<em>Cost Component</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Cost Component</em>'.
-	 * @generated
-	 */
-	CostComponent createCostComponent();
-
-	/**
-	 * Returns a new object of class '<em>Fuel Cost</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Fuel Cost</em>'.
-	 * @generated
-	 */
-	FuelCost createFuelCost();
-
-	/**
-	 * Returns a new object of class '<em>Journey</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Journey</em>'.
-	 * @generated
-	 */
-	Journey createJourney();
-
-	/**
-	 * Returns a new object of class '<em>Shipping Cost Plan</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Shipping Cost Plan</em>'.
-	 * @generated
-	 */
-	ShippingCostPlan createShippingCostPlan();
-
-	/**
-	 * Returns a new object of class '<em>Shipping Cost Row</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Shipping Cost Row</em>'.
-	 * @generated
-	 */
-	ShippingCostRow createShippingCostRow();
-
-	/**
-	 * Returns a new object of class '<em>Cargo Sandbox</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Cargo Sandbox</em>'.
-	 * @generated
-	 */
-	CargoSandbox createCargoSandbox();
-
-	/**
-	 * Returns a new object of class '<em>Provisional Cargo</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Provisional Cargo</em>'.
-	 * @generated
-	 */
-	ProvisionalCargo createProvisionalCargo();
-
-	/**
 	 * Returns a new object of class '<em>Buy Opportunity</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -357,15 +258,6 @@ public interface AnalyticsFactory extends EFactory {
 	ActionableSetPlan createActionableSetPlan();
 
 	/**
-	 * Returns a new object of class '<em>Actionable Set</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Actionable Set</em>'.
-	 * @generated
-	 */
-	ActionableSet createActionableSet();
-
-	/**
 	 * Returns a new object of class '<em>Slot Insertion Options</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -382,6 +274,24 @@ public interface AnalyticsFactory extends EFactory {
 	 * @generated
 	 */
 	SlotInsertionOption createSlotInsertionOption();
+
+	/**
+	 * Returns a new object of class '<em>Solution Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Solution Option</em>'.
+	 * @generated
+	 */
+	SolutionOption createSolutionOption();
+
+	/**
+	 * Returns a new object of class '<em>Optimisation Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Optimisation Result</em>'.
+	 * @generated
+	 */
+	OptimisationResult createOptimisationResult();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -64,50 +64,9 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_roundTripMatricesEditor(detailComposite, topClass);
-		add_selectedMatrixEditor(detailComposite, topClass);
-		add_shippingCostPlansEditor(detailComposite, topClass);
-		add_cargoSandboxesEditor(detailComposite, topClass);
 		add_optionModelsEditor(detailComposite, topClass);
-		add_insertionOptionsEditor(detailComposite, topClass);
-		add_actionableSetPlansEditor(detailComposite, topClass);
+		add_optimisationsEditor(detailComposite, topClass);
 	}
-	/**
-	 * Create the editor for the roundTripMatrices feature on AnalyticsModel
-	 *
-	 * @generated
-	 */
-	protected void add_roundTripMatricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES));
-	}
-
-	/**
-	 * Create the editor for the selectedMatrix feature on AnalyticsModel
-	 *
-	 * @generated
-	 */
-	protected void add_selectedMatrixEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__SELECTED_MATRIX));
-	}
-
-	/**
-	 * Create the editor for the shippingCostPlans feature on AnalyticsModel
-	 *
-	 * @generated
-	 */
-	protected void add_shippingCostPlansEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS));
-	}
-
-	/**
-	 * Create the editor for the cargoSandboxes feature on AnalyticsModel
-	 *
-	 * @generated
-	 */
-	protected void add_cargoSandboxesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES));
-	}
-
 	/**
 	 * Create the editor for the optionModels feature on AnalyticsModel
 	 *
@@ -118,20 +77,11 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the insertionOptions feature on AnalyticsModel
+	 * Create the editor for the optimisations feature on AnalyticsModel
 	 *
 	 * @generated
 	 */
-	protected void add_insertionOptionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__INSERTION_OPTIONS));
-	}
-
-	/**
-	 * Create the editor for the actionableSetPlans feature on AnalyticsModel
-	 *
-	 * @generated
-	 */
-	protected void add_actionableSetPlansEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS));
+	protected void add_optimisationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS));
 	}
 }

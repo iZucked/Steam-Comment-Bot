@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
-import com.mmxlabs.models.ui.valueproviders.MergedReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
 public class PortValueProviderFactory implements IReferenceValueProviderFactory {

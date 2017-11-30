@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -185,6 +186,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass multipleSolutionSimilarityOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum similarityModeEEnum = null;
 
 	/**
@@ -267,6 +275,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_PeriodStartDate() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -306,6 +315,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_WithSpotCargoMarkets() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(4);
 	}
@@ -335,6 +345,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_CleanStateOptimisation() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(7);
 	}
@@ -344,6 +355,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_FloatingDaysLimit() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(8);
 	}
@@ -553,6 +565,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOptimisationStage() {
 		return optimisationStageEClass;
 	}
@@ -562,6 +575,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOptimisationStage_Name() {
 		return (EAttribute)optimisationStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -571,6 +585,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getConstraintsAndFitnessSettingsStage() {
 		return constraintsAndFitnessSettingsStageEClass;
 	}
@@ -580,6 +595,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getConstraintsAndFitnessSettingsStage_ConstraintAndFitnessSettings() {
 		return (EReference)constraintsAndFitnessSettingsStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -589,6 +605,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getParallisableOptimisationStage() {
 		return parallisableOptimisationStageEClass;
 	}
@@ -598,6 +615,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getParallelOptimisationStage() {
 		return parallelOptimisationStageEClass;
 	}
@@ -607,6 +625,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getParallelOptimisationStage_JobCount() {
 		return (EAttribute)parallelOptimisationStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -616,6 +635,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getParallelOptimisationStage_Template() {
 		return (EReference)parallelOptimisationStageEClass.getEStructuralFeatures().get(1);
 	}
@@ -625,6 +645,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCleanStateOptimisationStage() {
 		return cleanStateOptimisationStageEClass;
 	}
@@ -634,6 +655,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCleanStateOptimisationStage_Seed() {
 		return (EAttribute)cleanStateOptimisationStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -643,6 +665,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCleanStateOptimisationStage_AnnealingSettings() {
 		return (EReference)cleanStateOptimisationStageEClass.getEStructuralFeatures().get(1);
 	}
@@ -652,6 +675,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getLocalSearchOptimisationStage() {
 		return localSearchOptimisationStageEClass;
 	}
@@ -661,6 +685,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLocalSearchOptimisationStage_Seed() {
 		return (EAttribute)localSearchOptimisationStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -670,6 +695,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getLocalSearchOptimisationStage_AnnealingSettings() {
 		return (EReference)localSearchOptimisationStageEClass.getEStructuralFeatures().get(1);
 	}
@@ -679,6 +705,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getHillClimbOptimisationStage() {
 		return hillClimbOptimisationStageEClass;
 	}
@@ -688,6 +715,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getHillClimbOptimisationStage_Seed() {
 		return (EAttribute)hillClimbOptimisationStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -697,6 +725,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getHillClimbOptimisationStage_AnnealingSettings() {
 		return (EReference)hillClimbOptimisationStageEClass.getEStructuralFeatures().get(1);
 	}
@@ -706,6 +735,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getActionPlanOptimisationStage() {
 		return actionPlanOptimisationStageEClass;
 	}
@@ -715,6 +745,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanOptimisationStage_TotalEvaluations() {
 		return (EAttribute)actionPlanOptimisationStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -724,6 +755,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanOptimisationStage_InRunEvaluations() {
 		return (EAttribute)actionPlanOptimisationStageEClass.getEStructuralFeatures().get(1);
 	}
@@ -733,6 +765,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanOptimisationStage_SearchDepth() {
 		return (EAttribute)actionPlanOptimisationStageEClass.getEStructuralFeatures().get(2);
 	}
@@ -742,6 +775,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getResetInitialSequencesStage() {
 		return resetInitialSequencesStageEClass;
 	}
@@ -751,6 +785,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBreakEvenOptimisationStage() {
 		return breakEvenOptimisationStageEClass;
 	}
@@ -760,6 +795,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBreakEvenOptimisationStage_TargetProfitAndLoss() {
 		return (EAttribute)breakEvenOptimisationStageEClass.getEStructuralFeatures().get(0);
 	}
@@ -769,6 +805,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getConstraintAndFitnessSettings() {
 		return constraintAndFitnessSettingsEClass;
 	}
@@ -778,6 +815,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getConstraintAndFitnessSettings_Objectives() {
 		return (EReference)constraintAndFitnessSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -787,6 +825,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getConstraintAndFitnessSettings_Constraints() {
 		return (EReference)constraintAndFitnessSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -796,6 +835,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getConstraintAndFitnessSettings_FloatingDaysLimit() {
 		return (EAttribute)constraintAndFitnessSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -805,6 +845,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getConstraintAndFitnessSettings_SimilaritySettings() {
 		return (EReference)constraintAndFitnessSettingsEClass.getEStructuralFeatures().get(3);
 	}
@@ -814,6 +855,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOptimisationPlan() {
 		return optimisationPlanEClass;
 	}
@@ -823,6 +865,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimisationPlan_UserSettings() {
 		return (EReference)optimisationPlanEClass.getEStructuralFeatures().get(0);
 	}
@@ -832,6 +875,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimisationPlan_Stages() {
 		return (EReference)optimisationPlanEClass.getEStructuralFeatures().get(1);
 	}
@@ -841,6 +885,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimisationPlan_SolutionBuilderSettings() {
 		return (EReference)optimisationPlanEClass.getEStructuralFeatures().get(2);
 	}
@@ -850,6 +895,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSolutionBuilderSettings() {
 		return solutionBuilderSettingsEClass;
 	}
@@ -859,8 +905,19 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSolutionBuilderSettings_ConstraintAndFitnessSettings() {
 		return (EReference)solutionBuilderSettingsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMultipleSolutionSimilarityOptimisationStage() {
+		return multipleSolutionSimilarityOptimisationStageEClass;
 	}
 
 	/**
@@ -986,6 +1043,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		solutionBuilderSettingsEClass = createEClass(SOLUTION_BUILDER_SETTINGS);
 		createEReference(solutionBuilderSettingsEClass, SOLUTION_BUILDER_SETTINGS__CONSTRAINT_AND_FITNESS_SETTINGS);
 
+		multipleSolutionSimilarityOptimisationStageEClass = createEClass(MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE);
+
 		// Create enums
 		similarityModeEEnum = createEEnum(SIMILARITY_MODE);
 	}
@@ -1039,6 +1098,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		actionPlanOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		resetInitialSequencesStageEClass.getESuperTypes().add(this.getOptimisationStage());
 		breakEvenOptimisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
+		multipleSolutionSimilarityOptimisationStageEClass.getESuperTypes().add(this.getLocalSearchOptimisationStage());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(userSettingsEClass, UserSettings.class, "UserSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1125,6 +1185,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		initEClass(solutionBuilderSettingsEClass, SolutionBuilderSettings.class, "SolutionBuilderSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSolutionBuilderSettings_ConstraintAndFitnessSettings(), this.getConstraintAndFitnessSettings(), null, "constraintAndFitnessSettings", null, 0, 1, SolutionBuilderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(multipleSolutionSimilarityOptimisationStageEClass, MultipleSolutionSimilarityOptimisationStage.class, "MultipleSolutionSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(similarityModeEEnum, SimilarityMode.class, "SimilarityMode");

@@ -8,10 +8,8 @@ package com.mmxlabs.models.lng.scenario.model;
 
 import java.time.LocalDate;
 
-import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;

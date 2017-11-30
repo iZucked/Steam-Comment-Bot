@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.adp.IntervalType;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;

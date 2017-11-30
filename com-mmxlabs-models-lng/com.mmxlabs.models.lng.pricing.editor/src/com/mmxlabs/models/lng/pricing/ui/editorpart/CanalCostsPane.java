@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;

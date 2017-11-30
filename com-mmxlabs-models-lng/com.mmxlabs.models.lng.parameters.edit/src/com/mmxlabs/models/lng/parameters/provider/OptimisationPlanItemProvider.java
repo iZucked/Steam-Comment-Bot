@@ -221,6 +221,11 @@ public class OptimisationPlanItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createMultipleSolutionSimilarityOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS,
 				 ParametersFactory.eINSTANCE.createSolutionBuilderSettings()));
 	}

@@ -8,7 +8,6 @@ package com.mmxlabs.models.lng.analytics.presentation.composites;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -48,7 +47,7 @@ public class SlotInsertionOptionsComponentHelper extends BaseComponentHelper {
 	 */
 	public SlotInsertionOptionsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET));
 	}
 	
 	/**
@@ -71,8 +70,6 @@ public class SlotInsertionOptionsComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotsInsertedEditor(detailComposite, topClass);
 		add_eventsInsertedEditor(detailComposite, topClass);
-		add_insertionOptionsEditor(detailComposite, topClass);
-		add_extraSlotsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slotsInserted feature on SlotInsertionOptions
@@ -89,22 +86,5 @@ public class SlotInsertionOptionsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_eventsInsertedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED));
-	}
-
-	/**
-	 * Create the editor for the insertionOptions feature on SlotInsertionOptions
-	 *
-	 * @generated
-	 */
-	protected void add_insertionOptionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS));
-	}
-	/**
-	 * Create the editor for the extraSlots feature on SlotInsertionOptions
-	 *
-	 * @generated
-	 */
-	protected void add_extraSlotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS));
 	}
 }

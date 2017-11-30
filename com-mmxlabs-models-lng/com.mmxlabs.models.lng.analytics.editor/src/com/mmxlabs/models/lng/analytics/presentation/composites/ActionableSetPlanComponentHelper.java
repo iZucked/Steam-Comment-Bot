@@ -8,7 +8,6 @@ package com.mmxlabs.models.lng.analytics.presentation.composites;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -48,7 +47,7 @@ public class ActionableSetPlanComponentHelper extends BaseComponentHelper {
 	 */
 	public ActionableSetPlanComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET));
 	}
 	
 	/**
@@ -69,23 +68,5 @@ public class ActionableSetPlanComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_actionSetsEditor(detailComposite, topClass);
-		add_extraSlotsEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the actionSets feature on ActionableSetPlan
-	 *
-	 * @generated
-	 */
-	protected void add_actionSetsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ACTIONABLE_SET_PLAN__ACTION_SETS));
-	}
-	/**
-	 * Create the editor for the extraSlots feature on ActionableSetPlan
-	 *
-	 * @generated
-	 */
-	protected void add_extraSlotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ACTIONABLE_SET_PLAN__EXTRA_SLOTS));
 	}
 }

@@ -46,7 +46,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.rcp.common.SelectionHelper;
-import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
@@ -103,7 +103,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
-	class BaseFuelEditorAction extends AbstractMenuAction {
+	class BaseFuelEditorAction extends AbstractMenuLockableAction {
 		public BaseFuelEditorAction() {
 			super("Base Fuels");
 			try {
@@ -132,7 +132,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 				boolean b = false;
 				for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
 					b = true;
-					final Action editBase = new AbstractMenuAction(baseFuel.getName()) {
+					final Action editBase = new AbstractMenuLockableAction(baseFuel.getName()) {
 						@Override
 						protected void populate(final Menu submenu) {
 							final LockableAction edit = new LockableAction("Edit...") {

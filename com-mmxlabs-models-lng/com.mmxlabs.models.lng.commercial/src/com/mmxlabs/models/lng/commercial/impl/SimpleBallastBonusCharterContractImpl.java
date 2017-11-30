@@ -12,8 +12,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
 
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 

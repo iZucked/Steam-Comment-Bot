@@ -29,13 +29,13 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider<Object> {
 	@Override
-	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
+	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet, MMXRootObject rootObject) {
 		return addedObject instanceof BaseFuel;
 	}
 
 	@Override
-	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		return shouldHandleAddition(deletedObject, overrides, editSet);
+	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet, MMXRootObject rootObject) {
+		return shouldHandleAddition(deletedObject, overrides, editSet, rootObject);
 	}
 
 	@Override

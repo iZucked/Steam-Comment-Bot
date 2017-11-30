@@ -31,7 +31,7 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
-import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
 /**
@@ -146,7 +146,7 @@ class SingleAddAction extends LockableAction {
 	}
 }
 
-class MenuAddAction extends AbstractMenuAction {
+class MenuAddAction extends AbstractMenuLockableAction {
 	private final List<IModelFactory> factories;
 	private final IAddContext context;
 	private final Action[] additionalActions;
@@ -174,7 +174,7 @@ class MenuAddAction extends AbstractMenuAction {
 	}
 }
 
-class MultiAddContextAction extends AbstractMenuAction {
+class MultiAddContextAction extends AbstractMenuLockableAction {
 	private final List<Pair<IModelFactory, IAddContext>> factories;
 	private final Action[] additionalActions;
 

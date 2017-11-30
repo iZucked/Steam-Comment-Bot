@@ -16,19 +16,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
-import com.mmxlabs.models.lng.analytics.CargoSandbox;
-import com.mmxlabs.models.lng.analytics.CostComponent;
-import com.mmxlabs.models.lng.analytics.DestinationType;
-import com.mmxlabs.models.lng.analytics.FuelCost;
-import com.mmxlabs.models.lng.analytics.Journey;
-import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
-import com.mmxlabs.models.lng.analytics.ShippingCostRow;
-import com.mmxlabs.models.lng.analytics.UnitCostLine;
-import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
-import com.mmxlabs.models.lng.analytics.Visit;
-import com.mmxlabs.models.lng.analytics.Voyage;
 
 /**
  * <!-- begin-user-doc -->
@@ -75,17 +63,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case AnalyticsPackage.ANALYTICS_MODEL: return createAnalyticsModel();
-			case AnalyticsPackage.UNIT_COST_MATRIX: return createUnitCostMatrix();
-			case AnalyticsPackage.UNIT_COST_LINE: return createUnitCostLine();
-			case AnalyticsPackage.VOYAGE: return createVoyage();
-			case AnalyticsPackage.VISIT: return createVisit();
-			case AnalyticsPackage.COST_COMPONENT: return createCostComponent();
-			case AnalyticsPackage.FUEL_COST: return createFuelCost();
-			case AnalyticsPackage.JOURNEY: return createJourney();
-			case AnalyticsPackage.SHIPPING_COST_PLAN: return createShippingCostPlan();
-			case AnalyticsPackage.SHIPPING_COST_ROW: return createShippingCostRow();
-			case AnalyticsPackage.CARGO_SANDBOX: return createCargoSandbox();
-			case AnalyticsPackage.PROVISIONAL_CARGO: return createProvisionalCargo();
 			case AnalyticsPackage.BUY_OPPORTUNITY: return createBuyOpportunity();
 			case AnalyticsPackage.SELL_OPPORTUNITY: return createSellOpportunity();
 			case AnalyticsPackage.BUY_MARKET: return createBuyMarket();
@@ -111,9 +88,10 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.EXISTING_VESSEL_AVAILABILITY: return createExistingVesselAvailability();
 			case AnalyticsPackage.EXISTING_CHARTER_MARKET_OPTION: return createExistingCharterMarketOption();
 			case AnalyticsPackage.ACTIONABLE_SET_PLAN: return createActionableSetPlan();
-			case AnalyticsPackage.ACTIONABLE_SET: return createActionableSet();
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS: return createSlotInsertionOptions();
 			case AnalyticsPackage.SLOT_INSERTION_OPTION: return createSlotInsertionOption();
+			case AnalyticsPackage.SOLUTION_OPTION: return createSolutionOption();
+			case AnalyticsPackage.OPTIMISATION_RESULT: return createOptimisationResult();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -127,8 +105,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case AnalyticsPackage.DESTINATION_TYPE:
-				return createDestinationTypeFromString(eDataType, initialValue);
 			case AnalyticsPackage.VOLUME_MODE:
 				return createVolumeModeFromString(eDataType, initialValue);
 			default:
@@ -144,8 +120,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case AnalyticsPackage.DESTINATION_TYPE:
-				return convertDestinationTypeToString(eDataType, instanceValue);
 			case AnalyticsPackage.VOLUME_MODE:
 				return convertVolumeModeToString(eDataType, instanceValue);
 			default:
@@ -162,127 +136,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public AnalyticsModel createAnalyticsModel() {
 		AnalyticsModelImpl analyticsModel = new AnalyticsModelImpl();
 		return analyticsModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public UnitCostMatrix createUnitCostMatrix() {
-		UnitCostMatrixImpl unitCostMatrix = new UnitCostMatrixImpl();
-		return unitCostMatrix;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public UnitCostLine createUnitCostLine() {
-		UnitCostLineImpl unitCostLine = new UnitCostLineImpl();
-		return unitCostLine;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Voyage createVoyage() {
-		VoyageImpl voyage = new VoyageImpl();
-		return voyage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Visit createVisit() {
-		VisitImpl visit = new VisitImpl();
-		return visit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CostComponent createCostComponent() {
-		CostComponentImpl costComponent = new CostComponentImpl();
-		return costComponent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public FuelCost createFuelCost() {
-		FuelCostImpl fuelCost = new FuelCostImpl();
-		return fuelCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Journey createJourney() {
-		JourneyImpl journey = new JourneyImpl();
-		return journey;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ShippingCostPlan createShippingCostPlan() {
-		ShippingCostPlanImpl shippingCostPlan = new ShippingCostPlanImpl();
-		return shippingCostPlan;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ShippingCostRow createShippingCostRow() {
-		ShippingCostRowImpl shippingCostRow = new ShippingCostRowImpl();
-		return shippingCostRow;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CargoSandbox createCargoSandbox() {
-		CargoSandboxImpl cargoSandbox = new CargoSandboxImpl();
-		return cargoSandbox;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ProvisionalCargo createProvisionalCargo() {
-		ProvisionalCargoImpl provisionalCargo = new ProvisionalCargoImpl();
-		return provisionalCargo;
 	}
 
 	/**
@@ -542,16 +395,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ActionableSet createActionableSet() {
-		ActionableSetImpl actionableSet = new ActionableSetImpl();
-		return actionableSet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public SlotInsertionOptions createSlotInsertionOptions() {
 		SlotInsertionOptionsImpl slotInsertionOptions = new SlotInsertionOptionsImpl();
 		return slotInsertionOptions;
@@ -572,10 +415,9 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DestinationType createDestinationTypeFromString(EDataType eDataType, String initialValue) {
-		DestinationType result = DestinationType.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-		return result;
+	public SolutionOption createSolutionOption() {
+		SolutionOptionImpl solutionOption = new SolutionOptionImpl();
+		return solutionOption;
 	}
 
 	/**
@@ -583,8 +425,9 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertDestinationTypeToString(EDataType eDataType, Object instanceValue) {
-		return instanceValue == null ? null : instanceValue.toString();
+	public OptimisationResult createOptimisationResult() {
+		OptimisationResultImpl optimisationResult = new OptimisationResultImpl();
+		return optimisationResult;
 	}
 
 	/**

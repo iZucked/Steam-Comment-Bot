@@ -6,8 +6,6 @@ package com.mmxlabs.models.lng.scenario.ui.importers;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;

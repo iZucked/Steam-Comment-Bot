@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
-import com.mmxlabs.models.lng.fleet.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;

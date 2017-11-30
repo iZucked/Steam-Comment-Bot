@@ -17,10 +17,8 @@ import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -44,9 +42,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.importer.RouteImporter;
-import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
@@ -59,9 +55,8 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
-import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
@@ -166,7 +161,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		final Action importPorts = new SimpleImportAction(scenarioEditingLocation, scenarioViewer);
 
 		importPorts.setText("Import ports...");
-		final AbstractMenuAction importMenu = new AbstractMenuAction("Import Ports and Distances") {
+		final AbstractMenuLockableAction importMenu = new AbstractMenuLockableAction("Import Ports and Distances") {
 			{
 				ImageDescriptor desc = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/etool16/import_wiz.gif");
 				if (desc == null) {
@@ -353,7 +348,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		return importMenu;
 	}
 
-	class DistanceMatrixEditorAction extends AbstractMenuAction {
+	class DistanceMatrixEditorAction extends AbstractMenuLockableAction {
 		public DistanceMatrixEditorAction() {
 			super("Edit distances");
 			try {
@@ -369,7 +364,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			if (rootObject instanceof LNGScenarioModel) {
 				final PortModel portModel = ((LNGScenarioModel) rootObject).getReferenceModel().getPortModel();
 				for (final Route canal : portModel.getRoutes()) {
-					final Action canalEditor = new AbstractMenuAction(canal.getName()) {
+					final Action canalEditor = new AbstractMenuLockableAction(canal.getName()) {
 						@Override
 						protected void populate(final Menu menu2) {
 							final Action editCanal = createMatrixEditor(canal.getName(), canal);

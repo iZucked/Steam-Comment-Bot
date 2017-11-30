@@ -12,9 +12,7 @@ import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel;
 import com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;

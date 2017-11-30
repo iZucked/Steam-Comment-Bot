@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.scenario.model.util;
 
-import com.mmxlabs.models.lng.scenario.model.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;

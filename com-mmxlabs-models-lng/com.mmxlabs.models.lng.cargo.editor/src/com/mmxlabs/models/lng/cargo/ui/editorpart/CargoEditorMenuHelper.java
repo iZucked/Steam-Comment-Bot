@@ -42,7 +42,6 @@ import com.mmxlabs.common.time.Days;
 import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
-import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;

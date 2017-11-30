@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
-import java.util.List;
-
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;

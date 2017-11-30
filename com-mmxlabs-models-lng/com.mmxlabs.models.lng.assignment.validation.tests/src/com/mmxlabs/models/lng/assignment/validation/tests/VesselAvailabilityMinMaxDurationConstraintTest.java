@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.assignment.validation.tests;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
@@ -19,19 +18,11 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import com.mmxlabs.models.lng.assignment.validation.AllowedVesselAssignmentConstraint;
 import com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityMinMaxConstraint;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class VesselAvailabilityMinMaxDurationConstraintTest {
 

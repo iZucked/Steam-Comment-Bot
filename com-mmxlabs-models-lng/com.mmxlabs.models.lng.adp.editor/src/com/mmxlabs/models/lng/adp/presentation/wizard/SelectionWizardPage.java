@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.adp.presentation.wizard;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.eclipse.emf.common.ui.celleditor.SingleColumnTableEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;

@@ -991,6 +991,61 @@ public interface ParametersPackage extends EPackage {
 	int SOLUTION_BUILDER_SETTINGS_FEATURE_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.MultipleSolutionSimilarityOptimisationStageImpl <em>Multiple Solution Similarity Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.MultipleSolutionSimilarityOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getMultipleSolutionSimilarityOptimisationStage()
+	 * @generated
+	 */
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 19;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__NAME = LOCAL_SEARCH_OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = LOCAL_SEARCH_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
+
+	/**
+	 * The feature id for the '<em><b>Seed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__SEED = LOCAL_SEARCH_OPTIMISATION_STAGE__SEED;
+
+	/**
+	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__ANNEALING_SETTINGS = LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS;
+
+	/**
+	 * The number of structural features of the '<em>Multiple Solution Similarity Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT = LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -998,7 +1053,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
 	 * @generated
 	 */
-	int SIMILARITY_MODE = 19;
+	int SIMILARITY_MODE = 20;
 
 
 	/**
@@ -1698,6 +1753,16 @@ public interface ParametersPackage extends EPackage {
 	EReference getSolutionBuilderSettings_ConstraintAndFitnessSettings();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage <em>Multiple Solution Similarity Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Multiple Solution Similarity Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage
+	 * @generated
+	 */
+	EClass getMultipleSolutionSimilarityOptimisationStage();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2286,6 +2351,16 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SOLUTION_BUILDER_SETTINGS__CONSTRAINT_AND_FITNESS_SETTINGS = eINSTANCE.getSolutionBuilderSettings_ConstraintAndFitnessSettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.MultipleSolutionSimilarityOptimisationStageImpl <em>Multiple Solution Similarity Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.MultipleSolutionSimilarityOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getMultipleSolutionSimilarityOptimisationStage()
+		 * @generated
+		 */
+		EClass MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = eINSTANCE.getMultipleSolutionSimilarityOptimisationStage();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
