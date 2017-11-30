@@ -32,11 +32,20 @@ public class CopyGridToClipboardAction extends Action {
 	private final char separator;
 
 	private boolean rowHeadersIncluded = false;
-
+	
+	private Runnable preOperation;
+	private Runnable postOperation;
+	
 	public CopyGridToClipboardAction(final Grid table) {
 		this(table, '\t');
 	}
 
+	public CopyGridToClipboardAction(final Grid table, Runnable preOperation, Runnable postOperation) {
+		this(table, '\t');
+		this.preOperation = preOperation;
+		this.postOperation = postOperation;
+	}
+	
 	public CopyGridToClipboardAction(final Grid table, final char separator) {
 
 		super("Copy");
@@ -52,7 +61,7 @@ public class CopyGridToClipboardAction extends Action {
 
 	@Override
 	public void run() {
-
+		preOperation.run();
 		final StringWriter sw = parseGridIntoStringWriter();
 
 		// Create a new clipboard instance
@@ -66,6 +75,7 @@ public class CopyGridToClipboardAction extends Action {
 			// Clean up our local resources - system clipboard now has the data
 			cb.dispose();
 		}
+		postOperation.run();
 	}
 
 	public StringWriter parseGridIntoStringWriter() {
@@ -86,6 +96,12 @@ public class CopyGridToClipboardAction extends Action {
 			}
 			// other header cells
 			for (int i = 0; i < numColumns; ++i) {
+//				
+//				Object obj = tc.getData();
+//				if (obj instanceof CargoEconsReportRow) {
+//					CargoEconsReportRow row = (CargoEconsReportRow) obj;
+//					String unit = row.unit;
+//				}
 				final GridColumn tc = table.getColumn(i);
 				cw.addValue(tc.getText());
 				if ((i + 1) == numColumns) {

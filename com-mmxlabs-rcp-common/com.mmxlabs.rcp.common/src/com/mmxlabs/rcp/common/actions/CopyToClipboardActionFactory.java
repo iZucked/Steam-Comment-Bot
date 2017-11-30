@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
+import java.util.function.Function;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -57,7 +59,38 @@ public final class CopyToClipboardActionFactory {
 	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTableViewer viewer) {
 		return new CopyGridToClipboardAction(viewer.getGrid());
 	}
+	
+	public static CopyGridToHtmlClipboardAction createCopyToHtmlClipboardAction(final GridTableViewer viewer, boolean includeRowHeaders, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToHtmlClipboardAction(viewer.getGrid(), includeRowHeaders);
+	}
 
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final Grid grid, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToClipboardAction(grid);
+	}
+
+	public static CopyTreeToClipboardAction createCopyToClipboardAction(final TreeViewer viewer, Runnable preOperation, Runnable postOperation) {
+		return new CopyTreeToClipboardAction(viewer.getTree());
+	}
+
+	public static CopyTreeToClipboardAction createCopyToClipboardAction(final Tree tree, Runnable preOperation, Runnable postOperation) {
+		return new CopyTreeToClipboardAction(tree);
+	}
+
+	public static CopyTableToClipboardAction createCopyToClipboardAction(final TableViewer viewer, Runnable preOperation, Runnable postOperation) {
+		return new CopyTableToClipboardAction(viewer.getTable());
+	}
+
+	public static CopyTableToClipboardAction createCopyToClipboardAction(final Table table, Runnable preOperation, Runnable postOperation) {
+		return new CopyTableToClipboardAction(table);
+	}
+
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTreeViewer viewer, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToClipboardAction(viewer.getGrid());
+	}
+
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTableViewer viewer, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToClipboardAction(viewer.getGrid(), preOperation, postOperation);
+	}
 	public static String generateCSV(Object obj) {
 		if (obj instanceof Grid || obj instanceof GridTreeViewer || obj instanceof GridTableViewer)
 			return createCopyToClipboardAction((Grid) obj).parseGridIntoStringWriter().toString();
