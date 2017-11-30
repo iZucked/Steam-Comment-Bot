@@ -11,8 +11,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.models.lng.analytics.SlotInsertionOption;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
+import com.mmxlabs.models.lng.analytics.SolutionOption;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -25,24 +27,26 @@ public class InsertionPlanTransformer {
 
 		final List<ScenarioResult> stages = new LinkedList<>();
 
-		// Assuming first option is the base.
-		for (final SlotInsertionOption option : plan.getInsertionOptions()) {
+		// Hacky - compare to evaluated state
+		AnalyticsModel analyticsModel = (AnalyticsModel) plan.eContainer();
+		LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
+		ScenarioResult base = new ScenarioResult(instance, scenarioModel.getScheduleModel());
+
+		boolean first = true;
+		for (final SolutionOption option : plan.getOptions()) {
+			if (first) {
+				// Skip first solution as it should be the original base case
+				first = false;
+				continue;
+			}
 			stages.add(new ScenarioResult(instance, option.getScheduleModel()));
 		}
-
 		try {
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
-			monitor.beginTask("Opening insertion plans", stages.size());
-			ScenarioResult base = null;
+			monitor.beginTask("Opening solutions", stages.size());
 			for (final ScenarioResult current : stages) {
-				if (base != null) {
-					root.getChangeSets().add(transformer.buildChangeSet(stages.get(0), base, current, target));
-				}
-				if (base == null) {
-					base = current;
-				}
+				root.getChangeSets().add(transformer.buildChangeSet(base, null, current));
 				monitor.worked(1);
-
 			}
 		} finally {
 			monitor.done();

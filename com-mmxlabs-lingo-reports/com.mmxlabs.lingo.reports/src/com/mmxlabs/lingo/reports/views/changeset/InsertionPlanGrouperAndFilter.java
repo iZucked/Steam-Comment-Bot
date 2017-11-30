@@ -76,12 +76,30 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	public boolean insertionModeActive = false;
 
+	public boolean isMultipleSolutionView() {
+		return multipleSolutionView;
+	}
+
+	public void setMultipleSolutionView(boolean multipleSolutionView) {
+		this.multipleSolutionView = multipleSolutionView;
+	}
+
+	private boolean multipleSolutionView = false;
+
 	public boolean isInsertionModeActive() {
 		return insertionModeActive;
 	}
 
 	public void setInsertionModeActive(boolean insertionModeActive) {
 		this.insertionModeActive = insertionModeActive;
+	}
+
+	public int getMaxComplexity() {
+		return maxComplexity;
+	}
+
+	public void setMaxComplexity(int maxComplexity) {
+		this.maxComplexity = maxComplexity;
 	}
 
 	@Override
@@ -109,13 +127,13 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		if (element instanceof ChangeSetTableGroup) {
 
 			ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
-			if (changeSetTableGroup.getComplexity() > maxComplexity) {
+			if (changeSetTableGroup.getComplexity() > getMaxComplexity()) {
 				return false;
 			}
 		}
 		if (parentElement instanceof ChangeSetTableGroup) {
 			ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
-			if (changeSetTableGroup.getComplexity() > maxComplexity) {
+			if (changeSetTableGroup.getComplexity() > getMaxComplexity()) {
 				return false;
 			}
 		}
@@ -328,7 +346,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				boolean first = true;
 				double sortValue = 0.0;
 				for (ChangeSetTableGroup g : groups) {
-					if (g.getComplexity() > maxComplexity) {
+					if (g.getComplexity() > getMaxComplexity()) {
 						continue;
 					}
 					g.setGroupAlternative(!first);
@@ -1038,12 +1056,29 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		BiFunction<ChangeSetTableGroup, Integer, String> defaultLabelProvider = ChangeSetViewColumnHelper.getDefaultLabelProvider();
 		return (changeSetTableGroup, index) -> {
 			if (!insertionModeActive) {
-				return defaultLabelProvider.apply(changeSetTableGroup, index);
+				if (!multipleSolutionView) {
+					return defaultLabelProvider.apply(changeSetTableGroup, index);
+				} else {
+					return ChangeSetViewColumnHelper.getMultipleSolutionLabelProvider().apply(changeSetTableGroup, index);
+				}
 			}
 
 			String dest = changeSetTableGroup.getDescription();
 			int complexity = changeSetTableGroup.getComplexity();
-			String base = String.format("%s, ∆%d ", dest, complexity);
+			final String base;
+			switch (groupMode) {
+			case Complexity:
+				base = String.format("∆%d ",  complexity);
+				break;
+			case Target:
+				base = String.format("%s ", dest);
+				break;
+			case TargetAndComplexity:
+				base = String.format("%s, ∆%d ", dest, complexity);
+				break;
+			default:
+				throw new IllegalStateException();
+			}
 			if (userFilters.isEmpty()) {
 				if (expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
 					if (changeSetTableGroup.isGroupAlternative()) {
@@ -1128,5 +1163,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			dest = sendTo.toString();
 		}
 		return new Pair<>(dest, sendTo);
+	}
+
+	public GroupMode getGroupMode() {
+		return groupMode;
 	}
 }

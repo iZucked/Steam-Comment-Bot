@@ -772,14 +772,6 @@
             plugin.xml="gco.plugin.xml">
       </PluginXMLEnablement>
       <PluginXMLEnablement
-            feature="options-suggester"
-            plugin.xml="suggester.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
-            feature="actionable-set-optimiser"
-            plugin.xml="actionable-set-optimiser.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
             feature="cargo-actuals"
             plugin.xml="actuals.plugin.xml">
       </PluginXMLEnablement>
@@ -966,6 +958,50 @@
                   </visibleWhen>
          </command>
       </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="com.mmxlabs.models.lng.analytics.AbstractSolutionSet"
+            class="com.mmxlabs.lingo.reports.services.AnalyticsSolutionAdapterFactory">
+         <adapter
+               type="com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="com.mmxlabs.models.lng.analytics.SlotInsertionOptions"
+            class="com.mmxlabs.lingo.reports.services.AnalyticsSolutionAdapterFactory">
+         <adapter
+               type="com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="com.mmxlabs.models.lng.analytics.OptimisationResult"
+            class="com.mmxlabs.lingo.reports.services.AnalyticsSolutionAdapterFactory">
+         <adapter
+               type="com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler">
+         </adapter>
+      </factory>      
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
+            icon="icons/cview16/changes_view.gif"
+            id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView"
+            name="Change Sets"
+            restorable="false">
+      </view>
+      <view
+            allowMultiple="false"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
+            id="com.mmxlabs.lingo.reports.views.changeset.ActionSetView"
+            name="Action Sets"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>

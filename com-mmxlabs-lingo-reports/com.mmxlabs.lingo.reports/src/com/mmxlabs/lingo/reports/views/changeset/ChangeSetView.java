@@ -5,14 +5,11 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -26,21 +23,22 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.di.PersistState;
 import org.eclipse.e4.ui.di.UIEventTopic;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
@@ -70,13 +68,18 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.lingo.reports.services.ChangeSetViewCreatorService;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -85,11 +88,10 @@ import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
+import com.mmxlabs.lingo.reports.views.changeset.InsertionPlanGrouperAndFilter.GroupMode;
 import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
-import com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupModeEvent;
-import com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchSlotEvent;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
@@ -99,7 +101,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
-import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -109,28 +111,24 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
-import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-public class ChangeSetView implements IAdaptable {
+public class ChangeSetView extends ViewPart {
 
 	public static enum ViewMode {
-		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS
+		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS, GENERIC
 	}
 
 	public static class ViewState {
@@ -145,7 +143,8 @@ public class ChangeSetView implements IAdaptable {
 		public final Collection<Slot> allTargetSlots = new HashSet<>();
 
 		public final SortMode displaySortMode;
-		public Consumer<ChangeSetTableRoot> postProcess = (cs) -> {};
+		public Consumer<ChangeSetTableRoot> postProcess = (cs) -> {
+		};
 
 		public ViewState(final ChangeSetRoot root, final SortMode displaySortMode) {
 			this.root = root;
@@ -174,18 +173,16 @@ public class ChangeSetView implements IAdaptable {
 
 	private static final String KEY_RESTORE_ANALYTICS_SOLUTION = "restore-analytics-solution-from-tags";
 
-	@Inject
-	private EPartService partService;
-
 	private GridTreeViewer viewer;
-
-	@Inject
+	// @Inject
+	// private EPartService partService;
+	// @Inject
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
-
-	@Inject
+	//
+	// @Inject
 	private ESelectionService eSelectionService;
-
-	@Inject
+	//
+	// @Inject
 	private ScenarioComparisonService scenarioComparisonService;
 
 	private ChangeSetViewColumnHelper columnHelper;
@@ -242,6 +239,8 @@ public class ChangeSetView implements IAdaptable {
 
 	private boolean diffToBase = false;
 	private boolean showNonStructuralChanges = false;
+	private boolean showRelatedChangesMenus = false;
+	private boolean showUserFilterMenus = false;
 	private boolean showNegativePNLChanges = true;
 
 	private boolean persistAnalyticsSolution = false;
@@ -454,25 +453,18 @@ public class ChangeSetView implements IAdaptable {
 	private final Queue<Runnable> postCreateActions = new ConcurrentLinkedQueue<>();
 	private boolean viewCreated = false;
 
+	protected boolean showToggleDiffToBaseAction = false;
+	protected boolean showGroupByMenu = false;
+	protected boolean showChangeTargetMenu = false;
+	protected boolean showNegativePNLChangesMenu = false;
+
+	private ActionContributionItem toggleDiffToBaseActionItem;
+
 	@PostConstruct
-	public void createPartControl(@Optional final MPart part, final Composite parent) {
-		handleEvents = true;
-		if (part != null) {
-			for (final String tag : part.getTags()) {
-				if (tag.equals(ChangeSetViewCreatorService.TAG_TYPE_OLD_ACTION_SET)) {
-					viewMode = ViewMode.OLD_ACTION_SET;
-				}
-				if (tag.equals(ChangeSetViewCreatorService.TAG_TYPE_NEW_ACTION_SET)) {
-					viewMode = ViewMode.NEW_ACTION_SET;
-				}
-				if (tag.equals(ChangeSetViewCreatorService.TAG_TYPE_INSERTIONS)) {
-					viewMode = ViewMode.INSERTIONS;
-				}
-				if (tag.equals("disable-event-handlers")) {
-					handleEvents = false;
-				}
-			}
-		}
+	public void createPartControl(final Composite parent) {
+		scenarioComparisonService = PlatformUI.getWorkbench().getService(ScenarioComparisonService.class);
+		eSelectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
+		scenarioSelectionProvider = PlatformUI.getWorkbench().getService(IScenarioServiceSelectionProvider.class);
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
@@ -516,7 +508,9 @@ public class ChangeSetView implements IAdaptable {
 									} else {
 										other = changeSet.getPrevScenario();
 									}
-									scenarioSelectionProvider.setPinnedPair(other, changeSet.getCurrentScenario(), true);
+									if (other != null && changeSet.getCurrentScenario() != null) {
+										scenarioSelectionProvider.setPinnedPair(other, changeSet.getCurrentScenario(), true);
+									}
 									break;
 								}
 							}
@@ -609,20 +603,6 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public boolean select(final Viewer viewer, Object parentElement, Object element) {
-				//
-				// if (insertionPlanFilter.getUserFilters().isEmpty()) {
-				//
-				// if (element instanceof ChangeSetNode) {
-				// ChangeSetNode changeSetNode = (ChangeSetNode) element;
-				// if (changeSetNode.eContainer() instanceof ChangeSetNode) {
-				// ChangeSetNode parentNode = (ChangeSetNode) changeSetNode.eContainer();
-				// if (!parentNode.isExpandChildren()) {
-				// return false;
-				// }
-				// }
-				// // element = ((ChangeSetNode) element).getTableGroup();
-				// }
-				// }
 
 				if (!showNegativePNLChanges) {
 
@@ -754,6 +734,10 @@ public class ChangeSetView implements IAdaptable {
 			}
 		});
 
+		makeActions();
+
+		setViewMode(ViewMode.COMPARE);
+
 		{
 			// final MenuManager mgr = new MenuManager();
 			// LocalMenuHelper menuHelper = new LocalMenuHelper(viewer.getGrid());
@@ -773,8 +757,149 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
-	@PostConstruct
 	public void makeActions() {
+		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("start"));
+
+		{
+			copyAction = CopyToClipboardActionFactory.createCopyToHtmlClipboardAction(viewer, true);
+			getViewSite().getActionBars().getToolBarManager().add(copyAction);
+		}
+		{
+			toggleDiffToBaseAction = new RunnableAction("Show all changes to base", SWT.PUSH, () -> {
+				doToggleDiffToBase();
+			});
+			toggleDiffToBaseAction.setToolTipText("Toggle comparing to base or previous case");
+			toggleDiffToBaseAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/compare_to_base.gif"));
+			GroupMarker group = new GroupMarker("diffToBaseGroup");
+			getViewSite().getActionBars().getToolBarManager().add(group);
+			toggleDiffToBaseActionItem = new ActionContributionItem(toggleDiffToBaseAction);
+			if (showToggleDiffToBaseAction) {
+				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleDiffToBaseActionItem);
+			}
+		}
+
+		{
+			getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("filters"));
+			filterMenu = new AbstractMenuAction("Filter...") {
+
+				@Override
+				protected void populate(Menu menu) {
+					// TODO Auto-generated method stub
+					if (showGroupByMenu) {
+						AbstractMenuAction groupModeAction = new AbstractMenuAction("Group by") {
+							@Override
+							protected void populate(Menu menu2) {
+								RunnableAction mode_Target = new RunnableAction("Target", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Target));
+
+								RunnableAction mode_TargetComplexity = new RunnableAction("Target and complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.TargetAndComplexity));
+								RunnableAction mode_Complextiy = new RunnableAction("Complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Complexity));
+
+								switch (insertionPlanFilter.getGroupMode()) {
+								case Complexity:
+									mode_Complextiy.setChecked(true);
+									break;
+								case Target:
+									mode_Target.setChecked(true);
+									break;
+								case TargetAndComplexity:
+									mode_TargetComplexity.setChecked(true);
+									break;
+								default:
+									break;
+								}
+								addActionToMenu(mode_Target, menu2);
+								addActionToMenu(mode_TargetComplexity, menu2);
+								addActionToMenu(mode_Complextiy, menu2);
+
+								int ii = 0;
+							};
+						};
+						groupModeAction.setToolTipText("Change the grouping choice");
+						addActionToMenu(groupModeAction, menu);
+					}
+					RunnableAction toggleStructuralChanges = new RunnableAction("Show non-structural changes", () -> doShowStructuralChangesToggle());
+					toggleStructuralChanges.setToolTipText("Toggling filtering of non structural changes");
+					toggleStructuralChanges.setChecked(showNonStructuralChanges);
+					// toggleStructuralChanges.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+					addActionToMenu(toggleStructuralChanges, menu);
+
+					if (showNegativePNLChangesMenu) {
+						RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", () -> doShowNegativePNLToggle());
+						toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
+						toggleNegativePNL.setChecked(showNegativePNLChanges);
+						// item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						addActionToMenu(toggleNegativePNL, menu);
+					}
+					if (showChangeTargetMenu) {
+						if (currentViewState != null && currentViewState.allTargetSlots.size() > 1) {
+
+							AbstractMenuAction targetMenu = new AbstractMenuAction("Target... ") {
+								@Override
+								protected void populate(Menu menu2) {
+
+									for (Slot target : currentViewState.allTargetSlots) {
+										RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH, () -> openAnalyticsSolution(currentViewState.lastSolution, target.getName()));
+										if (currentViewState.lastTargetSlot == target) {
+											action.setChecked(true);
+											action.setEnabled(false);
+										}
+										addActionToMenu(action, menu2);
+									}
+								}
+							};
+							targetMenu.setToolTipText("Select target element");
+							addActionToMenu(targetMenu, menu);
+						}
+					}
+
+				}
+			};
+			filterMenu.setToolTipText("Change filters");
+			filterMenu.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/filter.gif"));
+			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
+		}
+
+		// }
+		//
+		// if (solution.isCreateInsertionOptions()) {
+		// final MMenu menu = modelService.createModelElement(MMenu.class);
+		// menu.setElementId(viewPartId + ".directtoolitem.groupby_menu.menu");
+		// menu.setEnabled(true);
+		// menu.setToBeRendered(true);
+		// menu.setVisible(true);
+		//
+		// {
+		// final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+		// item.setElementId(viewPartId + ".directtoolitem.groupby_menu");
+		// item.setType(ItemType.PUSH);
+		// item.setTooltip("Change the grouping choice");
+		// item.setLabel("Group by");
+		// item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/group.gif");
+		// item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupByModeHandler");
+		// item.setMenu(menu);
+		// item.setEnabled(true);
+		// item.setToBeRendered(true);
+		// item.setVisible(true);
+		// toolbar.getChildren().add(item);
+		// }
+		// {
+		// final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
+		// item.setElementId(viewPartId + ".directtoolitem.group_menu.groupby.target_and_complexity");
+		// item.setType(ItemType.PUSH);
+		// item.setTooltip("Groups first by source or destination, then the the change complexity");
+		// item.setLabel("Target and complexity");
+		// // item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+		// item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupByModeHandler");
+		// item.getTags().add("groupby_target_and_complexity");
+		// item.setEnabled(true);
+		// item.setToBeRendered(true);
+		// item.setVisible(true);
+		// item.setType(ItemType.
+		//
+		// part.getTags().add(TAG_PREFIX_SCENARIO_UUID + solution.getScenarioInstance().getUuid());
+		// part.getTags().add(TAG_PREFIX_SOLUTION_UUID + solution.getSolution().getUuid());
+		// }
+		getViewSite().getActionBars().getToolBarManager().update(true);
 
 	}
 
@@ -848,6 +973,12 @@ public class ChangeSetView implements IAdaptable {
 
 	@PreDestroy
 	public void dispose() {
+		if (lastParent != null) {
+			lastParent.eAdapters().remove(adapter);
+		}
+		lastObject = null;
+		lastParent = null;
+		lastParentFeature = null;
 
 		scenarioComparisonService.removeListener(listener);
 		cleanUp(this.currentViewState);
@@ -926,10 +1057,11 @@ public class ChangeSetView implements IAdaptable {
 		ViewerHelper.runIfViewerValid(viewer, true, v -> v.expandAll());
 	}
 
-	@Inject
-	@Optional
-	private void handleDiffToBaseToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_COMPARE_TO_BASE) final Object o) {
+	private void doToggleDiffToBase() {
 		diffToBase = !diffToBase;
+		if (toggleDiffToBaseAction != null) {
+			toggleDiffToBaseAction.setChecked(diffToBase);
+		}
 		final ViewState viewState = currentViewState;
 		if (viewState != null) {
 			if (diffToBase) {
@@ -942,58 +1074,29 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
-	@Inject
-	@Optional
-	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final MPart activePart) {
-		if (activePart.getObject() == this) {
-			showNonStructuralChanges = !showNonStructuralChanges;
-			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+	private void doShowStructuralChangesToggle() {
+		showNonStructuralChanges = !showNonStructuralChanges;
+		ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+	}
+
+	private void doShowNegativePNLToggle() {
+		showNegativePNLChanges = !showNegativePNLChanges;
+		ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+	}
+
+	private void doSwitchGroupByModel(final GroupMode mode) {
+		insertionPlanFilter.setGroupMode(mode);
+		final ViewState viewState = currentViewState;
+
+		if (viewState != null) {
+			final String id = viewState.getTargetSlotID();
+			openAnalyticsSolution(viewState.lastSolution, id);
 		}
 	}
 
-	@Inject
-	@Optional
-	private void handleShotNegativePNLToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NEGATIVE_PNL_CHANGES) final MPart activePart) {
-		if (activePart.getObject() == this) {
-			showNegativePNLChanges = !showNegativePNLChanges;
-			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-		}
-	}
-
-	@Inject
-	@Optional
-	private void handleSwitchGroupByModel(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_GROUP_BY_MODE) final SwitchGroupModeEvent event) {
-		if (event.activePart.getObject() == this) {
-			insertionPlanFilter.setGroupMode(event.mode);
-			final ViewState viewState = currentViewState;
-			if (viewState != null) {
-				final String id = viewState.getTargetSlotID();
-
-				openAnalyticsSolution(viewState.lastSolution, id);
-			}
-		}
-	}
-
-	@Inject
-	@Optional
-	private void handleSwitchSlot(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_TARGET_SLOT) final SwitchSlotEvent event) {
-		if (event.activePart.getObject() == this) {
-			if (currentViewState != null) {
-				openAnalyticsSolution(currentViewState.lastSolution, event.slotId);
-			}
-		}
-	}
-
-	@Inject
-	@Optional
-	private void handleAnalyseScenario(@UIEventTopic(ChangeSetViewEventConstants.EVENT_ANALYSE_ACTION_SETS) final ScenarioInstance target) {
-		if (!handleEvents) {
-			return;
-		}
-		if (viewMode != ViewMode.OLD_ACTION_SET) {
-			return;
-		}
-		this.viewMode = ViewMode.OLD_ACTION_SET;
+	public void openOldStlyeActionSets(final ScenarioInstance target) {
+		setPartName("Action Sets");
+		setViewMode(ViewMode.OLD_ACTION_SET);
 		setNewDataData(target, (monitor, targetSlotId) -> {
 			final ActionSetTransformer transformer = new ActionSetTransformer();
 			return new ViewState(transformer.createDataModel(target, monitor), SortMode.BY_GROUP);
@@ -1003,7 +1106,12 @@ public class ChangeSetView implements IAdaptable {
 	private void openView(final @NonNull String viewId) {
 		// Open, but do not focus the view.
 		// FIXME: If this causes the view to be created the selection will not be correct. However attempting to re-set the selection does not appear to work.
-		partService.showPart(viewId, PartState.VISIBLE);
+		try {
+			getSite().getPage().showView(viewId, null, IWorkbenchPage.VIEW_VISIBLE);
+		} catch (PartInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private class ContextMenuManager implements MenuDetectListener {
@@ -1038,19 +1146,21 @@ public class ChangeSetView implements IAdaptable {
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					Object obj = itr.next();
-					if (obj instanceof ChangeSetTableGroup) {
-						ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
-						if (insertionPlanFilter.getUserFilters().isEmpty()) {
-							if (insertionPlanFilter.expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
-								helper.addAction(new RunnableAction("Hide related changes", () -> {
-									insertionPlanFilter.expandedGroups.remove(changeSetTableGroup.getGroupObject());
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-								}));
-							} else {
-								helper.addAction(new RunnableAction("Show related changes", () -> {
-									insertionPlanFilter.expandedGroups.add(changeSetTableGroup.getGroupObject());
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-								}));
+					if (showRelatedChangesMenus) {
+						if (obj instanceof ChangeSetTableGroup) {
+							ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
+							if (insertionPlanFilter.getUserFilters().isEmpty()) {
+								if (insertionPlanFilter.expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
+									helper.addAction(new RunnableAction("Hide related changes", () -> {
+										insertionPlanFilter.expandedGroups.remove(changeSetTableGroup.getGroupObject());
+										ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									}));
+								} else {
+									helper.addAction(new RunnableAction("Show related changes", () -> {
+										insertionPlanFilter.expandedGroups.add(changeSetTableGroup.getGroupObject());
+										ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									}));
+								}
 							}
 						}
 					}
@@ -1064,9 +1174,16 @@ public class ChangeSetView implements IAdaptable {
 				}
 				if (selectedSets.size() == 1) {
 					if (canExportChangeSet) {
-						if (ChangeSetView.this.viewMode == ViewMode.INSERTIONS || ChangeSetView.this.viewMode == ViewMode.NEW_ACTION_SET) {
+						{
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							helper.addAction(new ExportChangeAction(changeSetTableGroup));
+							int idx = 0;
+							ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+							if (root != null) {
+								idx = root.getGroups().indexOf(changeSetTableGroup);
+							}
+							String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
+
+							helper.addAction(new ExportChangeAction(changeSetTableGroup, name));
 							showMenu = true;
 						}
 						// Experimental code to generate a sandbox scenario.
@@ -1086,15 +1203,14 @@ public class ChangeSetView implements IAdaptable {
 
 				}
 
-				if (directSelectedRows.size() == 1) {
-				}
-				// Experimental user filters hook.
-				if (true) {
+				if (showUserFilterMenus) {
 					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetSlot);
 				}
 			} else {
-				if (true) {
-					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
+				if (showUserFilterMenus) {
+					if (currentViewState != null) {
+						showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
+					}
 				}
 			}
 
@@ -1104,21 +1220,67 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
-	@OpenChangeSetHandler
 	public void openAnalyticsSolution(final AnalyticsSolution solution) {
 		openAnalyticsSolution(solution, null);
 	}
 
+	private EObject lastParent = null;
+	private EObject lastObject = null;
+	private EStructuralFeature lastParentFeature = null;
+
+	private Adapter adapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(org.eclipse.emf.common.notify.Notification msg) {
+			if (msg.getEventType() == Notification.REMOVE) {
+				if (msg.getFeature() == lastParentFeature && msg.getOldValue() == lastObject) {
+					setEmptyData();
+					getSite().getPage().hideView(ChangeSetView.this);
+				}
+			}
+		};
+
+	};
+
+	private Action copyAction;
+	private Action toggleDiffToBaseAction;
+
+	private AbstractMenuAction filterMenu;;
+
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
+
+		if (lastParent != null) {
+			lastParent.eAdapters().remove(adapter);
+		}
+		lastObject = null;
+		lastParent = null;
+		lastParentFeature = null;
+
 		this.viewMode = ViewMode.OLD_ACTION_SET;
 		this.persistAnalyticsSolution = true;
 
 		final ScenarioInstance target = solution.getScenarioInstance();
 		final EObject plan = solution.getSolution();
+		setPartName(solution.getTitle());
+
+		lastParent = plan.eContainer();
+		if (lastParent != null) {
+			lastObject = plan;
+			lastParentFeature = plan.eContainingFeature();
+			lastParent.eAdapters().add(adapter);
+		}
+
 		// Do something?
-		if (plan instanceof ActionableSetPlan) {
-			this.viewMode = ViewMode.NEW_ACTION_SET;
-			this.canExportChangeSet = true;
+		if (plan instanceof OptimisationResult) {
+			setViewMode(ViewMode.GENERIC);
+			setNewDataData(target, (monitor, targetSlotId) -> {
+				final OptimisationResultPlanTransformer transformer = new OptimisationResultPlanTransformer();
+				// Sorting by Group as the label provider uses the provided ordering for indexing
+				final ViewState viewState = new ViewState(transformer.createDataModel(target, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
+				viewState.lastSolution = solution;
+				return viewState;
+			}, slotId);
+		} else if (plan instanceof ActionableSetPlan) {
+			setViewMode(ViewMode.NEW_ACTION_SET);
 			setNewDataData(target, (monitor, targetSlotId) -> {
 				final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
 				final ViewState viewState = new ViewState(transformer.createDataModel(target, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
@@ -1127,13 +1289,10 @@ public class ChangeSetView implements IAdaptable {
 			}, slotId);
 		} else if (plan instanceof SlotInsertionOptions) {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
-			this.viewMode = ViewMode.INSERTIONS;
-			this.canExportChangeSet = true;
-			columnHelper.setChangeSetColumnLabelProvider(insertionPlanFilter.createLabelProvider());
-
+			setViewMode(ViewMode.INSERTIONS);
 			setNewDataData(target, (monitor, targetSlotId) -> {
 
-				final NamedObject pTargetSlot;
+				NamedObject pTargetSlot = null;
 				if (!slotInsertionOptions.getSlotsInserted().isEmpty()) {
 					Slot targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
 					if (slotId != null) {
@@ -1145,7 +1304,7 @@ public class ChangeSetView implements IAdaptable {
 						}
 					}
 					pTargetSlot = targetSlot;
-				} else {
+				} else if (!slotInsertionOptions.getEventsInserted().isEmpty()) {
 					VesselEvent targetSlot = slotInsertionOptions.getEventsInserted().get(0);
 					if (slotId != null) {
 						for (final VesselEvent s : slotInsertionOptions.getEventsInserted()) {
@@ -1165,7 +1324,7 @@ public class ChangeSetView implements IAdaptable {
 
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
 				final ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor, pTargetSlot);
-				insertionPlanFilter.setInsertionModeActive(true);
+
 				viewState.postProcess = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
 
 				viewState.root = newRoot;
@@ -1174,100 +1333,6 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
-	@PostConstruct
-	public void restoreState(final MPart part) {
-		final Map<String, String> state = part.getPersistedState();
-		final String value = state.get(KEY_RESTORE_ANALYTICS_SOLUTION);
-		if (value != null) {
-			if (value.equalsIgnoreCase("true")) {
-
-				String scenarioUUID = null;
-				String solutionUUID = null;
-				for (final String tag : part.getTags()) {
-					if (tag.startsWith(ChangeSetViewCreatorService.TAG_PREFIX_SCENARIO_UUID)) {
-						scenarioUUID = tag.replaceFirst(ChangeSetViewCreatorService.TAG_PREFIX_SCENARIO_UUID, "");
-					}
-					if (tag.startsWith(ChangeSetViewCreatorService.TAG_PREFIX_SOLUTION_UUID)) {
-						solutionUUID = tag.replaceFirst(ChangeSetViewCreatorService.TAG_PREFIX_SOLUTION_UUID, "");
-					}
-				}
-
-				if (scenarioUUID != null && solutionUUID != null) {
-					persistAnalyticsSolution = true;
-
-					final String pScenarioUUID = scenarioUUID;
-					final String pSolutionUUID = solutionUUID;
-
-					final ScenarioInstance[] instance = new ScenarioInstance[1];
-					ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
-
-						if (ss.exists(pScenarioUUID)) {
-							final TreeIterator<EObject> itr = ss.getServiceModel().eAllContents();
-							while (itr.hasNext()) {
-								final EObject obj = itr.next();
-								if (obj instanceof ScenarioInstance) {
-									final ScenarioInstance scenarioInstance = (ScenarioInstance) obj;
-									if (pScenarioUUID.equals(scenarioInstance.getUuid())) {
-										instance[0] = scenarioInstance;
-										return false;
-									}
-								}
-							}
-						}
-						return true;
-					});
-					if (instance[0] != null) {
-						@NonNull
-						final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance[0]);
-						UUIDObject solution = null;
-						try (ModelReference ref = modelRecord.aquireReference("ChangeSetView:restore")) {
-							final EObject modelInstance = ref.getInstance();
-							if (modelInstance instanceof LNGScenarioModel) {
-								final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelInstance;
-								final AnalyticsModel analyticsModel = scenarioModel.getAnalyticsModel();
-								for (final EObject obj : analyticsModel.eContents()) {
-									if (obj instanceof UUIDObject) {
-										final UUIDObject uuidObject = (UUIDObject) obj;
-										if (pSolutionUUID.contentEquals(uuidObject.getUuid())) {
-											solution = uuidObject;
-											break;
-										}
-									}
-								}
-								if (solution != null) {
-
-									final UUIDObject pSolution = solution;
-									synchronized (postCreateActions) {
-										final ModelReference ref2 = modelRecord.aquireReference("ChangeSetView:delayedLoad");
-										final Runnable r = () -> {
-											final AnalyticsSolution analyticsSolution = new AnalyticsSolution(instance[0], pSolution, part.getLabel());
-											openAnalyticsSolution(analyticsSolution, null);
-											ref2.close();
-										};
-										if (viewCreated) {
-											r.run();
-										} else {
-											postCreateActions.add(r);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	@PersistState
-	public void persistState(final MPart part) {
-		if (persistAnalyticsSolution) {
-			final Map<String, String> state = part.getPersistedState();
-			state.put(KEY_RESTORE_ANALYTICS_SOLUTION, "true");
-		}
-	}
-
-	@GetCurrentAnalyticsSolution
 	public AnalyticsSolution getLastSolution() {
 		if (currentViewState != null) {
 			return currentViewState.lastSolution;
@@ -1275,7 +1340,6 @@ public class ChangeSetView implements IAdaptable {
 		return null;
 	}
 
-	@GetCurrentTargetObject
 	public NamedObject getLastSlot() {
 		if (currentViewState != null) {
 			return currentViewState.lastTargetSlot;
@@ -1309,12 +1373,76 @@ public class ChangeSetView implements IAdaptable {
 			}
 			if (linked) {
 				setEmptyData();
-				// TODO: Close view if dynamic
+				// Close view if dynamic
+				if (viewMode != ViewMode.COMPARE) {
+					getSite().getPage().hideView(ChangeSetView.this);
+				}
 			}
 		}
 	}
 
 	public ViewState getCurrentViewState() {
 		return currentViewState;
+	}
+
+	private void setViewMode(ViewMode viewMode) {
+		// Defaults
+		this.viewMode = viewMode;
+		handleEvents = false;
+		canExportChangeSet = true;
+		diffToBase = true;
+		showNegativePNLChanges = true;
+		insertionPlanFilter.setInsertionModeActive(false);
+		insertionPlanFilter.setMultipleSolutionView(true);
+		insertionPlanFilter.setMaxComplexity(Integer.MAX_VALUE);
+		columnHelper.setChangeSetColumnLabelProvider(columnHelper.getDefaultLabelProvider());
+		showRelatedChangesMenus = false;
+		showUserFilterMenus = false;
+		showGroupByMenu = false;
+		showChangeTargetMenu = false;
+		showNegativePNLChangesMenu = false;
+		showToggleDiffToBaseAction = false;
+
+		switch (viewMode) {
+		case COMPARE:
+			diffToBase = false;
+			handleEvents = true;
+			canExportChangeSet = false;
+			break;
+		case INSERTIONS:
+			insertionPlanFilter.setInsertionModeActive(true);
+			insertionPlanFilter.setMultipleSolutionView(false);
+			insertionPlanFilter.setMaxComplexity(4);
+			columnHelper.setChangeSetColumnLabelProvider(insertionPlanFilter.createLabelProvider());
+			showRelatedChangesMenus = true;
+			showUserFilterMenus = true;
+			showGroupByMenu = true;
+			showChangeTargetMenu = true;
+			showNegativePNLChangesMenu = true;
+			break;
+		case NEW_ACTION_SET:
+			showToggleDiffToBaseAction = true;
+			diffToBase = false;
+			break;
+		case OLD_ACTION_SET:
+			showToggleDiffToBaseAction = true;
+			diffToBase = false;
+			break;
+		case GENERIC:
+			columnHelper.setChangeSetColumnLabelProvider(insertionPlanFilter.createLabelProvider());
+			break;
+		default:
+			assert false;
+			break;
+		}
+
+		if (toggleDiffToBaseAction != null) {
+			toggleDiffToBaseAction.setChecked(diffToBase);
+			getViewSite().getActionBars().getToolBarManager().remove(toggleDiffToBaseActionItem);
+			if (showToggleDiffToBaseAction) {
+				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleDiffToBaseActionItem);
+			}
+			getViewSite().getActionBars().getToolBarManager().update(true);
+		}
 	}
 }
