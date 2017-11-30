@@ -59,46 +59,53 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 
 	private TextLayout textLayout;
 	private GridItem item;
+	private int lastGroupIndex = 0;
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	
 	@Override
 	public int getRow() {
+		int group = 0;
 		
 		Object object = null;
 		Object parent = null;
 
-		object = item.getData();
-
 		int row = item.getRowIndex();
-
-		for (int i = row - 1; i >= 0; i--) {
-			// Object object = item.getItem(row - 1);
+		
+		
+		for(int i = 0; i < row; i++) {
 			parent = item.getParent().getItem(i).getData();
-
-			if (parent instanceof CompositeRow) {
-				parent = ((CompositeRow) parent).getPinnedRow();
-			}
-
+			object = item.getParent().getItem(i + 1).getData();
+			
 			if (object instanceof CompositeRow) {
 				object = ((CompositeRow) object).getPinnedRow();
 			}
 
+			if (parent instanceof CompositeRow) {
+				parent = ((CompositeRow) parent).getPinnedRow();
+			}
+			
 			if (object instanceof Row && parent instanceof Row) {
 				Row objectRow = (Row) object;
 				Row parentRow = (Row) parent;
 
-				if (objectRow.getRowGroup() == parentRow.getRowGroup()) {
-					row -= 1;
-				} else {
-					break;
+				if (objectRow.getRowGroup() != parentRow.getRowGroup()) {
+					group += 1;
 				}
-
+			}
+		} 
+		
+		// Make sure the total row is in a different color
+		if (row == (item.getParent().getItemCount() -1)) {
+			if (object instanceof List<?>) {
+				return group += 1;
 			}
 		}
 		
-		return row;
+		assert group >= 0;
+		return group;
 	}
 	
 	@Override
@@ -135,7 +142,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 				Color back = item.getBackground(getColumn());
 
 			 
-				if (getRow() % 2 == 0) {
+				if (getRow() % 2 == 1) {
 					gc.setBackground(alternativeColour);
 					drawBackground = true;
 				} else {
