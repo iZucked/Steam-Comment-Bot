@@ -33,7 +33,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
  * @author chris.gross@us.ibm.com
  */
 @SuppressWarnings("restriction")
-public class AlternatingRowCellRenderer extends GridCellRenderer {
+public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 
 	int leftMargin = 4;
 

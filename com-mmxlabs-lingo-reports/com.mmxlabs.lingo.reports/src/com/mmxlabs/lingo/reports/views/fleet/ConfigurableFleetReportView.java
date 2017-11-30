@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.components.AlternatingRowCellRenderer;
+import com.mmxlabs.lingo.reports.components.GroupAlternatingRowCellRenderer;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
@@ -125,7 +125,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		if (enabled) {
 			GridColumn[] columns = viewer.getGrid().getColumns();
 			for (GridColumn column: columns) {
-				column.setCellRenderer(new AlternatingRowCellRenderer());
+				column.setCellRenderer(new GroupAlternatingRowCellRenderer());
 			}
 		} else {
 			GridColumn[] columns = viewer.getGrid().getColumns();
