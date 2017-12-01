@@ -116,55 +116,58 @@ public class E4ModelHelper {
 			}
 		}
 	}
-	public static void removeViewParts(@NonNull final String viewIdPrerfix, @NonNull final MApplication application, @NonNull final EModelService modelService) {
-		
+
+	public static void removeViewParts(@NonNull final String viewIdPrefix, boolean includePlaceholders, @NonNull final MApplication application, @NonNull final EModelService modelService) {
+
 		final List<MWindow> windows = modelService.findElements(application, null, MWindow.class, null);
-		
+
 		for (final MWindow window : windows) {
 			final List<MUIElement> elementsToRemove = new LinkedList<>();
 			for (final MUIElement element : window.getSharedElements()) {
-				if (element.getElementId().startsWith(viewIdPrerfix)) {
+				if (element.getElementId().startsWith(viewIdPrefix)) {
 					elementsToRemove.add(element);
 				}
 			}
-			for (final MUIElement element : elementsToRemove) {
-				MPlaceholder placeholder = modelService.findPlaceholderFor(window, element);
-				while (placeholder != null) {
-					final MElementContainer<MUIElement> parent = placeholder.getParent();
-					parent.getChildren().remove(placeholder);
-					if (parent.getSelectedElement() == placeholder) {
-						parent.setSelectedElement(null);
+			if (includePlaceholders) {
+				for (final MUIElement element : elementsToRemove) {
+					MPlaceholder placeholder = modelService.findPlaceholderFor(window, element);
+					while (placeholder != null) {
+						final MElementContainer<MUIElement> parent = placeholder.getParent();
+						parent.getChildren().remove(placeholder);
+						if (parent.getSelectedElement() == placeholder) {
+							parent.setSelectedElement(null);
+						}
+
+						placeholder = modelService.findPlaceholderFor(window, element);
 					}
-					
-					placeholder = modelService.findPlaceholderFor(window, element);
+					// See http://www.eclipse.org/forums/index.php/t/757211/
+
+					// API not yet defined
+					// modelService.delete(element);
+
+					// Tom Shindl's suggestion -- not available in injection / eclipse context at this point in time
+					// presentationEngine.removeGui(element);
+
+					// Another suggestion
+					// Probably not needed
+					element.setToBeRendered(false);
+					// Possible covered in the removeGui call
+					window.getSharedElements().remove(element);
 				}
-				// See http://www.eclipse.org/forums/index.php/t/757211/
-				
-				// API not yet defined
-				// modelService.delete(element);
-				
-				// Tom Shindl's suggestion -- not available in injection / eclipse context at this point in time
-				// presentationEngine.removeGui(element);
-				
-				// Another suggestion
-				// Probably not needed
-				element.setToBeRendered(false);
-				// Possible covered in the removeGui call
-				window.getSharedElements().remove(element);
 			}
 		}
-		
+
 		// Remove part descriptor
 		final Iterator<MPartDescriptor> descriptorItr = application.getDescriptors().iterator();
 		while (descriptorItr.hasNext()) {
 			final MPartDescriptor descriptor = descriptorItr.next();
-			if (descriptor.getElementId().startsWith(viewIdPrerfix)) {
+			if (descriptor.getElementId().startsWith(viewIdPrefix)) {
 				descriptorItr.remove();
 			}
 		}
 		final List<MPart> parts = modelService.findElements(application, null, MPart.class, null);
 		for (final MPart part : parts) {
-			if (!part.getElementId().startsWith(viewIdPrerfix)) {
+			if (!part.getElementId().startsWith(viewIdPrefix)) {
 				continue;
 			}
 			part.setToBeRendered(false);
@@ -189,15 +192,15 @@ public class E4ModelHelper {
 				}
 			}
 		}
-		
+
 		// Remove perspective tags
 		final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
-		final String viewTag = "persp.viewSC:" + viewIdPrerfix;
+		final String viewTag = "persp.viewSC:" + viewIdPrefix;
 		for (final MPerspective p : perspectives) {
 			final Iterator<String> tagItr = p.getTags().iterator();
 			while (tagItr.hasNext()) {
 				final String tag = tagItr.next();
-				if (tag.startsWith(viewIdPrerfix)) {
+				if (tag.startsWith(viewIdPrefix)) {
 					tagItr.remove();
 				}
 			}
