@@ -41,9 +41,9 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 	int arrowMargin = 6;
 
 	int imageSpacing = 3;
-	
+
 	private boolean forceCenter = false;
-	
+
 	private SortArrowRenderer arrowRenderer = new SortArrowRenderer();
 
 	private TextLayout textLayout;
@@ -121,13 +121,13 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 		if (column.getImage() != null) {
 			Rectangle bounds = getBounds();
 			Rectangle imgBounds = column.getImage().getBounds();
-			bounds.width /= 2;
-			bounds.width -= imgBounds.width / 2;
-			bounds.height /= 2;
-			bounds.height -= imgBounds.height / 2;
+			int width = bounds.width / 2;
+			width -= imgBounds.width / 2;
+			int height = bounds.height / 2;
+			height -= imgBounds.height / 2;
 
-			x = bounds.width > 0 ? bounds.x + bounds.width : bounds.x;
-			int y = bounds.height > 0 ? bounds.y + bounds.height : bounds.y;
+			x = width > 0 ? bounds.x + width : bounds.x;
+			int y = height > 0 ? bounds.y + height : bounds.y;
 
 			gc.drawImage(column.getImage(), x, y);
 		}
@@ -156,8 +156,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 			text = TextUtils.getShortString(gc, text, width);
 			// y -= gc.getFontMetrics().getHeight();
 		}
-		
-			
+
 		if (column.getAlignment() == SWT.CENTER || forceCenter) {
 			int len = gc.stringExtent(text).x;
 			if (len < width) {
@@ -168,7 +167,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 			if (len < width) {
 				x += width - len;
 			}
-		} 
+		}
 
 		if (!isWordWrap()) {
 			gc.drawString(text, getBounds().x + x + pushedDrawingOffset, y + pushedDrawingOffset, true);
@@ -302,11 +301,11 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 
 		return bounds;
 	}
-	
+
 	public void setCenter(boolean center) {
-		forceCenter = center; 
+		// forceCenter = center;
 	}
-	
+
 	/**
 	 * @return the bounds reserved for the control
 	 */
@@ -337,11 +336,10 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 				}
 			});
 		}
-		
+
 		if (forceCenter) {
 			textLayout.setAlignment(SWT.CENTER);
-		}
-		else {
+		} else {
 			textLayout.setAlignment(column.getAlignment());
 		}
 	}
