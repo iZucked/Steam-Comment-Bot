@@ -895,6 +895,15 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getOptimisationPlan_ResultName() {
+		return (EAttribute)optimisationPlanEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getSolutionBuilderSettings() {
 		return solutionBuilderSettingsEClass;
@@ -999,6 +1008,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEReference(optimisationPlanEClass, OPTIMISATION_PLAN__USER_SETTINGS);
 		createEReference(optimisationPlanEClass, OPTIMISATION_PLAN__STAGES);
 		createEReference(optimisationPlanEClass, OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS);
+		createEAttribute(optimisationPlanEClass, OPTIMISATION_PLAN__RESULT_NAME);
 
 		constraintAndFitnessSettingsEClass = createEClass(CONSTRAINT_AND_FITNESS_SETTINGS);
 		createEReference(constraintAndFitnessSettingsEClass, CONSTRAINT_AND_FITNESS_SETTINGS__OBJECTIVES);
@@ -1141,6 +1151,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEReference(getOptimisationPlan_UserSettings(), this.getUserSettings(), null, "userSettings", null, 0, 1, OptimisationPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationPlan_Stages(), this.getOptimisationStage(), null, "stages", null, 0, -1, OptimisationPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationPlan_SolutionBuilderSettings(), this.getSolutionBuilderSettings(), null, "solutionBuilderSettings", null, 0, 1, OptimisationPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptimisationPlan_ResultName(), ecorePackage.getEString(), "resultName", null, 0, 1, OptimisationPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(constraintAndFitnessSettingsEClass, ConstraintAndFitnessSettings.class, "ConstraintAndFitnessSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConstraintAndFitnessSettings_Objectives(), this.getObjective(), null, "objectives", null, 0, -1, ConstraintAndFitnessSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

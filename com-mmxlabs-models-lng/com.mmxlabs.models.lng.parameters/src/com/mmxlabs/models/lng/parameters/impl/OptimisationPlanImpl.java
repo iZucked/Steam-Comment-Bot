@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimisationPlanImpl#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimisationPlanImpl#getStages <em>Stages</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimisationPlanImpl#getSolutionBuilderSettings <em>Solution Builder Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimisationPlanImpl#getResultName <em>Result Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -73,6 +74,26 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * @ordered
 	 */
 	protected SolutionBuilderSettings solutionBuilderSettings;
+
+	/**
+	 * The default value of the '{@link #getResultName() <em>Result Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getResultName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String RESULT_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getResultName() <em>Result Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getResultName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String resultName = RESULT_NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -191,6 +212,27 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getResultName() {
+		return resultName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setResultName(String newResultName) {
+		String oldResultName = resultName;
+		resultName = newResultName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISATION_PLAN__RESULT_NAME, oldResultName, resultName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -217,6 +259,8 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 				return getStages();
 			case ParametersPackage.OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS:
 				return getSolutionBuilderSettings();
+			case ParametersPackage.OPTIMISATION_PLAN__RESULT_NAME:
+				return getResultName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -240,6 +284,9 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 			case ParametersPackage.OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS:
 				setSolutionBuilderSettings((SolutionBuilderSettings)newValue);
 				return;
+			case ParametersPackage.OPTIMISATION_PLAN__RESULT_NAME:
+				setResultName((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -261,6 +308,9 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 			case ParametersPackage.OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS:
 				setSolutionBuilderSettings((SolutionBuilderSettings)null);
 				return;
+			case ParametersPackage.OPTIMISATION_PLAN__RESULT_NAME:
+				setResultName(RESULT_NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -279,8 +329,26 @@ public class OptimisationPlanImpl extends EObjectImpl implements OptimisationPla
 				return stages != null && !stages.isEmpty();
 			case ParametersPackage.OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS:
 				return solutionBuilderSettings != null;
+			case ParametersPackage.OPTIMISATION_PLAN__RESULT_NAME:
+				return RESULT_NAME_EDEFAULT == null ? resultName != null : !RESULT_NAME_EDEFAULT.equals(resultName);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (resultName: ");
+		result.append(resultName);
+		result.append(')');
+		return result.toString();
 	}
 
 } //OptimisationPlanImpl

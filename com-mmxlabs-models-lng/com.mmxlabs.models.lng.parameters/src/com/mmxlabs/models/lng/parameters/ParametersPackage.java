@@ -556,13 +556,22 @@ public interface ParametersPackage extends EPackage {
 	int OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Result Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_PLAN__RESULT_NAME = 3;
+
+	/**
 	 * The number of structural features of the '<em>Optimisation Plan</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_PLAN_FEATURE_COUNT = 3;
+	int OPTIMISATION_PLAN_FEATURE_COUNT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
@@ -1732,6 +1741,17 @@ public interface ParametersPackage extends EPackage {
 	EReference getOptimisationPlan_SolutionBuilderSettings();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getResultName <em>Result Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Result Name</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationPlan#getResultName()
+	 * @see #getOptimisationPlan()
+	 * @generated
+	 */
+	EAttribute getOptimisationPlan_ResultName();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.SolutionBuilderSettings <em>Solution Builder Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2333,6 +2353,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS = eINSTANCE.getOptimisationPlan_SolutionBuilderSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Result Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISATION_PLAN__RESULT_NAME = eINSTANCE.getOptimisationPlan_ResultName();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.SolutionBuilderSettingsImpl <em>Solution Builder Settings</em>}' class.
