@@ -37,7 +37,7 @@ public final class ScenarioServiceUtils {
 	 * Event constant to indicate to parts to close any references to the scenario instance passed in with the event. E.g. the scenario is about to be deleted.
 	 */
 	public static final String EVENT_CLOSING_SCENARIO_INSTANCE = "scenario-service-closing-scenario-instance";
-	
+
 	@SuppressWarnings("null")
 	@NonNull
 	public static String stripFileExtension(@NonNull final String currentName) {
@@ -84,6 +84,10 @@ public final class ScenarioServiceUtils {
 			} else if (child instanceof ScenarioInstance) {
 				existingNames.add(((ScenarioInstance) child).getName());
 			}
+		}
+		if (parent instanceof ScenarioInstance) {
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) parent;
+			scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
 		}
 		return existingNames;
 	}
