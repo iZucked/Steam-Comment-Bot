@@ -36,19 +36,13 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
-import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagOptimiser;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
@@ -129,30 +123,6 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 		};
 		chainBuilder.addLink(link);
 		return link;
-	}
-
-	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
-		return LNGExporterUnit.exportMultiple(chainBuilder, progressTicks, runner, containerProvider, "Saving action plan", parent -> {
-			final List<Container> elementsToRemove = new LinkedList<>();
-			for (final Container c : parent.getElements()) {
-				if (c.getName().startsWith("ActionSet-")) {
-					elementsToRemove.add(c);
-				}
-			}
-			final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parent);
-			for (final Container c : elementsToRemove) {
-				scenarioService.delete(c);
-			}
-		}, changeSetIdx -> {
-			String newName;
-			if (changeSetIdx == 0) {
-				newName = "ActionSet-base";
-				changeSetIdx++;
-			} else {
-				newName = String.format("ActionSet-%s", (changeSetIdx++));
-			}
-			return newName;
-		});
 	}
 
 	@NonNull

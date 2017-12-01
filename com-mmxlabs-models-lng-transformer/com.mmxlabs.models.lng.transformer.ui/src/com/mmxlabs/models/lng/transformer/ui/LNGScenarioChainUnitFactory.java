@@ -51,7 +51,7 @@ public class LNGScenarioChainUnitFactory {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
-	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, ContainerProvider> chainUp(final @NonNull ChainBuilder builder, final @NonNull ExecutorService executorService,
+	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, final @NonNull ExecutorService executorService,
 			final @NonNull OptimisationStage template, final int jobCount, final @NonNull UserSettings userSettings) {
 
 		if (template instanceof CleanStateOptimisationStage) {
@@ -81,10 +81,10 @@ public class LNGScenarioChainUnitFactory {
 					LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
 				}
 			}
-			return (bridge, resultProvider) -> {
+			return (bridge, name) -> {
 				SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
 					OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
-					options.setName("Multiple similarity");
+					options.setName(name);
 					options.setUserSettings(EcoreUtil.copy(userSettings));
 					return options;
 				}, OptionalLong.empty());
@@ -136,11 +136,11 @@ public class LNGScenarioChainUnitFactory {
 						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
 					}
 				}
-				return (bridge, resultProvider) -> {
+				return (bridge, name) -> {
 					SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
 						ActionableSetPlan options = AnalyticsFactory.eINSTANCE.createActionableSetPlan();
 						options.setUserSettings(EcoreUtil.copy(userSettings));
-						options.setName("Action set");
+						options.setName(name);
 						return options;
 					}, OptionalLong.empty());
 				};

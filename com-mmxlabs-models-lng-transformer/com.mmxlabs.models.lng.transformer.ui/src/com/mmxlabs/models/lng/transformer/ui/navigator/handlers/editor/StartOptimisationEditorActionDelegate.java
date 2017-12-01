@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorActionDelegate;
@@ -201,6 +204,10 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 	}
 
 	protected void doRun(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings, final boolean optimising) {
-		OptimisationHelper.evaluateScenarioInstance(jobManager, instance, parameterMode, promptForOptimiserSettings, optimising, !optimising);
+		Set<String> existingNames = new HashSet<>();
+		instance.getFragments().forEach(f -> existingNames.add(f.getName()));
+		instance.getElements().forEach(f -> existingNames.add(f.getName()));
+
+		OptimisationHelper.evaluateScenarioInstance(jobManager, instance, parameterMode, promptForOptimiserSettings, optimising, !optimising, "Optimisation", existingNames);
 	}
 }

@@ -12,13 +12,18 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.ValidationStatusProvider;
+import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.conversion.Converter;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.property.Properties;
+import org.eclipse.core.databinding.property.value.IValueProperty;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -129,7 +134,17 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	@Nullable
 	private String title;
 
-	private List<ValidationStatusProvider> extraValidators = new LinkedList<>();;
+	private List<ValidationStatusProvider> extraValidators = new LinkedList<>();
+
+	private boolean showName;
+
+	private String nameSuggestion;
+
+	public void setNameSuggestion(String nameSuggestion) {
+		this.nameSuggestion = nameSuggestion;
+	}
+
+	private Set<String> existingNames;
 
 	public ParameterModesDialog(final Shell parentShell) {
 		super(parentShell);
@@ -183,7 +198,61 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		// Add in standard options
 		final Map<OptionGroup, Composite> groupMap = new HashMap<>();
+		if (showName) {
+			final Composite area = toolkit.createComposite(form.getBody(), SWT.NONE);
+			area.setLayout(new GridLayout(2, false));
+			area.setLayoutData(GridDataFactory.fillDefaults().create());
+
+			final Label lbl = toolkit.createLabel(area, "Name");
+			final Text text = toolkit.createText(area, null, SWT.NONE);
+			text.setLayoutData(GridDataFactory.fillDefaults().hint(400, SWT.DEFAULT).create());
+			if (nameSuggestion == null) {
+				nameSuggestion = "";
+			} else {
+				if (existingNames != null) {
+					String base = nameSuggestion;
+					int counter = 1;
+					while (existingNames.contains(nameSuggestion)) {
+						nameSuggestion = String.format("%s (%d)", base, counter++);
+					}
+				}
+			}
+
+			text.setText(nameSuggestion);
+			// Create UpdateValueStratgy and assign
+			// to the binding
+			final UpdateValueStrategy strategy = new UpdateValueStrategy();
+			{
+				// Define a validator to check that only numbers are entered
+				final IValidator validator = new IValidator() {
+					@Override
+					public IStatus validate(final Object value) {
+						if (value == null || value.toString().isEmpty()) {
+							return ValidationStatus.warning("No name specified");
+						}
+						if (existingNames != null) {
+							if (existingNames.contains(value)) {
+								return ValidationStatus.warning("Name clashes with another result");
+							}
+						}
+						return ValidationStatus.ok();
+					}
+				};
+				strategy.setBeforeSetValidator(validator);
+			}
+
+			// final CompositeValidator v = new CompositeValidator();
+			// v.addValidators(option.validators);
+			// strategy.setAfterGetValidator(v);
+
+			final IValueProperty prop = PojoProperties.value("nameSuggestion");
+			final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(this), strategy, null);
+
+			ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
+
+		}
 		if (optionsMap.containsKey(DataSection.General)) {
+
 			final List<Option> options = optionsMap.get(DataSection.General);
 			createOptionSetControls(form.getBody(), groupMap, options);
 		}
@@ -768,5 +837,16 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	public void addValidationStatusProvider(ValidationStatusProvider validator) {
 		this.extraValidators.add(validator);
 
+	}
+
+	public void addNameOption(String nameSuggestion, Set<String> existingNames) {
+		this.showName = true;
+		this.nameSuggestion = nameSuggestion;
+		this.existingNames = existingNames;
+
+	}
+
+	public String getNameSuggestion() {
+		return nameSuggestion;
 	}
 }

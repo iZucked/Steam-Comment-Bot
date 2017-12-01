@@ -48,7 +48,7 @@ public class LNGScenarioChainBuilder {
 	 * @param initialHints
 	 * @return
 	 */
-	public static IChainRunner createStandardOptimisationChain(@Nullable final String childName, @NonNull final LNGDataTransformer dataTransformer,
+	public static IChainRunner createStandardOptimisationChain(@NonNull final String resultName, @NonNull final LNGDataTransformer dataTransformer,
 			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final ExecutorService executorService,
 			@NonNull final String @Nullable... initialHints) {
 
@@ -67,10 +67,10 @@ public class LNGScenarioChainBuilder {
 				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
 
-			BiConsumer<LNGScenarioToOptimiserBridge, ContainerProvider> exportCallback = (bridge, resultProvider) -> {
+			BiConsumer<LNGScenarioToOptimiserBridge, String> exportCallback = (bridge, name) -> {
 				SolutionSetExporterUnit.exportMultipleSolutions(builder, 1, bridge, () -> {
 					OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
-					options.setName("Optimisation");
+					options.setName(name);
 					options.setUserSettings(EcoreUtil.copy(dataTransformer.getUserSettings()));
 					return options;
 				}, OptionalLong.empty());
@@ -80,7 +80,7 @@ public class LNGScenarioChainBuilder {
 
 				UserSettings userSettings = optimisationPlan.getUserSettings();
 				for (final OptimisationStage stage : optimisationPlan.getStages()) {
-					BiConsumer<LNGScenarioToOptimiserBridge, ContainerProvider> callback;
+					BiConsumer<LNGScenarioToOptimiserBridge, String> callback;
 					if (stage instanceof ParallelOptimisationStage<?>) {
 						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
 						final OptimisationStage template = parallelOptimisationStage.getTemplate();
@@ -96,24 +96,8 @@ public class LNGScenarioChainBuilder {
 				}
 			}
 
-			final ContainerProvider resultProvider;
-			if (childName != null) {
-				// We have finished all optimisation steps. If we are saving the result in a child scenario rather than overwriting - do that here. Otherwise the result will be returned and the
-				// LNGScenarioRunner will do the save.
-
-				// Create a ContainerProvider on the original instance.
-				final ContainerProvider containerProvider = new ContainerProvider(scenarioToOptimiserBridge.getScenarioInstance());
-				// Create an empty container to store the child scenario result into so we can then pass it into the action set export
-				resultProvider = new ContainerProvider();
-				// Export a copy of the best result
-				LNGExporterUnit.exportSingle(builder, 1, scenarioToOptimiserBridge, childName, containerProvider, resultProvider);
-			} else {
-				// No child scenario, so export action sets under the original scenario
-				resultProvider = new ContainerProvider(scenarioToOptimiserBridge.getScenarioInstance());
-			}
-
 			if (exportCallback != null) {
-				exportCallback.accept(scenarioToOptimiserBridge, resultProvider);
+				exportCallback.accept(scenarioToOptimiserBridge, resultName);
 			}
 		} else {
 			// Just evaluate the current scenario.

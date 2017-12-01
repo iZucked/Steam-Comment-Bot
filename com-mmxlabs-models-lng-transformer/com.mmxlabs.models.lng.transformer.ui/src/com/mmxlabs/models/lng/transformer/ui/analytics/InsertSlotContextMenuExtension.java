@@ -4,15 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -40,14 +39,12 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
-import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -213,6 +210,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			UserSettings userSettings = null;
 			// {
+			final String taskName = "Insert " + generateActionName(targetSlots);
 
 			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
 			try (final ModelReference modelReference = modelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
@@ -221,8 +219,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 				if (object instanceof LNGScenarioModel) {
 					final LNGScenarioModel root = (LNGScenarioModel) object;
-
-					userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
+					Set<String> existingNames = new HashSet<>();
+					original.getFragments().forEach(f -> existingNames.add(f.getName()));
+					original.getElements().forEach(f -> existingNames.add(f.getName()));
+					userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, taskName, existingNames);
 				}
 			}
 			// }
@@ -242,7 +242,6 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			// } catch (final Exception e) {
 			// throw new RuntimeException(e);
 			// }
-			final String taskName = "Insert " + generateActionName(targetSlots);
 
 			// final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
 

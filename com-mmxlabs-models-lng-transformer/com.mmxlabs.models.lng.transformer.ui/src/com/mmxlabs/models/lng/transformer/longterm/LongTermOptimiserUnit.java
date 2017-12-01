@@ -32,22 +32,15 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
-import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
-import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
@@ -77,7 +70,7 @@ public class LongTermOptimiserUnit {
 	private @NonNull ExecutorService executorService;
 
 	private IVesselAvailability nominalMarketAvailability;
-	
+
 	private LNGScenarioModel initialScenario;
 
 	@SuppressWarnings("null")
@@ -114,8 +107,8 @@ public class LongTermOptimiserUnit {
 
 				LongTermOptimiser longTermOptimiser = threadCache.get(Thread.currentThread());
 				if (longTermOptimiser == null) {
-//					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-//					scope.enter();
+					// final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
+					// scope.enter();
 					longTermOptimiser = new LongTermOptimiser();
 					injector.injectMembers(longTermOptimiser);
 					threadCache.put(Thread.currentThread(), longTermOptimiser);
@@ -123,7 +116,7 @@ public class LongTermOptimiserUnit {
 				}
 				return longTermOptimiser;
 			}
-			
+
 		});
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
@@ -132,94 +125,71 @@ public class LongTermOptimiserUnit {
 	}
 
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
+		try {
+
+			@NonNull
+			ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+			ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
+			IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+			Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
+			allPortSlots.forEach(e -> longTermSlotsProviderEditor.addLongTermSlot(e));
+			monitor.beginTask("Generate solutions", 100);
+			CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
+			final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
 			try {
 
-				@NonNull
-				ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
-				ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
-				IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-				Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
-				allPortSlots.forEach(e -> longTermSlotsProviderEditor.addLongTermSlot(e));
-				monitor.beginTask("Generate solutions", 100);
-				CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
-				final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
-				try {
+				futures.add(executorService.submit(() -> {
+					try {
+						// Bit nasty, but we are still in PoC stages
 
-					futures.add(executorService.submit(() -> {
-						try {
-							// Bit nasty, but we are still in PoC stages
-
-							final LongTermOptimiser calculator = injector.getInstance(LongTermOptimiser.class);
-							return calculator.optimise(executorService, dataTransformer, charterInMarket);
-						} finally {
-							monitor.worked(1);
-						}
-					}));
-					final List<Pair<ISequences, Long>> results = new LinkedList<>();
-
-					// Block until all futures completed
-					for (final Future<Pair<ISequences, Long>> f : futures) {
-						try {
-							final Pair<ISequences, Long> s = f.get();
-							if (s != null) {
-								results.add(s);
-							}
-						} catch (final InterruptedException e) {
-							e.printStackTrace();
-						} catch (final ExecutionException e) {
-							e.printStackTrace();
-						}
+						final LongTermOptimiser calculator = injector.getInstance(LongTermOptimiser.class);
+						return calculator.optimise(executorService, dataTransformer, charterInMarket);
+					} finally {
+						monitor.worked(1);
 					}
+				}));
+				final List<Pair<ISequences, Long>> results = new LinkedList<>();
 
-					Collections.sort(results, (a, b) -> {
-						long al = a.getSecond();
-						long bl = b.getSecond();
-						if (al > bl) {
-							return -1;
-						} else if (al < bl) {
-							return 1;
-						} else {
-							return 0;
+				// Block until all futures completed
+				for (final Future<Pair<ISequences, Long>> f : futures) {
+					try {
+						final Pair<ISequences, Long> s = f.get();
+						if (s != null) {
+							results.add(s);
 						}
-					});
-
-					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream() //
-							.distinct() //
-							.map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
-							.collect(Collectors.toList());
-
-//					solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(inputState.getBestSolution().getFirst(), new HashMap<>()));
-
-					return new MultiStateResult(solutions.get(0), solutions);
-				} finally {
-					monitor.done();
+					} catch (final InterruptedException e) {
+						e.printStackTrace();
+					} catch (final ExecutionException e) {
+						e.printStackTrace();
+					}
 				}
 
+				Collections.sort(results, (a, b) -> {
+					long al = a.getSecond();
+					long bl = b.getSecond();
+					if (al > bl) {
+						return -1;
+					} else if (al < bl) {
+						return 1;
+					} else {
+						return 0;
+					}
+				});
+
+				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream() //
+						.distinct() //
+						.map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
+						.collect(Collectors.toList());
+
+				// solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(inputState.getBestSolution().getFirst(), new HashMap<>()));
+
+				return new MultiStateResult(solutions.get(0), solutions);
 			} finally {
+				monitor.done();
 			}
+
+		} finally {
+		}
 	}
 
-	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
-		return LNGExporterUnit.exportMultiple(chainBuilder, progressTicks, runner, containerProvider, "Saving insertion plans", parent -> {
-
-			final List<Container> elementsToRemove = new LinkedList<>();
-			for (final Container c : parent.getElements()) {
-				if (c.getName().startsWith("InsertionPlan-")) {
-					elementsToRemove.add(c);
-				}
-			}
-			for (final Container c : elementsToRemove) {
-				SSDataManager.Instance.findScenarioService(parent).delete(c);
-			}
-		}, changeSetIdx -> {
-			String newName;
-			if (changeSetIdx == 0) {
-				newName = "InsertionPlan-base";
-				changeSetIdx++;
-			} else {
-				newName = String.format("InsertionPlan-%s", (changeSetIdx++));
-			}
-			return newName;
-		});
-	}
 }

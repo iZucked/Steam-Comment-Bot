@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
@@ -39,7 +41,10 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 			try {
 				ScenarioInstance fork = ScenarioServiceModelUtils.createAndOpenFork(instance, true);
 				if (fork != null) {
-					OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, !optimising);
+					Set<String> existingNames = new HashSet<>();
+					fork.getFragments().forEach(f -> existingNames.add(f.getName()));
+					fork.getElements().forEach(f -> existingNames.add(f.getName()));
+					OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, !optimising, "Optimisation", existingNames);
 				}
 			} catch (final Exception e) {
 				throw new RuntimeException("Unable to fork scenario", e);

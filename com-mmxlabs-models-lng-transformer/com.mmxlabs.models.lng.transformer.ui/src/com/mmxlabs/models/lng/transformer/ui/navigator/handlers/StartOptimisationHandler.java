@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -63,7 +65,11 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					while (itr.hasNext()) {
 						final Object obj = itr.next();
 						if (obj instanceof ScenarioInstance) {
-							OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, null, /* prompt if optimising */ optimising, optimising, !optimising);
+							ScenarioInstance instance = (ScenarioInstance) obj;
+							Set<String> existingNames = new HashSet<>();
+							instance.getFragments().forEach(f -> existingNames.add(f.getName()));
+							instance.getElements().forEach(f -> existingNames.add(f.getName()));
+							OptimisationHelper.evaluateScenarioInstance(jobManager, instance, null, /* prompt if optimising */ optimising, optimising, !optimising, "Optimisation", existingNames);
 						}
 					}
 				}

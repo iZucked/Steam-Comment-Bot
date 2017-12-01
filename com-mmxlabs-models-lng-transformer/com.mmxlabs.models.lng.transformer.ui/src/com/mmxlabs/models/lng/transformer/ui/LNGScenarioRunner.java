@@ -98,7 +98,7 @@ public class LNGScenarioRunner {
 		// chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
 		// executorService,
 		// LNGTransformerHelper.HINT_OPTIMISE_LSO);
-		chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimisationPlan, executorService,
+		chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimisationPlan, executorService,
 				initialHints);
 		// }
 	}

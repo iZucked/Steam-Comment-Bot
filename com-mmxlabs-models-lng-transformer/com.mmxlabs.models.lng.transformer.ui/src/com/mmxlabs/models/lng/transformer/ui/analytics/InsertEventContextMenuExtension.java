@@ -6,9 +6,11 @@ package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -131,6 +133,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			UserSettings userSettings = null;
+			final String taskName = "Insert " + generateActionName(originalTargetEvents);
 
 			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
 			try (final ModelReference modelReference = modelRecord.aquireReference("InsertEventContextMenuExtension:1")) {
@@ -139,8 +142,10 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 				if (object instanceof LNGScenarioModel) {
 					final LNGScenarioModel root = (LNGScenarioModel) object;
-
-					userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
+					Set<String> existingNames = new HashSet<>();
+					original.getFragments().forEach(f -> existingNames.add(f.getName()));
+					original.getElements().forEach(f -> existingNames.add(f.getName()));
+					userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, taskName, existingNames);
 				}
 			}
 			if (userSettings == null) {
@@ -152,8 +157,6 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			userSettings.setCleanStateOptimisation(false);
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 			final UserSettings pUserSettings = userSettings;
-
-			final String taskName = "Insert " + generateActionName(originalTargetEvents);
 
 			final List<VesselEvent> targetEvents = new LinkedList<>();
 

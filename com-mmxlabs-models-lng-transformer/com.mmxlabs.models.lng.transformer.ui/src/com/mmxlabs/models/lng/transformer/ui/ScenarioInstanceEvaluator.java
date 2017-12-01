@@ -33,7 +33,7 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) object;
 				final ExecutorService executorService = Executors.newSingleThreadExecutor();
 				try {
-					final OptimisationPlan p = OptimisationHelper.getOptimiserSettings(scenarioModel, true, null, false, false);
+					final OptimisationPlan p = OptimisationHelper.getOptimiserSettings(scenarioModel, true, null, false, false, null);
 
 					if (p == null) {
 						return;
