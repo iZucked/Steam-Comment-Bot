@@ -190,7 +190,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	}
 	
 	public void setSelectedObject(Collection<Object> objects) {
-		selectedObjects = new ArrayList(objects);
+		selectedObjects = new ArrayList<Object>(objects);
 	}
 	
 	public List<Object> getSelectedObject() {
@@ -238,13 +238,13 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		private final Object columnElement;
 
-		private final static ImageDescriptor imageDescriptorSteadyArrow = Activator.getPlugin().getImageDescriptor("icons/steady_arrow.png");
+		private final static ImageDescriptor imageDescriptorSteadyArrow = Activator.Implementation.getImageDescriptor("icons/steady_arrow.png");
 
-		private final static ImageDescriptor imageDescriptorGreenArrowDown = Activator.getPlugin().getImageDescriptor("icons/green_arrow_down.png");
-		private final static ImageDescriptor imageDescriptorGreenArrowUp = Activator.getPlugin().getImageDescriptor("icons/green_arrow_up.png");
+		private final static ImageDescriptor imageDescriptorGreenArrowDown = Activator.Implementation.getImageDescriptor("icons/green_arrow_down.png");
+		private final static ImageDescriptor imageDescriptorGreenArrowUp = Activator.Implementation.getImageDescriptor("icons/green_arrow_up.png");
 
-		private final static ImageDescriptor imageDescriptorRedArrowDown = Activator.getPlugin().getImageDescriptor("icons/red_arrow_down.png");
-		private final static ImageDescriptor imageDescriptorRedArrowUp = Activator.getPlugin().getImageDescriptor("icons/red_arrow_up.png");
+		private final static ImageDescriptor imageDescriptorRedArrowDown = Activator.Implementation.getImageDescriptor("icons/red_arrow_down.png");
+		private final static ImageDescriptor imageDescriptorRedArrowUp = Activator.Implementation.getImageDescriptor("icons/red_arrow_up.png");
 		
 		private final Image cellImageSteadyArrow = imageDescriptorSteadyArrow.createImage();
 		
