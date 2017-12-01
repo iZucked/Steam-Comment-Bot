@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.econs;
 
+import java.text.NumberFormat;
+
 import javax.annotation.PreDestroy;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -11,17 +13,20 @@ import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
-import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
+import com.mmxlabs.rcp.common.actions.CopyGridToExcelMSClipboardAction;
+import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
@@ -79,8 +84,7 @@ public class CargoEconsReport extends ViewPart {
 				component.rebuild();
 			});
 			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
-		
-			
+
 		}
 
 		Runnable preOperation = () -> {
@@ -94,11 +98,64 @@ public class CargoEconsReport extends ViewPart {
 		};
 
 		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
-		final Action copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(viewer, preOperation, postOperation);
+		final CopyGridToExcelMSClipboardAction copyAction = new CopyGridToExcelMSClipboardAction(viewer.getGrid(), false, preOperation, postOperation);
+		copyAction.setAdditionalAttributeProvider(new IAdditionalAttributeProvider() {
+
+			@Override
+			public Object getTypedValue(final GridItem item, final int i) {
+				String text = item.getText(i);
+				try {
+					return NumberFormat.getInstance().parseObject(text);
+				} catch (Exception e) {
+
+				}
+				return null;
+			}
+
+			@Override
+			public @NonNull String getTopLeftCellUpperText() {
+				return "";
+			}
+
+			@Override
+			public @NonNull String getTopLeftCellText() {
+				return "";
+			}
+
+			@Override
+			public @NonNull String getTopLeftCellLowerText() {
+				return "";
+			}
+
+			@Override
+			public @NonNull String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item) {
+				return null;
+			}
+
+			@Override
+			public @NonNull String @Nullable [] getAdditionalPreRows() {
+				return null;
+			}
+
+			@Override
+			public @NonNull String @Nullable [] getAdditionalHeaderAttributes(GridColumn column) {
+				return null;
+			}
+
+			@Override
+			public @NonNull String @Nullable [] getAdditionalAttributes(@NonNull GridItem item, int columnIdx) {
+
+				return null;
+			}
+
+			@Override
+			public int getBorders(GridItem item, int i) {
+				return 0;
+			}
+		});
 		getViewSite().getActionBars().getToolBarManager().add(packAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
-
 	}
 
 	@PreDestroy
