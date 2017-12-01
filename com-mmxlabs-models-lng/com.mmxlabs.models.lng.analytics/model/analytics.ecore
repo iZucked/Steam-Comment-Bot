@@ -3,6 +3,9 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="analytics" nsURI="http://www.mmxlabs.com/models/lng/analytics/1/"
     nsPrefix="lng.analytics">
   <eClassifiers xsi:type="ecore:EClass" name="AnalyticsModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+      <details key="nonUniqueChildren" value="true"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="optionModels" upperBound="-1"
         eType="#//OptionAnalysisModel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="optimisations" upperBound="-1"

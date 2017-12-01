@@ -3,12 +3,13 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="analytics" nsURI="http://www.mmxlabs.com/models/lng/analytics/1/"
     nsPrefix="lng.analytics">
   <eClassifiers xsi:type="ecore:EClass" name="AnalyticsModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+      <details key="nonUniqueChildren" value="true"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="optionModels" upperBound="-1"
         eType="#//OptionAnalysisModel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="optimisations" upperBound="-1"
         eType="#//AbstractSolutionSet" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="insertionOptions" upperBound="-1"
-        eType="#//SlotInsertionOptions" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyOption" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellOption" abstract="true" interface="true"/>
@@ -237,8 +238,6 @@
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventsInserted" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="insertionOptions" upperBound="-1"
-        eType="#//SlotInsertionOption" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotInsertionOption" eSuperTypes="#//SolutionOption"/>
   <eClassifiers xsi:type="ecore:EClass" name="SolutionOption">

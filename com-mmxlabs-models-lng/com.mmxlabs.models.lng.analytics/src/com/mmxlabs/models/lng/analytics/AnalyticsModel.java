@@ -21,7 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject nonUniqueChildren='true'"
  * @generated
  */
 public interface AnalyticsModel extends UUIDObject {

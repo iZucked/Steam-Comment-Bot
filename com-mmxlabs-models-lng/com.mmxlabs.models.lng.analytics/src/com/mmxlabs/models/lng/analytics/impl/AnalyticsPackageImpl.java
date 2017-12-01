@@ -351,17 +351,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		isInited = true;
 
 		// Initialize simple dependencies
-		CargoPackage.eINSTANCE.eClass();
-		CommercialPackage.eINSTANCE.eClass();
-		DateTimePackage.eINSTANCE.eClass();
-		FleetPackage.eINSTANCE.eClass();
-		TypesPackage.eINSTANCE.eClass();
-		MMXCorePackage.eINSTANCE.eClass();
 		ParametersPackage.eINSTANCE.eClass();
-		PortPackage.eINSTANCE.eClass();
-		PricingPackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
-		SpotMarketsPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theAnalyticsPackage.createPackageContents();
@@ -1893,12 +1884,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createResource(eNS_URI);
 
 		// Create annotations
+		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
+		createNamedObjectAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
 		createExpressionTypeAnnotations();
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
-		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
-		createNamedObjectAnnotations();
 	}
 
 	/**
@@ -1995,6 +1986,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	protected void createNamedObjectAnnotations() {
 		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";	
+		addAnnotation
+		  (analyticsModelEClass, 
+		   source, 
+		   new String[] {
+			 "nonUniqueChildren", "true"
+		   });	
 		addAnnotation
 		  (abstractSolutionSetEClass, 
 		   source, 
