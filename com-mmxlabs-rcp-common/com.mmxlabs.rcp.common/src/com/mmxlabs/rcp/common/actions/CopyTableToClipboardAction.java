@@ -30,9 +30,17 @@ public class CopyTableToClipboardAction extends Action {
 	private final Table table;
 
 	private final char separator;
+	private Runnable preOperation;
+	private Runnable postOperation;
 
 	public CopyTableToClipboardAction(final Table table) {
+		this(table, null, null);
+	}
+
+	public CopyTableToClipboardAction(final Table table, Runnable preOperation, Runnable postOperation) {
 		this(table, '\t');
+		this.preOperation = preOperation;
+		this.postOperation = postOperation;
 	}
 
 	public CopyTableToClipboardAction(final Table table, final char separator) {
@@ -50,19 +58,27 @@ public class CopyTableToClipboardAction extends Action {
 
 	@Override
 	public void run() {
-
-		final StringWriter sw = parseTableIntoStringWriter();
-		
-		// Create a new clipboard instance
-		final Display display = Display.getDefault();
-		final Clipboard cb = new Clipboard(display);
+		if (preOperation != null) {
+			preOperation.run();
+		}
 		try {
-			// Create the text transfer and set the contents
-			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+			final StringWriter sw = parseTableIntoStringWriter();
+
+			// Create a new clipboard instance
+			final Display display = Display.getDefault();
+			final Clipboard cb = new Clipboard(display);
+			try {
+				// Create the text transfer and set the contents
+				final TextTransfer textTransfer = TextTransfer.getInstance();
+				cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+			} finally {
+				// Clean up our local resources - system clipboard now has the data
+				cb.dispose();
+			}
 		} finally {
-			// Clean up our local resources - system clipboard now has the data
-			cb.dispose();
+			if (postOperation != null) {
+				postOperation.run();
+			}
 		}
 	}
 
@@ -82,22 +98,21 @@ public class CopyTableToClipboardAction extends Action {
 				cw.addValue(tc.getText());
 				if ((i + 1) == numColumns) {
 					cw.endRow();
-				} 
+				}
 			}
-	
+
 			for (final TableItem item : table.getItems()) {
 				// Ensure at least 1 column to grab data
 				processTableItem(cw, Math.max(1, numColumns), item);
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
-		
+
 		return sw;
-		
+
 	}
-	
+
 	private void processTableItem(final CSVWriter cw, final int numColumns, final TableItem item) throws IOException {
 		for (int i = 0; i < numColumns; ++i) {
 
@@ -105,7 +120,7 @@ public class CopyTableToClipboardAction extends Action {
 			// Add EOL or separator char as appropriate
 			if ((i + 1) == numColumns) {
 				cw.endRow();
-			} 
+			}
 		}
 	}
 }

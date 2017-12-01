@@ -7,7 +7,7 @@ package com.mmxlabs.rcp.common.actions;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -58,16 +58,18 @@ public class CopyGridToExcelMLStringUtil {
 		int border;
 		RGB foreground;
 		private RGB background;
+		Class<?> type;
 
-		public Style(RGB foreground, RGB background, int border) {
+		public Style(RGB foreground, RGB background, int border, Class<?> type) {
 			this.background = background;
 			this.border = border;
 			this.foreground = foreground;
+			this.type = type;
 		}
 
 		@Override
 		public int hashCode() {
-			return (border * 31 + foreground.hashCode()) * 31 + background.hashCode();
+			return ((border * 31 + foreground.hashCode()) * 31 + background.hashCode()) * 31 + type.hashCode();
 		}
 
 		@Override
@@ -78,7 +80,7 @@ public class CopyGridToExcelMLStringUtil {
 			if (obj instanceof Style) {
 				Style other = (Style) obj;
 
-				return border == other.border && foreground.equals(other.foreground) && background.equals(other.background);
+				return type == other.type && border == other.border && foreground.equals(other.foreground) && background.equals(other.background);
 
 			}
 			return false;
@@ -89,8 +91,8 @@ public class CopyGridToExcelMLStringUtil {
 		private AtomicInteger nextIndex = new AtomicInteger(1);
 		private Map<Style, String> stlyeCache = new LinkedHashMap<>();
 
-		public String getStyleID(RGB foreground, RGB background, int border) {
-			return stlyeCache.computeIfAbsent(new Style(foreground, background, border), (style) -> {
+		public String getStyleID(RGB foreground, RGB background, int border, Class<?> type) {
+			return stlyeCache.computeIfAbsent(new Style(foreground, background, border, type), (style) -> {
 				return String.format("Style%d", nextIndex.getAndIncrement());
 			});
 		}
@@ -127,9 +129,22 @@ public class CopyGridToExcelMLStringUtil {
 
 					border = String.format("<Borders>%s</Borders>", Joiner.on("").join(borderElements));
 				}
-				sw.append(String.format(
-						"<Style  ss:ID=\"%s\"><Interior  ss:Pattern=\"Solid\" ss:Color=\"#%02X%02X%02X\"></Interior><NumberFormat   ss:Format=\"yy\\-mmm\\-dd\" /><Font ss:Color=\"#%02X%02X%02X\"></Font>%s</Style>",
-						e.getValue(), b.red, b.green, b.blue, f.red, f.green, f.blue, border));
+				if (e.getKey().type == ZonedDateTime.class) {
+					if (showBackgroundColours) {
+						sw.append(String.format(
+								"<Style  ss:ID=\"%s\"><Interior  ss:Pattern=\"Solid\" ss:Color=\"#%02X%02X%02X\"></Interior><NumberFormat   ss:Format=\"yy\\-mmm\\-dd\" /><Font ss:Color=\"#%02X%02X%02X\"></Font>%s</Style>",
+								e.getValue(), b.red, b.green, b.blue, f.red, f.green, f.blue, border));
+					} else {
+						sw.append(String.format("<Style  ss:ID=\"%s\"> <NumberFormat   ss:Format=\"yy\\-mmm\\-dd\" /> %s</Style>", e.getValue(), border));
+					}
+				} else {
+					if (showBackgroundColours) {
+						sw.append(String.format("<Style  ss:ID=\"%s\"><Interior  ss:Pattern=\"Solid\" ss:Color=\"#%02X%02X%02X\"></Interior> <Font ss:Color=\"#%02X%02X%02X\"></Font>%s</Style>",
+								e.getValue(), b.red, b.green, b.blue, f.red, f.green, f.blue, border));
+					} else {
+						sw.append(String.format("<Style  ss:ID=\"%s\">%s</Style>", e.getValue(), border));
+					}
+				}
 			}
 
 			sw.append("</Styles>");
@@ -360,29 +375,37 @@ public class CopyGridToExcelMLStringUtil {
 				}
 				// String colourString = "";
 				String extra = "";
+
+				String typeString = String.format(" ss:Type=\"String\" ");
+				String text = item.getText(colIdx);
+				Object v = getTypedValue(item, colIdx);
+				Class<?> type = String.class;
+				if (v != null) {
+					if (v instanceof LocalDate) {
+						typeString = String.format(" ss:Type=\"DateTime\" ");
+						LocalDate dt = (LocalDate) v;
+						// text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
+						text = String.format("%4d-%02d-%02dT00:00:00.000", dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth());
+						type = ZonedDateTime.class;
+					} else if (v instanceof Number) {
+						typeString = String.format(" ss:Type=\"Number\" ");
+						// text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
+						text = v.toString();
+						type = Number.class;
+					}
+				}
+
 				// if (showBackgroundColours) {
 				{
 					// if (c == null) {
 					// colourString = "bgcolor='white'";
 					// } else {
 					// colourString = String.format(" <Font x:Color=\"FF0000\"> ", c.getRed(), c.getGreen(), c.getBlue());
-					extra = String.format(" ss:StyleID=\"%s\" ", styleManager.getStyleID(f, b, getBorders(item, colIdx)));
+					extra = String.format(" ss:StyleID=\"%s\" ", styleManager.getStyleID(f, b, getBorders(item, colIdx), type));
 					// }
 					// colourString = "";
 				}
 
-				String typeString = String.format(" ss:Type=\"String\" ");
-				String text = item.getText(colIdx);
-				Object v = getTypedValue(item, colIdx);
-				if (v != null) {
-					if (v instanceof LocalDate) {
-						typeString = String.format(" ss:Type=\"DateTime\" ");
-						LocalDate dt = (LocalDate) v;
-//						text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
-						text = String.format("%4d-%02d-%02dT00:00:00.000", dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth());
-
-					}
-				}
 				addCell(sw, text, item.getRowSpan(colIdx), item.getColumnSpan(colIdx), combineAttributes(new String[] { typeString }, getAdditionalAttributes(item, colIdx)), i + 1, extra);
 				// addCell(sw,item.getText(colIdx), 0,0,
 				// new String[] { typeString});
@@ -481,16 +504,16 @@ public class CopyGridToExcelMLStringUtil {
 			sw.write(" " + tag + " ");
 		}
 
-//		sw.write("<Data ss:Type=\"String\">");
-		 if (attributes == null) {
-		 sw.write("<Data ss:Type=\"String\">");
-		 } else {
-		 sw.write("<Data");
-		 for (final String attribute : attributes) {
-		 sw.write(" " + attribute);
-		 }
-		 sw.write(">");
-		 }
+		// sw.write("<Data ss:Type=\"String\">");
+		if (attributes == null) {
+			sw.write("<Data ss:Type=\"String\">");
+		} else {
+			sw.write("<Data");
+			for (final String attribute : attributes) {
+				sw.write(" " + attribute);
+			}
+			sw.write(">");
+		}
 
 		// if (extra != null) {
 		// }
