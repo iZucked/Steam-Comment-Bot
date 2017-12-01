@@ -36,8 +36,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 
 		diffArea.addView("com.mmxlabs.scenario.service.ui.navigator");
 		changeSetArea.addView("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView");
-		changeSetArea.addPlaceholder("com.mmxlabs.lingo.reports.views.changeset.ActionSetView");
-		changeSetArea.addPlaceholder("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:*");
+		changeSetArea.addPlaceholder("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:Dynamic");
 		fleetReportArea.addView(ConfigurableFleetReportView.ID);
 
 		ganttArea.addView(ScheduleSummaryReport.ID);
