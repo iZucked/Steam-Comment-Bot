@@ -174,10 +174,11 @@ public class CopyGridToExcelMLStringUtil {
 			// sw.append(" <Names>");
 			// sw.append(" <NamedRange ss:Name=\"Print_Titles\" ss:Hidden=\"0\" ss:RefersTo=\"=Schedule!R1:R1,Schedule!R2:R2\"/>");
 			// sw.append(" </Names>");
+			// sw.append(" <Worksheet >");
 			// below code possibly causes copy/paste errors - probably because Schedule does not exist in copy/paste
 			// // TODO: Get from input / date?
-			 sw.append(" <Worksheet ss:Name=\"Schedule\">");
-			// // =Sheet1!$1:$1,Sheet1!$2:$2
+			sw.append(" <Worksheet ss:Name=\"Sheet\">");
+			// // // =Sheet1!$1:$1,Sheet1!$2:$2
 			// sw.append(" <Names>");
 			// sw.append(" <NamedRange ss:Name=\"Print_Titles\" ss:Hidden=\"0\" ss:RefersTo=\"=Schedule!R1:R1,Schedule!R2:R2\"/>");
 			// sw.append(" </Names>");
@@ -188,13 +189,13 @@ public class CopyGridToExcelMLStringUtil {
 			// implicit column will be created in such cases
 			final int numColumns = table.getColumnCount();
 			sw.write(String.format("<Table ss:ExpandedColumnCount=\"%d\" ss:ExpandedRowCount=\"%d\" x:FullColumns=\"1\" x:FullRows=\"1\" ss:DefaultRowHeight=\"13.2\" >\n", numColumns,
-					table.getRootItems().length + 2));
+					table.getRootItems().length + 2)); //  +2 for double headers
 
 			try {
 				// addPreTableRows(sw);
 				addHeader(sw);
 				// Ensure at least 1 column to grab data
-				final int numberOfColumns = Math.max(5, numColumns);
+				final int numberOfColumns = Math.max(1, numColumns);
 				final int[] rowOffsets = new int[numberOfColumns];
 
 				for (final GridItem item : table.getItems()) {
@@ -268,16 +269,14 @@ public class CopyGridToExcelMLStringUtil {
 			String typeString = " ss:Type=\"String\"";
 			if (columnGroup == null) {
 				// No group? Then cell bottom row cell should fill both header rows
-				addCell(topRow, "<NamedCell ss:Name=\"Print_Titles\"/>", column.getText(), table.getColumnGroupCount() > 0 ? 1 : 0, 0,
-						combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
-				// //
-				addCell(singleRow, "<NamedCell ss:Name=\"Print_Titles\"/>", column.getText(), 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1,
+				addCell(topRow, "", column.getText(), table.getColumnGroupCount() > 0 ? 1 : 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1,
 						colourString);
+				// //
+				addCell(singleRow, "", column.getText(), 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
 
 			} else {
 				// Add in the bottom row info.
-				addCell(bottomRow, "<NamedCell ss:Name=\"Print_Titles\"/>", column.getText(), 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1,
-						colourString);
+				addCell(bottomRow, "", column.getText(), 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
 				// Part of column group. Only add group if we have not previously seen it.
 				if (seenGroups.add(columnGroup)) {
 					int groupCount = 0;
@@ -286,7 +285,7 @@ public class CopyGridToExcelMLStringUtil {
 							groupCount++;
 						}
 					}
-					addCell(topRow, "<NamedCell ss:Name=\"Print_Titles\"/>", columnGroup.getText(), 0, groupCount - 1,
+					addCell(topRow, "", columnGroup.getText(), 0, groupCount - 1,
 							combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
 					// idx += groupCount;
 				}
@@ -497,7 +496,6 @@ public class CopyGridToExcelMLStringUtil {
 			sw.write(String.format("<Cell ss:MergeAcross=\"%d\" ss:MergeDown=\"%d\" ss:Index=\"%d\" %s %s>", colSpan, rowSpan, colIdx, style, range));
 		} else {
 			sw.write(String.format("<Cell ss:Index=\"%d\" %s %s>", colIdx, style, range));
-
 		}
 
 		if (!"Cell".equalsIgnoreCase(tag)) {
