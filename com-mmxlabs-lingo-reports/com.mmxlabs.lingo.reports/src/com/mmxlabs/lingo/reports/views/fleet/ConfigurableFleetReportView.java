@@ -21,6 +21,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
@@ -81,6 +82,8 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	
 	private boolean diffMode = false;
 	
+	private ViewerComparator defaultViewerComparator = null; 
+	
 	@Inject(optional = true)
 	private Iterable<IFleetBasedColumnFactoryExtension> columnFactoryExtensions;
 
@@ -111,21 +114,105 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		diffMode = !diffMode;
 	}
 	
+	public ViewerComparator getGroupDeltaComparator() {
+		{
+
+			if (defaultViewerComparator == null) {
+				defaultViewerComparator = viewer.getComparator();
+			}
+
+			final ViewerComparator vc = defaultViewerComparator;
+
+			// Wrap around with group sorter
+			return new ViewerComparator() {
+				@Override
+				public int compare(final Viewer viewer, Object e1, Object e2) {
+					RowGroup g1 = null;
+					RowGroup g2 = null;
+
+					Boolean firstIsComposite = false;
+					Boolean secondIsComposite = false;
+
+					if (e1 instanceof Row) {
+						g1 = ((Row) e1).getRowGroup();
+					}
+					if (e2 instanceof Row) {
+						g2 = ((Row) e2).getRowGroup();
+					}
+
+					if (e1 instanceof CompositeRow) {
+						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
+						e1 = ((CompositeRow) e1).getPreviousRow();
+						firstIsComposite = true;
+					}
+					if (e2 instanceof CompositeRow) {
+						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
+						e2 = ((CompositeRow) e2).getPreviousRow();
+						secondIsComposite = true;
+					}
+
+					if (e1 instanceof List) {
+						return Integer.MAX_VALUE;
+					}
+
+					if (e2 instanceof List) {
+						return Integer.MIN_VALUE;
+					}
+
+					if (g1 == g2 && g1 != null) {
+						int res = vc.compare(viewer, e1, e2);
+
+						if (e1 instanceof Row && e2 instanceof Row) {
+							Row r1 = (Row) e1;
+							Row r2 = (Row) e2;
+
+							if (!(r1.isReference() && r2.isReference())) {
+								if (r1.isReference()) {
+									return -1;
+								} else if (r2.isReference()) {
+									return 1;
+								}
+							}
+
+							if (!(firstIsComposite && secondIsComposite)) {
+								if (firstIsComposite) {
+									return 1;
+								} else if (secondIsComposite) {
+									return -1;
+								}
+							}
+						}
+						return res;
+					} else {
+						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
+						final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
+						return vc.compare(viewer, rd1, rd2);
+					}
+				}
+			};
+		}
+
+	}
+	
 	public void setDiffMode(boolean enabled) {
-		
+
 		if (enabled) {
 			GridColumn[] columns = viewer.getGrid().getColumns();
-			for (GridColumn column: columns) {
+			for (GridColumn column : columns) {
 				column.setCellRenderer(new GroupAlternatingRowCellRenderer());
 			}
+			viewer.setComparator(getGroupDeltaComparator());
 		} else {
 			GridColumn[] columns = viewer.getGrid().getColumns();
-			for (GridColumn column: columns) {
+			for (GridColumn column : columns) {
 				column.setCellRenderer(new DefaultCellRenderer());
+				if (defaultViewerComparator != null) {
+					viewer.setComparator(defaultViewerComparator);
+				}
 			}
 		}
 	}
-	
+
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		// if (Table.class.isAssignableFrom(adapter)) {
