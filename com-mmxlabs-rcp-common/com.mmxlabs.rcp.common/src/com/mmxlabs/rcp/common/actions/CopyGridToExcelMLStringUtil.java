@@ -176,7 +176,7 @@ public class CopyGridToExcelMLStringUtil {
 			// sw.append(" </Names>");
 			// below code possibly causes copy/paste errors - probably because Schedule does not exist in copy/paste
 			// // TODO: Get from input / date?
-			// sw.append(" <Worksheet ss:Name=\"Schedule\">");
+			 sw.append(" <Worksheet ss:Name=\"Schedule\">");
 			// // =Sheet1!$1:$1,Sheet1!$2:$2
 			// sw.append(" <Names>");
 			// sw.append(" <NamedRange ss:Name=\"Print_Titles\" ss:Hidden=\"0\" ss:RefersTo=\"=Schedule!R1:R1,Schedule!R2:R2\"/>");
