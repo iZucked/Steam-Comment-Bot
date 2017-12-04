@@ -635,13 +635,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_FRAGMENT__CONTENT_TYPE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Use Command Stack</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FRAGMENT__USE_COMMAND_STACK = 4;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Fragment</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_FRAGMENT_FEATURE_COUNT = 4;
+	int SCENARIO_FRAGMENT_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '<em>IScenario Service</em>' data type.
@@ -1108,6 +1117,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioFragment_ContentType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#isUseCommandStack <em>Use Command Stack</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Use Command Stack</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#isUseCommandStack()
+	 * @see #getScenarioFragment()
+	 * @generated
+	 */
+	EAttribute getScenarioFragment_UseCommandStack();
 
 	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.IScenarioService <em>IScenario Service</em>}'.

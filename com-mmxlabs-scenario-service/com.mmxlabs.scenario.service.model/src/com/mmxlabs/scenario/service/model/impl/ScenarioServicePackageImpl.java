@@ -534,6 +534,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getScenarioFragment_UseCommandStack() {
+		return (EAttribute) scenarioFragmentEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getIScenarioService() {
 		return iScenarioServiceEDataType;
 	}
@@ -615,6 +624,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioFragmentEClass, SCENARIO_FRAGMENT__NAME);
 		createEReference(scenarioFragmentEClass, SCENARIO_FRAGMENT__FRAGMENT);
 		createEAttribute(scenarioFragmentEClass, SCENARIO_FRAGMENT__CONTENT_TYPE);
+		createEAttribute(scenarioFragmentEClass, SCENARIO_FRAGMENT__USE_COMMAND_STACK);
 
 		// Create data types
 		iScenarioServiceEDataType = createEDataType(ISCENARIO_SERVICE);
@@ -744,6 +754,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioFragment_ContentType(), ecorePackage.getEString(), "contentType", null, 0, 1, ScenarioFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioFragment_UseCommandStack(), ecorePackage.getEBoolean(), "useCommandStack", null, 0, 1, ScenarioFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(iScenarioServiceEDataType, IScenarioService.class, "IScenarioService", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -86,6 +86,10 @@ public final class ScenarioServiceUtils {
 				existingNames.add(((ScenarioInstance) child).getName());
 			}
 		}
+		if (parent instanceof ScenarioInstance) {
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) parent;
+			scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
+		}
 		return existingNames;
 	}
 

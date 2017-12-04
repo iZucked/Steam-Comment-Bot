@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getFragment <em>Fragment</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getContentType <em>Content Type</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#isUseCommandStack <em>Use Command Stack</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioFragment()
@@ -132,5 +133,31 @@ public interface ScenarioFragment extends EObject {
 	 * @generated
 	 */
 	void setContentType(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Use Command Stack</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Use Command Stack</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Use Command Stack</em>' attribute.
+	 * @see #setUseCommandStack(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioFragment_UseCommandStack()
+	 * @model
+	 * @generated
+	 */
+	boolean isUseCommandStack();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#isUseCommandStack <em>Use Command Stack</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Use Command Stack</em>' attribute.
+	 * @see #isUseCommandStack()
+	 * @generated
+	 */
+	void setUseCommandStack(boolean value);
 
 } // ScenarioFragment

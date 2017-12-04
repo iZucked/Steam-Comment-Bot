@@ -23,6 +23,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl#getFragment <em>Fragment</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl#getContentType <em>Content Type</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl#isUseCommandStack <em>Use Command Stack</em>}</li>
  * </ul>
  *
  * @generated
@@ -127,6 +128,24 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 */
 	public void setContentType(String newContentType) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_ContentType(), newContentType);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isUseCommandStack() {
+		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_UseCommandStack(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUseCommandStack(boolean newUseCommandStack) {
+		eSet(ScenarioServicePackage.eINSTANCE.getScenarioFragment_UseCommandStack(), newUseCommandStack);
 	}
 
 } //ScenarioFragmentImpl

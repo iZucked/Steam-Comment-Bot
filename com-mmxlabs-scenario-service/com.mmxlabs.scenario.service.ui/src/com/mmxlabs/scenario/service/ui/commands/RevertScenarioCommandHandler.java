@@ -5,12 +5,12 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.Iterator;
+import java.util.concurrent.ForkJoinPool;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -20,9 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 /**
@@ -55,7 +54,8 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
 							final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 							ScenarioServiceModelUtils.closeReferences(scenarioInstance);
-							modelRecord.revert();
+							// Run revert in BG to free up UI thread
+							ForkJoinPool.commonPool().submit(() -> modelRecord.revert());
 						}
 					}
 				}

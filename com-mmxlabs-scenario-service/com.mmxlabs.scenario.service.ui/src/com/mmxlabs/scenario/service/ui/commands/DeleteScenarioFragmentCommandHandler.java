@@ -5,11 +5,13 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.Iterator;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
@@ -20,8 +22,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class DeleteScenarioFragmentCommandHandler extends AbstractHandler {
 	/**
@@ -49,7 +51,14 @@ public class DeleteScenarioFragmentCommandHandler extends AbstractHandler {
 								final EditingDomain domain = ref.getEditingDomain();
 								final EObject fragmentObject = fragment.getFragment();
 								if (fragmentObject != null) {
-									domain.getCommandStack().execute(DeleteCommand.create(domain, fragmentObject));
+									final Command cmd = RemoveCommand.create(domain, fragmentObject);
+									assert cmd.canExecute();
+									if (fragment.isUseCommandStack()) {
+										domain.getCommandStack().execute(cmd);
+									} else {
+										cmd.execute();
+										ref.setDirty();
+									}
 								}
 							});
 						}

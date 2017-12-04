@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDirtyListener;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
@@ -116,6 +117,9 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 					addContentAdapter(modelRecord);
 				}
 			}
+		} else if (element instanceof ScenarioFragment) {
+			ScenarioFragment scenarioFragment = (ScenarioFragment) element;
+
 		}
 	}
 

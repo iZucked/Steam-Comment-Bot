@@ -9,6 +9,7 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 public class OpenScenarioCommandHandler extends AbstractHandler {
@@ -50,6 +52,14 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 							openEditor(activePage, element);
 						} else if (element instanceof ScenarioFragment) {
 							final ScenarioFragment scenarioFragment = (ScenarioFragment) element;
+							
+							IScenarioFragmentOpenHandler handler = (IScenarioFragmentOpenHandler) Platform.getAdapterManager().loadAdapter(scenarioFragment.getFragment(), IScenarioFragmentOpenHandler.class.getCanonicalName());
+							if (handler != null) {
+								handler.open(scenarioFragment, scenarioFragment.getScenarioInstance());
+								return;
+							}
+							
+							
 							final IEditorPart part = openEditor(activePage, scenarioFragment.getScenarioInstance());
 							if (part instanceof IPartGotoTarget) {
 								((IPartGotoTarget) part).gotoTarget(scenarioFragment.getFragment());

@@ -57,6 +57,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 			addNamePropertyDescriptor(object);
 			addFragmentPropertyDescriptor(object);
 			addContentTypePropertyDescriptor(object);
+			addUseCommandStackPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,6 +96,18 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioFragment_contentType_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioFragment_contentType_feature", "_UI_ScenarioFragment_type"),
 				ScenarioServicePackage.eINSTANCE.getScenarioFragment_ContentType(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Use Command Stack feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUseCommandStackPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioFragment_useCommandStack_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioFragment_useCommandStack_feature", "_UI_ScenarioFragment_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioFragment_UseCommandStack(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -142,6 +155,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 		switch (notification.getFeatureID(ScenarioFragment.class)) {
 		case ScenarioServicePackage.SCENARIO_FRAGMENT__NAME:
 		case ScenarioServicePackage.SCENARIO_FRAGMENT__CONTENT_TYPE:
+		case ScenarioServicePackage.SCENARIO_FRAGMENT__USE_COMMAND_STACK:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
