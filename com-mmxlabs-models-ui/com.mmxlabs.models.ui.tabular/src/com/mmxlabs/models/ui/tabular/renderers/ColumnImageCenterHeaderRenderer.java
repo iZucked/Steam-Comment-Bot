@@ -28,7 +28,7 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
  * @since 2.0.0
  */
 @SuppressWarnings("restriction")
-public class ColumnHeaderRenderer extends GridHeaderRenderer {
+public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 
 	int leftMargin = 6;
 
@@ -41,9 +41,9 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 	int arrowMargin = 6;
 
 	int imageSpacing = 3;
-	
+
 	private boolean forceCenter = false;
-	
+
 	private SortArrowRenderer arrowRenderer = new SortArrowRenderer();
 
 	private TextLayout textLayout;
@@ -118,18 +118,20 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 		}
 
 		int x = leftMargin;
-
 		if (column.getImage() != null) {
-			int y = bottomMargin;
+			Rectangle bounds = getBounds();
+			Rectangle imgBounds = column.getImage().getBounds();
+			int width = bounds.width / 2;
+			width -= imgBounds.width / 2;
+			int height = bounds.height / 2;
+			height -= imgBounds.height / 2;
 
-			if (column.getHeaderControl() == null) {
-				y = getBounds().y + pushedDrawingOffset + getBounds().height - bottomMargin - column.getImage().getBounds().height;
-			}
+			x = width > 0 ? bounds.x + width : bounds.x;
+			int y = height > 0 ? bounds.y + height : bounds.y;
 
-			gc.drawImage(column.getImage(), getBounds().x + x + pushedDrawingOffset, y);
-			x += column.getImage().getBounds().width + imageSpacing;
+			gc.drawImage(column.getImage(), x, y);
 		}
-
+		x = leftMargin;
 		int width = getBounds().width - x;
 
 		if (column.getSort() == SWT.NONE) {
@@ -154,8 +156,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 			text = TextUtils.getShortString(gc, text, width);
 			// y -= gc.getFontMetrics().getHeight();
 		}
-		
-			
+
 		if (column.getAlignment() == SWT.CENTER || forceCenter) {
 			int len = gc.stringExtent(text).x;
 			if (len < width) {
@@ -166,7 +167,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 			if (len < width) {
 				x += width - len;
 			}
-		} 
+		}
 
 		if (!isWordWrap()) {
 			gc.drawString(text, getBounds().x + x + pushedDrawingOffset, y + pushedDrawingOffset, true);
@@ -300,11 +301,11 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 
 		return bounds;
 	}
-	
+
 	public void setCenter(boolean center) {
-		forceCenter = center; 
+		// forceCenter = center;
 	}
-	
+
 	/**
 	 * @return the bounds reserved for the control
 	 */
@@ -335,11 +336,10 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 				}
 			});
 		}
-		
+
 		if (forceCenter) {
 			textLayout.setAlignment(SWT.CENTER);
-		}
-		else {
+		} else {
 			textLayout.setAlignment(column.getAlignment());
 		}
 	}

@@ -34,6 +34,8 @@ import org.eclipse.ui.forms.IMessage;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.rcp.common.RunnerHelper;
+
 /**
  * An abstract class providing a {@link FormDialog} with support for EMF Validation and EMF Data Bindings
  * 
@@ -148,6 +150,9 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 			}
 		});
 		observablesManager.addObservable(aggregateStatus);
+
+		// Set initial state
+		RunnerHelper.asyncExec(() -> handleStateChange(aggregateStatus.getValue(), dbc));
 	}
 
 	/**
@@ -250,7 +255,8 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 			}
 
 			Point computeSize = shell.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			shell.setSize(Math.min(computeSize.x, shell.getDisplay().getPrimaryMonitor().getBounds().width - 50), Math.min(computeSize.y, shell.getDisplay().getPrimaryMonitor().getBounds().height - 50));
+			shell.setSize(Math.min(computeSize.x, shell.getDisplay().getPrimaryMonitor().getBounds().width - 50),
+					Math.min(computeSize.y, shell.getDisplay().getPrimaryMonitor().getBounds().height - 50));
 			final Rectangle shellBounds = getParentShell().getBounds();
 			final Point dialogSize = shell.getSize();
 			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
