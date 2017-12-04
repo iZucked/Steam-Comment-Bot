@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.port;
 
-import org.eclipse.emf.common.util.EList;
-
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**

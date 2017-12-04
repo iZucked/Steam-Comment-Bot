@@ -12,6 +12,7 @@ import org.osgi.framework.BundleContext;
 
 import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.parameters.provider.ParametersEditPlugin;
 import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
 import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
@@ -52,6 +53,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 				FleetEditPlugin.INSTANCE,
 				LNGTypesEditPlugin.INSTANCE,
 				MmxcoreEditPlugin.INSTANCE,
+				ParametersEditPlugin.INSTANCE,
 				PortEditPlugin.INSTANCE,
 				PricingEditPlugin.INSTANCE,
 				ScheduleEditPlugin.INSTANCE,

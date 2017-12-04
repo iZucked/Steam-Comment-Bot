@@ -212,6 +212,16 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ParametersPackage.MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: {
+				MultipleSolutionSimilarityOptimisationStage multipleSolutionSimilarityOptimisationStage = (MultipleSolutionSimilarityOptimisationStage)theEObject;
+				T1 result = caseMultipleSolutionSimilarityOptimisationStage(multipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseLocalSearchOptimisationStage(multipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(multipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(multipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseOptimisationStage(multipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -498,6 +508,21 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseSolutionBuilderSettings(SolutionBuilderSettings object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Multiple Solution Similarity Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Multiple Solution Similarity Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseMultipleSolutionSimilarityOptimisationStage(MultipleSolutionSimilarityOptimisationStage object) {
 		return null;
 	}
 

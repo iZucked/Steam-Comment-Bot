@@ -5,6 +5,6 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" name="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelFragmentService">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="stop" name="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelFragmentService">
    <implementation class="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelFragmentService"/>
 </scr:component>

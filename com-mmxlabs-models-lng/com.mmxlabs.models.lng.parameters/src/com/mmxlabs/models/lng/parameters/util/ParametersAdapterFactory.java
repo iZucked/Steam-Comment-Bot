@@ -155,6 +155,10 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createSolutionBuilderSettingsAdapter();
 			}
 			@Override
+			public Adapter caseMultipleSolutionSimilarityOptimisationStage(MultipleSolutionSimilarityOptimisationStage object) {
+				return createMultipleSolutionSimilarityOptimisationStageAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -445,6 +449,20 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSolutionBuilderSettingsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage <em>Multiple Solution Similarity Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage
+	 * @generated
+	 */
+	public Adapter createMultipleSolutionSimilarityOptimisationStageAdapter() {
 		return null;
 	}
 

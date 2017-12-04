@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.cargo.CargoType;
 import java.util.Collection;
 import java.util.List;
 

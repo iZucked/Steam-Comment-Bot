@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
@@ -170,7 +171,9 @@ public class OptionAnalysisModelFragmentService {
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
 				if (notification.getEventType() == Notification.ADD) {
 					final EObject eObj = (EObject) notification.getNewValue();
-					createFragment(eObj);
+					if (eObj instanceof NamedObject) {
+						createFragment((NamedObject) eObj);
+					}
 				} else if (notification.getEventType() == Notification.REMOVE) {
 					final EObject eObj = (EObject) notification.getOldValue();
 					removeFragment(eObj);
@@ -184,9 +187,11 @@ public class OptionAnalysisModelFragmentService {
 			modelRecord.getScenarioInstance().getFragments().remove(fragment);
 		}
 
-		private void createFragment(final EObject plan) {
+		private void createFragment(final NamedObject plan) {
 			final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
 			fragment.setFragment(plan);
+			fragment.setName(plan.getName());
+			fragment.setUseCommandStack(true);
 			objectToFragmentMap.put(plan, fragment);
 			modelRecord.getScenarioInstance().getFragments().add(fragment);
 			// Create a databinding to keep names in sync

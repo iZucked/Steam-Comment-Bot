@@ -19,7 +19,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -29,8 +28,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * 
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
-	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Vessel(),
-			AnalyticsPackage.eINSTANCE.getShippingCostPlan_Vessel(), AnalyticsPackage.eINSTANCE.getProvisionalCargo_Vessel());
+	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList();
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 

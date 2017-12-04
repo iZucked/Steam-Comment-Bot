@@ -27,7 +27,6 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.util.AnalyticsAdapterFactory;
 
@@ -108,259 +107,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		}
 
 		return analyticsModelItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.UnitCostMatrix} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected UnitCostMatrixItemProvider unitCostMatrixItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.UnitCostMatrix}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createUnitCostMatrixAdapter() {
-		if (unitCostMatrixItemProvider == null) {
-			unitCostMatrixItemProvider = new UnitCostMatrixItemProvider(this);
-		}
-
-		return unitCostMatrixItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.UnitCostLine} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected UnitCostLineItemProvider unitCostLineItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.UnitCostLine}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createUnitCostLineAdapter() {
-		if (unitCostLineItemProvider == null) {
-			unitCostLineItemProvider = new UnitCostLineItemProvider(this);
-		}
-
-		return unitCostLineItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.Voyage} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected VoyageItemProvider voyageItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.Voyage}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createVoyageAdapter() {
-		if (voyageItemProvider == null) {
-			voyageItemProvider = new VoyageItemProvider(this);
-		}
-
-		return voyageItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.Visit} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected VisitItemProvider visitItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.Visit}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createVisitAdapter() {
-		if (visitItemProvider == null) {
-			visitItemProvider = new VisitItemProvider(this);
-		}
-
-		return visitItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CostComponent} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CostComponentItemProvider costComponentItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CostComponent}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCostComponentAdapter() {
-		if (costComponentItemProvider == null) {
-			costComponentItemProvider = new CostComponentItemProvider(this);
-		}
-
-		return costComponentItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.FuelCost} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected FuelCostItemProvider fuelCostItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.FuelCost}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createFuelCostAdapter() {
-		if (fuelCostItemProvider == null) {
-			fuelCostItemProvider = new FuelCostItemProvider(this);
-		}
-
-		return fuelCostItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.Journey} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected JourneyItemProvider journeyItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.Journey}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createJourneyAdapter() {
-		if (journeyItemProvider == null) {
-			journeyItemProvider = new JourneyItemProvider(this);
-		}
-
-		return journeyItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ShippingCostPlan} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ShippingCostPlanItemProvider shippingCostPlanItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ShippingCostPlan}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createShippingCostPlanAdapter() {
-		if (shippingCostPlanItemProvider == null) {
-			shippingCostPlanItemProvider = new ShippingCostPlanItemProvider(this);
-		}
-
-		return shippingCostPlanItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ShippingCostRow} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ShippingCostRowItemProvider shippingCostRowItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ShippingCostRow}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createShippingCostRowAdapter() {
-		if (shippingCostRowItemProvider == null) {
-			shippingCostRowItemProvider = new ShippingCostRowItemProvider(this);
-		}
-
-		return shippingCostRowItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CargoSandbox} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CargoSandboxItemProvider cargoSandboxItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CargoSandbox}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCargoSandboxAdapter() {
-		if (cargoSandboxItemProvider == null) {
-			cargoSandboxItemProvider = new CargoSandboxItemProvider(this);
-		}
-
-		return cargoSandboxItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ProvisionalCargo} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ProvisionalCargoItemProvider provisionalCargoItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ProvisionalCargo}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createProvisionalCargoAdapter() {
-		if (provisionalCargoItemProvider == null) {
-			provisionalCargoItemProvider = new ProvisionalCargoItemProvider(this);
-		}
-
-		return provisionalCargoItemProvider;
 	}
 
 	/**
@@ -939,29 +685,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ActionableSet} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ActionableSetItemProvider actionableSetItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ActionableSet}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createActionableSetAdapter() {
-		if (actionableSetItemProvider == null) {
-			actionableSetItemProvider = new ActionableSetItemProvider(this);
-		}
-
-		return actionableSetItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1005,6 +728,52 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		}
 
 		return slotInsertionOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SolutionOptionItemProvider solutionOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SolutionOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSolutionOptionAdapter() {
+		if (solutionOptionItemProvider == null) {
+			solutionOptionItemProvider = new SolutionOptionItemProvider(this);
+		}
+
+		return solutionOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptimisationResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OptimisationResultItemProvider optimisationResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.OptimisationResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOptimisationResultAdapter() {
+		if (optimisationResultItemProvider == null) {
+			optimisationResultItemProvider = new OptimisationResultItemProvider(this);
+		}
+
+		return optimisationResultItemProvider;
 	}
 
 	/**
@@ -1142,17 +911,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	@Override
 	public void dispose() {
 		if (analyticsModelItemProvider != null) analyticsModelItemProvider.dispose();
-		if (unitCostMatrixItemProvider != null) unitCostMatrixItemProvider.dispose();
-		if (unitCostLineItemProvider != null) unitCostLineItemProvider.dispose();
-		if (voyageItemProvider != null) voyageItemProvider.dispose();
-		if (visitItemProvider != null) visitItemProvider.dispose();
-		if (costComponentItemProvider != null) costComponentItemProvider.dispose();
-		if (fuelCostItemProvider != null) fuelCostItemProvider.dispose();
-		if (journeyItemProvider != null) journeyItemProvider.dispose();
-		if (shippingCostPlanItemProvider != null) shippingCostPlanItemProvider.dispose();
-		if (shippingCostRowItemProvider != null) shippingCostRowItemProvider.dispose();
-		if (cargoSandboxItemProvider != null) cargoSandboxItemProvider.dispose();
-		if (provisionalCargoItemProvider != null) provisionalCargoItemProvider.dispose();
 		if (buyOpportunityItemProvider != null) buyOpportunityItemProvider.dispose();
 		if (sellOpportunityItemProvider != null) sellOpportunityItemProvider.dispose();
 		if (buyMarketItemProvider != null) buyMarketItemProvider.dispose();
@@ -1178,9 +936,10 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (existingVesselAvailabilityItemProvider != null) existingVesselAvailabilityItemProvider.dispose();
 		if (existingCharterMarketOptionItemProvider != null) existingCharterMarketOptionItemProvider.dispose();
 		if (actionableSetPlanItemProvider != null) actionableSetPlanItemProvider.dispose();
-		if (actionableSetItemProvider != null) actionableSetItemProvider.dispose();
 		if (slotInsertionOptionsItemProvider != null) slotInsertionOptionsItemProvider.dispose();
 		if (slotInsertionOptionItemProvider != null) slotInsertionOptionItemProvider.dispose();
+		if (solutionOptionItemProvider != null) solutionOptionItemProvider.dispose();
+		if (optimisationResultItemProvider != null) optimisationResultItemProvider.dispose();
 	}
 
 }

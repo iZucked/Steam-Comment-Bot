@@ -16,94 +16,15 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getRoundTripMatrices <em>Round Trip Matrices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix <em>Selected Matrix</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans <em>Shipping Cost Plans</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getCargoSandboxes <em>Cargo Sandboxes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptionModels <em>Option Models</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getInsertionOptions <em>Insertion Options</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getActionableSetPlans <em>Actionable Set Plans</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptimisations <em>Optimisations</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject nonUniqueChildren='true'"
  * @generated
  */
 public interface AnalyticsModel extends UUIDObject {
-	/**
-	 * Returns the value of the '<em><b>Round Trip Matrices</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.UnitCostMatrix}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Round Trip Matrices</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Round Trip Matrices</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_RoundTripMatrices()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<UnitCostMatrix> getRoundTripMatrices();
-
-	/**
-	 * Returns the value of the '<em><b>Selected Matrix</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Selected Matrix</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Selected Matrix</em>' reference.
-	 * @see #setSelectedMatrix(UnitCostMatrix)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_SelectedMatrix()
-	 * @model required="true"
-	 * @generated
-	 */
-	UnitCostMatrix getSelectedMatrix();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix <em>Selected Matrix</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Selected Matrix</em>' reference.
-	 * @see #getSelectedMatrix()
-	 * @generated
-	 */
-	void setSelectedMatrix(UnitCostMatrix value);
-
-	/**
-	 * Returns the value of the '<em><b>Shipping Cost Plans</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.ShippingCostPlan}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Shipping Cost Plans</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Shipping Cost Plans</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_ShippingCostPlans()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<ShippingCostPlan> getShippingCostPlans();
-
-	/**
-	 * Returns the value of the '<em><b>Cargo Sandboxes</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.CargoSandbox}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cargo Sandboxes</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cargo Sandboxes</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_CargoSandboxes()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<CargoSandbox> getCargoSandboxes();
-
 	/**
 	 * Returns the value of the '<em><b>Option Models</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel}.
@@ -121,36 +42,20 @@ public interface AnalyticsModel extends UUIDObject {
 	EList<OptionAnalysisModel> getOptionModels();
 
 	/**
-	 * Returns the value of the '<em><b>Insertion Options</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions}.
+	 * Returns the value of the '<em><b>Optimisations</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Insertion Options</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Optimisations</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Insertion Options</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_InsertionOptions()
+	 * @return the value of the '<em>Optimisations</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_Optimisations()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<SlotInsertionOptions> getInsertionOptions();
-
-	/**
-	 * Returns the value of the '<em><b>Actionable Set Plans</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.ActionableSetPlan}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Actionable Set Plans</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Actionable Set Plans</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_ActionableSetPlans()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<ActionableSetPlan> getActionableSetPlans();
+	EList<AbstractSolutionSet> getOptimisations();
 
 } // end of  AnalyticsModel
 

@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getStages <em>Stages</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getSolutionBuilderSettings <em>Solution Builder Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getResultName <em>Result Name</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimisationPlan()
@@ -96,5 +97,31 @@ public interface OptimisationPlan extends EObject {
 	 * @generated
 	 */
 	void setSolutionBuilderSettings(SolutionBuilderSettings value);
+
+	/**
+	 * Returns the value of the '<em><b>Result Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Result Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Result Name</em>' attribute.
+	 * @see #setResultName(String)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimisationPlan_ResultName()
+	 * @model
+	 * @generated
+	 */
+	String getResultName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getResultName <em>Result Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Result Name</em>' attribute.
+	 * @see #getResultName()
+	 * @generated
+	 */
+	void setResultName(String value);
 
 } // OptimisationPlan

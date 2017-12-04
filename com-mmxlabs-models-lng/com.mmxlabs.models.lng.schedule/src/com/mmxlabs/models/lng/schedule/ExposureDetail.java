@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-
 import java.time.YearMonth;
 
 import org.eclipse.emf.ecore.EObject;

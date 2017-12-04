@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.provider.APortSetItemProvider;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.port.Port} object.

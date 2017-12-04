@@ -117,6 +117,7 @@ import com.mmxlabs.models.lng.analytics.provider.AnalyticsItemProviderAdapterFac
 import com.mmxlabs.models.lng.cargo.provider.CargoItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.commercial.provider.CommercialItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.fleet.provider.FleetItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.pricing.provider.PricingItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.schedule.provider.ScheduleItemProviderAdapterFactory;
@@ -623,6 +624,7 @@ public class AnalyticsEditor
 		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new TypesItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new MMXCoreItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PricingItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ScheduleItemProviderAdapterFactory());

@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -68,6 +69,7 @@ public class OptimisationPlanItemProvider
 			super.getPropertyDescriptors(object);
 
 			addUserSettingsPropertyDescriptor(object);
+			addResultNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -90,6 +92,28 @@ public class OptimisationPlanItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Result Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addResultNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimisationPlan_resultName_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationPlan_resultName_feature", "_UI_OptimisationPlan_type"),
+				 ParametersPackage.Literals.OPTIMISATION_PLAN__RESULT_NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -144,7 +168,10 @@ public class OptimisationPlanItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_OptimisationPlan_type");
+		String label = ((OptimisationPlan)object).getResultName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_OptimisationPlan_type") :
+			getString("_UI_OptimisationPlan_type") + " " + label;
 	}
 	
 
@@ -160,6 +187,9 @@ public class OptimisationPlanItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(OptimisationPlan.class)) {
+			case ParametersPackage.OPTIMISATION_PLAN__RESULT_NAME:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case ParametersPackage.OPTIMISATION_PLAN__STAGES:
 			case ParametersPackage.OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -218,6 +248,11 @@ public class OptimisationPlanItemProvider
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
 				 ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createMultipleSolutionSimilarityOptimisationStage()));
 
 		newChildDescriptors.add
 			(createChildParameter

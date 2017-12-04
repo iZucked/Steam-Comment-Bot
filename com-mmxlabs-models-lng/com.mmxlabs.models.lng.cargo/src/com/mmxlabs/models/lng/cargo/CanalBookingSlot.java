@@ -7,14 +7,9 @@
 package com.mmxlabs.models.lng.cargo;
 
 import com.mmxlabs.models.lng.port.CanalEntry;
-import com.mmxlabs.models.lng.port.EntryPoint;
-import com.mmxlabs.models.lng.port.Route;
-
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 
 /**
  * <!-- begin-user-doc -->

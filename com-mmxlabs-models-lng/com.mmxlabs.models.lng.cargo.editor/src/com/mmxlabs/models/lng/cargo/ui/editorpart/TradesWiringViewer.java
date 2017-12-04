@@ -887,7 +887,31 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final CargoPackage pkg = CargoPackage.eINSTANCE;
 		final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
+		{
+			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
+			assignmentColumn = addTradesColumn(loadColumns, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
+			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
+				@Override
+				public Image getImage(final Object element) {
 
+					if (element instanceof RowData) {
+						final RowData rowDataItem = (RowData) element;
+						final Object object = assignmentPath.get(rowDataItem);
+						if (object instanceof AssignableElement) {
+							final AssignableElement assignableElement = (AssignableElement) object;
+
+							if (assignableElement.isLocked()) {
+								return lockedImage;
+							}
+						}
+					}
+
+					return super.getImage(element);
+
+				}
+			});
+		}
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.LOAD);
@@ -1023,31 +1047,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			});
 		}
-		{
-			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
-			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
-			assignmentColumn = addTradesColumn(loadColumns, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
-			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
-				@Override
-				public Image getImage(final Object element) {
 
-					if (element instanceof RowData) {
-						final RowData rowDataItem = (RowData) element;
-						final Object object = assignmentPath.get(rowDataItem);
-						if (object instanceof AssignableElement) {
-							final AssignableElement assignableElement = (AssignableElement) object;
-
-							if (assignableElement.isLocked()) {
-								return lockedImage;
-							}
-						}
-					}
-
-					return super.getImage(element);
-
-				}
-			});
-		}
 
 		// Trigger sorting on the load date column to make this the initial sort column.
 		{

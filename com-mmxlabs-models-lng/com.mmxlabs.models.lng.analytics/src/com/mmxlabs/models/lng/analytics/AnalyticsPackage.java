@@ -90,67 +90,22 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Round Trip Matrices</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYTICS_MODEL__ROUND_TRIP_MATRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Selected Matrix</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYTICS_MODEL__SELECTED_MATRIX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Shipping Cost Plans</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYTICS_MODEL__SHIPPING_COST_PLANS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Cargo Sandboxes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYTICS_MODEL__CARGO_SANDBOXES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>Option Models</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL__OPTION_MODELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int ANALYTICS_MODEL__OPTION_MODELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Insertion Options</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Optimisations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL__INSERTION_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Actionable Set Plans</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYTICS_MODEL__ACTIONABLE_SET_PLANS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int ANALYTICS_MODEL__OPTIMISATIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -159,931 +114,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl <em>Unit Cost Matrix</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getUnitCostMatrix()
-	 * @generated
-	 */
-	int UNIT_COST_MATRIX = 1;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>From Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__FROM_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>To Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__TO_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Vessel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Notional Day Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__NOTIONAL_DAY_RATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__SPEED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Round Trip</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__ROUND_TRIP = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Minimum Load</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__MINIMUM_LOAD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Maximum Load</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__MAXIMUM_LOAD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Minimum Discharge</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__MINIMUM_DISCHARGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Maximum Discharge</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__MAXIMUM_DISCHARGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
-
-	/**
-	 * The feature id for the '<em><b>Retain Heel</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__RETAIN_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
-
-	/**
-	 * The feature id for the '<em><b>Cargo Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__CARGO_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
-
-	/**
-	 * The feature id for the '<em><b>Base Fuel Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__BASE_FUEL_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
-
-	/**
-	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__CV_VALUE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
-
-	/**
-	 * The feature id for the '<em><b>Cost Lines</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__COST_LINES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
-
-	/**
-	 * The feature id for the '<em><b>Allowed Route Options</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
-
-	/**
-	 * The feature id for the '<em><b>Revenue Share</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__REVENUE_SHARE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
-
-	/**
-	 * The feature id for the '<em><b>Laden Time Allowance</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Time Allowance</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
-
-	/**
-	 * The number of structural features of the '<em>Unit Cost Matrix</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getUnitCostLine()
-	 * @generated
-	 */
-	int UNIT_COST_LINE = 2;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Unit Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__UNIT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Mmbtu Delivered</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__MMBTU_DELIVERED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>From</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__FROM = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>To</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Volume Loaded</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__VOLUME_LOADED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Volume Discharged</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__VOLUME_DISCHARGED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__HIRE_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__FUEL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Canal Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__CANAL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Cost Components</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__COST_COMPONENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
-
-	/**
-	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__PORT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
-
-	/**
-	 * The feature id for the '<em><b>Profit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__PROFIT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
-
-	/**
-	 * The number of structural features of the '<em>Unit Cost Line</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CostComponentImpl <em>Cost Component</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.CostComponentImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCostComponent()
-	 * @generated
-	 */
-	int COST_COMPONENT = 5;
-
-	/**
-	 * The feature id for the '<em><b>Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COST_COMPONENT__DURATION = 0;
-
-	/**
-	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COST_COMPONENT__HIRE_COST = 1;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Costs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COST_COMPONENT__FUEL_COSTS = 2;
-
-	/**
-	 * The number of structural features of the '<em>Cost Component</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COST_COMPONENT_FEATURE_COUNT = 3;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl <em>Voyage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.VoyageImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVoyage()
-	 * @generated
-	 */
-	int VOYAGE = 3;
-
-	/**
-	 * The feature id for the '<em><b>Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__DURATION = COST_COMPONENT__DURATION;
-
-	/**
-	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__HIRE_COST = COST_COMPONENT__HIRE_COST;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Costs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__FUEL_COSTS = COST_COMPONENT__FUEL_COSTS;
-
-	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__ROUTE = COST_COMPONENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Route Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__ROUTE_COST = COST_COMPONENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__SPEED = COST_COMPONENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Distance</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__DISTANCE = COST_COMPONENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Idle Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__IDLE_TIME = COST_COMPONENT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Travel Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE__TRAVEL_TIME = COST_COMPONENT_FEATURE_COUNT + 5;
-
-	/**
-	 * The number of structural features of the '<em>Voyage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VOYAGE_FEATURE_COUNT = COST_COMPONENT_FEATURE_COUNT + 6;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VisitImpl <em>Visit</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.VisitImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVisit()
-	 * @generated
-	 */
-	int VISIT = 4;
-
-	/**
-	 * The feature id for the '<em><b>Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VISIT__DURATION = COST_COMPONENT__DURATION;
-
-	/**
-	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VISIT__HIRE_COST = COST_COMPONENT__HIRE_COST;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Costs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VISIT__FUEL_COSTS = COST_COMPONENT__FUEL_COSTS;
-
-	/**
-	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VISIT__PORT_COST = COST_COMPONENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Visit</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VISIT_FEATURE_COUNT = COST_COMPONENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FuelCostImpl <em>Fuel Cost</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.FuelCostImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFuelCost()
-	 * @generated
-	 */
-	int FUEL_COST = 6;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_COST__NAME = 0;
-
-	/**
-	 * The feature id for the '<em><b>Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_COST__UNIT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_COST__QUANTITY = 2;
-
-	/**
-	 * The feature id for the '<em><b>Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_COST__COST = 3;
-
-	/**
-	 * The number of structural features of the '<em>Fuel Cost</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_COST_FEATURE_COUNT = 4;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.JourneyImpl <em>Journey</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.JourneyImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getJourney()
-	 * @generated
-	 */
-	int JOURNEY = 7;
-
-	/**
-	 * The feature id for the '<em><b>From</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__FROM = 0;
-
-	/**
-	 * The feature id for the '<em><b>To</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__TO = 1;
-
-	/**
-	 * The number of structural features of the '<em>Journey</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY_FEATURE_COUNT = 2;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl <em>Shipping Cost Plan</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostPlan()
-	 * @generated
-	 */
-	int SHIPPING_COST_PLAN = 8;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_PLAN__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_PLAN__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Vessel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_PLAN__VESSEL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Notional Day Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_PLAN__NOTIONAL_DAY_RATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Base Fuel Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_PLAN__BASE_FUEL_PRICE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_PLAN__ROWS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The number of structural features of the '<em>Shipping Cost Plan</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_PLAN_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl <em>Shipping Cost Row</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostRow()
-	 * @generated
-	 */
-	int SHIPPING_COST_ROW = 9;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Cargo Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__CARGO_PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Destination Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__DESTINATION_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Heel Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__HEEL_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Include Port Costs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__INCLUDE_PORT_COSTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The number of structural features of the '<em>Shipping Cost Row</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl <em>Cargo Sandbox</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoSandbox()
-	 * @generated
-	 */
-	int CARGO_SANDBOX = 10;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_SANDBOX__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_SANDBOX__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Cargoes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_SANDBOX__CARGOES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Cargo Sandbox</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_SANDBOX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl <em>Provisional Cargo</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProvisionalCargo()
-	 * @generated
-	 */
-	int PROVISIONAL_CARGO = 11;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Buy</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO__BUY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Sell</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO__SELL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Vessel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Provisional Cargo</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -1093,7 +124,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyOption()
 	 * @generated
 	 */
-	int BUY_OPTION = 12;
+	int BUY_OPTION = 1;
 
 	/**
 	 * The number of structural features of the '<em>Buy Option</em>' class.
@@ -1112,7 +143,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellOption()
 	 * @generated
 	 */
-	int SELL_OPTION = 13;
+	int SELL_OPTION = 2;
 
 	/**
 	 * The number of structural features of the '<em>Sell Option</em>' class.
@@ -1131,7 +162,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyOpportunity()
 	 * @generated
 	 */
-	int BUY_OPPORTUNITY = 14;
+	int BUY_OPPORTUNITY = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1276,7 +307,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellOpportunity()
 	 * @generated
 	 */
-	int SELL_OPPORTUNITY = 15;
+	int SELL_OPPORTUNITY = 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1412,7 +443,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyMarket()
 	 * @generated
 	 */
-	int BUY_MARKET = 16;
+	int BUY_MARKET = 5;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -1440,7 +471,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellMarket()
 	 * @generated
 	 */
-	int SELL_MARKET = 17;
+	int SELL_MARKET = 6;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -1468,7 +499,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyReference()
 	 * @generated
 	 */
-	int BUY_REFERENCE = 18;
+	int BUY_REFERENCE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -1496,7 +527,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellReference()
 	 * @generated
 	 */
-	int SELL_REFERENCE = 19;
+	int SELL_REFERENCE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -1524,7 +555,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCaseRow()
 	 * @generated
 	 */
-	int BASE_CASE_ROW = 20;
+	int BASE_CASE_ROW = 9;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -1570,7 +601,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRow()
 	 * @generated
 	 */
-	int PARTIAL_CASE_ROW = 21;
+	int PARTIAL_CASE_ROW = 10;
 
 	/**
 	 * The feature id for the '<em><b>Buy Options</b></em>' reference list.
@@ -1616,7 +647,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingOption()
 	 * @generated
 	 */
-	int SHIPPING_OPTION = 22;
+	int SHIPPING_OPTION = 11;
 
 	/**
 	 * The number of structural features of the '<em>Shipping Option</em>' class.
@@ -1635,7 +666,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetShippingOption()
 	 * @generated
 	 */
-	int FLEET_SHIPPING_OPTION = 23;
+	int FLEET_SHIPPING_OPTION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -1690,7 +721,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalAvailabilityShippingOption()
 	 * @generated
 	 */
-	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION = 24;
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION = 13;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -1799,7 +830,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRoundTripShippingOption()
 	 * @generated
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION = 25;
+	int ROUND_TRIP_SHIPPING_OPTION = 14;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -1836,7 +867,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getNominatedShippingOption()
 	 * @generated
 	 */
-	int NOMINATED_SHIPPING_OPTION = 26;
+	int NOMINATED_SHIPPING_OPTION = 15;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -1864,7 +895,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultRow()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_ROW = 27;
+	int ANALYSIS_RESULT_ROW = 16;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -1928,7 +959,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultContainer()
 	 * @generated
 	 */
-	int RESULT_CONTAINER = 28;
+	int RESULT_CONTAINER = 17;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Allocation</b></em>' containment reference.
@@ -1983,7 +1014,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultDetail()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_DETAIL = 29;
+	int ANALYSIS_RESULT_DETAIL = 18;
 
 	/**
 	 * The number of structural features of the '<em>Analysis Result Detail</em>' class.
@@ -2002,7 +1033,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProfitAndLossResult()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_RESULT = 30;
+	int PROFIT_AND_LOSS_RESULT = 19;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -2030,7 +1061,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_RESULT = 31;
+	int BREAK_EVEN_RESULT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
@@ -2076,7 +1107,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 32;
+	int OPTION_ANALYSIS_MODEL = 21;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2185,7 +1216,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultSet()
 	 * @generated
 	 */
-	int RESULT_SET = 33;
+	int RESULT_SET = 22;
 
 	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
@@ -2222,7 +1253,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 34;
+	int BASE_CASE = 23;
 
 	/**
 	 * The feature id for the '<em><b>Base Case</b></em>' containment reference list.
@@ -2268,7 +1299,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 35;
+	int PARTIAL_CASE = 24;
 
 	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference list.
@@ -2305,7 +1336,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselAvailability()
 	 * @generated
 	 */
-	int EXISTING_VESSEL_AVAILABILITY = 36;
+	int EXISTING_VESSEL_AVAILABILITY = 25;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
@@ -2333,7 +1364,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingCharterMarketOption()
 	 * @generated
 	 */
-	int EXISTING_CHARTER_MARKET_OPTION = 37;
+	int EXISTING_CHARTER_MARKET_OPTION = 26;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
@@ -2363,14 +1394,14 @@ s	 * <!-- end-user-doc -->
 	int EXISTING_CHARTER_MARKET_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl <em>Abstract Solution Set</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
+	 * @see com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSolutionSet()
 	 * @generated
 	 */
-	int ACTIONABLE_SET_PLAN = 38;
+	int ABSTRACT_SOLUTION_SET = 27;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2379,7 +1410,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int ABSTRACT_SOLUTION_SET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -2388,16 +1419,34 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int ABSTRACT_SOLUTION_SET__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Sets</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN__ACTION_SETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int ABSTRACT_SOLUTION_SET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__USER_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
@@ -2406,7 +1455,80 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int ABSTRACT_SOLUTION_SET__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Abstract Solution Set</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
+	 * @generated
+	 */
+	int ACTIONABLE_SET_PLAN = 28;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__EXTENSIONS = ABSTRACT_SOLUTION_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__UUID = ABSTRACT_SOLUTION_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__NAME = ABSTRACT_SOLUTION_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__USER_SETTINGS = ABSTRACT_SOLUTION_SET__USER_SETTINGS;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__EXTRA_SLOTS = ABSTRACT_SOLUTION_SET__EXTRA_SLOTS;
 
 	/**
 	 * The number of structural features of the '<em>Actionable Set Plan</em>' class.
@@ -2415,35 +1537,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl <em>Actionable Set</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSet()
-	 * @generated
-	 */
-	int ACTIONABLE_SET = 39;
-
-	/**
-	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIONABLE_SET__SCHEDULE_MODEL = 0;
-
-	/**
-	 * The number of structural features of the '<em>Actionable Set</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIONABLE_SET_FEATURE_COUNT = 1;
+	int ACTIONABLE_SET_PLAN_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
@@ -2453,7 +1547,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
 	 * @generated
 	 */
-	int SLOT_INSERTION_OPTIONS = 40;
+	int SLOT_INSERTION_OPTIONS = 29;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2462,7 +1556,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int SLOT_INSERTION_OPTIONS__EXTENSIONS = ABSTRACT_SOLUTION_SET__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -2471,34 +1565,34 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int SLOT_INSERTION_OPTIONS__UUID = ABSTRACT_SOLUTION_SET__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Slots Inserted</b></em>' reference list.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__SLOTS_INSERTED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int SLOT_INSERTION_OPTIONS__NAME = ABSTRACT_SOLUTION_SET__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Events Inserted</b></em>' reference list.
+	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__EVENTS_INSERTED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int SLOT_INSERTION_OPTIONS__USER_SETTINGS = ABSTRACT_SOLUTION_SET__USER_SETTINGS;
 
 	/**
-	 * The feature id for the '<em><b>Insertion Options</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SLOT_INSERTION_OPTIONS__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
@@ -2507,7 +1601,25 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = ABSTRACT_SOLUTION_SET__EXTRA_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Slots Inserted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__SLOTS_INSERTED = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Events Inserted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__EVENTS_INSERTED = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Slot Insertion Options</em>' class.
@@ -2516,7 +1628,35 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SLOT_INSERTION_OPTIONS_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOption()
+	 * @generated
+	 */
+	int SOLUTION_OPTION = 31;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION__SCHEDULE_MODEL = 0;
+
+	/**
+	 * The number of structural features of the '<em>Solution Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_OPTION_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionImpl <em>Slot Insertion Option</em>}' class.
@@ -2526,7 +1666,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOption()
 	 * @generated
 	 */
-	int SLOT_INSERTION_OPTION = 41;
+	int SLOT_INSERTION_OPTION = 30;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
@@ -2535,7 +1675,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTION__SCHEDULE_MODEL = 0;
+	int SLOT_INSERTION_OPTION__SCHEDULE_MODEL = SOLUTION_OPTION__SCHEDULE_MODEL;
 
 	/**
 	 * The number of structural features of the '<em>Slot Insertion Option</em>' class.
@@ -2544,18 +1684,80 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTION_FEATURE_COUNT = 1;
+	int SLOT_INSERTION_OPTION_FEATURE_COUNT = SOLUTION_OPTION_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.DestinationType
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
+	 * @see com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptimisationResult()
 	 * @generated
 	 */
-	int DESTINATION_TYPE = 42;
+	int OPTIMISATION_RESULT = 32;
 
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__EXTENSIONS = ABSTRACT_SOLUTION_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__UUID = ABSTRACT_SOLUTION_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__NAME = ABSTRACT_SOLUTION_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__USER_SETTINGS = ABSTRACT_SOLUTION_SET__USER_SETTINGS;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__EXTRA_SLOTS = ABSTRACT_SOLUTION_SET__EXTRA_SLOTS;
+
+	/**
+	 * The number of structural features of the '<em>Optimisation Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
@@ -2565,7 +1767,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 43;
+	int VOLUME_MODE = 33;
 
 
 	/**
@@ -2579,50 +1781,6 @@ s	 * <!-- end-user-doc -->
 	EClass getAnalyticsModel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getRoundTripMatrices <em>Round Trip Matrices</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Round Trip Matrices</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getRoundTripMatrices()
-	 * @see #getAnalyticsModel()
-	 * @generated
-	 */
-	EReference getAnalyticsModel_RoundTripMatrices();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix <em>Selected Matrix</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Selected Matrix</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix()
-	 * @see #getAnalyticsModel()
-	 * @generated
-	 */
-	EReference getAnalyticsModel_SelectedMatrix();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans <em>Shipping Cost Plans</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Shipping Cost Plans</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans()
-	 * @see #getAnalyticsModel()
-	 * @generated
-	 */
-	EReference getAnalyticsModel_ShippingCostPlans();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getCargoSandboxes <em>Cargo Sandboxes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Cargo Sandboxes</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getCargoSandboxes()
-	 * @see #getAnalyticsModel()
-	 * @generated
-	 */
-	EReference getAnalyticsModel_CargoSandboxes();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptionModels <em>Option Models</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2634,831 +1792,15 @@ s	 * <!-- end-user-doc -->
 	EReference getAnalyticsModel_OptionModels();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getInsertionOptions <em>Insertion Options</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptimisations <em>Optimisations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Insertion Options</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getInsertionOptions()
+	 * @return the meta object for the containment reference list '<em>Optimisations</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptimisations()
 	 * @see #getAnalyticsModel()
 	 * @generated
 	 */
-	EReference getAnalyticsModel_InsertionOptions();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getActionableSetPlans <em>Actionable Set Plans</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Actionable Set Plans</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getActionableSetPlans()
-	 * @see #getAnalyticsModel()
-	 * @generated
-	 */
-	EReference getAnalyticsModel_ActionableSetPlans();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix <em>Unit Cost Matrix</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Unit Cost Matrix</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix
-	 * @generated
-	 */
-	EClass getUnitCostMatrix();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getFromPorts <em>From Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>From Ports</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getFromPorts()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EReference getUnitCostMatrix_FromPorts();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getToPorts <em>To Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>To Ports</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getToPorts()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EReference getUnitCostMatrix_ToPorts();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getVessel <em>Vessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getVessel()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EReference getUnitCostMatrix_Vessel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getNotionalDayRate <em>Notional Day Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Notional Day Rate</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getNotionalDayRate()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_NotionalDayRate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getSpeed <em>Speed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Speed</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getSpeed()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_Speed();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#isRoundTrip <em>Round Trip</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Round Trip</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#isRoundTrip()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_RoundTrip();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMinimumLoad <em>Minimum Load</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Minimum Load</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMinimumLoad()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_MinimumLoad();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMaximumLoad <em>Maximum Load</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Maximum Load</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMaximumLoad()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_MaximumLoad();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMinimumDischarge <em>Minimum Discharge</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Minimum Discharge</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMinimumDischarge()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_MinimumDischarge();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMaximumDischarge <em>Maximum Discharge</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Maximum Discharge</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMaximumDischarge()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_MaximumDischarge();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRetainHeel <em>Retain Heel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Retain Heel</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRetainHeel()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_RetainHeel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCargoPrice <em>Cargo Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cargo Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCargoPrice()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_CargoPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBaseFuelPrice <em>Base Fuel Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Fuel Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBaseFuelPrice()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_BaseFuelPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCvValue <em>Cv Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cv Value</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCvValue()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_CvValue();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCostLines <em>Cost Lines</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Cost Lines</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCostLines()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EReference getUnitCostMatrix_CostLines();
-
-	/**
-	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRouteOptions <em>Allowed Route Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Allowed Route Options</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRouteOptions()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_AllowedRouteOptions();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare <em>Revenue Share</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Revenue Share</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_RevenueShare();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getLadenTimeAllowance <em>Laden Time Allowance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Laden Time Allowance</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getLadenTimeAllowance()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_LadenTimeAllowance();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBallastTimeAllowance <em>Ballast Time Allowance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Ballast Time Allowance</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBallastTimeAllowance()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_BallastTimeAllowance();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.UnitCostLine <em>Unit Cost Line</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Unit Cost Line</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine
-	 * @generated
-	 */
-	EClass getUnitCostLine();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getUnitCost <em>Unit Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Unit Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getUnitCost()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_UnitCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getMmbtuDelivered <em>Mmbtu Delivered</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Mmbtu Delivered</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getMmbtuDelivered()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_MmbtuDelivered();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getFrom <em>From</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>From</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getFrom()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EReference getUnitCostLine_From();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getTo <em>To</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>To</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getTo()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EReference getUnitCostLine_To();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getDuration <em>Duration</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Duration</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getDuration()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_Duration();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getVolumeLoaded <em>Volume Loaded</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Volume Loaded</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getVolumeLoaded()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_VolumeLoaded();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getVolumeDischarged <em>Volume Discharged</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Volume Discharged</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getVolumeDischarged()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_VolumeDischarged();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getHireCost <em>Hire Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getHireCost()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_HireCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getFuelCost <em>Fuel Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Fuel Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getFuelCost()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_FuelCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCanalCost <em>Canal Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Canal Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getCanalCost()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_CanalCost();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCostComponents <em>Cost Components</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Cost Components</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getCostComponents()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EReference getUnitCostLine_CostComponents();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getPortCost <em>Port Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Port Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getPortCost()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_PortCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit <em>Profit</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Profit</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_Profit();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Voyage <em>Voyage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Voyage</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Voyage
-	 * @generated
-	 */
-	EClass getVoyage();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Route</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Voyage#getRoute()
-	 * @see #getVoyage()
-	 * @generated
-	 */
-	EReference getVoyage_Route();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getRouteCost <em>Route Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Route Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Voyage#getRouteCost()
-	 * @see #getVoyage()
-	 * @generated
-	 */
-	EAttribute getVoyage_RouteCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getSpeed <em>Speed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Speed</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Voyage#getSpeed()
-	 * @see #getVoyage()
-	 * @generated
-	 */
-	EAttribute getVoyage_Speed();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getDistance <em>Distance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Distance</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Voyage#getDistance()
-	 * @see #getVoyage()
-	 * @generated
-	 */
-	EAttribute getVoyage_Distance();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getIdleTime <em>Idle Time</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Idle Time</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Voyage#getIdleTime()
-	 * @see #getVoyage()
-	 * @generated
-	 */
-	EAttribute getVoyage_IdleTime();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getTravelTime <em>Travel Time</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Travel Time</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Voyage#getTravelTime()
-	 * @see #getVoyage()
-	 * @generated
-	 */
-	EAttribute getVoyage_TravelTime();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Visit <em>Visit</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Visit</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Visit
-	 * @generated
-	 */
-	EClass getVisit();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Visit#getPortCost <em>Port Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Port Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Visit#getPortCost()
-	 * @see #getVisit()
-	 * @generated
-	 */
-	EAttribute getVisit_PortCost();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CostComponent <em>Cost Component</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Cost Component</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.CostComponent
-	 * @generated
-	 */
-	EClass getCostComponent();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.CostComponent#getDuration <em>Duration</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Duration</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.CostComponent#getDuration()
-	 * @see #getCostComponent()
-	 * @generated
-	 */
-	EAttribute getCostComponent_Duration();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.CostComponent#getHireCost <em>Hire Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.CostComponent#getHireCost()
-	 * @see #getCostComponent()
-	 * @generated
-	 */
-	EAttribute getCostComponent_HireCost();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.CostComponent#getFuelCosts <em>Fuel Costs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Fuel Costs</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.CostComponent#getFuelCosts()
-	 * @see #getCostComponent()
-	 * @generated
-	 */
-	EReference getCostComponent_FuelCosts();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.FuelCost <em>Fuel Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Fuel Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FuelCost
-	 * @generated
-	 */
-	EClass getFuelCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FuelCost#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FuelCost#getName()
-	 * @see #getFuelCost()
-	 * @generated
-	 */
-	EAttribute getFuelCost_Name();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FuelCost#getUnit <em>Unit</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Unit</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FuelCost#getUnit()
-	 * @see #getFuelCost()
-	 * @generated
-	 */
-	EAttribute getFuelCost_Unit();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FuelCost#getQuantity <em>Quantity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Quantity</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FuelCost#getQuantity()
-	 * @see #getFuelCost()
-	 * @generated
-	 */
-	EAttribute getFuelCost_Quantity();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FuelCost#getCost <em>Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.FuelCost#getCost()
-	 * @see #getFuelCost()
-	 * @generated
-	 */
-	EAttribute getFuelCost_Cost();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Journey <em>Journey</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Journey</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Journey
-	 * @generated
-	 */
-	EClass getJourney();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Journey#getFrom <em>From</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>From</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Journey#getFrom()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EReference getJourney_From();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Journey#getTo <em>To</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>To</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.Journey#getTo()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EReference getJourney_To();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan <em>Shipping Cost Plan</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Shipping Cost Plan</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan
-	 * @generated
-	 */
-	EClass getShippingCostPlan();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getVessel <em>Vessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getVessel()
-	 * @see #getShippingCostPlan()
-	 * @generated
-	 */
-	EReference getShippingCostPlan_Vessel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getNotionalDayRate <em>Notional Day Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Notional Day Rate</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getNotionalDayRate()
-	 * @see #getShippingCostPlan()
-	 * @generated
-	 */
-	EAttribute getShippingCostPlan_NotionalDayRate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getBaseFuelPrice <em>Base Fuel Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Fuel Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getBaseFuelPrice()
-	 * @see #getShippingCostPlan()
-	 * @generated
-	 */
-	EAttribute getShippingCostPlan_BaseFuelPrice();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows <em>Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Rows</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows()
-	 * @see #getShippingCostPlan()
-	 * @generated
-	 */
-	EReference getShippingCostPlan_Rows();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow <em>Shipping Cost Row</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Shipping Cost Row</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow
-	 * @generated
-	 */
-	EClass getShippingCostRow();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort <em>Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort()
-	 * @see #getShippingCostRow()
-	 * @generated
-	 */
-	EReference getShippingCostRow_Port();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDate <em>Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Date</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getDate()
-	 * @see #getShippingCostRow()
-	 * @generated
-	 */
-	EAttribute getShippingCostRow_Date();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCargoPrice <em>Cargo Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cargo Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getCargoPrice()
-	 * @see #getShippingCostRow()
-	 * @generated
-	 */
-	EAttribute getShippingCostRow_CargoPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue <em>Cv Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cv Value</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue()
-	 * @see #getShippingCostRow()
-	 * @generated
-	 */
-	EAttribute getShippingCostRow_CvValue();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDestinationType <em>Destination Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Destination Type</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getDestinationType()
-	 * @see #getShippingCostRow()
-	 * @generated
-	 */
-	EAttribute getShippingCostRow_DestinationType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume <em>Heel Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Heel Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume()
-	 * @see #getShippingCostRow()
-	 * @generated
-	 */
-	EAttribute getShippingCostRow_HeelVolume();
-	
-	
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts <em>Include Port Costs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Include Port Costs</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts()
-	 * @see #getShippingCostRow()
-	 * @generated
-	 */
-	EAttribute getShippingCostRow_IncludePortCosts();
-
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CargoSandbox <em>Cargo Sandbox</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Cargo Sandbox</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.CargoSandbox
-	 * @generated
-	 */
-	EClass getCargoSandbox();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.CargoSandbox#getCargoes <em>Cargoes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Cargoes</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.CargoSandbox#getCargoes()
-	 * @see #getCargoSandbox()
-	 * @generated
-	 */
-	EReference getCargoSandbox_Cargoes();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo <em>Provisional Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Provisional Cargo</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo
-	 * @generated
-	 */
-	EClass getProvisionalCargo();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getBuy <em>Buy</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Buy</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getBuy()
-	 * @see #getProvisionalCargo()
-	 * @generated
-	 */
-	EReference getProvisionalCargo_Buy();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getSell <em>Sell</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Sell</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getSell()
-	 * @see #getProvisionalCargo()
-	 * @generated
-	 */
-	EReference getProvisionalCargo_Sell();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getVessel <em>Vessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getVessel()
-	 * @see #getProvisionalCargo()
-	 * @generated
-	 */
-	EReference getProvisionalCargo_Vessel();
+	EReference getAnalyticsModel_Optimisations();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}'.
@@ -4514,6 +2856,49 @@ s	 * <!-- end-user-doc -->
 	EAttribute getExistingCharterMarketOption_SpotIndex();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet <em>Abstract Solution Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Solution Set</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet
+	 * @generated
+	 */
+	EClass getAbstractSolutionSet();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getUserSettings <em>User Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>User Settings</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getUserSettings()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EReference getAbstractSolutionSet_UserSettings();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getOptions <em>Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getOptions()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EReference getAbstractSolutionSet_Options();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraSlots <em>Extra Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Extra Slots</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraSlots()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EReference getAbstractSolutionSet_ExtraSlots();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan <em>Actionable Set Plan</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4522,49 +2907,6 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EClass getActionableSetPlan();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan#getActionSets <em>Action Sets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Action Sets</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ActionableSetPlan#getActionSets()
-	 * @see #getActionableSetPlan()
-	 * @generated
-	 */
-	EReference getActionableSetPlan_ActionSets();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan#getExtraSlots <em>Extra Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Slots</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ActionableSetPlan#getExtraSlots()
-	 * @see #getActionableSetPlan()
-	 * @generated
-	 */
-	EReference getActionableSetPlan_ExtraSlots();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ActionableSet <em>Actionable Set</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Actionable Set</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ActionableSet
-	 * @generated
-	 */
-	EClass getActionableSet();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ActionableSet#getScheduleModel <em>Schedule Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Schedule Model</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ActionableSet#getScheduleModel()
-	 * @see #getActionableSet()
-	 * @generated
-	 */
-	EReference getActionableSet_ScheduleModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions <em>Slot Insertion Options</em>}'.
@@ -4599,28 +2941,6 @@ s	 * <!-- end-user-doc -->
 	EReference getSlotInsertionOptions_EventsInserted();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getInsertionOptions <em>Insertion Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Insertion Options</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getInsertionOptions()
-	 * @see #getSlotInsertionOptions()
-	 * @generated
-	 */
-	EReference getSlotInsertionOptions_InsertionOptions();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getExtraSlots <em>Extra Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Slots</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getExtraSlots()
-	 * @see #getSlotInsertionOptions()
-	 * @generated
-	 */
-	EReference getSlotInsertionOptions_ExtraSlots();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOption <em>Slot Insertion Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4631,15 +2951,35 @@ s	 * <!-- end-user-doc -->
 	EClass getSlotInsertionOption();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOption#getScheduleModel <em>Schedule Model</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Solution Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOption
+	 * @generated
+	 */
+	EClass getSolutionOption();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SolutionOption#getScheduleModel <em>Schedule Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Schedule Model</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOption#getScheduleModel()
-	 * @see #getSlotInsertionOption()
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOption#getScheduleModel()
+	 * @see #getSolutionOption()
 	 * @generated
 	 */
-	EReference getSlotInsertionOption_ScheduleModel();
+	EReference getSolutionOption_ScheduleModel();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptimisationResult <em>Optimisation Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Optimisation Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptimisationResult
+	 * @generated
+	 */
+	EClass getOptimisationResult();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}'.
@@ -4718,16 +3058,6 @@ s	 * <!-- end-user-doc -->
 	EAttribute getResultSet_ProfitAndLoss();
 
 	/**
-	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Destination Type</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.DestinationType
-	 * @generated
-	 */
-	EEnum getDestinationType();
-
-	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4771,38 +3101,6 @@ s	 * <!-- end-user-doc -->
 		EClass ANALYTICS_MODEL = eINSTANCE.getAnalyticsModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Round Trip Matrices</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANALYTICS_MODEL__ROUND_TRIP_MATRICES = eINSTANCE.getAnalyticsModel_RoundTripMatrices();
-
-		/**
-		 * The meta object literal for the '<em><b>Selected Matrix</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANALYTICS_MODEL__SELECTED_MATRIX = eINSTANCE.getAnalyticsModel_SelectedMatrix();
-
-		/**
-		 * The meta object literal for the '<em><b>Shipping Cost Plans</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANALYTICS_MODEL__SHIPPING_COST_PLANS = eINSTANCE.getAnalyticsModel_ShippingCostPlans();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargo Sandboxes</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANALYTICS_MODEL__CARGO_SANDBOXES = eINSTANCE.getAnalyticsModel_CargoSandboxes();
-
-		/**
 		 * The meta object literal for the '<em><b>Option Models</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4811,635 +3109,12 @@ s	 * <!-- end-user-doc -->
 		EReference ANALYTICS_MODEL__OPTION_MODELS = eINSTANCE.getAnalyticsModel_OptionModels();
 
 		/**
-		 * The meta object literal for the '<em><b>Insertion Options</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Optimisations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ANALYTICS_MODEL__INSERTION_OPTIONS = eINSTANCE.getAnalyticsModel_InsertionOptions();
-
-		/**
-		 * The meta object literal for the '<em><b>Actionable Set Plans</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANALYTICS_MODEL__ACTIONABLE_SET_PLANS = eINSTANCE.getAnalyticsModel_ActionableSetPlans();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl <em>Unit Cost Matrix</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getUnitCostMatrix()
-		 * @generated
-		 */
-		EClass UNIT_COST_MATRIX = eINSTANCE.getUnitCostMatrix();
-
-		/**
-		 * The meta object literal for the '<em><b>From Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNIT_COST_MATRIX__FROM_PORTS = eINSTANCE.getUnitCostMatrix_FromPorts();
-
-		/**
-		 * The meta object literal for the '<em><b>To Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNIT_COST_MATRIX__TO_PORTS = eINSTANCE.getUnitCostMatrix_ToPorts();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNIT_COST_MATRIX__VESSEL = eINSTANCE.getUnitCostMatrix_Vessel();
-
-		/**
-		 * The meta object literal for the '<em><b>Notional Day Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__NOTIONAL_DAY_RATE = eINSTANCE.getUnitCostMatrix_NotionalDayRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__SPEED = eINSTANCE.getUnitCostMatrix_Speed();
-
-		/**
-		 * The meta object literal for the '<em><b>Round Trip</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__ROUND_TRIP = eINSTANCE.getUnitCostMatrix_RoundTrip();
-
-		/**
-		 * The meta object literal for the '<em><b>Minimum Load</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__MINIMUM_LOAD = eINSTANCE.getUnitCostMatrix_MinimumLoad();
-
-		/**
-		 * The meta object literal for the '<em><b>Maximum Load</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__MAXIMUM_LOAD = eINSTANCE.getUnitCostMatrix_MaximumLoad();
-
-		/**
-		 * The meta object literal for the '<em><b>Minimum Discharge</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__MINIMUM_DISCHARGE = eINSTANCE.getUnitCostMatrix_MinimumDischarge();
-
-		/**
-		 * The meta object literal for the '<em><b>Maximum Discharge</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__MAXIMUM_DISCHARGE = eINSTANCE.getUnitCostMatrix_MaximumDischarge();
-
-		/**
-		 * The meta object literal for the '<em><b>Retain Heel</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__RETAIN_HEEL = eINSTANCE.getUnitCostMatrix_RetainHeel();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargo Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__CARGO_PRICE = eINSTANCE.getUnitCostMatrix_CargoPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Base Fuel Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__BASE_FUEL_PRICE = eINSTANCE.getUnitCostMatrix_BaseFuelPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__CV_VALUE = eINSTANCE.getUnitCostMatrix_CvValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Cost Lines</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNIT_COST_MATRIX__COST_LINES = eINSTANCE.getUnitCostMatrix_CostLines();
-
-		/**
-		 * The meta object literal for the '<em><b>Allowed Route Options</b></em>' attribute list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS = eINSTANCE.getUnitCostMatrix_AllowedRouteOptions();
-
-		/**
-		 * The meta object literal for the '<em><b>Revenue Share</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__REVENUE_SHARE = eINSTANCE.getUnitCostMatrix_RevenueShare();
-
-		/**
-		 * The meta object literal for the '<em><b>Laden Time Allowance</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE = eINSTANCE.getUnitCostMatrix_LadenTimeAllowance();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Time Allowance</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE = eINSTANCE.getUnitCostMatrix_BallastTimeAllowance();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getUnitCostLine()
-		 * @generated
-		 */
-		EClass UNIT_COST_LINE = eINSTANCE.getUnitCostLine();
-
-		/**
-		 * The meta object literal for the '<em><b>Unit Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__UNIT_COST = eINSTANCE.getUnitCostLine_UnitCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Mmbtu Delivered</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__MMBTU_DELIVERED = eINSTANCE.getUnitCostLine_MmbtuDelivered();
-
-		/**
-		 * The meta object literal for the '<em><b>From</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNIT_COST_LINE__FROM = eINSTANCE.getUnitCostLine_From();
-
-		/**
-		 * The meta object literal for the '<em><b>To</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNIT_COST_LINE__TO = eINSTANCE.getUnitCostLine_To();
-
-		/**
-		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__DURATION = eINSTANCE.getUnitCostLine_Duration();
-
-		/**
-		 * The meta object literal for the '<em><b>Volume Loaded</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__VOLUME_LOADED = eINSTANCE.getUnitCostLine_VolumeLoaded();
-
-		/**
-		 * The meta object literal for the '<em><b>Volume Discharged</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__VOLUME_DISCHARGED = eINSTANCE.getUnitCostLine_VolumeDischarged();
-
-		/**
-		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__HIRE_COST = eINSTANCE.getUnitCostLine_HireCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Fuel Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__FUEL_COST = eINSTANCE.getUnitCostLine_FuelCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Canal Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__CANAL_COST = eINSTANCE.getUnitCostLine_CanalCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Cost Components</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNIT_COST_LINE__COST_COMPONENTS = eINSTANCE.getUnitCostLine_CostComponents();
-
-		/**
-		 * The meta object literal for the '<em><b>Port Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__PORT_COST = eINSTANCE.getUnitCostLine_PortCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Profit</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__PROFIT = eINSTANCE.getUnitCostLine_Profit();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl <em>Voyage</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.VoyageImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVoyage()
-		 * @generated
-		 */
-		EClass VOYAGE = eINSTANCE.getVoyage();
-
-		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VOYAGE__ROUTE = eINSTANCE.getVoyage_Route();
-
-		/**
-		 * The meta object literal for the '<em><b>Route Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VOYAGE__ROUTE_COST = eINSTANCE.getVoyage_RouteCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VOYAGE__SPEED = eINSTANCE.getVoyage_Speed();
-
-		/**
-		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VOYAGE__DISTANCE = eINSTANCE.getVoyage_Distance();
-
-		/**
-		 * The meta object literal for the '<em><b>Idle Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VOYAGE__IDLE_TIME = eINSTANCE.getVoyage_IdleTime();
-
-		/**
-		 * The meta object literal for the '<em><b>Travel Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VOYAGE__TRAVEL_TIME = eINSTANCE.getVoyage_TravelTime();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.VisitImpl <em>Visit</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.VisitImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVisit()
-		 * @generated
-		 */
-		EClass VISIT = eINSTANCE.getVisit();
-
-		/**
-		 * The meta object literal for the '<em><b>Port Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VISIT__PORT_COST = eINSTANCE.getVisit_PortCost();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CostComponentImpl <em>Cost Component</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.CostComponentImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCostComponent()
-		 * @generated
-		 */
-		EClass COST_COMPONENT = eINSTANCE.getCostComponent();
-
-		/**
-		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute COST_COMPONENT__DURATION = eINSTANCE.getCostComponent_Duration();
-
-		/**
-		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute COST_COMPONENT__HIRE_COST = eINSTANCE.getCostComponent_HireCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Fuel Costs</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COST_COMPONENT__FUEL_COSTS = eINSTANCE.getCostComponent_FuelCosts();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.FuelCostImpl <em>Fuel Cost</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.FuelCostImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFuelCost()
-		 * @generated
-		 */
-		EClass FUEL_COST = eINSTANCE.getFuelCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FUEL_COST__NAME = eINSTANCE.getFuelCost_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Unit</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FUEL_COST__UNIT = eINSTANCE.getFuelCost_Unit();
-
-		/**
-		 * The meta object literal for the '<em><b>Quantity</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FUEL_COST__QUANTITY = eINSTANCE.getFuelCost_Quantity();
-
-		/**
-		 * The meta object literal for the '<em><b>Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FUEL_COST__COST = eINSTANCE.getFuelCost_Cost();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.JourneyImpl <em>Journey</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.JourneyImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getJourney()
-		 * @generated
-		 */
-		EClass JOURNEY = eINSTANCE.getJourney();
-
-		/**
-		 * The meta object literal for the '<em><b>From</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference JOURNEY__FROM = eINSTANCE.getJourney_From();
-
-		/**
-		 * The meta object literal for the '<em><b>To</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference JOURNEY__TO = eINSTANCE.getJourney_To();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl <em>Shipping Cost Plan</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostPlan()
-		 * @generated
-		 */
-		EClass SHIPPING_COST_PLAN = eINSTANCE.getShippingCostPlan();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SHIPPING_COST_PLAN__VESSEL = eINSTANCE.getShippingCostPlan_Vessel();
-
-		/**
-		 * The meta object literal for the '<em><b>Notional Day Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SHIPPING_COST_PLAN__NOTIONAL_DAY_RATE = eINSTANCE.getShippingCostPlan_NotionalDayRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Base Fuel Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SHIPPING_COST_PLAN__BASE_FUEL_PRICE = eINSTANCE.getShippingCostPlan_BaseFuelPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SHIPPING_COST_PLAN__ROWS = eINSTANCE.getShippingCostPlan_Rows();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl <em>Shipping Cost Row</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostRow()
-		 * @generated
-		 */
-		EClass SHIPPING_COST_ROW = eINSTANCE.getShippingCostRow();
-
-		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SHIPPING_COST_ROW__PORT = eINSTANCE.getShippingCostRow_Port();
-
-		/**
-		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SHIPPING_COST_ROW__DATE = eINSTANCE.getShippingCostRow_Date();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargo Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SHIPPING_COST_ROW__CARGO_PRICE = eINSTANCE.getShippingCostRow_CargoPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SHIPPING_COST_ROW__CV_VALUE = eINSTANCE.getShippingCostRow_CvValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Destination Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SHIPPING_COST_ROW__DESTINATION_TYPE = eINSTANCE.getShippingCostRow_DestinationType();
-
-		/**
-		 * The meta object literal for the '<em><b>Heel Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SHIPPING_COST_ROW__HEEL_VOLUME = eINSTANCE.getShippingCostRow_HeelVolume();
-
-		/**
-		 * The meta object literal for the '<em><b>Include Port Costs</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SHIPPING_COST_ROW__INCLUDE_PORT_COSTS = eINSTANCE.getShippingCostRow_IncludePortCosts();
-
-		
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl <em>Cargo Sandbox</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoSandbox()
-		 * @generated
-		 */
-		EClass CARGO_SANDBOX = eINSTANCE.getCargoSandbox();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargoes</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_SANDBOX__CARGOES = eINSTANCE.getCargoSandbox_Cargoes();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl <em>Provisional Cargo</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProvisionalCargo()
-		 * @generated
-		 */
-		EClass PROVISIONAL_CARGO = eINSTANCE.getProvisionalCargo();
-
-		/**
-		 * The meta object literal for the '<em><b>Buy</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PROVISIONAL_CARGO__BUY = eINSTANCE.getProvisionalCargo_Buy();
-
-		/**
-		 * The meta object literal for the '<em><b>Sell</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PROVISIONAL_CARGO__SELL = eINSTANCE.getProvisionalCargo_Sell();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PROVISIONAL_CARGO__VESSEL = eINSTANCE.getProvisionalCargo_Vessel();
+		EReference ANALYTICS_MODEL__OPTIMISATIONS = eINSTANCE.getAnalyticsModel_Optimisations();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -6276,6 +3951,40 @@ s	 * <!-- end-user-doc -->
 		EAttribute EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX = eINSTANCE.getExistingCharterMarketOption_SpotIndex();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl <em>Abstract Solution Set</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSolutionSet()
+		 * @generated
+		 */
+		EClass ABSTRACT_SOLUTION_SET = eINSTANCE.getAbstractSolutionSet();
+
+		/**
+		 * The meta object literal for the '<em><b>User Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_SOLUTION_SET__USER_SETTINGS = eINSTANCE.getAbstractSolutionSet_UserSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Options</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_SOLUTION_SET__OPTIONS = eINSTANCE.getAbstractSolutionSet_Options();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_SOLUTION_SET__EXTRA_SLOTS = eINSTANCE.getAbstractSolutionSet_ExtraSlots();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6284,40 +3993,6 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EClass ACTIONABLE_SET_PLAN = eINSTANCE.getActionableSetPlan();
-
-		/**
-		 * The meta object literal for the '<em><b>Action Sets</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ACTIONABLE_SET_PLAN__ACTION_SETS = eINSTANCE.getActionableSetPlan_ActionSets();
-
-		/**
-		 * The meta object literal for the '<em><b>Extra Slots</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ACTIONABLE_SET_PLAN__EXTRA_SLOTS = eINSTANCE.getActionableSetPlan_ExtraSlots();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl <em>Actionable Set</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSet()
-		 * @generated
-		 */
-		EClass ACTIONABLE_SET = eINSTANCE.getActionableSet();
-
-		/**
-		 * The meta object literal for the '<em><b>Schedule Model</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ACTIONABLE_SET__SCHEDULE_MODEL = eINSTANCE.getActionableSet_ScheduleModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
@@ -6346,22 +4021,6 @@ s	 * <!-- end-user-doc -->
 		EReference SLOT_INSERTION_OPTIONS__EVENTS_INSERTED = eINSTANCE.getSlotInsertionOptions_EventsInserted();
 
 		/**
-		 * The meta object literal for the '<em><b>Insertion Options</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS = eINSTANCE.getSlotInsertionOptions_InsertionOptions();
-
-		/**
-		 * The meta object literal for the '<em><b>Extra Slots</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = eINSTANCE.getSlotInsertionOptions_ExtraSlots();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionImpl <em>Slot Insertion Option</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6372,12 +4031,32 @@ s	 * <!-- end-user-doc -->
 		EClass SLOT_INSERTION_OPTION = eINSTANCE.getSlotInsertionOption();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOption()
+		 * @generated
+		 */
+		EClass SOLUTION_OPTION = eINSTANCE.getSolutionOption();
+
+		/**
 		 * The meta object literal for the '<em><b>Schedule Model</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SLOT_INSERTION_OPTION__SCHEDULE_MODEL = eINSTANCE.getSlotInsertionOption_ScheduleModel();
+		EReference SOLUTION_OPTION__SCHEDULE_MODEL = eINSTANCE.getSolutionOption_ScheduleModel();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptimisationResult()
+		 * @generated
+		 */
+		EClass OPTIMISATION_RESULT = eINSTANCE.getOptimisationResult();
 
 		/**
 		 * The meta object literal for the '<em><b>Partial Case</b></em>' containment reference feature.
@@ -6436,16 +4115,6 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute RESULT_SET__PROFIT_AND_LOSS = eINSTANCE.getResultSet_ProfitAndLoss();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.DestinationType
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
-		 * @generated
-		 */
-		EEnum DESTINATION_TYPE = eINSTANCE.getDestinationType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.

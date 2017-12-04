@@ -18,7 +18,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.google.common.base.Joiner;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingPackage;

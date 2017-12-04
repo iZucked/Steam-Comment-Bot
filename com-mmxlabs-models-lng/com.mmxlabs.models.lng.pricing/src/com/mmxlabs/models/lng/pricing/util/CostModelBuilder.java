@@ -107,6 +107,13 @@ public class CostModelBuilder {
 		costModel.getRouteCosts().add(routeCost);
 	}
 
+	public void setAllExistingCooldownCosts(boolean lumpsum, @NonNull final String expression) {
+		for (CooldownPrice cost : costModel.getCooldownCosts()) {
+			cost.setExpression(expression);
+			cost.setLumpsum(lumpsum);
+		}
+	}
+
 	public @NonNull CooldownPrice createCooldownPrice(@NonNull final String expression, final boolean isLumpsum, @NonNull final Collection<? extends APortSet<Port>> ports) {
 
 		final CooldownPrice cooldownPrice = PricingFactory.eINSTANCE.createCooldownPrice();

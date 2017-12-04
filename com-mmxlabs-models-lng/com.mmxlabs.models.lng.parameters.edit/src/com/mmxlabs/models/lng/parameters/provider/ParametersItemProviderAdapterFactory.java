@@ -480,6 +480,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MultipleSolutionSimilarityOptimisationStageItemProvider multipleSolutionSimilarityOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMultipleSolutionSimilarityOptimisationStageAdapter() {
+		if (multipleSolutionSimilarityOptimisationStageItemProvider == null) {
+			multipleSolutionSimilarityOptimisationStageItemProvider = new MultipleSolutionSimilarityOptimisationStageItemProvider(this);
+		}
+
+		return multipleSolutionSimilarityOptimisationStageItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -630,6 +653,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		if (resetInitialSequencesStageItemProvider != null) resetInitialSequencesStageItemProvider.dispose();
 		if (breakEvenOptimisationStageItemProvider != null) breakEvenOptimisationStageItemProvider.dispose();
 		if (solutionBuilderSettingsItemProvider != null) solutionBuilderSettingsItemProvider.dispose();
+		if (multipleSolutionSimilarityOptimisationStageItemProvider != null) multipleSolutionSimilarityOptimisationStageItemProvider.dispose();
 	}
 
 }

@@ -39,7 +39,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
-import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
@@ -90,7 +90,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_Ports");
 	}
 
-	class DistanceMatrixEditorAction extends AbstractMenuAction {
+	class DistanceMatrixEditorAction extends AbstractMenuLockableAction {
 		public DistanceMatrixEditorAction() {
 			super("Edit distances");
 			try {
@@ -106,7 +106,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			if (rootObject instanceof LNGScenarioModel) {
 				final PortModel portModel = ((LNGScenarioModel) rootObject).getReferenceModel().getPortModel();
 				for (final Route canal : portModel.getRoutes()) {
-					final Action canalEditor = new AbstractMenuAction(canal.getName()) {
+					final Action canalEditor = new AbstractMenuLockableAction(canal.getName()) {
 						@Override
 						protected void populate(final Menu menu2) {
 							final Action editCanal = createMatrixEditor(canal.getName(), canal);

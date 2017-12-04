@@ -10,8 +10,6 @@ package com.mmxlabs.models.lng.schedule.provider;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
-import java.time.YearMonth;
-
 import java.util.Collection;
 import java.util.List;
 

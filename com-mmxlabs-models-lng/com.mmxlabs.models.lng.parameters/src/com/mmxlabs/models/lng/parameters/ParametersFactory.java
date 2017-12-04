@@ -177,6 +177,15 @@ public interface ParametersFactory extends EFactory {
 	SolutionBuilderSettings createSolutionBuilderSettings();
 
 	/**
+	 * Returns a new object of class '<em>Multiple Solution Similarity Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Multiple Solution Similarity Optimisation Stage</em>'.
+	 * @generated
+	 */
+	MultipleSolutionSimilarityOptimisationStage createMultipleSolutionSimilarityOptimisationStage();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

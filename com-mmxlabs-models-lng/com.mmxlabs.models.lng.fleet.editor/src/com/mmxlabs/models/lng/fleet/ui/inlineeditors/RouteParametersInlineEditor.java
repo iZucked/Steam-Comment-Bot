@@ -20,7 +20,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.DialogInlineEditor;
-import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 
 public class RouteParametersInlineEditor extends DialogInlineEditor {
 	private MMXRootObject rootObject;

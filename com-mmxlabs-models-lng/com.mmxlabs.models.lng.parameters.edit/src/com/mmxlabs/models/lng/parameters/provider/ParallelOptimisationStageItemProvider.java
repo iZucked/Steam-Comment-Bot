@@ -227,6 +227,11 @@ public class ParallelOptimisationStageItemProvider
 			(createChildParameter
 				(ParametersPackage.Literals.PARALLEL_OPTIMISATION_STAGE__TEMPLATE,
 				 ParametersFactory.eINSTANCE.createHillClimbOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.PARALLEL_OPTIMISATION_STAGE__TEMPLATE,
+				 ParametersFactory.eINSTANCE.createMultipleSolutionSimilarityOptimisationStage()));
 	}
 
 	/**

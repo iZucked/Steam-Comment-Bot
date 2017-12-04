@@ -9,7 +9,6 @@ import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import java.time.ZoneId;
 
 /**

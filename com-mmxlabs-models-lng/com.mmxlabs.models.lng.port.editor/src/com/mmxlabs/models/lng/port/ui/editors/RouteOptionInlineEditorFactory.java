@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
