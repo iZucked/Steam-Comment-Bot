@@ -7,8 +7,8 @@ import shutil, os
 #####################################
 path_to_ws = os.getcwd()
 #####################################
-from_version = 79
-latest_version = 81
+from_version = 80
+latest_version = 84
 
 
 root = "{0}/com.mmxlabs.models.lng.".format(path_to_ws)

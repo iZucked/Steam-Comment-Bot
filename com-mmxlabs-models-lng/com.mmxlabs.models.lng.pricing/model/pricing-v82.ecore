@@ -13,8 +13,6 @@
         eType="#//BaseFuelIndex" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="conversionFactors" upperBound="-1"
         eType="#//UnitConversion" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketCurveDataVersion"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataIndex">
     <eTypeParameters name="Value"/>
@@ -104,6 +102,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RouteCost" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="route" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" lowerBound="1"
         upperBound="-1">
@@ -111,6 +110,8 @@
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
       </eGenericType>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenCost" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">

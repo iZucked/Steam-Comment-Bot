@@ -39,6 +39,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultWindowSize" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="hours"/>
         <details key="formatString" value="##,##0"/>
       </eAnnotations>
     </eStructuralFeatures>

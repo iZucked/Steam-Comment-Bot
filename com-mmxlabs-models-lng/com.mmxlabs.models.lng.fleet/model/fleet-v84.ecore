@@ -31,7 +31,7 @@
     <eOperations name="getVesselOrDelegateBaseFuel" lowerBound="1" eType="#//BaseFuel"/>
     <eOperations name="getVesselOrDelegateIdleBaseFuel" lowerBound="1" eType="#//BaseFuel"/>
     <eOperations name="getVesselOrDelegatePilotLightBaseFuel" lowerBound="1" eType="#//BaseFuel"/>
-    <eOperations name="getVesselOrDelegateInPortBaseFuel" lowerBound="1" eType="#//BaseFuel"/>
+    <eOperations name="getVesselOrDelegateInPortBaseFuel" lowerBound="1" eType="#//BaseFuel"/>    
     <eOperations name="getVesselOrDelegateCapacity" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getVesselOrDelegateFillCapacity" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getVesselOrDelegateMinSpeed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
@@ -66,7 +66,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="pilotLightBaseFuel" lowerBound="1"
         eType="#//BaseFuel" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="idleBaseFuel" lowerBound="1"
-        eType="#//BaseFuel" unsettable="true"/>
+        eType="#//BaseFuel" unsettable="true"/>        
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">

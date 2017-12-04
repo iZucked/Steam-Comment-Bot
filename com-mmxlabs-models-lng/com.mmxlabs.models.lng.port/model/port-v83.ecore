@@ -2,13 +2,15 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="port" nsURI="http://www.mmxlabs.com/models/lng/port/1/" nsPrefix="lng.port">
   <eClassifiers xsi:type="ecore:EClass" name="Port">
-    <eOperations name="getZoneId" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//ZoneId"/>
-    <eOperations name="getTempMMXID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject">
+      <details key="showOtherNames" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mmxID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
-        eType="#//Location" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capabilities" upperBound="-1"
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadDuration" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -51,6 +53,13 @@
         <details key="formatString" value="##,##0"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
+        eType="#//Location" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="atobviacCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataloyCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesonCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="UNLocode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
         unsettable="true">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -66,11 +75,16 @@
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//OtherNamesObject"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXIdentifiable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lines" upperBound="-1"
         eType="#//RouteLine" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="#//RouteOption"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="canal" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="routingOptions" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="northEntrance" eType="#//EntryPoint"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="southEntrance" eType="#//EntryPoint"
@@ -90,10 +104,12 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RouteLine" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eOperations name="getFullDistance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vias" upperBound="-1" eType="#//RouteLine"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
@@ -123,8 +139,6 @@
     <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject">
       <details key="showOtherNames" value="true"/>
     </eAnnotations>
-    <eOperations name="getZoneId" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//ZoneId"/>
-    <eOperations name="getTempMMXID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mmxId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

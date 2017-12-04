@@ -133,7 +133,7 @@
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
         <details key="type" value="basefuel"/>
       </eAnnotations>
-    </eStructuralFeatures>
+    </eStructuralFeatures>    
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortCost" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getPortCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
