@@ -11,8 +11,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.models.lng.analytics.ActionableSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -25,7 +25,7 @@ public class ActionableSetPlanTransformer {
 		final List<ScenarioResult> stages = new LinkedList<>();
 
 		// Assuming first option is the base.
-		for (final ActionableSet option : plan.getActionSets()) {
+		for (final SolutionOption option : plan.getOptions()) {
 			stages.add(new ScenarioResult(scenarioInstance, option.getScheduleModel()));
 		}
 

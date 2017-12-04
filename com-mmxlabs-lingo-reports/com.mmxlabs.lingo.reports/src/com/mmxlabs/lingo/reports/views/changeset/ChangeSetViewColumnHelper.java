@@ -1793,4 +1793,11 @@ public class ChangeSetViewColumnHelper {
 			}
 		};
 	}
+	
+	public static @NonNull BiFunction<ChangeSetTableGroup, Integer, String> getMultipleSolutionLabelProvider() {
+		return (changeSet, index) -> {
+			return String.format("Solution %s", index + 1);
+		};
+	}
+
 }

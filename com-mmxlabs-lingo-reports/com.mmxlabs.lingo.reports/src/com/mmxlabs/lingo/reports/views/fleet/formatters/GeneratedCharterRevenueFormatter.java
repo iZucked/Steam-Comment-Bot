@@ -10,21 +10,22 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
-public class GeneratedCharterRevenueFormatter extends IntegerFormatter {
+public class GeneratedCharterRevenueFormatter extends CostFormatter {
 
 	private final boolean diffMode;
 	private final boolean selectionOnly;
 
-	public GeneratedCharterRevenueFormatter(final boolean diffMode, final boolean selectionOnly) {
+	public GeneratedCharterRevenueFormatter(final boolean diffMode, final boolean selectionOnly, Type type) {
+		super(type);
 		this.diffMode = diffMode;
 		this.selectionOnly = selectionOnly;
-
 	}
 
 	@Override

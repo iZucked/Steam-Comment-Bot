@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.*;
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
@@ -76,6 +77,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 			case ScheduleReportPackage.ROW_GROUP: return createRowGroup();
 			case ScheduleReportPackage.USER_GROUP: return createUserGroup();
 			case ScheduleReportPackage.DIFF_OPTIONS: return createDiffOptions();
+			case ScheduleReportPackage.COMPOSITE_ROW: return createCompositeRow();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -192,6 +194,16 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	public DiffOptions createDiffOptions() {
 		DiffOptionsImpl diffOptions = new DiffOptionsImpl();
 		return diffOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CompositeRow createCompositeRow() {
+		CompositeRowImpl compositeRow = new CompositeRowImpl();
+		return compositeRow;
 	}
 
 	/**

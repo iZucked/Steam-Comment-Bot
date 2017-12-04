@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
@@ -65,7 +66,7 @@ public class ScenarioChangeSetService {
 
 	// Keeping this reference as we probably need to extract out the diff to base value from here
 	private ChangeSetView lastChangeSetViewObject = null;
-	private MPart lastChangeSetViewPart = null;
+	private Object lastChangeSetViewPart = null;
 
 	private final ISelectionListener changeSetListener = new ISelectionListener() {
 
@@ -120,11 +121,14 @@ public class ScenarioChangeSetService {
 
 		@Override
 		public void partActivated(final MPart part) {
-
-			if (part != lastChangeSetViewPart) {
+			Object partObject = part.getObject();
+			if (partObject instanceof CompatibilityPart) {
+				partObject = ((CompatibilityPart) partObject).getPart();
+			}
+			if (partObject != lastChangeSetViewPart) {
 				if (part.getElementId().contains("com.mmxlabs.lingo.reports.views.changeset.")) {
-					lastChangeSetViewPart = part;
-					lastChangeSetViewObject = (ChangeSetView) part.getObject();
+					lastChangeSetViewPart = partObject;
+					lastChangeSetViewObject = (ChangeSetView) partObject;
 					changeSetListener.selectionChanged(part, selectionService.getSelection(part.getElementId()));
 				}
 			}
@@ -153,10 +157,15 @@ public class ScenarioChangeSetService {
 
 		@Override
 		public void partVisible(final MPart part) {
-			if (part != lastChangeSetViewPart) {
+
+			Object partObject = part.getObject();
+			if (partObject instanceof CompatibilityPart) {
+				partObject = ((CompatibilityPart) partObject).getPart();
+			}
+			if (partObject != lastChangeSetViewPart) {
 				if (part.getElementId().contains("com.mmxlabs.lingo.reports.views.changeset.")) {
-					lastChangeSetViewPart = part;
-					lastChangeSetViewObject = (ChangeSetView) part.getObject();
+					lastChangeSetViewPart = partObject;
+					lastChangeSetViewObject = (ChangeSetView) partObject;
 					changeSetListener.selectionChanged(part, selectionService.getSelection(part.getElementId()));
 				}
 			}

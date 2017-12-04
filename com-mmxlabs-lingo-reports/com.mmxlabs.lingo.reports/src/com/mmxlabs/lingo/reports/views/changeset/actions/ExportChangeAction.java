@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.actions;
 
+import java.util.Collections;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -17,46 +19,43 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 public class ExportChangeAction extends Action {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExportChangeAction.class);
-	private ChangeSetTableGroup changeSetTableGroup;
+	private final ChangeSetTableGroup changeSetTableGroup;
+	private final String label;
 
-	public ExportChangeAction(ChangeSetTableGroup changeSetTableGroup) {
-		super("Export change");
+	public ExportChangeAction(final ChangeSetTableGroup changeSetTableGroup, final String label) {
+		super("Export solution");
 		this.changeSetTableGroup = changeSetTableGroup;
+		this.label = label;
 	}
 
 	@Override
 	public void run() {
-		ScenarioInstance fork[] = new ScenarioInstance[1];
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+		final ScenarioInstance fork[] = new ScenarioInstance[1];
+		final String name = ScenarioServiceModelUtils.openNewNameForForkPrompt(label, label, Collections.emptySet());
+		if (name == null) {
+			return;
+		}
+		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
 		try {
 			dialog.run(true, false, monitor -> {
-				monitor.beginTask("Export change", IProgressMonitor.UNKNOWN);
+				monitor.beginTask("Export solution", IProgressMonitor.UNKNOWN);
 				try {
-					final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
-					String name;
-					if (changeSetTableGroup.getDescription() != null && !changeSetTableGroup.getDescription().isEmpty()) {
-						name = changeSetTableGroup.getDescription();
-					} else {
-						int idx = 0;
-						if (root != null) {
-							idx = root.getGroups().indexOf(changeSetTableGroup);
-						}
-						name = String.format("Set %d", idx);
-					}
 					fork[0] = ExportScheduleHelper.export(changeSetTableGroup.getChangeSet().getCurrentScenario(), name, false);
 				} catch (final Exception e1) {
-					e1.printStackTrace();
+					LOGGER.error(e1.getMessage(), e1);
 				} finally {
 					monitor.done();
 				}
 			});
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error(e.getMessage(), e);
 		}
+
 		if (fork[0] != null) {
 			try {
 				OpenScenarioUtils.openScenarioInstance(fork[0]);

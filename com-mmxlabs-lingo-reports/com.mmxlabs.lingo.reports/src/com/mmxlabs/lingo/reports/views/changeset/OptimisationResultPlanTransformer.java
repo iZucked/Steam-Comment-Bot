@@ -12,16 +12,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
+import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-public class InsertionPlanTransformer {
+public class OptimisationResultPlanTransformer {
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, final SlotInsertionOptions plan, final IProgressMonitor monitor, NamedObject target) {
+	public ChangeSetRoot createDataModel(final ScenarioInstance instance, final OptimisationResult plan, final IProgressMonitor monitor) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
@@ -30,7 +29,7 @@ public class InsertionPlanTransformer {
 		// Hacky - compare to evaluated state
 		AnalyticsModel analyticsModel = (AnalyticsModel) plan.eContainer();
 		LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
-		ScenarioResult base = new ScenarioResult(scenarioInstance, scenarioModel.getScheduleModel());
+		ScenarioResult base = new ScenarioResult(instance, scenarioModel.getScheduleModel());
 
 		boolean first = true;
 		for (final SolutionOption option : plan.getOptions()) {
@@ -39,7 +38,7 @@ public class InsertionPlanTransformer {
 				first = false;
 				continue;
 			}
-			stages.add(new ScenarioResult(scenarioInstance, option.getScheduleModel()));
+			stages.add(new ScenarioResult(instance, option.getScheduleModel()));
 		}
 		try {
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
@@ -53,7 +52,6 @@ public class InsertionPlanTransformer {
 		}
 
 		return root;
-
 	}
 
 }

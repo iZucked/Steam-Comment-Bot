@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.common.util.EList;
@@ -20,6 +22,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReportComponent.CargoAllocationPair;
+import com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReportComponent.DeltaPair;
+import com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReportComponent.VesselEventVisitPair;
 import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -29,7 +34,6 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -59,11 +63,15 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 	}
 
-	public static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
-	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
-	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
+	public static final DecimalFormat DollarsFormat = new DecimalFormat("##,###,###,###");
+	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###");
+	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("###.###");
 	public static final DecimalFormat DaysFormat = new DecimalFormat("##");
-
+//
+//	public static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
+//	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
+//	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
+//	public static final DecimalFormat DaysFormat = new DecimalFormat("##");
 	public Collection<CargoEconsReportRow> createRows(@NonNull final EconsOptions options, @Nullable final Collection<Object> targets) {
 
 		boolean containsCargo = false;
@@ -88,34 +96,34 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 		final List<CargoEconsReportRow> rows = new LinkedList<>();
 		if (containsCargo) {
-			rows.add(createRow(10, "Purchase", "$", createBuyValuePrice(options)));
-			rows.add(createRow(20, "- Price", "$/mmBTu", createBuyPrice(options)));
-			rows.add(createRow(30, "- Volume", "mmBTu", createBuyVolumeMMBTuPrice(options)));
+			rows.add(createRow(10, "Purchase", true, "$", "", true, createBuyValuePrice(options)));
+			rows.add(createRow(20, "    Price", true, "$", "mmBTu", true, createBuyPrice(options)));
+			rows.add(createRow(30, "    Volume", true, "", "mmBTu", false, createBuyVolumeMMBTuPrice(options)));
 		}
-		rows.add(createRow(40, "Shipping", "$", createShippingCosts(options)));
-		rows.add(createRow(50, "- Bunkers", "$", createShippingBunkersTotal(options)));
-		rows.add(createRow(60, "- Port", "$", createShippingPortCosts(options)));
-		rows.add(createRow(70, "- Canal", "$", createShippingCanalCosts(options)));
-		rows.add(createRow(80, "- Boil-off", "$", createShippingBOGTotal(options), createBOGColourProvider(options)));
-		rows.add(createRow(90, "- Charter Cost", "$", createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
+		rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options)));
+		rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options)));
+		rows.add(createRow(60, "    Port", true, "$", "", true, createShippingPortCosts(options)));
+		rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options)));
+		rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options), createBOGColourProvider(options)));
+		rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
 		if (containsCharterOut) {
-			rows.add(createRow(100, "Charter Revenue", "$", createShippingCharterRevenue(options)));
-			rows.add(createRow(110, "Repositioning", "$", createShippingRepositioning(options)));
-			rows.add(createRow(120, "Ballast bonus", "$", createShippingBallastBonus(options)));
-			rows.add(createRow(130, "Charter Duration", "", createCharterDays(options)));
+			rows.add(createRow(100, "Charter Revenue", true, "$", "", false, createShippingCharterRevenue(options)));
+			rows.add(createRow(110, "Repositioning", true, "$", "", true, createShippingRepositioning(options)));
+			rows.add(createRow(120, "Ballast bonus", true, "$", "", false, createShippingBallastBonus(options)));
+			rows.add(createRow(130, "Charter Duration", true, "", "", false, createCharterDays(options)));
 		}
 		if (containsCargo) {
-			rows.add(createRow(140, "Sale", "$", createSellValuePrice(options)));
-			rows.add(createRow(150, "- Price", "$/mmBTu", createSellPrice(options)));
-			rows.add(createRow(160, "- Volume", "mmBtu", createSellVolumeMMBTuPrice(options)));
+			rows.add(createRow(140, "Sale", true, "$", "", false, createSellValuePrice(options)));
+			rows.add(createRow(150, "    Price", true, "$", "mmBTu", false, createSellPrice(options)));
+			rows.add(createRow(160, "    Volume", true, "", "mmBtu", false, createSellVolumeMMBTuPrice(options)));
 			if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
-				rows.add(createRow(170, "Equity P&L", "$", createPNLEquity(options)));
+				rows.add(createRow(170, "Equity P&L", true, "$", "", false, createPNLEquity(options)));
 			}
-			rows.add(createRow(180, "Addn. P&L", "$", createPNLAdditional(options)));
+			rows.add(createRow(180, "Addn. P&L", true, "$", "", false, createPNLAdditional(options)));
 		}
-		rows.add(createRow(190, "P&L", "$", createPNLTotal(options)));
+		rows.add(createRow(190, "P&L", true, "$", "", false, createPNLTotal(options)));
 		if (containsCargo) {
-			final CargoEconsReportRow row = createRow(200, "Margin", "$/mmBTu", createPNLPerMMBTU(options));
+			final CargoEconsReportRow row = createRow(200, "Margin", true, "$", "mmBTu", false, createPNLPerMMBTU(options));
 			row.tooltip = () -> {
 				switch (options.marginBy) {
 				case PURCHASE_VOLUME:
@@ -183,38 +191,179 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, final @NonNull String unit, final @NonNull ICellRenderer renderer) {
-		return createRow(order, name, unit, renderer, null);
+	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, boolean includeUnits, final @NonNull String prefixUnit, String suffixUnit, boolean isCost, final @NonNull ICellRenderer renderer) {
+		return createRow(order, name, true, prefixUnit, suffixUnit, isCost, renderer, null);
 	}
 
-	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, final @NonNull String unit, final @NonNull ICellRenderer formatter,
-			@Nullable final IColorProvider colourProvider) {
+	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, boolean includeUnits, final @NonNull String prefixUnit, String suffixUnit,
+			boolean isCost, final @NonNull ICellRenderer formatter, @Nullable final IColorProvider colourProvider) {
 		final CargoEconsReportRow row = new CargoEconsReportRow();
 		row.order = order;
 		row.name = name;
-		row.unit = unit;
+		row.includeUnits = includeUnits;
+		row.prefixUnit = prefixUnit;
+		row.suffixUnit = suffixUnit;
 		row.formatter = formatter;
 		row.colourProvider = colourProvider;
-
+		row.isCost = isCost;
+		
 		return row;
 	}
+	public <T, U, W> T getFromCargoAllocationPairListBi(Class<T> type, BiFunction<U, W, T> f, Object object, W options) {
+		final List<DeltaPair> cargoAllocations = (List<DeltaPair>) object;
 
+		if (type.getName().equals("java.lang.Integer")) {
+			int acc = 0;
+			for (DeltaPair cargoAllocation: cargoAllocations) {
+				acc += (int) getFromCargoAllocationPairBi(type, f, cargoAllocation, options);
+			}
+			return type.cast(acc);
+		} else if (type.getName().equals("java.lang.Double")) {
+			double acc = 0;
+			for (DeltaPair cargoAllocation: cargoAllocations) {
+				acc += (double) getFromCargoAllocationPairBi(type, f, cargoAllocation, options);
+			}
+			return type.cast(acc);
+		} else if (type.getName().equals("java.lang.Long")) {
+			long acc = 0;
+			for (DeltaPair cargoAllocation: cargoAllocations) {
+				acc += (long) getFromCargoAllocationPairBi(type, f, cargoAllocation, options);
+			}
+			return type.cast(acc);
+		}	
+
+		return null;
+	}
+
+	public <T, U, W> T getFromCargoAllocationPairBi(Class<T> type, BiFunction<U, W, T> f, Object object, W options) {
+		Object first = null;
+		Object second = null;
+		
+
+		if (object instanceof DeltaPair) {
+			final DeltaPair deltaPair = (DeltaPair) object;
+			first = deltaPair.first();
+			second = deltaPair.second();
+		}
+
+		T valueFirst = f.apply((U) first, options);
+
+		if (second != null) {
+			T valueSecond = f.apply((U) second, options);
+
+			if (valueFirst instanceof Integer) {
+				return type.cast(((int) valueFirst - (int) valueSecond));
+			} else if (valueFirst instanceof Double) {
+				return type.cast(((double) valueFirst - (double) valueSecond));
+			} else if (valueFirst instanceof Long) {
+				return type.cast(((long) valueFirst - (long) valueSecond));
+			}
+		}
+
+		return valueFirst;
+	}
+	
+	
+	
+	public <T,U> T getFromCargoAllocationPairList(Class<T> type, Function<U, T> f, Object object) {
+		final List<DeltaPair> cargoAllocations = (List<DeltaPair>) object;
+		
+		if (type.getName().equals("java.lang.Integer")) {
+			int acc = 0;
+			for (DeltaPair cargoAllocation: cargoAllocations) {
+				acc += (int) getFromCargoAllocationPair(type, f, cargoAllocation);
+			}
+			return type.cast(acc);
+		} else if (type.getName().equals("java.lang.Double")) {
+			double acc = 0;
+			for (DeltaPair cargoAllocation: cargoAllocations) {
+				acc += (double) getFromCargoAllocationPair(type, f, cargoAllocation);
+			}
+			return type.cast(acc);
+		} else if (type.getName().equals("java.lang.Long")) {
+			long acc = 0;
+			for (DeltaPair cargoAllocation: cargoAllocations) {
+				acc += (long) getFromCargoAllocationPair(type, f, cargoAllocation);
+			}
+			return type.cast(acc);
+		}	
+
+		return null;
+	}
+
+	public <T, U> T getFromCargoAllocationPair(Class<T> type, Function<U, T> f, Object object) {
+		Object first = null;
+		Object second = null;
+		
+		if (object instanceof DeltaPair) {
+			final DeltaPair deltaPair = (DeltaPair) object;
+			first = deltaPair.first();
+			second = deltaPair.second();
+		}
+		
+		T valueFirst = f.apply((U) first);
+
+		if (second != null) {
+			T valueSecond = f.apply((U) second);
+
+			if (valueFirst instanceof Integer) {
+				return type.cast(((int) valueSecond - (int) valueFirst));
+			} else if (valueFirst instanceof Double) {
+				return type.cast(((double) valueSecond - (double) valueFirst));
+			} else if (valueFirst instanceof Long) {
+				return type.cast(((long) valueSecond - (long) valueFirst));
+			}
+		}
+
+		return valueFirst;
+	}
+
+	public static double cargoAllocationBuyPriceHelper(Object object) {
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+		
+		for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+			if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
+				return allocation.getPrice();
+			}
+		}
+		}
+		return 0.0f;
+	}
+	
 	public @NonNull ICellRenderer createBuyPrice(final EconsOptions options) {
 		return new BaseFormatter() {
 			@Override
 			public @Nullable String render(final Object object) {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
-					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-						if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-							return DollarsPerMMBtuFormat.format(allocation.getPrice());
-						}
-					}
+					final double price = cargoAllocationBuyPriceHelper(cargoAllocation);
+					return DollarsPerMMBtuFormat.format(price);
+				} else if (object instanceof CargoAllocationPair) {
+					double value = getFromCargoAllocationPair(Double.class, StandardEconsRowFactory::cargoAllocationBuyPriceHelper, object);
+					return DollarsPerMMBtuFormat.format(value); 
+				} else if (object instanceof List<?>) {
+					double value = getFromCargoAllocationPairList(Double.class, StandardEconsRowFactory::cargoAllocationBuyPriceHelper, object);
+					return DollarsPerMMBtuFormat.format(value); 
 				}
 
 				return null;
 			}
 		};
+	}
+
+	private static double cargoAllocationSellPriceHelper(Object object) {
+
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+
+			for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+				if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
+					return allocation.getPrice();
+				}
+			}
+		}
+		return 0.0f;
 	}
 
 	public @NonNull ICellRenderer createSellPrice(final EconsOptions options) {
@@ -224,11 +373,15 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-						if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
-							return DollarsPerMMBtuFormat.format(allocation.getPrice());
-						}
-					}
+					final double price = cargoAllocationSellPriceHelper(cargoAllocation);
+
+					return DollarsPerMMBtuFormat.format(price);
+				} else if (object instanceof CargoAllocationPair) {
+					double value = getFromCargoAllocationPair(Double.class, StandardEconsRowFactory::cargoAllocationSellPriceHelper, object);
+					return DollarsPerMMBtuFormat.format(value);
+				} else if (object instanceof List<?>) {
+					double value = getFromCargoAllocationPairList(Double.class, StandardEconsRowFactory::cargoAllocationSellPriceHelper, object);
+					return DollarsPerMMBtuFormat.format(value);
 				}
 
 				return null;
@@ -236,6 +389,21 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
+	private static long cargoAllocationBuyValuePriceHelper(Object object) {
+		long cost = 0;
+
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+
+			for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+				if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
+					cost += allocation.getVolumeValue();
+				}
+			}
+		}
+		return cost;
+	}
+	
 	public @NonNull ICellRenderer createBuyValuePrice(final EconsOptions options) {
 		return new BaseFormatter() {
 			@Override
@@ -243,22 +411,39 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					long cost = 0;
-					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-						if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-							cost += allocation.getVolumeValue();
-						}
-					}
+					long cost = cargoAllocationBuyValuePriceHelper(cargoAllocation);
+
 					return DollarsFormat.format(cost);
 				} else if (object instanceof MarketAllocation) {
 					final MarketAllocation marketAllocation = (MarketAllocation) object;
 					final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 					return DollarsFormat.format(allocation.getVolumeValue());
+				} else if (object instanceof CargoAllocationPair) {
+					long value = getFromCargoAllocationPair(Long.class, StandardEconsRowFactory::cargoAllocationBuyValuePriceHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					long value = getFromCargoAllocationPairList(Long.class, StandardEconsRowFactory::cargoAllocationBuyValuePriceHelper, object);
+					return DollarsFormat.format(value);
 				}
 
 				return null;
 			}
 		};
+	}
+
+	private static long cargoAllocationSellValuePriceHelper(Object object) {
+		long cost = 0;
+
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+
+			for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+				if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
+					cost += allocation.getVolumeValue();
+				}
+			}
+		}
+		return cost;
 	}
 
 	public @NonNull ICellRenderer createSellValuePrice(final EconsOptions options) {
@@ -268,22 +453,38 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					long cost = 0;
-					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-						if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
-							cost += allocation.getVolumeValue();
-						}
-					}
+					long cost = cargoAllocationSellValuePriceHelper(cargoAllocation);
 					return DollarsFormat.format(cost);
 				} else if (object instanceof MarketAllocation) {
 					final MarketAllocation marketAllocation = (MarketAllocation) object;
 					final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 					return DollarsFormat.format(allocation.getVolumeValue());
+				} else if (object instanceof CargoAllocationPair) {
+					long value = getFromCargoAllocationPair(Long.class, StandardEconsRowFactory::cargoAllocationSellValuePriceHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					long value = getFromCargoAllocationPairList(Long.class, StandardEconsRowFactory::cargoAllocationSellValuePriceHelper, object);
+					return DollarsFormat.format(value);
 				}
 
 				return null;
 			}
 		};
+	}
+
+	private static long cargoAllocationBuyVolumeMMBTuPriceHelper(Object object) {
+		long cost = 0;
+
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+
+			for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+				if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
+					cost += allocation.getEnergyTransferred();
+				}
+			}
+		}
+		return cost;
 	}
 
 	public @NonNull ICellRenderer createBuyVolumeMMBTuPrice(final EconsOptions options) {
@@ -293,22 +494,38 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					long cost = 0;
-					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-						if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-							cost += allocation.getEnergyTransferred();
-						}
-					}
+					long cost = cargoAllocationBuyVolumeMMBTuPriceHelper(cargoAllocation);
 					return VolumeMMBtuFormat.format(cost);
 				} else if (object instanceof MarketAllocation) {
 					final MarketAllocation marketAllocation = (MarketAllocation) object;
 					final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 					return VolumeMMBtuFormat.format(allocation.getEnergyTransferred());
+				} else if (object instanceof CargoAllocationPair) {
+					long value = getFromCargoAllocationPair(Long.class, StandardEconsRowFactory::cargoAllocationBuyVolumeMMBTuPriceHelper, object);
+					return VolumeMMBtuFormat.format(value);
+				} else if (object instanceof List<?>) {
+					long value = getFromCargoAllocationPairList(Long.class, StandardEconsRowFactory::cargoAllocationBuyVolumeMMBTuPriceHelper, object);
+					return VolumeMMBtuFormat.format(value);
 				}
 
 				return null;
 			}
 		};
+	}
+
+	private static long cargoAllocationSellVolumeMMBTuPriceHelper(Object object) {
+		long cost = 0;
+
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+
+			for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+				if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
+					cost += allocation.getEnergyTransferred();
+				}
+			}
+		}
+		return cost;
 	}
 
 	public @NonNull ICellRenderer createSellVolumeMMBTuPrice(final EconsOptions options) {
@@ -317,23 +534,56 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 			public @Nullable String render(final Object object) {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
-
-					long cost = 0;
-					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-						if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
-							cost += allocation.getEnergyTransferred();
-						}
-					}
+					final long cost = cargoAllocationSellVolumeMMBTuPriceHelper(cargoAllocation);
 					return VolumeMMBtuFormat.format(cost);
 				} else if (object instanceof MarketAllocation) {
 					final MarketAllocation marketAllocation = (MarketAllocation) object;
 					final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 					return VolumeMMBtuFormat.format(allocation.getEnergyTransferred());
+				} else if (object instanceof CargoAllocationPair) {
+					long value = getFromCargoAllocationPair(Long.class, StandardEconsRowFactory::cargoAllocationSellVolumeMMBTuPriceHelper, object);
+					return VolumeMMBtuFormat.format(value);
+				} else if (object instanceof List<?>) {
+					long value = getFromCargoAllocationPairList(Long.class, StandardEconsRowFactory::cargoAllocationSellVolumeMMBTuPriceHelper, object);
+					return VolumeMMBtuFormat.format(value);
 				}
 
 				return null;
 			}
 		};
+	}
+
+	public double cargoAllocationPNLPerMMBTUHelper(Object object, StandardEconsRowFactory.EconsOptions options) {
+		if (object instanceof CargoAllocation) {
+
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+			final Integer pnl = getPNLValue(cargoAllocation);
+			if (pnl != null) {
+				double volume = 0.0;
+				if (options.marginBy == MarginBy.PURCHASE_VOLUME) {
+					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+						if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
+							volume += allocation.getEnergyTransferred();
+						}
+					}
+				} else if (options.marginBy == MarginBy.SALE_VOLUME) {
+					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+						if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
+							volume += allocation.getEnergyTransferred();
+						}
+					}
+				} else {
+					return 0.0f;
+				}
+
+				if (volume != 0.0) {
+					return (double) pnl / volume;
+				} else {
+					return 0.0f;
+				}
+			}
+		}
+		return 0.0f;
 	}
 
 	public @NonNull ICellRenderer createPNLPerMMBTU(final EconsOptions options) {
@@ -342,30 +592,12 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 			public @Nullable String render(final Object object) {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
+					double PNLPerMMBTU = cargoAllocationPNLPerMMBTUHelper(cargoAllocation, options);
 
-					final Integer pnl = getPNLValue(cargoAllocation);
-					if (pnl != null) {
-						double volume = 0.0;
-						if (options.marginBy == MarginBy.PURCHASE_VOLUME) {
-							for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-								if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-									volume += allocation.getEnergyTransferred();
-								}
-							}
-						} else if (options.marginBy == MarginBy.SALE_VOLUME) {
-							for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-								if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
-									volume += allocation.getEnergyTransferred();
-								}
-							}
-						} else {
-							return null;
-						}
-						if (volume != 0.0) {
-							return DollarsPerMMBtuFormat.format((double) pnl / volume);
-						} else {
-							return null;
-						}
+					if (PNLPerMMBTU != 0.0) {
+						return DollarsPerMMBtuFormat.format(PNLPerMMBTU);
+					} else {
+						return null;
 					}
 				} else if (object instanceof MarketAllocation) {
 					final MarketAllocation marketAllocation = (MarketAllocation) object;
@@ -377,7 +609,18 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 						return DollarsPerMMBtuFormat.format((double) pnl / volume);
 					}
+				} else if (object instanceof CargoAllocationPair) {
+					double value = getFromCargoAllocationPairBi(Double.class, (data, options) -> {
+						return cargoAllocationPNLPerMMBTUHelper(data, options);
+					}, object, options);
+					return DollarsPerMMBtuFormat.format(value);
+				} else if (object instanceof List<?>) {
+					double value = getFromCargoAllocationPairListBi(Double.class, (data, options) -> {
+						return cargoAllocationPNLPerMMBTUHelper(data, options);
+					}, object, options);
+					return DollarsPerMMBtuFormat.format(value);
 				}
+
 				return null;
 			}
 		};
@@ -401,13 +644,30 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 					if (pnl != null) {
 						return DollarsFormat.format(pnl);
 					}
+				} else if (object instanceof VesselEventVisitPair) {
+					Integer value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::getPNLValue, object);
+
+					if (value != null) {
+						return DollarsFormat.format(value);
+					}
 				} else if (object instanceof MarketAllocation) {
 					final MarketAllocation marketAllocation = (MarketAllocation) object;
 					final Integer pnl = getPNLValue(marketAllocation);
 					if (pnl != null) {
 						return DollarsFormat.format(pnl);
 					}
+				} else if (object instanceof CargoAllocationPair) {
+					Integer value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::getPNLValue, object);
+					if (value != null) {
+						return DollarsFormat.format(value);
+					}
+				} else if (object instanceof List<?>) {
+					Integer value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::getPNLValue, object);
+					if (value != null) {
+						return DollarsFormat.format(value);
+					}
 				}
+
 				return null;
 			}
 		};
@@ -424,7 +684,18 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 					if (pnl != null) {
 						return DollarsFormat.format(pnl);
 					}
+				} else if (object instanceof CargoAllocationPair) {
+					Integer value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::getEquityPNLValue, object);
+					if (value != null) {
+						return DollarsFormat.format(value);
+					}
+				} else if (object instanceof List<?>) {
+					Integer value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::getEquityPNLValue, object);
+					if (value != null) {
+						return DollarsFormat.format(value);
+					}
 				}
+
 				return null;
 			}
 		};
@@ -441,17 +712,56 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 					if (pnl != null) {
 						return DollarsFormat.format(pnl);
 					}
-
 				} else if (object instanceof MarketAllocation) {
 					final MarketAllocation marketAllocation = (MarketAllocation) object;
 					final Integer pnl = getAdditionalPNLValue(marketAllocation);
 					if (pnl != null) {
 						return DollarsFormat.format(pnl);
 					}
+				} else if (object instanceof CargoAllocationPair) {
+					Integer value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::getAdditionalPNLValue, object);
+					if (value != null) {
+						return DollarsFormat.format(value);
+					}
+				} else if (object instanceof List<?>) {
+					Integer value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::getAdditionalPNLValue, object);
+					if (value != null) {
+						return DollarsFormat.format(value);
+					}
 				}
+
 				return null;
 			}
 		};
+	}
+
+	private static int genericShippingBOGTotalHelper(Object object) {
+		if (object instanceof CargoAllocation) {
+			int cost = 0;
+
+			final CargoAllocation cargoAllocation = (CargoAllocation) object;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof FuelUsage) {
+					final FuelUsage fuelUsage = (FuelUsage) event;
+					cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
+				}
+			}
+			return cost;
+		} else if (object instanceof VesselEventVisit) {
+
+			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+
+			int cost = 0;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof FuelUsage) {
+					final FuelUsage fuelUsage = (FuelUsage) event;
+					cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
+				}
+			}
+			return cost;
+		}
+		return 0;
+
 	}
 
 	public @NonNull ICellRenderer createShippingBOGTotal(final EconsOptions options) {
@@ -461,31 +771,56 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						if (event instanceof FuelUsage) {
-							final FuelUsage fuelUsage = (FuelUsage) event;
-							cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
-						}
-					}
+					int cost = genericShippingBOGTotalHelper(cargoAllocation);
 					return DollarsFormat.format(cost);
 				} else if (object instanceof VesselEventVisit) {
-					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
 
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						if (event instanceof FuelUsage) {
-							final FuelUsage fuelUsage = (FuelUsage) event;
-							cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
-						}
-					}
+					int cost = genericShippingBOGTotalHelper(vesselEventVisit);
 					return DollarsFormat.format(cost);
+				} else if (object instanceof VesselEventVisitPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingBOGTotalHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof CargoAllocationPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingBOGTotalHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					int value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::genericShippingBOGTotalHelper, object);
+					return DollarsFormat.format(value);
 				}
+
 				return null;
 			}
 
 		};
 
+	}
+
+	private static int genericShippingBunkersTotalHelper(Object object) {
+
+		if (object instanceof CargoAllocation) {
+			int cost = 0;
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof FuelUsage) {
+					final FuelUsage fuelUsage = (FuelUsage) event;
+					cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+				}
+			}
+
+			return cost;
+		} else if (object instanceof VesselEventVisit) {
+			VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+			int cost = 0;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof FuelUsage) {
+					final FuelUsage fuelUsage = (FuelUsage) event;
+					cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+				}
+			}
+			return cost;
+		}
+		return 0;
 	}
 
 	public @NonNull ICellRenderer createShippingBunkersTotal(final EconsOptions options) {
@@ -495,30 +830,57 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						if (event instanceof FuelUsage) {
-							final FuelUsage fuelUsage = (FuelUsage) event;
-							cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-						}
-					}
+					final int cost = genericShippingBunkersTotalHelper(cargoAllocation);
 					return DollarsFormat.format(cost);
 				}
 				if (object instanceof VesselEventVisit) {
-					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
 
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						if (event instanceof FuelUsage) {
-							final FuelUsage fuelUsage = (FuelUsage) event;
-							cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-						}
-					}
+					int cost = genericShippingBunkersTotalHelper(vesselEventVisit);
 					return DollarsFormat.format(cost);
+
+				} else if (object instanceof VesselEventVisitPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingBunkersTotalHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof CargoAllocationPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingBunkersTotalHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					int value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::genericShippingBunkersTotalHelper, object);
+					return DollarsFormat.format(value);
 				}
+
 				return null;
 			}
 		};
+	}
+
+	private static int genericShippingPortCostsHelper(Object object) {
+
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+
+			int cost = 0;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof PortVisit) {
+					final PortVisit portVisit = (PortVisit) event;
+					cost += portVisit.getPortCost();
+				}
+			}
+
+			return cost;
+		} else if (object instanceof VesselEventVisit) {
+			VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
+			int cost = 0;
+			for (final Event event : vesselEventVisit.getEvents()) {
+				if (event instanceof PortVisit) {
+					final PortVisit portVisit = (PortVisit) event;
+					cost += portVisit.getPortCost();
+				}
+			}
+			return cost;
+		}
+		return 0;
 	}
 
 	public @NonNull ICellRenderer createShippingPortCosts(final EconsOptions options) {
@@ -528,29 +890,52 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						if (event instanceof PortVisit) {
-							final PortVisit portVisit = (PortVisit) event;
-							cost += portVisit.getPortCost();
-						}
-					}
+					final int cost = genericShippingPortCostsHelper(cargoAllocation);
 					return DollarsFormat.format(cost);
 				} else if (object instanceof VesselEventVisit) {
-					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						if (event instanceof PortVisit) {
-							final PortVisit portVisit = (PortVisit) event;
-							cost += portVisit.getPortCost();
-						}
-					}
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
+					int cost = genericShippingPortCostsHelper(vesselEventVisit);
 					return DollarsFormat.format(cost);
+				} else if (object instanceof VesselEventVisitPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingPortCostsHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof CargoAllocationPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingPortCostsHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					int value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::genericShippingPortCostsHelper, object);
+					return DollarsFormat.format(value);
 				}
+
 				return null;
 			}
 		};
+	}
+
+	private static int genericShippingCanalCostsHelper(Object object) {
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+
+			int cost = 0;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					cost += journey.getToll();
+				}
+			}
+			return cost;
+		} else if (object instanceof VesselEventVisit) {
+			VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
+			int cost = 0;
+			for (final Event event : vesselEventVisit.getEvents()) {
+				if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					cost += journey.getToll();
+				}
+			}
+			return cost;
+		}
+		return 0;
 	}
 
 	public @NonNull ICellRenderer createShippingCanalCosts(final EconsOptions options) {
@@ -560,30 +945,48 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						if (event instanceof Journey) {
-							final Journey journey = (Journey) event;
-							cost += journey.getToll();
-						}
-					}
+					final int cost = genericShippingCanalCostsHelper(cargoAllocation);
 					return DollarsFormat.format(cost);
 				} else if (object instanceof VesselEventVisit) {
-					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						if (event instanceof Journey) {
-							final Journey journey = (Journey) event;
-							cost += journey.getToll();
-						}
-					}
+					int cost = genericShippingCanalCostsHelper(object);
 					return DollarsFormat.format(cost);
+				} else if (object instanceof VesselEventVisitPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingPortCostsHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof CargoAllocationPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingCanalCostsHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					int value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::genericShippingCanalCostsHelper, object);
+					return DollarsFormat.format(value);
 				}
 				return null;
 
 			}
 		};
+	}
+
+	public static int genericShippingCharterCostsHelper(Object object) {
+
+		if (object instanceof CargoAllocation) {
+			CargoAllocation cargoAllocation = (CargoAllocation) object;
+			int cost = 0;
+			for (final Event event : cargoAllocation.getEvents()) {
+				cost += event.getCharterCost();
+			}
+			return cost;
+		}
+
+		if (object instanceof VesselEventVisit) {
+			VesselEventVisit vesselEventVisit = (VesselEventVisit) object;
+			int cost = 0;
+			for (final Event event : vesselEventVisit.getEvents()) {
+				cost += event.getCharterCost();
+			}
+			return cost;
+		}
+
+		return 0;
 	}
 
 	public @NonNull ICellRenderer createShippingCharterCosts(final EconsOptions options) {
@@ -593,26 +996,39 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						cost += event.getCharterCost();
-					}
+					final int cost = genericShippingCharterCostsHelper(cargoAllocation);
 					return DollarsFormat.format(cost);
 				}
 				if (object instanceof VesselEventVisit) {
-					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-
-					int cost = 0;
-					for (final Event event : cargoAllocation.getEvents()) {
-						cost += event.getCharterCost();
-					}
-
+					int cost = genericShippingCharterCostsHelper(object);
 					return DollarsFormat.format(cost);
+				} else if (object instanceof VesselEventVisitPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingCharterCostsHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof CargoAllocationPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::genericShippingCharterCostsHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					int value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::genericShippingCharterCostsHelper, object);
+					return DollarsFormat.format(value);
 				}
 				return null;
 
 			}
 		};
+	}
+
+	public static int vesselEventVisitShippingCharterRevenueHelper(Object object) {
+		int revenue = 0;
+
+		if (object instanceof VesselEventVisit) {
+			VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
+				revenue = charterOutEvent.getHireRate() * charterOutEvent.getDurationInDays();
+			}
+		}
+		return revenue;
 	}
 
 	public @NonNull ICellRenderer createShippingCharterRevenue(final EconsOptions options) {
@@ -622,19 +1038,34 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 				if (object instanceof VesselEventVisit) {
 					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+					final int revenue = vesselEventVisitShippingCharterRevenueHelper(cargoAllocation);
 
-					int revenue = 0;
-
-					if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
-						final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
-						revenue = charterOutEvent.getHireRate() * charterOutEvent.getDurationInDays();
-					}
 					return DollarsFormat.format(revenue);
+				} else if (object instanceof VesselEventVisitPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingCharterRevenueHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					int value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingCharterRevenueHelper, object);
+					return DollarsFormat.format(value);
 				}
+
 				return null;
 
 			}
 		};
+	}
+
+	public static int vesselEventVisitShippingBallastBonusHelper(Object object) {
+		int revenue = 0;
+
+		if (object instanceof VesselEventVisit) {
+			VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
+				revenue = charterOutEvent.getBallastBonus();
+			}
+		}
+		return revenue;
 	}
 
 	public @NonNull ICellRenderer createShippingBallastBonus(final EconsOptions options) {
@@ -645,18 +1076,32 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof VesselEventVisit) {
 					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
 
-					int revenue = 0;
-
-					if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
-						final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
-						revenue = charterOutEvent.getBallastBonus();
-					}
+					int revenue = vesselEventVisitShippingBallastBonusHelper(cargoAllocation);
 					return DollarsFormat.format(revenue);
+				} else if (object instanceof VesselEventVisitPair) {
+					int value = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingBallastBonusHelper, object);
+					return DollarsFormat.format(value);
+				} else if (object instanceof List<?>) {
+					int value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingBallastBonusHelper, object);
+					return DollarsFormat.format(value);
 				}
 				return null;
 
 			}
 		};
+	}
+
+	public static int vesselEventVisitCharterDaysHelper(Object object) {
+		int days = 0;
+
+		if (object instanceof VesselEventVisit) {
+			VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
+				days = charterOutEvent.getDurationInDays();
+			}
+		}
+		return days;
 	}
 
 	public @NonNull ICellRenderer createCharterDays(final EconsOptions options) {
@@ -666,19 +1111,34 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 				if (object instanceof VesselEventVisit) {
 					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+					final int days = vesselEventVisitCharterDaysHelper(cargoAllocation);
 
-					int days = 0;
-
-					if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
-						final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
-						days = charterOutEvent.getDurationInDays();
-					}
+					return DaysFormat.format(days);
+				} else if (object instanceof VesselEventVisitPair) {
+					int days = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::vesselEventVisitCharterDaysHelper, object);
+					return DaysFormat.format(days);
+				} else if (object instanceof List<?>) {
+					int days = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::vesselEventVisitCharterDaysHelper, object);
 					return DaysFormat.format(days);
 				}
+
 				return null;
 
 			}
 		};
+	}
+
+	public static int vesselEventVisitShippingRepositioningHelper(Object object) {
+		int revenue = 0;
+
+		if (object instanceof VesselEventVisit) {
+			VesselEventVisit cargoAllocation = (VesselEventVisit) object;
+			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
+				revenue = charterOutEvent.getRepositioningFee();
+			}
+		}
+		return revenue;
 	}
 
 	public @NonNull ICellRenderer createShippingRepositioning(final EconsOptions options) {
@@ -689,12 +1149,13 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof VesselEventVisit) {
 					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
 
-					int revenue = 0;
-
-					if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
-						final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
-						revenue = charterOutEvent.getRepositioningFee();
-					}
+					final int revenue = vesselEventVisitShippingRepositioningHelper(cargoAllocation);
+					return DollarsFormat.format(revenue);
+				} else if (object instanceof VesselEventVisitPair) {
+					int revenue = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingRepositioningHelper, object);
+					return DollarsFormat.format(revenue);
+				} else if (object instanceof List<?>) {
+					int revenue = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingRepositioningHelper, object);
 					return DollarsFormat.format(revenue);
 				}
 				return null;
@@ -710,7 +1171,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) object;
 
-					final Integer cost = getShippingCost(cargoAllocation.getSequence(), cargoAllocation);
+					final Integer cost = getShippingCost(cargoAllocation);
 					if (cost != null) {
 						return DollarsFormat.format(cost);
 					}
@@ -718,27 +1179,51 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				if (object instanceof VesselEventVisit) {
 					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
 
-					final Integer cost = getShippingCost(cargoAllocation.getSequence(), cargoAllocation);
+					final Integer cost = getShippingCost(object);
 					if (cost != null) {
 						return DollarsFormat.format(cost);
 					}
+				} else if (object instanceof VesselEventVisitPair) {
+					int cost = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::getShippingCost, object);
+					return DollarsFormat.format(cost);
+				} else if (object instanceof CargoAllocationPair) {
+					int cost = getFromCargoAllocationPair(Integer.class, StandardEconsRowFactory::getShippingCost, object);
+					return DollarsFormat.format(cost);
+				} else if (object instanceof List<?>) {
+					int sum = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::getShippingCost, object);
+					return DollarsFormat.format(sum);
 				}
+
 				return null;
 
 			}
 		};
 	}
 
-	private static Integer getShippingCost(final Sequence sequence, final EventGrouping cargoAllocation) {
-
-		if (cargoAllocation == null) {
+	private static Integer getShippingCost(Object object) {
+		
+		if (object == null) {
 			return null;
 		}
 
+		Sequence sequence = null;
+		List<Event> events = null;
+
+		if (object instanceof CargoAllocation) {
+			sequence = ((CargoAllocation) object).getSequence();
+			events = ((CargoAllocation) object).getEvents();
+		} else if (object instanceof VesselEventVisit) {
+			sequence = ((VesselEventVisit) object).getSequence();
+			events = ((VesselEventVisit) object).getEvents();
+		}
+		
+		if (sequence == null || events == null) {
+			return null;
+		}
 		// Bit of a double count here, but need to decide what to add to the model
 		int shippingCost = 0;
 		int charterCost = 0;
-		for (final Event event : cargoAllocation.getEvents()) {
+		for (final Event event : events) {
 
 			charterCost += event.getCharterCost();
 

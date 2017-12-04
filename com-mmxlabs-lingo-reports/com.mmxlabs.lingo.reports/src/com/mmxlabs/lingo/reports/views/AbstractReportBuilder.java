@@ -15,6 +15,7 @@ import org.eclipse.ui.IMemento;
 
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -89,10 +90,24 @@ public abstract class AbstractReportBuilder {
 	public List<?> adaptSelectionFromWidget(final List<?> selection) {
 		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size() * 2);
 		for (final Object obj : selection) {
-			if (obj instanceof EObject) {
-				adaptedSelection.add(((EObject) obj).eGet(ScheduleReportPackage.Literals.ROW__TARGET));
+			if (obj instanceof CompositeRow) {
+				CompositeRow compositeRow = (CompositeRow) obj;
+				
+				if (compositeRow.getPinnedRow() != null) {
+					adaptedSelection.add(compositeRow.getPinnedRow());
+				}
+				
+				if (compositeRow.getPreviousRow() != null) {
+					adaptedSelection.add(compositeRow.getPreviousRow());
+				}
+				
+			} else {
+				if (obj instanceof EObject) {
+					adaptedSelection.add(((EObject) obj).eGet(ScheduleReportPackage.Literals.ROW__TARGET));
+				}
+				adaptedSelection.add(obj);
 			}
-			adaptedSelection.add(obj);
+			
 		}
 
 		return adaptedSelection;

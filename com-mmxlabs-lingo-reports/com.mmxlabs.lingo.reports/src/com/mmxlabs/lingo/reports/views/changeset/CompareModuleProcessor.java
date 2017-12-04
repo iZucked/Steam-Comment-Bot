@@ -20,6 +20,14 @@ public class CompareModuleProcessor {
 
 	@Execute
 	public void cleanUpActionPlanUI(@NonNull final MApplication application, @NonNull final EModelService modelService) {
+		// Always remove the dynamic view parts
+		E4ModelHelper.removeViewParts("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:", false, application, modelService);
+
+		// Remove old view IDs
+		E4ModelHelper.removeViewPart("com.mmxlabs.lingo.reports.views.changeset.ChangeSetView", application, modelService);
+		E4ModelHelper.removeViewPart("com.mmxlabs.lingo.reports.views.changeset.ActionSetView", application, modelService);
+		E4ModelHelper.removeViewParts("com.mmxlabs.lingo.reports.views.changeset.CustomChangeSetView", true, application, modelService);
+		E4ModelHelper.removeViewPart(VIEW_CHANGES_ID, application, modelService);
 
 		if (LicenseFeatures.isPermitted("features:difftools")) {
 			// Feature is enabled, so do not clean up

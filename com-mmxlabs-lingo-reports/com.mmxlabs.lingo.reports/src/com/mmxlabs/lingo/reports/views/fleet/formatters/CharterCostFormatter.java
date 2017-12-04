@@ -16,7 +16,11 @@ public class CharterCostFormatter extends CostFormatter {
 	public CharterCostFormatter(boolean includeUnits) {
 		super(includeUnits);
 	}
-
+	
+	public CharterCostFormatter(boolean includeUnits, Type type) {
+		super(includeUnits, type);
+	}
+	
 	@Override
 	public Integer getIntValue(Object object) {
 

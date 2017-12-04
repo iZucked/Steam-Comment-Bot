@@ -39,14 +39,12 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesViewComponent;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
 public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 
-	
 	@PostConstruct
 	public void addHelpContext() {
 
@@ -213,17 +211,13 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 		for (final Object object : adaptSelection) {
 			if (object instanceof EObject) {
 				EObject eObject = (EObject) object;
-				while (eObject != null && !(eObject instanceof MMXRootObject)) {
+				while (eObject != null && !(eObject instanceof ScheduleModel)) {
 					eObject = eObject.eContainer();
 				}
 
-				if (eObject instanceof LNGScenarioModel) {
-					final LNGScenarioModel scenarioModel = (LNGScenarioModel) eObject;
-					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
-					if (scheduleModel != null) {
-						schedules.add(scheduleModel);
-					}
-
+				if (eObject instanceof ScheduleModel) {
+					ScheduleModel scheduleModel = (ScheduleModel) eObject;
+					schedules.add(scheduleModel);
 				}
 			}
 		}

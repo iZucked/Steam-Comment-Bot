@@ -17,10 +17,16 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.lingo.reports.components.GroupAlternatingRowCellRenderer;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
@@ -47,7 +54,9 @@ import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialSt
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialColumn;
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialDiffOption;
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialRowType;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -70,7 +79,11 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	public static final String ID = "com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView";
 
 	private final FleetBasedReportBuilder builder;
-
+	
+	private boolean diffMode = false;
+	
+	private ViewerComparator defaultViewerComparator = null; 
+	
 	@Inject(optional = true)
 	private Iterable<IFleetBasedColumnFactoryExtension> columnFactoryExtensions;
 
@@ -95,6 +108,109 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		// Setup the builder hooks.
 		this.builder = builder;
 		builder.setBlockManager(getBlockManager());
+	}
+	
+	public void toggleDiffMode() {
+		diffMode = !diffMode;
+	}
+	
+	public ViewerComparator getGroupDeltaComparator() {
+		{
+
+			if (defaultViewerComparator == null) {
+				defaultViewerComparator = viewer.getComparator();
+			}
+
+			final ViewerComparator vc = defaultViewerComparator;
+
+			// Wrap around with group sorter
+			return new ViewerComparator() {
+				@Override
+				public int compare(final Viewer viewer, Object e1, Object e2) {
+					RowGroup g1 = null;
+					RowGroup g2 = null;
+
+					Boolean firstIsComposite = false;
+					Boolean secondIsComposite = false;
+
+					if (e1 instanceof Row) {
+						g1 = ((Row) e1).getRowGroup();
+					}
+					if (e2 instanceof Row) {
+						g2 = ((Row) e2).getRowGroup();
+					}
+
+					if (e1 instanceof CompositeRow) {
+						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
+						e1 = ((CompositeRow) e1).getPreviousRow();
+						firstIsComposite = true;
+					}
+					if (e2 instanceof CompositeRow) {
+						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
+						e2 = ((CompositeRow) e2).getPreviousRow();
+						secondIsComposite = true;
+					}
+
+					if (e1 instanceof List) {
+						return Integer.MAX_VALUE;
+					}
+
+					if (e2 instanceof List) {
+						return Integer.MIN_VALUE;
+					}
+
+					if (g1 == g2 && g1 != null) {
+						int res = vc.compare(viewer, e1, e2);
+
+						if (e1 instanceof Row && e2 instanceof Row) {
+							Row r1 = (Row) e1;
+							Row r2 = (Row) e2;
+
+							if (!(r1.isReference() && r2.isReference())) {
+								if (r1.isReference()) {
+									return -1;
+								} else if (r2.isReference()) {
+									return 1;
+								}
+							}
+
+							if (!(firstIsComposite && secondIsComposite)) {
+								if (firstIsComposite) {
+									return 1;
+								} else if (secondIsComposite) {
+									return -1;
+								}
+							}
+						}
+						return res;
+					} else {
+						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
+						final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
+						return vc.compare(viewer, rd1, rd2);
+					}
+				}
+			};
+		}
+
+	}
+	
+	public void setDiffMode(boolean enabled) {
+
+		if (enabled) {
+			GridColumn[] columns = viewer.getGrid().getColumns();
+			for (GridColumn column : columns) {
+				column.setCellRenderer(new GroupAlternatingRowCellRenderer());
+			}
+			viewer.setComparator(getGroupDeltaComparator());
+		} else {
+			GridColumn[] columns = viewer.getGrid().getColumns();
+			for (GridColumn column : columns) {
+				column.setCellRenderer(new DefaultCellRenderer());
+				if (defaultViewerComparator != null) {
+					viewer.setComparator(defaultViewerComparator);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -193,14 +309,44 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					elementCollector.endCollecting();
 
 					setCurrentSelectedDataProvider(new TransformedSelectedDataProvider(selectedDataProvider));
-					ViewerHelper.setInput(viewer, true, table.getRows());
+					
+					int numberOfRow = table.getRows().size();
+					if (pinned != null) {
+						numberOfRow += table.getCompositeRows().size() + 1;
+					}
+					
+					List<Object> rows = new ArrayList<>(numberOfRow);
+					
+					if ((pinned != null && !diffMode) || (pinned == null)) {
+						rows.addAll(table.getRows());
+					}
+					
+					if (pinned != null) {
+						List<CompositeRow> compositeRows = new ArrayList<>(table.getCompositeRows());
+						
+						createDeltaRowGroup(compositeRows);
+						
+						rows.addAll(compositeRows);
+						rows.add(compositeRows);
+						
+						if(diffMode) {
+							setDiffMode(false);
+						} else {
+							setDiffMode(true);
+						}
+					} else {
+						setDiffMode(false);
+					}
+					
+					
+					ViewerHelper.setInput(viewer, true, rows);
 				}
 			};
 
 			RunnerHelper.exec(r, block);
 		}
 	};
-
+	
 	@Override
 	public void initPartControl(final Composite parent) {
 
@@ -208,7 +354,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
-
+		
+		// Add diff button
+		Action action = new DiffAction(viewer, this);
+		IActionBars actionBars = getViewSite().getActionBars();
+		IToolBarManager toolBar = actionBars.getToolBarManager();
+		toolBar.add(action);
+		
 		viewer.setContentProvider(new ArrayContentProvider());
 
 		// Add a filter to only show certain rows.
@@ -218,6 +370,14 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
 				if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences() && !scenarioComparisonService.getSelectedElements().isEmpty()) {
+					
+					if (element instanceof CompositeRow) {
+						final Row row = ((CompositeRow) element).getPreviousRow();
+						if (!scenarioComparisonService.getSelectedElements().contains(row.getSequence())) {
+							return false;
+						}
+					}
+
 					if (element instanceof Row) {
 						final Row row = (Row) element;
 						if (!scenarioComparisonService.getSelectedElements().contains(row.getSequence())) {
@@ -237,6 +397,12 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					// Only show visible rows
 					return row.isVisible();
 				}
+				
+				if (element instanceof CompositeRow) {
+					final Row row = ((CompositeRow) element).getPreviousRow();
+					return row.isVisible();
+				}
+				
 				return true;
 			}
 		} });
@@ -247,6 +413,10 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
+	}
+	
+	public void triggerSeletedScenariosServiceListener() {
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	@Override
@@ -347,7 +517,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			}
 		}
 	}
-
+	
 	public void processInputs(final List<Row> result) {
 		clearInputEquivalents();
 		for (final Row row : result) {
@@ -416,5 +586,18 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 		// Create the actual columns instances.
 		manager.addColumns(FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID, getBlockManager());
+	}
+	
+	private void createDeltaRowGroup(List<CompositeRow> compositeRows) {
+		for (CompositeRow compositeRow: compositeRows) {
+			RowGroup rowGroup = ScheduleReportFactory.eINSTANCE.createRowGroup();
+			
+			Row previousRow = compositeRow.getPreviousRow();
+			Row pinnedRow = compositeRow.getPinnedRow();
+			
+			previousRow.setRowGroup(rowGroup);
+			pinnedRow.setRowGroup(rowGroup);
+		}
+		
 	}
 }

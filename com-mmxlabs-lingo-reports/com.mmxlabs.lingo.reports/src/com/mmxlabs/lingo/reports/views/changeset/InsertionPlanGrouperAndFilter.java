@@ -66,7 +66,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	private final Set<Object> expandedGroups = new HashSet<>();
 	// private boolean filterActive = false;
 	private GroupMode groupMode = GroupMode.TargetAndComplexity;
-	private final int maxComplexity = 4;
+	private int maxComplexity = 4;
 
 	private final List<UserFilter> userFilters = new LinkedList<>();
 
@@ -74,12 +74,30 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	private boolean insertionModeActive = false;
 
+	public boolean isMultipleSolutionView() {
+		return multipleSolutionView;
+	}
+
+	public void setMultipleSolutionView(final boolean multipleSolutionView) {
+		this.multipleSolutionView = multipleSolutionView;
+	}
+
+	private boolean multipleSolutionView = false;
+
 	public boolean isInsertionModeActive() {
 		return insertionModeActive;
 	}
 
 	public void setInsertionModeActive(final boolean insertionModeActive) {
 		this.insertionModeActive = insertionModeActive;
+	}
+
+	public int getMaxComplexity() {
+		return maxComplexity;
+	}
+
+	public void setMaxComplexity(final int maxComplexity) {
+		this.maxComplexity = maxComplexity;
 	}
 
 	@Override
@@ -107,13 +125,13 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		if (element instanceof ChangeSetTableGroup) {
 
 			final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
-			if (changeSetTableGroup.getComplexity() > maxComplexity) {
+			if (changeSetTableGroup.getComplexity() > getMaxComplexity()) {
 				return false;
 			}
 		}
 		if (parentElement instanceof ChangeSetTableGroup) {
 			final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
-			if (changeSetTableGroup.getComplexity() > maxComplexity) {
+			if (changeSetTableGroup.getComplexity() > getMaxComplexity()) {
 				return false;
 			}
 		}
@@ -305,7 +323,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				boolean first = true;
 				double sortValue = 0.0;
 				for (final ChangeSetTableGroup g : groups) {
-					if (g.getComplexity() > maxComplexity) {
+					if (g.getComplexity() > getMaxComplexity()) {
 						continue;
 					}
 					g.setGroupAlternative(!first);
@@ -871,9 +889,6 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				final SubLocalMenuHelper loadMenuMarket = new SubLocalMenuHelper("by spot market");
 				final SubLocalMenuHelper loadMenuVessel = new SubLocalMenuHelper("by vessel");
 
-				// final Pair<String, UserFilter.FilterSlotType> key = new
-				// Pair<>(row.getLhsName(), UserFilter.FilterSlotType.BY_ID);
-
 				final Collection<UserFilter> filters = exploreSlotOptions.get(key);
 				if (filters != null) {
 					for (final UserFilter f : filters) {
@@ -962,12 +977,29 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		final BiFunction<ChangeSetTableGroup, Integer, String> defaultLabelProvider = ChangeSetViewColumnHelper.getDefaultLabelProvider();
 		return (changeSetTableGroup, index) -> {
 			if (!insertionModeActive) {
-				return defaultLabelProvider.apply(changeSetTableGroup, index);
+				if (!multipleSolutionView) {
+					return defaultLabelProvider.apply(changeSetTableGroup, index);
+				} else {
+					return ChangeSetViewColumnHelper.getMultipleSolutionLabelProvider().apply(changeSetTableGroup, index);
+				}
 			}
 
 			final String dest = changeSetTableGroup.getDescription();
 			final int complexity = changeSetTableGroup.getComplexity();
-			final String base = String.format("%s, ∆%d ", dest, complexity);
+			final String base;
+			switch (groupMode) {
+			case Complexity:
+				base = String.format("∆%d ",  complexity);
+				break;
+			case Target:
+				base = String.format("%s ", dest);
+				break;
+			case TargetAndComplexity:
+				base = String.format("%s, ∆%d ", dest, complexity);
+				break;
+			default:
+				throw new IllegalStateException();
+			}
 			if (userFilters.isEmpty()) {
 				if (!expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
 					return base + " (+)";
@@ -1049,5 +1081,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	public Collection<Object> getExpandedGroups() {
 		return expandedGroups;
+	}
+	
+	public GroupMode getGroupMode() {
+		return groupMode;
 	}
 }

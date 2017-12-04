@@ -65,6 +65,10 @@ public class ScheduleResultListTransformer {
 
 	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isBase, @Nullable NamedObject targetToSortFirst) {
 
+		if (from == null || to == null) {
+			return;
+		}
+
 		final ScheduleModel beforeScheduleModel = from.getTypedResult(ScheduleModel.class);
 		final ScheduleModel afterScheduleModel = to.getTypedResult(ScheduleModel.class);
 		if (beforeScheduleModel == null || afterScheduleModel == null) {

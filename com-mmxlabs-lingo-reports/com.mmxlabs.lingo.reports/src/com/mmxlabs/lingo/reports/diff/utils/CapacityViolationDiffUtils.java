@@ -12,6 +12,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EMap;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -28,7 +29,14 @@ public class CapacityViolationDiffUtils {
 	public static String checkSlotAllocationForCapacityViolations(final SlotAllocation nonReference, final SlotAllocation reference) {
 		if (nonReference == null || reference == null) {
 			return "";
-		} else if (!nonReference.getSlot().getName().equals(reference.getSlot().getName())) {
+		}
+
+		Slot nonReferenceSlot = nonReference.getSlot();
+		Slot referenceSlot = reference.getSlot();
+		if (nonReferenceSlot == null || referenceSlot == null) {
+			return "";
+		}
+		if (!nonReferenceSlot.getName().equals(referenceSlot.getName())) {
 			return "";
 		}
 		final CapacityViolationDifferences differences = CapacityViolationDiffUtils.getDifferenceInViolations(nonReference, reference);
@@ -39,7 +47,7 @@ public class CapacityViolationDiffUtils {
 		final String additions = createChangedViolationTextFromSet(differences.additionSet);
 		final String subtractions = createChangedViolationTextFromSet(differences.subtractionSet);
 		final String intersection = createModifiedViolationTextFromSet(differences.intersectSet);
-		final String slotType = nonReference.getSlot() instanceof LoadSlot ? "Load" : "Discharge";
+		final String slotType = nonReferenceSlot instanceof LoadSlot ? "Load" : "Discharge";
 
 		final String additionSemiColon = ((!differences.additionSet.isEmpty() && (!differences.subtractionSet.isEmpty() || !differences.intersectSet.isEmpty())) ? " ; " : "");
 		final String subtractionSemiColon = (!differences.subtractionSet.isEmpty() && !differences.intersectSet.isEmpty()) ? " ; " : "";

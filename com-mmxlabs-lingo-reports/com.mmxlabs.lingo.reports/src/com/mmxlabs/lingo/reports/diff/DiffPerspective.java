@@ -35,8 +35,8 @@ public class DiffPerspective implements IPerspectiveFactory {
 		final IFolderLayout econsArea = layout.createFolder("econsArea", IPageLayout.RIGHT, 0.85f, "reportsArea");
 
 		diffArea.addView("com.mmxlabs.scenario.service.ui.navigator");
-		changeSetArea.addView("com.mmxlabs.lingo.reports.views.changeset.ChangeSetView");
-		changeSetArea.addPlaceholder("com.mmxlabs.lingo.reports.views.changeset.ActionSetView");
+		changeSetArea.addView("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView");
+		changeSetArea.addPlaceholder("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:Dynamic");
 		fleetReportArea.addView(ConfigurableFleetReportView.ID);
 
 		ganttArea.addView(ScheduleSummaryReport.ID);
@@ -55,8 +55,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.diff.DiffGroupView");
 		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");
 
-		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.views.changeset.ChangeSetView");
-		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.views.changeset.ActionSetView");
+		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView");
 
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.editing");
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");

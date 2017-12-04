@@ -18,6 +18,9 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -25,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -35,7 +39,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(CompareScenariosHandler.class);
 
-	private static final String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetView";
+	private static final String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -76,11 +80,22 @@ public class CompareScenariosHandler extends AbstractHandler {
 										log.error("Unable to open compare perspective", e);
 									}
 								}
-								MPart viewPart = partService.findPart(viewPartId);
-								if (viewPart != null) {
-									viewPart = partService.showPart(viewPart, PartState.ACTIVATE); // Show part
+								{
+									IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+									try {
+										// No colon in id strings
+										IViewPart part = activePage.showView(viewPartId, null, IWorkbenchPage.VIEW_ACTIVATE);
+
+										return;
+									} catch (PartInitException e) {
+										e.printStackTrace();
+									}
 								}
+
 							}
+						});
+						// Split call to allow some time to display the view before triggering the selection. There probably is still a race-condition here
+						RunnerHelper.asyncExec(() -> {
 
 							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, (Consumer<IScenarioServiceSelectionProvider>) provider -> provider
 									.setPinnedPair(new ScenarioResult(pin), new ScenarioResult(other), true));

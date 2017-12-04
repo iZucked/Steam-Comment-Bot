@@ -22,22 +22,24 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class AnalyseScenarioHandler {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AnalyseScenarioHandler.class);
-
-	@Inject
-	private IEventBroker eventBroker;
 
 	@Inject
 	private ESelectionService selectionService;
@@ -114,17 +116,30 @@ public class AnalyseScenarioHandler {
 				LOG.error("Unable to open compare perspective", e);
 			}
 		}
+		{
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			try {
+				final String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";// :" + solution.getID();
 
-		// Activate change set view
-		partService.showPart("com.mmxlabs.lingo.reports.views.changeset.ActionSetView", PartState.ACTIVATE);
+				// No colon in id strings
+				IViewPart actionSetPart = activePage.showView(viewPartId, "Dynamic", IWorkbenchPage.VIEW_ACTIVATE);
+				if (actionSetPart instanceof ChangeSetView) {
+					ChangeSetView changeSetView = (ChangeSetView) actionSetPart;
 
-		final Object selection = selectionService.getSelection(part.getElementId());
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection ss = (IStructuredSelection) selection;
-			final Object o = ss.getFirstElement();
-			if (o instanceof ScenarioInstance) {
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-				eventBroker.post(ChangeSetViewEventConstants.EVENT_ANALYSE_ACTION_SETS, scenarioInstance);
+					final Object selection = selectionService.getSelection(part.getElementId());
+					if (selection instanceof IStructuredSelection) {
+						final IStructuredSelection ss = (IStructuredSelection) selection;
+						final Object o = ss.getFirstElement();
+						if (o instanceof ScenarioInstance) {
+							final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+							RunnerHelper.asyncExec(() -> changeSetView.openOldStlyeActionSets(scenarioInstance));
+						}
+					}
+
+				}
+				return;
+			} catch (PartInitException e) {
+				e.printStackTrace();
 			}
 		}
 	}

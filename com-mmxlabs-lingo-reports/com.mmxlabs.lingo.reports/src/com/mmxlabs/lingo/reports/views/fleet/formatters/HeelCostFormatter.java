@@ -7,16 +7,23 @@ package com.mmxlabs.lingo.reports.views.fleet.formatters;
 import java.util.List;
 
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
 
-public class PortCostFormatter extends CostFormatter {
+public class HeelCostFormatter extends CostFormatter {
+
+	public HeelCostFormatter(boolean includeUnits) {
+		super(includeUnits);
+	}
 	
-	public PortCostFormatter(Type type) {
-		super(type);
+	public HeelCostFormatter(boolean includeUnits, Type type ) {
+		super(includeUnits, type);
 	}
 	
 	@Override
@@ -25,32 +32,33 @@ public class PortCostFormatter extends CostFormatter {
 		if (object instanceof Row) {
 			object = ((Row) object).getSequence();
 		}
-		int cost = 0;
+		int heelCost = 0;
 		if (object instanceof Sequence) {
 			Sequence sequence = (Sequence) object;
-			cost += getCost(sequence);
+			heelCost += getHeelCost(sequence);
 		} else if (object instanceof List) {
 			List objects = (List) object;
 			if (objects.size() > 0) {
 				for (Object o : objects) {
 					if (o instanceof Sequence) {
-						cost += getCost((Sequence) o);
+					heelCost += getHeelCost((Sequence) o);
 					}
 				}
 			}
 		}
 
-		return cost;
+		return heelCost;
 	}
 
-	private int getCost(Sequence sequence) {
-		int cost = 0;
+	private int getHeelCost(Sequence sequence) {
+		int revenue = 0;
 		for (Event evt : sequence.getEvents()) {
 			if (evt instanceof PortVisit) {
-				PortVisit portVisit = (PortVisit) evt;
-				cost += portVisit.getPortCost();
+				final PortVisit portVisit = (PortVisit) evt;
+				revenue += portVisit.getHeelCost();
 			}
 		}
-		return cost;
+		return revenue;
 	}
+
 }
