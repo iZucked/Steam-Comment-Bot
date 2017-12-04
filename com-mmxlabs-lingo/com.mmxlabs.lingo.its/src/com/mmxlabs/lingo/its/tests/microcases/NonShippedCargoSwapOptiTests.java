@@ -61,7 +61,7 @@ public class NonShippedCargoSwapOptiTests extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
-			scenarioRunner.run();
+			scenarioRunner.runAndApplyBest();
 
 			// Wiring should have changed
 			Assert.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
@@ -96,7 +96,7 @@ public class NonShippedCargoSwapOptiTests extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
-			scenarioRunner.run();
+			scenarioRunner.runAndApplyBest();
 
 			// Wiring should have changed
 			Assert.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));

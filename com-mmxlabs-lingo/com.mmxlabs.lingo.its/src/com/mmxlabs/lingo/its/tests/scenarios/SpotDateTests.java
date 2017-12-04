@@ -37,7 +37,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 
 		LNGScenarioRunnerCreator.withLiNGOFileLegacyOptimisationRunner(url, null, 10_000, runner -> {
 
-			runner.run();
+			runner.runAndApplyBest();
 
 			// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
 			final Schedule schedule = runner.getSchedule();

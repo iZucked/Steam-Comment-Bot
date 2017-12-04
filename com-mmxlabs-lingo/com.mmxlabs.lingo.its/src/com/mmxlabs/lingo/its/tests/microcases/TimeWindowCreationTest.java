@@ -238,7 +238,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			// Run optimisation to generate the cargo
-			scenarioRunner.run();
+			scenarioRunner.runAndApplyBest();
 
 			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
 			final Cargo cargo = lngScenarioModel.getCargoModel().getCargoes().get(0);

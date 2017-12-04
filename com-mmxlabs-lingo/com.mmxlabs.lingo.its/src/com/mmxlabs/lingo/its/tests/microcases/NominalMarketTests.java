@@ -387,7 +387,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			final long beforePNL = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), optimiserScenario.getScheduleModel().getSchedule()).getGroupProfitAndLoss().getProfitAndLoss();
-			scenarioRunner.run();
+			scenarioRunner.runAndApplyBest();
 			final long afterPNL = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), optimiserScenario.getScheduleModel().getSchedule()).getGroupProfitAndLoss().getProfitAndLoss();
 
 			Assert.assertTrue(beforePNL > afterPNL);

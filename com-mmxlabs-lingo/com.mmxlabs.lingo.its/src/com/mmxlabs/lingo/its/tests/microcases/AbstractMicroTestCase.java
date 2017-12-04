@@ -200,7 +200,7 @@ public abstract class AbstractMicroTestCase {
 			scenarioRunner.evaluateInitialState();
 
 			if (optimise) {
-				scenarioRunner.run();
+				scenarioRunner.runAndApplyBest();
 			}
 
 			checker.accept(scenarioRunner);

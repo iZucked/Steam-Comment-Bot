@@ -316,7 +316,7 @@ public class HeadlessApplication implements IApplication {
 
 					System.err.println("Starting run...");
 
-					runner.run();
+					runner.runAndApplyBest();
 
 					final long runTime = System.currentTimeMillis() - startTime;
 					final Schedule finalSchedule = runner.getSchedule();
