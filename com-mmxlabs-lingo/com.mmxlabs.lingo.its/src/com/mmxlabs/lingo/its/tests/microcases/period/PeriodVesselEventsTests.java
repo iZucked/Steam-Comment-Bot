@@ -137,7 +137,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			Assert.assertFalse(period_event.getAllowedVessels().isEmpty());
 			Assert.assertEquals(charter_1.getAllowedVessels().size(), period_event.getAllowedVessels().size());
 
-			scenarioRunner.run();
+			scenarioRunner.runAndApplyBest();
 			Assert.assertSame(vesselAvailability_2, charter_1.getVesselAssignmentType());
 		} finally {
 			executorService.shutdownNow();
@@ -232,7 +232,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, period_event.getAllowedVessels().size());
 			Assert.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));
 
-			scenarioRunner.run();
+			scenarioRunner.runAndApplyBest();
 			Assert.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());
 
 		} finally {

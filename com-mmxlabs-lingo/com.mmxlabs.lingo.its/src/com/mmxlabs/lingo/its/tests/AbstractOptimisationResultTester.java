@@ -172,7 +172,7 @@ public class AbstractOptimisationResultTester {
 			}
 		}
 
-		final IMultiStateResult result = scenarioRunner.run();
+		final IMultiStateResult result = scenarioRunner.runAndApplyBest();
 
 		if (doPropertiesChecks) {
 			boolean checkSolutions = true;

@@ -57,12 +57,12 @@ public abstract class AbstractMicroTestCase {
 	protected PortModelBuilder portModelBuilder;
 	protected PortModelFinder portFinder;
 	protected CargoModelBuilder cargoModelBuilder;
+	protected CostModelBuilder costModelBuilder;
 	protected CommercialModelBuilder commercialModelBuilder;
 	protected FleetModelBuilder fleetModelBuilder;
 	protected SpotMarketsModelBuilder spotMarketsModelBuilder;
 	protected SpotMarketsModelFinder spotMarketsModelFinder;
 	protected PricingModelBuilder pricingModelBuilder;
-	protected CostModelBuilder costModelBuilder;
 	
 	protected DistanceModelBuilder distanceModelBuilder;
 
@@ -211,7 +211,7 @@ public abstract class AbstractMicroTestCase {
 			scenarioRunner.evaluateInitialState();
 
 			if (optimise) {
-				scenarioRunner.run();
+				scenarioRunner.runAndApplyBest();
 			}
 
 			checker.accept(scenarioRunner);

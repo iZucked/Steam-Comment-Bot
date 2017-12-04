@@ -74,7 +74,7 @@ public class ReportTesterHelper {
 	public static final String KPI_REPORT_ID = KPIReportView.ID;
 	public static final String KPI_REPORT_SHORTNAME = "KPIReport";
 
-	public static final String CHANGESET_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetView";
+	public static final String CHANGESET_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";
 	public static final String CHANGESET_REPORT_SHORTNAME = "ChangeSetReport";
 
 	public static final String ACTIONPLAN_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ActionSetView";

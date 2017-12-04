@@ -113,10 +113,8 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final IMultiStateResult result = scenarioRunner.run();
+			final IMultiStateResult result = scenarioRunner.runAndApplyBest();
 			Assert.assertNotNull(result);
-
-			scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
 
 			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
 			Assert.assertEquals(2, lngScenarioModel.getCargoModel().getLoadSlots().size());
@@ -194,10 +192,8 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final IMultiStateResult result = scenarioRunner.run();
+			final IMultiStateResult result = scenarioRunner.runAndApplyBest();
 			Assert.assertNotNull(result);
-
-			scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
 
 			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
 			Assert.assertEquals(2, lngScenarioModel.getCargoModel().getLoadSlots().size());
@@ -258,10 +254,8 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final IMultiStateResult result = scenarioRunner.run();
+			final IMultiStateResult result = scenarioRunner.runAndApplyBest();
 			Assert.assertNotNull(result);
-
-			scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
 
 			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
 			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getLoadSlots().size());
@@ -310,7 +304,7 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final IMultiStateResult result = scenarioRunner.run();
+			final IMultiStateResult result = scenarioRunner.runAndApplyBest();
 			Assert.assertNotNull(result);
 
 			scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
