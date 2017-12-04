@@ -348,7 +348,9 @@ public class PeriodOptimiserTest {
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1.lingo");
 				}
-				runner.run();
+				
+				runner.runAndApplyBest();
+				
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario2.lingo");
 				}
@@ -389,7 +391,7 @@ public class PeriodOptimiserTest {
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1p.lingo");
 				}
-				runner.run();
+				runner.runAndApplyBest();
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario2p.lingo");
 				}

@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Module;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -57,7 +58,7 @@ public class LNGScenarioRunner {
 	@Nullable
 	private final ScenarioInstance scenarioInstance;
 
-	private @NonNull ExecutorService executorService;
+	private @NonNull final ExecutorService executorService;
 
 	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimisationPlan optimisationPlan,
 			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
@@ -98,8 +99,8 @@ public class LNGScenarioRunner {
 		// chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
 		// executorService,
 		// LNGTransformerHelper.HINT_OPTIMISE_LSO);
-		chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimisationPlan, executorService,
-				initialHints);
+		chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge,
+				optimisationPlan, executorService, initialHints);
 		// }
 	}
 
@@ -123,7 +124,7 @@ public class LNGScenarioRunner {
 
 		final ISequences startRawSequences = result.getBestSolution().getFirst();
 		final Map<String, Object> extraAnnotations = result.getBestSolution().getSecond();
-		Schedule[] v = new Schedule[1];
+		final Schedule[] v = new Schedule[1];
 		RunnerHelper.syncExecDisplayOptional(() -> {
 			v[0] = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
 		});
@@ -132,8 +133,12 @@ public class LNGScenarioRunner {
 		return schedule;
 	}
 
-	public IMultiStateResult run() {
-		return runWithProgress(new NullProgressMonitor());
+	public IMultiStateResult runAndApplyBest() {
+		final IMultiStateResult result = runWithProgress(new NullProgressMonitor());
+		final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
+		getScenarioToOptimiserBridge().overwrite(100, bestSolution.getFirst(), bestSolution.getSecond());
+
+		return result;
 	}
 
 	/**
