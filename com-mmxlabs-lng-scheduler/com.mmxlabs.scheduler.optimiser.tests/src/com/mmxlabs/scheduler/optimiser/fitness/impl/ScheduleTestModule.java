@@ -135,6 +135,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
 		bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
 
 		bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
 
