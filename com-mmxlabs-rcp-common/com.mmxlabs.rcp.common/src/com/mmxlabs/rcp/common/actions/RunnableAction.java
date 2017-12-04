@@ -15,6 +15,11 @@ public final class RunnableAction extends Action {
 		this.runnable = runnable;
 	}
 
+	public RunnableAction(final String label, int style, final Runnable runnable) {
+		super(label, style);
+		this.runnable = runnable;
+	}
+
 	@Override
 	public void run() {
 		runnable.run();

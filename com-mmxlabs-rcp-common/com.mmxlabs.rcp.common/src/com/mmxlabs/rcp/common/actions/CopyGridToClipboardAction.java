@@ -33,8 +33,17 @@ public class CopyGridToClipboardAction extends Action {
 
 	private boolean rowHeadersIncluded = false;
 
+	private Runnable preOperation;
+	private Runnable postOperation;
+
 	public CopyGridToClipboardAction(final Grid table) {
+		this(table, null, null);
+	}
+
+	public CopyGridToClipboardAction(final Grid table, Runnable preOperation, Runnable postOperation) {
 		this(table, '\t');
+		this.preOperation = preOperation;
+		this.postOperation = postOperation;
 	}
 
 	public CopyGridToClipboardAction(final Grid table, final char separator) {
@@ -52,19 +61,27 @@ public class CopyGridToClipboardAction extends Action {
 
 	@Override
 	public void run() {
-
-		final StringWriter sw = parseGridIntoStringWriter();
-
-		// Create a new clipboard instance
-		final Display display = Display.getDefault();
-		final Clipboard cb = new Clipboard(display);
+		if (preOperation != null) {
+			preOperation.run();
+		}
 		try {
-			// Create the text transfer and set the contents
-			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+			final StringWriter sw = parseGridIntoStringWriter();
+
+			// Create a new clipboard instance
+			final Display display = Display.getDefault();
+			final Clipboard cb = new Clipboard(display);
+			try {
+				// Create the text transfer and set the contents
+				final TextTransfer textTransfer = TextTransfer.getInstance();
+				cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+			} finally {
+				// Clean up our local resources - system clipboard now has the data
+				cb.dispose();
+			}
 		} finally {
-			// Clean up our local resources - system clipboard now has the data
-			cb.dispose();
+			if (postOperation != null) {
+				postOperation.run();
+			}
 		}
 	}
 
@@ -86,25 +103,30 @@ public class CopyGridToClipboardAction extends Action {
 			}
 			// other header cells
 			for (int i = 0; i < numColumns; ++i) {
+				//
+				// Object obj = tc.getData();
+				// if (obj instanceof CargoEconsReportRow) {
+				// CargoEconsReportRow row = (CargoEconsReportRow) obj;
+				// String unit = row.unit;
+				// }
 				final GridColumn tc = table.getColumn(i);
 				cw.addValue(tc.getText());
 				if ((i + 1) == numColumns) {
 					cw.endRow();
-				} 
+				}
 			}
-	
+
 			for (final GridItem item : table.getItems()) {
 				// Ensure at least 1 column to grab data
 				processTableItem(cw, Math.max(1, numColumns), item);
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
 
 		return sw;
 	}
-	
+
 	private void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
 		if (rowHeadersIncluded) {
 			cw.addValue(item.getHeaderText());

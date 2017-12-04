@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.dnd.Clipboard;
@@ -22,10 +23,18 @@ import com.mmxlabs.rcp.common.internal.Activator;
 public class CopyGridToHtmlClipboardAction extends Action {
 
 	private CopyGridToHtmlStringUtil util;
+	private Runnable preOperation;
+	private Runnable postOperation;
 
 	public CopyGridToHtmlClipboardAction(final Grid table, final boolean includeRowHeaders) {
+		this(table, includeRowHeaders, null, null);
+	}
+
+	public CopyGridToHtmlClipboardAction(final Grid table, final boolean includeRowHeaders, final @Nullable Runnable preOperation, final @Nullable Runnable postOperation) {
 
 		super("Copy");
+		this.preOperation = preOperation;
+		this.postOperation = postOperation;
 
 		util = new CopyGridToHtmlStringUtil(table, includeRowHeaders, false);
 
@@ -41,19 +50,27 @@ public class CopyGridToHtmlClipboardAction extends Action {
 
 	@Override
 	public void run() {
-
-		String contents = util.convert();
-
-		// Create a new clipboard instance
-		final Display display = Display.getDefault();
-		final Clipboard cb = new Clipboard(display);
+		if (preOperation != null) {
+			preOperation.run();
+		}
 		try {
-			// Create the text transfer and set the contents
-			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { contents }, new Transfer[] { textTransfer });
+			String contents =  "<meta charset=\"UTF-8\"/>"  + util.convert();
+
+			// Create a new clipboard instance
+			final Display display = Display.getDefault();
+			final Clipboard cb = new Clipboard(display);
+			try {
+				// Create the text transfer and set the contents
+				final TextTransfer textTransfer = TextTransfer.getInstance();
+				cb.setContents(new Object[] { contents }, new Transfer[] { textTransfer });
+			} finally {
+				// Clean up our local resources - system clipboard now has the data
+				cb.dispose();
+			}
 		} finally {
-			// Clean up our local resources - system clipboard now has the data
-			cb.dispose();
+			if (postOperation != null) {
+				postOperation.run();
+			}
 		}
 	}
 

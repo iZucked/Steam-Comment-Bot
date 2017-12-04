@@ -37,7 +37,7 @@ public class CopyToHtmlClipboardHandler {
 	 * 
 	 * @return
 	 */
-	public static MHandledToolItem createPackAction() {
+	public static MHandledToolItem createAction() {
 
 		final MCommand command = MCommandsFactory.INSTANCE.createCommand();
 		command.setCommandName("Copy data to clipboard");

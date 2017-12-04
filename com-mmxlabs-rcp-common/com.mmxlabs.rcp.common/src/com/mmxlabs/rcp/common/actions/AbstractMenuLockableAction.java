@@ -17,10 +17,10 @@ import org.eclipse.swt.widgets.Menu;
  * @author hinton
  * 
  */
-public abstract class AbstractMenuAction extends Action implements IMenuCreator {
+public abstract class AbstractMenuLockableAction extends LockableAction implements IMenuCreator {
 	private Menu lastMenu;
 
-	protected AbstractMenuAction(final String label) {
+	protected AbstractMenuLockableAction(final String label) {
 		super(label, IAction.AS_DROP_DOWN_MENU);
 	}
 
@@ -49,10 +49,9 @@ public abstract class AbstractMenuAction extends Action implements IMenuCreator 
 		return lastMenu;
 	}
 
-	protected ActionContributionItem addActionToMenu(final Action a, final Menu m) {
+	protected void addActionToMenu(final Action a, final Menu m) {
 		final ActionContributionItem aci = new ActionContributionItem(a);
 		aci.fill(m, -1);
-		return aci;
 	}
 
 	/**

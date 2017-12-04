@@ -32,8 +32,18 @@ public class CopyTreeToClipboardAction extends Action {
 
 	private final char separator;
 
+	private Runnable preOperation;
+
+	private Runnable postOperation;
+
 	public CopyTreeToClipboardAction(final Tree tree) {
 		this(tree, '\t');
+	}
+
+	public CopyTreeToClipboardAction(final Tree tree, Runnable preOperation, Runnable postOperation) {
+		this(tree, '\t');
+		this.preOperation = preOperation;
+		this.postOperation = postOperation;
 	}
 
 	public CopyTreeToClipboardAction(final Tree tree, final char separator) {
@@ -51,23 +61,30 @@ public class CopyTreeToClipboardAction extends Action {
 
 	@Override
 	public void run() {
-
-		final StringWriter sw = parseTreeIntoStringWriter();
-		
-		// Create a new clipboard instance
-		final Display display = Display.getDefault();
-		final Clipboard cb = new Clipboard(display);
+		if (preOperation != null) {
+			preOperation.run();
+		}
 		try {
-			// Create the text transfer and set the contents
-			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+			final StringWriter sw = parseTreeIntoStringWriter();
+
+			// Create a new clipboard instance
+			final Display display = Display.getDefault();
+			final Clipboard cb = new Clipboard(display);
+			try {
+				// Create the text transfer and set the contents
+				final TextTransfer textTransfer = TextTransfer.getInstance();
+				cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+			} finally {
+				// Clean up our local resources - system clipboard now has the data
+				cb.dispose();
+			}
 		} finally {
-			// Clean up our local resources - system clipboard now has the data
-			cb.dispose();
+			if (postOperation != null) {
+				postOperation.run();
+			}
 		}
 	}
 
-	
 	public StringWriter parseTreeIntoStringWriter() {
 
 		final StringWriter sw = new StringWriter();
@@ -84,29 +101,28 @@ public class CopyTreeToClipboardAction extends Action {
 				cw.addValue(tc.getText());
 				if ((i + 1) == numColumns) {
 					cw.endRow();
-				} 
+				}
 			}
-	
+
 			for (final TreeItem item : tree.getItems()) {
 				// Ensure at least 1 column to grab data
 				processTreeItem(cw, Math.max(1, numColumns), item);
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
-		
+
 		return sw;
-		
+
 	}
-	
+
 	/**
 	 * Recursive function to process child {@link TreeItem}s
 	 * 
 	 * @param cw
 	 * @param numColumns
 	 * @param item
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private void processTreeItem(final CSVWriter cw, final int numColumns, final TreeItem item) throws IOException {
 
@@ -116,7 +132,7 @@ public class CopyTreeToClipboardAction extends Action {
 			// Add EOL or separator char as appropriate
 			if ((i + 1) == numColumns) {
 				cw.endRow();
-			} 
+			}
 		}
 
 		// Recurse.....

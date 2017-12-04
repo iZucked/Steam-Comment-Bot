@@ -27,7 +27,11 @@ public final class CopyToClipboardActionFactory {
 	}
 
 	public static CopyGridToHtmlClipboardAction createCopyToHtmlClipboardAction(final GridTableViewer viewer, boolean includeRowHeaders) {
-		return new CopyGridToHtmlClipboardAction(viewer.getGrid(), includeRowHeaders);
+		return new CopyGridToHtmlClipboardAction(viewer.getGrid(), includeRowHeaders, null, null);
+	}
+
+	public static CopyGridToHtmlClipboardAction createCopyToHtmlClipboardAction(final GridTreeViewer viewer, boolean includeRowHeaders) {
+		return new CopyGridToHtmlClipboardAction(viewer.getGrid(), includeRowHeaders, null, null);
 	}
 
 	public static CopyGridToClipboardAction createCopyToClipboardAction(final Grid grid) {
@@ -56,6 +60,42 @@ public final class CopyToClipboardActionFactory {
 
 	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTableViewer viewer) {
 		return new CopyGridToClipboardAction(viewer.getGrid());
+	}
+
+	public static CopyGridToHtmlClipboardAction createCopyToHtmlClipboardAction(final GridTreeViewer viewer, boolean includeRowHeaders, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToHtmlClipboardAction(viewer.getGrid(), includeRowHeaders, preOperation, postOperation);
+	}
+
+	public static CopyGridToHtmlClipboardAction createCopyToHtmlClipboardAction(final GridTableViewer viewer, boolean includeRowHeaders, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToHtmlClipboardAction(viewer.getGrid(), includeRowHeaders, preOperation, postOperation);
+	}
+
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final Grid grid, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToClipboardAction(grid, preOperation, postOperation);
+	}
+
+	public static CopyTreeToClipboardAction createCopyToClipboardAction(final TreeViewer viewer, Runnable preOperation, Runnable postOperation) {
+		return new CopyTreeToClipboardAction(viewer.getTree(), preOperation, postOperation);
+	}
+
+	public static CopyTreeToClipboardAction createCopyToClipboardAction(final Tree tree, Runnable preOperation, Runnable postOperation) {
+		return new CopyTreeToClipboardAction(tree, preOperation, postOperation);
+	}
+
+	public static CopyTableToClipboardAction createCopyToClipboardAction(final TableViewer viewer, Runnable preOperation, Runnable postOperation) {
+		return new CopyTableToClipboardAction(viewer.getTable(), preOperation, postOperation);
+	}
+
+	public static CopyTableToClipboardAction createCopyToClipboardAction(final Table table, Runnable preOperation, Runnable postOperation) {
+		return new CopyTableToClipboardAction(table, preOperation, postOperation);
+	}
+
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTreeViewer viewer, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToClipboardAction(viewer.getGrid(), preOperation, postOperation);
+	}
+
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTableViewer viewer, Runnable preOperation, Runnable postOperation) {
+		return new CopyGridToClipboardAction(viewer.getGrid(), preOperation, postOperation);
 	}
 
 	public static String generateCSV(Object obj) {

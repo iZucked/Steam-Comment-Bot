@@ -116,4 +116,94 @@ public class E4ModelHelper {
 			}
 		}
 	}
+
+	public static void removeViewParts(@NonNull final String viewIdPrefix, boolean includePlaceholders, @NonNull final MApplication application, @NonNull final EModelService modelService) {
+
+		final List<MWindow> windows = modelService.findElements(application, null, MWindow.class, null);
+
+		for (final MWindow window : windows) {
+			final List<MUIElement> elementsToRemove = new LinkedList<>();
+			for (final MUIElement element : window.getSharedElements()) {
+				if (element.getElementId().startsWith(viewIdPrefix)) {
+					elementsToRemove.add(element);
+				}
+			}
+			if (includePlaceholders) {
+				for (final MUIElement element : elementsToRemove) {
+					MPlaceholder placeholder = modelService.findPlaceholderFor(window, element);
+					while (placeholder != null) {
+						final MElementContainer<MUIElement> parent = placeholder.getParent();
+						parent.getChildren().remove(placeholder);
+						if (parent.getSelectedElement() == placeholder) {
+							parent.setSelectedElement(null);
+						}
+
+						placeholder = modelService.findPlaceholderFor(window, element);
+					}
+					// See http://www.eclipse.org/forums/index.php/t/757211/
+
+					// API not yet defined
+					// modelService.delete(element);
+
+					// Tom Shindl's suggestion -- not available in injection / eclipse context at this point in time
+					// presentationEngine.removeGui(element);
+
+					// Another suggestion
+					// Probably not needed
+					element.setToBeRendered(false);
+					// Possible covered in the removeGui call
+					window.getSharedElements().remove(element);
+				}
+			}
+		}
+
+		// Remove part descriptor
+		final Iterator<MPartDescriptor> descriptorItr = application.getDescriptors().iterator();
+		while (descriptorItr.hasNext()) {
+			final MPartDescriptor descriptor = descriptorItr.next();
+			if (descriptor.getElementId().startsWith(viewIdPrefix)) {
+				descriptorItr.remove();
+			}
+		}
+		final List<MPart> parts = modelService.findElements(application, null, MPart.class, null);
+		for (final MPart part : parts) {
+			if (!part.getElementId().startsWith(viewIdPrefix)) {
+				continue;
+			}
+			part.setToBeRendered(false);
+			final MElementContainer<MUIElement> parent = part.getParent();
+			if (parent != null) {
+				parent.getChildren().remove(part);
+				if (parent.getSelectedElement() == part) {
+					boolean foundElement = false;
+					for (MUIElement element : parent.getChildren()) {
+						if (element.isVisible()) {
+							parent.setSelectedElement(element);
+							foundElement = true;
+							break;
+						}
+					}
+					if (!foundElement) {
+						// Parent is empty.
+						// Might be better to remove the parent too, this could get recursive however.
+						parent.setToBeRendered(false);
+						parent.setSelectedElement(null);
+					}
+				}
+			}
+		}
+
+		// Remove perspective tags
+		final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
+		final String viewTag = "persp.viewSC:" + viewIdPrefix;
+		for (final MPerspective p : perspectives) {
+			final Iterator<String> tagItr = p.getTags().iterator();
+			while (tagItr.hasNext()) {
+				final String tag = tagItr.next();
+				if (tag.startsWith(viewIdPrefix)) {
+					tagItr.remove();
+				}
+			}
+		}
+	}
 }

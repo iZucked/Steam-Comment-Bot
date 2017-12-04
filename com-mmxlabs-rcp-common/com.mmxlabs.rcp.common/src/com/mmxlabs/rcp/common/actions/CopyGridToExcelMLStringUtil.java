@@ -7,7 +7,7 @@ package com.mmxlabs.rcp.common.actions;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -58,16 +58,18 @@ public class CopyGridToExcelMLStringUtil {
 		int border;
 		RGB foreground;
 		private RGB background;
+		Class<?> type;
 
-		public Style(RGB foreground, RGB background, int border) {
+		public Style(RGB foreground, RGB background, int border, Class<?> type) {
 			this.background = background;
 			this.border = border;
 			this.foreground = foreground;
+			this.type = type;
 		}
 
 		@Override
 		public int hashCode() {
-			return (border * 31 + foreground.hashCode()) * 31 + background.hashCode();
+			return ((border * 31 + foreground.hashCode()) * 31 + background.hashCode()) * 31 + type.hashCode();
 		}
 
 		@Override
@@ -78,7 +80,7 @@ public class CopyGridToExcelMLStringUtil {
 			if (obj instanceof Style) {
 				Style other = (Style) obj;
 
-				return border == other.border && foreground.equals(other.foreground) && background.equals(other.background);
+				return type == other.type && border == other.border && foreground.equals(other.foreground) && background.equals(other.background);
 
 			}
 			return false;
@@ -89,8 +91,8 @@ public class CopyGridToExcelMLStringUtil {
 		private AtomicInteger nextIndex = new AtomicInteger(1);
 		private Map<Style, String> stlyeCache = new LinkedHashMap<>();
 
-		public String getStyleID(RGB foreground, RGB background, int border) {
-			return stlyeCache.computeIfAbsent(new Style(foreground, background, border), (style) -> {
+		public String getStyleID(RGB foreground, RGB background, int border, Class<?> type) {
+			return stlyeCache.computeIfAbsent(new Style(foreground, background, border, type), (style) -> {
 				return String.format("Style%d", nextIndex.getAndIncrement());
 			});
 		}
@@ -127,9 +129,22 @@ public class CopyGridToExcelMLStringUtil {
 
 					border = String.format("<Borders>%s</Borders>", Joiner.on("").join(borderElements));
 				}
-				sw.append(String.format(
-						"<Style  ss:ID=\"%s\"><Interior  ss:Pattern=\"Solid\" ss:Color=\"#%02X%02X%02X\"></Interior><NumberFormat   ss:Format=\"yy\\-mmm\\-dd\" /><Font ss:Color=\"#%02X%02X%02X\"></Font>%s</Style>",
-						e.getValue(), b.red, b.green, b.blue, f.red, f.green, f.blue, border));
+				if (e.getKey().type == ZonedDateTime.class) {
+					if (showBackgroundColours) {
+						sw.append(String.format(
+								"<Style  ss:ID=\"%s\"><Interior  ss:Pattern=\"Solid\" ss:Color=\"#%02X%02X%02X\"></Interior><NumberFormat   ss:Format=\"yy\\-mmm\\-dd\" /><Font ss:Color=\"#%02X%02X%02X\"></Font>%s</Style>",
+								e.getValue(), b.red, b.green, b.blue, f.red, f.green, f.blue, border));
+					} else {
+						sw.append(String.format("<Style  ss:ID=\"%s\"> <NumberFormat   ss:Format=\"yy\\-mmm\\-dd\" /> %s</Style>", e.getValue(), border));
+					}
+				} else {
+					if (showBackgroundColours) {
+						sw.append(String.format("<Style  ss:ID=\"%s\"><Interior  ss:Pattern=\"Solid\" ss:Color=\"#%02X%02X%02X\"></Interior> <Font ss:Color=\"#%02X%02X%02X\"></Font>%s</Style>",
+								e.getValue(), b.red, b.green, b.blue, f.red, f.green, f.blue, border));
+					} else {
+						sw.append(String.format("<Style  ss:ID=\"%s\">%s</Style>", e.getValue(), border));
+					}
+				}
 			}
 
 			sw.append("</Styles>");
@@ -159,13 +174,14 @@ public class CopyGridToExcelMLStringUtil {
 			// sw.append(" <Names>");
 			// sw.append(" <NamedRange ss:Name=\"Print_Titles\" ss:Hidden=\"0\" ss:RefersTo=\"=Schedule!R1:R1,Schedule!R2:R2\"/>");
 			// sw.append(" </Names>");
-
-			// TODO: Get from input / date?
-			sw.append(" <Worksheet ss:Name=\"Schedule\">");
-			// =Sheet1!$1:$1,Sheet1!$2:$2
-			sw.append(" <Names>");
-			sw.append(" <NamedRange ss:Name=\"Print_Titles\" ss:Hidden=\"0\"  ss:RefersTo=\"=Schedule!R1:R1,Schedule!R2:R2\"/>");
-			sw.append(" </Names>");
+			// sw.append(" <Worksheet >");
+			// below code possibly causes copy/paste errors - probably because Schedule does not exist in copy/paste
+			// // TODO: Get from input / date?
+			sw.append(" <Worksheet ss:Name=\"Sheet\">");
+			// // // =Sheet1!$1:$1,Sheet1!$2:$2
+			// sw.append(" <Names>");
+			// sw.append(" <NamedRange ss:Name=\"Print_Titles\" ss:Hidden=\"0\" ss:RefersTo=\"=Schedule!R1:R1,Schedule!R2:R2\"/>");
+			// sw.append(" </Names>");
 
 			StyleManager styleManger = new StyleManager();
 
@@ -173,13 +189,13 @@ public class CopyGridToExcelMLStringUtil {
 			// implicit column will be created in such cases
 			final int numColumns = table.getColumnCount();
 			sw.write(String.format("<Table ss:ExpandedColumnCount=\"%d\" ss:ExpandedRowCount=\"%d\" x:FullColumns=\"1\" x:FullRows=\"1\" ss:DefaultRowHeight=\"13.2\" >\n", numColumns,
-					table.getRootItems().length + 2));
+					table.getRootItems().length + 2)); //  +2 for double headers
 
 			try {
 				// addPreTableRows(sw);
 				addHeader(sw);
 				// Ensure at least 1 column to grab data
-				final int numberOfColumns = Math.max(5, numColumns);
+				final int numberOfColumns = Math.max(1, numColumns);
 				final int[] rowOffsets = new int[numberOfColumns];
 
 				for (final GridItem item : table.getItems()) {
@@ -253,16 +269,14 @@ public class CopyGridToExcelMLStringUtil {
 			String typeString = " ss:Type=\"String\"";
 			if (columnGroup == null) {
 				// No group? Then cell bottom row cell should fill both header rows
-				addCell(topRow, "<NamedCell ss:Name=\"Print_Titles\"/>", column.getText(), table.getColumnGroupCount() > 0 ? 1 : 0, 0,
-						combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
-				// //
-				addCell(singleRow, "<NamedCell ss:Name=\"Print_Titles\"/>", column.getText(), 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1,
+				addCell(topRow, "", column.getText(), table.getColumnGroupCount() > 0 ? 1 : 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1,
 						colourString);
+				// //
+				addCell(singleRow, "", column.getText(), 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
 
 			} else {
 				// Add in the bottom row info.
-				addCell(bottomRow, "<NamedCell ss:Name=\"Print_Titles\"/>", column.getText(), 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1,
-						colourString);
+				addCell(bottomRow, "", column.getText(), 0, 0, combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
 				// Part of column group. Only add group if we have not previously seen it.
 				if (seenGroups.add(columnGroup)) {
 					int groupCount = 0;
@@ -271,7 +285,7 @@ public class CopyGridToExcelMLStringUtil {
 							groupCount++;
 						}
 					}
-					addCell(topRow, "<NamedCell ss:Name=\"Print_Titles\"/>", columnGroup.getText(), 0, groupCount - 1,
+					addCell(topRow, "", columnGroup.getText(), 0, groupCount - 1,
 							combineAttributes(new String[] { typeString }, getAdditionalHeaderAttributes(column)), idx + 1, colourString);
 					// idx += groupCount;
 				}
@@ -360,29 +374,37 @@ public class CopyGridToExcelMLStringUtil {
 				}
 				// String colourString = "";
 				String extra = "";
+
+				String typeString = String.format(" ss:Type=\"String\" ");
+				String text = item.getText(colIdx);
+				Object v = getTypedValue(item, colIdx);
+				Class<?> type = String.class;
+				if (v != null) {
+					if (v instanceof LocalDate) {
+						typeString = String.format(" ss:Type=\"DateTime\" ");
+						LocalDate dt = (LocalDate) v;
+						// text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
+						text = String.format("%4d-%02d-%02dT00:00:00.000", dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth());
+						type = ZonedDateTime.class;
+					} else if (v instanceof Number) {
+						typeString = String.format(" ss:Type=\"Number\" ");
+						// text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
+						text = v.toString();
+						type = Number.class;
+					}
+				}
+
 				// if (showBackgroundColours) {
 				{
 					// if (c == null) {
 					// colourString = "bgcolor='white'";
 					// } else {
 					// colourString = String.format(" <Font x:Color=\"FF0000\"> ", c.getRed(), c.getGreen(), c.getBlue());
-					extra = String.format(" ss:StyleID=\"%s\" ", styleManager.getStyleID(f, b, getBorders(item, colIdx)));
+					extra = String.format(" ss:StyleID=\"%s\" ", styleManager.getStyleID(f, b, getBorders(item, colIdx), type));
 					// }
 					// colourString = "";
 				}
 
-				String typeString = String.format(" ss:Type=\"String\" ");
-				String text = item.getText(colIdx);
-				Object v = getTypedValue(item, colIdx);
-				if (v != null) {
-					if (v instanceof LocalDate) {
-						typeString = String.format(" ss:Type=\"DateTime\" ");
-						LocalDate dt = (LocalDate) v;
-//						text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
-						text = String.format("%4d-%02d-%02dT00:00:00.000", dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth());
-
-					}
-				}
 				addCell(sw, text, item.getRowSpan(colIdx), item.getColumnSpan(colIdx), combineAttributes(new String[] { typeString }, getAdditionalAttributes(item, colIdx)), i + 1, extra);
 				// addCell(sw,item.getText(colIdx), 0,0,
 				// new String[] { typeString});
@@ -474,23 +496,22 @@ public class CopyGridToExcelMLStringUtil {
 			sw.write(String.format("<Cell ss:MergeAcross=\"%d\" ss:MergeDown=\"%d\" ss:Index=\"%d\" %s %s>", colSpan, rowSpan, colIdx, style, range));
 		} else {
 			sw.write(String.format("<Cell ss:Index=\"%d\" %s %s>", colIdx, style, range));
-
 		}
 
 		if (!"Cell".equalsIgnoreCase(tag)) {
 			sw.write(" " + tag + " ");
 		}
 
-//		sw.write("<Data ss:Type=\"String\">");
-		 if (attributes == null) {
-		 sw.write("<Data ss:Type=\"String\">");
-		 } else {
-		 sw.write("<Data");
-		 for (final String attribute : attributes) {
-		 sw.write(" " + attribute);
-		 }
-		 sw.write(">");
-		 }
+		// sw.write("<Data ss:Type=\"String\">");
+		if (attributes == null) {
+			sw.write("<Data ss:Type=\"String\">");
+		} else {
+			sw.write("<Data");
+			for (final String attribute : attributes) {
+				sw.write(" " + attribute);
+			}
+			sw.write(">");
+		}
 
 		// if (extra != null) {
 		// }
