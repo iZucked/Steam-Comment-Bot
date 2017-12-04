@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -56,10 +58,13 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 						if (obj instanceof ScenarioInstance) {
 
 							final ScenarioInstance instance = (ScenarioInstance) obj;
+							Set<String> existingNames = new HashSet<>();
+							instance.getFragments().forEach(f -> existingNames.add(f.getName()));
+							instance.getElements().forEach(f -> existingNames.add(f.getName()));
 							try {
 								ScenarioInstance fork = ScenarioServiceModelUtils.createAndOpenFork(instance, true);
 								if (fork != null) {
-									OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, /* prompt if optimising */optimising, optimising, !optimising);
+									OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, /* prompt if optimising */optimising, optimising, !optimising, "Optimisation", existingNames);
 								}
 							} catch (final Exception e) {
 								exceptions[0] = e;

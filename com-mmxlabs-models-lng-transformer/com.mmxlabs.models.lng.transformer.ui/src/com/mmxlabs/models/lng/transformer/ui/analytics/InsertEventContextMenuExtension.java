@@ -4,13 +4,12 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -23,7 +22,6 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Joiner;
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
@@ -31,10 +29,10 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.events.IVesselEventsTableContextMenuExtension;
-import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -46,7 +44,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 public class InsertEventContextMenuExtension implements IVesselEventsTableContextMenuExtension {
 
@@ -125,7 +122,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertEventAction(final IScenarioEditingLocation scenarioEditingLocation, final List<VesselEvent> targetVesselEvents) {
-			super(generateActionName(targetVesselEvents) + " (Beta)");
+			super(AnalyticsSolutionHelper.generateInsertionName(targetVesselEvents) + " (Beta)");
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.originalTargetEvents = targetVesselEvents;
 		}
@@ -137,6 +134,8 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
 			UserSettings userSettings = null;
+
+			final String taskName = "Insert " + AnalyticsSolutionHelper.generateInsertionName(originalTargetEvents);
 			{
 
 				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertEventContextMenuExtension:1")) {
@@ -145,8 +144,10 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 					if (object instanceof LNGScenarioModel) {
 						final LNGScenarioModel root = (LNGScenarioModel) object;
-
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
+						Set<String> existingNames = new HashSet<>();
+						original.getFragments().forEach(f -> existingNames.add(f.getName()));
+						original.getElements().forEach(f -> existingNames.add(f.getName()));
+						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, taskName, existingNames);
 					}
 				}
 			}
@@ -160,85 +161,26 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 			final UserSettings pUserSettings = userSettings;
 
-			final ScenarioInstance duplicate;
-			try {
-				duplicate = ScenarioServiceUtils.copyScenario(originalModelRecord, original, generateActionName(originalTargetEvents));
-			} catch (final Exception e) {
-				throw new RuntimeException(e);
-			}
-			assert duplicate != null;
-			final String taskName = "Insert " + generateActionName(originalTargetEvents);
-
-			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
-
 			final List<VesselEvent> targetEvents = new LinkedList<>();
 
-			// Map between original and fork
-			final BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
-				// Map between original and fork
-				final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
-				for (final VesselEvent originalEvent : originalTargetEvents) {
-					targetEvents.add(finder.findVesselEvent(originalEvent.getName()));
-				}
-				return true;
-			};
-
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSlotInsertionJobDescriptor(generateName(targetEvents), duplicate, pUserSettings, Collections.emptyList(), targetEvents);
+				return new LNGSlotInsertionJobDescriptor(taskName, original, pUserSettings, Collections.emptyList(), targetEvents);
 			};
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
 				if (newState == EJobState.COMPLETED) {
-					try {
-						sdp.getModelReference().save();
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
-
 					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 					if (plan != null) {
 
-						duplicate.setReadonly(true);
-
 						final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-						final AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
+						final AnalyticsSolution data = new AnalyticsSolution(original, plan, taskName);
 						data.setCreateInsertionOptions(true);
 						eventBroker.post(ChangeSetViewCreatorService_Topic, data);
 					}
 				}
 			};
 
-			jobRunner.run(taskName, duplicate, modelRecord, prepareCallback, createJobDescriptorCallback, jobCompletedCallback);
+			jobRunner.run(taskName, original, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
 		}
-	}
-
-	private static String generateName(final SlotInsertionOptions plan) {
-
-		final List<String> names = new LinkedList<String>();
-		for (final VesselEvent s : plan.getEventsInserted()) {
-			names.add(s.getName());
-		}
-
-		return "Inserting: " + Joiner.on(", ").join(names);
-	}
-
-	private static String generateName(final Collection<VesselEvent> events) {
-
-		final List<String> names = new LinkedList<String>();
-		for (final VesselEvent s : events) {
-			names.add(s.getName());
-		}
-
-		return "Inserting: " + Joiner.on(", ").join(names);
-	}
-
-	private static String generateActionName(final Collection<VesselEvent> events) {
-
-		final List<String> names = new LinkedList<String>();
-		for (final VesselEvent s : events) {
-			names.add(s.getName());
-		}
-
-		return "Insert " + Joiner.on(", ").join(names);
 	}
 }

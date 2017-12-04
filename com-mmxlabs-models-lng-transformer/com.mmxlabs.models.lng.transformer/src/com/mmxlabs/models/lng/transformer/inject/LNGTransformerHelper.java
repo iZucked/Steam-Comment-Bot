@@ -114,6 +114,21 @@ public class LNGTransformerHelper {
 	}
 
 	@NonNull
+	public static Collection<@NonNull Module> getModulesWithOverrides(@NonNull final List<@NonNull Module> mainModules, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
+			final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+		final List<@NonNull Module> overrides = new LinkedList<>();
+		collectModuleOverrides(moduleType, services, overrides, hints);
+		final LinkedList<@NonNull Module> modules = new LinkedList<>();
+		if (overrides.isEmpty()) {
+			modules.addAll(mainModules);
+		} else {
+			modules.add(Modules.override(mainModules).with(overrides));
+		}
+		modules.addAll(collectModules(moduleType, services, hints));
+		return modules;
+	}
+
+	@NonNull
 	public static Collection<@NonNull Module> collectModules(final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
 			@NonNull final Collection<@NonNull String> hints) {
 		final List<@NonNull Module> modules = new LinkedList<>();

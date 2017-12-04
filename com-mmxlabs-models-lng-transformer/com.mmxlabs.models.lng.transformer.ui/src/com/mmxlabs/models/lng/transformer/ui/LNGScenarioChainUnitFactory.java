@@ -6,20 +6,26 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.OptionalLong;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 
 import org.apache.shiro.SecurityUtils;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -28,8 +34,10 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGCleanStateOptimiserTrans
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.ResetInitialSequencesUnit;
+import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGActionSetTransformerUnit;
+import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 
 public class LNGScenarioChainUnitFactory {
 
@@ -43,7 +51,7 @@ public class LNGScenarioChainUnitFactory {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
-	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, ContainerProvider> chainUp(final @NonNull ChainBuilder builder, final @NonNull ExecutorService executorService,
+	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, final @NonNull ExecutorService executorService,
 			final @NonNull OptimisationStage template, final int jobCount, final @NonNull UserSettings userSettings) {
 
 		if (template instanceof CleanStateOptimisationStage) {
@@ -58,16 +66,37 @@ public class LNGScenarioChainUnitFactory {
 				LNGCleanStateOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, seeds);
 			}
 			return null;
-		} else if (template instanceof LocalSearchOptimisationStage) {
-			final LocalSearchOptimisationStage stage = (LocalSearchOptimisationStage) template;
-
+		} else if (template instanceof MultipleSolutionSimilarityOptimisationStage) {
+			final MultipleSolutionSimilarityOptimisationStage stage = (MultipleSolutionSimilarityOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
-
 				final int[] seeds = new int[jobCount];
 				for (int i = 0; i < jobCount; ++i) {
 					seeds[i] = stage.getSeed() + i;
 				}
-
+				final boolean doSecondRun = doSecondLSORun(userSettings);
+				if (doSecondRun) {
+					LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
+					LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+				} else {
+					LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+				}
+			}
+			return (bridge, name) -> {
+				SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
+					OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+					options.setName(name);
+					options.setUserSettings(EcoreUtil.copy(userSettings));
+					return options;
+				}, OptionalLong.empty());
+			};
+			
+		} else if (template instanceof LocalSearchOptimisationStage) {
+			final LocalSearchOptimisationStage stage = (LocalSearchOptimisationStage) template;
+			if (stage.getAnnealingSettings().getIterations() > 0) {
+				final int[] seeds = new int[jobCount];
+				for (int i = 0; i < jobCount; ++i) {
+					seeds[i] = stage.getSeed() + i;
+				}
 				final boolean doSecondRun = doSecondLSORun(userSettings);
 				if (doSecondRun) {
 					LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
@@ -75,7 +104,6 @@ public class LNGScenarioChainUnitFactory {
 				} else {
 					LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
 				}
-
 			}
 			return null;
 		} else if (template instanceof BreakEvenOptimisationStage) {
@@ -108,8 +136,13 @@ public class LNGScenarioChainUnitFactory {
 						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
 					}
 				}
-				return (bridge, resultProvider) -> {
-					LNGActionSetTransformerUnit.export(builder, PROGRESS_ACTION_SET_SAVE, bridge, resultProvider);
+				return (bridge, name) -> {
+					SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
+						ActionableSetPlan options = AnalyticsFactory.eINSTANCE.createActionableSetPlan();
+						options.setUserSettings(EcoreUtil.copy(userSettings));
+						options.setName(name);
+						return options;
+					}, OptionalLong.empty());
 				};
 			}
 		} else if (template instanceof ResetInitialSequencesStage) {

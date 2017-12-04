@@ -29,27 +29,19 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
-import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
-import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
@@ -199,29 +191,5 @@ public class LongTermOptimiserUnit {
 
 		} finally {
 		}
-	}
-
-	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
-		return LNGExporterUnit.exportMultiple(chainBuilder, progressTicks, runner, containerProvider, "Saving insertion plans", parent -> {
-
-			final List<Container> elementsToRemove = new LinkedList<>();
-			for (final Container c : parent.getElements()) {
-				if (c.getName().startsWith("InsertionPlan-")) {
-					elementsToRemove.add(c);
-				}
-			}
-			for (final Container c : elementsToRemove) {
-				SSDataManager.Instance.findScenarioService(parent).delete(c);
-			}
-		}, changeSetIdx -> {
-			String newName;
-			if (changeSetIdx == 0) {
-				newName = "InsertionPlan-base";
-				changeSetIdx++;
-			} else {
-				newName = String.format("InsertionPlan-%s", (changeSetIdx++));
-			}
-			return newName;
-		});
 	}
 }

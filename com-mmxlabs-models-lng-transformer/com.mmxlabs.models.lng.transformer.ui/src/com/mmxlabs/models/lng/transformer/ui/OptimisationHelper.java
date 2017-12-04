@@ -14,11 +14,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.apache.shiro.SecurityUtils;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -58,6 +61,7 @@ import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -89,6 +93,15 @@ import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
 public final class OptimisationHelper {
+	public static class NameProvider {
+		public NameProvider(String suggestion, Set<String> existingNames) {
+			this.nameSuggestion = suggestion;
+			this.existingNames = existingNames;
+		}
+
+		String nameSuggestion;
+		Set<String> existingNames;
+	}
 
 	public static final String PARAMETER_MODE_CUSTOM = "Custom";
 
@@ -130,7 +143,12 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_IDLE_DAYS = "swtbot.idledays";
 
 	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
-			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled) {
+			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled, String nameSuggestion, Set<String> existingNames) {
+		return evaluateScenarioInstance(jobManager, instance, parameterMode, promptForOptimiserSettings, optimising, promptOnlyIfOptionsEnabled, new NameProvider(nameSuggestion, existingNames));
+	}
+
+	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
+			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled, NameProvider nameProvider) {
 
 		final IScenarioService service = SSDataManager.Instance.findScenarioService(instance);
 		if (service == null) {
@@ -140,7 +158,7 @@ public final class OptimisationHelper {
 
 		final OptimisationPlan[] planRef = new OptimisationPlan[1];
 		final BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
-			final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled);
+			final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled, nameProvider);
 
 			if (optimisationPlan == null) {
 				return false;
@@ -169,7 +187,8 @@ public final class OptimisationHelper {
 		return null;
 	}
 
-	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
+	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+			NameProvider nameProvider) {
 		UserSettings previousSettings = null;
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
@@ -182,7 +201,7 @@ public final class OptimisationHelper {
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
-			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled);
+			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider);
 		}
 
 		if (previousSettings == null) {
@@ -200,7 +219,7 @@ public final class OptimisationHelper {
 
 	@Nullable
 	public static OptimisationPlan getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode, final boolean promptUser,
-			final boolean promptOnlyIfOptionsEnabled) {
+			final boolean promptOnlyIfOptionsEnabled, NameProvider nameProvider) {
 
 		UserSettings previousSettings = null;
 		if (scenario != null) {
@@ -214,7 +233,7 @@ public final class OptimisationHelper {
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
-			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled);
+			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider);
 		}
 
 		if (previousSettings == null) {
@@ -229,18 +248,19 @@ public final class OptimisationHelper {
 		}
 
 		final OptimisationPlan optimisationPlan = transformUserSettings(userSettings, parameterMode, scenario);
+		optimisationPlan.setResultName(nameProvider.nameSuggestion);
 
 		return optimisationPlan;
 	}
 
 	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled) {
+			final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
 		return openUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
-				displayOnlyIfOptionsEnabled);
+				displayOnlyIfOptionsEnabled, nameProvider);
 	}
 
 	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
-			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled) {
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
 		boolean optionAdded = false;
 		boolean enabledOptionAdded = false;
 
@@ -265,6 +285,10 @@ public final class OptimisationHelper {
 		resetDisabledFeatures(copy);
 
 		if (!forEvaluation) {
+			dialog.addNameOption(nameProvider.nameSuggestion, nameProvider.existingNames);
+		}
+
+		if (!forEvaluation) {
 			// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
 			// optionAdded = true;
@@ -282,6 +306,61 @@ public final class OptimisationHelper {
 					optEnd.enabled = false;
 				} else {
 					enabledOptionAdded = true;
+
+					final IObservableValue[] values = new IObservableValue[2];
+
+					MultiValidator validator = new MultiValidator() {
+
+						@Override
+						protected IStatus validate() {
+							LocalDate periodStart = null;
+							if (values[0].getValue() instanceof LocalDate) {
+								periodStart = (LocalDate) values[0].getValue();
+							}
+							YearMonth periodEnd = null;
+							if (values[1].getValue() instanceof YearMonth) {
+								periodEnd = (YearMonth) values[1].getValue();
+							}
+							if (periodStart != null && periodEnd != null) {
+								if (periodEnd.atDay(1).isBefore(periodStart)) {
+									return ValidationStatus.error("Period start must be before period end");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					};
+
+					dialog.addValidation(optStart, new IValidator() {
+
+						@Override
+						public IStatus validate(final Object value) {
+							if (value instanceof LocalDate) {
+								final LocalDate startDate = (LocalDate) value;
+								if (startDate.getYear() < 2010) {
+									return ValidationStatus.error("Invalid period start date");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					});
+					dialog.addValidation(optEnd, new IValidator() {
+
+						@Override
+						public IStatus validate(final Object value) {
+							if (value instanceof YearMonth) {
+								final YearMonth endDate = (YearMonth) value;
+								if (endDate.getYear() < 2010) {
+									return ValidationStatus.error("Invalid period end date");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					});
+
+					dialog.addValidationCallback(optStart, (v) -> values[0] = v);
+					dialog.addValidationCallback(optEnd, (v) -> values[1] = v);
+
+					dialog.addValidationStatusProvider(validator);
 				}
 				optionAdded = true;
 			}
@@ -368,7 +447,7 @@ public final class OptimisationHelper {
 				choiceData.addChoice("Low", SimilarityMode.LOW);
 				choiceData.addChoice("Med", SimilarityMode.MEDIUM);
 				choiceData.addChoice("High", SimilarityMode.HIGH);
-				// choiceData.addChoice("All", SimilarityMode.ALL);
+				choiceData.addChoice("All", SimilarityMode.ALL);
 
 				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
 
@@ -398,8 +477,8 @@ public final class OptimisationHelper {
 						if (value instanceof UserSettings) {
 							final UserSettings userSettings = (UserSettings) value;
 							if (userSettings.isBuildActionSets()) {
-								if (userSettings.getSimilarityMode() == SimilarityMode.OFF) {
-									return ValidationStatus.error("Similarity must be enabled to use action sets");
+								if (userSettings.getSimilarityMode() == SimilarityMode.OFF || userSettings.getSimilarityMode() == SimilarityMode.ALL) {
+									return ValidationStatus.error("Similarity (low, medium, high) must be enabled to use action sets");
 								}
 								final LocalDate periodStart = userSettings.getPeriodStartDate();
 								final YearMonth periodEnd = userSettings.getPeriodEnd();
@@ -438,10 +517,12 @@ public final class OptimisationHelper {
 				return null;
 			}
 		}
+		nameProvider.nameSuggestion = dialog.getNameSuggestion();
 		return copy;
 	}
 
-	public static UserSettings promptForInsertionUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
+	public static UserSettings promptForInsertionUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+			String nameSuggestion, Set<String> existingNames) {
 		UserSettings previousSettings = null;
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
@@ -454,7 +535,7 @@ public final class OptimisationHelper {
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
-			previousSettings = openInsertionPlanUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled);
+			previousSettings = openInsertionPlanUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameSuggestion, existingNames);
 		}
 
 		if (previousSettings == null) {
@@ -471,13 +552,13 @@ public final class OptimisationHelper {
 	}
 
 	public static UserSettings openInsertionPlanUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled) {
+			final boolean displayOnlyIfOptionsEnabled, String nameSuggestion, Set<String> existingNames) {
 		return openInsertionPlanUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
-				displayOnlyIfOptionsEnabled);
+				displayOnlyIfOptionsEnabled, nameSuggestion, existingNames);
 	}
 
 	public static UserSettings openInsertionPlanUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
-			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled) {
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, String nameSuggestion, Set<String> existingNames) {
 		boolean optionAdded = false;
 		boolean enabledOptionAdded = false;
 
@@ -503,6 +584,10 @@ public final class OptimisationHelper {
 		resetDisabledFeatures(copy);
 
 		if (!forEvaluation) {
+			dialog.addNameOption(nameSuggestion, existingNames);
+		}
+
+		if (!forEvaluation) {
 			// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
 			// optionAdded = true;
@@ -519,6 +604,60 @@ public final class OptimisationHelper {
 					optEnd.enabled = false;
 				} else {
 					enabledOptionAdded = true;
+					final IObservableValue[] values = new IObservableValue[2];
+
+					MultiValidator validator = new MultiValidator() {
+
+						@Override
+						protected IStatus validate() {
+							LocalDate periodStart = null;
+							if (values[0].getValue() instanceof LocalDate) {
+								periodStart = (LocalDate) values[0].getValue();
+							}
+							YearMonth periodEnd = null;
+							if (values[1].getValue() instanceof YearMonth) {
+								periodEnd = (YearMonth) values[1].getValue();
+							}
+							if (periodStart != null && periodEnd != null) {
+								if (periodEnd.atDay(1).isBefore(periodStart)) {
+									return ValidationStatus.error("Period start must be before period end");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					};
+
+					dialog.addValidation(optStart, new IValidator() {
+
+						@Override
+						public IStatus validate(final Object value) {
+							if (value instanceof LocalDate) {
+								final LocalDate startDate = (LocalDate) value;
+								if (startDate.getYear() < 2010) {
+									return ValidationStatus.error("Invalid period start date");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					});
+					dialog.addValidation(optEnd, new IValidator() {
+
+						@Override
+						public IStatus validate(final Object value) {
+							if (value instanceof YearMonth) {
+								final YearMonth endDate = (YearMonth) value;
+								if (endDate.getYear() < 2010) {
+									return ValidationStatus.error("Invalid period end date");
+								}
+							}
+							return Status.OK_STATUS;
+						}
+					});
+
+					dialog.addValidationCallback(optStart, (v) -> values[0] = v);
+					dialog.addValidationCallback(optEnd, (v) -> values[1] = v);
+
+					dialog.addValidationStatusProvider(validator);
 				}
 				optionAdded = true;
 			}
@@ -709,7 +848,9 @@ public final class OptimisationHelper {
 
 		switch (similarityMode) {
 		case ALL:
-			assert false;
+			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = true;
+			userSettings.setBuildActionSets(false);
 			break;
 		case HIGH:
 			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
@@ -754,8 +895,13 @@ public final class OptimisationHelper {
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
 		}
-		{
+		if (similarityMode != SimilarityMode.ALL) {
 			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
+			plan.getStages().add(stage);
+		} else {
+			final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EcoreUtil.copy(constraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 			plan.getStages().add(stage);
@@ -776,6 +922,14 @@ public final class OptimisationHelper {
 			}
 		}
 		return LNGScenarioRunnerUtils.createExtendedSettings(plan);
+	}
+
+	private static boolean shouldCreateDefaultSaveStage(@NonNull UserSettings userSettings) {
+		if (userSettings.getSimilarityMode() != SimilarityMode.ALL) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private static boolean shouldDisableActionSets(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {

@@ -99,8 +99,8 @@ public class ExportScheduleHelper {
 
 		// Clear any insertion plans - assume no longer relevant
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-		analyticsModel.getActionableSetPlans().clear();
-		analyticsModel.getInsertionOptions().clear();
+		analyticsModel.getOptimisations().clear();
+		analyticsModel.getOptionModels().clear();
 
 		// TODO: Need injector for correct post export processors
 		final Command command = LNGSchedulerJobUtils.exportSchedule(null, scenarioModel, editingDomain, schedule);

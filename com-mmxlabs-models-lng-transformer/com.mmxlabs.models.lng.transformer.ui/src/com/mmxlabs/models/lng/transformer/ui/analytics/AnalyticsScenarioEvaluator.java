@@ -134,7 +134,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					false, hints);
 
 			scenarioRunner.evaluateInitialState();
-			scenarioRunner.run();
+			scenarioRunner.runAndApplyBest();
 
 			if (parentForFork != null) {
 				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);

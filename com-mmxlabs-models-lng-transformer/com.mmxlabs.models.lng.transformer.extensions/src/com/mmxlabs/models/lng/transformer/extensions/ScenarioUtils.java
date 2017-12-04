@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -170,6 +171,26 @@ public class ScenarioUtils {
 	public static @NonNull LocalSearchOptimisationStage createDefaultLSOParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
 		final LocalSearchOptimisationStage params = ParametersFactory.eINSTANCE.createLocalSearchOptimisationStage();
 		params.setName("lso");
+		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
+		annealingSettings.setIterations(1_000_000);
+		annealingSettings.setCooling(0.96);
+		annealingSettings.setEpochLength(10_000);
+		annealingSettings.setInitialTemperature(1_000_000);
+		// restarts
+		annealingSettings.setRestarting(false);
+		annealingSettings.setRestartIterationsThreshold(500_000);
+		params.setAnnealingSettings(annealingSettings);
+
+		params.setSeed(0);
+
+		params.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
+
+		return params;
+	}
+
+	public static @NonNull MultipleSolutionSimilarityOptimisationStage createDefaultMultipleSolutionSimilarityParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
+		final MultipleSolutionSimilarityOptimisationStage params = ParametersFactory.eINSTANCE.createMultipleSolutionSimilarityOptimisationStage();
+		params.setName("mo-sim-all");
 		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
 		annealingSettings.setIterations(1_000_000);
 		annealingSettings.setCooling(0.96);
@@ -356,7 +377,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(ShippingHoursRestrictionCheckerFactory.NAME, true));
 			constraints.add(createConstraint(LockedUnusedElementsConstraintCheckerFactory.NAME, true));
-//			constraints.add(createConstraint(PanamaSlotsConstraintCheckerFactory.NAME, true));
+			// constraints.add(createConstraint(PanamaSlotsConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives

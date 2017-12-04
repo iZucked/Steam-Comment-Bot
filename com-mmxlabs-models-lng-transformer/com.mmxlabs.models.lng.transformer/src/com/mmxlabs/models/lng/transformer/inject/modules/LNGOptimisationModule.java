@@ -43,7 +43,7 @@ public class LNGOptimisationModule extends AbstractModule {
 		}
 		install(new FitnessFunctionInstantiatorModule());
 
-		install(new LocalSearchOptimiserModule());
+//		install(new LocalSearchOptimiserModule());
 		install(new LinearFitnessEvaluatorModule());
 
 		install(new MoveGeneratorModule());

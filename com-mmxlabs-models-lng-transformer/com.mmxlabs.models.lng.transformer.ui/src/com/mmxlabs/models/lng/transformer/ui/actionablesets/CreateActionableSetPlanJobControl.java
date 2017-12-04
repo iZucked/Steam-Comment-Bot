@@ -24,11 +24,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.analytics.ActionableSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.SolutionOption;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -229,10 +230,10 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 								// }
 							}
 
-							final ActionableSet option = AnalyticsFactory.eINSTANCE.createActionableSet();
+							final SolutionOption option = AnalyticsFactory.eINSTANCE.createSolutionOption();
 							option.setScheduleModel(scheduleModel);
 
-							plan.getActionSets().add(option);
+							plan.getOptions().add(option);
 
 							// scenarioToOptimiserBridge.storeAsCopy(changeSet.getFirst(), newName, scenarioInstance, null);
 						} catch (final Exception e) {
@@ -242,11 +243,14 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 						monitor.worked(1);
 					}
 
-					cmd.append(AddCommand.create(originalEditingDomain, analyticsModel, AnalyticsPackage.Literals.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS, plan));
+					cmd.append(AddCommand.create(originalEditingDomain, analyticsModel, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, plan));
 
 					RunnerHelper.syncExec(() -> originalEditingDomain.getCommandStack().execute(cmd));
 
+					plan.setName(AnalyticsSolutionHelper.generateName(plan));
+					
 					actionableSetPlan = plan;
+					
 
 				} finally {
 					monitor.done();

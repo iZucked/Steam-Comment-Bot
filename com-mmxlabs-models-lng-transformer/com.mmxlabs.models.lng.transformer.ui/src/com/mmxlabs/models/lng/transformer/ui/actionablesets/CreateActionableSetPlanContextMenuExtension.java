@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.transformer.ui.actionablesets;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import org.eclipse.core.runtime.IStatus;
@@ -40,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenu
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -112,7 +115,10 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 							return;
 						}
 					}
-					final UserSettings userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false);
+					Set<String> existingNames = new HashSet<>();
+					instance.getFragments().forEach(f -> existingNames.add(f.getName()));
+					instance.getElements().forEach(f -> existingNames.add(f.getName()));
+					final UserSettings userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false, new NameProvider("Action set", existingNames));
 					new Thread("CreateActionableSetThread") {
 						@Override
 						public void run() {

@@ -4,15 +4,13 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -25,7 +23,6 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.jobmanager.jobs.EJobState;
@@ -34,13 +31,13 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
-import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -52,7 +49,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 public class InsertSlotContextMenuExtension implements ITradesTableContextMenuExtension {
 
@@ -132,8 +128,8 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			}
 
 			if (noCargoSelected && slots.size() > 0) {
-				if (slots.size() != 2 || (slots.size() == 2 && !(slots.stream().filter(s -> (s instanceof LoadSlot)).findAny().isPresent() &&
-						slots.stream().filter(s -> (s instanceof DischargeSlot)).findAny().isPresent()))) {
+				if (slots.size() != 2 || (slots.size() == 2
+						&& !(slots.stream().filter(s -> (s instanceof LoadSlot)).findAny().isPresent() && slots.stream().filter(s -> (s instanceof DischargeSlot)).findAny().isPresent()))) {
 					slots = Lists.newArrayList(slots.get(0));
 				}
 				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
@@ -197,13 +193,13 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 	private static class InsertSlotAction extends Action {
 
-		private final List<Slot> originalTargetSlots;
+		private final List<Slot> targetSlots;
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot> targetSlots) {
-			super(generateActionName(targetSlots) + " (Beta)");
+			super(AnalyticsSolutionHelper.generateInsertionName(targetSlots) + " (Beta)");
 			this.scenarioEditingLocation = scenarioEditingLocation;
-			this.originalTargetSlots = targetSlots;
+			this.targetSlots = targetSlots;
 		}
 
 		@Override
@@ -214,6 +210,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			UserSettings userSettings = null;
 			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
+			final String taskName = "Insert " + AnalyticsSolutionHelper.generateInsertionName(targetSlots);
 			{
 
 				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
@@ -222,8 +219,11 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 					if (object instanceof LNGScenarioModel) {
 						final LNGScenarioModel root = (LNGScenarioModel) object;
+						Set<String> existingNames = new HashSet<>();
+						original.getFragments().forEach(f -> existingNames.add(f.getName()));
+						original.getElements().forEach(f -> existingNames.add(f.getName()));
 
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
+						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, taskName, existingNames);
 					}
 				}
 			}
@@ -237,89 +237,27 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 			final UserSettings pUserSettings = userSettings;
 
-			final ScenarioInstance duplicate;
-			try {
-				duplicate = ScenarioServiceUtils.copyScenario(originalModelRecord, original, generateActionName(originalTargetSlots));
-			} catch (final Exception e) {
-				throw new RuntimeException(e);
-			}
-			assert duplicate != null;
-			final String taskName = "Insert " + generateActionName(originalTargetSlots);
-
-			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
-
 			final List<Slot> targetSlots = new LinkedList<Slot>();
-
-			// Map between original and fork
-			final BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
-				// Map between original and fork
-				final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
-				for (final Slot originalSlot : originalTargetSlots) {
-					if (originalSlot instanceof LoadSlot) {
-						targetSlots.add(finder.findLoadSlot(originalSlot.getName()));
-					} else if (originalSlot instanceof DischargeSlot) {
-						targetSlots.add(finder.findDischargeSlot(originalSlot.getName()));
-					}
-				}
-				return true;
-			};
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSlotInsertionJobDescriptor(generateName(targetSlots), duplicate, pUserSettings, targetSlots, Collections.emptyList());
+				return new LNGSlotInsertionJobDescriptor(taskName, original, pUserSettings, targetSlots, Collections.emptyList());
 			};
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
 				if (newState == EJobState.COMPLETED) {
-					try {
-						sdp.getModelReference().save();
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
 
 					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 					if (plan != null) {
 
-						duplicate.setReadonly(true);
-
 						final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-						final AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
+						final AnalyticsSolution data = new AnalyticsSolution(original, plan, taskName);
 						data.setCreateInsertionOptions(true);
 						eventBroker.post(ChangeSetViewCreatorService_Topic, data);
 					}
 				}
 			};
 
-			jobRunner.run(taskName, duplicate, modelRecord, prepareCallback, createJobDescriptorCallback, jobCompletedCallback);
+			jobRunner.run(taskName, original, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
 
 		}
-	}
-
-	private static String generateName(final SlotInsertionOptions plan) {
-
-		final List<String> names = new LinkedList<String>();
-		for (final Slot s : plan.getSlotsInserted()) {
-			names.add(s.getName());
-		}
-
-		return "Inserting: " + Joiner.on(", ").join(names);
-	}
-
-	private static String generateName(final Collection<Slot> slots) {
-
-		final List<String> names = new LinkedList<String>();
-		for (final Slot s : slots) {
-			names.add(s.getName());
-		}
-
-		return "Inserting: " + Joiner.on(", ").join(names);
-	}
-
-	private static String generateActionName(final Collection<Slot> slots) {
-
-		final List<String> names = new LinkedList<String>();
-		for (final Slot s : slots) {
-			names.add(s.getName());
-		}
-
-		return "Insert " + Joiner.on(", ").join(names);
 	}
 }

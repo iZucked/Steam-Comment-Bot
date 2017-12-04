@@ -465,7 +465,7 @@ public class ParameterModesDialogTest {
 					final LNGScenarioModel dummyModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 					final CargoModel dummyCargoModel = CargoFactory.eINSTANCE.createCargoModel();
 					dummyModel.setCargoModel(dummyCargoModel);
-					return OptimisationHelper.openUserDialog(dummyModel, display, shell, false, initialSettings, initialSettings, false);
+					return OptimisationHelper.openUserDialog(dummyModel, display, shell, false, initialSettings, initialSettings, false, null);
 				} catch (final Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException(e);

@@ -38,7 +38,7 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 				try {
 					scenarioDataProvider.setLastEvaluationFailed(true);
 
-					final OptimisationPlan p = OptimisationHelper.getOptimiserSettings(scenarioModel, true, null, false, false);
+					final OptimisationPlan p = OptimisationHelper.getOptimiserSettings(scenarioModel, true, null, false, false, null);
 
 					if (p == null) {
 						return;
