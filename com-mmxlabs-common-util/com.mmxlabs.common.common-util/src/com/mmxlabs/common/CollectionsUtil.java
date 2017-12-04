@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -178,6 +179,16 @@ public final class CollectionsUtil {
 			result.add(elements[i]);
 		}
 		return result;
+	}
+
+	@NonNull
+	public static <T> LinkedList<T> makeLinkedList(final @NonNull T... elements) {
+	    LinkedList<T> newList = new LinkedList<T>();
+	    for (T el : elements) {
+	        newList.add(el);
+	    }
+
+	    return newList;
 	}
 
 	/**
