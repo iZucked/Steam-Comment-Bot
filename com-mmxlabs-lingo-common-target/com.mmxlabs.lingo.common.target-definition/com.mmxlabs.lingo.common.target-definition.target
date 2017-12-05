@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="18">
+<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="19">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.annotation" version="2.1.100.v20170511-1408"/>
@@ -10,7 +10,7 @@
 <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.7/R-4.7.1a-201710090410"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.oxygen/R-4.7.1a-201710090410/org.eclipse.updates.oxygen-R-4.7.1a-201710090410.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
@@ -37,7 +37,7 @@
 <unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.source.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/releases/oxygen/201710111001"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.oxygen/201710111001/org.eclipse.oxygen-201710111001.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.log4j" version="0.0.0"/>
@@ -89,15 +89,13 @@
 <unit id="org.dom4j.source" version="1.6.1.v201312101416"/>
 <unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
 <unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
-<unit id="org.apache.commons.codec" version="1.6.0.v201305230611"/>
-<unit id="org.apache.commons.codec.source" version="1.6.0.v201305230611"/>
 <unit id="org.apache.commons.cli" version="1.2.0.v201404270220"/>
 <unit id="org.apache.commons.cli.source" version="1.2.0.v201404270220"/>
 <unit id="org.apache.commons.lang" version="2.6.0.v201404270220"/>
 <unit id="org.apache.commons.lang.source" version="2.6.0.v201404270220"/>
 <unit id="com.google.guava" version="21.0.0.v20170206-1425"/>
 <unit id="com.google.guava.source" version="21.0.0.v20170206-1425"/>
-<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20170919201930/repository/"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20170919201930/orbit-buildrepo-R20170919201930.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
@@ -105,25 +103,39 @@
 <repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/" id="mmxlabs-releases" />
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.core.jackson-core" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.core.jackson-databind" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.core.jackson-annotations.source" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.core.jackson-core.source" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.core.jackson-databind.source" version="2.9.2"/>
+<unit id="com.google.inject" version="4.1.0"/>
+<unit id="com.googlecode.json-simple" version="0.0.0"/>
 <unit id="com.googlecode.json-simple.source" version="0.0.0"/>
-<unit id="com.googlecode.json-simple" version="1.1.1"/>
+<unit id="net.bytebuddy.byte-buddy" version="1.7.8"/>
+<unit id="net.bytebuddy.byte-buddy-agent" version="1.7.8"/>
+<unit id="org.apache.commons.codec" version="1.11.0"/>
+<unit id="org.apache.commons.collections4" version="4.1.0"/>
+<unit id="org.apache.commons.compress" version="1.15.0"/>
+<unit id="org.apache.commons.io" version="2.6.0"/>
+<unit id="org.apache.commons.lang3" version="3.7.0"/>
+<unit id="org.apache.commons.math3" version="3.5.0"/>
+<unit id="org.apache.shiro.core" version="1.2.0"/>
+<unit id="org.apache.shiro.core.source" version="1.2.0"/>
+<unit id="org.apache.shiro.guice" version="1.2.0"/>
+<unit id="org.apache.shiro.guice.source" version="1.2.0"/>
+<unit id="org.mockito.mockito-core" version="2.11.0"/>
+<unit id="org.objenesis" version="2.6.0"/>
+<unit id="org.ops4j.peaberry" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.activation" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.activation.source" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse.source" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.source" version="1.3.0"/>
-<unit id="org.ops4j.peaberry.activation" version="1.3.0"/>
-<unit id="org.ops4j.peaberry" version="1.3.0"/>
-<unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
-<unit id="org.apache.shiro.core.source" version="1.2.0"/>
-<unit id="org.apache.shiro.guice.source" version="1.2.0"/>
-<unit id="org.apache.shiro.core" version="1.2.0"/>
-<unit id="org.apache.shiro.guice" version="1.2.0"/>
-<unit id="org.swtchart" version="0.7.0"/>
-<unit id="org.mockito.mockito-core" version="0.0.0"/>
-<unit id="org.objenesis" version="0.0.0"/>
-<unit id="com.google.inject" version="0.0.0"/>
-<unit id="net.bytebuddy.byte-buddy" version="0.0.0"/>
-<unit id="net.bytebuddy.byte-buddy-agent" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.13/mmxlabs-external-1.0.13-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="org.swtchart" version="0.0.0"/>
+<unit id="org.swtchart.ext" version="0.0.0"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.14/mmxlabs-external-1.0.14-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 </locations>
 </target>
