@@ -135,7 +135,9 @@ public class LNGScenarioRunner {
 	public IMultiStateResult runAndApplyBest() {
 		final IMultiStateResult result = runWithProgress(new NullProgressMonitor());
 		final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
-		getScenarioToOptimiserBridge().overwrite(100, bestSolution.getFirst(), bestSolution.getSecond());
+		RunnerHelper.syncExecDisplayOptional(() -> {
+			this.schedule = getScenarioToOptimiserBridge().overwrite(100, bestSolution.getFirst(), bestSolution.getSecond());
+		});
 
 		return result;
 	}
