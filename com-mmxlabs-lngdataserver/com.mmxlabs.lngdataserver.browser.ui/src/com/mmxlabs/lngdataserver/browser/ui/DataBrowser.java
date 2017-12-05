@@ -42,8 +42,8 @@ import com.mmxlabs.lngdataserver.browser.provider.BrowserItemProviderAdapterFact
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
-public class DataBrowser extends ViewPart{
-	
+public class DataBrowser extends ViewPart {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataBrowser.class);
 
 	private TreeViewer viewer;
@@ -56,17 +56,17 @@ public class DataBrowser extends ViewPart{
 		viewer = new TreeViewer(parent, SWT.NONE);
 		viewer.setContentProvider(new DataBrowserContentProvider(createNewAdapterFactory()));
 		viewer.setLabelProvider(new DataBrowserLabelProvider(createNewAdapterFactory()));
-		
+
 		root = BrowserFactory.eINSTANCE.createCompositeNode();
 		root.setDisplayName("Versions");
 		viewer.setInput(root);
 		
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				System.out.println("selection changed");
-				
+
 			}
 		});
 		getSite().setSelectionProvider(viewer);
@@ -134,8 +134,15 @@ public class DataBrowser extends ViewPart{
 		}));
 		LOGGER.debug("Found " + Iterables.size(extensions) + " extensions");
 		for(DataExtensionPoint extensionPoint : extensions) {
-			root.getChildren().add(extensionPoint.getDataExtension().getDataRoot());
-			publishCallbacks.put(extensionPoint.getDataExtension().getDataRoot(), extensionPoint.getDataExtension().getPublishCallback());
+			DataExtension dataExtension = extensionPoint.getDataExtension();
+			if (dataExtension != null) {
+				try {
+					root.getChildren().add(dataExtension.getDataRoot());
+					publishCallbacks.put(extensionPoint.getDataExtension().getDataRoot(), extensionPoint.getDataExtension().getPublishCallback());
+				} catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			}
 		}
 	}
 
@@ -143,17 +150,17 @@ public class DataBrowser extends ViewPart{
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
 	}
-	
+
 	private static ComposedAdapterFactory createNewAdapterFactory() {
 		// Hook in the global registry to get other adapter factories
 		final ComposedAdapterFactory factory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		factory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		factory.addAdapterFactory(new BrowserItemProviderAdapterFactory());
 		factory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		
+
 		return factory;
 	}
-	
+
 	private static class DataExtensionsModule extends AbstractModule {
 		@Override
 		protected void configure() {

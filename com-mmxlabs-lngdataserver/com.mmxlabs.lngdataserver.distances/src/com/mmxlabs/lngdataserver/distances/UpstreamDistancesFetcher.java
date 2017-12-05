@@ -6,20 +6,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import javax.xml.transform.OutputKeys;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.ClientProtocolException;
+import org.assertj.core.condition.Join;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import com.google.common.base.Joiner;
 import com.mmxlabs.common.http.UrlFetcher;
 import com.mmxlabs.common.json.JSONConverter;
 
@@ -33,8 +41,8 @@ public class UpstreamDistancesFetcher {
 		Map<Via, String> map = new HashMap<>();
 
 		map.put(Via.Direct, "");
-		map.put(Via.PanamaCanal, "?open=PAN");
-		map.put(Via.SuezCanal, "?open=SUZ");
+		map.put(Via.PanamaCanal, "open=PAN");
+		map.put(Via.SuezCanal, "open=SUZ");
 
 		routeOpt = Collections.unmodifiableMap(map);
 	}
@@ -116,11 +124,14 @@ public class UpstreamDistancesFetcher {
 	public static Map<Via, Map<String, Map<String, Integer>>> getDistances(String baseUrl, String version, String username, String password) throws ClientProtocolException, IOException, ParseException, AuthenticationException {
 		Map<Via, Map<String, Map<String, Integer>>> result = new EnumMap<>(Via.class);
 
+		
 		for (Entry<Via, String> ro : routeOpt.entrySet()) {
-			String url = baseUrl + DISTANCES_URL + ro.getValue();
-			if (version != null) {
-				url += "&v=" + version;
+			List<String> requestArgs = new LinkedList<>();
+			if (!ro.getValue().isEmpty()) {
+				requestArgs.add(ro.getValue());
 			}
+			requestArgs.add("v=" + version);
+			String url = baseUrl + DISTANCES_URL + "?" + Joiner.on("&").join(requestArgs) ;
 			
 			String rawJSON = UrlFetcher.fetchURLContent(url, username, password);
 			JSONParser parser = new JSONParser();

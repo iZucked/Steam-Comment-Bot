@@ -16,7 +16,9 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.jface,
  org.eclipse.ui.workbench,
  com.mmxlabs.models.lng.port,
- com.mmxlabs.rcp.common 
+ com.mmxlabs.rcp.common,
+ com.mmxlabs.lngdataserver.lib,
+ com.google.guava
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.slf4j
 Bundle-ActivationPolicy: lazy
