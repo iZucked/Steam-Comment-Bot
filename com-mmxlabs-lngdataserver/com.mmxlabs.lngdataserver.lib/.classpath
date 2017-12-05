@@ -22,10 +22,10 @@
 	<classpathentry exported="true" kind="lib" path="lib/de.flapdoodle.embed.process-2.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/handlebars-4.0.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate-validator-5.2.4.Final.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson-annotations-2.8.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson-core-2.8.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson-databind-2.8.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jackson-datatype-jsr310-2.8.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-annotations-2.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-core-2.8.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-databind-2.8.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-datatype-jsr310-2.8.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/javassist-3.20.0-GA.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jboss-logging-3.3.0.Final.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jcl-over-slf4j-1.7.22.jar"/>
@@ -63,21 +63,23 @@
 	<classpathentry exported="true" kind="lib" path="lib/proxytoys-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/reactive-streams-1.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/snakeyaml-1.17.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-aop-4.3.10.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-beans-4.3.10.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-boot-1.5.6.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-boot-autoconfigure-1.5.6.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-1.5.6.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-logging-1.5.6.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-tomcat-1.5.6.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-web-1.5.6.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-context-4.3.10.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-core-4.3.10.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-expression-4.3.10.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-json-view-0.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/json-view-0.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-aop-4.3.13.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-beans-4.3.13.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-boot-1.5.9.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-boot-autoconfigure-1.5.9.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-1.5.9.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-logging-1.5.9.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-tomcat-1.5.9.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-web-1.5.9.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-context-4.3.13.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-core-4.3.13.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-expression-4.3.13.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring-plugin-core-1.2.0.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring-plugin-metadata-1.2.0.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-web-4.3.10.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-webmvc-4.3.10.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-web-4.3.13.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-webmvc-4.3.13.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/springfox-core-2.6.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/springfox-schema-2.6.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/springfox-spi-2.6.1.jar"/>
