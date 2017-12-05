@@ -21,6 +21,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.E4PartWrapper;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.junit.Assert;
 
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -38,6 +39,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 /**
  * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
@@ -77,7 +79,7 @@ public class ReportTesterHelper {
 	public static final String CHANGESET_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";
 	public static final String CHANGESET_REPORT_SHORTNAME = "ChangeSetReport";
 
-	public static final String ACTIONPLAN_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ActionSetView";
+	public static final String ACTIONPLAN_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:Dynamic";
 	public static final String ACTIONPLAN_REPORT_SHORTNAME = "ActionPlanReport";
 
 	public static final String EXPOSURES_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView";
@@ -104,7 +106,13 @@ public class ReportTesterHelper {
 			if (handler == null) {
 				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
 				final MPart part = partService.findPart(reportID);
-				handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
+				if (part instanceof CompatibilityView) {
+					CompatibilityView compatibilityView = (CompatibilityView) part;
+					IViewPart oPart = compatibilityView.getView();
+					handler = oPart.getAdapter(IActionPlanHandler.class);
+				} else {
+					handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
+				}
 			}
 			if (handler != null) {
 				handler.displayActionPlan(scenarios);
@@ -114,7 +122,13 @@ public class ReportTesterHelper {
 			if (handler == null) {
 				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
 				final MPart part = partService.findPart(reportID);
-				handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
+				if (part instanceof CompatibilityView) {
+					CompatibilityView compatibilityView = (CompatibilityView) part;
+					IViewPart oPart = compatibilityView.getView();
+					handler = oPart.getAdapter(IActionPlanHandler.class);
+				} else {
+					handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
+				}
 			}
 			if (handler != null) {
 				handler.displayActionPlan(Collections.emptyList());
