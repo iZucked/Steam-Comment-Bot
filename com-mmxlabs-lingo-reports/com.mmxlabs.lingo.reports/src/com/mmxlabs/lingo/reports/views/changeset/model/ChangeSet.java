@@ -6,9 +6,9 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model;
 
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,13 +19,14 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToBase <em>Metrics To Base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToPrevious <em>Metrics To Previous</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToDefaultBase <em>Metrics To Default Base</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToAlternativeBase <em>Metrics To Alternative Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenario <em>Base Scenario</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario <em>Prev Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenario <em>Current Scenario</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToBase <em>Change Set Rows To Base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToPrevious <em>Change Set Rows To Previous</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getAltBaseScenario <em>Alt Base Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getAltCurrentScenario <em>Alt Current Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToDefaultBase <em>Change Set Rows To Default Base</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToAlternativeBase <em>Change Set Rows To Alternative Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentMetrics <em>Current Metrics</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getDescription <em>Description</em>}</li>
  * </ul>
@@ -36,62 +37,62 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  */
 public interface ChangeSet extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Metrics To Base</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Metrics To Default Base</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Metrics To Base</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Metrics To Default Base</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Metrics To Base</em>' containment reference.
-	 * @see #setMetricsToBase(DeltaMetrics)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_MetricsToBase()
+	 * @return the value of the '<em>Metrics To Default Base</em>' containment reference.
+	 * @see #setMetricsToDefaultBase(DeltaMetrics)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_MetricsToDefaultBase()
 	 * @model containment="true"
 	 * @generated
 	 */
-	DeltaMetrics getMetricsToBase();
+	DeltaMetrics getMetricsToDefaultBase();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToBase <em>Metrics To Base</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToDefaultBase <em>Metrics To Default Base</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Metrics To Base</em>' containment reference.
-	 * @see #getMetricsToBase()
+	 * @param value the new value of the '<em>Metrics To Default Base</em>' containment reference.
+	 * @see #getMetricsToDefaultBase()
 	 * @generated
 	 */
-	void setMetricsToBase(DeltaMetrics value);
+	void setMetricsToDefaultBase(DeltaMetrics value);
 
 	/**
-	 * Returns the value of the '<em><b>Metrics To Previous</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Metrics To Alternative Base</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Metrics To Previous</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Metrics To Alternative Base</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Metrics To Previous</em>' containment reference.
-	 * @see #setMetricsToPrevious(DeltaMetrics)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_MetricsToPrevious()
+	 * @return the value of the '<em>Metrics To Alternative Base</em>' containment reference.
+	 * @see #setMetricsToAlternativeBase(DeltaMetrics)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_MetricsToAlternativeBase()
 	 * @model containment="true"
 	 * @generated
 	 */
-	DeltaMetrics getMetricsToPrevious();
+	DeltaMetrics getMetricsToAlternativeBase();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToPrevious <em>Metrics To Previous</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToAlternativeBase <em>Metrics To Alternative Base</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Metrics To Previous</em>' containment reference.
-	 * @see #getMetricsToPrevious()
+	 * @param value the new value of the '<em>Metrics To Alternative Base</em>' containment reference.
+	 * @see #getMetricsToAlternativeBase()
 	 * @generated
 	 */
-	void setMetricsToPrevious(DeltaMetrics value);
+	void setMetricsToAlternativeBase(DeltaMetrics value);
 
 	/**
 	 * Returns the value of the '<em><b>Base Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Base Scenario</em>' reference isn't clear,
+	 * If the meaning of the '<em>Base Scenario</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
@@ -114,36 +115,10 @@ public interface ChangeSet extends EObject {
 	void setBaseScenario(ScenarioResult value);
 
 	/**
-	 * Returns the value of the '<em><b>Prev Scenario</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Prev Scenario</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Prev Scenario</em>' attribute.
-	 * @see #setPrevScenario(ScenarioResult)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_PrevScenario()
-	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ScenarioResult"
-	 * @generated
-	 */
-	ScenarioResult getPrevScenario();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario <em>Prev Scenario</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Prev Scenario</em>' attribute.
-	 * @see #getPrevScenario()
-	 * @generated
-	 */
-	void setPrevScenario(ScenarioResult value);
-
-	/**
 	 * Returns the value of the '<em><b>Current Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Current Scenario</em>' reference isn't clear,
+	 * If the meaning of the '<em>Current Scenario</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
@@ -166,36 +141,88 @@ public interface ChangeSet extends EObject {
 	void setCurrentScenario(ScenarioResult value);
 
 	/**
-	 * Returns the value of the '<em><b>Change Set Rows To Base</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow}.
+	 * Returns the value of the '<em><b>Alt Base Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Change Set Rows To Base</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Alt Base Scenario</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Change Set Rows To Base</em>' containment reference list.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_ChangeSetRowsToBase()
-	 * @model containment="true"
+	 * @return the value of the '<em>Alt Base Scenario</em>' attribute.
+	 * @see #setAltBaseScenario(ScenarioResult)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_AltBaseScenario()
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ScenarioResult"
 	 * @generated
 	 */
-	EList<ChangeSetRow> getChangeSetRowsToBase();
+	ScenarioResult getAltBaseScenario();
 
 	/**
-	 * Returns the value of the '<em><b>Change Set Rows To Previous</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow}.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getAltBaseScenario <em>Alt Base Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Alt Base Scenario</em>' attribute.
+	 * @see #getAltBaseScenario()
+	 * @generated
+	 */
+	void setAltBaseScenario(ScenarioResult value);
+
+	/**
+	 * Returns the value of the '<em><b>Alt Current Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Change Set Rows To Previous</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Alt Current Scenario</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Change Set Rows To Previous</em>' containment reference list.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_ChangeSetRowsToPrevious()
+	 * @return the value of the '<em>Alt Current Scenario</em>' attribute.
+	 * @see #setAltCurrentScenario(ScenarioResult)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_AltCurrentScenario()
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ScenarioResult"
+	 * @generated
+	 */
+	ScenarioResult getAltCurrentScenario();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getAltCurrentScenario <em>Alt Current Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Alt Current Scenario</em>' attribute.
+	 * @see #getAltCurrentScenario()
+	 * @generated
+	 */
+	void setAltCurrentScenario(ScenarioResult value);
+
+	/**
+	 * Returns the value of the '<em><b>Change Set Rows To Default Base</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Change Set Rows To Default Base</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Change Set Rows To Default Base</em>' containment reference list.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_ChangeSetRowsToDefaultBase()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<ChangeSetRow> getChangeSetRowsToPrevious();
+	EList<ChangeSetRow> getChangeSetRowsToDefaultBase();
+
+	/**
+	 * Returns the value of the '<em><b>Change Set Rows To Alternative Base</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Change Set Rows To Alternative Base</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Change Set Rows To Alternative Base</em>' containment reference list.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_ChangeSetRowsToAlternativeBase()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ChangeSetRow> getChangeSetRowsToAlternativeBase();
 
 	/**
 	 * Returns the value of the '<em><b>Current Metrics</b></em>' containment reference.

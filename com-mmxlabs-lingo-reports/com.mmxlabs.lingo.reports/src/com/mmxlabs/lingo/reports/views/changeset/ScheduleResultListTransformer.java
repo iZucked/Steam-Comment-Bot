@@ -32,7 +32,7 @@ public class ScheduleResultListTransformer {
 			ScenarioResult prev = null;
 			for (final ScenarioResult current : stages) {
 				if (prev != null) {
-					root.getChangeSets().add(buildChangeSet(stages.get(0), prev, current));
+					root.getChangeSets().add(buildDiffToBaseChangeSet(stages.get(0), prev, current));
 				}
 				prev = current;
 				monitor.worked(1);
@@ -46,24 +46,46 @@ public class ScheduleResultListTransformer {
 
 	}
 
-	public ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current) {
-		return buildChangeSet(base, prev, current, null);
+	public ChangeSet buildSingleChangeChangeSet(final ScenarioResult base, final ScenarioResult current) {
+		return buildDiffToBaseChangeSet(null, base, current, null);
+	}
+	
+	public ChangeSet buildDiffToBaseChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current) {
+		return buildDiffToBaseChangeSet(base, prev, current, null);
 	}
 
-	public ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, @Nullable NamedObject targetToSortFirst) {
+	public ChangeSet buildDiffToBaseChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, @Nullable NamedObject targetToSortFirst) {
 
 		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
-		changeSet.setBaseScenario(base);
-		changeSet.setPrevScenario(prev);
+		changeSet.setBaseScenario(prev);
 		changeSet.setCurrentScenario(current);
-
-		generateDifferences(base, current, changeSet, true, targetToSortFirst);
 		generateDifferences(prev, current, changeSet, false, targetToSortFirst);
+
+		changeSet.setAltBaseScenario(base);
+		changeSet.setAltCurrentScenario(current);
+		generateDifferences(base, current, changeSet, true, targetToSortFirst);
 
 		return changeSet;
 	}
 
-	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isBase, @Nullable NamedObject targetToSortFirst) {
+	public ChangeSet buildParallelDiffChangeSet(final ScenarioResult base, final ScenarioResult current, final ScenarioResult altBase, final ScenarioResult altCurrent,
+			@Nullable NamedObject targetToSortFirst) {
+
+		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
+		changeSet.setBaseScenario(base);
+		changeSet.setCurrentScenario(current);
+
+		generateDifferences(base, current, changeSet, false, targetToSortFirst);
+		if (altBase != null && altCurrent != null) {
+			changeSet.setAltCurrentScenario(altCurrent);
+			changeSet.setAltBaseScenario(altBase);
+			generateDifferences(altBase, altCurrent, changeSet, true, targetToSortFirst);
+		}
+
+		return changeSet;
+	}
+
+	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isAlternative, @Nullable NamedObject targetToSortFirst) {
 
 		if (from == null || to == null) {
 			return;
@@ -91,17 +113,17 @@ public class ScheduleResultListTransformer {
 		// //
 
 		// Add to data model
-		if (isBase) {
-			changeSet.getChangeSetRowsToBase().addAll(rows);
+		if (isAlternative) {
+			changeSet.getChangeSetRowsToAlternativeBase().addAll(rows);
 		} else {
-			changeSet.getChangeSetRowsToPrevious().addAll(rows);
+			changeSet.getChangeSetRowsToDefaultBase().addAll(rows);
 		}
 
 		ChangeSetTransformerUtil.setRowFlags(rows);
 		// // ChangeSetTransformerUtil.filterRows(rows);
 		// // ChangeSetTransformerUtil.sortRows(rows);
 		// Build metrics
-		ChangeSetTransformerUtil.calculateMetrics(changeSet, beforeSchedule, afterSchedule, isBase);
+		ChangeSetTransformerUtil.calculateMetrics(changeSet, beforeSchedule, afterSchedule, isAlternative);
 	}
 
 }

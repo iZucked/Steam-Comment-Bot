@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model;
 
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -24,6 +25,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getCurrentMetrics <em>Current Metrics</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getChangeSet <em>Change Set</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getBaseScenario <em>Base Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getCurrentScenario <em>Current Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getLinkedGroup <em>Linked Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getComplexity <em>Complexity</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getSortValue <em>Sort Value</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupSortValue <em>Group Sort Value</em>}</li>
@@ -155,6 +159,84 @@ public interface ChangeSetTableGroup extends EObject {
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Base Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Base Scenario</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Base Scenario</em>' attribute.
+	 * @see #setBaseScenario(ScenarioResult)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_BaseScenario()
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ScenarioResult"
+	 * @generated
+	 */
+	ScenarioResult getBaseScenario();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getBaseScenario <em>Base Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Base Scenario</em>' attribute.
+	 * @see #getBaseScenario()
+	 * @generated
+	 */
+	void setBaseScenario(ScenarioResult value);
+
+	/**
+	 * Returns the value of the '<em><b>Current Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Current Scenario</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Current Scenario</em>' attribute.
+	 * @see #setCurrentScenario(ScenarioResult)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_CurrentScenario()
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ScenarioResult"
+	 * @generated
+	 */
+	ScenarioResult getCurrentScenario();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getCurrentScenario <em>Current Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Current Scenario</em>' attribute.
+	 * @see #getCurrentScenario()
+	 * @generated
+	 */
+	void setCurrentScenario(ScenarioResult value);
+
+	/**
+	 * Returns the value of the '<em><b>Linked Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Linked Group</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Linked Group</em>' reference.
+	 * @see #setLinkedGroup(ChangeSetTableGroup)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_LinkedGroup()
+	 * @model
+	 * @generated
+	 */
+	ChangeSetTableGroup getLinkedGroup();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getLinkedGroup <em>Linked Group</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Linked Group</em>' reference.
+	 * @see #getLinkedGroup()
+	 * @generated
+	 */
+	void setLinkedGroup(ChangeSetTableGroup value);
 
 	/**
 	 * Returns the value of the '<em><b>Complexity</b></em>' attribute.

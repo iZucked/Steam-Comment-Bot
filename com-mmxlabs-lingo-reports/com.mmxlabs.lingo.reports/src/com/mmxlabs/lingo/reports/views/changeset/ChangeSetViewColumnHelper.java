@@ -553,6 +553,10 @@ public class ChangeSetViewColumnHelper {
 
 	private static ChangeSetVesselType[] displayedVesselType = { ChangeSetVesselType.FLEET, ChangeSetVesselType.MARKET, ChangeSetVesselType.NOMINAL };
 
+	private boolean showAlternativePNLBase;
+
+	private GridViewerColumn altPNLBaseColumn;
+
 	public void updateVesselColumns(final Collection<VesselData> data) {
 		final Map<ChangeSetVesselType, List<VesselData>> colData = data.stream() //
 				.filter(a -> a.name != null && !a.name.isEmpty()) // Ignore empty names

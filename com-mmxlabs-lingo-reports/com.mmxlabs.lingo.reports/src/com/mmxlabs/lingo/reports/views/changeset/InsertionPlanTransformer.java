@@ -45,7 +45,7 @@ public class InsertionPlanTransformer {
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
 			monitor.beginTask("Opening solutions", stages.size());
 			for (final ScenarioResult current : stages) {
-				root.getChangeSets().add(transformer.buildChangeSet(base, null, current));
+				root.getChangeSets().add(transformer.buildSingleChangeChangeSet(base, current));
 				monitor.worked(1);
 			}
 		} finally {

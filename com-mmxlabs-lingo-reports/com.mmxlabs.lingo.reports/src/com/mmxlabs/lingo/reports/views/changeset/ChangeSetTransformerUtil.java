@@ -1043,7 +1043,7 @@ public final class ChangeSetTransformerUtil {
 
 	}
 
-	public static void calculateMetrics(@NonNull final ChangeSet changeSet, @NonNull final Schedule fromSchedule, @NonNull final Schedule toSchedule, final boolean isBase) {
+	public static void calculateMetrics(@NonNull final ChangeSet changeSet, @NonNull final Schedule fromSchedule, @NonNull final Schedule toSchedule, final boolean isAlternative) {
 		final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
 		final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
@@ -1122,10 +1122,10 @@ public final class ChangeSetTransformerUtil {
 		deltaMetrics.setPnlDelta((int) pnl);
 		deltaMetrics.setLatenessDelta((int) lateness);
 		deltaMetrics.setCapacityDelta((int) violations);
-		if (isBase) {
-			changeSet.setMetricsToBase(deltaMetrics);
+		if (isAlternative) {
+			changeSet.setMetricsToAlternativeBase(deltaMetrics);
 		} else {
-			changeSet.setMetricsToPrevious(deltaMetrics);
+			changeSet.setMetricsToDefaultBase(deltaMetrics);
 		}
 		changeSet.setCurrentMetrics(currentMetrics);
 	}

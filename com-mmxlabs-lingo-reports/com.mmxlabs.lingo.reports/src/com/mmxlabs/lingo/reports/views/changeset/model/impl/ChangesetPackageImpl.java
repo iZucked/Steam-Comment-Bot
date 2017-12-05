@@ -237,7 +237,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_MetricsToBase() {
+	public EReference getChangeSet_MetricsToDefaultBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -246,7 +246,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_MetricsToPrevious() {
+	public EReference getChangeSet_MetricsToAlternativeBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -264,7 +264,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSet_PrevScenario() {
+	public EAttribute getChangeSet_CurrentScenario() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -273,7 +273,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSet_CurrentScenario() {
+	public EAttribute getChangeSet_AltBaseScenario() {
 		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -282,8 +282,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_ChangeSetRowsToBase() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(5);
+	public EAttribute getChangeSet_AltCurrentScenario() {
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_ChangeSetRowsToPrevious() {
+	public EReference getChangeSet_ChangeSetRowsToDefaultBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -300,7 +300,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_CurrentMetrics() {
+	public EReference getChangeSet_ChangeSetRowsToAlternativeBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -309,8 +309,17 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getChangeSet_CurrentMetrics() {
+		return (EReference)changeSetEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getChangeSet_Description() {
-		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -696,7 +705,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSetTableGroup_Complexity() {
+	public EAttribute getChangeSetTableGroup_BaseScenario() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -705,7 +714,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSetTableGroup_SortValue() {
+	public EAttribute getChangeSetTableGroup_CurrentScenario() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -714,8 +723,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSetTableGroup_GroupSortValue() {
-		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(7);
+	public EReference getChangeSetTableGroup_LinkedGroup() {
+		return (EReference)changeSetTableGroupEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -723,7 +732,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSetTableGroup_GroupObject() {
+	public EAttribute getChangeSetTableGroup_Complexity() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -732,8 +741,35 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSetTableGroup_GroupAlternative() {
+	public EAttribute getChangeSetTableGroup_SortValue() {
 		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSetTableGroup_GroupSortValue() {
+		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSetTableGroup_GroupObject() {
+		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSetTableGroup_GroupAlternative() {
+		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -1047,13 +1083,14 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetRootEClass, CHANGE_SET_ROOT__CHANGE_SETS);
 
 		changeSetEClass = createEClass(CHANGE_SET);
-		createEReference(changeSetEClass, CHANGE_SET__METRICS_TO_BASE);
-		createEReference(changeSetEClass, CHANGE_SET__METRICS_TO_PREVIOUS);
+		createEReference(changeSetEClass, CHANGE_SET__METRICS_TO_DEFAULT_BASE);
+		createEReference(changeSetEClass, CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE);
 		createEAttribute(changeSetEClass, CHANGE_SET__BASE_SCENARIO);
-		createEAttribute(changeSetEClass, CHANGE_SET__PREV_SCENARIO);
 		createEAttribute(changeSetEClass, CHANGE_SET__CURRENT_SCENARIO);
-		createEReference(changeSetEClass, CHANGE_SET__CHANGE_SET_ROWS_TO_BASE);
-		createEReference(changeSetEClass, CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS);
+		createEAttribute(changeSetEClass, CHANGE_SET__ALT_BASE_SCENARIO);
+		createEAttribute(changeSetEClass, CHANGE_SET__ALT_CURRENT_SCENARIO);
+		createEReference(changeSetEClass, CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE);
+		createEReference(changeSetEClass, CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE);
 		createEReference(changeSetEClass, CHANGE_SET__CURRENT_METRICS);
 		createEAttribute(changeSetEClass, CHANGE_SET__DESCRIPTION);
 
@@ -1104,6 +1141,9 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__CURRENT_METRICS);
 		createEReference(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__CHANGE_SET);
 		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__DESCRIPTION);
+		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__BASE_SCENARIO);
+		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__CURRENT_SCENARIO);
+		createEReference(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__LINKED_GROUP);
 		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__COMPLEXITY);
 		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__SORT_VALUE);
 		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE);
@@ -1186,13 +1226,14 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSetRoot_ChangeSets(), this.getChangeSet(), null, "changeSets", null, 0, -1, ChangeSetRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeSetEClass, ChangeSet.class, "ChangeSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getChangeSet_MetricsToBase(), this.getDeltaMetrics(), null, "metricsToBase", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_MetricsToPrevious(), this.getDeltaMetrics(), null, "metricsToPrevious", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSet_MetricsToDefaultBase(), this.getDeltaMetrics(), null, "metricsToDefaultBase", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSet_MetricsToAlternativeBase(), this.getDeltaMetrics(), null, "metricsToAlternativeBase", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSet_BaseScenario(), this.getScenarioResult(), "baseScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getChangeSet_PrevScenario(), this.getScenarioResult(), "prevScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSet_CurrentScenario(), this.getScenarioResult(), "currentScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_ChangeSetRowsToBase(), this.getChangeSetRow(), null, "changeSetRowsToBase", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_ChangeSetRowsToPrevious(), this.getChangeSetRow(), null, "changeSetRowsToPrevious", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSet_AltBaseScenario(), this.getScenarioResult(), "altBaseScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSet_AltCurrentScenario(), this.getScenarioResult(), "altCurrentScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSet_ChangeSetRowsToDefaultBase(), this.getChangeSetRow(), null, "changeSetRowsToDefaultBase", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSet_ChangeSetRowsToAlternativeBase(), this.getChangeSetRow(), null, "changeSetRowsToAlternativeBase", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_CurrentMetrics(), this.getMetrics(), null, "currentMetrics", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSet_Description(), ecorePackage.getEString(), "description", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1243,6 +1284,9 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSetTableGroup_CurrentMetrics(), this.getMetrics(), null, "currentMetrics", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetTableGroup_ChangeSet(), this.getChangeSet(), null, "changeSet", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableGroup_Description(), ecorePackage.getEString(), "description", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableGroup_BaseScenario(), this.getScenarioResult(), "baseScenario", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableGroup_CurrentScenario(), this.getScenarioResult(), "currentScenario", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSetTableGroup_LinkedGroup(), this.getChangeSetTableGroup(), null, "linkedGroup", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableGroup_Complexity(), ecorePackage.getEInt(), "complexity", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableGroup_SortValue(), ecorePackage.getEDouble(), "sortValue", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableGroup_GroupSortValue(), ecorePackage.getEDouble(), "groupSortValue", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

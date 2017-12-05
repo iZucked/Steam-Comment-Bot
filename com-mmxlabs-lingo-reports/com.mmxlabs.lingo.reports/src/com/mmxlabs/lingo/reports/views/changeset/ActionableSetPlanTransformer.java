@@ -35,7 +35,7 @@ public class ActionableSetPlanTransformer {
 			ScenarioResult prev = null;
 			for (final ScenarioResult current : stages) {
 				if (prev != null) {
-					root.getChangeSets().add(transformer.buildChangeSet(stages.get(0), prev, current));
+					root.getChangeSets().add(transformer.buildDiffToBaseChangeSet(stages.get(0), prev, current));
 				}
 				prev = current;
 				monitor.worked(1);

@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
@@ -38,14 +37,12 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -207,7 +204,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 		// Group by change count and target
 		for (final ChangeSet changeSet : root.getChangeSets()) {
-			final Collection<ChangeSetRow> changeSetRows = changeSet.getChangeSetRowsToBase();
+			final Collection<ChangeSetRow> changeSetRows = changeSet.getChangeSetRowsToDefaultBase();
 
 			for (final ChangeSetRow row : changeSetRows) {
 				final ChangeSetRowDataGroup afterData = row.getAfterData();
@@ -330,6 +327,10 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 
 		return (tableRoot) -> {
+			if (tableRoot == null) {
+				return;
+			}
+			
 			final Map<ChangeSetMetadata, List<ChangeSetTableGroup>> grouper = new LinkedHashMap<>();
 			for (ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
 				Pair<String, Object> p = getDestination(tableGroup, target);
@@ -1099,7 +1100,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	private Pair<String, Object> getDestination(ChangeSetTableGroup tableGroup, Object target) {
 		ChangeSet changeSet = tableGroup.getChangeSet();
 		Object sendTo = null;
-		for (ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+		// TODO: Does this need to check alternative base?
+		for (ChangeSetRow row : changeSet.getChangeSetRowsToDefaultBase()) {
 			final ChangeSetRowDataGroup afterData = row.getAfterData();
 			if (afterData == null) {
 				continue;

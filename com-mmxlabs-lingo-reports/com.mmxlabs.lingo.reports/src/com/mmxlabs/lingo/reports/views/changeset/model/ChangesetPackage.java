@@ -110,22 +110,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET = 1;
 
 	/**
-	 * The feature id for the '<em><b>Metrics To Base</b></em>' containment reference.
+	 * The feature id for the '<em><b>Metrics To Default Base</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__METRICS_TO_BASE = 0;
+	int CHANGE_SET__METRICS_TO_DEFAULT_BASE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Metrics To Previous</b></em>' containment reference.
+	 * The feature id for the '<em><b>Metrics To Alternative Base</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__METRICS_TO_PREVIOUS = 1;
+	int CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Base Scenario</b></em>' attribute.
@@ -137,40 +137,49 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET__BASE_SCENARIO = 2;
 
 	/**
-	 * The feature id for the '<em><b>Prev Scenario</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET__PREV_SCENARIO = 3;
-
-	/**
 	 * The feature id for the '<em><b>Current Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__CURRENT_SCENARIO = 4;
+	int CHANGE_SET__CURRENT_SCENARIO = 3;
 
 	/**
-	 * The feature id for the '<em><b>Change Set Rows To Base</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Alt Base Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__CHANGE_SET_ROWS_TO_BASE = 5;
+	int CHANGE_SET__ALT_BASE_SCENARIO = 4;
 
 	/**
-	 * The feature id for the '<em><b>Change Set Rows To Previous</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Alt Current Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS = 6;
+	int CHANGE_SET__ALT_CURRENT_SCENARIO = 5;
+
+	/**
+	 * The feature id for the '<em><b>Change Set Rows To Default Base</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Change Set Rows To Alternative Base</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Current Metrics</b></em>' containment reference.
@@ -179,7 +188,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__CURRENT_METRICS = 7;
+	int CHANGE_SET__CURRENT_METRICS = 8;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -188,7 +197,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__DESCRIPTION = 8;
+	int CHANGE_SET__DESCRIPTION = 9;
 
 	/**
 	 * The number of structural features of the '<em>Change Set</em>' class.
@@ -197,7 +206,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_FEATURE_COUNT = 9;
+	int CHANGE_SET_FEATURE_COUNT = 10;
 
 	/**
 	 * The number of operations of the '<em>Change Set</em>' class.
@@ -685,13 +694,40 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_GROUP__DESCRIPTION = 4;
 
 	/**
+	 * The feature id for the '<em><b>Base Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__BASE_SCENARIO = 5;
+
+	/**
+	 * The feature id for the '<em><b>Current Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__CURRENT_SCENARIO = 6;
+
+	/**
+	 * The feature id for the '<em><b>Linked Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__LINKED_GROUP = 7;
+
+	/**
 	 * The feature id for the '<em><b>Complexity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_GROUP__COMPLEXITY = 5;
+	int CHANGE_SET_TABLE_GROUP__COMPLEXITY = 8;
 
 	/**
 	 * The feature id for the '<em><b>Sort Value</b></em>' attribute.
@@ -700,7 +736,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_GROUP__SORT_VALUE = 6;
+	int CHANGE_SET_TABLE_GROUP__SORT_VALUE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Group Sort Value</b></em>' attribute.
@@ -709,7 +745,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE = 7;
+	int CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Group Object</b></em>' attribute.
@@ -718,7 +754,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_GROUP__GROUP_OBJECT = 8;
+	int CHANGE_SET_TABLE_GROUP__GROUP_OBJECT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Group Alternative</b></em>' attribute.
@@ -727,7 +763,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE = 9;
+	int CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE = 12;
 
 	/**
 	 * The number of structural features of the '<em>Change Set Table Group</em>' class.
@@ -736,7 +772,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_GROUP_FEATURE_COUNT = 10;
+	int CHANGE_SET_TABLE_GROUP_FEATURE_COUNT = 13;
 
 	/**
 	 * The number of operations of the '<em>Change Set Table Group</em>' class.
@@ -1099,26 +1135,26 @@ public interface ChangesetPackage extends EPackage {
 	EClass getChangeSet();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToBase <em>Metrics To Base</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToDefaultBase <em>Metrics To Default Base</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Metrics To Base</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToBase()
+	 * @return the meta object for the containment reference '<em>Metrics To Default Base</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToDefaultBase()
 	 * @see #getChangeSet()
 	 * @generated
 	 */
-	EReference getChangeSet_MetricsToBase();
+	EReference getChangeSet_MetricsToDefaultBase();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToPrevious <em>Metrics To Previous</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToAlternativeBase <em>Metrics To Alternative Base</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Metrics To Previous</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToPrevious()
+	 * @return the meta object for the containment reference '<em>Metrics To Alternative Base</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToAlternativeBase()
 	 * @see #getChangeSet()
 	 * @generated
 	 */
-	EReference getChangeSet_MetricsToPrevious();
+	EReference getChangeSet_MetricsToAlternativeBase();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenario <em>Base Scenario</em>}'.
@@ -1132,17 +1168,6 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSet_BaseScenario();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario <em>Prev Scenario</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Prev Scenario</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario()
-	 * @see #getChangeSet()
-	 * @generated
-	 */
-	EAttribute getChangeSet_PrevScenario();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenario <em>Current Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1154,26 +1179,48 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSet_CurrentScenario();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToBase <em>Change Set Rows To Base</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getAltBaseScenario <em>Alt Base Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Change Set Rows To Base</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToBase()
+	 * @return the meta object for the attribute '<em>Alt Base Scenario</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getAltBaseScenario()
 	 * @see #getChangeSet()
 	 * @generated
 	 */
-	EReference getChangeSet_ChangeSetRowsToBase();
+	EAttribute getChangeSet_AltBaseScenario();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToPrevious <em>Change Set Rows To Previous</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getAltCurrentScenario <em>Alt Current Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Change Set Rows To Previous</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToPrevious()
+	 * @return the meta object for the attribute '<em>Alt Current Scenario</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getAltCurrentScenario()
 	 * @see #getChangeSet()
 	 * @generated
 	 */
-	EReference getChangeSet_ChangeSetRowsToPrevious();
+	EAttribute getChangeSet_AltCurrentScenario();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToDefaultBase <em>Change Set Rows To Default Base</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Change Set Rows To Default Base</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToDefaultBase()
+	 * @see #getChangeSet()
+	 * @generated
+	 */
+	EReference getChangeSet_ChangeSetRowsToDefaultBase();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToAlternativeBase <em>Change Set Rows To Alternative Base</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Change Set Rows To Alternative Base</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToAlternativeBase()
+	 * @see #getChangeSet()
+	 * @generated
+	 */
+	EReference getChangeSet_ChangeSetRowsToAlternativeBase();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentMetrics <em>Current Metrics</em>}'.
@@ -1597,6 +1644,39 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getChangeSetTableGroup_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getBaseScenario <em>Base Scenario</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Scenario</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getBaseScenario()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableGroup_BaseScenario();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getCurrentScenario <em>Current Scenario</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Current Scenario</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getCurrentScenario()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableGroup_CurrentScenario();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getLinkedGroup <em>Linked Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Linked Group</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getLinkedGroup()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EReference getChangeSetTableGroup_LinkedGroup();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getComplexity <em>Complexity</em>}'.
@@ -2098,20 +2178,20 @@ public interface ChangesetPackage extends EPackage {
 		EClass CHANGE_SET = eINSTANCE.getChangeSet();
 
 		/**
-		 * The meta object literal for the '<em><b>Metrics To Base</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Metrics To Default Base</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHANGE_SET__METRICS_TO_BASE = eINSTANCE.getChangeSet_MetricsToBase();
+		EReference CHANGE_SET__METRICS_TO_DEFAULT_BASE = eINSTANCE.getChangeSet_MetricsToDefaultBase();
 
 		/**
-		 * The meta object literal for the '<em><b>Metrics To Previous</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Metrics To Alternative Base</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHANGE_SET__METRICS_TO_PREVIOUS = eINSTANCE.getChangeSet_MetricsToPrevious();
+		EReference CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE = eINSTANCE.getChangeSet_MetricsToAlternativeBase();
 
 		/**
 		 * The meta object literal for the '<em><b>Base Scenario</b></em>' attribute feature.
@@ -2122,14 +2202,6 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET__BASE_SCENARIO = eINSTANCE.getChangeSet_BaseScenario();
 
 		/**
-		 * The meta object literal for the '<em><b>Prev Scenario</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET__PREV_SCENARIO = eINSTANCE.getChangeSet_PrevScenario();
-
-		/**
 		 * The meta object literal for the '<em><b>Current Scenario</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2138,20 +2210,36 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET__CURRENT_SCENARIO = eINSTANCE.getChangeSet_CurrentScenario();
 
 		/**
-		 * The meta object literal for the '<em><b>Change Set Rows To Base</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Alt Base Scenario</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHANGE_SET__CHANGE_SET_ROWS_TO_BASE = eINSTANCE.getChangeSet_ChangeSetRowsToBase();
+		EAttribute CHANGE_SET__ALT_BASE_SCENARIO = eINSTANCE.getChangeSet_AltBaseScenario();
 
 		/**
-		 * The meta object literal for the '<em><b>Change Set Rows To Previous</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Alt Current Scenario</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS = eINSTANCE.getChangeSet_ChangeSetRowsToPrevious();
+		EAttribute CHANGE_SET__ALT_CURRENT_SCENARIO = eINSTANCE.getChangeSet_AltCurrentScenario();
+
+		/**
+		 * The meta object literal for the '<em><b>Change Set Rows To Default Base</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE = eINSTANCE.getChangeSet_ChangeSetRowsToDefaultBase();
+
+		/**
+		 * The meta object literal for the '<em><b>Change Set Rows To Alternative Base</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE = eINSTANCE.getChangeSet_ChangeSetRowsToAlternativeBase();
 
 		/**
 		 * The meta object literal for the '<em><b>Current Metrics</b></em>' containment reference feature.
@@ -2476,6 +2564,30 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHANGE_SET_TABLE_GROUP__DESCRIPTION = eINSTANCE.getChangeSetTableGroup_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Scenario</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_GROUP__BASE_SCENARIO = eINSTANCE.getChangeSetTableGroup_BaseScenario();
+
+		/**
+		 * The meta object literal for the '<em><b>Current Scenario</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_GROUP__CURRENT_SCENARIO = eINSTANCE.getChangeSetTableGroup_CurrentScenario();
+
+		/**
+		 * The meta object literal for the '<em><b>Linked Group</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_TABLE_GROUP__LINKED_GROUP = eINSTANCE.getChangeSetTableGroup_LinkedGroup();
 
 		/**
 		 * The meta object literal for the '<em><b>Complexity</b></em>' attribute feature.
