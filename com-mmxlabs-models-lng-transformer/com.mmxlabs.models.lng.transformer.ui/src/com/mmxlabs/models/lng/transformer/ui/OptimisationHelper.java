@@ -284,7 +284,7 @@ public final class OptimisationHelper {
 		// Reset disabled features
 		resetDisabledFeatures(copy);
 
-		if (!forEvaluation) {
+		if (!forEvaluation && nameProvider != null) {
 			dialog.addNameOption(nameProvider.nameSuggestion, nameProvider.existingNames);
 		}
 
