@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -56,6 +57,7 @@ public final class ScenarioModelBuilder {
 		// rootObject.setParametersModel(ParametersFactory.eINSTANCE.createParametersModel());
 		rootObject.setCargoModel(CargoFactory.eINSTANCE.createCargoModel());
 		rootObject.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
+		rootObject.setAnalyticsModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		referenceModel.setPortModel(PortFactory.eINSTANCE.createPortModel());
