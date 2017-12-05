@@ -54,6 +54,7 @@ public class NodeItemProvider extends ItemProviderAdapter implements IEditingDom
 
 			addDisplayNamePropertyDescriptor(object);
 			addParentPropertyDescriptor(object);
+			addPublishedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -79,6 +80,18 @@ public class NodeItemProvider extends ItemProviderAdapter implements IEditingDom
 	protected void addParentPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Node_parent_feature"),
 				getString("_UI_PropertyDescriptor_description", "_UI_Node_parent_feature", "_UI_Node_type"), BrowserPackage.Literals.NODE__PARENT, true, false, true, null, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Published feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPublishedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Node_published_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_Node_published_feature", "_UI_Node_type"), BrowserPackage.Literals.NODE__PUBLISHED, true, false, false,
+				ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -117,6 +130,7 @@ public class NodeItemProvider extends ItemProviderAdapter implements IEditingDom
 
 		switch (notification.getFeatureID(Node.class)) {
 		case BrowserPackage.NODE__DISPLAY_NAME:
+		case BrowserPackage.NODE__PUBLISHED:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}

@@ -113,13 +113,22 @@ public interface BrowserPackage extends EPackage {
 	int NODE__PARENT = 1;
 
 	/**
+	 * The feature id for the '<em><b>Published</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE__PUBLISHED = 2;
+
+	/**
 	 * The number of structural features of the '<em>Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NODE_FEATURE_COUNT = 2;
+	int NODE_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Node</em>' class.
@@ -157,6 +166,15 @@ public interface BrowserPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE_NODE__PARENT = NODE__PARENT;
+
+	/**
+	 * The feature id for the '<em><b>Published</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_NODE__PUBLISHED = NODE__PUBLISHED;
 
 	/**
 	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
@@ -212,6 +230,15 @@ public interface BrowserPackage extends EPackage {
 	 * @ordered
 	 */
 	int LEAF__PARENT = NODE__PARENT;
+
+	/**
+	 * The feature id for the '<em><b>Published</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEAF__PUBLISHED = NODE__PUBLISHED;
 
 	/**
 	 * The number of structural features of the '<em>Leaf</em>' class.
@@ -305,6 +332,17 @@ public interface BrowserPackage extends EPackage {
 	EReference getNode_Parent();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lngdataserver.browser.Node#isPublished <em>Published</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Published</em>'.
+	 * @see com.mmxlabs.lngdataserver.browser.Node#isPublished()
+	 * @see #getNode()
+	 * @generated
+	 */
+	EAttribute getNode_Published();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -384,6 +422,13 @@ public interface BrowserPackage extends EPackage {
 		 * @generated
 		 */
 		EReference NODE__PARENT = eINSTANCE.getNode_Parent();
+		/**
+		 * The meta object literal for the '<em><b>Published</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NODE__PUBLISHED = eINSTANCE.getNode_Published();
 
 	}
 

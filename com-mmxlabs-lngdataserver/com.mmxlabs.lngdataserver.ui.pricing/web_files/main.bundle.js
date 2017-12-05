@@ -1051,6 +1051,8 @@ webpackEmptyContext.id = "../../../../../src async recursive";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppRoutingModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1070,13 +1072,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
 var routes = [
     { path: '', redirectTo: '/distances', pathMatch: 'full' },
     { path: 'distances', component: __WEBPACK_IMPORTED_MODULE_2__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */] },
     { path: 'distances/:version', component: __WEBPACK_IMPORTED_MODULE_2__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */] },
     { path: 'ports/:id', component: __WEBPACK_IMPORTED_MODULE_4__port_detail_port_detail_component__["a" /* PortDetailComponent */] },
     { path: 'ports', component: __WEBPACK_IMPORTED_MODULE_3__ports_ports_component__["a" /* PortsComponent */] },
-    { path: 'pricing', component: __WEBPACK_IMPORTED_MODULE_5__pricing_pricing_component__["a" /* PricingComponent */],
+    { path: 'pricing/:version', component: __WEBPACK_IMPORTED_MODULE_5__pricing_pricing_component__["a" /* PricingComponent */],
         children: [
             { path: '', redirectTo: 'commodities', pathMatch: 'full' },
             { path: 'commodities', component: __WEBPACK_IMPORTED_MODULE_6__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */], children: [
@@ -1085,7 +1089,11 @@ var routes = [
                     { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_10__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */] }
                 ]
             },
-            { path: 'currencies', component: __WEBPACK_IMPORTED_MODULE_7__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */] },
+            { path: 'currencies', component: __WEBPACK_IMPORTED_MODULE_7__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */], children: [
+                    { path: '', redirectTo: 'chart', pathMatch: 'full' },
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_12__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_13__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */] }
+                ] },
             { path: 'basefuel', component: __WEBPACK_IMPORTED_MODULE_8__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */] },
             { path: 'charter', component: __WEBPACK_IMPORTED_MODULE_9__pricing_charter_charter_component__["a" /* CharterComponent */] }
         ]
@@ -1147,7 +1155,7 @@ var AppComponent = (function () {
 AppComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'my-app',
-        template: "\n    <h1>{{title}}</h1>\n    <nav>\n        <a routerLink=\"/distances\" routerLinkActive=\"active\">Distances</a>\n        <a routerLink=\"/ports\" routerLinkActive=\"active\">Ports</a>\n        <a routerLink=\"/pricing\" routerLinkActive=\"active\">Pricing</a>\n    </nav>\n    <router-outlet></router-outlet>\n ",
+        template: "\n    <h1>{{title}}</h1>\n    <nav>\n        <a routerLink=\"/distances\" routerLinkActive=\"active\">Distances</a>\n        <a routerLink=\"/ports\" routerLinkActive=\"active\">Ports</a>\n        <a routerLink=\"/pricing/latest\" routerLinkActive=\"active\">Pricing</a>\n    </nav>\n    <router-outlet></router-outlet>\n ",
         styles: [__webpack_require__("../../../../../src/app/app.component.css")]
     })
 ], AppComponent);
@@ -1190,6 +1198,8 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pricing_curve_editor_curve_editor_component__ = __webpack_require__("../../../../../src/app/pricing/curve-editor/curve-editor.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
 /* unused harmony export getParameterByName */
 /* unused harmony export ApiBaseUrlFactory */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
@@ -1199,6 +1209,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -1255,6 +1267,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_23__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */],
             __WEBPACK_IMPORTED_MODULE_24__pricing_curve_editor_curve_editor_component__["a" /* CurveEditorComponent */],
             __WEBPACK_IMPORTED_MODULE_25__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -1652,37 +1666,39 @@ var PricingService = (function () {
             this.basePath = basePath;
         }
     }
-    PricingService.prototype.getCurrencies = function () {
-        var _this = this;
-        return this.http.get(this.basePath + "/currencies").toPromise().then(function (response) {
-            return _this.getCurves(response.map(function (e) { return e.name; }));
-        });
+    PricingService.prototype.getCurrencies = function (version) {
+        return this.getSpecific(this.basePath + "/currencies", version);
     };
-    PricingService.prototype.getCommodities = function () {
-        var _this = this;
-        return this.http.get(this.basePath + "/commodities").toPromise().then(function (response) {
-            return _this.getCurves(response.map(function (e) { return e.name; }));
-        });
+    PricingService.prototype.getCommodities = function (version) {
+        return this.getSpecific(this.basePath + "/commodities", version);
     };
-    PricingService.prototype.getBaseFuel = function () {
-        var _this = this;
-        return this.http.get(this.basePath + "/basefuel").toPromise().then(function (response) {
-            return _this.getCurves(response.map(function (e) { return e.name; }));
-        });
+    PricingService.prototype.getBaseFuel = function (version) {
+        return this.getSpecific(this.basePath + "/basefuel", version);
     };
-    PricingService.prototype.getCharter = function () {
+    PricingService.prototype.getCharter = function (version) {
+        return this.getSpecific(this.basePath + "/charter", version);
+    };
+    PricingService.prototype.getSpecific = function (endPoint, version) {
         var _this = this;
-        return this.http.get(this.basePath + "/charter").toPromise().then(function (response) {
-            return _this.getCurves(response.map(function (e) { return e.name; }));
+        var urlParams = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpParams */]();
+        if (version != undefined) {
+            urlParams = urlParams.append('v', version);
+        }
+        return this.http.get(endPoint, { params: urlParams }).toPromise().then(function (response) {
+            return _this.getCurves(response.map(function (e) { return e.name; }), version);
         });
     };
     /**
      * Bulk retrival of curves
      * @param curves
      */
-    PricingService.prototype.getCurves = function (curves) {
+    PricingService.prototype.getCurves = function (curves, version) {
+        var urlParams = curves.reduce(function (params, element) { return params.append("curve", element); }, new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpParams */]());
+        if (version != undefined) {
+            urlParams = urlParams.append('v', version);
+        }
         return this.http.get(this.basePath + "/bulk", {
-            params: curves.reduce(function (params, element) { return params.append("curve", element); }, new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpParams */]())
+            params: urlParams
         }).toPromise();
     };
     return PricingService;
@@ -2126,6 +2142,186 @@ CommoditiesComponent = __decorate([
 
 /***/ }),
 
+/***/ "../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p-dropdown [options]=\"currencies\" [(ngModel)]=\"selectedCurrency\" (onChange)=\"currencyChange()\"></p-dropdown>\n<p-chart type=\"line\" [data]=\"data\"></p-chart>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CurrenciesChartComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var CurrenciesChartComponent = (function () {
+    function CurrenciesChartComponent(pricingService) {
+        this.pricingService = pricingService;
+        this.unfilteredDataSets = new Array();
+        this.currencies = new Array();
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+    }
+    CurrenciesChartComponent.prototype.ngOnInit = function () {
+        this.colorStack = __WEBPACK_IMPORTED_MODULE_1__pricing_component__["a" /* PricingComponent */].COLORS.slice();
+        this.loadCurves();
+    };
+    CurrenciesChartComponent.prototype.loadCurves = function () {
+        var _this = this;
+        this.pricingService.getCurrencies()
+            .then(function (result) {
+            _this.data.labels = result.curves[0].curve.map(function (e) { return e.date; });
+            result.curves.forEach(function (element) {
+                // TODO: expression curves are ignored for now. Need to be handled on the server
+                if (element['@class'] === ".ExpressionCurve") {
+                    return;
+                }
+                _this.unfilteredDataSets.push({
+                    currency: element.currency,
+                    label: element.name,
+                    data: element.curve.map(function (e) { return e.value; }),
+                    fill: false,
+                    borderColor: _this.colorStack.pop()
+                });
+            });
+            _this.getCurrencies(result.curves);
+        });
+    };
+    CurrenciesChartComponent.prototype.currencyChange = function () {
+        this.filterCurrencies(this.selectedCurrency);
+    };
+    CurrenciesChartComponent.prototype.getCurrencies = function (curves) {
+        var currencies = new Set();
+        curves.forEach(function (element) {
+            currencies.add(element.currency);
+        });
+        var currencyList = Array.from(currencies);
+        for (var i = 0; i < currencyList.length; i++) {
+            if (i == 0) {
+                this.selectedCurrency = currencyList[i];
+                this.filterCurrencies(currencyList[i]);
+            }
+            this.currencies.push({ label: currencyList[i], value: currencyList[i] });
+        }
+    };
+    CurrenciesChartComponent.prototype.filterCurrencies = function (currency) {
+        this.data = {
+            datasets: this.unfilteredDataSets.filter(function (e) { return e.currency === currency; }),
+            labels: this.data.labels
+        };
+    };
+    return CurrenciesChartComponent;
+}());
+CurrenciesChartComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-currencies-chart',
+        template: __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__pricing_service__["a" /* PricingService */]) === "function" && _a || Object])
+], CurrenciesChartComponent);
+
+var _a;
+//# sourceMappingURL=currencies-chart.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  currencies-editor works!\n</p>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CurrenciesEditorComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CurrenciesEditorComponent = (function () {
+    function CurrenciesEditorComponent() {
+    }
+    CurrenciesEditorComponent.prototype.ngOnInit = function () {
+    };
+    return CurrenciesEditorComponent;
+}());
+CurrenciesEditorComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-currencies-editor',
+        template: __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], CurrenciesEditorComponent);
+
+//# sourceMappingURL=currencies-editor.component.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/pricing/currencies/currencies.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2147,7 +2343,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pricing/currencies/currencies.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p-chart type=\"line\" [data]=\"data\"></p-chart>\n"
+module.exports = "<button pButton type=\"button\" [routerLink]=\"['chart']\" icon=\"fa-line-chart\"  class=\"ui-button-secondary\"></button>\n<button pButton type=\"button\" [routerLink]=\"['editor']\" icon=\"fa-table\"  class=\"ui-button-secondary\"></button>\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -2379,6 +2575,7 @@ module.exports = "<h2> Pricing </h2>\n<p-tabMenu [model]=\"items\"></p-tabMenu>\
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PricingComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2390,8 +2587,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var PricingComponent = (function () {
-    function PricingComponent() {
+    function PricingComponent(route) {
+        this.route = route;
+        // if (route.snapshot.paramMap.has("version")){
+        //   this.version = route.snapshot.paramMap.get("version");
+        // }
     }
     PricingComponent.prototype.ngOnInit = function () {
         this.items = [
@@ -2410,9 +2612,10 @@ PricingComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/pricing/pricing.component.html"),
         styles: [__webpack_require__("../../../../../src/app/pricing/pricing.component.css")],
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"]) === "function" && _a || Object])
 ], PricingComponent);
 
+var _a;
 //# sourceMappingURL=pricing.component.js.map
 
 /***/ }),

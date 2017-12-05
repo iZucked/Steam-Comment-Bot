@@ -46,9 +46,13 @@ public class PricingRepository {
 		}
 	}
 	
-	public List<String> getVersions() throws IOException {
+	public List<PricingVersion> getVersions() throws IOException {
 		ensureReady();
 		return PricingClient.getVersions(backendUrl);
+	}
+	
+	public void publishVersion(String version) throws IOException {
+		PricingClient.publishVersion(version, backendUrl);
 	}
 	
 	public void registerVersionListener(Consumer<String> versionConsumer) {
@@ -86,7 +90,7 @@ public class PricingRepository {
 
 	public IPricingProvider getLatestPrices() throws IOException {
 		ensureReady();
-		return getPricingProvider(getVersions().get(0));
+		return getPricingProvider(getVersions().get(0).getIdentifier());
 	}
 
 	public IPricingProvider getPricingProvider(String version) throws IOException {

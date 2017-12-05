@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#getDisplayName <em>Display Name</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#getParent <em>Parent</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#isPublished <em>Published</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getNode()
@@ -74,5 +75,31 @@ public interface Node extends EObject {
 	 * @generated
 	 */
 	void setParent(Node value);
+
+	/**
+	 * Returns the value of the '<em><b>Published</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Published</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Published</em>' attribute.
+	 * @see #setPublished(boolean)
+	 * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getNode_Published()
+	 * @model
+	 * @generated
+	 */
+	boolean isPublished();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lngdataserver.browser.Node#isPublished <em>Published</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Published</em>' attribute.
+	 * @see #isPublished()
+	 * @generated
+	 */
+	void setPublished(boolean value);
 
 } // Node

@@ -179,6 +179,15 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getNode_Published() {
+		return (EAttribute) nodeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public BrowserFactory getBrowserFactory() {
 		return (BrowserFactory) getEFactoryInstance();
 	}
@@ -213,6 +222,7 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 		nodeEClass = createEClass(NODE);
 		createEAttribute(nodeEClass, NODE__DISPLAY_NAME);
 		createEReference(nodeEClass, NODE__PARENT);
+		createEAttribute(nodeEClass, NODE__PUBLISHED);
 	}
 
 	/**
@@ -261,6 +271,8 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 				!IS_DERIVED, IS_ORDERED);
 		initEReference(getNode_Parent(), this.getNode(), null, "parent", null, 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNode_Published(), ecorePackage.getEBoolean(), "published", null, 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
