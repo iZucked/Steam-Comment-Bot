@@ -23,13 +23,12 @@ import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class DistancesSelectionPage extends WizardPage {
-	
+
 	private String versionTag;
 	private boolean isSelected = false;
 	private boolean checked = false;
-	private Map<ScenarioInstance, Map<RouteOption, List<RouteLine>>> lostDistances = new HashMap<ScenarioInstance, Map<RouteOption,List<RouteLine>>>();
-	
-	
+	private Map<ScenarioInstance, Map<RouteOption, List<RouteLine>>> lostDistances = new HashMap<ScenarioInstance, Map<RouteOption, List<RouteLine>>>();
+
 	public Map<ScenarioInstance, Map<RouteOption, List<RouteLine>>> getLostDistances() {
 		return lostDistances;
 	}
@@ -41,7 +40,6 @@ public class DistancesSelectionPage extends WizardPage {
 	protected DistancesSelectionPage(String pageName) {
 		super(pageName);
 	}
-	
 
 	@Override
 	public void createControl(Composite parent) {
@@ -50,54 +48,55 @@ public class DistancesSelectionPage extends WizardPage {
 		// set the layout for the whole functional region
 		GridLayout layout = GridLayoutFactory.createFrom(new GridLayout(2, false)).extendedMargins(0, 0, 0, 0).spacing(5, 0).create();
 		container.setLayout(layout);
-		
-		(new Label(container, SWT.NULL)).setText("Select the version of the distances to be imported: ");
-		
-		final Combo combo = new Combo(container, SWT.READ_ONLY);
-		
-		DistanceRepository dr = new DistanceRepository(BackEndUrlProvider.INSTANCE.getUrl() );
-			dr.getVersions().forEach(v -> combo.add(v));
-		
-	    combo.addSelectionListener(new SelectionListener() {
-	        public void widgetSelected(SelectionEvent e) {
-	        	versionTag = combo.getText();
-	        	isSelected = true;
-	        	cleanChecked();
-	        	getWizard().getContainer().updateButtons();
-	        }
 
-	        public void widgetDefaultSelected(SelectionEvent e) {
-	        	versionTag = combo.getText();
-	        	getWizard().getContainer().updateButtons();
-	        	isSelected = false;
-	        	cleanChecked();
-	        }
-	      });
-	    setControl(container);
+		(new Label(container, SWT.NULL)).setText("Select the version of the distances to be imported: ");
+
+		final Combo combo = new Combo(container, SWT.READ_ONLY);
+
+		DistanceRepository dr = new DistanceRepository(BackEndUrlProvider.INSTANCE.getUrl());
+		dr.getVersions().forEach(v -> combo.add(v));
+
+		combo.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent e) {
+				versionTag = combo.getText();
+				isSelected = true;
+				cleanChecked();
+				getWizard().getContainer().updateButtons();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				versionTag = combo.getText();
+				getWizard().getContainer().updateButtons();
+				isSelected = false;
+				cleanChecked();
+			}
+		});
+		setControl(container);
 	}
-	
+
 	@Override
-	public boolean canFlipToNextPage(){
+	public boolean canFlipToNextPage() {
 		return isPageComplete();
 	}
-	
+
 	@Override
-	public boolean isPageComplete(){
+	public boolean isPageComplete() {
 		return isSelected;
 	}
-	
-	public String getVersionTag(){
+
+	public String getVersionTag() {
 		return versionTag;
 	}
-	
-    @Override
+
+	@Override
 	public IWizardPage getPreviousPage() {
-    	checked = false;
-    	return super.getPreviousPage();
-    }
-	
+		checked = false;
+		return super.getPreviousPage();
+	}
+
 	/**
 	 * Indicates whether the selected distance was evaluated for lost distances
+	 * 
 	 * @return
 	 */
 	public boolean isChecked() {
@@ -107,10 +106,10 @@ public class DistancesSelectionPage extends WizardPage {
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
-	
+
 	private void cleanChecked() {
-    	checked = false;
-    	lostDistances.clear();
+		checked = false;
+		lostDistances.clear();
 	}
 
 }
