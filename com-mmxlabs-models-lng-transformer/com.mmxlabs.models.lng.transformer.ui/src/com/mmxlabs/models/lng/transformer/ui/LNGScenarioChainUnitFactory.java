@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGCleanStateOptimiserTrans
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.ResetInitialSequencesUnit;
+import com.mmxlabs.models.lng.transformer.longterm.LightWeightSchedulerOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGActionSetTransformerUnit;
@@ -51,9 +52,8 @@ public class LNGScenarioChainUnitFactory {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
-	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, final @NonNull ExecutorService executorService,
+	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final @NonNull ExecutorService executorService,
 			final @NonNull OptimisationStage template, final int jobCount, final @NonNull UserSettings userSettings) {
-
 		if (template instanceof CleanStateOptimisationStage) {
 			final CleanStateOptimisationStage stage = (CleanStateOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
@@ -63,7 +63,7 @@ public class LNGScenarioChainUnitFactory {
 					seeds[i] = stage.getSeed() + i;
 				}
 
-				LNGCleanStateOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, seeds);
+				LightWeightSchedulerOptimiserUnit.chainPool(builder, scenarioToOptimiserBridge, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, seeds);
 			}
 			return null;
 		} else if (template instanceof MultipleSolutionSimilarityOptimisationStage) {

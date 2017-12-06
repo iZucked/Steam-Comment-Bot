@@ -1005,6 +1005,7 @@ public final class OptimisationHelper {
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		to.setWithSpotCargoMarkets(from.isWithSpotCargoMarkets());
+		to.setCleanStateOptimisation(from.isCleanStateOptimisation());
 
 		if (from.getSimilarityMode() != null) {
 			to.setSimilarityMode(from.getSimilarityMode());

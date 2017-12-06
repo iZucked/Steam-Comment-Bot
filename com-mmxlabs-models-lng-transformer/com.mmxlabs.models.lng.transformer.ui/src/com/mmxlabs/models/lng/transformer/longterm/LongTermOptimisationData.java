@@ -106,10 +106,6 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	
 	private void setOptionalLoads() {
 		for (int i = 0; i < sortedLoads.length; i++) {
-			if (sortedLoads[i].getId().contains("103")) {
-				int z = 0;
-			}
-			System.out.println(String.format("%s,%s", sortedLoads[i].getId(),optionalElementsProvider.isElementOptional(portSlotProvider.getElement(sortedLoads[i]))? "1": "0"));
 			optionalLoads[i] = optionalElementsProvider.isElementOptional(portSlotProvider.getElement(sortedLoads[i])) && !optionalElementsProvider.getSoftRequiredElements().contains(portSlotProvider.getElement(sortedLoads[i]));
 		}
 	}

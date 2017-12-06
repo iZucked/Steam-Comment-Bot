@@ -13,5 +13,5 @@ public interface ILongTermMatrixOptimiser {
 	 * @param values
 	 * @return
 	 */
-	boolean[][] findOptimalPairings(@NonNull Long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges);
+	boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid);
 }
