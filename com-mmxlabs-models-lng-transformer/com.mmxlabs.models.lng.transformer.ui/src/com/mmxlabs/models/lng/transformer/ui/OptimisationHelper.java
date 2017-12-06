@@ -517,7 +517,9 @@ public final class OptimisationHelper {
 				return null;
 			}
 		}
-		nameProvider.nameSuggestion = dialog.getNameSuggestion();
+		if (nameProvider != null) {
+			nameProvider.nameSuggestion = dialog.getNameSuggestion();
+		}
 		return copy;
 	}
 
