@@ -13,6 +13,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -42,6 +43,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getCurrentMetrics <em>Current Metrics</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getChangeSet <em>Change Set</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getBaseScenario <em>Base Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getCurrentScenario <em>Current Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getLinkedGroup <em>Linked Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getComplexity <em>Complexity</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getSortValue <em>Sort Value</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getGroupSortValue <em>Group Sort Value</em>}</li>
@@ -111,6 +115,56 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * @ordered
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBaseScenario() <em>Base Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ScenarioResult BASE_SCENARIO_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getBaseScenario() <em>Base Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScenarioResult baseScenario = BASE_SCENARIO_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCurrentScenario() <em>Current Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCurrentScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ScenarioResult CURRENT_SCENARIO_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCurrentScenario() <em>Current Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCurrentScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScenarioResult currentScenario = CURRENT_SCENARIO_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getLinkedGroup() <em>Linked Group</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLinkedGroup()
+	 * @generated
+	 * @ordered
+	 */
+	protected ChangeSetTableGroup linkedGroup;
 
 	/**
 	 * The default value of the '{@link #getComplexity() <em>Complexity</em>}' attribute.
@@ -393,6 +447,86 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ScenarioResult getBaseScenario() {
+		return baseScenario;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBaseScenario(ScenarioResult newBaseScenario) {
+		ScenarioResult oldBaseScenario = baseScenario;
+		baseScenario = newBaseScenario;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__BASE_SCENARIO, oldBaseScenario, baseScenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScenarioResult getCurrentScenario() {
+		return currentScenario;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCurrentScenario(ScenarioResult newCurrentScenario) {
+		ScenarioResult oldCurrentScenario = currentScenario;
+		currentScenario = newCurrentScenario;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__CURRENT_SCENARIO, oldCurrentScenario, currentScenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeSetTableGroup getLinkedGroup() {
+		if (linkedGroup != null && linkedGroup.eIsProxy()) {
+			InternalEObject oldLinkedGroup = (InternalEObject)linkedGroup;
+			linkedGroup = (ChangeSetTableGroup)eResolveProxy(oldLinkedGroup);
+			if (linkedGroup != oldLinkedGroup) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_TABLE_GROUP__LINKED_GROUP, oldLinkedGroup, linkedGroup));
+			}
+		}
+		return linkedGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeSetTableGroup basicGetLinkedGroup() {
+		return linkedGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLinkedGroup(ChangeSetTableGroup newLinkedGroup) {
+		ChangeSetTableGroup oldLinkedGroup = linkedGroup;
+		linkedGroup = newLinkedGroup;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__LINKED_GROUP, oldLinkedGroup, linkedGroup));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getComplexity() {
 		return complexity;
 	}
@@ -530,6 +664,13 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 				return basicGetChangeSet();
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__DESCRIPTION:
 				return getDescription();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__BASE_SCENARIO:
+				return getBaseScenario();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__CURRENT_SCENARIO:
+				return getCurrentScenario();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__LINKED_GROUP:
+				if (resolve) return getLinkedGroup();
+				return basicGetLinkedGroup();
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY:
 				return getComplexity();
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__SORT_VALUE:
@@ -568,6 +709,15 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 				return;
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__BASE_SCENARIO:
+				setBaseScenario((ScenarioResult)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__CURRENT_SCENARIO:
+				setCurrentScenario((ScenarioResult)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__LINKED_GROUP:
+				setLinkedGroup((ChangeSetTableGroup)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY:
 				setComplexity((Integer)newValue);
@@ -611,6 +761,15 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__BASE_SCENARIO:
+				setBaseScenario(BASE_SCENARIO_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__CURRENT_SCENARIO:
+				setCurrentScenario(CURRENT_SCENARIO_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__LINKED_GROUP:
+				setLinkedGroup((ChangeSetTableGroup)null);
+				return;
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY:
 				setComplexity(COMPLEXITY_EDEFAULT);
 				return;
@@ -648,6 +807,12 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 				return changeSet != null;
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__BASE_SCENARIO:
+				return BASE_SCENARIO_EDEFAULT == null ? baseScenario != null : !BASE_SCENARIO_EDEFAULT.equals(baseScenario);
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__CURRENT_SCENARIO:
+				return CURRENT_SCENARIO_EDEFAULT == null ? currentScenario != null : !CURRENT_SCENARIO_EDEFAULT.equals(currentScenario);
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__LINKED_GROUP:
+				return linkedGroup != null;
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY:
 				return complexity != COMPLEXITY_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__SORT_VALUE:
@@ -674,6 +839,10 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (description: ");
 		result.append(description);
+		result.append(", baseScenario: ");
+		result.append(baseScenario);
+		result.append(", currentScenario: ");
+		result.append(currentScenario);
 		result.append(", complexity: ");
 		result.append(complexity);
 		result.append(", sortValue: ");

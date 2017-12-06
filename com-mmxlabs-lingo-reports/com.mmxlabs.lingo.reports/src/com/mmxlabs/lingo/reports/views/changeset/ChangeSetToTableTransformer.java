@@ -22,6 +22,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ChangeSetToTableTransformer {
 
@@ -29,17 +30,41 @@ public class ChangeSetToTableTransformer {
 		BY_GROUP, BY_PNL
 	}
 
-	public ChangeSetTableRoot createViewDataModel(final ChangeSetRoot changeSetRoot, final boolean isDiffToBase, final NamedObject targetToSortFirst, SortMode sortMode) {
+	public void bindModels(ChangeSetTableRoot base, ChangeSetTableRoot alt) {
+		if (base == null || alt == null) {
+			return;
+		}
+
+		int count = Math.min(base.getGroups().size(), alt.getGroups().size());
+		for (int i = 0; i < count; ++i) {
+			ChangeSetTableGroup a = base.getGroups().get(i);
+			ChangeSetTableGroup b = alt.getGroups().get(i);
+			a.setLinkedGroup(b);
+			b.setLinkedGroup(a);
+		}
+	}
+
+	public ChangeSetTableRoot createViewDataModel(final ChangeSetRoot changeSetRoot, final boolean isAlternative, final NamedObject targetToSortFirst, SortMode sortMode) {
 
 		final ChangeSetTableRoot changeSetTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 		int groupIdx = 0;
 		for (final ChangeSet changeSet : changeSetRoot.getChangeSets()) {
 
 			List<ChangeSetRow> changeSetRows;
-			if (isDiffToBase) {
-				changeSetRows = changeSet.getChangeSetRowsToBase();
+			ScenarioResult baseResult;
+			ScenarioResult currentResult;
+			if (isAlternative) {
+				changeSetRows = changeSet.getChangeSetRowsToAlternativeBase();
+				baseResult = changeSet.getAltBaseScenario();
+				currentResult = changeSet.getAltCurrentScenario();
 			} else {
-				changeSetRows = changeSet.getChangeSetRowsToPrevious();
+				changeSetRows = changeSet.getChangeSetRowsToDefaultBase();
+				baseResult = changeSet.getBaseScenario();
+				currentResult = changeSet.getCurrentScenario();
+			}
+
+			if (baseResult == null && currentResult == null) {
+				return null;
 			}
 
 			final List<ChangeSetTableRow> changeSetTableGroupRows = convertRows(changeSetRows);
@@ -52,10 +77,14 @@ public class ChangeSetToTableTransformer {
 				ChangeSetTransformerUtil.sortRows(changeSetTableGroupRows, targetToSortFirst);
 				changeSetTableGroup.getRows().addAll(changeSetTableGroupRows);
 				changeSetTableRoot.getGroups().add(changeSetTableGroup);
-				changeSetTableGroup.setDeltaMetrics(EcoreUtil.copy(isDiffToBase ? changeSet.getMetricsToBase() : changeSet.getMetricsToPrevious()));
+				changeSetTableGroup.setDeltaMetrics(EcoreUtil.copy(isAlternative ? changeSet.getMetricsToAlternativeBase() : changeSet.getMetricsToDefaultBase()));
 				changeSetTableGroup.setCurrentMetrics(EcoreUtil.copy(changeSet.getCurrentMetrics()));
 
 				changeSetTableGroup.setChangeSet(changeSet);
+
+				changeSetTableGroup.setBaseScenario(baseResult);
+				changeSetTableGroup.setCurrentScenario(currentResult);
+
 				int structuralChanges = 0;
 				for (final ChangeSetRow row : changeSetRows) {
 					final ChangeSetRowDataGroup afterData = row.getAfterData();

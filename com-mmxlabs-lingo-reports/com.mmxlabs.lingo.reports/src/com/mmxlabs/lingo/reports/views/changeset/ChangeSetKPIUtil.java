@@ -37,7 +37,7 @@ public class ChangeSetKPIUtil {
 		WithoutFlex, WithFlex
 	}
 
-	public static long getPNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+	public static long getPNL(@Nullable final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 	}
 

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -139,8 +140,8 @@ public class ChangeSetView extends ViewPart {
 
 		public ChangeSetRoot root;
 
-		public ChangeSetTableRoot tableRootToBase;
-		public ChangeSetTableRoot tableRootToPrevious;
+		public ChangeSetTableRoot tableRootAlternative;
+		public ChangeSetTableRoot tableRootDefault;
 
 		public @Nullable AnalyticsSolution lastSolution;
 		public @Nullable NamedObject lastTargetSlot;
@@ -167,8 +168,8 @@ public class ChangeSetView extends ViewPart {
 			this.lastSolution = null;
 			this.lastTargetSlot = null;
 			this.root = null;
-			this.tableRootToBase = null;
-			this.tableRootToPrevious = null;
+			this.tableRootDefault = null;
+			this.tableRootAlternative = null;
 		}
 
 	}
@@ -237,13 +238,11 @@ public class ChangeSetView extends ViewPart {
 
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
-	private boolean diffToBase = false;
+	private boolean showAlternativeChangeModel = false;
 	private boolean showNonStructuralChanges = false;
 	private boolean showRelatedChangesMenus = false;
 	private boolean showUserFilterMenus = false;
 	private boolean showNegativePNLChanges = true;
-
-	private boolean persistAnalyticsSolution = false;
 
 	private final class ViewUpdateRunnable implements Runnable {
 		private final ViewState newViewState;
@@ -265,18 +264,18 @@ public class ChangeSetView extends ViewPart {
 
 			final Set<VesselData> vesselnames = new LinkedHashSet<>();
 
-			final ChangeSetTableRoot csDdiffToBase = newViewState.tableRootToBase;
-			if (csDdiffToBase != null) {
-				for (final ChangeSetTableGroup group : csDdiffToBase.getGroups()) {
+			final ChangeSetTableRoot tableRootDefault = newViewState.tableRootDefault;
+			if (tableRootDefault != null) {
+				for (final ChangeSetTableGroup group : tableRootDefault.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
 						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType()));
 						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType()));
 					}
 				}
 			}
-			final ChangeSetTableRoot csdiffToPrevious = newViewState.tableRootToPrevious;
-			if (csdiffToPrevious != null) {
-				for (final ChangeSetTableGroup group : csdiffToPrevious.getGroups()) {
+			final ChangeSetTableRoot tableRootAlternative = newViewState.tableRootAlternative;
+			if (tableRootAlternative != null) {
+				for (final ChangeSetTableGroup group : tableRootAlternative.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
 						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType()));
 						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType()));
@@ -291,7 +290,7 @@ public class ChangeSetView extends ViewPart {
 
 			final ViewState oldRoot = currentViewState;
 
-			final ChangeSetTableRoot newTable = diffToBase ? csDdiffToBase : csdiffToPrevious;
+			final ChangeSetTableRoot newTable = showAlternativeChangeModel ? tableRootAlternative : tableRootDefault;
 			// Release after creating the new one so we increment reference counts before
 			// decrementing, which could cause a scenario unload/load cycle
 
@@ -398,14 +397,16 @@ public class ChangeSetView extends ViewPart {
 
 						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
-						final ChangeSetTableRoot csdiffToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newRoot, false, null, SortMode.BY_GROUP);
-						final ChangeSetTableRoot csdiffToBase = new ChangeSetToTableTransformer().createViewDataModel(newRoot, true, null, SortMode.BY_GROUP);
+						ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
+						final ChangeSetTableRoot tableRootDefault = changeSetToTableTransformer.createViewDataModel(newRoot, false, null, SortMode.BY_GROUP);
+						final ChangeSetTableRoot tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newRoot, true, null, SortMode.BY_GROUP);
+						changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
 
-						newViewState.postProcess.accept(csdiffToBase);
-						newViewState.postProcess.accept(csdiffToPrevious);
+						newViewState.postProcess.accept(tableRootDefault);
+						newViewState.postProcess.accept(tableRootAlternative);
 						newViewState.root = newRoot;
-						newViewState.tableRootToBase = csdiffToBase;
-						newViewState.tableRootToPrevious = csdiffToPrevious;
+						newViewState.tableRootDefault = tableRootDefault;
+						newViewState.tableRootAlternative = tableRootAlternative;
 
 						RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
 					}
@@ -545,19 +546,8 @@ public class ChangeSetView extends ViewPart {
 							}
 							if (o instanceof ChangeSetTableGroup) {
 								final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) o;
-								final ChangeSet changeSet = changeSetTableGroup.getChangeSet();
-								if (changeSet != null) {
-									final ScenarioResult other;
-									if (diffToBase) {
-										other = changeSet.getBaseScenario();
-									} else {
-										other = changeSet.getPrevScenario();
-									}
-									if (other != null && changeSet.getCurrentScenario() != null) {
-										scenarioSelectionProvider.setPinnedPair(other, changeSet.getCurrentScenario(), true);
-									}
-									break;
-								}
+								scenarioSelectionProvider.setPinnedPair(changeSetTableGroup.getBaseScenario(), changeSetTableGroup.getCurrentScenario(), true);
+								break;
 							}
 						}
 					}
@@ -925,10 +915,14 @@ public class ChangeSetView extends ViewPart {
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						final ViewState newViewState = action.apply(monitor, targetSlotId);
-						newViewState.tableRootToBase = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
-						newViewState.tableRootToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
-						newViewState.postProcess.accept(newViewState.tableRootToBase);
-						newViewState.postProcess.accept(newViewState.tableRootToPrevious);
+						final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
+						newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
+						newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
+
+						changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
+
+						newViewState.postProcess.accept(newViewState.tableRootDefault);
+						newViewState.postProcess.accept(newViewState.tableRootAlternative);
 
 						if (runAsync) {
 							display.asyncExec(new ViewUpdateRunnable(newViewState));
@@ -966,8 +960,8 @@ public class ChangeSetView extends ViewPart {
 
 		final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 		newViewState.root = newRoot;
-		newViewState.tableRootToBase = newTableRoot;
-		newViewState.tableRootToPrevious = newTableRoot;
+		newViewState.tableRootAlternative = newTableRoot;
+		newViewState.tableRootDefault = newTableRoot;
 
 		RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
 	}
@@ -989,7 +983,9 @@ public class ChangeSetView extends ViewPart {
 
 		scenarioComparisonService.removeListener(listener);
 		cleanUp(this.currentViewState);
-		columnHelper.getDiagram().setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetTableRoot());
+		if (columnHelper != null) {
+			columnHelper.getDiagram().setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetTableRoot());
+		}
 		this.currentViewState = null;
 
 		columnHelper.cleanUpVesselColumns();
@@ -1065,18 +1061,19 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	private void doToggleDiffToBase() {
-		diffToBase = !diffToBase;
+		showAlternativeChangeModel = !showAlternativeChangeModel;
 		if (toggleDiffToBaseAction != null) {
-			toggleDiffToBaseAction.setChecked(diffToBase);
+			toggleDiffToBaseAction.setChecked(showAlternativeChangeModel);
 		}
 		final ViewState viewState = currentViewState;
 		if (viewState != null) {
-			if (diffToBase) {
-				columnHelper.getDiagram().setChangeSetRoot(viewState.tableRootToBase);
-				ViewerHelper.setInput(viewer, true, viewState.tableRootToBase);
+			if (showAlternativeChangeModel && viewState.tableRootAlternative != null) {
+				columnHelper.getDiagram().setChangeSetRoot(viewState.tableRootAlternative);
+				ViewerHelper.setInput(viewer, true, viewState.tableRootAlternative);
 			} else {
-				columnHelper.getDiagram().setChangeSetRoot(viewState.tableRootToPrevious);
-				ViewerHelper.setInput(viewer, true, viewState.tableRootToPrevious);
+				showAlternativeChangeModel = false;
+				columnHelper.getDiagram().setChangeSetRoot(viewState.tableRootDefault);
+				ViewerHelper.setInput(viewer, true, viewState.tableRootDefault);
 			}
 		}
 	}
@@ -1265,7 +1262,6 @@ public class ChangeSetView extends ViewPart {
 		lastParentFeature = null;
 
 		this.viewMode = ViewMode.OLD_ACTION_SET;
-		this.persistAnalyticsSolution = true;
 
 		final ScenarioInstance target = solution.getScenarioInstance();
 		final EObject plan = solution.getSolution();
@@ -1378,7 +1374,11 @@ public class ChangeSetView extends ViewPart {
 						linked = true;
 						break;
 					}
-					if (checker.apply(changeSet.getPrevScenario())) {
+					if (checker.apply(changeSet.getAltBaseScenario())) {
+						linked = true;
+						break;
+					}
+					if (checker.apply(changeSet.getAltCurrentScenario())) {
 						linked = true;
 						break;
 					}
@@ -1403,7 +1403,6 @@ public class ChangeSetView extends ViewPart {
 		this.viewMode = viewMode;
 		handleEvents = false;
 		canExportChangeSet = true;
-		diffToBase = true;
 		showNegativePNLChanges = true;
 		insertionPlanFilter.setInsertionModeActive(false);
 		insertionPlanFilter.setMultipleSolutionView(true);
@@ -1418,7 +1417,7 @@ public class ChangeSetView extends ViewPart {
 
 		switch (viewMode) {
 		case COMPARE:
-			diffToBase = false;
+			showAlternativeChangeModel = false;
 			handleEvents = true;
 			canExportChangeSet = false;
 			break;
@@ -1432,16 +1431,16 @@ public class ChangeSetView extends ViewPart {
 			showGroupByMenu = true;
 			showChangeTargetMenu = true;
 			showNegativePNLChangesMenu = true;
+			showAlternativeChangeModel = false;
 			break;
 		case NEW_ACTION_SET:
 			showToggleDiffToBaseAction = true;
-			diffToBase = false;
 			break;
 		case OLD_ACTION_SET:
 			showToggleDiffToBaseAction = true;
-			diffToBase = false;
 			break;
 		case GENERIC:
+			showAlternativeChangeModel = false;
 			columnHelper.setChangeSetColumnLabelProvider(insertionPlanFilter.createLabelProvider());
 			break;
 		default:
@@ -1450,7 +1449,7 @@ public class ChangeSetView extends ViewPart {
 		}
 
 		if (toggleDiffToBaseAction != null) {
-			toggleDiffToBaseAction.setChecked(diffToBase);
+			toggleDiffToBaseAction.setChecked(showAlternativeChangeModel);
 			getViewSite().getActionBars().getToolBarManager().remove(toggleDiffToBaseActionItem);
 			if (showToggleDiffToBaseAction) {
 				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleDiffToBaseActionItem);

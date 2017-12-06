@@ -204,7 +204,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 		// Group by change count and target
 		for (final ChangeSet changeSet : root.getChangeSets()) {
-			final Collection<ChangeSetRow> changeSetRows = changeSet.getChangeSetRowsToBase();
+			final Collection<ChangeSetRow> changeSetRows = changeSet.getChangeSetRowsToDefaultBase();
 
 			for (final ChangeSetRow row : changeSetRows) {
 				final ChangeSetRowDataGroup afterData = row.getAfterData();
@@ -307,6 +307,10 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 
 		return (tableRoot) -> {
+			if (tableRoot == null) {
+				return;
+			}
+			
 			final Map<ChangeSetMetadata, List<ChangeSetTableGroup>> grouper = new LinkedHashMap<>();
 			for (final ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
 				final Pair<String, Object> p = getDestination(tableGroup, target);
@@ -1013,7 +1017,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	private Pair<String, Object> getDestination(final ChangeSetTableGroup tableGroup, final Object target) {
 		final ChangeSet changeSet = tableGroup.getChangeSet();
 		Object sendTo = null;
-		for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+	// TODO: Does this need to check alternative base?
+		for (final ChangeSetRow row : changeSet.getChangeSetRowsToDefaultBase()) {
 			final ChangeSetRowDataGroup afterData = row.getAfterData();
 			if (afterData == null) {
 				continue;

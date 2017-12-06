@@ -33,13 +33,14 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getMetricsToBase <em>Metrics To Base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getMetricsToPrevious <em>Metrics To Previous</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getMetricsToDefaultBase <em>Metrics To Default Base</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getMetricsToAlternativeBase <em>Metrics To Alternative Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getBaseScenario <em>Base Scenario</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getPrevScenario <em>Prev Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getCurrentScenario <em>Current Scenario</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToBase <em>Change Set Rows To Base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToPrevious <em>Change Set Rows To Previous</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getAltBaseScenario <em>Alt Base Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getAltCurrentScenario <em>Alt Current Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToDefaultBase <em>Change Set Rows To Default Base</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToAlternativeBase <em>Change Set Rows To Alternative Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getCurrentMetrics <em>Current Metrics</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getDescription <em>Description</em>}</li>
  * </ul>
@@ -48,24 +49,24 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  */
 public class ChangeSetImpl extends MinimalEObjectImpl.Container implements ChangeSet {
 	/**
-	 * The cached value of the '{@link #getMetricsToBase() <em>Metrics To Base</em>}' containment reference.
+	 * The cached value of the '{@link #getMetricsToDefaultBase() <em>Metrics To Default Base</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMetricsToBase()
+	 * @see #getMetricsToDefaultBase()
 	 * @generated
 	 * @ordered
 	 */
-	protected DeltaMetrics metricsToBase;
+	protected DeltaMetrics metricsToDefaultBase;
 
 	/**
-	 * The cached value of the '{@link #getMetricsToPrevious() <em>Metrics To Previous</em>}' containment reference.
+	 * The cached value of the '{@link #getMetricsToAlternativeBase() <em>Metrics To Alternative Base</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMetricsToPrevious()
+	 * @see #getMetricsToAlternativeBase()
 	 * @generated
 	 * @ordered
 	 */
-	protected DeltaMetrics metricsToPrevious;
+	protected DeltaMetrics metricsToAlternativeBase;
 
 	/**
 	 * The default value of the '{@link #getBaseScenario() <em>Base Scenario</em>}' attribute.
@@ -88,26 +89,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	protected ScenarioResult baseScenario = BASE_SCENARIO_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getPrevScenario() <em>Prev Scenario</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPrevScenario()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final ScenarioResult PREV_SCENARIO_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPrevScenario() <em>Prev Scenario</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPrevScenario()
-	 * @generated
-	 * @ordered
-	 */
-	protected ScenarioResult prevScenario = PREV_SCENARIO_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getCurrentScenario() <em>Current Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -128,24 +109,64 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	protected ScenarioResult currentScenario = CURRENT_SCENARIO_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getChangeSetRowsToBase() <em>Change Set Rows To Base</em>}' containment reference list.
+	 * The default value of the '{@link #getAltBaseScenario() <em>Alt Base Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getChangeSetRowsToBase()
+	 * @see #getAltBaseScenario()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ChangeSetRow> changeSetRowsToBase;
+	protected static final ScenarioResult ALT_BASE_SCENARIO_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getChangeSetRowsToPrevious() <em>Change Set Rows To Previous</em>}' containment reference list.
+	 * The cached value of the '{@link #getAltBaseScenario() <em>Alt Base Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getChangeSetRowsToPrevious()
+	 * @see #getAltBaseScenario()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ChangeSetRow> changeSetRowsToPrevious;
+	protected ScenarioResult altBaseScenario = ALT_BASE_SCENARIO_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getAltCurrentScenario() <em>Alt Current Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAltCurrentScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ScenarioResult ALT_CURRENT_SCENARIO_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getAltCurrentScenario() <em>Alt Current Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAltCurrentScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScenarioResult altCurrentScenario = ALT_CURRENT_SCENARIO_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getChangeSetRowsToDefaultBase() <em>Change Set Rows To Default Base</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChangeSetRowsToDefaultBase()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ChangeSetRow> changeSetRowsToDefaultBase;
+
+	/**
+	 * The cached value of the '{@link #getChangeSetRowsToAlternativeBase() <em>Change Set Rows To Alternative Base</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChangeSetRowsToAlternativeBase()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ChangeSetRow> changeSetRowsToAlternativeBase;
 
 	/**
 	 * The cached value of the '{@link #getCurrentMetrics() <em>Current Metrics</em>}' containment reference.
@@ -201,8 +222,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeltaMetrics getMetricsToBase() {
-		return metricsToBase;
+	public DeltaMetrics getMetricsToDefaultBase() {
+		return metricsToDefaultBase;
 	}
 
 	/**
@@ -210,11 +231,11 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetMetricsToBase(DeltaMetrics newMetricsToBase, NotificationChain msgs) {
-		DeltaMetrics oldMetricsToBase = metricsToBase;
-		metricsToBase = newMetricsToBase;
+	public NotificationChain basicSetMetricsToDefaultBase(DeltaMetrics newMetricsToDefaultBase, NotificationChain msgs) {
+		DeltaMetrics oldMetricsToDefaultBase = metricsToDefaultBase;
+		metricsToDefaultBase = newMetricsToDefaultBase;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_BASE, oldMetricsToBase, newMetricsToBase);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE, oldMetricsToDefaultBase, newMetricsToDefaultBase);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -225,18 +246,18 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMetricsToBase(DeltaMetrics newMetricsToBase) {
-		if (newMetricsToBase != metricsToBase) {
+	public void setMetricsToDefaultBase(DeltaMetrics newMetricsToDefaultBase) {
+		if (newMetricsToDefaultBase != metricsToDefaultBase) {
 			NotificationChain msgs = null;
-			if (metricsToBase != null)
-				msgs = ((InternalEObject)metricsToBase).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__METRICS_TO_BASE, null, msgs);
-			if (newMetricsToBase != null)
-				msgs = ((InternalEObject)newMetricsToBase).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__METRICS_TO_BASE, null, msgs);
-			msgs = basicSetMetricsToBase(newMetricsToBase, msgs);
+			if (metricsToDefaultBase != null)
+				msgs = ((InternalEObject)metricsToDefaultBase).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE, null, msgs);
+			if (newMetricsToDefaultBase != null)
+				msgs = ((InternalEObject)newMetricsToDefaultBase).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE, null, msgs);
+			msgs = basicSetMetricsToDefaultBase(newMetricsToDefaultBase, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_BASE, newMetricsToBase, newMetricsToBase));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE, newMetricsToDefaultBase, newMetricsToDefaultBase));
 	}
 
 	/**
@@ -244,8 +265,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeltaMetrics getMetricsToPrevious() {
-		return metricsToPrevious;
+	public DeltaMetrics getMetricsToAlternativeBase() {
+		return metricsToAlternativeBase;
 	}
 
 	/**
@@ -253,11 +274,11 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetMetricsToPrevious(DeltaMetrics newMetricsToPrevious, NotificationChain msgs) {
-		DeltaMetrics oldMetricsToPrevious = metricsToPrevious;
-		metricsToPrevious = newMetricsToPrevious;
+	public NotificationChain basicSetMetricsToAlternativeBase(DeltaMetrics newMetricsToAlternativeBase, NotificationChain msgs) {
+		DeltaMetrics oldMetricsToAlternativeBase = metricsToAlternativeBase;
+		metricsToAlternativeBase = newMetricsToAlternativeBase;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS, oldMetricsToPrevious, newMetricsToPrevious);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE, oldMetricsToAlternativeBase, newMetricsToAlternativeBase);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -268,18 +289,18 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMetricsToPrevious(DeltaMetrics newMetricsToPrevious) {
-		if (newMetricsToPrevious != metricsToPrevious) {
+	public void setMetricsToAlternativeBase(DeltaMetrics newMetricsToAlternativeBase) {
+		if (newMetricsToAlternativeBase != metricsToAlternativeBase) {
 			NotificationChain msgs = null;
-			if (metricsToPrevious != null)
-				msgs = ((InternalEObject)metricsToPrevious).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS, null, msgs);
-			if (newMetricsToPrevious != null)
-				msgs = ((InternalEObject)newMetricsToPrevious).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS, null, msgs);
-			msgs = basicSetMetricsToPrevious(newMetricsToPrevious, msgs);
+			if (metricsToAlternativeBase != null)
+				msgs = ((InternalEObject)metricsToAlternativeBase).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE, null, msgs);
+			if (newMetricsToAlternativeBase != null)
+				msgs = ((InternalEObject)newMetricsToAlternativeBase).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE, null, msgs);
+			msgs = basicSetMetricsToAlternativeBase(newMetricsToAlternativeBase, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS, newMetricsToPrevious, newMetricsToPrevious));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE, newMetricsToAlternativeBase, newMetricsToAlternativeBase));
 	}
 
 	/**
@@ -308,27 +329,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioResult getPrevScenario() {
-		return prevScenario;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPrevScenario(ScenarioResult newPrevScenario) {
-		ScenarioResult oldPrevScenario = prevScenario;
-		prevScenario = newPrevScenario;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__PREV_SCENARIO, oldPrevScenario, prevScenario));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public ScenarioResult getCurrentScenario() {
 		return currentScenario;
 	}
@@ -350,11 +350,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<ChangeSetRow> getChangeSetRowsToBase() {
-		if (changeSetRowsToBase == null) {
-			changeSetRowsToBase = new EObjectContainmentEList<ChangeSetRow>(ChangeSetRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE);
-		}
-		return changeSetRowsToBase;
+	public ScenarioResult getAltBaseScenario() {
+		return altBaseScenario;
 	}
 
 	/**
@@ -362,11 +359,56 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<ChangeSetRow> getChangeSetRowsToPrevious() {
-		if (changeSetRowsToPrevious == null) {
-			changeSetRowsToPrevious = new EObjectContainmentEList<ChangeSetRow>(ChangeSetRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS);
+	public void setAltBaseScenario(ScenarioResult newAltBaseScenario) {
+		ScenarioResult oldAltBaseScenario = altBaseScenario;
+		altBaseScenario = newAltBaseScenario;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__ALT_BASE_SCENARIO, oldAltBaseScenario, altBaseScenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScenarioResult getAltCurrentScenario() {
+		return altCurrentScenario;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAltCurrentScenario(ScenarioResult newAltCurrentScenario) {
+		ScenarioResult oldAltCurrentScenario = altCurrentScenario;
+		altCurrentScenario = newAltCurrentScenario;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__ALT_CURRENT_SCENARIO, oldAltCurrentScenario, altCurrentScenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<ChangeSetRow> getChangeSetRowsToDefaultBase() {
+		if (changeSetRowsToDefaultBase == null) {
+			changeSetRowsToDefaultBase = new EObjectContainmentEList<ChangeSetRow>(ChangeSetRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE);
 		}
-		return changeSetRowsToPrevious;
+		return changeSetRowsToDefaultBase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<ChangeSetRow> getChangeSetRowsToAlternativeBase() {
+		if (changeSetRowsToAlternativeBase == null) {
+			changeSetRowsToAlternativeBase = new EObjectContainmentEList<ChangeSetRow>(ChangeSetRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE);
+		}
+		return changeSetRowsToAlternativeBase;
 	}
 
 	/**
@@ -441,14 +483,14 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
-				return basicSetMetricsToBase(null, msgs);
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
-				return basicSetMetricsToPrevious(null, msgs);
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
-				return ((InternalEList<?>)getChangeSetRowsToBase()).basicRemove(otherEnd, msgs);
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
-				return ((InternalEList<?>)getChangeSetRowsToPrevious()).basicRemove(otherEnd, msgs);
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE:
+				return basicSetMetricsToDefaultBase(null, msgs);
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE:
+				return basicSetMetricsToAlternativeBase(null, msgs);
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE:
+				return ((InternalEList<?>)getChangeSetRowsToDefaultBase()).basicRemove(otherEnd, msgs);
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE:
+				return ((InternalEList<?>)getChangeSetRowsToAlternativeBase()).basicRemove(otherEnd, msgs);
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				return basicSetCurrentMetrics(null, msgs);
 		}
@@ -463,20 +505,22 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
-				return getMetricsToBase();
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
-				return getMetricsToPrevious();
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE:
+				return getMetricsToDefaultBase();
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE:
+				return getMetricsToAlternativeBase();
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
 				return getBaseScenario();
-			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
-				return getPrevScenario();
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO:
 				return getCurrentScenario();
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
-				return getChangeSetRowsToBase();
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
-				return getChangeSetRowsToPrevious();
+			case ChangesetPackage.CHANGE_SET__ALT_BASE_SCENARIO:
+				return getAltBaseScenario();
+			case ChangesetPackage.CHANGE_SET__ALT_CURRENT_SCENARIO:
+				return getAltCurrentScenario();
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE:
+				return getChangeSetRowsToDefaultBase();
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE:
+				return getChangeSetRowsToAlternativeBase();
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				return getCurrentMetrics();
 			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
@@ -494,28 +538,31 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
-				setMetricsToBase((DeltaMetrics)newValue);
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE:
+				setMetricsToDefaultBase((DeltaMetrics)newValue);
 				return;
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
-				setMetricsToPrevious((DeltaMetrics)newValue);
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE:
+				setMetricsToAlternativeBase((DeltaMetrics)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
 				setBaseScenario((ScenarioResult)newValue);
 				return;
-			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
-				setPrevScenario((ScenarioResult)newValue);
-				return;
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO:
 				setCurrentScenario((ScenarioResult)newValue);
 				return;
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
-				getChangeSetRowsToBase().clear();
-				getChangeSetRowsToBase().addAll((Collection<? extends ChangeSetRow>)newValue);
+			case ChangesetPackage.CHANGE_SET__ALT_BASE_SCENARIO:
+				setAltBaseScenario((ScenarioResult)newValue);
 				return;
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
-				getChangeSetRowsToPrevious().clear();
-				getChangeSetRowsToPrevious().addAll((Collection<? extends ChangeSetRow>)newValue);
+			case ChangesetPackage.CHANGE_SET__ALT_CURRENT_SCENARIO:
+				setAltCurrentScenario((ScenarioResult)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE:
+				getChangeSetRowsToDefaultBase().clear();
+				getChangeSetRowsToDefaultBase().addAll((Collection<? extends ChangeSetRow>)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE:
+				getChangeSetRowsToAlternativeBase().clear();
+				getChangeSetRowsToAlternativeBase().addAll((Collection<? extends ChangeSetRow>)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				setCurrentMetrics((Metrics)newValue);
@@ -535,26 +582,29 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
-				setMetricsToBase((DeltaMetrics)null);
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE:
+				setMetricsToDefaultBase((DeltaMetrics)null);
 				return;
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
-				setMetricsToPrevious((DeltaMetrics)null);
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE:
+				setMetricsToAlternativeBase((DeltaMetrics)null);
 				return;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
 				setBaseScenario(BASE_SCENARIO_EDEFAULT);
 				return;
-			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
-				setPrevScenario(PREV_SCENARIO_EDEFAULT);
-				return;
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO:
 				setCurrentScenario(CURRENT_SCENARIO_EDEFAULT);
 				return;
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
-				getChangeSetRowsToBase().clear();
+			case ChangesetPackage.CHANGE_SET__ALT_BASE_SCENARIO:
+				setAltBaseScenario(ALT_BASE_SCENARIO_EDEFAULT);
 				return;
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
-				getChangeSetRowsToPrevious().clear();
+			case ChangesetPackage.CHANGE_SET__ALT_CURRENT_SCENARIO:
+				setAltCurrentScenario(ALT_CURRENT_SCENARIO_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE:
+				getChangeSetRowsToDefaultBase().clear();
+				return;
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE:
+				getChangeSetRowsToAlternativeBase().clear();
 				return;
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				setCurrentMetrics((Metrics)null);
@@ -574,20 +624,22 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
-				return metricsToBase != null;
-			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
-				return metricsToPrevious != null;
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_DEFAULT_BASE:
+				return metricsToDefaultBase != null;
+			case ChangesetPackage.CHANGE_SET__METRICS_TO_ALTERNATIVE_BASE:
+				return metricsToAlternativeBase != null;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
 				return BASE_SCENARIO_EDEFAULT == null ? baseScenario != null : !BASE_SCENARIO_EDEFAULT.equals(baseScenario);
-			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
-				return PREV_SCENARIO_EDEFAULT == null ? prevScenario != null : !PREV_SCENARIO_EDEFAULT.equals(prevScenario);
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO:
 				return CURRENT_SCENARIO_EDEFAULT == null ? currentScenario != null : !CURRENT_SCENARIO_EDEFAULT.equals(currentScenario);
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
-				return changeSetRowsToBase != null && !changeSetRowsToBase.isEmpty();
-			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
-				return changeSetRowsToPrevious != null && !changeSetRowsToPrevious.isEmpty();
+			case ChangesetPackage.CHANGE_SET__ALT_BASE_SCENARIO:
+				return ALT_BASE_SCENARIO_EDEFAULT == null ? altBaseScenario != null : !ALT_BASE_SCENARIO_EDEFAULT.equals(altBaseScenario);
+			case ChangesetPackage.CHANGE_SET__ALT_CURRENT_SCENARIO:
+				return ALT_CURRENT_SCENARIO_EDEFAULT == null ? altCurrentScenario != null : !ALT_CURRENT_SCENARIO_EDEFAULT.equals(altCurrentScenario);
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE:
+				return changeSetRowsToDefaultBase != null && !changeSetRowsToDefaultBase.isEmpty();
+			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE:
+				return changeSetRowsToAlternativeBase != null && !changeSetRowsToAlternativeBase.isEmpty();
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				return currentMetrics != null;
 			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
@@ -608,10 +660,12 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (baseScenario: ");
 		result.append(baseScenario);
-		result.append(", prevScenario: ");
-		result.append(prevScenario);
 		result.append(", currentScenario: ");
 		result.append(currentScenario);
+		result.append(", altBaseScenario: ");
+		result.append(altBaseScenario);
+		result.append(", altCurrentScenario: ");
+		result.append(altCurrentScenario);
 		result.append(", description: ");
 		result.append(description);
 		result.append(')');

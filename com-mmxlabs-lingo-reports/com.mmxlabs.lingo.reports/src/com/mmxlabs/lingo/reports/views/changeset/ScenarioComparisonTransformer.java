@@ -108,7 +108,7 @@ public class ScenarioComparisonTransformer {
 					final List<ChangeSetRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
 
 					processRows(toSchedule, fromSchedule, rows, changeSet);
-					if (!changeSet.getChangeSetRowsToPrevious().isEmpty()) {
+					if (!changeSet.getChangeSetRowsToDefaultBase().isEmpty()) {
 						changeSets.add(changeSet);
 					}
 				}
@@ -128,7 +128,7 @@ public class ScenarioComparisonTransformer {
 
 					final ChangeSet changeSet = createChangeSet(root, from, to);
 					processRows(toSchedule, fromSchedule, rows, changeSet);
-					if (!changeSet.getChangeSetRowsToPrevious().isEmpty()) {
+					if (!changeSet.getChangeSetRowsToDefaultBase().isEmpty()) {
 						changeSets.add(changeSet);
 					}
 				}
@@ -140,11 +140,11 @@ public class ScenarioComparisonTransformer {
 						boolean o1HasStructureChange = false;
 						boolean o2HasStructureChange = false;
 
-						for (final ChangeSetRow r : o1.getChangeSetRowsToPrevious()) {
+						for (final ChangeSetRow r : o1.getChangeSetRowsToDefaultBase()) {
 							o1HasStructureChange |= r.isWiringChange();
 							o1HasStructureChange |= r.isVesselChange();
 						}
-						for (final ChangeSetRow r : o2.getChangeSetRowsToPrevious()) {
+						for (final ChangeSetRow r : o2.getChangeSetRowsToDefaultBase()) {
 							o2HasStructureChange |= r.isWiringChange();
 							o2HasStructureChange |= r.isVesselChange();
 						}
@@ -157,7 +157,7 @@ public class ScenarioComparisonTransformer {
 							}
 						}
 
-						return Integer.compare(o2.getMetricsToPrevious().getPnlDelta(), o1.getMetricsToPrevious().getPnlDelta());
+						return Integer.compare(o2.getMetricsToDefaultBase().getPnlDelta(), o1.getMetricsToDefaultBase().getPnlDelta());
 					}
 				});
 				root.getChangeSets().addAll(changeSets);
@@ -171,7 +171,7 @@ public class ScenarioComparisonTransformer {
 	private ChangeSet createChangeSet(@NonNull final ChangeSetRoot root, @NonNull final ScenarioResult prev, @NonNull final ScenarioResult current) {
 		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
 
-		changeSet.setPrevScenario(prev);
+		changeSet.setBaseScenario(prev);
 		changeSet.setCurrentScenario(current);
 
 		return changeSet;
@@ -183,7 +183,7 @@ public class ScenarioComparisonTransformer {
 		ChangeSetTransformerUtil.setRowFlags(rows);
 		// ChangeSetTransformerUtil.filterRows(rows);
 		// ChangeSetTransformerUtil.sortRows(rows, null);
-		changeSet.getChangeSetRowsToPrevious().addAll(rows);
+		changeSet.getChangeSetRowsToDefaultBase().addAll(rows);
 		calculateMetrics(changeSet, fromSchedule, toSchedule);
 	}
 
@@ -338,7 +338,7 @@ public class ScenarioComparisonTransformer {
 		violations = 0;
 		lateness = 0;
 
-		for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+		for (final ChangeSetRow row : changeSet.getChangeSetRowsToDefaultBase()) {
 			ChangeSetRowDataGroup afterData = row.getAfterData();
 			if (afterData != null) {
 				pnl += ChangeSetTransformerUtil.getRowProfitAndLossValue(afterData, ScheduleModelKPIUtils::getGroupProfitAndLoss);
@@ -370,7 +370,7 @@ public class ScenarioComparisonTransformer {
 		deltaMetrics.setPnlDelta((int) pnl);
 		deltaMetrics.setLatenessDelta((int) lateness);
 		deltaMetrics.setCapacityDelta((int) violations);
-		changeSet.setMetricsToPrevious(deltaMetrics);
+		changeSet.setMetricsToDefaultBase(deltaMetrics);
 
 		changeSet.setCurrentMetrics(currentMetrics);
 	}
