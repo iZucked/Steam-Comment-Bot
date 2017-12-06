@@ -146,17 +146,11 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResultContainer">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//CargoAllocation"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//CargoAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="openSlotAllocations" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"
-        containment="true"/>
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Event"
-        containment="true"/>
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnalysisResultDetail"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossResult" eSuperTypes="#//AnalysisResultDetail">
@@ -178,8 +172,10 @@
         eType="#//ShippingOption" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="partialCase" eType="#//PartialCase"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resultSets" upperBound="-1"
-        eType="#//ResultSet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseCaseResult" eType="#//Result"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="results" eType="#//Result"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="useTargetPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
         eType="#//OptionAnalysisModel" containment="true"/>
@@ -188,6 +184,27 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//AnalysisResultRow"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Result">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+      <details key="nonUniqueChildren" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraSlots" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultSets" upperBound="-1"
+        eType="#//ResultSet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselAvailabilities"
+        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverrides"
+        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CharterInMarketOverride"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraCharterInMarkets"
+        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseCase">
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseCase" upperBound="-1"
@@ -204,6 +221,10 @@
     <eLiterals name="NOT_SPECIFIED"/>
     <eLiterals name="FIXED" value="1"/>
     <eLiterals name="RANGE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NewVesselAvailability" eSuperTypes="#//ShippingOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailability" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExistingVesselAvailability" eSuperTypes="#//ShippingOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailability" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"/>
@@ -239,10 +260,67 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventsInserted" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SlotInsertionOption" eSuperTypes="#//SolutionOption"/>
   <eClassifiers xsi:type="ecore:EClass" name="SolutionOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OptimisationResult" eSuperTypes="#//AbstractSolutionSet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeDescription">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changes" upperBound="-1"
+        eType="#//Change" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Change" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenSlotChange" eSuperTypes="#//Change">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotDescriptor" eType="#//SlotDescriptor"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CargoChange" eSuperTypes="#//Change">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotDescriptors" upperBound="-1"
+        eType="#//SlotDescriptor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAllocation" eType="#//VesselAllocationDescriptor"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" eType="#//PositionDescriptor"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventChange" eSuperTypes="#//Change">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEventDescriptor"
+        eType="#//VesselEventDescriptor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAllocation" eType="#//VesselAllocationDescriptor"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" eType="#//PositionDescriptor"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SlotDescriptor" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotType" eType="#//SlotType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RealSlotDescriptor" eSuperTypes="#//SlotDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotMarketSlotDescriptor" eSuperTypes="#//SlotDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselAllocationDescriptor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MarketVesselAllocationDescriptor" eSuperTypes="#//VesselAllocationDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FleetVesselAllocationDescriptor" eSuperTypes="#//VesselAllocationDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SlotType">
+    <eLiterals name="FOB_PURCHASE"/>
+    <eLiterals name="FOB_SALE" value="1"/>
+    <eLiterals name="DES_PURCHASE" value="2"/>
+    <eLiterals name="DES_SALE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PositionDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="after" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="before" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
 </ecore:EPackage>

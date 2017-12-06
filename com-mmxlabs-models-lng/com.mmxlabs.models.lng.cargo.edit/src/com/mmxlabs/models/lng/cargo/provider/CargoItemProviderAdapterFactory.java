@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.util.CargoAdapterFactory;
 
@@ -524,6 +525,190 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.ScheduleSpecification} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScheduleSpecificationItemProvider scheduleSpecificationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.ScheduleSpecification}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScheduleSpecificationAdapter() {
+		if (scheduleSpecificationItemProvider == null) {
+			scheduleSpecificationItemProvider = new ScheduleSpecificationItemProvider(this);
+		}
+
+		return scheduleSpecificationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NonShippedCargoSpecificationItemProvider nonShippedCargoSpecificationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNonShippedCargoSpecificationAdapter() {
+		if (nonShippedCargoSpecificationItemProvider == null) {
+			nonShippedCargoSpecificationItemProvider = new NonShippedCargoSpecificationItemProvider(this);
+		}
+
+		return nonShippedCargoSpecificationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VesselScheduleSpecification} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselScheduleSpecificationItemProvider vesselScheduleSpecificationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VesselScheduleSpecification}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselScheduleSpecificationAdapter() {
+		if (vesselScheduleSpecificationItemProvider == null) {
+			vesselScheduleSpecificationItemProvider = new VesselScheduleSpecificationItemProvider(this);
+		}
+
+		return vesselScheduleSpecificationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScheduleSpecificationEventItemProvider scheduleSpecificationEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScheduleSpecificationEventAdapter() {
+		if (scheduleSpecificationEventItemProvider == null) {
+			scheduleSpecificationEventItemProvider = new ScheduleSpecificationEventItemProvider(this);
+		}
+
+		return scheduleSpecificationEventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VesselEventSpecification} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselEventSpecificationItemProvider vesselEventSpecificationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VesselEventSpecification}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselEventSpecificationAdapter() {
+		if (vesselEventSpecificationItemProvider == null) {
+			vesselEventSpecificationItemProvider = new VesselEventSpecificationItemProvider(this);
+		}
+
+		return vesselEventSpecificationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VoyageSpecification} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VoyageSpecificationItemProvider voyageSpecificationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VoyageSpecification}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVoyageSpecificationAdapter() {
+		if (voyageSpecificationItemProvider == null) {
+			voyageSpecificationItemProvider = new VoyageSpecificationItemProvider(this);
+		}
+
+		return voyageSpecificationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.SlotSpecification} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SlotSpecificationItemProvider slotSpecificationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.SlotSpecification}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSlotSpecificationAdapter() {
+		if (slotSpecificationItemProvider == null) {
+			slotSpecificationItemProvider = new SlotSpecificationItemProvider(this);
+		}
+
+		return slotSpecificationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterInMarketOverrideItemProvider charterInMarketOverrideItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterInMarketOverrideAdapter() {
+		if (charterInMarketOverrideItemProvider == null) {
+			charterInMarketOverrideItemProvider = new CharterInMarketOverrideItemProvider(this);
+		}
+
+		return charterInMarketOverrideItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -668,6 +853,14 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (inventoryItemProvider != null) inventoryItemProvider.dispose();
 		if (canalBookingSlotItemProvider != null) canalBookingSlotItemProvider.dispose();
 		if (canalBookingsItemProvider != null) canalBookingsItemProvider.dispose();
+		if (scheduleSpecificationItemProvider != null) scheduleSpecificationItemProvider.dispose();
+		if (nonShippedCargoSpecificationItemProvider != null) nonShippedCargoSpecificationItemProvider.dispose();
+		if (vesselScheduleSpecificationItemProvider != null) vesselScheduleSpecificationItemProvider.dispose();
+		if (scheduleSpecificationEventItemProvider != null) scheduleSpecificationEventItemProvider.dispose();
+		if (vesselEventSpecificationItemProvider != null) vesselEventSpecificationItemProvider.dispose();
+		if (voyageSpecificationItemProvider != null) voyageSpecificationItemProvider.dispose();
+		if (slotSpecificationItemProvider != null) slotSpecificationItemProvider.dispose();
+		if (charterInMarketOverrideItemProvider != null) charterInMarketOverrideItemProvider.dispose();
 	}
 
 }

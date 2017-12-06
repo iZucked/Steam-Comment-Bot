@@ -23,6 +23,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ShippingOption;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -212,7 +213,15 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 						public int compare(final Pair<String, ?> o1, final Pair<String, ?> o2) {
 							final Object v1 = o1.getSecond();
 							final Object v2 = o2.getSecond();
-							if (v1 instanceof VesselAvailability) {
+							if (v1 instanceof CharterInMarketOverride) {
+								if (!(v2 instanceof CharterInMarketOverride)) {
+									return 1;
+								}
+							} else if (v1 instanceof CharterInMarket) {
+								if (!(v2 instanceof CharterInMarket)) {
+									return -1;
+								}
+							} else if (v1 instanceof VesselAvailability) {
 								if (v2 instanceof CharterInMarket) {
 									return -1;
 								}

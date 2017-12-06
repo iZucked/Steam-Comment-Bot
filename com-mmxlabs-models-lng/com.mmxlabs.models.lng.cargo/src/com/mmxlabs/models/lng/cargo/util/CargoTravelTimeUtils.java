@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -88,8 +89,11 @@ private static int getMinTimeFromAllowedRoutes(final Slot from, final Slot to, f
 			return new Pair<>();
 		}
 		if (vesselAssignmentType instanceof CharterInMarket) {
-			final CharterInMarket cim = ((CharterInMarket) vesselAssignmentType);
+			final CharterInMarket cim = (CharterInMarket) vesselAssignmentType;
 			vessel = cim.getVessel();
+		} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+			final CharterInMarketOverride cim = (CharterInMarketOverride) vesselAssignmentType;
+			vessel = cim.getCharterInMarket().getVessel();
 		} else {
 			final VesselAvailability va = (VesselAvailability) vesselAssignmentType;
 			vessel = va.getVessel();

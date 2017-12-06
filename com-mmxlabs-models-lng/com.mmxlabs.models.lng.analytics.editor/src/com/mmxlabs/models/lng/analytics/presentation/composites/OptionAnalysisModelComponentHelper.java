@@ -74,7 +74,8 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 		add_baseCaseEditor(detailComposite, topClass);
 		add_shippingTemplatesEditor(detailComposite, topClass);
 		add_partialCaseEditor(detailComposite, topClass);
-		add_resultSetsEditor(detailComposite, topClass);
+		add_baseCaseResultEditor(detailComposite, topClass);
+		add_resultsEditor(detailComposite, topClass);
 		add_useTargetPNLEditor(detailComposite, topClass);
 		add_childrenEditor(detailComposite, topClass);
 	}
@@ -122,12 +123,21 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the resultSets feature on OptionAnalysisModel
+	 * Create the editor for the baseCaseResult feature on OptionAnalysisModel
 	 *
 	 * @generated
 	 */
-	protected void add_resultSetsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS));
+	protected void add_baseCaseResultEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT));
+	}
+
+	/**
+	 * Create the editor for the results feature on OptionAnalysisModel
+	 *
+	 * @generated
+	 */
+	protected void add_resultsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS));
 	}
 
 	/**

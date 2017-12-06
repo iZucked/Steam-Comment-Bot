@@ -66,6 +66,8 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -518,7 +520,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return new Pair<>(true, EnumSet.of(SectionType.SELLS));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL));
-			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS) {
+			} else if (notification.getNotifier() instanceof ShippingOption || notification.getNotifier() instanceof VesselAvailability) {
+				return new Pair<>(true, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS) {
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.RESULT__RESULT_SETS) {
 				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__BASE_CASE) {
 				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));

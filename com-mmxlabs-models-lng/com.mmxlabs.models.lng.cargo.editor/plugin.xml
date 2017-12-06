@@ -142,6 +142,12 @@
                id="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingSlotComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CharterInMarketOverrideComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.CharterInMarketOverrideComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.CharterInMarketOverride">
          </componentHelper>        
 	</extension>
  <extension

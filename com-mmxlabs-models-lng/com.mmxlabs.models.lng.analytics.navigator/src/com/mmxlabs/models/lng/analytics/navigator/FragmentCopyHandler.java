@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.analytics.navigator;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -15,13 +16,16 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
@@ -33,7 +37,9 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -78,22 +84,39 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 				if (target == source) {
 					final OptionAnalysisModel copyModel = EcoreUtil.copy(sourceModel);
 					final LNGScenarioModel targetModel = (LNGScenarioModel) sourceReference.getInstance();
-					AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
+					final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
 					analyticsModel.getOptionModels().add(copyModel);
 					sourceReference.setDirty();
 					return true;
 				} else {
 					//
-					ScenarioModelRecord targetRecord = SSDataManager.Instance.getModelRecord(target);
+					final ScenarioModelRecord targetRecord = SSDataManager.Instance.getModelRecord(target);
 					try (ModelReference targetReference = targetRecord.aquireReference("FragmentCopyHandler:2")) {
 						final LNGScenarioModel targetModel = (LNGScenarioModel) targetReference.getInstance();
 
 						final OptionAnalysisModel copyModel = EcoreUtil.copy(sourceModel);
 
+						// Recursively clear the results portion of all contained analysis models
+						final Consumer<OptionAnalysisModel> clearResults = model -> {
+
+							@SuppressWarnings({ "rawtypes", "unchecked" })
+							final BiConsumer<BiConsumer, OptionAnalysisModel> helper = (f, d) -> {
+								d.setResults(null);
+								d.setBaseCaseResult(null);
+								for (final OptionAnalysisModel child : d.getChildren()) {
+									f.accept(f, child);
+								}
+							};
+							helper.accept(helper, model);
+						};
+
+						clearResults.accept(copyModel);
+
 						final Map<String, PurchaseContract> purchaseContractMapping = generatePurchaseContractMapping(targetModel);
 						final Map<String, SalesContract> salesContractMapping = generateSalesContractMapping(targetModel);
 						final Map<String, Port> portMapping = generatePortMapping(targetModel);
 						final Map<String, BaseLegalEntity> entityMapping = generateEntityMapping(targetModel);
+						final Map<String, CharterContract> charterContractMapping = generateCharterContractMapping(targetModel);
 
 						final Map<String, LoadSlot> loadMapping = generateLoadMapping(targetModel);
 						final Map<String, DischargeSlot> dischargeMapping = generateDischargeMapping(targetModel);
@@ -104,6 +127,7 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 						final Map<String, SpotMarket> fobPurchaseMarketMapping = generateFOBPurchaseMarketMapping(targetModel);
 
 						final Map<String, Vessel> vesselMapping = generateVesselMapping(targetModel);
+						final Map<Pair<String, Integer>, VesselAvailability> vesselAvailabilityMapping = generateVesselAvailabilityMapping(targetModel);
 
 						for (final BuyOption buy : copyModel.getBuys()) {
 							if (buy instanceof BuyReference) {
@@ -192,6 +216,29 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 								if (opt.getVessel() != null) {
 									opt.setVessel(vesselMapping.get(opt.getVessel().getName()));
 								}
+							} else if (option instanceof ExistingVesselAvailability) {
+								final ExistingVesselAvailability opt = (ExistingVesselAvailability) option;
+								if (opt.getVesselAvailability() != null) {
+									opt.setVesselAvailability(vesselAvailabilityMapping.get(new Pair<>(opt.getVesselAvailability().getVessel(), opt.getVesselAvailability().getCharterNumber())));
+								}
+							} else if (option instanceof NewVesselAvailability) {
+								final NewVesselAvailability opt = (NewVesselAvailability) option;
+								if (opt.getVesselAvailability() != null) {
+									VesselAvailability avail = opt.getVesselAvailability();
+									if (avail.getVessel() != null) {
+										avail.setVessel(vesselMapping.get(avail.getVessel().getName()));
+									}
+									if (avail.getEntity() != null) {
+										avail.setEntity(entityMapping.get(avail.getEntity().getName()));
+									}
+									if (avail.getCharterContract() != null) {
+										avail.setCharterContract(charterContractMapping.get(avail.getCharterContract().getName()));
+									}
+									opt.setVesselAvailability(
+											vesselAvailabilityMapping.get(new Pair<>(opt.getVesselAvailability().getVessel().getName(), opt.getVesselAvailability().getCharterNumber())));
+								}
+							} else {
+								assert false;
 							}
 						};
 
@@ -208,7 +255,7 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 						// targetModel.getOptionModels().add(copyModel);
 
 						final EditingDomain domain = targetReference.getEditingDomain();
-						AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
+						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
 
 						domain.getCommandStack().execute(AddCommand.create(domain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), copyModel));
 
@@ -236,6 +283,11 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 	private Map<String, PurchaseContract> generatePurchaseContractMapping(final LNGScenarioModel lngScenarioModel) {
 		final CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
 		return model.getPurchaseContracts().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
+	}
+
+	private Map<String, CharterContract> generateCharterContractMapping(final LNGScenarioModel lngScenarioModel) {
+		final CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
+		return model.getCharteringContracts().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
 	private Map<String, SalesContract> generateSalesContractMapping(final LNGScenarioModel lngScenarioModel) {
@@ -271,6 +323,11 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 	private Map<String, DischargeSlot> generateDischargeMapping(final LNGScenarioModel lngScenarioModel) {
 		final CargoModel model = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		return model.getDischargeSlots().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
+	}
+
+	private Map<Pair<String, Integer>, VesselAvailability> generateVesselAvailabilityMapping(final LNGScenarioModel lngScenarioModel) {
+		final CargoModel model = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		return model.getVesselAvailabilities().stream().collect(Collectors.toMap(va -> new Pair<>(va.getVessel().getName(), va.getCharterNumber()), Function.identity()));
 	}
 
 	private Map<String, Vessel> generateVesselMapping(final LNGScenarioModel lngScenarioModel) {

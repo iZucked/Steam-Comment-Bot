@@ -23,7 +23,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCase <em>Base Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResultSets <em>Result Sets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCaseResult <em>Base Case Result</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResults <em>Results</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#isUseTargetPNL <em>Use Target PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getChildren <em>Children</em>}</li>
  * </ul>
@@ -134,20 +135,56 @@ public interface OptionAnalysisModel extends NamedObject {
 	void setPartialCase(PartialCase value);
 
 	/**
-	 * Returns the value of the '<em><b>Result Sets</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.ResultSet}.
+	 * Returns the value of the '<em><b>Base Case Result</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Result Sets</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Base Case Result</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Result Sets</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_ResultSets()
+	 * @return the value of the '<em>Base Case Result</em>' containment reference.
+	 * @see #setBaseCaseResult(Result)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_BaseCaseResult()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<ResultSet> getResultSets();
+	Result getBaseCaseResult();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCaseResult <em>Base Case Result</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Base Case Result</em>' containment reference.
+	 * @see #getBaseCaseResult()
+	 * @generated
+	 */
+	void setBaseCaseResult(Result value);
+
+	/**
+	 * Returns the value of the '<em><b>Results</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Results</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Results</em>' containment reference.
+	 * @see #setResults(Result)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_Results()
+	 * @model containment="true"
+	 * @generated
+	 */
+	Result getResults();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResults <em>Results</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Results</em>' containment reference.
+	 * @see #getResults()
+	 * @generated
+	 */
+	void setResults(Result value);
 
 	/**
 	 * Returns the value of the '<em><b>Use Target PNL</b></em>' attribute.

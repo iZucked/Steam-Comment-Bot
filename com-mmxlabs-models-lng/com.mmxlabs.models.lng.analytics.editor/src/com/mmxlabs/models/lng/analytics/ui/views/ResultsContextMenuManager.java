@@ -38,17 +38,20 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
+import com.mmxlabs.models.lng.analytics.Result;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
+import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 public class ResultsContextMenuManager implements MenuDetectListener {
@@ -118,14 +121,17 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 								ScenarioInstance fork = ScenarioServiceModelUtils.fork(parent, newForkName, new NullProgressMonitor());
 								// Create a base case scenario
 								{
-									BaseCaseEvaluator.evaluate(scenarioEditingLocation, optionAnalysisModel, optionAnalysisModel.getBaseCase(), true, "InsertionPlan-base", fork);
+									// BaseCaseEvaluator.evaluate(scenarioEditingLocation, optionAnalysisModel, optionAnalysisModel.getBaseCase(), true, "InsertionPlan-base", fork);
 								}
 
 								// Generate child result.
 								int idx = 1;
-								for (ResultSet rs : optionAnalysisModel.getResultSets()) {
-									final OptionAnalysisModel newModel = createNewBaseCase(rs);
-									BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, String.format("InsertionPlan-%d", idx++), fork);
+								Result result = optionAnalysisModel.getResults();
+								if (result != null) {
+									for (ResultSet rs : result.getResultSets()) {
+										final OptionAnalysisModel newModel = createNewBaseCase(rs);
+										// BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, String.format("InsertionPlan-%d", idx++), fork);
+									}
 								}
 							}
 						} catch (Exception e1) {
@@ -139,14 +145,9 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 
 			mgr.add(new RunnableAction("Create fork", () -> {
 				if (resultSet != null) {
-					final String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioEditingLocation.getScenarioInstance(), false);
-					if (newForkName != null) {
-						final OptionAnalysisModel newModel = createNewBaseCase(resultSet);
-						newModel.getBaseCase().setKeepExistingScenario(optionAnalysisModel.getPartialCase().isKeepExistingScenario());
-						newModel.getBaseCase().setProfitAndLoss(optionAnalysisModel.getBaseCase().getProfitAndLoss());
-						newModel.setUseTargetPNL(optionAnalysisModel.isUseTargetPNL());
-						BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, newForkName, null);
-					}
+					ScenarioResult scenarioResult = new ScenarioResult(scenarioEditingLocation.getScenarioInstance(), resultSet.getScheduleModel());
+					ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.exportResult(scenarioResult, "Sandbox"));
+
 				}
 			}));
 

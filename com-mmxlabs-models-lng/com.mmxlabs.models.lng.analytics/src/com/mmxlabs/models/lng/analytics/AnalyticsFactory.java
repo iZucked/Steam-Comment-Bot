@@ -213,6 +213,15 @@ public interface AnalyticsFactory extends EFactory {
 	ResultSet createResultSet();
 
 	/**
+	 * Returns a new object of class '<em>Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Result</em>'.
+	 * @generated
+	 */
+	Result createResult();
+
+	/**
 	 * Returns a new object of class '<em>Base Case</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -229,6 +238,15 @@ public interface AnalyticsFactory extends EFactory {
 	 * @generated
 	 */
 	PartialCase createPartialCase();
+
+	/**
+	 * Returns a new object of class '<em>New Vessel Availability</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>New Vessel Availability</em>'.
+	 * @generated
+	 */
+	NewVesselAvailability createNewVesselAvailability();
 
 	/**
 	 * Returns a new object of class '<em>Existing Vessel Availability</em>'.
@@ -267,13 +285,103 @@ public interface AnalyticsFactory extends EFactory {
 	SlotInsertionOptions createSlotInsertionOptions();
 
 	/**
-	 * Returns a new object of class '<em>Slot Insertion Option</em>'.
+	 * Returns a new object of class '<em>Change Description</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Slot Insertion Option</em>'.
+	 * @return a new object of class '<em>Change Description</em>'.
 	 * @generated
 	 */
-	SlotInsertionOption createSlotInsertionOption();
+	ChangeDescription createChangeDescription();
+
+	/**
+	 * Returns a new object of class '<em>Open Slot Change</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Open Slot Change</em>'.
+	 * @generated
+	 */
+	OpenSlotChange createOpenSlotChange();
+
+	/**
+	 * Returns a new object of class '<em>Cargo Change</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cargo Change</em>'.
+	 * @generated
+	 */
+	CargoChange createCargoChange();
+
+	/**
+	 * Returns a new object of class '<em>Vessel Event Change</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Event Change</em>'.
+	 * @generated
+	 */
+	VesselEventChange createVesselEventChange();
+
+	/**
+	 * Returns a new object of class '<em>Vessel Event Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Event Descriptor</em>'.
+	 * @generated
+	 */
+	VesselEventDescriptor createVesselEventDescriptor();
+
+	/**
+	 * Returns a new object of class '<em>Real Slot Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Real Slot Descriptor</em>'.
+	 * @generated
+	 */
+	RealSlotDescriptor createRealSlotDescriptor();
+
+	/**
+	 * Returns a new object of class '<em>Spot Market Slot Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Spot Market Slot Descriptor</em>'.
+	 * @generated
+	 */
+	SpotMarketSlotDescriptor createSpotMarketSlotDescriptor();
+
+	/**
+	 * Returns a new object of class '<em>Vessel Allocation Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Allocation Descriptor</em>'.
+	 * @generated
+	 */
+	VesselAllocationDescriptor createVesselAllocationDescriptor();
+
+	/**
+	 * Returns a new object of class '<em>Market Vessel Allocation Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Market Vessel Allocation Descriptor</em>'.
+	 * @generated
+	 */
+	MarketVesselAllocationDescriptor createMarketVesselAllocationDescriptor();
+
+	/**
+	 * Returns a new object of class '<em>Fleet Vessel Allocation Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fleet Vessel Allocation Descriptor</em>'.
+	 * @generated
+	 */
+	FleetVesselAllocationDescriptor createFleetVesselAllocationDescriptor();
+
+	/**
+	 * Returns a new object of class '<em>Position Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Position Descriptor</em>'.
+	 * @generated
+	 */
+	PositionDescriptor createPositionDescriptor();
 
 	/**
 	 * Returns a new object of class '<em>Solution Option</em>'.

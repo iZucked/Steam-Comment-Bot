@@ -10,8 +10,10 @@ package com.mmxlabs.models.lng.analytics.provider;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -86,7 +89,6 @@ public class ResultContainerItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__CARGO_ALLOCATION);
 			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS);
 			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__SLOT_ALLOCATIONS);
-			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS);
 		}
 		return childrenFeatures;
 	}
@@ -142,7 +144,6 @@ public class ResultContainerItemProvider
 			case AnalyticsPackage.RESULT_CONTAINER__CARGO_ALLOCATION:
 			case AnalyticsPackage.RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS:
 			case AnalyticsPackage.RESULT_CONTAINER__SLOT_ALLOCATIONS:
-			case AnalyticsPackage.RESULT_CONTAINER__EVENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -174,61 +175,6 @@ public class ResultContainerItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.RESULT_CONTAINER__SLOT_ALLOCATIONS,
 				 ScheduleFactory.eINSTANCE.createSlotAllocation()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createStartEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createEndEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createJourney()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createIdle()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createPortVisit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createSlotVisit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createVesselEventVisit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createGeneratedCharterOut()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createCooldown()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
-				 ScheduleFactory.eINSTANCE.createCanalBookingEvent()));
 	}
 
 	/**

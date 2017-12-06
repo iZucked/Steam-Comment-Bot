@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
+import com.mmxlabs.models.lng.analytics.Result;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BEPriceResultDetailsDescriptionFormatter;
@@ -62,13 +63,17 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ResultsComponent extends AbstractSandboxComponent {
 
 	private GridTreeViewer resultsViewer;
 	private ResultsSetWiringDiagram resultsDiagram;
 
-	private boolean filterConstantRows = false;
+	private final boolean filterConstantRows = false;
 
 	private final Image image_filter;
 	private final Image image_grey_filter;
@@ -210,10 +215,10 @@ public class ResultsComponent extends AbstractSandboxComponent {
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
 		createColumn(resultsViewer, "Shipping", new ResultsFormatterLabelProvider(new ShippingOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING);
-		GridViewerColumn pAndL = createColumn(resultsViewer, "Cargo P&L",
+		final GridViewerColumn pAndL = createColumn(resultsViewer, "Cargo P&L",
 				new ResultsFormatterLabelProvider(new CargoResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
-		GridViewerColumn bePrice = createColumn(resultsViewer, "B/E Price",
+		final GridViewerColumn bePrice = createColumn(resultsViewer, "B/E Price",
 				new ResultsFormatterLabelProvider(new BEPriceResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
 
@@ -225,9 +230,9 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 		mgr = new MenuManager();
 		inputWants.add(model -> {
-			IContributionItem[] items = mgr.getItems();
+			final IContributionItem[] items = mgr.getItems();
 			mgr.removeAll();
-			for (IContributionItem item : items) {
+			for (final IContributionItem item : items) {
 				item.dispose();
 			}
 		});
@@ -238,12 +243,29 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 		resultsViewer.setContentProvider(new ResultsViewerContentProvider());
 		final ESelectionService selectionService = optionModellerView.getSite().getService(ESelectionService.class);
+
 		resultsViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 				final List<Object> selection = new LinkedList<>();
 				final ISelection s = resultsViewer.getSelection();
+				ScenarioResult baseScenarioResult = null;
+				ScenarioResult scenarioResult = null;
+				{
+					final OptionAnalysisModel model = optionModellerView.getCurrentRoot().get();
+					if (model != null) {
+						final Result r = model.getBaseCaseResult();
+						if (r != null && !r.getResultSets().isEmpty()) {
+							final ResultSet baseResult = r.getResultSets().get(0);
+							final ScenarioInstance scenarioInstance = scenarioEditingLocation.getScenarioInstance();
+							if (scenarioInstance != null) {
+								baseScenarioResult = new ScenarioResult(scenarioInstance, baseResult.getScheduleModel());
+							}
+
+						}
+					}
+				}
 				if (s instanceof IStructuredSelection) {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) s;
 					final Iterator<?> itr = structuredSelection.iterator();
@@ -251,6 +273,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 						final Object o = itr.next();
 						if (o instanceof AnalysisResultRow) {
 							final AnalysisResultRow analysisResultRow = (AnalysisResultRow) o;
+							final ResultSet resultSet = (ResultSet) analysisResultRow.eContainer();
 							final ResultContainer t = analysisResultRow.getResultDetails();
 							if (t != null) {
 								if (t.getCargoAllocation() != null) {
@@ -258,10 +281,31 @@ public class ResultsComponent extends AbstractSandboxComponent {
 								}
 								selection.addAll(t.getSlotAllocations());
 								selection.addAll(t.getOpenSlotAllocations());
+								if (resultSet != null) {
+									final ScenarioInstance scenarioInstance = scenarioEditingLocation.getScenarioInstance();
+									if (scenarioInstance != null) {
+										scenarioResult = new ScenarioResult(scenarioInstance, resultSet.getScheduleModel());
+									}
+								}
 							}
 						}
 					}
 				}
+				// TODO: Check to see if we really need to re-select
+				if (scenarioResult != null) {
+					final ScenarioResult pScenarioResult = scenarioResult;
+					final ScenarioResult pBaseScenarioResult = baseScenarioResult;
+					ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, service -> {
+						if (pBaseScenarioResult != null && pScenarioResult != null) {
+							service.setPinnedPair(pBaseScenarioResult, pScenarioResult, true);
+						} else if (pScenarioResult != null) {
+							// TODO: Need a select one API
+							service.deselectAll(true);
+							service.select(pScenarioResult, true);
+						}
+					});
+				}
+
 				if (selection != null) {
 					selectionService.setPostSelection(new StructuredSelection(selection));
 				}
@@ -279,15 +323,15 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 		resultsViewer.setComparator(new ViewerComparator() {
 			@Override
-			public int compare(Viewer viewer, Object e1, Object e2) {
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 				int comparable = 0;
 				if (e1 instanceof ResultSet && e2 instanceof ResultSet) {
-					ResultSet r1 = (ResultSet) e1;
-					ResultSet r2 = (ResultSet) e2;
-					for (GridColumn gridColumn : getColumnSortOrder()) {
+					final ResultSet r1 = (ResultSet) e1;
+					final ResultSet r2 = (ResultSet) e2;
+					for (final GridColumn gridColumn : getColumnSortOrder()) {
 						if (gridColumn == bePrice.getColumn()) {
-							Double breakeven1 = findBreakEvenResult(r1);
-							Double breakeven2 = findBreakEvenResult(r2);
+							final Double breakeven1 = findBreakEvenResult(r1);
+							final Double breakeven2 = findBreakEvenResult(r2);
 							if (breakeven1 != null && breakeven2 == null) {
 								comparable = -1;
 							} else if (breakeven1 == null && breakeven2 != null) {
@@ -298,8 +342,8 @@ public class ResultsComponent extends AbstractSandboxComponent {
 								comparable = Double.compare(breakeven1, breakeven2);
 							}
 						} else if (gridColumn == pAndL.getColumn()) {
-							Double profit1 = findLargestProfit(r1);
-							Double profit2 = findLargestProfit(r2);
+							final Double profit1 = findLargestProfit(r1);
+							final Double profit2 = findLargestProfit(r2);
 							if (profit1 != null && profit2 == null) {
 								return -1;
 							} else if (profit1 == null && profit2 != null) {
@@ -325,8 +369,8 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		return resultsViewer.getControl();
 	}
 
-	private Double findBreakEvenResult(ResultSet rs) {
-		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
+	private Double findBreakEvenResult(final ResultSet rs) {
+		for (final AnalysisResultRow analysisResultRow : rs.getRows()) {
 			if (analysisResultRow.getResultDetail() instanceof BreakEvenResult) {
 				return ((BreakEvenResult) analysisResultRow.getResultDetail()).getPrice();
 			}
@@ -334,9 +378,9 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		return null;
 	}
 
-	private Double findLargestProfit(ResultSet rs) {
+	private Double findLargestProfit(final ResultSet rs) {
 		@NonNull
-		List<ProfitAndLossResult> results = rs.getRows().stream().filter(r -> r.getResultDetail() instanceof ProfitAndLossResult) //
+		final List<ProfitAndLossResult> results = rs.getRows().stream().filter(r -> r.getResultDetail() instanceof ProfitAndLossResult) //
 				.map(r -> (ProfitAndLossResult) r.getResultDetail()) //
 				.sorted((a, b) -> Double.compare(a.getValue(), b.getValue())) //
 				.collect(Collectors.toList());
@@ -386,7 +430,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		return columnSortOrder;
 	}
 
-	public void setSortDescending(boolean sortDescending) {
+	public void setSortDescending(final boolean sortDescending) {
 		this.sortDescending = sortDescending;
 	}
 

@@ -195,6 +195,78 @@ public interface CargoFactory extends EFactory {
 	CanalBookings createCanalBookings();
 
 	/**
+	 * Returns a new object of class '<em>Schedule Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Schedule Specification</em>'.
+	 * @generated
+	 */
+	ScheduleSpecification createScheduleSpecification();
+
+	/**
+	 * Returns a new object of class '<em>Non Shipped Cargo Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Non Shipped Cargo Specification</em>'.
+	 * @generated
+	 */
+	NonShippedCargoSpecification createNonShippedCargoSpecification();
+
+	/**
+	 * Returns a new object of class '<em>Vessel Schedule Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Schedule Specification</em>'.
+	 * @generated
+	 */
+	VesselScheduleSpecification createVesselScheduleSpecification();
+
+	/**
+	 * Returns a new object of class '<em>Schedule Specification Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Schedule Specification Event</em>'.
+	 * @generated
+	 */
+	ScheduleSpecificationEvent createScheduleSpecificationEvent();
+
+	/**
+	 * Returns a new object of class '<em>Vessel Event Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Event Specification</em>'.
+	 * @generated
+	 */
+	VesselEventSpecification createVesselEventSpecification();
+
+	/**
+	 * Returns a new object of class '<em>Voyage Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Voyage Specification</em>'.
+	 * @generated
+	 */
+	VoyageSpecification createVoyageSpecification();
+
+	/**
+	 * Returns a new object of class '<em>Slot Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Slot Specification</em>'.
+	 * @generated
+	 */
+	SlotSpecification createSlotSpecification();
+
+	/**
+	 * Returns a new object of class '<em>Charter In Market Override</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter In Market Override</em>'.
+	 * @generated
+	 */
+	CharterInMarketOverride createCharterInMarketOverride();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

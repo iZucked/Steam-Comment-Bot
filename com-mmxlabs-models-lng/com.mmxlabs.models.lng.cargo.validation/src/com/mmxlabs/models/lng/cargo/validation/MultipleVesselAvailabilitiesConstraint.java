@@ -76,15 +76,18 @@ public class MultipleVesselAvailabilitiesConstraint extends AbstractModelMultiCo
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof VesselAvailability) {
-			CargoModel cargoModel;
+			EObject container;
 			if (extraContext.isValidatingClone()) {
-				cargoModel = (CargoModel) target.eContainer();
+				container = (CargoModel) target.eContainer();
 			} else {
-				cargoModel = (CargoModel) extraContext.getContainer(target);
+				container = extraContext.getContainer(target);
 			}
 
-			final HashMap<Vessel, List<VesselAvailability>> currentConstraintData = getCurrentConstraintData(ctx, extraContext);
-			validateAvailability(ctx, statuses, currentConstraintData, (VesselAvailability) target);
+			if (container instanceof CargoModel) {
+
+				final HashMap<Vessel, List<VesselAvailability>> currentConstraintData = getCurrentConstraintData(ctx, extraContext);
+				validateAvailability(ctx, statuses, currentConstraintData, (VesselAvailability) target);
+			}
 		}
 
 		return Activator.PLUGIN_ID;

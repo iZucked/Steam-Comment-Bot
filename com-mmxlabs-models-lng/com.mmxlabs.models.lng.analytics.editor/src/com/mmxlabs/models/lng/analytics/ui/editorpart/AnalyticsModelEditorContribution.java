@@ -68,13 +68,13 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 			final EPartService partService = editorPart.getSite().getService(EPartService.class);
 			final MApplication application = editorPart.getSite().getService(MApplication.class);
 
-			// Switch perspective
-			final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
-			for (final MPerspective p : perspectives) {
-				if (p.getElementId().equals("com.mmxlabs.lingo.app.perspective.analysis")) {
-					partService.switchPerspective(p);
-				}
-			}
+//			// Switch perspective
+//			final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
+//			for (final MPerspective p : perspectives) {
+//				if (p.getElementId().equals("com.mmxlabs.lingo.app.perspective.analysis")) {
+//					partService.switchPerspective(p);
+//				}
+//			}
 
 			// Activate change set view
 			final MPart part = partService.showPart("com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView", PartState.ACTIVATE);

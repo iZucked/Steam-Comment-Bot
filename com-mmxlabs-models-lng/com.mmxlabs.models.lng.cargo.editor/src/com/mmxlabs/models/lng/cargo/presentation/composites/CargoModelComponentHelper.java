@@ -73,6 +73,7 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 		add_vesselTypeGroupsEditor(detailComposite, topClass);
 		add_inventoryModelsEditor(detailComposite, topClass);
 		add_canalBookingsEditor(detailComposite, topClass);
+		add_charterInMarketOverridesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the loadSlots feature on CargoModel
@@ -151,5 +152,14 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_canalBookingsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CANAL_BOOKINGS));
+	}
+
+	/**
+	 * Create the editor for the charterInMarketOverrides feature on CargoModel
+	 *
+	 * @generated
+	 */
+	protected void add_charterInMarketOverridesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES));
 	}
 }

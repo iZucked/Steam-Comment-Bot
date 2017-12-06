@@ -6,6 +6,10 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -21,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ResultSet#getRows <em>Rows</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ResultSet#getProfitAndLoss <em>Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.ResultSet#getScheduleModel <em>Schedule Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getResultSet()
@@ -69,5 +74,31 @@ public interface ResultSet extends EObject {
 	 * @generated
 	 */
 	void setProfitAndLoss(long value);
+
+	/**
+	 * Returns the value of the '<em><b>Schedule Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Schedule Model</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Schedule Model</em>' containment reference.
+	 * @see #setScheduleModel(ScheduleModel)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getResultSet_ScheduleModel()
+	 * @model containment="true"
+	 * @generated
+	 */
+	ScheduleModel getScheduleModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ResultSet#getScheduleModel <em>Schedule Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Schedule Model</em>' containment reference.
+	 * @see #getScheduleModel()
+	 * @generated
+	 */
+	void setScheduleModel(ScheduleModel value);
 
 } // ResultSet

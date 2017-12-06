@@ -7,8 +7,10 @@
 package com.mmxlabs.models.lng.analytics.impl;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 
 import org.eclipse.emf.common.notify.Notification;

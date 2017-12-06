@@ -168,12 +168,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createResultSetAdapter();
 			}
 			@Override
+			public Adapter caseResult(Result object) {
+				return createResultAdapter();
+			}
+			@Override
 			public Adapter caseBaseCase(BaseCase object) {
 				return createBaseCaseAdapter();
 			}
 			@Override
 			public Adapter casePartialCase(PartialCase object) {
 				return createPartialCaseAdapter();
+			}
+			@Override
+			public Adapter caseNewVesselAvailability(NewVesselAvailability object) {
+				return createNewVesselAvailabilityAdapter();
 			}
 			@Override
 			public Adapter caseExistingVesselAvailability(ExistingVesselAvailability object) {
@@ -196,16 +204,64 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createSlotInsertionOptionsAdapter();
 			}
 			@Override
-			public Adapter caseSlotInsertionOption(SlotInsertionOption object) {
-				return createSlotInsertionOptionAdapter();
-			}
-			@Override
 			public Adapter caseSolutionOption(SolutionOption object) {
 				return createSolutionOptionAdapter();
 			}
 			@Override
 			public Adapter caseOptimisationResult(OptimisationResult object) {
 				return createOptimisationResultAdapter();
+			}
+			@Override
+			public Adapter caseChangeDescription(ChangeDescription object) {
+				return createChangeDescriptionAdapter();
+			}
+			@Override
+			public Adapter caseChange(Change object) {
+				return createChangeAdapter();
+			}
+			@Override
+			public Adapter caseOpenSlotChange(OpenSlotChange object) {
+				return createOpenSlotChangeAdapter();
+			}
+			@Override
+			public Adapter caseCargoChange(CargoChange object) {
+				return createCargoChangeAdapter();
+			}
+			@Override
+			public Adapter caseVesselEventChange(VesselEventChange object) {
+				return createVesselEventChangeAdapter();
+			}
+			@Override
+			public Adapter caseVesselEventDescriptor(VesselEventDescriptor object) {
+				return createVesselEventDescriptorAdapter();
+			}
+			@Override
+			public Adapter caseSlotDescriptor(SlotDescriptor object) {
+				return createSlotDescriptorAdapter();
+			}
+			@Override
+			public Adapter caseRealSlotDescriptor(RealSlotDescriptor object) {
+				return createRealSlotDescriptorAdapter();
+			}
+			@Override
+			public Adapter caseSpotMarketSlotDescriptor(SpotMarketSlotDescriptor object) {
+				return createSpotMarketSlotDescriptorAdapter();
+			}
+			@Override
+			public Adapter caseVesselAllocationDescriptor(VesselAllocationDescriptor object) {
+				return createVesselAllocationDescriptorAdapter();
+			}
+			@Override
+			public Adapter caseMarketVesselAllocationDescriptor(MarketVesselAllocationDescriptor object) {
+				return createMarketVesselAllocationDescriptorAdapter();
+			}
+			@Override
+			public Adapter caseFleetVesselAllocationDescriptor(FleetVesselAllocationDescriptor object) {
+				return createFleetVesselAllocationDescriptorAdapter();
+			}
+			@Override
+			public Adapter casePositionDescriptor(PositionDescriptor object) {
+				return createPositionDescriptorAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -562,6 +618,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.Result <em>Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.Result
+	 * @generated
+	 */
+	public Adapter createResultAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BaseCase <em>Base Case</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -586,6 +656,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartialCaseAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.NewVesselAvailability <em>New Vessel Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.NewVesselAvailability
+	 * @generated
+	 */
+	public Adapter createNewVesselAvailabilityAdapter() {
 		return null;
 	}
 
@@ -660,16 +744,184 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOption <em>Slot Insertion Option</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ChangeDescription <em>Change Description</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOption
+	 * @see com.mmxlabs.models.lng.analytics.ChangeDescription
 	 * @generated
 	 */
-	public Adapter createSlotInsertionOptionAdapter() {
+	public Adapter createChangeDescriptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.Change <em>Change</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.Change
+	 * @generated
+	 */
+	public Adapter createChangeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OpenSlotChange <em>Open Slot Change</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.OpenSlotChange
+	 * @generated
+	 */
+	public Adapter createOpenSlotChangeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.CargoChange <em>Cargo Change</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.CargoChange
+	 * @generated
+	 */
+	public Adapter createCargoChangeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.VesselEventChange <em>Vessel Event Change</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.VesselEventChange
+	 * @generated
+	 */
+	public Adapter createVesselEventChangeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.VesselEventDescriptor <em>Vessel Event Descriptor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.VesselEventDescriptor
+	 * @generated
+	 */
+	public Adapter createVesselEventDescriptorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SlotDescriptor <em>Slot Descriptor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SlotDescriptor
+	 * @generated
+	 */
+	public Adapter createSlotDescriptorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.RealSlotDescriptor <em>Real Slot Descriptor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.RealSlotDescriptor
+	 * @generated
+	 */
+	public Adapter createRealSlotDescriptorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SpotMarketSlotDescriptor <em>Spot Market Slot Descriptor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SpotMarketSlotDescriptor
+	 * @generated
+	 */
+	public Adapter createSpotMarketSlotDescriptorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.VesselAllocationDescriptor <em>Vessel Allocation Descriptor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.VesselAllocationDescriptor
+	 * @generated
+	 */
+	public Adapter createVesselAllocationDescriptorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketVesselAllocationDescriptor <em>Market Vessel Allocation Descriptor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketVesselAllocationDescriptor
+	 * @generated
+	 */
+	public Adapter createMarketVesselAllocationDescriptorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.FleetVesselAllocationDescriptor <em>Fleet Vessel Allocation Descriptor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.FleetVesselAllocationDescriptor
+	 * @generated
+	 */
+	public Adapter createFleetVesselAllocationDescriptorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.PositionDescriptor <em>Position Descriptor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.PositionDescriptor
+	 * @generated
+	 */
+	public Adapter createPositionDescriptorAdapter() {
 		return null;
 	}
 

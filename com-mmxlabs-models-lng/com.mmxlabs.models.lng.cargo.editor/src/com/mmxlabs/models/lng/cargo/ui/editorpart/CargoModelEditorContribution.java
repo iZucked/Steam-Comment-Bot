@@ -60,6 +60,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	// private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
 	private int eventPage;
+	private MarketOverrideViewerPane_Editor marketOverrideViewerPane;
+	private int overridePage;
 
 	private InventoryFeedPane inventoryFeedPane;
 	private InventoryOfftakePane inventoryOfftakePane;
@@ -93,6 +95,17 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			eventPage = editorPart.addPage(sash);
 			editorPart.setPageText(eventPage, "Fleet");
 
+		}
+		if (!modelObject.getCharterInMarketOverrides().isEmpty()) {
+
+			marketOverrideViewerPane = new MarketOverrideViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			marketOverrideViewerPane.createControl(parent);
+			marketOverrideViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_CharterInMarketOverrides()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+
+			marketOverrideViewerPane.getViewer().setInput(modelObject);
+
+			overridePage = editorPart.addPage(marketOverrideViewerPane.getControl());
+			editorPart.setPageText(overridePage, "Overrides");
 		}
 
 		if (LicenseFeatures.isPermitted("features:inventory-model")) {

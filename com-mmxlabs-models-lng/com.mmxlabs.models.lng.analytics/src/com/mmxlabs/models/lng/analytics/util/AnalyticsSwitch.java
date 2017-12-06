@@ -232,6 +232,12 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.RESULT: {
+				Result result = (Result)theEObject;
+				T theResult = caseResult(result);
+				if (theResult == null) theResult = defaultCase(theEObject);
+				return theResult;
+			}
 			case AnalyticsPackage.BASE_CASE: {
 				BaseCase baseCase = (BaseCase)theEObject;
 				T result = caseBaseCase(baseCase);
@@ -241,6 +247,13 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.PARTIAL_CASE: {
 				PartialCase partialCase = (PartialCase)theEObject;
 				T result = casePartialCase(partialCase);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.NEW_VESSEL_AVAILABILITY: {
+				NewVesselAvailability newVesselAvailability = (NewVesselAvailability)theEObject;
+				T result = caseNewVesselAvailability(newVesselAvailability);
+				if (result == null) result = caseShippingOption(newVesselAvailability);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -287,13 +300,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.SLOT_INSERTION_OPTION: {
-				SlotInsertionOption slotInsertionOption = (SlotInsertionOption)theEObject;
-				T result = caseSlotInsertionOption(slotInsertionOption);
-				if (result == null) result = caseSolutionOption(slotInsertionOption);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case AnalyticsPackage.SOLUTION_OPTION: {
 				SolutionOption solutionOption = (SolutionOption)theEObject;
 				T result = caseSolutionOption(solutionOption);
@@ -307,6 +313,91 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(optimisationResult);
 				if (result == null) result = caseNamedObject(optimisationResult);
 				if (result == null) result = caseMMXObject(optimisationResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.CHANGE_DESCRIPTION: {
+				ChangeDescription changeDescription = (ChangeDescription)theEObject;
+				T result = caseChangeDescription(changeDescription);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.CHANGE: {
+				Change change = (Change)theEObject;
+				T result = caseChange(change);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.OPEN_SLOT_CHANGE: {
+				OpenSlotChange openSlotChange = (OpenSlotChange)theEObject;
+				T result = caseOpenSlotChange(openSlotChange);
+				if (result == null) result = caseChange(openSlotChange);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.CARGO_CHANGE: {
+				CargoChange cargoChange = (CargoChange)theEObject;
+				T result = caseCargoChange(cargoChange);
+				if (result == null) result = caseChange(cargoChange);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.VESSEL_EVENT_CHANGE: {
+				VesselEventChange vesselEventChange = (VesselEventChange)theEObject;
+				T result = caseVesselEventChange(vesselEventChange);
+				if (result == null) result = caseChange(vesselEventChange);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.VESSEL_EVENT_DESCRIPTOR: {
+				VesselEventDescriptor vesselEventDescriptor = (VesselEventDescriptor)theEObject;
+				T result = caseVesselEventDescriptor(vesselEventDescriptor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SLOT_DESCRIPTOR: {
+				SlotDescriptor slotDescriptor = (SlotDescriptor)theEObject;
+				T result = caseSlotDescriptor(slotDescriptor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.REAL_SLOT_DESCRIPTOR: {
+				RealSlotDescriptor realSlotDescriptor = (RealSlotDescriptor)theEObject;
+				T result = caseRealSlotDescriptor(realSlotDescriptor);
+				if (result == null) result = caseSlotDescriptor(realSlotDescriptor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SPOT_MARKET_SLOT_DESCRIPTOR: {
+				SpotMarketSlotDescriptor spotMarketSlotDescriptor = (SpotMarketSlotDescriptor)theEObject;
+				T result = caseSpotMarketSlotDescriptor(spotMarketSlotDescriptor);
+				if (result == null) result = caseSlotDescriptor(spotMarketSlotDescriptor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.VESSEL_ALLOCATION_DESCRIPTOR: {
+				VesselAllocationDescriptor vesselAllocationDescriptor = (VesselAllocationDescriptor)theEObject;
+				T result = caseVesselAllocationDescriptor(vesselAllocationDescriptor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKET_VESSEL_ALLOCATION_DESCRIPTOR: {
+				MarketVesselAllocationDescriptor marketVesselAllocationDescriptor = (MarketVesselAllocationDescriptor)theEObject;
+				T result = caseMarketVesselAllocationDescriptor(marketVesselAllocationDescriptor);
+				if (result == null) result = caseVesselAllocationDescriptor(marketVesselAllocationDescriptor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.FLEET_VESSEL_ALLOCATION_DESCRIPTOR: {
+				FleetVesselAllocationDescriptor fleetVesselAllocationDescriptor = (FleetVesselAllocationDescriptor)theEObject;
+				T result = caseFleetVesselAllocationDescriptor(fleetVesselAllocationDescriptor);
+				if (result == null) result = caseVesselAllocationDescriptor(fleetVesselAllocationDescriptor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.POSITION_DESCRIPTOR: {
+				PositionDescriptor positionDescriptor = (PositionDescriptor)theEObject;
+				T result = casePositionDescriptor(positionDescriptor);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -660,6 +751,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseResult(Result object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Base Case</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -686,6 +792,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePartialCase(PartialCase object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>New Vessel Availability</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>New Vessel Availability</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNewVesselAvailability(NewVesselAvailability object) {
 		return null;
 	}
 
@@ -765,17 +886,197 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Slot Insertion Option</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Change Description</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Slot Insertion Option</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Change Description</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSlotInsertionOption(SlotInsertionOption object) {
+	public T caseChangeDescription(ChangeDescription object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Change</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Change</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseChange(Change object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Open Slot Change</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Open Slot Change</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOpenSlotChange(OpenSlotChange object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Cargo Change</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Cargo Change</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCargoChange(CargoChange object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Change</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Event Change</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselEventChange(VesselEventChange object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Event Descriptor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselEventDescriptor(VesselEventDescriptor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Slot Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Slot Descriptor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSlotDescriptor(SlotDescriptor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Real Slot Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Real Slot Descriptor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRealSlotDescriptor(RealSlotDescriptor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Spot Market Slot Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Spot Market Slot Descriptor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSpotMarketSlotDescriptor(SpotMarketSlotDescriptor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Allocation Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Allocation Descriptor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselAllocationDescriptor(VesselAllocationDescriptor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Market Vessel Allocation Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Market Vessel Allocation Descriptor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarketVesselAllocationDescriptor(MarketVesselAllocationDescriptor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fleet Vessel Allocation Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fleet Vessel Allocation Descriptor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFleetVesselAllocationDescriptor(FleetVesselAllocationDescriptor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Position Descriptor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Position Descriptor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePositionDescriptor(PositionDescriptor object) {
 		return null;
 	}
 

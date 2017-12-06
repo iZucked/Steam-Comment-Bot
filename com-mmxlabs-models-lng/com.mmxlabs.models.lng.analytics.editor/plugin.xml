@@ -129,6 +129,12 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.NewVesselAvailabilityComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.NewVesselAvailabilityComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.NewVesselAvailability">
+  </componentHelper>
 		
 	</extension>
  <extension

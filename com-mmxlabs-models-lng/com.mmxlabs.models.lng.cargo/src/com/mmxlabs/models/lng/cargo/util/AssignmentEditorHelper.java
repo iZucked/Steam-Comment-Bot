@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +23,7 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -166,6 +168,7 @@ public class AssignmentEditorHelper {
 
 		// Map the vessel availability to assignents
 		final Map<VesselAvailability, List<AssignableElement>> fleetGrouping = new HashMap<>();
+		final Map<CharterInMarketOverride, List<AssignableElement>> marketOverridesGrouping = new HashMap<>();
 		// Keep the same order as the EMF data model
 		final List<VesselAvailability> vesselAvailabilityOrder = new ArrayList<>();
 		for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
@@ -234,6 +237,9 @@ public class AssignmentEditorHelper {
 				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 				// Groupings should have been pre-created
 				fleetGrouping.get(vesselAvailability).add(assignableElement);
+			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+				marketOverridesGrouping.computeIfAbsent(charterInMarketOverride, k-> new LinkedList<>()).add(assignableElement);
 			}
 		}
 

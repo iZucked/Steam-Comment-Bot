@@ -301,6 +301,59 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.SCHEDULE_SPECIFICATION: {
+				ScheduleSpecification scheduleSpecification = (ScheduleSpecification)theEObject;
+				T1 result = caseScheduleSpecification(scheduleSpecification);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.NON_SHIPPED_CARGO_SPECIFICATION: {
+				NonShippedCargoSpecification nonShippedCargoSpecification = (NonShippedCargoSpecification)theEObject;
+				T1 result = caseNonShippedCargoSpecification(nonShippedCargoSpecification);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.VESSEL_SCHEDULE_SPECIFICATION: {
+				VesselScheduleSpecification vesselScheduleSpecification = (VesselScheduleSpecification)theEObject;
+				T1 result = caseVesselScheduleSpecification(vesselScheduleSpecification);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.SCHEDULE_SPECIFICATION_EVENT: {
+				ScheduleSpecificationEvent scheduleSpecificationEvent = (ScheduleSpecificationEvent)theEObject;
+				T1 result = caseScheduleSpecificationEvent(scheduleSpecificationEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.VESSEL_EVENT_SPECIFICATION: {
+				VesselEventSpecification vesselEventSpecification = (VesselEventSpecification)theEObject;
+				T1 result = caseVesselEventSpecification(vesselEventSpecification);
+				if (result == null) result = caseScheduleSpecificationEvent(vesselEventSpecification);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.VOYAGE_SPECIFICATION: {
+				VoyageSpecification voyageSpecification = (VoyageSpecification)theEObject;
+				T1 result = caseVoyageSpecification(voyageSpecification);
+				if (result == null) result = caseScheduleSpecificationEvent(voyageSpecification);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.SLOT_SPECIFICATION: {
+				SlotSpecification slotSpecification = (SlotSpecification)theEObject;
+				T1 result = caseSlotSpecification(slotSpecification);
+				if (result == null) result = caseScheduleSpecificationEvent(slotSpecification);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.CHARTER_IN_MARKET_OVERRIDE: {
+				CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride)theEObject;
+				T1 result = caseCharterInMarketOverride(charterInMarketOverride);
+				if (result == null) result = caseMMXObject(charterInMarketOverride);
+				if (result == null) result = caseVesselAssignmentType(charterInMarketOverride);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -647,6 +700,126 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseCanalBookings(CanalBookings object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Schedule Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Schedule Specification</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseScheduleSpecification(ScheduleSpecification object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Non Shipped Cargo Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Non Shipped Cargo Specification</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseNonShippedCargoSpecification(NonShippedCargoSpecification object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Schedule Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Schedule Specification</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseVesselScheduleSpecification(VesselScheduleSpecification object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Schedule Specification Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Schedule Specification Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseScheduleSpecificationEvent(ScheduleSpecificationEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Event Specification</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseVesselEventSpecification(VesselEventSpecification object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Voyage Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Voyage Specification</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseVoyageSpecification(VoyageSpecification object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Slot Specification</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Slot Specification</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSlotSpecification(SlotSpecification object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter In Market Override</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter In Market Override</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCharterInMarketOverride(CharterInMarketOverride object) {
 		return null;
 	}
 

@@ -25,6 +25,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups <em>Vessel Type Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels <em>Inventory Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings <em>Canal Bookings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel()
@@ -187,6 +188,22 @@ public interface CargoModel extends UUIDObject {
 	 * @generated
 	 */
 	void setCanalBookings(CanalBookings value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter In Market Overrides</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter In Market Overrides</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_CharterInMarketOverrides()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<CharterInMarketOverride> getCharterInMarketOverrides();
 
 } // end of  CargoModel
 

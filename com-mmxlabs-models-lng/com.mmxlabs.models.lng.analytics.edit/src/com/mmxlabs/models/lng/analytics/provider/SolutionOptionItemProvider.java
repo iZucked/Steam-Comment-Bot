@@ -1,14 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.analytics.provider;
 
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
+
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 

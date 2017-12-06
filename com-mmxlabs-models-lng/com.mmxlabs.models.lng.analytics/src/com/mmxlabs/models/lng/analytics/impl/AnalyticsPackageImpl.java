@@ -27,16 +27,26 @@ import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.CargoChange;
+import com.mmxlabs.models.lng.analytics.Change;
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.FleetVesselAllocationDescriptor;
+import com.mmxlabs.models.lng.analytics.MarketVesselAllocationDescriptor;
+import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.lng.analytics.OpenSlotChange;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PositionDescriptor;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
+import com.mmxlabs.models.lng.analytics.RealSlotDescriptor;
+import com.mmxlabs.models.lng.analytics.Result;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
@@ -45,9 +55,14 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.analytics.SlotInsertionOption;
+import com.mmxlabs.models.lng.analytics.SlotDescriptor;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
+import com.mmxlabs.models.lng.analytics.SlotType;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
+import com.mmxlabs.models.lng.analytics.SpotMarketSlotDescriptor;
+import com.mmxlabs.models.lng.analytics.VesselAllocationDescriptor;
+import com.mmxlabs.models.lng.analytics.VesselEventChange;
+import com.mmxlabs.models.lng.analytics.VesselEventDescriptor;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -233,6 +248,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass resultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass baseCaseEClass = null;
 
 	/**
@@ -241,6 +263,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass partialCaseEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass newVesselAvailabilityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -282,7 +311,91 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass slotInsertionOptionEClass = null;
+	private EClass changeDescriptionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass changeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass openSlotChangeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass cargoChangeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselEventChangeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselEventDescriptorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass slotDescriptorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass realSlotDescriptorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass spotMarketSlotDescriptorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselAllocationDescriptorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass marketVesselAllocationDescriptorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fleetVesselAllocationDescriptorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass positionDescriptorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -304,6 +417,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EEnum volumeModeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum slotTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1079,15 +1199,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getResultContainer_Events() {
-		return (EReference)resultContainerEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getAnalysisResultDetail() {
 		return analysisResultDetailEClass;
 	}
@@ -1259,6 +1370,24 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getNewVesselAvailability() {
+		return newVesselAvailabilityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getNewVesselAvailability_VesselAvailability() {
+		return (EReference)newVesselAvailabilityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getExistingVesselAvailability() {
 		return existingVesselAvailabilityEClass;
 	}
@@ -1376,8 +1505,296 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getSlotInsertionOption() {
-		return slotInsertionOptionEClass;
+	public EClass getChangeDescription() {
+		return changeDescriptionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getChangeDescription_Changes() {
+		return (EReference)changeDescriptionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getChange() {
+		return changeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getOpenSlotChange() {
+		return openSlotChangeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getOpenSlotChange_SlotDescriptor() {
+		return (EReference)openSlotChangeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCargoChange() {
+		return cargoChangeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoChange_SlotDescriptors() {
+		return (EReference)cargoChangeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoChange_VesselAllocation() {
+		return (EReference)cargoChangeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoChange_Position() {
+		return (EReference)cargoChangeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVesselEventChange() {
+		return vesselEventChangeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselEventChange_VesselEventDescriptor() {
+		return (EReference)vesselEventChangeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselEventChange_VesselAllocation() {
+		return (EReference)vesselEventChangeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselEventChange_Position() {
+		return (EReference)vesselEventChangeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVesselEventDescriptor() {
+		return vesselEventDescriptorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselEventDescriptor_EventName() {
+		return (EAttribute)vesselEventDescriptorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSlotDescriptor() {
+		return slotDescriptorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlotDescriptor_SlotType() {
+		return (EAttribute)slotDescriptorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getRealSlotDescriptor() {
+		return realSlotDescriptorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRealSlotDescriptor_SlotName() {
+		return (EAttribute)realSlotDescriptorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSpotMarketSlotDescriptor() {
+		return spotMarketSlotDescriptorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSpotMarketSlotDescriptor_Date() {
+		return (EAttribute)spotMarketSlotDescriptorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSpotMarketSlotDescriptor_MarketName() {
+		return (EAttribute)spotMarketSlotDescriptorEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSpotMarketSlotDescriptor_PortName() {
+		return (EAttribute)spotMarketSlotDescriptorEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVesselAllocationDescriptor() {
+		return vesselAllocationDescriptorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getMarketVesselAllocationDescriptor() {
+		return marketVesselAllocationDescriptorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMarketVesselAllocationDescriptor_MarketName() {
+		return (EAttribute)marketVesselAllocationDescriptorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMarketVesselAllocationDescriptor_SpotIndex() {
+		return (EAttribute)marketVesselAllocationDescriptorEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getFleetVesselAllocationDescriptor() {
+		return fleetVesselAllocationDescriptorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFleetVesselAllocationDescriptor_Name() {
+		return (EAttribute)fleetVesselAllocationDescriptorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFleetVesselAllocationDescriptor_CharterIndex() {
+		return (EAttribute)fleetVesselAllocationDescriptorEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPositionDescriptor() {
+		return positionDescriptorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPositionDescriptor_After() {
+		return (EAttribute)positionDescriptorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPositionDescriptor_Before() {
+		return (EAttribute)positionDescriptorEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1421,7 +1838,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionAnalysisModel_ResultSets() {
+	public EReference getOptionAnalysisModel_BaseCaseResult() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -1430,8 +1847,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getOptionAnalysisModel_Results() {
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getOptionAnalysisModel_UseTargetPNL() {
-		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -1440,7 +1866,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getOptionAnalysisModel_Children() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(7);
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -1475,8 +1901,80 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getResultSet_ScheduleModel() {
+		return (EReference)resultSetEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getResult() {
+		return resultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResult_ExtraSlots() {
+		return (EReference)resultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResult_ResultSets() {
+		return (EReference)resultEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResult_ExtraVesselAvailabilities() {
+		return (EReference)resultEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResult_CharterInMarketOverrides() {
+		return (EReference)resultEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResult_ExtraCharterInMarkets() {
+		return (EReference)resultEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getVolumeMode() {
 		return volumeModeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getSlotType() {
+		return slotTypeEEnum;
 	}
 
 	/**
@@ -1601,7 +2099,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(resultContainerEClass, RESULT_CONTAINER__CARGO_ALLOCATION);
 		createEReference(resultContainerEClass, RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS);
 		createEReference(resultContainerEClass, RESULT_CONTAINER__SLOT_ALLOCATIONS);
-		createEReference(resultContainerEClass, RESULT_CONTAINER__EVENTS);
 
 		analysisResultDetailEClass = createEClass(ANALYSIS_RESULT_DETAIL);
 
@@ -1619,13 +2116,22 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RESULT_SETS);
+		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT);
+		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RESULTS);
 		createEAttribute(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__CHILDREN);
 
 		resultSetEClass = createEClass(RESULT_SET);
 		createEReference(resultSetEClass, RESULT_SET__ROWS);
 		createEAttribute(resultSetEClass, RESULT_SET__PROFIT_AND_LOSS);
+		createEReference(resultSetEClass, RESULT_SET__SCHEDULE_MODEL);
+
+		resultEClass = createEClass(RESULT);
+		createEReference(resultEClass, RESULT__EXTRA_SLOTS);
+		createEReference(resultEClass, RESULT__RESULT_SETS);
+		createEReference(resultEClass, RESULT__EXTRA_VESSEL_AVAILABILITIES);
+		createEReference(resultEClass, RESULT__CHARTER_IN_MARKET_OVERRIDES);
+		createEReference(resultEClass, RESULT__EXTRA_CHARTER_IN_MARKETS);
 
 		baseCaseEClass = createEClass(BASE_CASE);
 		createEReference(baseCaseEClass, BASE_CASE__BASE_CASE);
@@ -1635,6 +2141,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		partialCaseEClass = createEClass(PARTIAL_CASE);
 		createEReference(partialCaseEClass, PARTIAL_CASE__PARTIAL_CASE);
 		createEAttribute(partialCaseEClass, PARTIAL_CASE__KEEP_EXISTING_SCENARIO);
+
+		newVesselAvailabilityEClass = createEClass(NEW_VESSEL_AVAILABILITY);
+		createEReference(newVesselAvailabilityEClass, NEW_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY);
 
 		existingVesselAvailabilityEClass = createEClass(EXISTING_VESSEL_AVAILABILITY);
 		createEReference(existingVesselAvailabilityEClass, EXISTING_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY);
@@ -1654,15 +2163,60 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__SLOTS_INSERTED);
 		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__EVENTS_INSERTED);
 
-		slotInsertionOptionEClass = createEClass(SLOT_INSERTION_OPTION);
-
 		solutionOptionEClass = createEClass(SOLUTION_OPTION);
 		createEReference(solutionOptionEClass, SOLUTION_OPTION__SCHEDULE_MODEL);
 
 		optimisationResultEClass = createEClass(OPTIMISATION_RESULT);
 
+		changeDescriptionEClass = createEClass(CHANGE_DESCRIPTION);
+		createEReference(changeDescriptionEClass, CHANGE_DESCRIPTION__CHANGES);
+
+		changeEClass = createEClass(CHANGE);
+
+		openSlotChangeEClass = createEClass(OPEN_SLOT_CHANGE);
+		createEReference(openSlotChangeEClass, OPEN_SLOT_CHANGE__SLOT_DESCRIPTOR);
+
+		cargoChangeEClass = createEClass(CARGO_CHANGE);
+		createEReference(cargoChangeEClass, CARGO_CHANGE__SLOT_DESCRIPTORS);
+		createEReference(cargoChangeEClass, CARGO_CHANGE__VESSEL_ALLOCATION);
+		createEReference(cargoChangeEClass, CARGO_CHANGE__POSITION);
+
+		vesselEventChangeEClass = createEClass(VESSEL_EVENT_CHANGE);
+		createEReference(vesselEventChangeEClass, VESSEL_EVENT_CHANGE__VESSEL_EVENT_DESCRIPTOR);
+		createEReference(vesselEventChangeEClass, VESSEL_EVENT_CHANGE__VESSEL_ALLOCATION);
+		createEReference(vesselEventChangeEClass, VESSEL_EVENT_CHANGE__POSITION);
+
+		vesselEventDescriptorEClass = createEClass(VESSEL_EVENT_DESCRIPTOR);
+		createEAttribute(vesselEventDescriptorEClass, VESSEL_EVENT_DESCRIPTOR__EVENT_NAME);
+
+		slotDescriptorEClass = createEClass(SLOT_DESCRIPTOR);
+		createEAttribute(slotDescriptorEClass, SLOT_DESCRIPTOR__SLOT_TYPE);
+
+		realSlotDescriptorEClass = createEClass(REAL_SLOT_DESCRIPTOR);
+		createEAttribute(realSlotDescriptorEClass, REAL_SLOT_DESCRIPTOR__SLOT_NAME);
+
+		spotMarketSlotDescriptorEClass = createEClass(SPOT_MARKET_SLOT_DESCRIPTOR);
+		createEAttribute(spotMarketSlotDescriptorEClass, SPOT_MARKET_SLOT_DESCRIPTOR__DATE);
+		createEAttribute(spotMarketSlotDescriptorEClass, SPOT_MARKET_SLOT_DESCRIPTOR__MARKET_NAME);
+		createEAttribute(spotMarketSlotDescriptorEClass, SPOT_MARKET_SLOT_DESCRIPTOR__PORT_NAME);
+
+		vesselAllocationDescriptorEClass = createEClass(VESSEL_ALLOCATION_DESCRIPTOR);
+
+		marketVesselAllocationDescriptorEClass = createEClass(MARKET_VESSEL_ALLOCATION_DESCRIPTOR);
+		createEAttribute(marketVesselAllocationDescriptorEClass, MARKET_VESSEL_ALLOCATION_DESCRIPTOR__MARKET_NAME);
+		createEAttribute(marketVesselAllocationDescriptorEClass, MARKET_VESSEL_ALLOCATION_DESCRIPTOR__SPOT_INDEX);
+
+		fleetVesselAllocationDescriptorEClass = createEClass(FLEET_VESSEL_ALLOCATION_DESCRIPTOR);
+		createEAttribute(fleetVesselAllocationDescriptorEClass, FLEET_VESSEL_ALLOCATION_DESCRIPTOR__NAME);
+		createEAttribute(fleetVesselAllocationDescriptorEClass, FLEET_VESSEL_ALLOCATION_DESCRIPTOR__CHARTER_INDEX);
+
+		positionDescriptorEClass = createEClass(POSITION_DESCRIPTOR);
+		createEAttribute(positionDescriptorEClass, POSITION_DESCRIPTOR__AFTER);
+		createEAttribute(positionDescriptorEClass, POSITION_DESCRIPTOR__BEFORE);
+
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
+		slotTypeEEnum = createEEnum(SLOT_TYPE);
 	}
 
 	/**
@@ -1721,14 +2275,21 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		profitAndLossResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		breakEvenResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		optionAnalysisModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		newVesselAvailabilityEClass.getESuperTypes().add(this.getShippingOption());
 		existingVesselAvailabilityEClass.getESuperTypes().add(this.getShippingOption());
 		existingCharterMarketOptionEClass.getESuperTypes().add(this.getShippingOption());
 		abstractSolutionSetEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		abstractSolutionSetEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		actionableSetPlanEClass.getESuperTypes().add(this.getAbstractSolutionSet());
 		slotInsertionOptionsEClass.getESuperTypes().add(this.getAbstractSolutionSet());
-		slotInsertionOptionEClass.getESuperTypes().add(this.getSolutionOption());
 		optimisationResultEClass.getESuperTypes().add(this.getAbstractSolutionSet());
+		openSlotChangeEClass.getESuperTypes().add(this.getChange());
+		cargoChangeEClass.getESuperTypes().add(this.getChange());
+		vesselEventChangeEClass.getESuperTypes().add(this.getChange());
+		realSlotDescriptorEClass.getESuperTypes().add(this.getSlotDescriptor());
+		spotMarketSlotDescriptorEClass.getESuperTypes().add(this.getSlotDescriptor());
+		marketVesselAllocationDescriptorEClass.getESuperTypes().add(this.getVesselAllocationDescriptor());
+		fleetVesselAllocationDescriptorEClass.getESuperTypes().add(this.getVesselAllocationDescriptor());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1821,10 +2382,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAnalysisResultRow_ResultDetails(), this.getResultContainer(), null, "resultDetails", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resultContainerEClass, ResultContainer.class, "ResultContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getResultContainer_CargoAllocation(), theSchedulePackage.getCargoAllocation(), null, "cargoAllocation", null, 0, 1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResultContainer_OpenSlotAllocations(), theSchedulePackage.getOpenSlotAllocation(), null, "openSlotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResultContainer_SlotAllocations(), theSchedulePackage.getSlotAllocation(), null, "slotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResultContainer_Events(), theSchedulePackage.getEvent(), null, "events", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResultContainer_CargoAllocation(), theSchedulePackage.getCargoAllocation(), null, "cargoAllocation", null, 0, 1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResultContainer_OpenSlotAllocations(), theSchedulePackage.getOpenSlotAllocation(), null, "openSlotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResultContainer_SlotAllocations(), theSchedulePackage.getSlotAllocation(), null, "slotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(analysisResultDetailEClass, AnalysisResultDetail.class, "AnalysisResultDetail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1842,13 +2402,22 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getOptionAnalysisModel_BaseCase(), this.getBaseCase(), null, "baseCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_ShippingTemplates(), this.getShippingOption(), null, "shippingTemplates", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_PartialCase(), this.getPartialCase(), null, "partialCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionAnalysisModel_ResultSets(), this.getResultSet(), null, "resultSets", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptionAnalysisModel_BaseCaseResult(), this.getResult(), null, "baseCaseResult", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptionAnalysisModel_Results(), this.getResult(), null, "results", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptionAnalysisModel_UseTargetPNL(), ecorePackage.getEBoolean(), "useTargetPNL", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_Children(), this.getOptionAnalysisModel(), null, "children", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resultSetEClass, ResultSet.class, "ResultSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getResultSet_Rows(), this.getAnalysisResultRow(), null, "rows", null, 0, -1, ResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getResultSet_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, ResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResultSet_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, ResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(resultEClass, Result.class, "Result", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getResult_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResult_ResultSets(), this.getResultSet(), null, "resultSets", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResult_ExtraVesselAvailabilities(), theCargoPackage.getVesselAvailability(), null, "extraVesselAvailabilities", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResult_CharterInMarketOverrides(), theCargoPackage.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResult_ExtraCharterInMarkets(), theSpotMarketsPackage.getCharterInMarket(), null, "extraCharterInMarkets", null, 0, -1, Result.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(baseCaseEClass, BaseCase.class, "BaseCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseCase_BaseCase(), this.getBaseCaseRow(), null, "baseCase", null, 0, -1, BaseCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1858,6 +2427,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(partialCaseEClass, PartialCase.class, "PartialCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPartialCase_PartialCase(), this.getPartialCaseRow(), null, "partialCase", null, 0, -1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPartialCase_KeepExistingScenario(), ecorePackage.getEBoolean(), "keepExistingScenario", null, 0, 1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(newVesselAvailabilityEClass, NewVesselAvailability.class, "NewVesselAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNewVesselAvailability_VesselAvailability(), theCargoPackage.getVesselAvailability(), null, "vesselAvailability", null, 0, 1, NewVesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(existingVesselAvailabilityEClass, ExistingVesselAvailability.class, "ExistingVesselAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getExistingVesselAvailability_VesselAvailability(), theCargoPackage.getVesselAvailability(), null, "vesselAvailability", null, 0, 1, ExistingVesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1877,18 +2449,68 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getSlotInsertionOptions_SlotsInserted(), theCargoPackage.getSlot(), null, "slotsInserted", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotInsertionOptions_EventsInserted(), theCargoPackage.getVesselEvent(), null, "eventsInserted", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(slotInsertionOptionEClass, SlotInsertionOption.class, "SlotInsertionOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
 		initEClass(solutionOptionEClass, SolutionOption.class, "SolutionOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSolutionOption_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, SolutionOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optimisationResultEClass, OptimisationResult.class, "OptimisationResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(changeDescriptionEClass, ChangeDescription.class, "ChangeDescription", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getChangeDescription_Changes(), this.getChange(), null, "changes", null, 0, -1, ChangeDescription.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(changeEClass, Change.class, "Change", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(openSlotChangeEClass, OpenSlotChange.class, "OpenSlotChange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getOpenSlotChange_SlotDescriptor(), this.getSlotDescriptor(), null, "slotDescriptor", null, 0, 1, OpenSlotChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(cargoChangeEClass, CargoChange.class, "CargoChange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCargoChange_SlotDescriptors(), this.getSlotDescriptor(), null, "slotDescriptors", null, 0, -1, CargoChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoChange_VesselAllocation(), this.getVesselAllocationDescriptor(), null, "vesselAllocation", null, 0, 1, CargoChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoChange_Position(), this.getPositionDescriptor(), null, "position", null, 0, 1, CargoChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselEventChangeEClass, VesselEventChange.class, "VesselEventChange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselEventChange_VesselEventDescriptor(), this.getVesselEventDescriptor(), null, "vesselEventDescriptor", null, 0, 1, VesselEventChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselEventChange_VesselAllocation(), this.getVesselAllocationDescriptor(), null, "vesselAllocation", null, 0, 1, VesselEventChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselEventChange_Position(), this.getPositionDescriptor(), null, "position", null, 0, 1, VesselEventChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselEventDescriptorEClass, VesselEventDescriptor.class, "VesselEventDescriptor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getVesselEventDescriptor_EventName(), ecorePackage.getEString(), "eventName", null, 0, 1, VesselEventDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(slotDescriptorEClass, SlotDescriptor.class, "SlotDescriptor", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSlotDescriptor_SlotType(), this.getSlotType(), "slotType", null, 0, 1, SlotDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(realSlotDescriptorEClass, RealSlotDescriptor.class, "RealSlotDescriptor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRealSlotDescriptor_SlotName(), ecorePackage.getEString(), "slotName", null, 0, 1, RealSlotDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(spotMarketSlotDescriptorEClass, SpotMarketSlotDescriptor.class, "SpotMarketSlotDescriptor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSpotMarketSlotDescriptor_Date(), theDateTimePackage.getYearMonth(), "date", null, 0, 1, SpotMarketSlotDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarketSlotDescriptor_MarketName(), ecorePackage.getEString(), "marketName", null, 0, 1, SpotMarketSlotDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarketSlotDescriptor_PortName(), ecorePackage.getEString(), "portName", null, 0, 1, SpotMarketSlotDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselAllocationDescriptorEClass, VesselAllocationDescriptor.class, "VesselAllocationDescriptor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(marketVesselAllocationDescriptorEClass, MarketVesselAllocationDescriptor.class, "MarketVesselAllocationDescriptor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMarketVesselAllocationDescriptor_MarketName(), ecorePackage.getEString(), "marketName", null, 0, 1, MarketVesselAllocationDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarketVesselAllocationDescriptor_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 0, 1, MarketVesselAllocationDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(fleetVesselAllocationDescriptorEClass, FleetVesselAllocationDescriptor.class, "FleetVesselAllocationDescriptor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFleetVesselAllocationDescriptor_Name(), ecorePackage.getEString(), "name", null, 0, 1, FleetVesselAllocationDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFleetVesselAllocationDescriptor_CharterIndex(), ecorePackage.getEInt(), "charterIndex", null, 0, 1, FleetVesselAllocationDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(positionDescriptorEClass, PositionDescriptor.class, "PositionDescriptor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPositionDescriptor_After(), ecorePackage.getEString(), "after", null, 0, 1, PositionDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPositionDescriptor_Before(), ecorePackage.getEString(), "before", null, 0, 1, PositionDescriptor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");
 		addEEnumLiteral(volumeModeEEnum, VolumeMode.NOT_SPECIFIED);
 		addEEnumLiteral(volumeModeEEnum, VolumeMode.FIXED);
 		addEEnumLiteral(volumeModeEEnum, VolumeMode.RANGE);
+
+		initEEnum(slotTypeEEnum, SlotType.class, "SlotType");
+		addEEnumLiteral(slotTypeEEnum, SlotType.FOB_PURCHASE);
+		addEEnumLiteral(slotTypeEEnum, SlotType.FOB_SALE);
+		addEEnumLiteral(slotTypeEEnum, SlotType.DES_PURCHASE);
+		addEEnumLiteral(slotTypeEEnum, SlotType.DES_SALE);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -1998,6 +2620,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";	
 		addAnnotation
 		  (analyticsModelEClass, 
+		   source, 
+		   new String[] {
+			 "nonUniqueChildren", "true"
+		   });	
+		addAnnotation
+		  (resultEClass, 
 		   source, 
 		   new String[] {
 			 "nonUniqueChildren", "true"

@@ -9,9 +9,16 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
+import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public interface IMapperClass {
@@ -32,10 +39,6 @@ public interface IMapperClass {
 
 		void addMapping(SellOption sell, DischargeSlot original, DischargeSlot breakEven, DischargeSlot changable);
 
-		<T extends EObject> T getCopy(@NonNull T original);
-
-		<T extends EObject> T getOriginal(@NonNull T copy);
-
 		void addMapping(SpotMarket market, YearMonth date, LoadSlot slot_original, LoadSlot slot_breakEven, LoadSlot slot_changable);
 
 		void addMapping(SpotMarket market, YearMonth date, DischargeSlot slot_original, DischargeSlot slot_breakEven, DischargeSlot slot_changable);
@@ -51,5 +54,17 @@ public interface IMapperClass {
 		LoadSlot getPurchaseMarketChangable(SpotMarket market, @NonNull YearMonth date);
 
 		LoadSlot getPurchaseMarketOriginal(SpotMarket market, @NonNull YearMonth date);
+
+	ExtraDataProvider getExtraDataProvider();
+
+	void addMapping(RoundTripShippingOption shippingOption, CharterInMarket newMarket);
+
+	void addMapping(FleetShippingOption shippingOption, VesselAvailability vesselAvailability);
+	void addMapping(ExistingVesselAvailability shippingOption, VesselAvailability vesselAvailability);
+	void addMapping(NewVesselAvailability shippingOption, VesselAvailability vesselAvailability);
+
+	VesselAvailability get(FleetShippingOption fleetShippingOption);
+
+	CharterInMarket get(RoundTripShippingOption roundTripShippingOption);
 
 	}

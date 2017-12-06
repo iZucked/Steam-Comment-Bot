@@ -11,6 +11,9 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -108,6 +111,7 @@ public class ResultSetItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_SET__ROWS);
+			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_SET__SCHEDULE_MODEL);
 		}
 		return childrenFeatures;
 	}
@@ -165,6 +169,7 @@ public class ResultSetItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.RESULT_SET__ROWS:
+			case AnalyticsPackage.RESULT_SET__SCHEDULE_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -186,6 +191,11 @@ public class ResultSetItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.RESULT_SET__ROWS,
 				 AnalyticsFactory.eINSTANCE.createAnalysisResultRow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_SET__SCHEDULE_MODEL,
+				 ScheduleFactory.eINSTANCE.createScheduleModel()));
 	}
 
 	/**

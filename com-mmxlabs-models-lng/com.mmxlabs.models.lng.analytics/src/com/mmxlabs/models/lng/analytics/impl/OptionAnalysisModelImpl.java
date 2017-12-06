@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCase;
+import com.mmxlabs.models.lng.analytics.Result;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 
@@ -43,7 +44,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getBaseCase <em>Base Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getShippingTemplates <em>Shipping Templates</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getPartialCase <em>Partial Case</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getResultSets <em>Result Sets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getBaseCaseResult <em>Base Case Result</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getResults <em>Results</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#isUseTargetPNL <em>Use Target PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getChildren <em>Children</em>}</li>
  * </ul>
@@ -102,14 +104,24 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	protected PartialCase partialCase;
 
 	/**
-	 * The cached value of the '{@link #getResultSets() <em>Result Sets</em>}' containment reference list.
+	 * The cached value of the '{@link #getBaseCaseResult() <em>Base Case Result</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getResultSets()
+	 * @see #getBaseCaseResult()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ResultSet> resultSets;
+	protected Result baseCaseResult;
+
+	/**
+	 * The cached value of the '{@link #getResults() <em>Results</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getResults()
+	 * @generated
+	 * @ordered
+	 */
+	protected Result results;
 
 	/**
 	 * The default value of the '{@link #isUseTargetPNL() <em>Use Target PNL</em>}' attribute.
@@ -287,11 +299,85 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<ResultSet> getResultSets() {
-		if (resultSets == null) {
-			resultSets = new EObjectContainmentEList<ResultSet>(ResultSet.class, this, AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS);
+	public Result getBaseCaseResult() {
+		return baseCaseResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetBaseCaseResult(Result newBaseCaseResult, NotificationChain msgs) {
+		Result oldBaseCaseResult = baseCaseResult;
+		baseCaseResult = newBaseCaseResult;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT, oldBaseCaseResult, newBaseCaseResult);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return resultSets;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBaseCaseResult(Result newBaseCaseResult) {
+		if (newBaseCaseResult != baseCaseResult) {
+			NotificationChain msgs = null;
+			if (baseCaseResult != null)
+				msgs = ((InternalEObject)baseCaseResult).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT, null, msgs);
+			if (newBaseCaseResult != null)
+				msgs = ((InternalEObject)newBaseCaseResult).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT, null, msgs);
+			msgs = basicSetBaseCaseResult(newBaseCaseResult, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT, newBaseCaseResult, newBaseCaseResult));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Result getResults() {
+		return results;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetResults(Result newResults, NotificationChain msgs) {
+		Result oldResults = results;
+		results = newResults;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS, oldResults, newResults);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setResults(Result newResults) {
+		if (newResults != results) {
+			NotificationChain msgs = null;
+			if (results != null)
+				msgs = ((InternalEObject)results).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS, null, msgs);
+			if (newResults != null)
+				msgs = ((InternalEObject)newResults).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS, null, msgs);
+			msgs = basicSetResults(newResults, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS, newResults, newResults));
 	}
 
 	/**
@@ -345,8 +431,10 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 				return ((InternalEList<?>)getShippingTemplates()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				return basicSetPartialCase(null, msgs);
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
-				return ((InternalEList<?>)getResultSets()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
+				return basicSetBaseCaseResult(null, msgs);
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS:
+				return basicSetResults(null, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
 				return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
 		}
@@ -371,8 +459,10 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 				return getShippingTemplates();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				return getPartialCase();
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
-				return getResultSets();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
+				return getBaseCaseResult();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS:
+				return getResults();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				return isUseTargetPNL();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
@@ -408,9 +498,11 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				setPartialCase((PartialCase)newValue);
 				return;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
-				getResultSets().clear();
-				getResultSets().addAll((Collection<? extends ResultSet>)newValue);
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
+				setBaseCaseResult((Result)newValue);
+				return;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS:
+				setResults((Result)newValue);
 				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				setUseTargetPNL((Boolean)newValue);
@@ -446,8 +538,11 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				setPartialCase((PartialCase)null);
 				return;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
-				getResultSets().clear();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
+				setBaseCaseResult((Result)null);
+				return;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS:
+				setResults((Result)null);
 				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				setUseTargetPNL(USE_TARGET_PNL_EDEFAULT);
@@ -477,8 +572,10 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 				return shippingTemplates != null && !shippingTemplates.isEmpty();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 				return partialCase != null;
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
-				return resultSets != null && !resultSets.isEmpty();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
+				return baseCaseResult != null;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS:
+				return results != null;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				return useTargetPNL != USE_TARGET_PNL_EDEFAULT;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:

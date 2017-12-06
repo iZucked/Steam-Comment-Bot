@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -39,6 +40,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getSequenceType <em>Sequence Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getCharterInMarketOverride <em>Charter In Market Override</em>}</li>
  * </ul>
  *
  * @generated
@@ -150,6 +152,25 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @ordered
 	 */
 	protected SequenceType sequenceType = SEQUENCE_TYPE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCharterInMarketOverride() <em>Charter In Market Override</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected CharterInMarketOverride charterInMarketOverride;
+
+	/**
+	 * This is true if the Charter In Market Override reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean charterInMarketOverrideESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -390,6 +411,69 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterInMarketOverride getCharterInMarketOverride() {
+		if (charterInMarketOverride != null && charterInMarketOverride.eIsProxy()) {
+			InternalEObject oldCharterInMarketOverride = (InternalEObject)charterInMarketOverride;
+			charterInMarketOverride = (CharterInMarketOverride)eResolveProxy(oldCharterInMarketOverride);
+			if (charterInMarketOverride != oldCharterInMarketOverride) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE, oldCharterInMarketOverride, charterInMarketOverride));
+			}
+		}
+		return charterInMarketOverride;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterInMarketOverride basicGetCharterInMarketOverride() {
+		return charterInMarketOverride;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterInMarketOverride(CharterInMarketOverride newCharterInMarketOverride) {
+		CharterInMarketOverride oldCharterInMarketOverride = charterInMarketOverride;
+		charterInMarketOverride = newCharterInMarketOverride;
+		boolean oldCharterInMarketOverrideESet = charterInMarketOverrideESet;
+		charterInMarketOverrideESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE, oldCharterInMarketOverride, charterInMarketOverride, !oldCharterInMarketOverrideESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCharterInMarketOverride() {
+		CharterInMarketOverride oldCharterInMarketOverride = charterInMarketOverride;
+		boolean oldCharterInMarketOverrideESet = charterInMarketOverrideESet;
+		charterInMarketOverride = null;
+		charterInMarketOverrideESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE, oldCharterInMarketOverride, null, oldCharterInMarketOverrideESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCharterInMarketOverride() {
+		return charterInMarketOverrideESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public String getName() {
@@ -489,6 +573,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return getSpotIndex();
 			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
 				return getSequenceType();
+			case SchedulePackage.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE:
+				if (resolve) return getCharterInMarketOverride();
+				return basicGetCharterInMarketOverride();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -522,6 +609,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
 				setSequenceType((SequenceType)newValue);
 				return;
+			case SchedulePackage.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE:
+				setCharterInMarketOverride((CharterInMarketOverride)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -552,6 +642,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
 				setSequenceType(SEQUENCE_TYPE_EDEFAULT);
 				return;
+			case SchedulePackage.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE:
+				unsetCharterInMarketOverride();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -576,6 +669,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return isSetSpotIndex();
 			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
 				return sequenceType != SEQUENCE_TYPE_EDEFAULT;
+			case SchedulePackage.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE:
+				return isSetCharterInMarketOverride();
 		}
 		return super.eIsSet(featureID);
 	}

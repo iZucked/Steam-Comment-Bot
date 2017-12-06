@@ -655,6 +655,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSequence_CharterInMarketOverride() {
+		return (EReference)sequenceEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSequence__GetName() {
 		return sequenceEClass.getEOperations().get(0);
 	}
@@ -2321,6 +2330,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(sequenceEClass, SEQUENCE__FITNESSES);
 		createEAttribute(sequenceEClass, SEQUENCE__SPOT_INDEX);
 		createEAttribute(sequenceEClass, SEQUENCE__SEQUENCE_TYPE);
+		createEReference(sequenceEClass, SEQUENCE__CHARTER_IN_MARKET_OVERRIDE);
 		createEOperation(sequenceEClass, SEQUENCE___GET_NAME);
 		createEOperation(sequenceEClass, SEQUENCE___IS_SPOT_VESSEL);
 		createEOperation(sequenceEClass, SEQUENCE___IS_FLEET_VESSEL);
@@ -2655,6 +2665,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSequence_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_SequenceType(), this.getSequenceType(), "sequenceType", null, 0, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSequence_CharterInMarketOverride(), theCargoPackage.getCharterInMarketOverride(), null, "charterInMarketOverride", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSequence__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 

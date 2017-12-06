@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.Result;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -169,60 +170,59 @@ public class ResultsSetWiringDiagram implements PaintListener {
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 
 		// draw paths
-		for (ResultSet resultSet : root.getResultSets()) {
-			List<AnalysisResultRow> rows = resultSet.getRows();
-			for (final AnalysisResultRow row : rows) {
+		Result results = root.getResults();
+		if (results != null) {
+			for (ResultSet resultSet : results.getResultSets()) {
+				List<AnalysisResultRow> rows = resultSet.getRows();
+				for (final AnalysisResultRow row : rows) {
 
-				BaseCaseRow other = null;
-				for (BaseCaseRow bcr : root.getBaseCase().getBaseCase()) {
-					if (bcr.getBuyOption() != null && row.getBuyOption() == bcr.getBuyOption()) {
-						other = bcr;
-						break;
-					}
-				}
-				AnalysisResultRow otherRow = null;
-				if (other != null) {
-					for (AnalysisResultRow arr : resultSet.getRows()) {
-						if (other.getSellOption() != null && arr.getSellOption() == other.getSellOption()) {
-							otherRow = arr;
+					BaseCaseRow other = null;
+					for (BaseCaseRow bcr : root.getBaseCase().getBaseCase()) {
+						if (bcr.getBuyOption() != null && row.getBuyOption() == bcr.getBuyOption()) {
+							other = bcr;
 							break;
 						}
 					}
+					AnalysisResultRow otherRow = null;
+					if (other != null) {
+						for (AnalysisResultRow arr : resultSet.getRows()) {
+							if (other.getSellOption() != null && arr.getSellOption() == other.getSellOption()) {
+								otherRow = arr;
+								break;
+							}
+						}
+					}
+
+					final Integer unsortedSource = rowIndices.get(row);
+					final Integer unsortedDestination = rowIndices.get(otherRow);
+					if (unsortedSource == null || unsortedDestination == null) {
+						// Error?
+						continue;
+					}
+					// Map back between current row (sorted) and data (unsorted)
+					final int sortedDestination = unsortedDestination;
+					final int sortedSource = unsortedSource;
+
+					// Filtering can lead to missing terminals
+					if (sortedDestination < 0 || sortedSource < 0) {
+						continue;
+					}
+
+					final float startMid = terminalPositions.get(sortedSource);
+					final float endMid = terminalPositions.get(sortedDestination);
+
+					// Draw wire - offset by ca.x to as x pos is relative to left hand side
+					final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
+
+					graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+
+					graphics.setLineDash(new int[] { 2, 3 });
+
+					graphics.drawPath(path);
+					path.dispose();
+
+					graphics.setLineDash(null);
 				}
-
-				final Integer unsortedSource = rowIndices.get(row);
-				final Integer unsortedDestination = rowIndices.get(otherRow);
-				if (unsortedSource == null || unsortedDestination == null) {
-					// Error?
-					continue;
-				}
-				// Map back between current row (sorted) and data (unsorted)
-				final int sortedDestination = unsortedDestination;
-				final int sortedSource = unsortedSource;
-
-				// Filtering can lead to missing terminals
-				if (sortedDestination < 0 || sortedSource < 0) {
-					continue;
-				}
-
-				final float startMid = terminalPositions.get(sortedSource);
-				final float endMid = terminalPositions.get(sortedDestination);
-
-				// Draw wire - offset by ca.x to as x pos is relative to left hand side
-				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
-
-				graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-
-				// if (wire.dashed) {
-				graphics.setLineDash(new int[] { 2, 3 });
-				// } else {
-				// graphics.setLineDash(null);
-				// }
-
-				graphics.drawPath(path);
-				path.dispose();
-
-				graphics.setLineDash(null);
 			}
 		}
 

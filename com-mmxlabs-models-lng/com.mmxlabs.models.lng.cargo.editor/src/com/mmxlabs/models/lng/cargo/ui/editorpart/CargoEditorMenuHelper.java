@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -1122,6 +1123,8 @@ public class CargoEditorMenuHelper {
 									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
 								} else if (vesselAssignmentType instanceof CharterInMarket) {
 									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
+								} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
 								}
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
@@ -1177,6 +1180,8 @@ public class CargoEditorMenuHelper {
 									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
 								} else if (vesselAssignmentType instanceof CharterInMarket) {
 									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
+								} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+									assignedVessel = ((CharterInMarketOverride) vesselAssignmentType).getCharterInMarket().getVessel();
 								}
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);

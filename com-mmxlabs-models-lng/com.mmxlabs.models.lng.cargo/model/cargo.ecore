@@ -28,6 +28,8 @@
         eType="#//Inventory"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="canalBookings" eType="#//CanalBookings"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverrides"
+        upperBound="-1" eType="#//CharterInMarketOverride" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
@@ -482,5 +484,64 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="northboundMaxIdleDays"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScheduleSpecification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselScheduleSpecifications"
+        upperBound="-1" eType="#//VesselScheduleSpecification" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nonShippedCargoSpecifications"
+        upperBound="-1" eType="#//NonShippedCargoSpecification" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openEvents" upperBound="-1"
+        eType="#//ScheduleSpecificationEvent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NonShippedCargoSpecification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotSpecifications" upperBound="-1"
+        eType="#//SlotSpecification" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselScheduleSpecification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//ScheduleSpecificationEvent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScheduleSpecificationEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventSpecification" eSuperTypes="#//ScheduleSpecificationEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" eType="#//VesselEvent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VoyageSpecification" eSuperTypes="#//ScheduleSpecificationEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SlotSpecification" eSuperTypes="#//ScheduleSpecificationEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="#//Slot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterInMarketOverride" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType">
+    <eOperations name="getStartDateAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getEndDateAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getLocalOrDelegateMinDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getLocalOrDelegateMaxDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarket" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
+        eType="#//StartHeelOptions" unsettable="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="#//EndHeelOptions"
+        unsettable="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeBallastBonus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minDuration" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxDuration" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

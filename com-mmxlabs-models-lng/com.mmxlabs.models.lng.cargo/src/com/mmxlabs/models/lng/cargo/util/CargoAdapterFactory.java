@@ -186,6 +186,38 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createCanalBookingsAdapter();
 			}
 			@Override
+			public Adapter caseScheduleSpecification(ScheduleSpecification object) {
+				return createScheduleSpecificationAdapter();
+			}
+			@Override
+			public Adapter caseNonShippedCargoSpecification(NonShippedCargoSpecification object) {
+				return createNonShippedCargoSpecificationAdapter();
+			}
+			@Override
+			public Adapter caseVesselScheduleSpecification(VesselScheduleSpecification object) {
+				return createVesselScheduleSpecificationAdapter();
+			}
+			@Override
+			public Adapter caseScheduleSpecificationEvent(ScheduleSpecificationEvent object) {
+				return createScheduleSpecificationEventAdapter();
+			}
+			@Override
+			public Adapter caseVesselEventSpecification(VesselEventSpecification object) {
+				return createVesselEventSpecificationAdapter();
+			}
+			@Override
+			public Adapter caseVoyageSpecification(VoyageSpecification object) {
+				return createVoyageSpecificationAdapter();
+			}
+			@Override
+			public Adapter caseSlotSpecification(SlotSpecification object) {
+				return createSlotSpecificationAdapter();
+			}
+			@Override
+			public Adapter caseCharterInMarketOverride(CharterInMarketOverride object) {
+				return createCharterInMarketOverrideAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -594,6 +626,118 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCanalBookingsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification <em>Schedule Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecification
+	 * @generated
+	 */
+	public Adapter createScheduleSpecificationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification <em>Non Shipped Cargo Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification
+	 * @generated
+	 */
+	public Adapter createNonShippedCargoSpecificationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.VesselScheduleSpecification <em>Vessel Schedule Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.VesselScheduleSpecification
+	 * @generated
+	 */
+	public Adapter createVesselScheduleSpecificationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent <em>Schedule Specification Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent
+	 * @generated
+	 */
+	public Adapter createScheduleSpecificationEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.VesselEventSpecification <em>Vessel Event Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEventSpecification
+	 * @generated
+	 */
+	public Adapter createVesselEventSpecificationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.VoyageSpecification <em>Voyage Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.VoyageSpecification
+	 * @generated
+	 */
+	public Adapter createVoyageSpecificationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.SlotSpecification <em>Slot Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.SlotSpecification
+	 * @generated
+	 */
+	public Adapter createSlotSpecificationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride <em>Charter In Market Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride
+	 * @generated
+	 */
+	public Adapter createCharterInMarketOverrideAdapter() {
 		return null;
 	}
 

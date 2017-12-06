@@ -98,7 +98,8 @@ public class OptionAnalysisModelItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS);
+			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT);
+			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN);
 		}
 		return childrenFeatures;
@@ -163,7 +164,8 @@ public class OptionAnalysisModelItemProvider
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT:
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULTS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -245,6 +247,11 @@ public class OptionAnalysisModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+				 AnalyticsFactory.eINSTANCE.createNewVesselAvailability()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 				 AnalyticsFactory.eINSTANCE.createExistingVesselAvailability()));
 
 		newChildDescriptors.add
@@ -259,13 +266,41 @@ public class OptionAnalysisModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS,
-				 AnalyticsFactory.eINSTANCE.createResultSet()));
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT,
+				 AnalyticsFactory.eINSTANCE.createResult()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS,
+				 AnalyticsFactory.eINSTANCE.createResult()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN,
 				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE_RESULT ||
+			childFeature == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

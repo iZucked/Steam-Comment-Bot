@@ -191,11 +191,6 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS,
-				 AnalyticsFactory.eINSTANCE.createSlotInsertionOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS,
 				 CargoFactory.eINSTANCE.createLoadSlot()));
 

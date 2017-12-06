@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
@@ -230,6 +231,8 @@ public class AnalyticsBuilder {
 			return ((ExistingCharterMarketOption) shippingOption).getCharterInMarket().getVessel().getVesselOrDelegateCapacity();
 		} else if (shippingOption instanceof ExistingVesselAvailability) {
 			return ((ExistingVesselAvailability) shippingOption).getVesselAvailability().getVessel().getVesselOrDelegateCapacity();
+		} else if (shippingOption instanceof NewVesselAvailability) {
+			return ((NewVesselAvailability) shippingOption).getVesselAvailability().getVessel().getVesselOrDelegateCapacity();
 		}
 		return 0;
 	}
@@ -617,6 +620,13 @@ public class AnalyticsBuilder {
 		final BaseLegalEntity entity = getDefaultEntity(scenarioEditingLocation);
 		if (entity != null) {
 			option.setEntity(entity);
+		}
+	}
+
+	public static void setDefaultEntity(final IScenarioEditingLocation scenarioEditingLocation, final NewVesselAvailability option) {
+		final BaseLegalEntity entity = getDefaultEntity(scenarioEditingLocation);
+		if (entity != null) {
+			option.getVesselAvailability().setEntity(entity);
 		}
 	}
 
@@ -1180,6 +1190,10 @@ public class AnalyticsBuilder {
 		} else if (shippingOption instanceof ExistingVesselAvailability) {
 
 			final ExistingVesselAvailability existingVesselAvailability = (ExistingVesselAvailability) shippingOption;
+			vessel = existingVesselAvailability.getVesselAvailability().getVessel();
+		} else if (shippingOption instanceof NewVesselAvailability) {
+
+			final NewVesselAvailability existingVesselAvailability = (NewVesselAvailability) shippingOption;
 			vessel = existingVesselAvailability.getVesselAvailability().getVessel();
 		} else if (shippingOption instanceof ExistingCharterMarketOption) {
 			final ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption) shippingOption;

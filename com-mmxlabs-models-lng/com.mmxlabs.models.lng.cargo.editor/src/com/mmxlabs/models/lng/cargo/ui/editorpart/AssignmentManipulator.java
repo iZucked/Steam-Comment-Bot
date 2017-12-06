@@ -21,6 +21,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
@@ -68,15 +69,18 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 			if (p.getSecond() instanceof VesselAvailability) {
 				final VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
 				p.setFirst(AssignmentLabelProvider.getLabelFor(vesselAvailability));
+			} else if (p.getSecond() instanceof CharterInMarketOverride) {
+				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) p.getSecond();
+				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarketOverride));
 			} else if (p.getSecond() instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) p.getSecond();
-				
+
 				int spotIndex = -2;
 				if (target instanceof AssignableElement) {
 					AssignableElement assignableElement = (AssignableElement) target;
 					spotIndex = assignableElement.getSpotIndex();
 				}
-				
+
 				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, spotIndex));
 			}
 		});

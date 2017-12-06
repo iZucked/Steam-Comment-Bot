@@ -44,7 +44,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
@@ -119,7 +119,10 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 				public void mouseDown(final MouseEvent e) {
 					final OptionAnalysisModel m = modelProvider.get();
 					if (baseCaseValid && m != null) {
-						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(scenarioEditingLocation, m, m.getBaseCase(), false, "Base Case", null));
+						
+						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> WhatIfEvaluator.evaluateBaseCase(scenarioEditingLocation, m));
+
+//						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(scenarioEditingLocation, m, m.getBaseCase(), false, "Base Case", null));
 					}
 				}
 

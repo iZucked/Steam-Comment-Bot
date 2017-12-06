@@ -19,6 +19,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.edit.utils.AssignableElementCommandHelper;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
@@ -39,6 +40,9 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 			if (p.getSecond() instanceof VesselAvailability) {
 				final VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
 				p.setFirst(AssignmentLabelProvider.getLabelFor(vesselAvailability));
+			} else if (p.getSecond() instanceof CharterInMarketOverride) {
+				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) p.getSecond();
+				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarketOverride));
 			} else if (p.getSecond() instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) p.getSecond();
 				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, -2));

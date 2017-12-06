@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -55,6 +56,13 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 				final Vessel vessel = charterInMarket.getVessel();
 				if (vessel != null) {
 					inaccessiblePorts = vessel.getVesselOrDelegateInaccessiblePorts();
+				}
+			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+				final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
+				final Vessel vessel = charterInMarket.getVessel();
+				if (vessel != null) {
+					inaccessiblePorts = vessel.getInaccessiblePorts();
 				}
 			}
 

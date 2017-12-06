@@ -83,15 +83,27 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.BREAK_EVEN_RESULT: return createBreakEvenResult();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL: return createOptionAnalysisModel();
 			case AnalyticsPackage.RESULT_SET: return createResultSet();
+			case AnalyticsPackage.RESULT: return createResult();
 			case AnalyticsPackage.BASE_CASE: return createBaseCase();
 			case AnalyticsPackage.PARTIAL_CASE: return createPartialCase();
+			case AnalyticsPackage.NEW_VESSEL_AVAILABILITY: return createNewVesselAvailability();
 			case AnalyticsPackage.EXISTING_VESSEL_AVAILABILITY: return createExistingVesselAvailability();
 			case AnalyticsPackage.EXISTING_CHARTER_MARKET_OPTION: return createExistingCharterMarketOption();
 			case AnalyticsPackage.ACTIONABLE_SET_PLAN: return createActionableSetPlan();
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS: return createSlotInsertionOptions();
-			case AnalyticsPackage.SLOT_INSERTION_OPTION: return createSlotInsertionOption();
 			case AnalyticsPackage.SOLUTION_OPTION: return createSolutionOption();
 			case AnalyticsPackage.OPTIMISATION_RESULT: return createOptimisationResult();
+			case AnalyticsPackage.CHANGE_DESCRIPTION: return createChangeDescription();
+			case AnalyticsPackage.OPEN_SLOT_CHANGE: return createOpenSlotChange();
+			case AnalyticsPackage.CARGO_CHANGE: return createCargoChange();
+			case AnalyticsPackage.VESSEL_EVENT_CHANGE: return createVesselEventChange();
+			case AnalyticsPackage.VESSEL_EVENT_DESCRIPTOR: return createVesselEventDescriptor();
+			case AnalyticsPackage.REAL_SLOT_DESCRIPTOR: return createRealSlotDescriptor();
+			case AnalyticsPackage.SPOT_MARKET_SLOT_DESCRIPTOR: return createSpotMarketSlotDescriptor();
+			case AnalyticsPackage.VESSEL_ALLOCATION_DESCRIPTOR: return createVesselAllocationDescriptor();
+			case AnalyticsPackage.MARKET_VESSEL_ALLOCATION_DESCRIPTOR: return createMarketVesselAllocationDescriptor();
+			case AnalyticsPackage.FLEET_VESSEL_ALLOCATION_DESCRIPTOR: return createFleetVesselAllocationDescriptor();
+			case AnalyticsPackage.POSITION_DESCRIPTOR: return createPositionDescriptor();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -107,6 +119,8 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 		switch (eDataType.getClassifierID()) {
 			case AnalyticsPackage.VOLUME_MODE:
 				return createVolumeModeFromString(eDataType, initialValue);
+			case AnalyticsPackage.SLOT_TYPE:
+				return createSlotTypeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -122,6 +136,8 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 		switch (eDataType.getClassifierID()) {
 			case AnalyticsPackage.VOLUME_MODE:
 				return convertVolumeModeToString(eDataType, instanceValue);
+			case AnalyticsPackage.SLOT_TYPE:
+				return convertSlotTypeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -345,6 +361,16 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Result createResult() {
+		ResultImpl result = new ResultImpl();
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public BaseCase createBaseCase() {
 		BaseCaseImpl baseCase = new BaseCaseImpl();
 		return baseCase;
@@ -358,6 +384,16 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public PartialCase createPartialCase() {
 		PartialCaseImpl partialCase = new PartialCaseImpl();
 		return partialCase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NewVesselAvailability createNewVesselAvailability() {
+		NewVesselAvailabilityImpl newVesselAvailability = new NewVesselAvailabilityImpl();
+		return newVesselAvailability;
 	}
 
 	/**
@@ -405,9 +441,109 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SlotInsertionOption createSlotInsertionOption() {
-		SlotInsertionOptionImpl slotInsertionOption = new SlotInsertionOptionImpl();
-		return slotInsertionOption;
+	public ChangeDescription createChangeDescription() {
+		ChangeDescriptionImpl changeDescription = new ChangeDescriptionImpl();
+		return changeDescription;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotChange createOpenSlotChange() {
+		OpenSlotChangeImpl openSlotChange = new OpenSlotChangeImpl();
+		return openSlotChange;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CargoChange createCargoChange() {
+		CargoChangeImpl cargoChange = new CargoChangeImpl();
+		return cargoChange;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselEventChange createVesselEventChange() {
+		VesselEventChangeImpl vesselEventChange = new VesselEventChangeImpl();
+		return vesselEventChange;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselEventDescriptor createVesselEventDescriptor() {
+		VesselEventDescriptorImpl vesselEventDescriptor = new VesselEventDescriptorImpl();
+		return vesselEventDescriptor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RealSlotDescriptor createRealSlotDescriptor() {
+		RealSlotDescriptorImpl realSlotDescriptor = new RealSlotDescriptorImpl();
+		return realSlotDescriptor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SpotMarketSlotDescriptor createSpotMarketSlotDescriptor() {
+		SpotMarketSlotDescriptorImpl spotMarketSlotDescriptor = new SpotMarketSlotDescriptorImpl();
+		return spotMarketSlotDescriptor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselAllocationDescriptor createVesselAllocationDescriptor() {
+		VesselAllocationDescriptorImpl vesselAllocationDescriptor = new VesselAllocationDescriptorImpl();
+		return vesselAllocationDescriptor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MarketVesselAllocationDescriptor createMarketVesselAllocationDescriptor() {
+		MarketVesselAllocationDescriptorImpl marketVesselAllocationDescriptor = new MarketVesselAllocationDescriptorImpl();
+		return marketVesselAllocationDescriptor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FleetVesselAllocationDescriptor createFleetVesselAllocationDescriptor() {
+		FleetVesselAllocationDescriptorImpl fleetVesselAllocationDescriptor = new FleetVesselAllocationDescriptorImpl();
+		return fleetVesselAllocationDescriptor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PositionDescriptor createPositionDescriptor() {
+		PositionDescriptorImpl positionDescriptor = new PositionDescriptorImpl();
+		return positionDescriptor;
 	}
 
 	/**
@@ -447,6 +583,26 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * @generated
 	 */
 	public String convertVolumeModeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotType createSlotTypeFromString(EDataType eDataType, String initialValue) {
+		SlotType result = SlotType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSlotTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

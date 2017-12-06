@@ -70,6 +70,7 @@ public class SequenceComponentHelper extends BaseComponentHelper {
 		add_fitnessesEditor(detailComposite, topClass);
 		add_spotIndexEditor(detailComposite, topClass);
 		add_sequenceTypeEditor(detailComposite, topClass);
+		add_charterInMarketOverrideEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the events feature on Sequence
@@ -122,5 +123,14 @@ public class SequenceComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_sequenceTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__SEQUENCE_TYPE));
+	}
+
+	/**
+	 * Create the editor for the charterInMarketOverride feature on Sequence
+	 *
+	 * @generated
+	 */
+	protected void add_charterInMarketOverrideEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE));
 	}
 }

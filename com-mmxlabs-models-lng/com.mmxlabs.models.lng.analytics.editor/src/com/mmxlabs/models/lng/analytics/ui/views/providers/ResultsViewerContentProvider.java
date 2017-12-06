@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.Result;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 
 public class ResultsViewerContentProvider implements ITreeContentProvider {
@@ -27,7 +28,10 @@ public class ResultsViewerContentProvider implements ITreeContentProvider {
 
 		if (inputElement instanceof OptionAnalysisModel) {
 			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
-			return model.getResultSets().toArray();
+			Result result = model.getResults();
+			if (result != null) {
+				return result.getResultSets().toArray();
+			}
 		}
 		return new Object[0];
 	}

@@ -23,6 +23,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -53,6 +54,10 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 			final Vessel vessel;
 			if (vesselAssignmentType instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+				vessel = charterInMarket.getVessel();
+			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+				final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 				vessel = charterInMarket.getVessel();
 			} else if (vesselAssignmentType instanceof VesselAvailability) {
 				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;

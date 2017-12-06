@@ -69,6 +69,7 @@ public class ResultSetComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_rowsEditor(detailComposite, topClass);
 		add_profitAndLossEditor(detailComposite, topClass);
+		add_scheduleModelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the rows feature on ResultSet
@@ -85,5 +86,14 @@ public class ResultSetComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_profitAndLossEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.RESULT_SET__PROFIT_AND_LOSS));
+	}
+
+	/**
+	 * Create the editor for the scheduleModel feature on ResultSet
+	 *
+	 * @generated
+	 */
+	protected void add_scheduleModelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.RESULT_SET__SCHEDULE_MODEL));
 	}
 }

@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 
 import org.eclipse.emf.ecore.EObject;

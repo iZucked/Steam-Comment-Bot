@@ -13,6 +13,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -172,6 +173,13 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			}
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
 			CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+			final Vessel vessel = charterInMarket.getVessel();
+			if (vessel != null) {
+				capacity = vessel.getVesselOrDelegateCapacity();
+			}
+		} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+			CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+			CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 			final Vessel vessel = charterInMarket.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();

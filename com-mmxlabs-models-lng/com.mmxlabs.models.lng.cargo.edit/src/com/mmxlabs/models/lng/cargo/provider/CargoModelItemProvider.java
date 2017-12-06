@@ -96,6 +96,7 @@ public class CargoModelItemProvider
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_TYPE_GROUPS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CANAL_BOOKINGS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 		}
 		return childrenFeatures;
 	}
@@ -158,6 +159,7 @@ public class CargoModelItemProvider
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
 			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
+			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -234,6 +236,11 @@ public class CargoModelItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__CANAL_BOOKINGS,
 				 CargoFactory.eINSTANCE.createCanalBookings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES,
+				 CargoFactory.eINSTANCE.createCharterInMarketOverride()));
 	}
 
 }

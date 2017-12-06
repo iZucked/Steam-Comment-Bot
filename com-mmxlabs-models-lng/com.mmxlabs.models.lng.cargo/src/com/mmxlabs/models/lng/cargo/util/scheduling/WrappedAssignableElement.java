@@ -17,6 +17,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -369,6 +370,9 @@ public class WrappedAssignableElement {
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
 			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 			vessel = charterInMarket.getVessel();
+		} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
+			final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+			vessel = charterInMarketOverride.getCharterInMarket().getVessel();
 		}
 
 		return getTravelTime(vessel, portModel, from, to, modelDistanceProvider);

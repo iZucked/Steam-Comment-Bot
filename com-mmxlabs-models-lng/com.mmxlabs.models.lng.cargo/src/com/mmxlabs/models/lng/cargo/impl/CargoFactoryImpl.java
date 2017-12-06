@@ -93,6 +93,14 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.INVENTORY: return createInventory();
 			case CargoPackage.CANAL_BOOKING_SLOT: return createCanalBookingSlot();
 			case CargoPackage.CANAL_BOOKINGS: return createCanalBookings();
+			case CargoPackage.SCHEDULE_SPECIFICATION: return createScheduleSpecification();
+			case CargoPackage.NON_SHIPPED_CARGO_SPECIFICATION: return createNonShippedCargoSpecification();
+			case CargoPackage.VESSEL_SCHEDULE_SPECIFICATION: return createVesselScheduleSpecification();
+			case CargoPackage.SCHEDULE_SPECIFICATION_EVENT: return createScheduleSpecificationEvent();
+			case CargoPackage.VESSEL_EVENT_SPECIFICATION: return createVesselEventSpecification();
+			case CargoPackage.VOYAGE_SPECIFICATION: return createVoyageSpecification();
+			case CargoPackage.SLOT_SPECIFICATION: return createSlotSpecification();
+			case CargoPackage.CHARTER_IN_MARKET_OVERRIDE: return createCharterInMarketOverride();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -328,6 +336,86 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public CanalBookings createCanalBookings() {
 		CanalBookingsImpl canalBookings = new CanalBookingsImpl();
 		return canalBookings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScheduleSpecification createScheduleSpecification() {
+		ScheduleSpecificationImpl scheduleSpecification = new ScheduleSpecificationImpl();
+		return scheduleSpecification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NonShippedCargoSpecification createNonShippedCargoSpecification() {
+		NonShippedCargoSpecificationImpl nonShippedCargoSpecification = new NonShippedCargoSpecificationImpl();
+		return nonShippedCargoSpecification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselScheduleSpecification createVesselScheduleSpecification() {
+		VesselScheduleSpecificationImpl vesselScheduleSpecification = new VesselScheduleSpecificationImpl();
+		return vesselScheduleSpecification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScheduleSpecificationEvent createScheduleSpecificationEvent() {
+		ScheduleSpecificationEventImpl scheduleSpecificationEvent = new ScheduleSpecificationEventImpl();
+		return scheduleSpecificationEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselEventSpecification createVesselEventSpecification() {
+		VesselEventSpecificationImpl vesselEventSpecification = new VesselEventSpecificationImpl();
+		return vesselEventSpecification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VoyageSpecification createVoyageSpecification() {
+		VoyageSpecificationImpl voyageSpecification = new VoyageSpecificationImpl();
+		return voyageSpecification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotSpecification createSlotSpecification() {
+		SlotSpecificationImpl slotSpecification = new SlotSpecificationImpl();
+		return slotSpecification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterInMarketOverride createCharterInMarketOverride() {
+		CharterInMarketOverrideImpl charterInMarketOverride = new CharterInMarketOverrideImpl();
+		return charterInMarketOverride;
 	}
 
 	/**

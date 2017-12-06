@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
@@ -61,7 +62,8 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 						statuses.add(deco);
 					}
 					if (!(baseCaseRow.getShipping() instanceof FleetShippingOption || baseCaseRow.getShipping() instanceof RoundTripShippingOption
-							|| baseCaseRow.getShipping() instanceof ExistingVesselAvailability || baseCaseRow.getShipping() instanceof ExistingCharterMarketOption)) {
+							|| baseCaseRow.getShipping() instanceof NewVesselAvailability || baseCaseRow.getShipping() instanceof ExistingVesselAvailability
+							|| baseCaseRow.getShipping() instanceof ExistingCharterMarketOption)) {
 						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Target - incompatible shipping option defined."));
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						statuses.add(deco);

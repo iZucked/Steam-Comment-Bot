@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SupplyFromFlow;
 import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
 import com.mmxlabs.models.lng.adp.SupplyFromSpotFlow;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
@@ -96,6 +97,14 @@ public class BindingRuleLabelProvider implements ILabelProvider {
 					vesselStr = vesselAvailability.getVessel().getName();
 				} else if (option.getVesselAssignmentType() instanceof CharterInMarket) {
 					final CharterInMarket charterInMarket = (CharterInMarket) option.getVesselAssignmentType();
+					if (option.getSpotIndex() == -1) {
+						vesselStr = String.format("Nominal - %s", charterInMarket.getName());
+					} else {
+						vesselStr = String.format("Market - %s", charterInMarket.getName());
+					}
+				} else if (option.getVesselAssignmentType() instanceof CharterInMarketOverride) {
+					final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) option.getVesselAssignmentType();
+					final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 					if (option.getSpotIndex() == -1) {
 						vesselStr = String.format("Nominal - %s", charterInMarket.getName());
 					} else {

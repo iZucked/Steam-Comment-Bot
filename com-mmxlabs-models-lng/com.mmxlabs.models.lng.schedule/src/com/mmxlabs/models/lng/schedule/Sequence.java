@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -24,6 +25,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSequenceType <em>Sequence Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarketOverride <em>Charter In Market Override</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence()
@@ -252,6 +254,59 @@ public interface Sequence extends MMXObject {
 	 * @generated
 	 */
 	void setSequenceType(SequenceType value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter In Market Override</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter In Market Override</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter In Market Override</em>' reference.
+	 * @see #isSetCharterInMarketOverride()
+	 * @see #unsetCharterInMarketOverride()
+	 * @see #setCharterInMarketOverride(CharterInMarketOverride)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_CharterInMarketOverride()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	CharterInMarketOverride getCharterInMarketOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarketOverride <em>Charter In Market Override</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter In Market Override</em>' reference.
+	 * @see #isSetCharterInMarketOverride()
+	 * @see #unsetCharterInMarketOverride()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	void setCharterInMarketOverride(CharterInMarketOverride value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarketOverride <em>Charter In Market Override</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCharterInMarketOverride()
+	 * @see #getCharterInMarketOverride()
+	 * @see #setCharterInMarketOverride(CharterInMarketOverride)
+	 * @generated
+	 */
+	void unsetCharterInMarketOverride();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarketOverride <em>Charter In Market Override</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Charter In Market Override</em>' reference is set.
+	 * @see #unsetCharterInMarketOverride()
+	 * @see #getCharterInMarketOverride()
+	 * @see #setCharterInMarketOverride(CharterInMarketOverride)
+	 * @generated
+	 */
+	boolean isSetCharterInMarketOverride();
 
 	/**
 	 * <!-- begin-user-doc -->

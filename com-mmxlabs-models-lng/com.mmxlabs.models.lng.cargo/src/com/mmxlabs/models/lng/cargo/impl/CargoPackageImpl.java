@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -34,15 +35,22 @@ import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
+import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.VesselType;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
+import com.mmxlabs.models.lng.cargo.VoyageSpecification;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -218,6 +226,62 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass canalBookingsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scheduleSpecificationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass nonShippedCargoSpecificationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselScheduleSpecificationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scheduleSpecificationEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselEventSpecificationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass voyageSpecificationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass slotSpecificationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass charterInMarketOverrideEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1090,6 +1154,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EReference getCargoModel_CanalBookings() {
 		return (EReference)cargoModelEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoModel_CharterInMarketOverrides() {
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -2006,6 +2079,285 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getScheduleSpecification() {
+		return scheduleSpecificationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScheduleSpecification_VesselScheduleSpecifications() {
+		return (EReference)scheduleSpecificationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScheduleSpecification_NonShippedCargoSpecifications() {
+		return (EReference)scheduleSpecificationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScheduleSpecification_OpenEvents() {
+		return (EReference)scheduleSpecificationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getNonShippedCargoSpecification() {
+		return nonShippedCargoSpecificationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getNonShippedCargoSpecification_SlotSpecifications() {
+		return (EReference)nonShippedCargoSpecificationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVesselScheduleSpecification() {
+		return vesselScheduleSpecificationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselScheduleSpecification_VesselAllocation() {
+		return (EReference)vesselScheduleSpecificationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselScheduleSpecification_SpotIndex() {
+		return (EAttribute)vesselScheduleSpecificationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselScheduleSpecification_Events() {
+		return (EReference)vesselScheduleSpecificationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getScheduleSpecificationEvent() {
+		return scheduleSpecificationEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVesselEventSpecification() {
+		return vesselEventSpecificationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselEventSpecification_VesselEvent() {
+		return (EReference)vesselEventSpecificationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVoyageSpecification() {
+		return voyageSpecificationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSlotSpecification() {
+		return slotSpecificationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotSpecification_Slot() {
+		return (EReference)slotSpecificationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCharterInMarketOverride() {
+		return charterInMarketOverrideEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterInMarketOverride_CharterInMarket() {
+		return (EReference)charterInMarketOverrideEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarketOverride_SpotIndex() {
+		return (EAttribute)charterInMarketOverrideEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterInMarketOverride_StartHeel() {
+		return (EReference)charterInMarketOverrideEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarketOverride_StartDate() {
+		return (EAttribute)charterInMarketOverrideEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterInMarketOverride_EndPort() {
+		return (EReference)charterInMarketOverrideEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarketOverride_EndDate() {
+		return (EAttribute)charterInMarketOverrideEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterInMarketOverride_EndHeel() {
+		return (EReference)charterInMarketOverrideEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarketOverride_IncludeBallastBonus() {
+		return (EAttribute)charterInMarketOverrideEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarketOverride_MinDuration() {
+		return (EAttribute)charterInMarketOverrideEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarketOverride_MaxDuration() {
+		return (EAttribute)charterInMarketOverrideEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getCharterInMarketOverride__GetStartDateAsDateTime() {
+		return charterInMarketOverrideEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getCharterInMarketOverride__GetEndDateAsDateTime() {
+		return charterInMarketOverrideEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getCharterInMarketOverride__GetLocalOrDelegateMinDuration() {
+		return charterInMarketOverrideEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getCharterInMarketOverride__GetLocalOrDelegateMaxDuration() {
+		return charterInMarketOverrideEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -2075,6 +2427,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__VESSEL_TYPE_GROUPS);
 		createEReference(cargoModelEClass, CARGO_MODEL__INVENTORY_MODELS);
 		createEReference(cargoModelEClass, CARGO_MODEL__CANAL_BOOKINGS);
+		createEReference(cargoModelEClass, CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 
 		cargoEClass = createEClass(CARGO);
 		createEAttribute(cargoEClass, CARGO__ALLOW_REWIRING);
@@ -2275,6 +2628,45 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS);
 
+		scheduleSpecificationEClass = createEClass(SCHEDULE_SPECIFICATION);
+		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS);
+		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__NON_SHIPPED_CARGO_SPECIFICATIONS);
+		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__OPEN_EVENTS);
+
+		nonShippedCargoSpecificationEClass = createEClass(NON_SHIPPED_CARGO_SPECIFICATION);
+		createEReference(nonShippedCargoSpecificationEClass, NON_SHIPPED_CARGO_SPECIFICATION__SLOT_SPECIFICATIONS);
+
+		vesselScheduleSpecificationEClass = createEClass(VESSEL_SCHEDULE_SPECIFICATION);
+		createEReference(vesselScheduleSpecificationEClass, VESSEL_SCHEDULE_SPECIFICATION__VESSEL_ALLOCATION);
+		createEAttribute(vesselScheduleSpecificationEClass, VESSEL_SCHEDULE_SPECIFICATION__SPOT_INDEX);
+		createEReference(vesselScheduleSpecificationEClass, VESSEL_SCHEDULE_SPECIFICATION__EVENTS);
+
+		scheduleSpecificationEventEClass = createEClass(SCHEDULE_SPECIFICATION_EVENT);
+
+		vesselEventSpecificationEClass = createEClass(VESSEL_EVENT_SPECIFICATION);
+		createEReference(vesselEventSpecificationEClass, VESSEL_EVENT_SPECIFICATION__VESSEL_EVENT);
+
+		voyageSpecificationEClass = createEClass(VOYAGE_SPECIFICATION);
+
+		slotSpecificationEClass = createEClass(SLOT_SPECIFICATION);
+		createEReference(slotSpecificationEClass, SLOT_SPECIFICATION__SLOT);
+
+		charterInMarketOverrideEClass = createEClass(CHARTER_IN_MARKET_OVERRIDE);
+		createEReference(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__CHARTER_IN_MARKET);
+		createEAttribute(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__SPOT_INDEX);
+		createEReference(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__START_HEEL);
+		createEAttribute(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__START_DATE);
+		createEReference(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__END_PORT);
+		createEAttribute(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__END_DATE);
+		createEReference(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__END_HEEL);
+		createEAttribute(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__INCLUDE_BALLAST_BONUS);
+		createEAttribute(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__MIN_DURATION);
+		createEAttribute(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__MAX_DURATION);
+		createEOperation(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE___GET_START_DATE_AS_DATE_TIME);
+		createEOperation(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE___GET_END_DATE_AS_DATE_TIME);
+		createEOperation(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE___GET_LOCAL_OR_DELEGATE_MIN_DURATION);
+		createEOperation(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE___GET_LOCAL_OR_DELEGATE_MAX_DURATION);
+
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
@@ -2349,6 +2741,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		startHeelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		canalBookingSlotEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		canalBookingsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		vesselEventSpecificationEClass.getESuperTypes().add(this.getScheduleSpecificationEvent());
+		voyageSpecificationEClass.getESuperTypes().add(this.getScheduleSpecificationEvent());
+		slotSpecificationEClass.getESuperTypes().add(this.getScheduleSpecificationEvent());
+		charterInMarketOverrideEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		charterInMarketOverrideEClass.getESuperTypes().add(theTypesPackage.getVesselAssignmentType());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2361,6 +2758,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_VesselTypeGroups(), this.getVesselTypeGroup(), null, "vesselTypeGroups", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_InventoryModels(), this.getInventory(), null, "inventoryModels", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_CanalBookings(), this.getCanalBookings(), null, "canalBookings", null, 0, 1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoModel_CharterInMarketOverrides(), this.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoEClass, Cargo.class, "Cargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCargo_AllowRewiring(), ecorePackage.getEBoolean(), "allowRewiring", "false", 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2608,6 +3006,49 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCanalBookings_FlexibleBookingAmountSouthbound(), ecorePackage.getEInt(), "flexibleBookingAmountSouthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_NorthboundMaxIdleDays(), ecorePackage.getEInt(), "northboundMaxIdleDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(scheduleSpecificationEClass, ScheduleSpecification.class, "ScheduleSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getScheduleSpecification_VesselScheduleSpecifications(), this.getVesselScheduleSpecification(), null, "vesselScheduleSpecifications", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScheduleSpecification_NonShippedCargoSpecifications(), this.getNonShippedCargoSpecification(), null, "nonShippedCargoSpecifications", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScheduleSpecification_OpenEvents(), this.getScheduleSpecificationEvent(), null, "openEvents", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(nonShippedCargoSpecificationEClass, NonShippedCargoSpecification.class, "NonShippedCargoSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNonShippedCargoSpecification_SlotSpecifications(), this.getSlotSpecification(), null, "slotSpecifications", null, 0, -1, NonShippedCargoSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselScheduleSpecificationEClass, VesselScheduleSpecification.class, "VesselScheduleSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselScheduleSpecification_VesselAllocation(), theTypesPackage.getVesselAssignmentType(), null, "vesselAllocation", null, 0, 1, VesselScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselScheduleSpecification_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 0, 1, VesselScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselScheduleSpecification_Events(), this.getScheduleSpecificationEvent(), null, "events", null, 0, -1, VesselScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(scheduleSpecificationEventEClass, ScheduleSpecificationEvent.class, "ScheduleSpecificationEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(vesselEventSpecificationEClass, VesselEventSpecification.class, "VesselEventSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselEventSpecification_VesselEvent(), this.getVesselEvent(), null, "vesselEvent", null, 0, 1, VesselEventSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(voyageSpecificationEClass, VoyageSpecification.class, "VoyageSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(slotSpecificationEClass, SlotSpecification.class, "SlotSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSlotSpecification_Slot(), this.getSlot(), null, "slot", null, 0, 1, SlotSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(charterInMarketOverrideEClass, CharterInMarketOverride.class, "CharterInMarketOverride", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCharterInMarketOverride_CharterInMarket(), theSpotMarketsPackage.getCharterInMarket(), null, "charterInMarket", null, 0, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarketOverride_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 0, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterInMarketOverride_StartHeel(), this.getStartHeelOptions(), null, "startHeel", null, 1, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarketOverride_StartDate(), theDateTimePackage.getLocalDateTime(), "startDate", null, 0, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterInMarketOverride_EndPort(), thePortPackage.getPort(), null, "endPort", null, 0, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarketOverride_EndDate(), theDateTimePackage.getLocalDateTime(), "endDate", null, 0, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterInMarketOverride_EndHeel(), this.getEndHeelOptions(), null, "endHeel", null, 0, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarketOverride_IncludeBallastBonus(), ecorePackage.getEBoolean(), "includeBallastBonus", null, 0, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarketOverride_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarketOverride_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getCharterInMarketOverride__GetStartDateAsDateTime(), theDateTimePackage.getDateTime(), "getStartDateAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getCharterInMarketOverride__GetEndDateAsDateTime(), theDateTimePackage.getDateTime(), "getEndDateAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getCharterInMarketOverride__GetLocalOrDelegateMinDuration(), ecorePackage.getEInt(), "getLocalOrDelegateMinDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getCharterInMarketOverride__GetLocalOrDelegateMaxDuration(), ecorePackage.getEInt(), "getLocalOrDelegateMaxDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
 		addEEnumLiteral(cargoTypeEEnum, CargoType.FLEET);
@@ -2846,6 +3287,20 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   new String[] {
 			 "unit", "m\u00b3",
 			 "formatString", "###,##0.###"
+		   });	
+		addAnnotation
+		  (getCharterInMarketOverride_MinDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "##0"
+		   });	
+		addAnnotation
+		  (getCharterInMarketOverride_MaxDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "##0"
 		   });
 	}
 

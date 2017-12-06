@@ -9,6 +9,7 @@ import java.util.Collection;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
@@ -118,12 +119,29 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			final VesselAvailability availability = option.getVesselAvailability();
 			String vesselName = "<No vessel>";
 			if (availability != null) {
-				final String s = availability.getVessel().getName();
-				if (s != null && !s.trim().isEmpty()) {
-					vesselName = s;
+				Vessel vessel = availability.getVessel();
+				if (vessel != null) {
+					final String s = vessel.getName();
+					if (s != null && !s.trim().isEmpty()) {
+						vesselName = s;
+					}
 				}
 			}
 			return String.format("%s (existing)", vesselName);
+		} else if (object instanceof NewVesselAvailability) {
+			final NewVesselAvailability option = (NewVesselAvailability) object;
+			final VesselAvailability availability = option.getVesselAvailability();
+			String vesselName = "<No vessel>";
+			if (availability != null) {
+				Vessel vessel = availability.getVessel();
+				if (vessel != null) {
+					final String s = vessel.getName();
+					if (s != null && !s.trim().isEmpty()) {
+						vesselName = s;
+					}
+				}
+			}
+			return String.format("%s (new)", vesselName);
 		}
 
 		if (object == null) {

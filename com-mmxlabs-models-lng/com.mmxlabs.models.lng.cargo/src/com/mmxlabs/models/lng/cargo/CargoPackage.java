@@ -212,13 +212,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__CANAL_BOOKINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5532,6 +5541,473 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl <em>Schedule Specification</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecification()
+	 * @generated
+	 */
+	int SCHEDULE_SPECIFICATION = 23;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Schedule Specifications</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Non Shipped Cargo Specifications</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION__NON_SHIPPED_CARGO_SPECIFICATIONS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Open Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION__OPEN_EVENTS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Schedule Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Schedule Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.NonShippedCargoSpecificationImpl <em>Non Shipped Cargo Specification</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.NonShippedCargoSpecificationImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getNonShippedCargoSpecification()
+	 * @generated
+	 */
+	int NON_SHIPPED_CARGO_SPECIFICATION = 24;
+
+	/**
+	 * The feature id for the '<em><b>Slot Specifications</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_CARGO_SPECIFICATION__SLOT_SPECIFICATIONS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Non Shipped Cargo Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_CARGO_SPECIFICATION_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Non Shipped Cargo Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_CARGO_SPECIFICATION_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselScheduleSpecificationImpl <em>Vessel Schedule Specification</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselScheduleSpecificationImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselScheduleSpecification()
+	 * @generated
+	 */
+	int VESSEL_SCHEDULE_SPECIFICATION = 25;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_SCHEDULE_SPECIFICATION__VESSEL_ALLOCATION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_SCHEDULE_SPECIFICATION__SPOT_INDEX = 1;
+
+	/**
+	 * The feature id for the '<em><b>Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_SCHEDULE_SPECIFICATION__EVENTS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Schedule Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_SCHEDULE_SPECIFICATION_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Vessel Schedule Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_SCHEDULE_SPECIFICATION_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationEventImpl <em>Schedule Specification Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecificationEvent()
+	 * @generated
+	 */
+	int SCHEDULE_SPECIFICATION_EVENT = 26;
+
+	/**
+	 * The number of structural features of the '<em>Schedule Specification Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Schedule Specification Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION_EVENT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventSpecificationImpl <em>Vessel Event Specification</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselEventSpecificationImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEventSpecification()
+	 * @generated
+	 */
+	int VESSEL_EVENT_SPECIFICATION = 27;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_SPECIFICATION__VESSEL_EVENT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Event Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Vessel Event Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_SPECIFICATION_OPERATION_COUNT = SCHEDULE_SPECIFICATION_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VoyageSpecificationImpl <em>Voyage Specification</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VoyageSpecificationImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVoyageSpecification()
+	 * @generated
+	 */
+	int VOYAGE_SPECIFICATION = 28;
+
+	/**
+	 * The number of structural features of the '<em>Voyage Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Voyage Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE_SPECIFICATION_OPERATION_COUNT = SCHEDULE_SPECIFICATION_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotSpecificationImpl <em>Slot Specification</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.SlotSpecificationImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSlotSpecification()
+	 * @generated
+	 */
+	int SLOT_SPECIFICATION = 29;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_SPECIFICATION__SLOT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Slot Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Slot Specification</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_SPECIFICATION_OPERATION_COUNT = SCHEDULE_SPECIFICATION_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterInMarketOverrideImpl <em>Charter In Market Override</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CharterInMarketOverrideImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterInMarketOverride()
+	 * @generated
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE = 30;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__CHARTER_IN_MARKET = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__SPOT_INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__START_HEEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__START_DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__END_PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__END_DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>End Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__END_HEEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Include Ballast Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__INCLUDE_BALLAST_BONUS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__MIN_DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE__MAX_DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The number of structural features of the '<em>Charter In Market Override</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Start Date As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE___GET_START_DATE_AS_DATE_TIME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get End Date As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE___GET_END_DATE_AS_DATE_TIME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Local Or Delegate Min Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE___GET_LOCAL_OR_DELEGATE_MIN_DURATION = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Local Or Delegate Max Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE___GET_LOCAL_OR_DELEGATE_MAX_DURATION = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Charter In Market Override</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET_OVERRIDE_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5539,7 +6015,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 23;
+	int CARGO_TYPE = 31;
 
 
 	/**
@@ -5550,7 +6026,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 24;
+	int VESSEL_TYPE = 32;
 
 
 	/**
@@ -5561,7 +6037,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEVesselTankState()
 	 * @generated
 	 */
-	int EVESSEL_TANK_STATE = 25;
+	int EVESSEL_TANK_STATE = 33;
 
 
 	/**
@@ -5572,7 +6048,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 26;
+	int INVENTORY_FREQUENCY = 34;
 
 
 	/**
@@ -6498,6 +6974,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargoModel_CanalBookings();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Charter In Market Overrides</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_CharterInMarketOverrides();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}'.
@@ -7583,6 +8070,335 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookings_NorthboundMaxIdleDays();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification <em>Schedule Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Schedule Specification</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecification
+	 * @generated
+	 */
+	EClass getScheduleSpecification();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getVesselScheduleSpecifications <em>Vessel Schedule Specifications</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Schedule Specifications</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecification#getVesselScheduleSpecifications()
+	 * @see #getScheduleSpecification()
+	 * @generated
+	 */
+	EReference getScheduleSpecification_VesselScheduleSpecifications();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getNonShippedCargoSpecifications <em>Non Shipped Cargo Specifications</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Non Shipped Cargo Specifications</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecification#getNonShippedCargoSpecifications()
+	 * @see #getScheduleSpecification()
+	 * @generated
+	 */
+	EReference getScheduleSpecification_NonShippedCargoSpecifications();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getOpenEvents <em>Open Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Open Events</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecification#getOpenEvents()
+	 * @see #getScheduleSpecification()
+	 * @generated
+	 */
+	EReference getScheduleSpecification_OpenEvents();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification <em>Non Shipped Cargo Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Non Shipped Cargo Specification</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification
+	 * @generated
+	 */
+	EClass getNonShippedCargoSpecification();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification#getSlotSpecifications <em>Slot Specifications</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Slot Specifications</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification#getSlotSpecifications()
+	 * @see #getNonShippedCargoSpecification()
+	 * @generated
+	 */
+	EReference getNonShippedCargoSpecification_SlotSpecifications();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselScheduleSpecification <em>Vessel Schedule Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Schedule Specification</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselScheduleSpecification
+	 * @generated
+	 */
+	EClass getVesselScheduleSpecification();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselScheduleSpecification#getVesselAllocation <em>Vessel Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselScheduleSpecification#getVesselAllocation()
+	 * @see #getVesselScheduleSpecification()
+	 * @generated
+	 */
+	EReference getVesselScheduleSpecification_VesselAllocation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselScheduleSpecification#getSpotIndex <em>Spot Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Index</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselScheduleSpecification#getSpotIndex()
+	 * @see #getVesselScheduleSpecification()
+	 * @generated
+	 */
+	EAttribute getVesselScheduleSpecification_SpotIndex();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.VesselScheduleSpecification#getEvents <em>Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Events</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselScheduleSpecification#getEvents()
+	 * @see #getVesselScheduleSpecification()
+	 * @generated
+	 */
+	EReference getVesselScheduleSpecification_Events();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent <em>Schedule Specification Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Schedule Specification Event</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent
+	 * @generated
+	 */
+	EClass getScheduleSpecificationEvent();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselEventSpecification <em>Vessel Event Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Event Specification</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEventSpecification
+	 * @generated
+	 */
+	EClass getVesselEventSpecification();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselEventSpecification#getVesselEvent <em>Vessel Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Event</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEventSpecification#getVesselEvent()
+	 * @see #getVesselEventSpecification()
+	 * @generated
+	 */
+	EReference getVesselEventSpecification_VesselEvent();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VoyageSpecification <em>Voyage Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Voyage Specification</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VoyageSpecification
+	 * @generated
+	 */
+	EClass getVoyageSpecification();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SlotSpecification <em>Slot Specification</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot Specification</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.SlotSpecification
+	 * @generated
+	 */
+	EClass getSlotSpecification();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.SlotSpecification#getSlot <em>Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.SlotSpecification#getSlot()
+	 * @see #getSlotSpecification()
+	 * @generated
+	 */
+	EReference getSlotSpecification_Slot();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride <em>Charter In Market Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Charter In Market Override</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride
+	 * @generated
+	 */
+	EClass getCharterInMarketOverride();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getCharterInMarket <em>Charter In Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Charter In Market</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getCharterInMarket()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EReference getCharterInMarketOverride_CharterInMarket();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getSpotIndex <em>Spot Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Index</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getSpotIndex()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EAttribute getCharterInMarketOverride_SpotIndex();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getStartHeel <em>Start Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Start Heel</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getStartHeel()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EReference getCharterInMarketOverride_StartHeel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getStartDate <em>Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getStartDate()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EAttribute getCharterInMarketOverride_StartDate();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getEndPort <em>End Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>End Port</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getEndPort()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EReference getCharterInMarketOverride_EndPort();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getEndDate <em>End Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getEndDate()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EAttribute getCharterInMarketOverride_EndDate();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getEndHeel <em>End Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>End Heel</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getEndHeel()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EReference getCharterInMarketOverride_EndHeel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#isIncludeBallastBonus <em>Include Ballast Bonus</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Include Ballast Bonus</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#isIncludeBallastBonus()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EAttribute getCharterInMarketOverride_IncludeBallastBonus();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getMinDuration <em>Min Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Duration</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getMinDuration()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EAttribute getCharterInMarketOverride_MinDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getMaxDuration <em>Max Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Duration</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getMaxDuration()
+	 * @see #getCharterInMarketOverride()
+	 * @generated
+	 */
+	EAttribute getCharterInMarketOverride_MaxDuration();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getStartDateAsDateTime() <em>Get Start Date As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Start Date As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getStartDateAsDateTime()
+	 * @generated
+	 */
+	EOperation getCharterInMarketOverride__GetStartDateAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getEndDateAsDateTime() <em>Get End Date As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get End Date As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getEndDateAsDateTime()
+	 * @generated
+	 */
+	EOperation getCharterInMarketOverride__GetEndDateAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getLocalOrDelegateMinDuration() <em>Get Local Or Delegate Min Duration</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Or Delegate Min Duration</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getLocalOrDelegateMinDuration()
+	 * @generated
+	 */
+	EOperation getCharterInMarketOverride__GetLocalOrDelegateMinDuration();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getLocalOrDelegateMaxDuration() <em>Get Local Or Delegate Max Duration</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Or Delegate Max Duration</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CharterInMarketOverride#getLocalOrDelegateMaxDuration()
+	 * @generated
+	 */
+	EOperation getCharterInMarketOverride__GetLocalOrDelegateMaxDuration();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8341,6 +9157,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_MODEL__CANAL_BOOKINGS = eINSTANCE.getCargoModel_CanalBookings();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES = eINSTANCE.getCargoModel_CharterInMarketOverrides();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
@@ -9185,6 +10009,270 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_NorthboundMaxIdleDays();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl <em>Schedule Specification</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecification()
+		 * @generated
+		 */
+		EClass SCHEDULE_SPECIFICATION = eINSTANCE.getScheduleSpecification();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Schedule Specifications</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS = eINSTANCE.getScheduleSpecification_VesselScheduleSpecifications();
+
+		/**
+		 * The meta object literal for the '<em><b>Non Shipped Cargo Specifications</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE_SPECIFICATION__NON_SHIPPED_CARGO_SPECIFICATIONS = eINSTANCE.getScheduleSpecification_NonShippedCargoSpecifications();
+
+		/**
+		 * The meta object literal for the '<em><b>Open Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE_SPECIFICATION__OPEN_EVENTS = eINSTANCE.getScheduleSpecification_OpenEvents();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.NonShippedCargoSpecificationImpl <em>Non Shipped Cargo Specification</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.NonShippedCargoSpecificationImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getNonShippedCargoSpecification()
+		 * @generated
+		 */
+		EClass NON_SHIPPED_CARGO_SPECIFICATION = eINSTANCE.getNonShippedCargoSpecification();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot Specifications</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NON_SHIPPED_CARGO_SPECIFICATION__SLOT_SPECIFICATIONS = eINSTANCE.getNonShippedCargoSpecification_SlotSpecifications();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselScheduleSpecificationImpl <em>Vessel Schedule Specification</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.VesselScheduleSpecificationImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselScheduleSpecification()
+		 * @generated
+		 */
+		EClass VESSEL_SCHEDULE_SPECIFICATION = eINSTANCE.getVesselScheduleSpecification();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_SCHEDULE_SPECIFICATION__VESSEL_ALLOCATION = eINSTANCE.getVesselScheduleSpecification_VesselAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_SCHEDULE_SPECIFICATION__SPOT_INDEX = eINSTANCE.getVesselScheduleSpecification_SpotIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_SCHEDULE_SPECIFICATION__EVENTS = eINSTANCE.getVesselScheduleSpecification_Events();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationEventImpl <em>Schedule Specification Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationEventImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecificationEvent()
+		 * @generated
+		 */
+		EClass SCHEDULE_SPECIFICATION_EVENT = eINSTANCE.getScheduleSpecificationEvent();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventSpecificationImpl <em>Vessel Event Specification</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.VesselEventSpecificationImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEventSpecification()
+		 * @generated
+		 */
+		EClass VESSEL_EVENT_SPECIFICATION = eINSTANCE.getVesselEventSpecification();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Event</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT_SPECIFICATION__VESSEL_EVENT = eINSTANCE.getVesselEventSpecification_VesselEvent();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VoyageSpecificationImpl <em>Voyage Specification</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.VoyageSpecificationImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVoyageSpecification()
+		 * @generated
+		 */
+		EClass VOYAGE_SPECIFICATION = eINSTANCE.getVoyageSpecification();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotSpecificationImpl <em>Slot Specification</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.SlotSpecificationImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSlotSpecification()
+		 * @generated
+		 */
+		EClass SLOT_SPECIFICATION = eINSTANCE.getSlotSpecification();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_SPECIFICATION__SLOT = eINSTANCE.getSlotSpecification_Slot();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterInMarketOverrideImpl <em>Charter In Market Override</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.CharterInMarketOverrideImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterInMarketOverride()
+		 * @generated
+		 */
+		EClass CHARTER_IN_MARKET_OVERRIDE = eINSTANCE.getCharterInMarketOverride();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter In Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET_OVERRIDE__CHARTER_IN_MARKET = eINSTANCE.getCharterInMarketOverride_CharterInMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET_OVERRIDE__SPOT_INDEX = eINSTANCE.getCharterInMarketOverride_SpotIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Heel</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET_OVERRIDE__START_HEEL = eINSTANCE.getCharterInMarketOverride_StartHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET_OVERRIDE__START_DATE = eINSTANCE.getCharterInMarketOverride_StartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>End Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET_OVERRIDE__END_PORT = eINSTANCE.getCharterInMarketOverride_EndPort();
+
+		/**
+		 * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET_OVERRIDE__END_DATE = eINSTANCE.getCharterInMarketOverride_EndDate();
+
+		/**
+		 * The meta object literal for the '<em><b>End Heel</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET_OVERRIDE__END_HEEL = eINSTANCE.getCharterInMarketOverride_EndHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Include Ballast Bonus</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET_OVERRIDE__INCLUDE_BALLAST_BONUS = eINSTANCE.getCharterInMarketOverride_IncludeBallastBonus();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET_OVERRIDE__MIN_DURATION = eINSTANCE.getCharterInMarketOverride_MinDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET_OVERRIDE__MAX_DURATION = eINSTANCE.getCharterInMarketOverride_MaxDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Start Date As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHARTER_IN_MARKET_OVERRIDE___GET_START_DATE_AS_DATE_TIME = eINSTANCE.getCharterInMarketOverride__GetStartDateAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get End Date As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHARTER_IN_MARKET_OVERRIDE___GET_END_DATE_AS_DATE_TIME = eINSTANCE.getCharterInMarketOverride__GetEndDateAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Or Delegate Min Duration</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHARTER_IN_MARKET_OVERRIDE___GET_LOCAL_OR_DELEGATE_MIN_DURATION = eINSTANCE.getCharterInMarketOverride__GetLocalOrDelegateMinDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Or Delegate Max Duration</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHARTER_IN_MARKET_OVERRIDE___GET_LOCAL_OR_DELEGATE_MAX_DURATION = eINSTANCE.getCharterInMarketOverride__GetLocalOrDelegateMaxDuration();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

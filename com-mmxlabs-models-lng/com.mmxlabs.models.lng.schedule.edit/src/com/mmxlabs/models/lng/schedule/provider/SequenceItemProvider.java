@@ -54,6 +54,7 @@ public class SequenceItemProvider
 			addCharterInMarketPropertyDescriptor(object);
 			addSpotIndexPropertyDescriptor(object);
 			addSequenceTypePropertyDescriptor(object);
+			addCharterInMarketOverridePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -142,6 +143,28 @@ public class SequenceItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Charter In Market Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterInMarketOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Sequence_charterInMarketOverride_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_charterInMarketOverride_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__CHARTER_IN_MARKET_OVERRIDE,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

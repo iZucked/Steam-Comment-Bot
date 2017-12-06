@@ -28,16 +28,19 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.NewVesselAvailability;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -120,6 +123,18 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
+					if (true) {
+						helper.addAction(new RunnableAction("Full Availability", () -> {
+							final NewVesselAvailability opt = AnalyticsFactory.eINSTANCE.createNewVesselAvailability();
+							opt.setVesselAvailability(CargoFactory.eINSTANCE.createVesselAvailability());
+							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+									modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+						}));
+					}
 				}
 
 				@Override
@@ -176,7 +191,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 		hookDragSource(shippingOptionsViewer);
 
 		inputWants.add(model -> shippingOptionsViewer.setInput(model));
-		inputWants.add(model -> listener.setOptionAnalysisModel(model)); 
+		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 
 		return shippingOptionsViewer;
 	}
