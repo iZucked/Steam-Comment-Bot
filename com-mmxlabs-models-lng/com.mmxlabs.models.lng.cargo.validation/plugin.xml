@@ -871,6 +871,22 @@
                   <target
                         class="CanalBookingSlot">
                   </target>
+               </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.CanalBookingsConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.CanalBookingsConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="CanalBookingsConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="CanalBookings">
+                  </target>
                </constraint>       
         </constraints>
       </constraintProvider>
