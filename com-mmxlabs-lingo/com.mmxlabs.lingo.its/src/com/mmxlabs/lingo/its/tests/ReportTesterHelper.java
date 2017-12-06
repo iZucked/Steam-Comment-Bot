@@ -106,8 +106,8 @@ public class ReportTesterHelper {
 			if (handler == null) {
 				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
 				final MPart part = partService.findPart(reportID);
-				if (part instanceof CompatibilityView) {
-					CompatibilityView compatibilityView = (CompatibilityView) part;
+				if (part.getObject() instanceof CompatibilityView) {
+					CompatibilityView compatibilityView = (CompatibilityView) part.getObject();
 					IViewPart oPart = compatibilityView.getView();
 					handler = oPart.getAdapter(IActionPlanHandler.class);
 				} else {
@@ -122,8 +122,8 @@ public class ReportTesterHelper {
 			if (handler == null) {
 				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
 				final MPart part = partService.findPart(reportID);
-				if (part instanceof CompatibilityView) {
-					CompatibilityView compatibilityView = (CompatibilityView) part;
+				if (part.getObject() instanceof CompatibilityView) {
+					CompatibilityView compatibilityView = (CompatibilityView) part.getObject();
 					IViewPart oPart = compatibilityView.getView();
 					handler = oPart.getAdapter(IActionPlanHandler.class);
 				} else {
