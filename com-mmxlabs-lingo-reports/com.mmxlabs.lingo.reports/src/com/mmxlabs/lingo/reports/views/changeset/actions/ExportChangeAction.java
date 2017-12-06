@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
@@ -45,7 +44,7 @@ public class ExportChangeAction extends Action {
 			dialog.run(true, false, monitor -> {
 				monitor.beginTask("Export solution", IProgressMonitor.UNKNOWN);
 				try {
-					fork[0] = ExportScheduleHelper.export(changeSetTableGroup.getChangeSet().getCurrentScenario(), name, false);
+					fork[0] = ExportScheduleHelper.export(changeSetTableGroup.getCurrentScenario(), name, false, null);
 				} catch (final Exception e1) {
 					LOGGER.error(e1.getMessage(), e1);
 				} finally {
