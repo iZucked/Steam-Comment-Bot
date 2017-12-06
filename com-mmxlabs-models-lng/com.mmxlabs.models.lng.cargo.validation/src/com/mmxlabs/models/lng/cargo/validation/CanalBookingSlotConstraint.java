@@ -5,9 +5,11 @@
 package com.mmxlabs.models.lng.cargo.validation;
 
 import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
+
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
@@ -24,6 +26,7 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 	@Override
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
+
 		if (target instanceof CanalBookingSlot) {
 			final CanalBookingSlot canalBookingSlot = (CanalBookingSlot) target;
 
@@ -35,16 +38,16 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 						.withMessage("Canal must be specified.") //
 						.make(ctx));
 			}
-			
+
 			if (canalBookingSlot.getBookingDate() == null) {
 				statuses.add(baseFactory.copyName() //
 						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_DATE) //
 						.withMessage("Date must be specified.") //
 						.make(ctx));
-			}else {
+			} else {
 				// TODO: fill in
 			}
-			
+
 			if (canalBookingSlot.getCanalEntrance() == null) {
 				statuses.add(baseFactory.copyName() //
 						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__CANAL_ENTRANCE) //
