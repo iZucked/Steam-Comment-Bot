@@ -92,6 +92,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	private boolean performBreakEven;
 
+	private final UserSettings userSettings;
+
 	private OptimisationPlan plan;
 
 	public LNGSchedulerInsertSlotJobRunner(final ExecutorService executorService, @Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider,
@@ -99,6 +101,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.originalEditingDomain = editingDomain;
+		this.userSettings = userSettings;
 		this.targetSlots = targetSlots;
 		this.targetEvents = targetEvents;
 
@@ -283,7 +286,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 		link.run(initialSequencesContainer, results, monitor);
 
 		return plan;
-
 	}
 
 	public LNGScenarioRunner getLNGScenarioRunner() {

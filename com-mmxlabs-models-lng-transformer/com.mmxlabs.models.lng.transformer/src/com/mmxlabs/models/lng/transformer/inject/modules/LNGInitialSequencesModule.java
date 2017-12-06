@@ -63,7 +63,7 @@ public class LNGInitialSequencesModule extends PrivateModule {
 		// }
 		//
 		// install(new ConstraintCheckerInstantiatorModule());
-//		install(new OptimiserContextModule());
+		// install(new OptimiserContextModule());
 
 		if (Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
@@ -114,7 +114,7 @@ public class LNGInitialSequencesModule extends PrivateModule {
 	private IMultiStateResult provideSolutionPair(@NonNull final Injector injector, @NonNull @Named(KEY_GENERATED_RAW_SEQUENCES) final ISequences rawSequences,
 			@NonNull List<IFitnessComponent> fitnessComponents, @NonNull IFitnessHelper fitnessHelper, @NonNull IFitnessCombiner fitnessCombiner) {
 
-		final Pair<IAnnotatedSolution, IEvaluationState> p = LNGSchedulerJobUtils.evaluateCurrentState(injector, injector.getInstance(IOptimisationData.class), rawSequences);
+		final Pair<IAnnotatedSolution, IEvaluationState> p = LNGSchedulerJobUtils.evaluateCurrentState(injector, rawSequences);
 		IAnnotatedSolution annotatedSolution = p.getFirst();
 		IEvaluationState evaluationState = p.getSecond();
 

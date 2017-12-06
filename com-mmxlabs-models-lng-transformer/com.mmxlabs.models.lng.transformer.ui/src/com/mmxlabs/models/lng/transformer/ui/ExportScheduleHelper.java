@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
@@ -21,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -32,9 +32,7 @@ import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
@@ -50,10 +48,10 @@ public class ExportScheduleHelper {
 	private static final Logger LOG = LoggerFactory.getLogger(ExportScheduleHelper.class);
 
 	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult) throws Exception {
-		return export(scenarioResult, null, true);
+		return export(scenarioResult, null, true, null);
 	}
 
-	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult, @Nullable final String nameSuggestion, boolean openScenario) throws Exception {
+	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult, @Nullable final String nameSuggestion, boolean openScenario, @Nullable BiConsumer<LNGScenarioModel, Schedule> modelCustomiser) throws Exception {
 		// Original data
 		final LNGScenarioModel o_scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel o_scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
@@ -101,6 +99,10 @@ public class ExportScheduleHelper {
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 		analyticsModel.getOptimisations().clear();
 		analyticsModel.getOptionModels().clear();
+
+		if (modelCustomiser != null) {
+			modelCustomiser.accept(scenarioModel, schedule);
+		}
 
 		// TODO: Need injector for correct post export processors
 		final Command command = LNGSchedulerJobUtils.exportSchedule(null, scenarioModel, editingDomain, schedule);

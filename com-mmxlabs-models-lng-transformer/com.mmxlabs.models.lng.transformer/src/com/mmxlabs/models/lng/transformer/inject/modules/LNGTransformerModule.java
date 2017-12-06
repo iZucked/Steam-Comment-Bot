@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Singleton;
 
@@ -22,8 +24,13 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -240,7 +247,7 @@ public class LNGTransformerModule extends AbstractModule {
 	@PerChainUnitScope
 	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate, @Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
 
-		if (cacheMode == CacheMode.Off) {
+		if (cacheMode == CacheMode.Off || !hintEnableCache) {
 			return delegate;
 		} else {
 			final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
@@ -426,5 +433,34 @@ public class LNGTransformerModule extends AbstractModule {
 		final SeriesParser parser = new SeriesParser();
 		parser.setShiftMapper(shiftMapper);
 		return parser;
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_VESSEL_AVAILABILITIES)
+	private List<VesselAvailability> provideExtraAvailabilities() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKETS)
+	private List<CharterInMarket> provideCharterInMarkets() {
+		return Collections.emptyList();
+	}
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKET_OVERRIDES)
+	private List<CharterInMarketOverride> provideCharterInMarketOverrides() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_LOAD_SLOTS)
+	private List<LoadSlot> provideExtraLoadSlots() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_DISCHARGE_SLOTS)
+	private List<DischargeSlot> provideExtraDischargeSlots() {
+		return Collections.emptyList();
 	}
 }

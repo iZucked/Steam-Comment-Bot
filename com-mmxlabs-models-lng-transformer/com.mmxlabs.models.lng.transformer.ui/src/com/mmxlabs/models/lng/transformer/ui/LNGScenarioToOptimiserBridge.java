@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker;
 import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
 import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
+import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenOptimiser;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -116,7 +117,7 @@ public class LNGScenarioToOptimiserBridge {
 
 	public LNGScenarioToOptimiserBridge(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
 			@NonNull final SolutionBuilderSettings solutionBuilderSettings, @NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule,
-			@Nullable final IOptimiserInjectorService localOverrides, final boolean evaluationOnly, final @NonNull String @Nullable... initialHints) {
+			@Nullable final IOptimiserInjectorService localOverrides, final boolean evaluationOnly, boolean initialEvaluation, final @NonNull String @Nullable... initialHints) {
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.scenarioInstance = scenarioInstance;
 		this.userSettings = userSettings;
@@ -134,9 +135,12 @@ public class LNGScenarioToOptimiserBridge {
 		this.optimiserScenarioDataProvider = originalScenarioDataProvider;
 
 		// Trigger initial evaluation - note no fitness state is saved
-		RunnerHelper.syncExecDisplayOptional(() -> {
-			overwrite(0, originalDataTransformer.getInitialSequences(), null);
-		});
+		if (initialEvaluation) {
+		
+			RunnerHelper.syncExecDisplayOptional(() -> {
+				overwrite(0, originalDataTransformer.getInitialSequences(), null);
+			});
+		}
 		if (!evaluationOnly) {
 			final Triple<com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance,
 					originalScenarioDataProvider, originalEditingDomain, userSettings);
@@ -386,6 +390,11 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	@NonNull
 	public Schedule createSchedule(@NonNull final ISequences rawOptimiserSequences, @Nullable final Map<String, Object> extraAnnotations) {
+		return createSchedule(rawOptimiserSequences, extraAnnotations, null);
+	}
+
+	@NonNull
+	public Schedule createSchedule(@NonNull final ISequences rawOptimiserSequences, @Nullable final Map<String, Object> extraAnnotations, @Nullable Long be_targetProfitAndLoss) {
 		final ISequences rawSequences = getTransformedOriginalRawSequences(rawOptimiserSequences);
 
 		final Injector injector;
@@ -409,8 +418,12 @@ public class LNGScenarioToOptimiserBridge {
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 
-			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences).getFirst();
+			if (be_targetProfitAndLoss != null) {
+				final BreakEvenOptimiser instance = injector.getInstance(BreakEvenOptimiser.class);
+				instance.optimise(rawSequences, be_targetProfitAndLoss);
+			}
+
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, rawSequences).getFirst();
 
 			// Copy extra annotations - e.g. fitness information
 			if (extraAnnotations != null) {
@@ -450,8 +463,7 @@ public class LNGScenarioToOptimiserBridge {
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 
-			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences).getFirst();
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, rawSequences).getFirst();
 
 			// Copy extra annotations - e.g. fitness information
 			if (extraAnnotations != null) {
@@ -464,6 +476,7 @@ public class LNGScenarioToOptimiserBridge {
 
 	/**
 	 * Returns the optimiser {@link Schedule} for the initial sequences.
+	 * 
 	 * @return
 	 */
 	public Schedule createOptimiserInitialSchedule() {

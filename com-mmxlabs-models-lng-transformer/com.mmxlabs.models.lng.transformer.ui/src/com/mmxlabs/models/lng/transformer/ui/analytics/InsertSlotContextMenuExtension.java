@@ -251,6 +251,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 						final AnalyticsSolution data = new AnalyticsSolution(original, plan, taskName);
 						data.setCreateInsertionOptions(true);
+						data.setCreateDiffToBaseAction(true);
 						eventBroker.post(ChangeSetViewCreatorService_Topic, data);
 					}
 				}

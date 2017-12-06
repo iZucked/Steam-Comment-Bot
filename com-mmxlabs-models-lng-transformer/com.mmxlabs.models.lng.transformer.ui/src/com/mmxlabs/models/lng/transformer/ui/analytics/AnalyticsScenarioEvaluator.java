@@ -1,88 +1,79 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+	 * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BaseCase;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
-import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
-import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
-import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
-import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
-import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenOptimiser;
+import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
-import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IModifiableSequence;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
+import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
+
 	@Override
-	public void evaluate(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final Container parentForFork, final boolean fork,
+	public void evaluateBaseCase(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final ScenarioInstance parentForFork, final boolean fork,
 			final String forkName) {
 
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, (LNGScenarioModel) scenarioDataProvider.getScenario());
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, scenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
 		// No optimisation going on, clear stages. Need better OptimisationHelper API?
@@ -108,196 +99,194 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		}
 
 	}
-
+	
 	@Override
-	public void breakEvenEvaluate(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final Container parentForFork,
-			final long targetProfitAndLoss, final BreakEvenMode breakEvenMode) {
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, (LNGScenarioModel) scenarioDataProvider.getScenario());
+	public void multiEvaluate(ScenarioInstance scenarioInstance, EditingDomain editingDomain, @NonNull  IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, long targetProfitAndLoss,
+			BreakEvenMode breakEvenMode, List<Pair<BaseCase, ScheduleSpecification>> baseCases, IMapperClass mapper, BiConsumer<BaseCase, Schedule> resultHandler) {
+
+		ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
+		helper.processExtraDataProvider(mapper.getExtraDataProvider());
+
+		for (Pair<BaseCase, ScheduleSpecification> p : baseCases) {
+
+			final BiConsumer<LNGScenarioToOptimiserBridge, Injector> job = (bridge, injector) -> {
+				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
+				final ISequences base = transformer.createSequences(p.getSecond(), bridge.getDataTransformer());
+				Long be_pnl = null;
+				if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
+					be_pnl = OptimiserUnitConvertor.convertToInternalFixedCost(targetProfitAndLoss);
+				}
+				try {
+					final Schedule schedule = bridge.createSchedule(base, Collections.emptyMap(), be_pnl);
+					resultHandler.accept(p.getFirst(), schedule);
+				} catch (final Throwable e) {
+				}
+			};
+			helper.addJobs(job);
+		}
+		List<String> hints = new LinkedList<>();
 		if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
-			optimisationPlan.getStages().clear();
-			final BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
-			breakEvenOptimisationStage.setTargetProfitAndLoss(targetProfitAndLoss);
-			optimisationPlan.getStages().add(breakEvenOptimisationStage);
-		}
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newFixedThreadPool(1);
-		try {
-			String[] hints;
-			if (breakEvenMode == BreakEvenMode.POINT_TO_POINT) {
-				hints = new String[] {};
-			} else {
-				hints = new String[] { LNGTransformerHelper.HINT_DISABLE_CACHES };
-			}
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null, null,
-					false, hints);
-
-			scenarioRunner.evaluateInitialState();
-			scenarioRunner.runAndApplyBest();
-
-			if (parentForFork != null) {
-				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
-				scenarioService.copyInto(parentForFork, scenarioDataProvider, "What if");
-			}
-
-		} catch (final Exception e) {
-			e.printStackTrace();
-		} finally {
-			executorService.shutdownNow();
+			hints.add(LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN);
 		}
 
+		helper.generateResults(scenarioInstance, userSettings, editingDomain, hints);
 	}
 
 	@Override
-	public void multiEvaluate(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final Container parentForFork,
-			final long targetProfitAndLoss, final BreakEvenMode breakEvenMode, final List<BaseCase> baseCases, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap,
-			final BiConsumer<BaseCase, Schedule> resultHandler) {
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, (LNGScenarioModel) scenarioDataProvider.getScenario());
-		if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
-			optimisationPlan.getStages().clear();
-			final BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
-			breakEvenOptimisationStage.setTargetProfitAndLoss(targetProfitAndLoss);
-			optimisationPlan.getStages().add(breakEvenOptimisationStage);
-		}
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
+	public ScenarioInstance exportResult(ScenarioResult result, String name) {
 
-		// Generate internal data
-		final ExecutorService executorService = Executors.newFixedThreadPool(1);
 		try {
-			String[] hints;
-			if (breakEvenMode == BreakEvenMode.POINT_TO_POINT) {
-				hints = new String[] {};
-			} else {
-				hints = new String[] { LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN, LNGTransformerHelper.HINT_DISABLE_CACHES };
-			}
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null, null,
-					false, hints);
-
-			@NonNull
-			final LNGScenarioToOptimiserBridge bridge = scenarioRunner.getScenarioToOptimiserBridge();
-
-			final ModelEntityMap modelEntityMap = bridge.getInjector().getInstance(ModelEntityMap.class);
-			final PortModel portModel = ScenarioModelUtil.getPortModel(bridge.getScenarioDataProvider());
-			final ModelDistanceProvider modelDistanceProvider = ScenarioModelUtil.getModelDistanceProvider(bridge.getScenarioDataProvider());
-
-			final List<IPortSlot> unused = new LinkedList<>();
-			for (final BaseCase baseCase : baseCases) {
-
-				final Map<VesselAssignmentType, List<WrappedAssignableElement>> m_ToGenerate = new LinkedHashMap<>();
-				final Map<WrappedAssignableElement, List<Slot>> assignableMap = new LinkedHashMap<>();
-				final Map<IResource, IModifiableSequence> m_preCreated = new LinkedHashMap<>();
-
-				for (final BaseCaseRow row : baseCase.getBaseCase()) {
-					final LoadSlot load = mapper.getOriginal(row.getBuyOption());
-					final DischargeSlot discharge = mapper.getOriginal(row.getSellOption());
-					final ShippingOption shipping = row.getShipping();
-
-					if (row.getBuyOption() == null || row.getSellOption() == null) {
-
-						if (row.getBuyOption() != null) {
-							unused.add(modelEntityMap.getOptimiserObjectNullChecked(load, IPortSlot.class));
-						}
-						if (row.getSellOption() != null) {
-							unused.add(modelEntityMap.getOptimiserObjectNullChecked(discharge, IPortSlot.class));
-						}
-						continue;
-					}
-
-					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.createFOBDESSequence(bridge.getDataTransformer(), load, discharge);
-						m_preCreated.put(p.getFirst(), p.getSecond());
-
-						continue;
-					}
-					final ShippingOption copyOfShipping = mapper.getCopy(shipping);
-					final VesselAssignmentType key = shippingMap.get(copyOfShipping);
-
-					Vessel vessel = null;
-					if (key instanceof VesselAvailability) {
-						final VesselAvailability vesselAvailability = (VesselAvailability) key;
-						vessel = vesselAvailability.getVessel();
-					} else if (key instanceof CharterInMarket) {
-						final CharterInMarket charterInMarket = (CharterInMarket) key;
-						vessel = charterInMarket.getVessel();
-					}
-
-					final List<WrappedAssignableElement> sortableElements = m_ToGenerate.computeIfAbsent(key, k -> new LinkedList<>());
-					final List<Slot> sortedSlots = Lists.newArrayList(load, discharge);
-
-					final WrappedAssignableElement e = new WrappedAssignableElement(sortedSlots, vessel, portModel, modelDistanceProvider, null);
-					sortableElements.add(e);
-
-					assignableMap.put(e, sortedSlots);
-				}
-
-				for (final Map.Entry<VesselAssignmentType, List<WrappedAssignableElement>> e : m_ToGenerate.entrySet()) {
-					final List<Slot> orderedSlots = new LinkedList<>();
-					CollectedAssignment.sortWrappedAssignableElements(e.getValue());
-					for (final WrappedAssignableElement w : e.getValue()) {
-						orderedSlots.addAll(assignableMap.get(w));
-					}
-
-					final VesselAssignmentType t = e.getKey();
-					if (t instanceof VesselAvailability) {
-						final VesselAvailability vesselAvailability = (VesselAvailability) t;
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge.getDataTransformer(), vesselAvailability, orderedSlots);
-						final ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
-						assert old == null;
-
-					} else if (t instanceof CharterInMarket) {
-						final CharterInMarket charterInMarket = (CharterInMarket) t;
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge.getDataTransformer(), charterInMarket, -1, orderedSlots);
-						final ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
-						assert old == null;
-					}
-				}
-				final ModifiableSequences rawSequences = new ModifiableSequences(new ArrayList<>(m_preCreated.keySet()), m_preCreated);
-				{
-					final LNGDataTransformer optimiserDataTransformer = bridge.getDataTransformer();
-					final Injector evaluationInjector;
-					{
-						final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
-						final List<Module> modules = new LinkedList<>();
-						modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
-						modules.add(new InputSequencesModule(rawSequences));
-						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
-								new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(),
-										optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
-								services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, optimiserDataTransformer.getHints()));
-						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(optimiserDataTransformer.getHints()), services,
-								IOptimiserInjectorService.ModuleType.Module_Evaluation, optimiserDataTransformer.getHints()));
-						evaluationInjector = optimiserDataTransformer.getInjector().createChildInjector(modules);
-					}
-
-					try (PerChainUnitScopeImpl scope = evaluationInjector.getInstance(PerChainUnitScopeImpl.class)) {
-						scope.enter();
-
-						if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
-							final BreakEvenOptimiser instance = evaluationInjector.getInstance(BreakEvenOptimiser.class);
-							instance.optimise(rawSequences, OptimiserUnitConvertor.convertToInternalFixedCost(targetProfitAndLoss));
-						}
-						final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-						{
-							final Injector childInjector = evaluationInjector.createChildInjector(new ExporterExtensionsModule());
-							childInjector.injectMembers(exporter);
-						}
-
-						final IOptimisationData optimisationData = evaluationInjector.getInstance(IOptimisationData.class);
-						final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(evaluationInjector, optimisationData, rawSequences).getFirst();
-
-						final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
-						resultHandler.accept(baseCase, schedule);
-					}
-				}
-			}
-
-		} catch (final Exception e) {
+			return ExportScheduleHelper.export(result, name, true, createModelCustomiser());
+		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			executorService.shutdownNow();
 		}
-
+		return null;
 	}
 
+	public static BiConsumer<LNGScenarioModel, Schedule> createModelCustomiser() {
+		return (input_scenario, input_schedule) -> {
+
+			final Set<VesselAvailability> usedVesselAvailabilites = new LinkedHashSet<>();
+			final Set<CharterInMarketOverride> usedCharterInMarketOverrides = new LinkedHashSet<>();
+			final Set<CharterInMarket> usedCharterInMarkets = new LinkedHashSet<>();
+			final Set<LoadSlot> usedLoadSlots = new LinkedHashSet<>();
+			final Set<DischargeSlot> usedDischargeSlots = new LinkedHashSet<>();
+			final Set<VesselEvent> usedVesselEvents = new LinkedHashSet<>();
+			final Set<Cargo> usedCargoes = new LinkedHashSet<>();
+
+			for (final SlotAllocation slotAllocation : input_schedule.getSlotAllocations()) {
+				final Slot slot = slotAllocation.getSlot();
+				if (slot instanceof LoadSlot) {
+					usedLoadSlots.add((LoadSlot) slot);
+
+					if (slot.getCargo() != null && slotAllocation.getCargoAllocation() != null) {
+						if (slotAllocation.getCargoAllocation().getSlotAllocations().get(0) == slotAllocation) {
+							usedCargoes.add(slot.getCargo());
+						}
+					}
+				} else if (slot instanceof DischargeSlot) {
+					usedDischargeSlots.add((DischargeSlot) slot);
+				} else {
+					assert false;
+				}
+			}
+			for (final OpenSlotAllocation openSlotAllocation : input_schedule.getOpenSlotAllocations()) {
+				final Slot slot = openSlotAllocation.getSlot();
+				if (slot instanceof LoadSlot) {
+					usedLoadSlots.add((LoadSlot) slot);
+				} else if (slot instanceof DischargeSlot) {
+					usedDischargeSlots.add((DischargeSlot) slot);
+				} else {
+					assert false;
+				}
+			}
+			for (final Sequence sequence : input_schedule.getSequences()) {
+				if (sequence.getVesselAvailability() != null) {
+					usedVesselAvailabilites.add(sequence.getVesselAvailability());
+				}
+				if (sequence.getCharterInMarketOverride() != null) {
+					usedCharterInMarketOverrides.add(sequence.getCharterInMarketOverride());
+				} else if (sequence.getCharterInMarket() != null) {
+					usedCharterInMarkets.add(sequence.getCharterInMarket());
+				}
+				for (final Event event : sequence.getEvents()) {
+					if (event instanceof VesselEventVisit) {
+						final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+						usedVesselEvents.add(vesselEventVisit.getVesselEvent());
+					}
+				}
+			}
+
+			final Set<EObject> objectsToDelete = new LinkedHashSet<>();
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(input_scenario);
+
+			{
+				final Iterator<LoadSlot> l_itr = cargoModel.getLoadSlots().iterator();
+				while (l_itr.hasNext()) {
+					final LoadSlot loadSlot = l_itr.next();
+					if (!usedLoadSlots.contains(loadSlot)) {
+						loadSlot.setCargo(null);
+						objectsToDelete.add(loadSlot);
+						l_itr.remove();
+					}
+				}
+			}
+			{
+				final Iterator<DischargeSlot> l_itr = cargoModel.getDischargeSlots().iterator();
+				while (l_itr.hasNext()) {
+					final DischargeSlot dischargeSlot = l_itr.next();
+					if (!usedDischargeSlots.contains(dischargeSlot)) {
+						dischargeSlot.setCargo(null);
+						objectsToDelete.add(dischargeSlot);
+						l_itr.remove();
+					}
+				}
+			}
+			{
+				final Iterator<Cargo> l_itr = cargoModel.getCargoes().iterator();
+				while (l_itr.hasNext()) {
+					final Cargo cargo = l_itr.next();
+					if (cargo.getSlots().size() < 2 || !usedCargoes.contains(cargo)) {
+						cargo.getSlots().clear();
+						objectsToDelete.add(cargo);
+
+						l_itr.remove();
+					}
+				}
+			}
+			{
+				final Iterator<VesselEvent> l_itr = cargoModel.getVesselEvents().iterator();
+				while (l_itr.hasNext()) {
+					final VesselEvent vesselEvent = l_itr.next();
+					if (!usedVesselEvents.contains(vesselEvent)) {
+						objectsToDelete.add(vesselEvent);
+
+						l_itr.remove();
+					}
+				}
+			}
+			{
+				final Iterator<VesselAvailability> l_itr = cargoModel.getVesselAvailabilities().iterator();
+				while (l_itr.hasNext()) {
+					final VesselAvailability vesselAvailability = l_itr.next();
+					if (!usedVesselAvailabilites.contains(vesselAvailability)) {
+						objectsToDelete.add(vesselAvailability);
+						l_itr.remove();
+					}
+				}
+			}
+
+			for (final VesselAvailability vesselAvailability : usedVesselAvailabilites) {
+				if (!cargoModel.getVesselAvailabilities().contains(vesselAvailability)) {
+					cargoModel.getVesselAvailabilities().add(vesselAvailability);
+				}
+			}
+			cargoModel.getCharterInMarketOverrides().clear();
+			cargoModel.getCharterInMarketOverrides().addAll(usedCharterInMarketOverrides);
+
+			SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(input_scenario);
+			usedCharterInMarkets.removeAll(spotMarketsModel.getCharterInMarkets());
+			spotMarketsModel.getCharterInMarkets().addAll(usedCharterInMarkets);
+
+			input_scenario.getScheduleModel().setSchedule(null);
+
+			AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(input_scenario);
+			analyticsModel.getOptimisations().clear();
+			analyticsModel.getOptionModels().clear();
+
+			final Map<EObject, Collection<Setting>> crossReferences = EcoreUtil.UsageCrossReferencer.findAll(objectsToDelete, input_scenario);
+			for (final Map.Entry<EObject, Collection<Setting>> ee : crossReferences.entrySet()) {
+				final EObject object = ee.getKey();
+				for (final Setting setting : ee.getValue()) {
+					final EStructuralFeature eStructuralFeature = setting.getEStructuralFeature();
+					final EObject container = setting.getEObject();
+					if (eStructuralFeature.isMany()) {
+						((Collection<?>) container.eGet(eStructuralFeature)).remove(object);
+					} else {
+						container.eUnset(eStructuralFeature);
+					}
+				}
+			}
+		};
+	}
 }

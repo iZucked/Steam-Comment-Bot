@@ -86,7 +86,7 @@ public class LNGScenarioRunner {
 
 		// here we want to take user settings and generate initial state settings
 		scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, optimisationPlan.getUserSettings(), optimisationPlan.getSolutionBuilderSettings(),
-				editingDomain, extraModule, localOverrides, evaluationOnly, initialHints);
+				editingDomain, extraModule, localOverrides, evaluationOnly, true, initialHints);
 
 		setRunnerHook(runnerHook);
 

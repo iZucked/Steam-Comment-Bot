@@ -51,7 +51,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 
 	public static final String OPTIMISER_REEVALUATE = "LNGParameters_EvaluationSettingsModule_OPTIMISER_REEVALUATE";
 	public static final String SIMILARITY_SETTING = "LNGParameters_EvaluationSettingsModule_SIMILARITY_SETTING";
-	
+
 	@NonNull
 	private final UserSettings userSettings;
 
@@ -162,15 +162,14 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		}
 		return weightsMap;
 	}
-	
+
 	@Provides
 	@Named(LocalSearchOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_NAMES)
 	List<String> provideMultiObjectiveFitnessComponentNames(@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
 		LinkedList<String> objectiveNames = new LinkedList<String>(Arrays.asList("SimilarityFitnessCore"));
-		assert(enabledFitnessNames.containsAll(objectiveNames));
+		assert (enabledFitnessNames.containsAll(objectiveNames));
 		return objectiveNames;
 	}
-
 
 	@Provides
 	@Singleton
@@ -238,7 +237,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	private boolean isSCMGLooping() {
 		return false;
 	}
-	
+
 	@Provides
 	@Named(LocalSearchOptimiserModule.SIMILARITY_SETTING)
 	private SimilarityFitnessMode getSimilarityMode() {
@@ -257,7 +256,5 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 			return null;
 		}
 	}
-
-	
 
 }

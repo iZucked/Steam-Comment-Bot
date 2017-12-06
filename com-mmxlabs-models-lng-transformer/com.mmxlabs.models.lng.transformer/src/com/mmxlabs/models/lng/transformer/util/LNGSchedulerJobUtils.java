@@ -117,8 +117,7 @@ public class LNGSchedulerJobUtils {
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 
-			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences).getFirst();
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, rawSequences).getFirst();
 
 			// Copy extra annotations - e.g. fitness information
 			if (extraAnnotations != null) {
@@ -257,17 +256,17 @@ public class LNGSchedulerJobUtils {
 
 		// The ElementAssignment needs a cargo linked to a slot. Not all slots will have a cargo until after the command generated here is executed. Therefore build up a map to perform the link. Fall
 		// back to slot.getCargo() is there is no mapping.
-		final Map<LoadSlot, Cargo> slotToCargoMap = new HashMap<LoadSlot, Cargo>();
+		final Map<LoadSlot, Cargo> slotToCargoMap = new HashMap<>();
 
 		// Maintain a two lists of commands. The null commands are the commands which unset (or set to null) references between cargoes and lots.. The set commands are the commands which then re-set
 		// the new slot/cargo references. They are kept separate to avoid issues where opposite references changes can lead to unexpected results.
 		// final List<Command> nullCommands = new LinkedList<Command>();
-		final List<Command> setCommands = new LinkedList<Command>();
+		final List<Command> setCommands = new LinkedList<>();
 
 		// Set of slots which may not be linked to a cargo
-		final Set<Slot> unsetCargoSlots = new HashSet<Slot>();
+		final Set<Slot> unsetCargoSlots = new HashSet<>();
 		// Set of slots which really are linked to a cargo. This will later be taken out of the unsetCargoSlots
-		final Set<Slot> setCargoSlots = new HashSet<Slot>();
+		final Set<Slot> setCargoSlots = new HashSet<>();
 
 		// First pass - add in generated slots to the slot containers
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
@@ -297,7 +296,7 @@ public class LNGSchedulerJobUtils {
 		// We may reuse the existing slot, or create a new one. For non-first load slots, remove the cargo definition
 
 		// Maintain a list of used cargo objects.
-		final Set<Cargo> usedCargoes = new HashSet<Cargo>();
+		final Set<Cargo> usedCargoes = new HashSet<>();
 		// Maintain a list of potentially unused cargoes - once this next step is complete, we need to remove the used cargoes to get the real list
 		final Set<Cargo> possibleUnusedCargoes = new HashSet<Cargo>(cargoModel.getCargoes());
 
@@ -396,7 +395,7 @@ public class LNGSchedulerJobUtils {
 			// }
 
 			// Remove references to slots no longer in the cargo
-			final Set<Slot> oldSlots = new HashSet<Slot>();
+			final Set<Slot> oldSlots = new HashSet<>();
 			oldSlots.addAll(loadCargo.getSlots());
 			oldSlots.removeAll(cargoSlots);
 			for (final Slot slot : oldSlots) {
@@ -470,7 +469,7 @@ public class LNGSchedulerJobUtils {
 			}
 			if (eObj instanceof CharterOutEvent) {
 				final CharterOutEvent charterOutEvent = (CharterOutEvent) eObj;
-				
+
 				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
 				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
 				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
@@ -569,8 +568,7 @@ public class LNGSchedulerJobUtils {
 
 	}
 
-	public static @NonNull Pair<IAnnotatedSolution, IEvaluationState> evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data,
-			@NonNull final ISequences rawSequences) {
+	public static @NonNull Pair<IAnnotatedSolution, IEvaluationState> evaluateCurrentState(@NonNull final Injector injector, @NonNull final ISequences rawSequences) {
 		/**
 		 * Start the full evaluation process.
 		 */

@@ -53,6 +53,10 @@ public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint 
 					// Charter out mode not enabled
 					return Activator.PLUGIN_ID;
 				}
+				if (true) {
+					// SG - Turned off as this needs to check the UserSettings object now
+					return Activator.PLUGIN_ID;
+				}
 
 				if (slot.isSetPriceExpression() && slot.getPriceExpression().contains(IBreakEvenEvaluator.MARKER)) {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(

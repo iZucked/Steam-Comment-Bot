@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -82,6 +83,20 @@ public class SequenceHelper {
 		return makeSequence(dataTransformer, resource, o_vesselAvailability, cargoes);
 	}
 
+	public static @NonNull IModifiableSequence makeSequence(final @NonNull LNGDataTransformer dataTransformer, final CharterInMarketOverride charterInMarketOverride,
+			final EObject... cargoes) {
+
+		@NonNull
+		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+
+		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
+
+		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(charterInMarketOverride, IVesselAvailability.class);
+		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
+
+		return makeSequence(dataTransformer, resource, o_vesselAvailability, cargoes);
+	}
+
 	public static @NonNull Pair<IResource, IModifiableSequence> makeSequence(final @NonNull LNGDataTransformer dataTransformer, final VesselAvailability vesselAvailability,
 			final Collection<? extends EObject> cargoes) {
 
@@ -91,6 +106,20 @@ public class SequenceHelper {
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 
 		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
+
+		return makeSequence(dataTransformer, resource, o_vesselAvailability, cargoes);
+	}
+
+	public static @NonNull Pair<IResource, IModifiableSequence> makeSequence(final @NonNull LNGDataTransformer dataTransformer,
+			final CharterInMarketOverride charterInMarketOverride, final Collection<? extends EObject> cargoes) {
+
+		@NonNull
+		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+
+		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
+
+		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(charterInMarketOverride, IVesselAvailability.class);
 		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
 
 		return makeSequence(dataTransformer, resource, o_vesselAvailability, cargoes);

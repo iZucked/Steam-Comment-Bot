@@ -21,6 +21,7 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -51,6 +52,7 @@ import com.mmxlabs.models.lng.transformer.export.exporters.GeneratedCharterOutEv
 import com.mmxlabs.models.lng.transformer.export.exporters.IdleEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.JourneyEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.VisitEventExporter;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
@@ -184,6 +186,8 @@ public class AnnotatedSolutionExporter {
 			boolean isRoundTripSequence = false;
 			final ISequence sequence = annotatedSolution.getFullSequences().getSequence(resource);
 			final VolumeAllocatedSequence scheduledSequence = scheduledSequences.getScheduledSequenceForResource(resource);
+			assert scheduledSequence != null;
+			
 			switch (vesselAvailability.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
@@ -217,6 +221,7 @@ public class AnnotatedSolutionExporter {
 				}
 
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
+				eSequence.setCharterInMarketOverride(modelEntityMap.getModelObject(vesselAvailability, CharterInMarketOverride.class));
 				eSequence.unsetVesselAvailability();
 				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
 				break;

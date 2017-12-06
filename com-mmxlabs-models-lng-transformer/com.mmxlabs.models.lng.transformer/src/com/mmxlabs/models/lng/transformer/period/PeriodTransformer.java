@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -860,6 +861,8 @@ public class PeriodTransformer {
 			lockedVessel = (((VesselAvailability) vat).getVessel());
 		} else if (vat instanceof CharterInMarket) {
 			lockedVessel = (((CharterInMarket) vat).getVessel());
+		} else if (vat instanceof CharterInMarketOverride) {
+			lockedVessel = (((CharterInMarketOverride) vat).getCharterInMarket().getVessel());
 		}
 
 		for (final Slot slot : cargo.getSlots()) {
@@ -930,6 +933,8 @@ public class PeriodTransformer {
 				slot.getAllowedVessels().add(((VesselAvailability) vat).getVessel());
 			} else if (vat instanceof CharterInMarket) {
 				slot.getAllowedVessels().add(((CharterInMarket) vat).getVessel());
+			} else if (vat instanceof CharterInMarketOverride) {
+				slot.getAllowedVessels().add(((CharterInMarketOverride) vat).getCharterInMarket().getVessel());
 			}
 		}
 		slot.setLocked(true);
