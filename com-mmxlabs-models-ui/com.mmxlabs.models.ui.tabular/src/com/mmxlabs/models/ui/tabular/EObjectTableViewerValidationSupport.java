@@ -31,11 +31,11 @@ public class EObjectTableViewerValidationSupport {
 
 		@Override
 		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-//			final HashSet<Object> updates = new HashSet<Object>();
-//			for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
-//				if (!entry.getValue().isOK())
-//					updates.add(entry.getKey());
-//			}
+			// final HashSet<Object> updates = new HashSet<Object>();
+			// for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
+			// if (!entry.getValue().isOK())
+			// updates.add(entry.getKey());
+			// }
 
 			validationErrors.clear();
 			ViewerHelper.runIfViewerValid(viewer, false, (viewer) -> processStatus(status, true));
@@ -63,8 +63,9 @@ public class EObjectTableViewerValidationSupport {
 	}
 
 	private void recursiveProcessStatus(final IStatus status, final boolean update) {
-		if (status == null)
+		if (status == null) {
 			return;
+		}
 		if (status.isMultiStatus()) {
 			for (final IStatus s : status.getChildren()) {
 				recursiveProcessStatus(s, update);
@@ -79,8 +80,10 @@ public class EObjectTableViewerValidationSupport {
 				updateObject(getElementForValidationTarget(detailConstraintStatus.getTarget()), status, update);
 
 				for (final EObject e : detailConstraintStatus.getObjects()) {
-					setStatus(e, status);
-					updateObject(getElementForValidationTarget(e), status, update);
+					if (e != null) {
+						setStatus(e, status);
+						updateObject(getElementForValidationTarget(e), status, update);
+					}
 				}
 			}
 		}
