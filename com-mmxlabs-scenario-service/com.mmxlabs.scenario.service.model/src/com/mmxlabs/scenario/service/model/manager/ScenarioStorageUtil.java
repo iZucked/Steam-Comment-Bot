@@ -19,6 +19,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -78,7 +80,10 @@ public class ScenarioStorageUtil {
 
 	protected ScenarioStorageUtil() {
 		try {
-			storageDirectory = Files.createTempDirectory("ScenarioStorage");
+			final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+
+			storageDirectory = workspaceLocation.append("temp").toFile().toPath();
+			storageDirectory.toFile().mkdirs();
 			// there is a race here; the only way to really avoid it is to use
 			// something like java.nio in java 7, which has a createTempDir method.
 			// if (storageDirectory.delete()) {
@@ -115,7 +120,7 @@ public class ScenarioStorageUtil {
 				}
 			});
 
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			storageDirectory = null;
 		}
 
@@ -439,7 +444,7 @@ public class ScenarioStorageUtil {
 				if (copyToTemp) {
 					final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
-					final File f = File.createTempFile("temp", ".lingo");
+					final File f = File.createTempFile("temp", ".lingo", ScenarioStorageUtil.getTempDirectory());
 					tempFiles.add(f);
 					// Create a temp file and generate a URI to it to pass into migration code.
 					final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
@@ -706,5 +711,9 @@ public class ScenarioStorageUtil {
 
 		return modelRecord;
 
+	}
+
+	public static File getTempDirectory() {
+		return INSTANCE.storageDirectory.toFile();
 	}
 }
