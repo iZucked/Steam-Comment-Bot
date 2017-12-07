@@ -280,7 +280,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(startPort.getZoneId()).toLocalDateTime();
 		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(startPort.getZoneId()).toLocalDateTime();
 
-		return scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, startPort, false) //
+		return scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, startPort) //
 				.withRelocatePort(endPort) //
 				.withDurationInDays(1) //
 				.withAvailableHeelOptions(0, 0, 21.0, "1") //
