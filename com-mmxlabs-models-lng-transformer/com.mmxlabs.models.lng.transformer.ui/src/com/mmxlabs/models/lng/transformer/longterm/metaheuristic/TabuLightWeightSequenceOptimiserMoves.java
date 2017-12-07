@@ -141,7 +141,7 @@ public class TabuLightWeightSequenceOptimiserMoves {
 	public List<List<Integer>> move(List<List<Integer>> sequences) {
 		List<List<Integer>> newSequences = copySequences(sequences);
 		double d = random.nextDouble();
-		boolean noUselessMove = true;
+		boolean noUselessMove = false;
 
 		if (noUselessMove) {
 			if (unusedCargoes.size() > 0) {

@@ -55,6 +55,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	public TabuLightWeightSequenceOptimiser() {
+		this(1000, 10000, 2, 0);
 	}
 
 	public TabuLightWeightSequenceOptimiser(int globalIterations, int searchIterations, int maxAge, int randomSeed) {
@@ -192,41 +193,12 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 			tabu.add(tabuSet); // add new tabu elements to master set
 		}
 
-		System.out.printf("\n\nFitness: %f\n", bestScore);
-		System.out.printf("Lateness: %d hrs\n", lateness);
-
 		Double bestScoreBest = evaluate(bestSchedules, cargoCount, cargoPNL, vesselCapacities,
 				cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes,
 				cargoMinTravelTimes, loads, discharges);
 
 		System.out.printf("\n\nFitness best (re-evaluated): %f\n", bestScoreBest);
 		System.out.printf("Lateness best (re-evaluated): %d hrs\n", totalLateness);
-
-		/*
-		 * Ship 0: 2 4 15 Ship 1: 9 17 21 1 Ship 2: 0 16 18 13 Ship 3: 8 10 12 5 6 Ship
-		 * 4: 7 3 14 19 Ship 5: 11 20 22
-		 */
-
-		List<Integer> ship_0 = Arrays.asList(2, 4, 15);
-		List<Integer> ship_1 = Arrays.asList(9, 17, 21, 1);
-		List<Integer> ship_2 = Arrays.asList(0, 16, 18, 13);
-		List<Integer> ship_3 = Arrays.asList(8, 10, 12, 5, 6);
-		List<Integer> ship_4 = Arrays.asList(7, 3, 14, 19);
-		List<Integer> ship_5 = Arrays.asList(11, 20, 22);
-		List<List<Integer>> MIPSolution = new ArrayList<List<Integer>>();
-		MIPSolution.add(ship_0);
-		MIPSolution.add(ship_1);
-		MIPSolution.add(ship_2);
-		MIPSolution.add(ship_3);
-		MIPSolution.add(ship_4);
-		MIPSolution.add(ship_5);
-
-		Double MIPscore = evaluate(MIPSolution, cargoCount, cargoPNL, vesselCapacities,
-				cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes,
-				cargoMinTravelTimes, loads, discharges);
-
-		System.out.printf("\n\nMIP Fitness: %f\n", MIPscore);
-		System.out.printf("MIP Lateness: %d hrs\n", totalLateness);
 
 		System.out.println("\nOrdering");
 		for (List schedule : bestSchedules) {

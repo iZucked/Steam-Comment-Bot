@@ -120,6 +120,7 @@ public class LightweightSchedulerOptimiser {
 
 		// (3) Optimise matrix
 		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid());
+		
 		if (pairingsMatrix == null) {
 			return null;
 		}
