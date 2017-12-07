@@ -168,7 +168,6 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 			// this case should not occur, since the value provider should offer null as an option
 			return "(Null)";
 		} else {
-			assert false;
 			// fall back on displaying the VesselSet's name
 			return "Unknown vessel assignment";
 		}
