@@ -482,17 +482,5 @@
                plugin.xml="actionable-set-optimiser.plugin.xml">
          </PluginXMLEnablement>         
       </extension>
-            <extension
-            point="com.mmxlabs.models.lng.cargo.editor.TradesTableContextMenuExtension">
-         <TradesTableContextMenuExtension
-               class="com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserMenuExtension">
-         </TradesTableContextMenuExtension>
-      </extension>
-                  <extension
-            point="com.mmxlabs.models.lng.cargo.editor.TradesTableContextMenuExtension">
-         <TradesTableContextMenuExtension
-               class="com.mmxlabs.models.lng.transformer.longterm.LightWeightSchedulerMenuExtension">
-         </TradesTableContextMenuExtension>
-      </extension>
       
 </plugin>
