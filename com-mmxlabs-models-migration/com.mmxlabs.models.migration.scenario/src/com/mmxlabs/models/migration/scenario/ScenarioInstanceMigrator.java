@@ -85,7 +85,7 @@ public class ScenarioInstanceMigrator {
 
 			// Copy data files for manipulation
 			assert archiveURI != null;
-			final File f = File.createTempFile("migration", ".lingo");
+			final File f = File.createTempFile("migration", ".lingo", ScenarioStorageUtil.getTempDirectory());
 			tmpFiles.add(f);
 			// Create a temp file and generate a URI to it to pass into migration code.
 			final URI tmpArchiveURI = URI.createFileURI(f.getCanonicalPath());
