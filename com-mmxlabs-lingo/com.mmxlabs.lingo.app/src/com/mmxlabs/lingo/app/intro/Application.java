@@ -4,8 +4,14 @@
  */
 package com.mmxlabs.lingo.app.intro;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -29,6 +35,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
@@ -38,6 +46,7 @@ import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.rcp.common.application.WorkbenchStateManager;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 import com.mmxlabs.scenario.service.model.manager.ISharedDataModelType;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 /**
  * This class controls all aspects of the application's execution
@@ -54,10 +63,38 @@ public class Application implements IApplication {
 	public Object start(final IApplicationContext context) {
 		final String[] appLineArgs = Platform.getApplicationArgs();
 
+		{
+			// Clean up temp folder on start up.
+			final File tempDirectory = ScenarioStorageUtil.getTempDirectory();
+			if (tempDirectory.exists() && tempDirectory.isDirectory()) {
+				final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
+				try {
+					final Path tempDir = tempDirectory.toPath();
+					Files.walkFileTree(tempDir, new SimpleFileVisitor<Path>() {
+						@Override
+						public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+							if (!tempDir.equals(dir)) {
+								dir.toFile().delete();
+							}
+							return FileVisitResult.CONTINUE;
+						}
+
+						@Override
+						public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+							FileDeleter.delete(file.toFile(), secureDelete);
+							return FileVisitResult.CONTINUE;
+						}
+					});
+				} catch (final IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		// HAK
 		@NonNull
-		ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
-		
+		final ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
+
 		if (appLineArgs != null && appLineArgs.length > 0) {
 			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g. could get here through a relaunch)
 			boolean skipAutoMemory = false;
@@ -116,7 +153,6 @@ public class Application implements IApplication {
 			display.dispose();
 			return IApplication.EXIT_OK;
 		}
-
 
 		cleanupP2();
 
