@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.longterm.metaheuristic.TabuLightWeightSequenceOptimiser;
 import com.mmxlabs.models.lng.transformer.longterm.webservice.WebserviceLongTermMatrixOptimiser;
 import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -114,7 +115,7 @@ public class LightWeightSchedulerOptimiserUnit {
 				bind(ILongTermMatrixOptimiser.class).toInstance(matrixOptimiser);
 				bind(ICargoToCargoCostCalculator.class).to(SimpleCargoToCargoCostCalculator.class);
 				bind(ICargoVesselRestrictionsMatrixProducer.class).to(CargoVesselRestrictionsMatrixProducer.class);
-				bind(ILightWeightSequenceOptimiser.class).to(SimpleLightweightSequenceOptimiser.class);
+				bind(ILightWeightSequenceOptimiser.class).to(TabuLightWeightSequenceOptimiser.class);
 			}
 
 			@Provides
