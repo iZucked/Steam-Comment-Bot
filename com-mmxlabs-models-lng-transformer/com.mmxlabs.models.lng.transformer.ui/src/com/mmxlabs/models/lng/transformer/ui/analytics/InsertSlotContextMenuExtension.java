@@ -237,7 +237,6 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 			final UserSettings pUserSettings = userSettings;
 
-			final List<Slot> targetSlots = new LinkedList<Slot>();
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
 				return new LNGSlotInsertionJobDescriptor(taskName, original, pUserSettings, targetSlots, Collections.emptyList());
 			};
