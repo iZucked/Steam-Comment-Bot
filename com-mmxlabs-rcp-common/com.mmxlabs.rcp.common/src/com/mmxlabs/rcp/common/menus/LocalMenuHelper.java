@@ -40,16 +40,6 @@ public class LocalMenuHelper {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
-				if (menu == null) {
-					menu = mgr.createContextMenu(control);
-				}
-				// Clean up existing menu items
-				final IContributionItem[] l = mgr.getItems();
-				mgr.removeAll();
-				for (final IContributionItem itm : l) {
-					itm.dispose();
-				}
-
 				if (title != null) {
 					mgr.add(new GroupMarker(title));
 				}
@@ -77,7 +67,6 @@ public class LocalMenuHelper {
 			}
 
 		};
-		mgr.addMenuListener(listener);
 	}
 
 	@Override
@@ -103,7 +92,16 @@ public class LocalMenuHelper {
 	}
 
 	public void open() {
-		mgr.fill(control);
+		if (menu == null) {
+			menu = mgr.createContextMenu(control);
+		}
+		// Clean up existing menu items
+		final IContributionItem[] l = mgr.getItems();
+		mgr.removeAll();
+		for (final IContributionItem itm : l) {
+			itm.dispose();
+		}
+
 		mgr.setVisible(true);
 		listener.menuAboutToShow(mgr);
 	}
