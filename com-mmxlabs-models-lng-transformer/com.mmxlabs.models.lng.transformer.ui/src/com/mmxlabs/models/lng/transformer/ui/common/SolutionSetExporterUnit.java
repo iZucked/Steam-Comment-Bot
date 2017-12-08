@@ -18,11 +18,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
@@ -46,6 +46,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scheduler.optimiser.insertion.SequencesUndoSpotHelper;
 
 public class SolutionSetExporterUnit {
 
@@ -62,16 +63,20 @@ public class SolutionSetExporterUnit {
 
 				solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(initialSequences.getSequences(), new HashMap<>()));
 				monitor.beginTask("Export", solutions.size());
+
+				final LNGDataTransformer dataTransformer = runner.getDataTransformer();
+				Injector injector = dataTransformer.getInjector().createChildInjector();
+				SequencesUndoSpotHelper helper = injector.getInstance(SequencesUndoSpotHelper.class);
+
 				try {
 					final AbstractSolutionSet plan = solutionSetFactory.get();
 					for (final NonNullPair<ISequences, Map<String, Object>> changeSet : solutions) {
 
 						try {
+							ISequences sequences = helper.undoSpotMarketSwaps(initialSequences.getSequences(), changeSet.getFirst());
 
 							// Perform a portfolio break-even if requested.
 							if (portfolioBreakEvenTarget.isPresent()) {
-
-								final LNGDataTransformer dataTransformer = runner.getDataTransformer();
 
 								@NonNull
 								final Collection<@NonNull String> hints = new LinkedList<>(dataTransformer.getHints());
@@ -83,12 +88,12 @@ public class SolutionSetExporterUnit {
 								stageSettings.setTargetProfitAndLoss(portfolioBreakEvenTarget.getAsLong());
 
 								final BreakEvenTransformerUnit t = new BreakEvenTransformerUnit(dataTransformer, dataTransformer.getUserSettings(), stageSettings, changeSet.getFirst(),
-										new MultiStateResult(changeSet.getFirst(), new HashMap<>()), hints);
+										new MultiStateResult(sequences, new HashMap<>()), hints);
 
 								t.run(new NullProgressMonitor());
 							}
 
-							final Schedule child_schedule = runner.createSchedule(changeSet.getFirst(), changeSet.getSecond());
+							final Schedule child_schedule = runner.createSchedule(sequences, changeSet.getSecond());
 
 							final ScheduleModel scheduleModel = ScheduleFactory.eINSTANCE.createScheduleModel();
 							scheduleModel.setSchedule(child_schedule);
