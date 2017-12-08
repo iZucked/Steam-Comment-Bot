@@ -1,0 +1,123 @@
+package com.mmxlabs.serviceintegration.vessels.internal;
+
+import java.io.IOException;
+
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mmxlabs.ApiException;
+import com.mmxlabs.lngdataserver.browser.BrowserFactory;
+import com.mmxlabs.lngdataserver.browser.CompositeNode;
+import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.rcp.common.RunnerHelper;
+
+/**
+ * The activator class controls the plug-in life cycle
+ */
+public class Activator extends AbstractUIPlugin {
+	
+	// The plug-in ID
+	public static final String PLUGIN_ID = "com.mmxlabs.serviceintegration.vessels"; //$NON-NLS-1$
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
+	
+	// The shared instance
+	private static Activator plugin;
+	
+	private final CompositeNode vesselsDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
+	private final VesselsRepository vesselsRepository = new VesselsRepository();
+	private Thread versionLoader;
+	private boolean active;
+	
+	/**
+	 * The constructor
+	 */
+	public Activator() {
+		Node loading = BrowserFactory.eINSTANCE.createNode();
+		loading.setDisplayName("loading...");
+		vesselsDataRoot.setDisplayName("Vessels (loading...)");
+		vesselsDataRoot.getChildren().add(loading);
+		
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 */
+	@Override
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		plugin = this;
+		active = true;
+		versionLoader = new Thread(this::loadVersions);
+		versionLoader.start();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 */
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		plugin = null;
+		super.stop(context);
+		active = false;
+	}
+
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static Activator getDefault() {
+		return plugin;
+	}
+	
+	public CompositeNode getVesselsDataRoot() {
+		return vesselsDataRoot;
+	}
+
+//	
+	private void loadVersions() {
+		
+		while(!vesselsRepository.isReady() && active) {
+			try {
+				LOGGER.debug("Vessel back-end not ready yet...");
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				LOGGER.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
+		}
+		
+		
+		if(active) {
+			
+		}
+		
+		
+		if (active) {
+			LOGGER.debug("Pricing back-end ready, retrieving versions...");
+			try {
+				vesselsDataRoot.getChildren().clear();
+				try {
+					for (VesselsVersion v : vesselsRepository.getVersions()) {
+						Node version = BrowserFactory.eINSTANCE.createNode();
+						version.setParent(vesselsDataRoot);
+						version.setDisplayName(v.getIdentifier());
+						version.setPublished(v.isPublished());
+						RunnerHelper.asyncExec(c -> vesselsDataRoot.getChildren().add(version));
+					}
+				} catch (ApiException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				vesselsDataRoot.setDisplayName("Vessels");
+			} catch (IOException e) {
+				LOGGER.error("Error retrieving vessels versions");
+			}
+		}
+	}
+}
