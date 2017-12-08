@@ -34,6 +34,7 @@ public class BasicDragSource implements DragSourceListener {
 		if (transfer.isSupportedType(event.dataType)) {
 			transfer.setSelection(selection);
 			transfer.setSelectionSetTime(event.time & 0xFFFF);
+			event.data = selection;
 		}
 	}
 
