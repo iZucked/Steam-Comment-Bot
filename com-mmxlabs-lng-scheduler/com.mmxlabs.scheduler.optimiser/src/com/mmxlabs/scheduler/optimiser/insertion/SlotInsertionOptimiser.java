@@ -59,6 +59,9 @@ public class SlotInsertionOptimiser {
 	private SequencesHitchHikerHelper sequencesHelper;
 
 	@Inject
+	private SequencesUndoSpotHelper undoSpotHelper;
+
+	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
 
 	@Inject
@@ -259,7 +262,7 @@ public class SlotInsertionOptimiser {
 				.collect(Collectors.toList());
 		final Pair<ISequences, Long> result = insert(state, seed, elements);
 		if (result != null) {
-			result.setFirst(sequencesHelper.undoSpotMarketSwaps(state.originalRawSequences, result.getFirst()));
+			result.setFirst(undoSpotHelper.undoSpotMarketSwaps(state.originalRawSequences, result.getFirst()));
 		}
 		return result;
 	}
