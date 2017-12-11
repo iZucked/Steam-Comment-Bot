@@ -89,11 +89,11 @@ public class SelectedScenariosService {
 				final Collection<?> result = mostRecentCommand.getResult();
 				for (final Object o : result) {
 					if (o == scheduleModel.get() || (o instanceof Schedule && ((Schedule) o).eContainer() == scheduleModel.get())) {
-						updateSelectedScenarios(false);
 						final KeyValueRecord record = scenarioRecords.remove(result);
 						if (record != null) {
 							record.dispose();
 						}
+						updateSelectedScenarios(false);
 						return;
 					}
 				}

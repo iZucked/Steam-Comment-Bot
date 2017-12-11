@@ -72,7 +72,11 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 		} else if (object instanceof Sequence) {
 			final Sequence sequence = (Sequence) object;
 			return getSequenceLabel(sequence);
+		} else if (object instanceof Vessel) {
+			Vessel vessel = (Vessel) object;
+			return AssignmentLabelProvider.getLabelFor(vessel);
 		}
+
 
 		return null;
 	}

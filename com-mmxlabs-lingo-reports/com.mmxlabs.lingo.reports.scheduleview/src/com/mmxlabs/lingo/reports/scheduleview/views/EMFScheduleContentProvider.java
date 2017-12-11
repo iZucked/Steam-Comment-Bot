@@ -176,8 +176,11 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 						if (journey.getCanalDate() != null) {
 							if (journey.getRouteOption() == RouteOption.PANAMA) {
 								if (sequence.getCharterInMarket() == null || sequence.getSpotIndex() != -1) {
-
-									final @NonNull ModelDistanceProvider modelDistanceProvider = getScenarioDataProviderFor(journey).getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
+									IScenarioDataProvider scenarioDataProvider = getScenarioDataProviderFor(journey);
+									if (scenarioDataProvider == null) {
+										continue;
+									}
+									final @NonNull ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
 											ModelDistanceProvider.class);
 
 									final CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();

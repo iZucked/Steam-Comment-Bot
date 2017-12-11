@@ -185,6 +185,9 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	// DEMO
 	private final boolean showConnections = System.getProperty("schedulechart.showConnections") != null || LicenseFeatures.isPermitted("features:schedulechart-showConnections");
 
+	@Nullable
+	ISelectedDataProvider currentSelectedDataProvider = null;
+	
 	/**
 	 * The constructor.
 	 */
@@ -585,9 +588,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 							final Event evt = (Event) ganttEvent.getData();
 							if (table != null) {
 								// Change alpha for pinned elements
-								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-								if (selectedDataProvider != null) {
-									if (selectedDataProvider.isPinnedObject(evt)) {
+								if (currentSelectedDataProvider != null) {
+									if (currentSelectedDataProvider.isPinnedObject(evt)) {
 										ganttEvent.setStatusAlpha(50);
 									}
 								}
@@ -793,9 +795,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 				if (obj instanceof EObject) {
 					final EObject eObject = (EObject) obj;
 
-					@Nullable
-					final
-					ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 					if (currentSelectedDataProvider != null) {
 						@Nullable
 						final
@@ -1276,6 +1275,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
+					SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
 					final List<Object> rowElements = new LinkedList<>();
 					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
 					elementCollector.beginCollecting(pinned != null);
