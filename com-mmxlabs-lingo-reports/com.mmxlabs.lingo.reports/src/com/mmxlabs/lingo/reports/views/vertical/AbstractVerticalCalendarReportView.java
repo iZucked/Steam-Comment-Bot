@@ -84,7 +84,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 				public void run() {
 					final List<@NonNull ScenarioResult> scenarios = new LinkedList<>(others);
 					if (pinned != null) {
-						scenarios.add(0, pinned);
+						// Add to end, prefer the first "other"
+						scenarios.add(pinned);
 					}
 					if (!scenarios.isEmpty()) {
 						final ScenarioResult result = scenarios.get(0);
