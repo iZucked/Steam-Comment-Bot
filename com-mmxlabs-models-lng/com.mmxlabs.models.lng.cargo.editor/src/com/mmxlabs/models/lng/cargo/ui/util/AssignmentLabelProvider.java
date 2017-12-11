@@ -19,6 +19,14 @@ public class AssignmentLabelProvider {
 		}
 		return "";
 	}
+	
+	public static String getLabelFor(final Vessel vessel) {
+		if (vessel != null) {
+			return String.format("%s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000);
+		}
+		return "";
+	}
+
 	public static String getLabelFor(final CharterInMarketOverride charterInMarketOverride) {
 		
 		final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
