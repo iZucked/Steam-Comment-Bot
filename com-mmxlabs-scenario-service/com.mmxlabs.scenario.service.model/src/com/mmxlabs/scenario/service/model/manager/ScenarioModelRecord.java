@@ -126,7 +126,7 @@ public final class ScenarioModelRecord extends ModelRecord {
 		return scenarioInstance;
 	}
 
-	private final AdapterImpl readOnlyAdapter = new AdapterImpl() {
+	private final @NonNull AdapterImpl readOnlyAdapter = new AdapterImpl() {
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
 				setReadOnly(msg.getNewBooleanValue());

@@ -478,7 +478,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		return newInstance;
 	}
 
-	final EContentAdapter saveAdapter = new EContentAdapter() {
+	private final @NonNull EContentAdapter saveAdapter = new EContentAdapter() {
 
 		@Override
 		public void notifyChanged(final Notification notification) {

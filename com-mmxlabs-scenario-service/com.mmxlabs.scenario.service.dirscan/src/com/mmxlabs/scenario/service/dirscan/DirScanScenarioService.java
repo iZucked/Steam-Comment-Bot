@@ -91,7 +91,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	 */
 	private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
-	private final EContentAdapter serviceModelAdapter = new EContentAdapter() {
+	private final @NonNull EContentAdapter serviceModelAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 
