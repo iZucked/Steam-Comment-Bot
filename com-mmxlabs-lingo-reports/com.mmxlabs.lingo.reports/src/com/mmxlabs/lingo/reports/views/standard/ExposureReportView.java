@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -34,7 +32,6 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
@@ -49,7 +46,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -315,42 +311,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	@Override
 	protected void makeActions() {
 		super.makeActions();
-		if (false) {
-			// Automatically calculated on evaluate.
-			final Action calculateExposures = new Action("Calculate") {
-				@Override
-				public void run() {
-
-					final SelectedScenariosService service = getViewSite().getService(SelectedScenariosService.class);
-					if (service == null) {
-						return;
-					}
-					@Nullable
-					final ISelectedDataProvider currentSelectedDataProvider = service.getCurrentSelectedDataProvider();
-
-					if (currentSelectedDataProvider == null) {
-						return;
-					}
-
-					@NonNull
-					final Collection<@NonNull ScenarioResult> scenarioResults = currentSelectedDataProvider.getScenarioResults();
-					for (final ScenarioResult scenarioResult : scenarioResults) {
-
-						final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
-						try (ModelReference ref = modelRecord.aquireReference("ExposuresReportView")) {
-
-							final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();
-							final EditingDomain domain = ref.getEditingDomain();
-							final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
-							Exposures.calculateExposures(scenarioModel, schedule, domain);
-						}
-					}
-					// refresh();
-				}
-			};
-
-			getViewSite().getActionBars().getToolBarManager().add(calculateExposures);
-		}
 
 		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
 			@Override
