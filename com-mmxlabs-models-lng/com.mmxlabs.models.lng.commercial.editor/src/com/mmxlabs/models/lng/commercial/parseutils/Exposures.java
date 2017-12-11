@@ -15,10 +15,6 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -48,7 +44,6 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -81,12 +76,11 @@ public class Exposures {
 
 	}
 
-	public static void calculateExposures(final LNGScenarioModel scenarioModel, final Schedule schedule, final EditingDomain domain) {
+	public static void calculateExposures(final LNGScenarioModel scenarioModel, final Schedule schedule) {
 
 		if (schedule == null) {
 			return;
 		}
-		final CompoundCommand cmd = new CompoundCommand("Calculate Exposures");
 
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
@@ -94,7 +88,7 @@ public class Exposures {
 
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-				cmd.append(SetCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, SetCommand.UNSET_VALUE));
+				slotAllocation.getExposures().clear();
 
 				final int volume = slotAllocation.getEnergyTransferred();
 				final Slot slot = slotAllocation.getSlot();
@@ -131,19 +125,10 @@ public class Exposures {
 							d.setVolumeInNativeUnits(0.0);
 						}
 					}
-
-					cmd.append(AddCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, exposureDetail));
+					slotAllocation.getExposures().addAll(exposureDetail);
 				}
 			}
 		}
-
-		if (!scenarioModel.getScheduleModel().isDirty())
-
-		{
-			cmd.append(SetCommand.create(domain, scenarioModel.getScheduleModel(), SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
-		}
-		domain.getCommandStack().execute(cmd);
-
 	}
 
 	/**
