@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.its.tests;
 
 import java.util.function.Consumer;
 
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assume;
 import org.junit.Test;
@@ -14,13 +13,7 @@ import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.ReportTest;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
  * Abstract class to run parameterised tests on report generation. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
@@ -109,14 +102,6 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 	@Category(ReportTest.class)
 	public void testExposuresReport() throws Exception {
 		Assume.assumeTrue(LicenseFeatures.isPermitted("features:exposures"));
-		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html", modelRecord -> {
-			try (ModelReference ref = modelRecord.aquireReference("ExposuresReportView")) {
-
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();
-				final EditingDomain domain = ref.getEditingDomain();
-				final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
-				RunnerHelper.asyncExec(() -> Exposures.calculateExposures(scenarioModel, schedule, domain));
-			}
-		});
+		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html");
 	}
 }
