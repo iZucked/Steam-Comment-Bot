@@ -274,7 +274,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		// Make sure this is the original, not the optimiser
 		plan.getSlotsInserted().addAll(targetSlots);
 		plan.getEventsInserted().addAll(targetEvents);
-		plan.setUserSettings(EcoreUtil.copy(plan.getUserSettings()));
+		plan.setUserSettings(EcoreUtil.copy(userSettings));
 
 		plan.setName(AnalyticsSolutionHelper.generateName(plan));
 
