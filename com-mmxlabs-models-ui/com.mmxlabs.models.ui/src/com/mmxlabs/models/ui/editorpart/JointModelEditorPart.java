@@ -192,7 +192,22 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private final @NonNull IScenarioLockListener lockedAdapter = (modelRecord, writeLocked) -> updateLocked();
 
-	private AdapterImpl scenarioNameAttributeAdapter;
+	private final @NonNull AdapterImpl scenarioNameAttributeAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification msg) {
+			if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
+				updateLocked();
+			}
+			if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
+				RunnerHelper.asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						setPartName(msg.getNewStringValue());
+					}
+				});
+			}
+		}
+	};
 
 	private TreeViewer selectionViewer;
 
@@ -383,22 +398,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			modelReference.getLock().addLockListener(lockedAdapter);
 			modelRecord.addDirtyListener(scenarioDirtyListener);
 
-			scenarioNameAttributeAdapter = new AdapterImpl() {
-				@Override
-				public void notifyChanged(final Notification msg) {
-					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
-						updateLocked();
-					}
-					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
-						RunnerHelper.asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								setPartName(msg.getNewStringValue());
-							}
-						});
-					}
-				}
-			};
 			instance.eAdapters().add(scenarioNameAttributeAdapter);
 
 			if (ro instanceof MMXRootObject) {
@@ -585,10 +584,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			scenarioDataProvider.close();
 			scenarioDataProvider = null;
 		}
-
-		if (scenarioNameAttributeAdapter != null) {
+		if (scenarioInstance != null) {
 			scenarioInstance.eAdapters().remove(scenarioNameAttributeAdapter);
-			this.scenarioNameAttributeAdapter = null;
 		}
 
 		for (final IJointModelEditorContribution contribution : contributions) {

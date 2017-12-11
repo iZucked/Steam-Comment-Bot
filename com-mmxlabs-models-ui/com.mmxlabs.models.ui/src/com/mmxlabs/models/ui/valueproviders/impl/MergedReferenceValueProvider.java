@@ -12,6 +12,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
@@ -26,7 +27,7 @@ public class MergedReferenceValueProvider extends SimpleReferenceValueProvider {
 	private final ArrayList<EReference> extraReferences;
 	private final EObject container;
 
-	private final MMXAdapterImpl adapter = new MMXAdapterImpl() {
+	private final @NonNull MMXAdapterImpl adapter = new MMXAdapterImpl() {
 		@Override
 		protected void missedNotifications(final List<Notification> missed) {
 			for (final Notification n : missed) {

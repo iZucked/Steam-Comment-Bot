@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.change.util.ChangeRecorder;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 
@@ -39,7 +40,7 @@ public class DialogEcoreCopier {
 	private final Set<EObject> objectsAdded = new HashSet<>();
 	private final Set<EObject> objectsRemoved = new HashSet<>();
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final @NonNull EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 

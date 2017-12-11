@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -42,7 +43,7 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 	 */
 	private final Set<EObject> adapterReferences = new HashSet<EObject>();
 
-	private final MMXAdapterImpl adapter = new MMXAdapterImpl() {
+	private final @NonNull MMXAdapterImpl adapter = new MMXAdapterImpl() {
 		@Override
 		protected void missedNotifications(final List<Notification> missed) {
 			// Clone list as the clearAdapterReferences can cause more notification to be added to the missed array. These will be missed as we take the original list, but we do not care about these
