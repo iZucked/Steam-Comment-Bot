@@ -20,13 +20,13 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ScenarioResult {
 
-	private final ScenarioModelRecord modelRecord;
-	private final IScenarioDataProvider scenarioDataProvider;
-	private @NonNull final MMXResultRoot resultRoot;
+	private final @NonNull ScenarioModelRecord modelRecord;
+	private final @NonNull IScenarioDataProvider scenarioDataProvider;
+	private final @NonNull MMXResultRoot resultRoot;
 	private final int hash;
 	private ScenarioInstance scenarioInstance;
 
-	private static @NonNull MMXResultRoot getDefaultRoot(final ScenarioModelRecord modelRecord, final IScenarioDataProvider reference) {
+	private static @NonNull MMXResultRoot getDefaultRoot(final @NonNull ScenarioModelRecord modelRecord, final @NonNull IScenarioDataProvider reference) {
 		// Make sure it is a valid reference
 		// assert reference.getScenarioInstance() == instance;
 
@@ -78,7 +78,7 @@ public class ScenarioResult {
 		this.scenarioInstance = instance;
 	}
 
-	public IScenarioDataProvider getScenarioDataProvider() {
+	public @NonNull IScenarioDataProvider getScenarioDataProvider() {
 		return scenarioDataProvider;
 	}
 
@@ -111,7 +111,7 @@ public class ScenarioResult {
 		return cls.cast(resultRoot);
 	}
 
-	public ScenarioModelRecord getModelRecord() {
+	public @NonNull ScenarioModelRecord getModelRecord() {
 		return modelRecord;
 	}
 
@@ -123,8 +123,10 @@ public class ScenarioResult {
 		}
 		if (obj instanceof ScenarioResult) {
 			final ScenarioResult other = (ScenarioResult) obj;
-			// return Objects.equals(this.modelRecord, other.modelRecord) && Objects.equals(this.resultRoot, other.resultRoot);
-			// FIXME: ScenarioInstance is optional, but should be part of equals. Some code does equality checks on the scenario instance (i.e. UI)
+			// return Objects.equals(this.modelRecord, other.modelRecord) &&
+			// Objects.equals(this.resultRoot, other.resultRoot);
+			// FIXME: ScenarioInstance is optional, but should be part of equals. Some code
+			// does equality checks on the scenario instance (i.e. UI)
 			return this.modelRecord == other.modelRecord && Objects.equals(this.resultRoot, other.resultRoot);
 		}
 		return false;
