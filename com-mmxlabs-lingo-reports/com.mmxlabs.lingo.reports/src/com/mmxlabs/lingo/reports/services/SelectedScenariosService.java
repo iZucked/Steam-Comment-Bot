@@ -31,10 +31,10 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.IPostChangeHook;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager.PostChangeHookPhase;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -44,8 +44,10 @@ public class SelectedScenariosService {
 
 	private final Map<ScenarioResult, MyCommandStackListener> commandStacks = new HashMap<>();
 	private final Map<ScenarioResult, ModelReference> scenarioReferences = new HashMap<>();
-	// private final Map<CommandStack, ScenarioResult> commandStackMap = new HashMap<>();
-	// TODO: Create an explicitly remove/updateRecord method set to ensure record.dispose() is called.
+	// private final Map<CommandStack, ScenarioResult> commandStackMap = new
+	// HashMap<>();
+	// TODO: Create an explicitly remove/updateRecord method set to ensure
+	// record.dispose() is called.
 	private final Map<ScenarioResult, KeyValueRecord> scenarioRecords = new HashMap<>();
 
 	private IScenarioServiceSelectionProvider selectionProvider;
@@ -55,12 +57,14 @@ public class SelectedScenariosService {
 	private final Set<ISelectedScenariosServiceListener> listeners = new HashSet<>();
 
 	/**
-	 * Special counter to try and avoid multiple update requests happening at once. TODO: What happens if we hit Integer.MAX_VALUE?
+	 * Special counter to try and avoid multiple update requests happening at once.
+	 * TODO: What happens if we hit Integer.MAX_VALUE?
 	 */
 	private final AtomicInteger counter = new AtomicInteger();
 
 	/**
-	 * Command stack listener method, cause the linked viewer to refresh on command execution
+	 * Command stack listener method, cause the linked viewer to refresh on command
+	 * execution
 	 * 
 	 */
 	private class MyCommandStackListener implements CommandStackListener {
@@ -86,8 +90,8 @@ public class SelectedScenariosService {
 			final CommandStack commandStack = (CommandStack) event.getSource();
 			final Command mostRecentCommand = commandStack.getMostRecentCommand();
 			if (mostRecentCommand != null) {
-				final Collection<?> result = mostRecentCommand.getResult();
-				for (final Object o : result) {
+				final Collection<?> commandResult = mostRecentCommand.getResult();
+				for (final Object o : commandResult) {
 					if (o == scheduleModel.get() || (o instanceof Schedule && ((Schedule) o).eContainer() == scheduleModel.get())) {
 						final KeyValueRecord record = scenarioRecords.remove(result);
 						if (record != null) {
@@ -101,7 +105,7 @@ public class SelectedScenariosService {
 		}
 	};
 
-	private final IScenarioServiceSelectionChangedListener scenarioServiceSelectionChangedListener = new IScenarioServiceSelectionChangedListener() {
+	private final @NonNull IScenarioServiceSelectionChangedListener scenarioServiceSelectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
 		@Override
 		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> selected, final boolean block) {
@@ -431,14 +435,16 @@ public class SelectedScenariosService {
 			assert scenarioResult != null;
 			final KeyValueRecord record;
 			// Cannot reuse existing record as we do not know if it has changed or not.
-			// If we re-evaluate, the ScenarioResult is the same, the ScenarioInstance is the same and the ScheduleModel is the same!
+			// If we re-evaluate, the ScenarioResult is the same, the ScenarioInstance is
+			// the same and the ScheduleModel is the same!
 			if (false && scenarioRecords.containsKey(scenarioResult)) {
 				record = scenarioRecords.get(scenarioResult);
 			} else {
 				try {
 					record = createKeyValueRecord(scenarioResult);
 				} catch (Exception e) {
-					// Failed to load - this can happen when the scenario is removed after getting the current selection.
+					// Failed to load - this can happen when the scenario is removed after getting
+					// the current selection.
 					continue;
 				}
 				final KeyValueRecord oldRecord = scenarioRecords.put(scenarioResult, record);
@@ -492,7 +498,7 @@ public class SelectedScenariosService {
 		return null;
 	}
 
-	public static ISelectedDataProvider createTestingSelectedDataProvider(ScenarioResult pin, ScenarioResult other) {
+	public static ISelectedDataProvider createTestingSelectedDataProvider(final @NonNull ScenarioResult pin, final @NonNull ScenarioResult other) {
 
 		final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
 		{
