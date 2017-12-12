@@ -6,6 +6,11 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.progress.IProgressConstants2;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -45,43 +50,68 @@ public class Activator implements BundleActivator {
 	public void start(final BundleContext context) throws Exception {
 		plugin = this;
 
-		String binariesPath = new MongoProvider().getStringPath();
-
-		mongoService = new MongoDBService();
-		mongoService.setEmbeddedBinariesLocation(binariesPath);
-		// mongoService.setEmbeddedDataLocation("/Users/roberterdin/tmp/mongo_data");
-		mongoService.setEmbeddedDataLocation(getMongoDataPath());
-		int port = mongoService.start();
-
-		// this is a bit dangerous, should probably let the server choose it's own port with server.port=0
-		int randomPort = randomPort();
-		String[] args = {
-				// "--db.embeddedBinaries=" + binariesPath,
-				"--server.port=" + randomPort, //
-				"--db.embedded=false", //
-				"--db.port=" + port, //
-				"--db.diagnosticDataCollectionEnabled=false", //
-				"--server.cors=true", //
-				"--spring.mvc.async.request-timeout=-1", //
-				"--debug" //
-		};
-		Thread background = new Thread(new Runnable() {
+		Job background = new Job("Start data server") {
 			@Override
-			public void run() {
+			public IStatus run(IProgressMonitor monitor) {
 				// Having a method called "main" in the stacktrace stops SpringBoot throwing an exception in the logging framework
-				main();
+				return main(monitor);
 			}
 
-			public void main() {
-				Object[] endPoints = DataServerEndPointExtensionUtil.getEndPoints();
+			public IStatus main(IProgressMonitor monitor) {
+				monitor.beginTask("Starting data server", IProgressMonitor.UNKNOWN);
+				try {
+					monitor.subTask("Starting database");
+					String binariesPath = new MongoProvider().getStringPath();
 
-				servletContext = SpringApplication.run(endPoints, args);
-				BackEndUrlProvider.INSTANCE.setPort(randomPort);
-				BackEndUrlProvider.INSTANCE.setAvailable(true);
+					mongoService = new MongoDBService();
+					mongoService.setEmbeddedBinariesLocation(binariesPath);
+					// mongoService.setEmbeddedDataLocation("/Users/roberterdin/tmp/mongo_data");
+					mongoService.setEmbeddedDataLocation(getMongoDataPath());
+					int port = mongoService.start();
+					monitor.subTask("Starting internal webserver");
+
+					// this is a bit dangerous, should probably let the server choose it's own port with server.port=0
+					int randomPort = randomPort();
+					String[] args = {
+							// "--db.embeddedBinaries=" + binariesPath,
+							"--server.port=" + randomPort, //
+							"--db.embedded=false", //
+							"--db.port=" + port, //
+							"--db.diagnosticDataCollectionEnabled=false", //
+							"--server.cors=true", //
+							"--spring.mvc.async.request-timeout=-1", //
+							"--debug" //
+					};
+					monitor.subTask("Gathering end points");
+
+					Object[] endPoints = DataServerEndPointExtensionUtil.getEndPoints();
+					monitor.worked(1);
+					monitor.subTask("Starting webserver");
+					servletContext = SpringApplication.run(endPoints, args);
+					monitor.worked(1);
+					BackEndUrlProvider.INSTANCE.setPort(randomPort);
+					monitor.worked(1);
+					BackEndUrlProvider.INSTANCE.setAvailable(true);
+					monitor.worked(1);
+				} catch (Exception e) {
+					setProperty(IProgressConstants2.KEEP_PROPERTY, Boolean.TRUE);
+					return Status.CANCEL_STATUS;
+				} finally {
+					monitor.done();
+				}
+				return Status.OK_STATUS;
 			}
-		});
+		};
+		// IRunnableWithProgress p = null;
+		background.setSystem(false);
+		background.setUser(true);
+		background.setPriority(Job.LONG);
+		// background.setProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, true);
+		// IProgressService service = PlatformUI.getWorkbench().getProgressService();
+		// service.run(true, false, background);
+		//
 
-		background.start();
+		background.schedule();
 		System.out.println("starting in background...");
 	}
 
