@@ -248,7 +248,9 @@ public final class OptimisationHelper {
 		}
 
 		final OptimisationPlan optimisationPlan = transformUserSettings(userSettings, parameterMode, scenario);
-		optimisationPlan.setResultName(nameProvider.nameSuggestion);
+		if (nameProvider != null) {
+			optimisationPlan.setResultName(nameProvider.nameSuggestion);
+		}
 
 		return optimisationPlan;
 	}
