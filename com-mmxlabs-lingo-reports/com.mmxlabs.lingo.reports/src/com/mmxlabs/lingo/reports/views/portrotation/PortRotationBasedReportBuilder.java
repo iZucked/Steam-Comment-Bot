@@ -38,8 +38,11 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 
 /**
- * Big helper class for any report based on {@link CargoAllocation}s, {@link OpenSlotAllocation}s, or other events. This builds the internal report data model and handles pin/diff comparison hooks.
- * Currently this class also some generic columns used in these reports but these should be broken out into separate classes as part of FogBugz: 51/
+ * Big helper class for any report based on {@link CargoAllocation}s,
+ * {@link OpenSlotAllocation}s, or other events. This builds the internal report
+ * data model and handles pin/diff comparison hooks. Currently this class also
+ * some generic columns used in these reports but these should be broken out
+ * into separate classes as part of FogBugz: 51/
  * 
  * @author Simon Goodall
  * 
@@ -102,7 +105,9 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 		List<ColumnHandler> handlers = new LinkedList<>();
 
 		// if (block == null) {
-		// block = blockManager.createBlock(PortRotationBasedReportBuilder.COLUMN_BLOCK_FUELS, "[Fuels]", ColumnType.NORMAL);
+		// block =
+		// blockManager.createBlock(PortRotationBasedReportBuilder.COLUMN_BLOCK_FUELS,
+		// "[Fuels]", ColumnType.NORMAL);
 		// }
 		// block.setPlaceholder(true);
 		{
@@ -200,19 +205,20 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 			public Integer getIntValue(final Object object) {
 				if (object instanceof FuelUsage) {
 					final FuelUsage mix = (FuelUsage) object;
+					int total = 0;
 					for (final FuelQuantity q : mix.getFuels()) {
 						BaseFuel baseFuel = q.getBaseFuel();
 						if (baseFuel != null && baseFuel.getName().equals(fuelName)) {
 							final FuelUnit unit = FuelUnit.MT;
 							for (final FuelAmount fa : q.getAmounts()) {
 								if (fa.getUnit() == unit) {
-									return fa.getQuantity();
+									total += fa.getQuantity();
 								}
 							}
 						}
 					}
 
-					return null;
+					return total == 0 ? null : total;
 				} else {
 					return null;
 				}
@@ -248,13 +254,14 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof FuelUsage) {
+					int total = 0;
 					for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
 						BaseFuel baseFuel = q.getBaseFuel();
 						if (baseFuel != null && baseFuel.getName().equals(fuelName)) {
-							return q.getCost();
+							total += q.getCost();
 						}
 					}
-					return null;
+					return total == 0 ? null : total;
 				} else {
 					return null;
 				}
