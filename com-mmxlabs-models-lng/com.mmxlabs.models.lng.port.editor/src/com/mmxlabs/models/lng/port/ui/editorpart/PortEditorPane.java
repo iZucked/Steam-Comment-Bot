@@ -58,6 +58,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		addNameManipulator("Name");
 
 		addTypicalColumn("Country", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getEditingDomain()), PortPackage.eINSTANCE.getPort_Location());
+//		addTypicalColumn("MMX ID ", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_MmxId(), getEditingDomain()), PortPackage.eINSTANCE.getPort_Location());
 
 		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getJointModelEditorPart().getEditingDomain()));
 		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE, getJointModelEditorPart().getEditingDomain()));
