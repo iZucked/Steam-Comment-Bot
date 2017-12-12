@@ -17,5 +17,11 @@
          </adapter>
       </factory>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.models.migration.scenario.internal.PluginStartup">
+      </startup>
+   </extension>
 
 </plugin>

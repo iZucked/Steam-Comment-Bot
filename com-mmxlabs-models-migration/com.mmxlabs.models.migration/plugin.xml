@@ -15,5 +15,11 @@
    <extension-point id="DefaultClientMigrationContext" name="DefaultClientMigrationContext" schema="schema/DefaultClientMigrationContext.exsd"/>
    <extension-point id="ClientMigrationContext" name="ClientMigrationContext" schema="schema/ClientMigrationContext.exsd"/>
    <extension-point id="ClientMigrationUnit" name="ClientMigrationUnit" schema="schema/ClientMigrationUnit.exsd"/>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.models.migration.internal.PluginStartup">
+      </startup>
+   </extension>
 
 </plugin>
