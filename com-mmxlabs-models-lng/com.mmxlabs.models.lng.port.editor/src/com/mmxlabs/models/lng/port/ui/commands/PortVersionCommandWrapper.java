@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -94,14 +93,10 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 				super.notifyChanged(notification);
 				if (notification.getNotifier() instanceof Location) {
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Route) {
-					changedRef[0] = true;
 				} else if (notification.getNotifier() instanceof Port) {
 					// Strictly port__location + port__name
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
-					changedRef[0] = true;
-				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__ROUTES) {
 					changedRef[0] = true;
 				}
 
@@ -125,7 +120,7 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 				if (target instanceof PortModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof Route || notifier instanceof Port) {
+						if (notifier instanceof Port) {
 							addAdapter(notifier);
 						}
 					}
@@ -146,7 +141,7 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 				if (target instanceof PortModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof Route || notifier instanceof Port) {
+						if (notifier instanceof Port) {
 							removeAdapter(notifier, false, true);
 						}
 					}
