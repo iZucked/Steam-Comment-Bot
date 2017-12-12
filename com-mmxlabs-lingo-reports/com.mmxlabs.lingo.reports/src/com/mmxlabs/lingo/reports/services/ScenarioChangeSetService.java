@@ -76,8 +76,11 @@ public class ScenarioChangeSetService {
 			if (!part.getElementId().contains("com.mmxlabs.lingo.reports.views.changeset.")) {
 				return;
 			}
-
-			if (part == lastChangeSetViewPart) {
+			Object partObject = part.getObject();
+			if (partObject instanceof CompatibilityPart) {
+				partObject = ((CompatibilityPart) partObject).getPart();
+			}
+			if (partObject == lastChangeSetViewPart) {
 
 				final ISelection selection = SelectionHelper.adaptSelection(selectionObject);
 				if (selection instanceof IStructuredSelection) {
