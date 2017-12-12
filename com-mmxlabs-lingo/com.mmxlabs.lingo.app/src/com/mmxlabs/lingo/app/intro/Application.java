@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
@@ -61,6 +62,7 @@ public class Application implements IApplication {
 	 */
 	@Override
 	public Object start(final IApplicationContext context) {
+
 		final String[] appLineArgs = Platform.getApplicationArgs();
 
 		{
@@ -137,6 +139,14 @@ public class Application implements IApplication {
 					}
 				}
 			}
+		}
+
+		// Start peaberry activation - only for ITS runs inside eclipse.
+		try {
+			Platform.getBundle("org.ops4j.peaberry.activation").start();
+		} catch (BundleException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 		initAccessControl();
