@@ -467,5 +467,11 @@
                plugin.xml="actionable-set-optimiser.plugin.xml">
          </PluginXMLEnablement>         
       </extension>
+      <extension
+            point="org.eclipse.ui.startup">
+         <startup
+               class="com.mmxlabs.models.lng.transformer.ui.internal.PluginStartup">
+         </startup>
+      </extension>
       
 </plugin>

@@ -15,5 +15,11 @@
             factory="com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusFeeDetailProperties">
       </DetailPropertyFactory>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.models.lng.transformer.extensions.internal.PluginStartup">
+      </startup>
+   </extension>
 
 </plugin>
