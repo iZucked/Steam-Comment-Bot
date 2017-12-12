@@ -33,7 +33,6 @@ Build: {1}
       startupMessageRect="0,0,0,0"
       startupForegroundColor="FFFFFF" />
    <launcher name="LiNGO">
-      <solaris/>
       <win useIco="true">
          <ico path="icons/minimax_icon.ico"/>
          <bmp/>
@@ -57,8 +56,6 @@ Build: {1}
    </features>
 
    <configurations>
-      <plugin id="com.mmxlabs.datasources.atobviac" autoStart="true" startLevel="0" />
-      <plugin id="com.mmxlabs.datasources.dataloy" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.lingo.extensions" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.liveevaluator" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.transformer" autoStart="true" startLevel="0" />
