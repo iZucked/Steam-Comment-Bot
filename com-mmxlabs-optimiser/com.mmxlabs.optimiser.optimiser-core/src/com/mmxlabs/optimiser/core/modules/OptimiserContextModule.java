@@ -42,17 +42,17 @@ public class OptimiserContextModule extends AbstractModule {
 			@NonNull @Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {
 		// @NonNull @Named(EvaluatedStateConstraintCheckerInstantiatorModule.ENABLED_EVALUATED_STATE_CONSTRAINT_NAMES) final List<String> enabledEvaluatedStateConstraintCheckerNames) {
 
-		final List<String> components = new ArrayList<String>(enabledFitnessNames);
+		final List<String> components = new ArrayList<>(enabledFitnessNames);
 		components.retainAll(fitnessFunctionRegistry.getFitnessComponentNames());
 
-		final List<String> checkers = new ArrayList<String>(enabledConstraintNames);
+		final List<String> checkers = new ArrayList<>(enabledConstraintNames);
 		checkers.retainAll(constraintCheckerRegistry.getConstraintCheckerNames());
 
 		// Enable all processes
 		// final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
 		// log.debug("Available evaluation processes: " + evaluationProcesses);
 		// evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
-		final List<String> evaluationProcesses = new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames());
+		final List<String> evaluationProcesses = new ArrayList<>(evaluationProcessRegistry.getEvaluationProcessNames());
 
 		// Enable all evaluation state constraint checkers
 		// final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
