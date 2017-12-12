@@ -2,6 +2,7 @@ package com.mmxlabs.lngdataserver.distances;
 
 import java.io.IOException;
 import java.util.List;
+
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.ClientProtocolException;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -18,7 +19,9 @@ public class PortRepository {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortRepository.class);
 
-	private Triple<String, String, String> getServiceAuth() {
+	private Triple<String, String, String> auth;
+
+	private Triple<String, String, String> getUserServiceAuth() {
 		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
 		final String url = prefs.getString(PreferenceConstants.P_URL_KEY);
 		if ("".equals(url)) {
@@ -30,9 +33,15 @@ public class PortRepository {
 		return new Triple<>(url, username, password);
 	}
 
-	public List<Port> getPorts(String version) throws AuthenticationException, ClientProtocolException, IOException, ParseException {
-		Triple<String, String, String> serviceAuth = getServiceAuth();
+	public PortRepository() {
+		auth = getUserServiceAuth();
+	}
 
-		return UpstreamPortFetcher.getPorts(serviceAuth.getFirst(), version, serviceAuth.getSecond(), serviceAuth.getThird());
+	public PortRepository(String url) {
+		auth = new Triple<>(url, "", "");
+	}
+
+	public List<Port> getPorts(String version) throws AuthenticationException, ClientProtocolException, IOException, ParseException {
+		return UpstreamPortFetcher.getPorts(auth.getFirst(), version, auth.getSecond(), auth.getThird());
 	}
 }

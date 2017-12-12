@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 
 public class UpstreamPortFetcher {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamPortFetcher.class);
 
 	private static final String PORTS_URL = "/ports";
@@ -60,48 +60,50 @@ public class UpstreamPortFetcher {
 		String rawJSON = UrlFetcher.fetchURLContent(baseUrl + PORTS_URL, username, password);
 		JSONParser parser = new JSONParser();
 		Object portsJSON = parser.parse(rawJSON);
-		
+
 		if (!(portsJSON instanceof JSONArray)) {
 			LOGGER.error("Error parsing ports");
 			throw new RuntimeException("Error parsing ports");
 		}
-		
+
 		for (Object current : JSONConverter.toList((JSONArray) portsJSON)) {
 			if (!(current instanceof Map)) {
 				// skip
 				LOGGER.info("Received invalid port");
 				continue;
 			}
-			
+
 			Map<String, Object> currentMap = (Map<String, Object>) current;
-			
+
 			if (!currentMap.containsKey("mmxId") || !(currentMap.get("mmxId") instanceof String)) {
 				LOGGER.info("Port does not contain a mmxId");
 				continue;
 			}
-			
+
 			if (!currentMap.containsKey("name") || !(currentMap.get("name") instanceof String)) {
 				LOGGER.info("Port does not contain a name");
 				continue;
 			}
-			
-			
-			
+
 			Port p = PortFactory.eINSTANCE.createPort();
 			Location l = PortFactory.eINSTANCE.createLocation();
 			p.setLocation(l);
 			result.add(p);
-			
-			p.setName((String)currentMap.get("name"));
-			l.setName((String)currentMap.get("name"));
-			l.setMmxId((String)currentMap.get("mmxId"));
-			
+
+			p.setName((String) currentMap.get("name"));
+			l.setName((String) currentMap.get("name"));
+			l.setMmxId((String) currentMap.get("mmxId"));
+			l.setCountry((String) ((Map) currentMap.get("location")).get("country"));
+			l.setLat((Double) ((Map) currentMap.get("location")).get("lat"));
+			l.setLon((Double) ((Map) currentMap.get("location")).get("lon"));
+			l.setTimeZone((String) ((Map) currentMap.get("location")).get("timeZone"));
+
 			if (currentMap.containsKey("aliases") && currentMap.get("aliases") instanceof JSONArray) {
-				((JSONArray)currentMap.get("aliases")).forEach(a -> l.getOtherNames().add((String)a));
+				((JSONArray) currentMap.get("aliases")).forEach(a -> l.getOtherNames().add((String) a));
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 }

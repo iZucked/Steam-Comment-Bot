@@ -31,7 +31,7 @@ public class DefaultPortProvider implements IPortProvider {
 
 	@Override
 	public Port getPortById(final String mmxId) {
-		final Optional<Port> potential = ports.stream().filter(p -> p.getName().equals(mmxId)).findAny();
+		final Optional<Port> potential = ports.stream().filter(p -> p.getLocation().getMmxId().equals(mmxId)).findAny();
 		if (!potential.isPresent()) {
 			LOGGER.warn("No port found with id " + mmxId);
 			throw new RuntimeException("No port found with id " + mmxId);

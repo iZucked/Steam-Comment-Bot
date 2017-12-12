@@ -27,12 +27,14 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.distances.IDistanceProvider;
 import com.mmxlabs.lngdataserver.distances.Via;
 import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.impl.LocationImpl;
 import com.mmxlabs.models.lng.port.impl.PortImpl;
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 
@@ -42,16 +44,22 @@ public class CopyDistancesToScenarioTests {
 	public void testCopyDistances() {
 
 		final List<Port> ports = new ArrayList<>();
-		final Port a = Mockito.mock(PortImpl.class);
-		Mockito.when(a.getTempMMXID()).thenReturn("a");
+		final Port a = Mockito.mock(Port.class);
+		final Location l_a = Mockito.mock(Location.class);
+		Mockito.when(a.getLocation()).thenReturn(l_a);
+		Mockito.when(l_a.getMmxId()).thenReturn("a");
 		ports.add(a);
 
-		final Port b = Mockito.mock(PortImpl.class);
-		Mockito.when(b.getTempMMXID()).thenReturn("b");
+		final Port b = Mockito.mock(Port.class);
+		final Location l_b = Mockito.mock(Location.class);
+		Mockito.when(b.getLocation()).thenReturn(l_b);
+		Mockito.when(l_b.getMmxId()).thenReturn("b");
 		ports.add(b);
 
-		final Port c = Mockito.mock(PortImpl.class);
-		Mockito.when(c.getTempMMXID()).thenReturn("c");
+		final Port c = Mockito.mock(Port.class);
+		final Location l_c = Mockito.mock(Location.class);
+		Mockito.when(c.getLocation()).thenReturn(l_c);
+		Mockito.when(l_c.getMmxId()).thenReturn("c");
 		ports.add(c);
 
 		final List<Route> routes = new ArrayList<>();
@@ -69,28 +77,28 @@ public class CopyDistancesToScenarioTests {
 		final EditingDomain ed = createLocalEditingDomain(portModel);
 
 		final IDistanceProvider dp = Mockito.mock(IDistanceProvider.class);
-		final Set<@NonNull String> knownLocations = CollectionsUtil.makeHashSet(a.getTempMMXID(), b.getTempMMXID(), c.getTempMMXID());
+		final Set<@NonNull String> knownLocations = CollectionsUtil.makeHashSet(a.getLocation().getMmxId(), b.getLocation().getMmxId(), c.getLocation().getMmxId());
 		when(dp.getKnownPorts()).thenReturn(knownLocations);
 
-		when(dp.getDistance(a.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(0);
-		when(dp.getDistance(a.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(1);
-		when(dp.getDistance(a.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(2);
-		when(dp.getDistance(b.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(3);
-		when(dp.getDistance(b.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(0);
-		when(dp.getDistance(b.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(4);
-		when(dp.getDistance(c.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(5);
-		when(dp.getDistance(c.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(6);
-		when(dp.getDistance(c.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(0);
+		when(dp.getDistance(a.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
+		when(dp.getDistance(a.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(1);
+		when(dp.getDistance(a.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(2);
+		when(dp.getDistance(b.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(3);
+		when(dp.getDistance(b.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
+		when(dp.getDistance(b.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(4);
+		when(dp.getDistance(c.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(5);
+		when(dp.getDistance(c.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(6);
+		when(dp.getDistance(c.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
 
-		when(dp.getDistance(a.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
-		when(dp.getDistance(a.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(7);
-		when(dp.getDistance(a.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(8);
-		when(dp.getDistance(b.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(9);
-		when(dp.getDistance(b.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
-		when(dp.getDistance(b.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(10);
-		when(dp.getDistance(c.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(11);
-		when(dp.getDistance(c.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(12);
-		when(dp.getDistance(c.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
+		when(dp.getDistance(a.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
+		when(dp.getDistance(a.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(7);
+		when(dp.getDistance(a.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(8);
+		when(dp.getDistance(b.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(9);
+		when(dp.getDistance(b.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
+		when(dp.getDistance(b.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(10);
+		when(dp.getDistance(c.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(11);
+		when(dp.getDistance(c.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(12);
+		when(dp.getDistance(c.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
 
 		final DistancesToScenarioCopier copier = new DistancesToScenarioCopier();
 		final Pair<Command, Map<RouteOption, List<RouteLine>>> updateDistancesCommand = copier.getUpdateDistancesCommand(ed, dp, portModel);
@@ -103,7 +111,7 @@ public class CopyDistancesToScenarioTests {
 		Assert.assertEquals(6, portModel.getRoutes().get(1).getLines().size());
 
 		final Optional<RouteLine> potential = portModel.getRoutes().get(1).getLines().stream().filter(e -> {
-			return Objects.equals(e.getFrom().getTempMMXID(), a.getTempMMXID()) && Objects.equals(e.getTo().getTempMMXID(), b.getTempMMXID());
+			return Objects.equals(e.getFrom().getLocation().getMmxId(), a.getLocation().getMmxId()) && Objects.equals(e.getTo().getLocation().getMmxId(), b.getLocation().getMmxId());
 		}).findFirst();
 		Assert.assertTrue(potential.isPresent());
 		Assert.assertEquals(7, potential.get().getDistance());
@@ -114,16 +122,25 @@ public class CopyDistancesToScenarioTests {
 
 		final List<Port> ports = new ArrayList<>();
 		final Port a = Mockito.mock(PortImpl.class);
+		final Location l_a = Mockito.mock(Location.class);
+
+		Mockito.when(a.getLocation()).thenReturn(l_a);
 		when(a.getName()).thenReturn("a");
-		when(a.getTempMMXID()).thenReturn("a");
+		when(l_a.getMmxId()).thenReturn("a");
 		ports.add(a);
+
 		final Port b = Mockito.mock(PortImpl.class);
+		final Location l_b = Mockito.mock(Location.class);
+		Mockito.when(b.getLocation()).thenReturn(l_b);
 		when(b.getName()).thenReturn("b");
-		when(b.getTempMMXID()).thenReturn("b");
+		when(l_b.getMmxId()).thenReturn("b");
 		ports.add(b);
+
 		final Port c = Mockito.mock(PortImpl.class);
+		final Location l_c = Mockito.mock(Location.class);
+		Mockito.when(c.getLocation()).thenReturn(l_c);
 		when(c.getName()).thenReturn("c");
-		when(c.getTempMMXID()).thenReturn("c");
+		when(l_c.getMmxId()).thenReturn("c");
 		ports.add(c);
 
 		final List<Route> routes = new ArrayList<>();
@@ -142,28 +159,28 @@ public class CopyDistancesToScenarioTests {
 		portModel.getRoutes().addAll(routes);
 
 		final IDistanceProvider dp = Mockito.mock(IDistanceProvider.class);
-		final Set<@NonNull String> knownLocations = CollectionsUtil.makeHashSet(a.getTempMMXID(), b.getTempMMXID(), c.getTempMMXID());
+		final Set<@NonNull String> knownLocations = CollectionsUtil.makeHashSet(a.getLocation().getMmxId(), b.getLocation().getMmxId(), c.getLocation().getMmxId());
 		when(dp.getKnownPorts()).thenReturn(knownLocations);
 
-		when(dp.getDistance(a.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(0);
-		when(dp.getDistance(a.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(1);
-		when(dp.getDistance(a.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(2);
-		when(dp.getDistance(b.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(3);
-		when(dp.getDistance(b.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(0);
-		when(dp.getDistance(b.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(4);
-		when(dp.getDistance(c.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(5);
-		when(dp.getDistance(c.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(6);
-		when(dp.getDistance(c.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(0);
+		when(dp.getDistance(a.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
+		when(dp.getDistance(a.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(1);
+		when(dp.getDistance(a.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(2);
+		when(dp.getDistance(b.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(3);
+		when(dp.getDistance(b.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
+		when(dp.getDistance(b.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(4);
+		when(dp.getDistance(c.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(5);
+		when(dp.getDistance(c.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(6);
+		when(dp.getDistance(c.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
 
-		when(dp.getDistance(a.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
-		when(dp.getDistance(a.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(7);
-		when(dp.getDistance(a.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(8);
-		when(dp.getDistance(b.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(9);
-		when(dp.getDistance(b.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
-		when(dp.getDistance(b.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(10);
-		when(dp.getDistance(c.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(11);
-		when(dp.getDistance(c.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(12);
-		when(dp.getDistance(c.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
+		when(dp.getDistance(a.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
+		when(dp.getDistance(a.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(7);
+		when(dp.getDistance(a.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(8);
+		when(dp.getDistance(b.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(9);
+		when(dp.getDistance(b.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
+		when(dp.getDistance(b.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(10);
+		when(dp.getDistance(c.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(11);
+		when(dp.getDistance(c.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(12);
+		when(dp.getDistance(c.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
 
 		final DistancesToScenarioCopier copier = new DistancesToScenarioCopier();
 		final Pair<Command, Map<RouteOption, List<RouteLine>>> updateDistancesCommand = copier.getUpdateDistancesCommand(ed, dp, portModel);
@@ -172,25 +189,25 @@ public class CopyDistancesToScenarioTests {
 		final IDistanceProvider dp2 = Mockito.mock(IDistanceProvider.class);
 		when(dp2.getKnownPorts()).thenReturn(knownLocations);
 
-		when(dp2.getDistance(a.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(0);
-		when(dp2.getDistance(a.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(13);
-		when(dp2.getDistance(a.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(14);
-		when(dp2.getDistance(b.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(15);
-		when(dp2.getDistance(b.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(0);
-		when(dp2.getDistance(b.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(16);
-		when(dp2.getDistance(c.getTempMMXID(), a.getTempMMXID(), Via.Direct)).thenReturn(Integer.MAX_VALUE);
-		when(dp2.getDistance(c.getTempMMXID(), b.getTempMMXID(), Via.Direct)).thenReturn(18);
-		when(dp2.getDistance(c.getTempMMXID(), c.getTempMMXID(), Via.Direct)).thenReturn(0);
+		when(dp2.getDistance(a.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
+		when(dp2.getDistance(a.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(13);
+		when(dp2.getDistance(a.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(14);
+		when(dp2.getDistance(b.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(15);
+		when(dp2.getDistance(b.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
+		when(dp2.getDistance(b.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(16);
+		when(dp2.getDistance(c.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.Direct)).thenReturn(Integer.MAX_VALUE);
+		when(dp2.getDistance(c.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.Direct)).thenReturn(18);
+		when(dp2.getDistance(c.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.Direct)).thenReturn(0);
 
-		when(dp2.getDistance(a.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
-		when(dp2.getDistance(a.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(19);
-		when(dp2.getDistance(a.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(20);
-		when(dp2.getDistance(b.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(21);
-		when(dp2.getDistance(b.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
-		when(dp2.getDistance(b.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(22);
-		when(dp2.getDistance(c.getTempMMXID(), a.getTempMMXID(), Via.PanamaCanal)).thenReturn(23);
-		when(dp2.getDistance(c.getTempMMXID(), b.getTempMMXID(), Via.PanamaCanal)).thenReturn(Integer.MAX_VALUE);
-		when(dp2.getDistance(c.getTempMMXID(), c.getTempMMXID(), Via.PanamaCanal)).thenReturn(0);
+		when(dp2.getDistance(a.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
+		when(dp2.getDistance(a.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(19);
+		when(dp2.getDistance(a.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(20);
+		when(dp2.getDistance(b.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(21);
+		when(dp2.getDistance(b.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
+		when(dp2.getDistance(b.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(22);
+		when(dp2.getDistance(c.getLocation().getMmxId(), a.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(23);
+		when(dp2.getDistance(c.getLocation().getMmxId(), b.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(Integer.MAX_VALUE);
+		when(dp2.getDistance(c.getLocation().getMmxId(), c.getLocation().getMmxId(), Via.PanamaCanal)).thenReturn(0);
 
 		final Pair<Command, Map<RouteOption, List<RouteLine>>> updateDistancesIncomplete = copier.getUpdateDistancesCommand(ed, dp2, portModel);
 		Assert.assertNotNull(updateDistancesIncomplete.getFirst());

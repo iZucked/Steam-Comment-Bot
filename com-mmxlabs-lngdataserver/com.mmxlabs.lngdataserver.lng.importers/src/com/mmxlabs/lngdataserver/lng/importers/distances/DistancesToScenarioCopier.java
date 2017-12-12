@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.distances.IDistanceProvider;
 import com.mmxlabs.lngdataserver.distances.exceptions.PortNotFoundException;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -53,7 +54,9 @@ public class DistancesToScenarioCopier {
 					rl.setFrom(from);
 					rl.setTo(to);
 					try {
-						final int distance = distanceProvider.getDistance(from.getTempMMXID(), to.getTempMMXID(), ViaKeyMapper.mapVia(route));
+						Location fromLoc = from.getLocation();
+						Location toLoc = to.getLocation();
+						final int distance = distanceProvider.getDistance(fromLoc.getMmxId(), toLoc.getMmxId(), ViaKeyMapper.mapVia(route));
 						if (distance != Integer.MAX_VALUE) {
 							rl.setDistance(distance);
 							toAdd.add(rl);
