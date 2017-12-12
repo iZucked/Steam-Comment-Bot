@@ -73,7 +73,6 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 		detailComposite.addInlineEditor(new BasicAttributeInlineEditor(PortPackage.Literals.LOCATION__MMX_ID) {
 			@Override
 			public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
-				final Location location = (Location) input;
 
 				// final Control control = super.createControl(parent, dbc, toolkit);
 
@@ -97,18 +96,21 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 
 							@Override
 							protected Control createDialogArea(final Composite container) {
-								final Composite composite = (Composite) super.createDialogArea(container);
+								container.setLayoutData(new GridData(GridData.FILL_BOTH));
+								final Location location = (Location) input;
+
+								final Composite composite_p = (Composite) super.createDialogArea(container);
+								Composite composite = new Composite(composite_p, SWT.BORDER);
+								composite.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
+								final GridLayout layout = new GridLayout(2, false);
+								composite.setLayout(layout);
 								// Composite composite = new Composite(container, SWT.NONE);
 								try {
 									final PortRepository repo = new PortRepository(BackEndUrlProvider.INSTANCE.getUrl());
 									final String version = "<not specified>";
 									final List<Port> ports = repo.getPorts(version);
 									final DefaultPortProvider portProvider = new DefaultPortProvider(version, ports);
-
-									final GridLayout layout = new GridLayout(2, false);
-
-									composite.setLayout(layout);
-									composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 									final Label l_note = new Label(composite, SWT.NONE);
 									l_note.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
@@ -126,6 +128,7 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 											}
 										}
 									});
+									txt.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 									if (location.getMmxId() == null || location.getMmxId().isEmpty()) {
 										l_note.setText("Currently unlinked");
@@ -134,7 +137,6 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 										final Port p = portProvider.getPortById(location.getMmxId());
 										if (p != null) {
 											txt.setText(p.getLocation().getName());
-
 											l_note.setText("Linked to " + p.getLocation().getName());
 										} else {
 											l_note.setText("Currently unlinked");
@@ -142,8 +144,9 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 										}
 									}
 
-									txt.setText(location.getName());
 									viewer = new TableViewer(composite);
+									viewer.getTable().setLayoutData(GridDataFactory.fillDefaults().span(2, 1).hint(40, 500).create());
+
 									viewer.setContentProvider(new ArrayContentProvider());
 									viewer.setLabelProvider(new ColumnLabelProvider() {
 										@Override
@@ -215,6 +218,7 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 						};
 
 						d.setTitle("Link port to...");
+						final Location location = (Location) input;
 
 						final int open = d.open();
 						if (open == IDialogConstants.OK_ID) {
@@ -231,6 +235,8 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 							if (r != null) {
 								if (r.length == 1) {
 									final Port p = (Port) r[0];
+
+									location.setName(p.getName());
 									location.setCountry(p.getLocation().getCountry());
 									location.setLat(p.getLocation().getLat());
 									location.setLon(p.getLocation().getLon());
