@@ -40,11 +40,11 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		// TODO: should we move this logic to the front-end?
-		while (!BackEndUrlProvider.INSTANCE.isAvailable()) {
-			Thread.sleep(5000);
-			System.out.println("waiting for back-end...");
-		}
+//		// TODO: should we move this logic to the front-end?
+//		while (!BackEndUrlProvider.INSTANCE.isAvailable()) {
+//			Thread.sleep(5000);
+//			System.out.println("waiting for back-end...");
+//		}
 	}
 	
     static String getWebFilesPath() throws URISyntaxException, IOException {

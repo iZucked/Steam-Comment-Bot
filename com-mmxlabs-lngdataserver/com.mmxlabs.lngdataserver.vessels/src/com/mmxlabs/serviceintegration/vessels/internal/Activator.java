@@ -11,26 +11,26 @@ import com.mmxlabs.ApiException;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-	
+
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.serviceintegration.vessels"; //$NON-NLS-1$
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
-	
+
 	// The shared instance
 	private static Activator plugin;
-	
+
 	private final CompositeNode vesselsDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
 	private final VesselsRepository vesselsRepository = new VesselsRepository();
-	private Thread versionLoader;
 	private boolean active;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -39,11 +39,12 @@ public class Activator extends AbstractUIPlugin {
 		loading.setDisplayName("loading...");
 		vesselsDataRoot.setDisplayName("Vessels (loading...)");
 		vesselsDataRoot.getChildren().add(loading);
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
@@ -51,12 +52,12 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		active = true;
-		versionLoader = new Thread(this::loadVersions);
-		versionLoader.start();
+		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
@@ -74,15 +75,15 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-	
+
 	public CompositeNode getVesselsDataRoot() {
 		return vesselsDataRoot;
 	}
 
-//	
+	//
 	private void loadVersions() {
-		
-		while(!vesselsRepository.isReady() && active) {
+
+		while (!vesselsRepository.isReady() && active) {
 			try {
 				LOGGER.debug("Vessel back-end not ready yet...");
 				Thread.sleep(1000);
@@ -91,13 +92,11 @@ public class Activator extends AbstractUIPlugin {
 				throw new RuntimeException(e);
 			}
 		}
-		
-		
-		if(active) {
-			
+
+		if (active) {
+
 		}
-		
-		
+
 		if (active) {
 			LOGGER.debug("Pricing back-end ready, retrieving versions...");
 			try {

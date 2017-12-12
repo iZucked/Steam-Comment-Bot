@@ -1,20 +1,26 @@
 package com.mmxlabs.lngdataserver.ui.pricing;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.internal.ole.win32.FUNCDESC;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.ui.server.ServerUrlProvider;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class PricingEditorView extends ViewPart {
 
@@ -31,8 +37,6 @@ public class PricingEditorView extends ViewPart {
 		System.out.println("Browser: " + browser.getBrowserType());
 
 		browser.setBounds(0, 0, 600, 800);
-
-		browser.setUrl(getUrl(""));
 
 		selectionListener = new ISelectionListener() {
 
@@ -58,7 +62,20 @@ public class PricingEditorView extends ViewPart {
 			}
 		};
 
-		getViewSite().getWorkbenchWindow().getSelectionService().addSelectionListener("com.mmxlabs.lngdataserver.browser.ui.DataBrowser", selectionListener);
+		try {
+			// Icon from https://commons.wikimedia.org/wiki/Category:Throbbers#/media/File:Ajax-loader.gif
+			URL resource = FileLocator.toFileURL(getClass().getResource("/wait.html"));
+			browser.setUrl(resource.toExternalForm());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> RunnerHelper.asyncExec(() -> {
+			if (!browser.isDisposed()) {
+				browser.setUrl(getUrl(""));
+				getViewSite().getWorkbenchWindow().getSelectionService().addSelectionListener("com.mmxlabs.lngdataserver.browser.ui.DataBrowser", selectionListener);
+			}
+		}));
 	}
 
 	private String getUrl(String version) {
@@ -78,7 +95,9 @@ public class PricingEditorView extends ViewPart {
 
 	@Override
 	public void dispose() {
-		getViewSite().getWorkbenchWindow().getSelectionService().removeSelectionListener("com.mmxlabs.lngdataserver.browser.ui.DataBrowser", selectionListener);
+		if (selectionListener != null) {
+			getViewSite().getWorkbenchWindow().getSelectionService().removeSelectionListener("com.mmxlabs.lngdataserver.browser.ui.DataBrowser", selectionListener);
+		}
 	}
 
 	@Override

@@ -12,27 +12,27 @@ import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.pricing.PricingVersion;
+import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-	
+
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.pricing"; //$NON-NLS-1$
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
-	
+
 	// The shared instance
 	private static Activator plugin;
-	
+
 	private final CompositeNode pricingDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
 	private final PricingRepository pricingRepository = new PricingRepository();
-	
-	private Thread versionLoader;
+
 	private boolean active;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -41,11 +41,12 @@ public class Activator extends AbstractUIPlugin {
 		loading.setDisplayName("loading...");
 		pricingDataRoot.setDisplayName("Pricing (loading...)");
 		pricingDataRoot.getChildren().add(loading);
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
@@ -53,12 +54,13 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		active = true;
-		versionLoader = new Thread(this::loadVersions);
-		versionLoader.start();
+
+		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
@@ -76,17 +78,17 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-	
+
 	public CompositeNode getPricingDataRoot() {
 		return pricingDataRoot;
 	}
-	
+
 	public PricingRepository getPricingRepository() {
 		return pricingRepository;
 	}
-	
+
 	private void loadVersions() {
-		while(!pricingRepository.isReady() && active) {
+		while (!pricingRepository.isReady() && active) {
 			try {
 				LOGGER.debug("Pricing back-end not ready yet...");
 				Thread.sleep(1000);
@@ -110,7 +112,7 @@ public class Activator extends AbstractUIPlugin {
 			} catch (IOException e) {
 				LOGGER.error("Error retrieving pricing versions");
 			}
-			
+
 			// register consumer to update on new version
 			pricingRepository.registerVersionListener(versionString -> {
 				Node newVersion = BrowserFactory.eINSTANCE.createNode();
