@@ -274,7 +274,9 @@ public class CargoEditorMenuHelper {
 					createFOBDESSwitchMenu(manager, dischargeSlot);
 				}
 
-				panamaAssignmentMenu(manager, dischargeSlot);
+				if(cargoModel.getCanalBookings() != null) {
+					panamaAssignmentMenu(manager, dischargeSlot);
+				}
 			}
 
 		};
@@ -601,7 +603,9 @@ public class CargoEditorMenuHelper {
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, loadSlot);
 				}
-				panamaAssignmentMenu(manager, loadSlot);
+				if(cargoModel.getCanalBookings() != null) {
+					panamaAssignmentMenu(manager, loadSlot);
+				}
 			}
 
 		};
