@@ -6,12 +6,14 @@ Bundle-Version: 4.3.15.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- lib/spring-boot-test-1.4.3.RELEASE.jar,
- lib/spring-boot-test-autoconfigure-1.4.3.RELEASE.jar,
  lib/wiremock-2.5.1.jar,
  lib/jsonassert-1.3.0.jar,
  lib/xmlunit-core-2.3.0.jar,
- lib/xmlunit-legacy-2.3.0.jar
+ lib/xmlunit-legacy-2.3.0.jar,
+ lib/spring-boot-starter-test-1.5.9.RELEASE.jar,
+ lib/spring-boot-test-1.5.9.RELEASE.jar,
+ lib/spring-boot-test-autoconfigure-1.5.9.RELEASE.jar,
+ lib/spring-test-4.3.13.RELEASE.jar
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0"
 Import-Package: org.slf4j,
  org.slf4j.helpers,
@@ -42,7 +44,6 @@ Export-Package: com.github.tomakehurst.wiremock,
  org.custommonkey.xmlunit.util,
  org.skyscreamer.jsonassert,
  org.skyscreamer.jsonassert.comparator,
- org.springframework.boot.test,
  org.springframework.boot.test.autoconfigure,
  org.springframework.boot.test.autoconfigure.core,
  org.springframework.boot.test.autoconfigure.filter,

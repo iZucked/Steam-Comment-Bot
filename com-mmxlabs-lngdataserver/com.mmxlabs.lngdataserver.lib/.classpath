@@ -61,7 +61,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/spring-boot-autoconfigure-1.5.9.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-1.5.9.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-logging-1.5.9.RELEASE.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-tomcat-1.5.9.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring-boot-starter-web-1.5.9.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring-context-4.3.13.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring-core-4.3.13.RELEASE.jar"/>
