@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.longterm;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,6 +24,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.minimaxlabs.rnd.representation.LightWeightOutputData;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -143,8 +147,15 @@ public class LightweightSchedulerOptimiser {
 		int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
 		int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
 		
-		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(shippedCargoes, vessels, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel);
-		
+//		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(shippedCargoes, vessels, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel);
+		List<List<Integer>> sequences = null;
+		try {
+			sequences = getStoredSequences("/tmp/gurobiOutput.gb");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		// (5) Export the pairings matrix to the raw sequences
 		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
 		updateSequences(rawSequences, sequences, shippedCargoes, vessels, pairingsMap, vesselProvider.getResource(pnlVessel));
@@ -273,6 +284,23 @@ public class LightweightSchedulerOptimiser {
 
 	private ResourceAllocationConstraintChecker getResourceAllocationConstraintChecker(List<IPairwiseConstraintChecker> constraintCheckers) {
 		return constraintCheckers.parallelStream().filter(c -> (c instanceof ResourceAllocationConstraintChecker)).map(c -> (ResourceAllocationConstraintChecker) c).findFirst().get();
+	}
+
+	private static List<List<Integer>> getStoredSequences(String path) throws IOException {
+		ObjectInputStream objectinputstream = null;
+		LightWeightOutputData readCase = null;
+		try {
+			FileInputStream streamIn = new FileInputStream(path);
+			objectinputstream = new ObjectInputStream(streamIn);
+			readCase = (LightWeightOutputData) objectinputstream.readObject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (objectinputstream != null) {
+				objectinputstream.close();
+			}
+		}
+		return readCase.sequences;
 	}
 
 }

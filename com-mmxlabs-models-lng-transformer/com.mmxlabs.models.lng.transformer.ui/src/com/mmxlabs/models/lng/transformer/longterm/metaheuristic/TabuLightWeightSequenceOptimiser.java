@@ -1,5 +1,8 @@
 package com.mmxlabs.models.lng.transformer.longterm.metaheuristic;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.minimaxlabs.rnd.representation.ShipmentData;
 import com.mmxlabs.models.lng.transformer.longterm.ILightWeightSequenceOptimiser;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -55,7 +59,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	public TabuLightWeightSequenceOptimiser() {
-		this(1000, 10000, 2, 0);
+		this(5000, 5000, 6, 0);
 	}
 
 	public TabuLightWeightSequenceOptimiser(int globalIterations, int searchIterations, int maxAge, int randomSeed) {
@@ -86,7 +90,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 	public List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability,
 			ArrayList<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
-		double[] capacity = vessels.stream().mapToDouble(v -> v.getVessel().getCargoCapacity()).toArray();
+		double[] capacity = vessels.stream().mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000).toArray();
 
 		double[] cargoPNLasDouble = new double[cargoPNL.length];
 		for (int i = 0; i < cargoPNLasDouble.length; i++) {
@@ -96,6 +100,15 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		List<List<Integer>> cargoVesselRestrictionAsList = new ArrayList<List<Integer>>(cargoVesselRestrictions.size());
 		for (Set<Integer> restriction : cargoVesselRestrictions) {
 			cargoVesselRestrictionAsList.add(restriction.stream().collect(Collectors.toList()));
+		}
+		
+		double[][][] cargoToCargoCostsProcessed = new double[cargoToCargoCostsOnAvailability.length][cargoToCargoCostsOnAvailability[0].length][cargoToCargoCostsOnAvailability[0][0].length];
+		for (int j = 0; j < cargoToCargoCostsOnAvailability.length; j++) {
+			for (int j2 = 0; j2 < cargoToCargoCostsOnAvailability[j].length; j2++) {
+				for (int k = 0; k < cargoToCargoCostsOnAvailability[j][j2].length; k++) {
+					cargoToCargoCostsProcessed[j][j2][k] = (double) cargoToCargoCostsOnAvailability[j][j2][k] / 1_000_000.0;
+				}
+			}
 		}
 
 		Interval[] loads = new Interval[cargoes.size()];
@@ -108,19 +121,41 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 			loads[i] = new Interval(loadTW.getInclusiveStart(), loadTW.getExclusiveEnd());
 			discharges[i] = new Interval(dischargeTW.getInclusiveStart(), dischargeTW.getExclusiveEnd());
 		}
-
+		
+		createExternalData(cargoes, vessels, cargoToCargoMinTravelTimes, cargoMinTravelTimes, capacity, cargoPNLasDouble, cargoToCargoCostsProcessed, loads, discharges);
+		
 		return optimise(0, false,
 				cargoes.size(), vessels.size(),
 				cargoPNLasDouble, capacity,
-				cargoToCargoCostsOnAvailability, cargoVesselRestrictionAsList,
+				cargoToCargoCostsProcessed, cargoVesselRestrictionAsList,
 				cargoToCargoMinTravelTimes, cargoMinTravelTimes,
 				loads, discharges);
+	}
+
+	private void createExternalData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, double[] capacity,
+			double[] cargoPNLasDouble, double[][][] cargoToCargoCostsProcessed, Interval[] loads, Interval[] discharges) {
+		com.minimaxlabs.rnd.representation.Interval[] arrivals = Arrays.stream(loads).map(a -> new com.minimaxlabs.rnd.representation.Interval((int) a.start, (int) a.end)).toArray(size -> new com.minimaxlabs.rnd.representation.Interval[size]);
+		com.minimaxlabs.rnd.representation.Interval[] departures = Arrays.stream(discharges).map(a -> new com.minimaxlabs.rnd.representation.Interval((int) a.start, (int) a.end)).toArray(size -> new com.minimaxlabs.rnd.representation.Interval[size]);
+
+		ShipmentData sd = new ShipmentData(cargoes.size(), vessels.size(), cargoPNLasDouble, capacity, cargoToCargoMinTravelTimes, cargoToCargoCostsProcessed, cargoMinTravelTimes, arrivals, departures);
+
+	      try {
+	          FileOutputStream fileOut =
+	          new FileOutputStream("/tmp/shippedData.sd");
+	          ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	          out.writeObject(sd);
+	          out.close();
+	          fileOut.close();
+	          System.out.printf("Serialized data is saved in /tmp/shippedData.sd");
+	       }catch(IOException iff) {
+	          iff.printStackTrace();
+	       }
 	}
 
 	public List<List<Integer>> optimise(int id, boolean loggingFlag,
 			int cargoCount, int vesselCount,
 			double[] cargoPNL, double[] vesselCapacities,
-			Long[][][] cargoToCargoCostsOnAvailability, List<List<Integer>> cargoVesselRestrictions,
+			double[][][] cargoToCargoCostsOnAvailability, List<List<Integer>> cargoVesselRestrictions,
 			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes,
 			Interval[] loads, Interval[] discharges) {
 		
@@ -216,7 +251,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		return bestSchedules;
 	}
 
-	private double calculateCostOnSequence(List<Integer> sequence, int availability, Long[][][] cargoToCargoCostsOnAvailability) {
+	private double calculateCostOnSequence(List<Integer> sequence, int availability, double[][][] cargoToCargoCostsOnAvailability) {
 		double total = 0;
 		for (int i = 0; i < sequence.size() - 1; i++) {
 			int currIdx = sequence.get(i);
@@ -266,7 +301,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		return sum;
 	}
 
-	public Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, Long[][][] cargoToCargoCostsOnAvailability,
+	public Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
 			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges) {
 		double totalCost = 0;
 		double totalPNL = 0;
