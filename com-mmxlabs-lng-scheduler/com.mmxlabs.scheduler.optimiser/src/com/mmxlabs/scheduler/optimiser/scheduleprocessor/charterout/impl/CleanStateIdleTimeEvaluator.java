@@ -205,7 +205,10 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 				charterToEndPlan.setRemainingHeelInM3(charterToEndPlan.getRemainingHeelInM3() + delta);
 				// now we set the heel options on the charter out event as it will be need when the second voyage plan is calculated
 				final IGeneratedCharterOutVesselEventPortSlot charter = (IGeneratedCharterOutVesselEventPortSlot) ((PortDetails) charterToEndPlan.getSequence()[0]).getOptions().getPortSlot();
-				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), charterToEndPlan.getStartingHeelInM3());
+				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
+			} else {
+				final IGeneratedCharterOutVesselEventPortSlot charter = (IGeneratedCharterOutVesselEventPortSlot) ((PortDetails) charterToEndPlan.getSequence()[0]).getOptions().getPortSlot();
+				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
 			}
 
 			// TODO: really we need partial boiloff here (see BugzID: 1798)
@@ -431,7 +434,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 		charterOutOption.setPortOptions(generatedCharterPortOptions);
 		// (3) ballast to return port
-		int startOfPostCharterVoyage = portTimesRecord.getSlotTime(charterOutPortSlot) + portTimesRecord.getSlotDuration(charterOutPortSlot);
+		final int startOfPostCharterVoyage = charterOutOption.getCharterStartTime() + charterOutOption.getCharterDuration();
 		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), vessel, startOfPostCharterVoyage, CostType.Ballast);
 
 		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions(charterOutPortSlot, originalBallast.getOptions().getToPortSlot());
@@ -672,6 +675,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 					heelPriceCalculator = new ConstantHeelPriceCalculator(discharge.getDischargePriceCalculator().estimateSalesUnitPrice(discharge, portTimesRecord, null));
 				}
 				cv = ((ILoadSlot) portSlot).getCargoCVValue();
+			} else {
+				heelPriceCalculator = new ConstantHeelPriceCalculator(0);
 			}
 		}
 		assert heelPriceCalculator != null;
