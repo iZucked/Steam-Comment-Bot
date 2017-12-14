@@ -70,8 +70,8 @@ public class ModelRecord {
 			referenceLock.lock();
 			++referenceCount;
 			boolean triggerLoadCallback = false;
-			if (referenceCount == 1) {
-				assert data == null;
+			if (data == null && referenceCount == 1) {
+				// assert data == null;
 				InstanceData pData = loadFunction.apply(this, monitor);
 				if (pData == null) {
 					throw new RuntimeException(loadFailure);
@@ -88,7 +88,7 @@ public class ModelRecord {
 				sharedReference = ModelReference.createSharedReference(this, referenceID, pData);
 
 				triggerLoadCallback = true;
-				
+
 				data.setReadOnly(readOnly);
 			}
 			if (loadFailure != null) {
@@ -96,7 +96,6 @@ public class ModelRecord {
 			}
 
 			assert data != null;
-
 
 			final ModelReference modelReference = new ModelReference(this, referenceID, data);
 			referencesList.add(new WeakReference<ModelReference>(modelReference));
@@ -145,7 +144,7 @@ public class ModelRecord {
 			--referenceCount;
 			if (referenceCount == 0) {
 				// Release strong reference
-				if (data != null) {
+				if (data != null && !data.isDirty()) {
 					for (final IScenarioLockListener l : lockListeners) {
 						data.getLock().removeLockListener(l);
 					}
@@ -157,10 +156,10 @@ public class ModelRecord {
 					sharedReference.close();
 					sharedReference = null;
 					data.close();
+					data = null;
+					// Reset validation status
+					onPostUnload();
 				}
-				data = null;
-				// Reset validation status
-				onPostUnload();
 			}
 			cleanupReferencesList();
 		} finally {
