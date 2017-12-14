@@ -15,32 +15,7 @@
 -->
 
 <plugin>
-<!--
-   <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            file-extensions="scn"
-            id="com.mmxlabs.shiplingo.platform.models.manifest.scnfile"
-            name="SCN File"
-            priority="normal">
-      </content-type>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="com.mmxlabs.models.ui.editorpart.JointModelEditorPart"
-            contributorClass="com.mmxlabs.models.ui.editorpart.JointModelEditorContributor"
-            default="true"
-            extensions="scn,sc2"
-            id="com.mmxlabs.models.lng.demo.scneditor"
-            name="SCN Editor">
-         <contentTypeBinding
-               contentTypeId="com.mmxlabs.shiplingo.platform.models.manifest.scnfile">
-         </contentTypeBinding>
-      </editor>
-   </extension> -->
-   
-   
+ 
    <!-- DISTANCES -->
      <extension
            point="org.eclipse.ui.menus">
@@ -48,6 +23,11 @@
          <menuContribution
                allPopups="false"
                locationURI="menu:data?after=dataStart">
+     		<command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.ports"
+                  label="Import ports"
+                  style="push">
+            </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.distances"
                   label="Import distances"
@@ -62,6 +42,11 @@
                id="com.mmxlabs.models.lng.scenario.import.wizards.distances"
                name="Copy distances to scenario">
          </command>
+ <command
+               defaultHandler="com.mmxlabs.lngdataserver.lng.importers.ports.ui.ImportPortsWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.ports"
+               name="Copy ports to scenario">
+         </command>         
       </extension>
       
       <!-- PRICES -->
