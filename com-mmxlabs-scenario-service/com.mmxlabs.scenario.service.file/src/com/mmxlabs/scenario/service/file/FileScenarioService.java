@@ -129,10 +129,8 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	/**
-	 * Creates a complete backup of the file scenario service data. First we create
-	 * a local archive as the rest of the application will block to avoid data
-	 * modification issues. Then we copy to the remote location after releasing the
-	 * lock.
+	 * Creates a complete backup of the file scenario service data. First we create a local archive as the rest of the application will block to avoid data modification issues. Then we copy to the
+	 * remote location after releasing the lock.
 	 */
 	private void backupWorkspace() throws InterruptedException {
 
@@ -632,6 +630,16 @@ public class FileScenarioService extends AbstractScenarioService {
 
 							// Delete the old file.
 							FileDeleter.delete(oldScenarioFile, true);
+
+							// Remove instances backup
+							{
+								URI backupScenarioURI = resolveURI("instances/" + scenarioInstance.getUuid() + ".xmi");
+								File backupScenarioFile = new File(backupScenarioURI.toFileString());
+								if (backupScenarioFile.exists()) {
+									FileDeleter.delete(backupScenarioFile, true);
+								}
+							}
+
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
@@ -656,12 +664,17 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	/**
-	 * Simple method to recover any lost scenarios (those which are in the
-	 * instances/ dir, but not in the scenario service)
+	 * Simple method to recover any lost scenarios (those which are in the instances/ dir, but not in the scenario service)
 	 * 
 	 * @param result
 	 */
 	private void recoverLostScenarios(final ScenarioService result) {
+
+		if (true) {
+			// This does nothing in the new .lingo model
+			return;
+		}
+
 		// gather up all UUIDs
 		final HashSet<String> allUUIDs = new HashSet<String>();
 		final TreeIterator<EObject> iterator = result.eAllContents();
