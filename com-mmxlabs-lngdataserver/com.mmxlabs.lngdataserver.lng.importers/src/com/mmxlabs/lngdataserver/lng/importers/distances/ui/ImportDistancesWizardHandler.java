@@ -5,8 +5,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
+
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class ImportDistancesWizardHandler extends AbstractHandler{
 	
@@ -20,7 +24,14 @@ public class ImportDistancesWizardHandler extends AbstractHandler{
 			return null;
 		}
 		
-		DistancesToScenarioImportWizard wizard = new DistancesToScenarioImportWizard();
+		final IEditorInput activeEditorInput = HandlerUtil.getActiveEditorInput(event);
+		ScenarioInstance currentInstance = null;
+		if (activeEditorInput instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
+			currentInstance = editorInput.getScenarioInstance();
+		}
+		
+		DistancesToScenarioImportWizard wizard = new DistancesToScenarioImportWizard(currentInstance);
 		
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 

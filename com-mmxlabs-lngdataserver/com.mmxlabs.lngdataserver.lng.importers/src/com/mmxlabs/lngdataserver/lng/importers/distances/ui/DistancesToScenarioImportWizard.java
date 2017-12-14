@@ -32,7 +32,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -50,12 +49,18 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 	private IDistanceProvider distanceProvider;
 
+	private ScenarioInstance currentInstance;
+
+	public DistancesToScenarioImportWizard(ScenarioInstance currentInstance) {
+		this.currentInstance = currentInstance;
+	}
+
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		setWindowTitle("Import distances to scenario");
 		setNeedsProgressMonitor(true);
 
-		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", null);
+		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", currentInstance);
 		distancesSelectionPage = new DistancesSelectionPage("Distances");
 		distanceSanityCheckPage = new DistanceSanityCheckPage("Verify Distances", distancesSelectionPage);
 	}
