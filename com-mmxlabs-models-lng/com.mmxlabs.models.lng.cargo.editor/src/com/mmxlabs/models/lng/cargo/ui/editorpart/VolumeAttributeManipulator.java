@@ -20,6 +20,7 @@ import org.eclipse.nebula.widgets.formattedtext.LongFormatter;
 import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 
@@ -87,7 +88,7 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 	protected String renderSetValue(final Object container, final Object setValue) {
 		if (setValue instanceof Number) {
 			final Number number = (Number) setValue;
-			if (number.equals(Integer.MAX_VALUE)) {
+			if (number.equals(Integer.MAX_VALUE) || (number.intValue() == 0 && field == CargoPackage.Literals.SLOT__MAX_QUANTITY)) {
 				return "∞";
 			}
 			final double n = number.doubleValue();
