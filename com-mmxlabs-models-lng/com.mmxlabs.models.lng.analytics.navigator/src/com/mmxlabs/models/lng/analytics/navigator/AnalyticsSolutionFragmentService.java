@@ -7,8 +7,10 @@ package com.mmxlabs.models.lng.analytics.navigator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.databinding.ObservablesManager;
@@ -19,6 +21,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.databinding.swt.DisplayRealm;
 import org.eclipse.ui.PlatformUI;
@@ -31,7 +34,17 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
+import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.manifest.ManifestFactory;
+import com.mmxlabs.scenario.service.manifest.ModelArtifact;
+import com.mmxlabs.scenario.service.manifest.StorageType;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioModel;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.IPostChangeHook;
@@ -41,6 +54,8 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class AnalyticsSolutionFragmentService {
+
+	private static final String TYPE_SOLUTION = "fragment-solution";
 
 	private final Map<ModelRecord, ModelAdapter> dataMap = new ConcurrentHashMap<>();
 
@@ -68,6 +83,15 @@ public class AnalyticsSolutionFragmentService {
 		}
 	};
 
+	public void bindScenarioModel(ScenarioServiceRegistry registry) {
+		registry.getScenarioModel().eAdapters().add(modelAdapter);
+
+	}
+
+	public void unbindScenarioModel(ScenarioServiceRegistry registry) {
+		registry.getScenarioModel().eAdapters().remove(modelAdapter);
+	}
+
 	public void start() {
 		SSDataManager.Instance.registerChangeHook(loadHook, SSDataManager.PostChangeHookPhase.ON_LOAD);
 		SSDataManager.Instance.registerChangeHook(unloadHook, SSDataManager.PostChangeHookPhase.ON_UNLOAD);
@@ -94,7 +118,10 @@ public class AnalyticsSolutionFragmentService {
 		// private final ScenarioInstance scenarioInstance;
 		private final ScenarioModelRecord modelRecord;
 		private LNGScenarioModel scenarioModel;
-		private final Map<EObject, ScenarioFragment> objectToFragmentMap = new HashMap<>();
+		private final Map<Object, ScenarioFragment> objectToFragmentMap = new HashMap<>();
+		private final Map<String, ScenarioFragment> uuidToFragmentMap = new HashMap<>();
+		private final Map<String, ModelArtifact> uuidToArtifactMap = new HashMap<>();
+		private final Map<String, EObject> uuidToModelMap = new HashMap<>();
 
 		public ModelAdapter(final ScenarioModelRecord modelRecord) {
 			this.modelRecord = modelRecord;
@@ -111,15 +138,62 @@ public class AnalyticsSolutionFragmentService {
 		private void processScenario() {
 			final ModelReference modelReference = modelRecord.getSharedReference();
 			assert modelReference != null;
+
+			// Gather existing fragments
+			for (ScenarioFragment f : modelRecord.getScenarioInstance().getFragments()) {
+				if (f.getContentType() != null) {
+					uuidToFragmentMap.put(f.getContentType(), f);
+				}
+			}
+
+			// Gather existing artifacts
+			for (ModelArtifact fragment : modelRecord.getManifest().getModelFragments()) {
+				if (fragment.getStorageType() != StorageType.INTERNAL) {
+					continue;
+				}
+				if (TYPE_SOLUTION.equals(fragment.getType())) {
+					String uuid = fragment.getKey();
+					uuidToArtifactMap.put(uuid, fragment);
+					System.out.println("Found artifact " + uuid);
+				}
+			}
+
+			Set<ModelArtifact> seenArtifacts = new HashSet<>();
+
+			// Update the scenario model artifacts
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 			if (scenarioModel.getAnalyticsModel() != null) {
 				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 				for (final AbstractSolutionSet plan : analyticsModel.getOptimisations()) {
-					if (plan.getName() == null || plan.getName().isEmpty()) {
-						plan.setName("Solution");// AnalyticsSolutionHelper.generateName(plan));
+					String uuid = plan.getUuid();
+					final ModelArtifact artifact;
+					if (uuidToArtifactMap.containsKey(uuid)) {
+						artifact = uuidToArtifactMap.get(uuid);
+						artifact.setDisplayName(plan.getName());
+						seenArtifacts.add(artifact);
+					} else {
+						artifact = ManifestFactory.eINSTANCE.createModelArtifact();
+						artifact.setKey(uuid);
+						artifact.setStorageType(StorageType.INTERNAL);
+						artifact.setType(TYPE_SOLUTION);
+						artifact.setDisplayName(plan.getName());
+						seenArtifacts.add(artifact);
+						uuidToArtifactMap.put(uuid, artifact);
+						modelRecord.getManifest().getModelFragments().add(artifact);
 					}
-					createFragment(plan, modelReference);
+					final ScenarioFragment fragment;
+					if (uuidToFragmentMap.containsKey(uuid)) {
+						fragment = uuidToFragmentMap.get(uuid);
+					} else {
+						fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+						fragment.setContentType(uuid);
+						uuidToFragmentMap.put(uuid, fragment);
+					}
+					createFragment(fragment, plan, modelReference);
 				}
+				Set<ModelArtifact> allArtifacts = new HashSet<>(modelRecord.getManifest().getModelFragments());
+				allArtifacts.retainAll(seenArtifacts);
+
 				analyticsModel.eAdapters().add(ModelAdapter.this);
 			}
 			this.scenarioModel = scenarioModel;
@@ -131,16 +205,13 @@ public class AnalyticsSolutionFragmentService {
 			try (final ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("OptionAnalysisModelFragmentService:dispose")) {
 				if (scenarioModel != null) {
 					if (scenarioModel.getAnalyticsModel() != null) {
-
 						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 						analyticsModel.eAdapters().remove(ModelAdapter.this);
 						for (final AbstractSolutionSet plan : analyticsModel.getOptimisations()) {
-							removeFragment(plan);
-						}
-
-						// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
-						for (final EObject plan : new HashSet<>(objectToFragmentMap.keySet())) {
-							removeFragment(plan);
+							ScenarioFragment fragment = uuidToFragmentMap.get(plan.getUuid());
+							if (fragment != null) {
+								fragment.setFragment(null);
+							}
 						}
 					}
 				}
@@ -170,8 +241,19 @@ public class AnalyticsSolutionFragmentService {
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_Optimisations()) {
 				if (notification.getEventType() == Notification.ADD) {
 					final EObject eObj = (EObject) notification.getNewValue();
-					if (eObj instanceof NamedObject) {
-						createFragment((NamedObject) eObj, modelRecord.getSharedReference());
+					if (eObj instanceof AbstractSolutionSet) {
+						AbstractSolutionSet plan = (AbstractSolutionSet) eObj;
+						String uuid = plan.getUuid();
+
+						final ScenarioFragment fragment;
+						if (uuidToFragmentMap.containsKey(uuid)) {
+							fragment = uuidToFragmentMap.get(uuid);
+						} else {
+							fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+							fragment.setContentType(uuid);
+							uuidToFragmentMap.put(uuid, fragment);
+						}
+						createFragment(fragment, plan, modelRecord.getSharedReference());
 					}
 				} else if (notification.getEventType() == Notification.REMOVE) {
 					final EObject eObj = (EObject) notification.getOldValue();
@@ -186,13 +268,14 @@ public class AnalyticsSolutionFragmentService {
 			modelRecord.getScenarioInstance().getFragments().remove(fragment);
 		}
 
-		private void createFragment(final NamedObject plan, ModelReference modelReference) {
-			if (modelReference == null) {
+		private void createFragment(final ScenarioFragment fragment, final AbstractSolutionSet plan, ModelReference modelReference) {
+			if (modelReference == null || fragment == null) {
 				return;
 			}
-			final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
 			fragment.setFragment(plan);
 			fragment.setName(plan.getName());
+			fragment.setUseCommandStack(false);
+
 			objectToFragmentMap.put(plan, fragment);
 			modelRecord.getScenarioInstance().getFragments().add(fragment);
 			// Create a databinding to keep names in sync
@@ -216,4 +299,86 @@ public class AnalyticsSolutionFragmentService {
 			});
 		}
 	}
+
+	private ScenarioModel model;
+
+	EContentAdapter modelAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(Notification notification) {
+
+			// Check for add/remove child models
+			super.notifyChanged(notification);
+
+			if (notification.isTouch()) {
+				return;
+			}
+			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioModel_ScenarioServices()) {
+				if (notification.getEventType() == Notification.ADD) {
+					walkContainer(((ScenarioService) notification.getNewValue()));
+					((ScenarioService) notification.getNewValue()).eAdapters().add(serviceAdapter);
+				} else if (notification.getEventType() == Notification.REMOVE) {
+					((ScenarioService) notification.getOldValue()).eAdapters().remove(serviceAdapter);
+				}
+			}
+		}
+	};
+
+	private void walkContainer(Container c) {
+		if (c instanceof ScenarioInstance) {
+			ScenarioInstance scenarioInstance = (ScenarioInstance) c;
+			Manifest manifest = scenarioInstance.getManifest();
+			if (manifest != null) {
+				List<ScenarioFragment> fragments = new LinkedList<>();
+				for (ModelArtifact artifact : manifest.getModelFragments()) {
+					if (artifact.getStorageType() != StorageType.INTERNAL) {
+						continue;
+					}
+					if (TYPE_SOLUTION.equals(artifact.getType())) {
+						String uuid = artifact.getKey();
+						System.out.println("Found offline artifact " + uuid);
+						final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+						fragment.setFragment(null);
+						fragment.setName(artifact.getDisplayName());
+						fragment.setUseCommandStack(false);
+						fragment.setContentType(uuid); // Subvert the use of content type to store UUID
+						fragments.add(fragment);
+					}
+				}
+				RunnerHelper.asyncExec(() -> scenarioInstance.getFragments().addAll(fragments));
+			}
+		}
+		for (Container child : c.getElements()) {
+			walkContainer(child);
+		}
+	}
+
+	EContentAdapter serviceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(Notification notification) {
+			super.notifyChanged(notification);
+
+			if (notification.isTouch()) {
+				return;
+			}
+
+			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Manifest()) {
+				if (notification.getEventType() == Notification.SET) {
+					Object child = notification.getNewValue();
+					if (child instanceof ScenarioInstance) {
+						ScenarioInstance scenarioInstance = (ScenarioInstance) child;
+						walkContainer(scenarioInstance);
+					}
+				}
+			}
+			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Elements()) {
+				if (notification.getEventType() == Notification.ADD) {
+					Object child = notification.getNewValue();
+					if (child instanceof ScenarioInstance) {
+						ScenarioInstance scenarioInstance = (ScenarioInstance) child;
+						walkContainer(scenarioInstance);
+					}
+				}
+			}
+		}
+	};
 }
