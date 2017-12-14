@@ -990,6 +990,12 @@ public class ChangeSetView extends ViewPart {
 
 		columnHelper.cleanUpVesselColumns();
 		columnHelper.dispose();
+
+		// The post selection from this view can be left in the e4 context somehow.
+		if (eSelectionService != null) {
+			eSelectionService.setPostSelection(new StructuredSelection());
+			eSelectionService = null;
+		}
 	}
 
 	@Focus
