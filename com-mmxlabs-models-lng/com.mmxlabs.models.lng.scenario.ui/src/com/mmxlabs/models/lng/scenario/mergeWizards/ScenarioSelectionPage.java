@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.scenario.mergeWizards;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -209,7 +210,8 @@ public class ScenarioSelectionPage extends WizardPage {
 	}
 
 	/**
-	 * Returns a list of all scenario instances which descend (directly or indirectly) from a given parent container.
+	 * Returns a list of all scenario instances which descend (directly or
+	 * indirectly) from a given parent container.
 	 * 
 	 * @param parent
 	 * @return
@@ -230,8 +232,11 @@ public class ScenarioSelectionPage extends WizardPage {
 	}
 
 	/**
-	 * Returns the scenarios explicitly or implicitly selected by the user. If the user specified "All scenarios", return all available scenarios. If the user specified "Current scenario", return the
-	 * current editing scenario only. If the user specified "Selected scenarios only", return the scenarios selected in the tree control.
+	 * Returns the scenarios explicitly or implicitly selected by the user. If the
+	 * user specified "All scenarios", return all available scenarios. If the user
+	 * specified "Current scenario", return the current editing scenario only. If
+	 * the user specified "Selected scenarios only", return the scenarios selected
+	 * in the tree control.
 	 * 
 	 * @return
 	 */
@@ -242,6 +247,9 @@ public class ScenarioSelectionPage extends WizardPage {
 			return getAllAvailableScenarioInstances();
 		}
 		case 1: { // "Current Scenario"
+			if (currentScenario == null) {
+				return Collections.emptyList();
+			}
 			return Arrays.asList(new ScenarioInstance[] { currentScenario });
 		}
 		case 2: { // "Selected Scenarios Only"
@@ -262,8 +270,8 @@ public class ScenarioSelectionPage extends WizardPage {
 	 * @return
 	 */
 	private EList<ScenarioService> getServices() {
-		final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle()
-				.getBundleContext(), ScenarioServiceRegistry.class, null);
+		final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(
+				Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 		final ScenarioModel scenarioModel = tracker.getService().getScenarioModel();
 		tracker.close();
@@ -297,7 +305,8 @@ public class ScenarioSelectionPage extends WizardPage {
 	}
 
 	/*
-	 * Is there *really* no standard JFace way to bind a radio button group to a single variable?
+	 * Is there *really* no standard JFace way to bind a radio button group to a
+	 * single variable?
 	 */
 	class RadioSelectionGroup extends Composite {
 		int selectedIndex = -1;
@@ -374,8 +383,8 @@ public class ScenarioSelectionPage extends WizardPage {
 
 		// create a radiobutton group for specifying how scenarios are selected
 		final String currentScenarioOption = currentScenario == null ? "" : String.format("Current ('%s')", currentScenario.getName());
-		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" }, new int[] { CHOICE_ALL_SCENARIOS,
-				CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
+		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" },
+				new int[] { CHOICE_ALL_SCENARIOS, CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
 		// scenarioSelectionGroup.setSelectedIndex(0);
 
 		// create a container for the scenario tree control (so we can hide it)
@@ -399,7 +408,8 @@ public class ScenarioSelectionPage extends WizardPage {
 		viewerLayoutData.verticalAlignment = SWT.FILL;
 		scenarioTreeViewer.getTree().setLayoutData(viewerLayoutData);
 
-		// when a parent element checkbox is clicked in the tree, propagate the change to its descendants
+		// when a parent element checkbox is clicked in the tree, propagate the change
+		// to its descendants
 		scenarioTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(final CheckStateChangedEvent event) {
