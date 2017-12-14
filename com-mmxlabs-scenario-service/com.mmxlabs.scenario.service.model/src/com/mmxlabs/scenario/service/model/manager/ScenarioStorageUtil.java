@@ -550,7 +550,7 @@ public class ScenarioStorageUtil {
 
 			// if (modelRecord.getOptions().createBackupOnSave())
 			{
-				final URI backupTarget = archiveURI.appendFileExtension(".backup");
+				final URI backupTarget = archiveURI.appendFileExtension("backup");
 				// Copy scenario before saving
 				try {
 					ScenarioServiceUtils.copyURIData(new ExtensibleURIConverterImpl(), archiveURI, backupTarget);
