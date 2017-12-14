@@ -210,6 +210,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			final Manifest manifest = (Manifest) object;
 			final List<Object> l = new LinkedList<>();
 			l.addAll(manifest.getModelDependencies());
+			l.addAll(manifest.getModelFragments());
 			return l.toArray();
 		} else if (object instanceof Container) {
 			final Container container = (Container) object;

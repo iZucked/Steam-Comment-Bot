@@ -307,7 +307,7 @@ public class ScenarioStorageUtil {
 
 					final ScenarioModelRecord modelRecord;
 					{
-						final BiConsumer<ModelRecord, InstanceData> saveCallback = allowSave ? createSaveCallback2(archiveURI, resourceSet, PATH_ROOT_OBJECT) : (mr, data) -> {
+						final BiConsumer<ModelRecord, InstanceData> saveCallback = allowSave ? createSaveCallback(archiveURI, resourceSet, PATH_ROOT_OBJECT) : (mr, data) -> {
 							// Save not permitted
 						};
 						final Consumer<InstanceData> closeCallback = createCloseCallback(tmpFilesList);
@@ -322,7 +322,7 @@ public class ScenarioStorageUtil {
 									if (!mr.hasExtraDataRecord(artifactKey)) {
 										final LinkedList<File> extraDataTmp = new LinkedList<>();
 
-										final BiConsumer<ModelRecord, InstanceData> l_saveCallback = allowSave ? createSaveCallback2(uri, resourceSet, artifact.getPath()) : (l_mr, l_data) -> {
+										final BiConsumer<ModelRecord, InstanceData> l_saveCallback = allowSave ? createSaveCallback(uri, resourceSet, artifact.getPath()) : (l_mr, l_data) -> {
 											// Save not permitted
 										};
 										final Consumer<InstanceData> l_closeCallback = createCloseCallback(extraDataTmp);
@@ -345,7 +345,7 @@ public class ScenarioStorageUtil {
 					for (final ModelArtifact artifact : manifest.getModelDependencies()) {
 						final LinkedList<File> extraDataTmp = new LinkedList<>();
 
-						final BiConsumer<ModelRecord, InstanceData> saveCallback = allowSave ? createSaveCallback2(archiveURI, resourceSet, artifact.getPath()) : (mr, data) -> {
+						final BiConsumer<ModelRecord, InstanceData> saveCallback = allowSave ? createSaveCallback(archiveURI, resourceSet, artifact.getPath()) : (mr, data) -> {
 							// Save not permitted
 						};
 						final Consumer<InstanceData> closeCallback = createCloseCallback(extraDataTmp);
@@ -545,64 +545,11 @@ public class ScenarioStorageUtil {
 		};
 	}
 
-	private static Consumer<InstanceData> createSaveCallback(final URI archiveURI, final ScenarioModelRecord modelRecord, final ResourceSet resourceSet, final Resource resource) {
-		final Consumer<InstanceData> saveCallback = (d) -> {
-
-			// if (modelRecord.getOptions().createBackupOnSave())
-			{
-				final URI backupTarget = archiveURI.appendFileExtension("backup");
-				// Copy scenario before saving
-				try {
-					ScenarioServiceUtils.copyURIData(new ExtensibleURIConverterImpl(), archiveURI, backupTarget);
-				} catch (final IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-
-			try (ModelReference ref = modelRecord.aquireReference("ScenarioStorageUtil:2")) {
-				try {
-					ResourceHelper.saveResource(resource);
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-				// execute(scenarioInstance, (si) -> {
-				// // Update last modified date
-				// final Metadata metadata = si.getMetadata();
-				// if (metadata != null) {
-				// metadata.setLastModified(new Date());
-				// }
-				// });
-				// Save manifest, migration may have changed it.
-				{
-					final URI manifestURI = createArtifactURI(archiveURI, PATH_MANIFEST_OBJECT);
-					final Manifest manifest = modelRecord.getManifest();
-
-					final Resource manifestResource = resourceSet.getResource(manifestURI, true);
-					manifestResource.getContents().clear();
-					// Copy before save as it will be reparented otherwise.
-					// FIXME: Keep hold of manifest resource(set)?
-					manifestResource.getContents().add(EcoreUtil.copy(manifest));
-					// manifest.getModelURIs().add(PATH_MANIFEST_OBJECT);
-					try {
-						manifestResource.save(null);
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
-				}
-
-				final BasicCommandStack commandStack = (BasicCommandStack) d.getCommandStack();
-				commandStack.saveIsDone();
-			}
-		};
-		return saveCallback;
-	}
-
-	private static BiConsumer<ModelRecord, InstanceData> createSaveCallback2(final URI archiveURI, final ResourceSet resourceSet, final String fragment) {
+	private static BiConsumer<ModelRecord, InstanceData> createSaveCallback(final URI archiveURI, final ResourceSet resourceSet, final String fragment) {
 		final BiConsumer<ModelRecord, InstanceData> saveCallback = (modelRecord, d) -> {
 
 			{
-				final URI backupTarget = archiveURI.appendFileExtension(".backup");
+				final URI backupTarget = archiveURI.appendFileExtension("backup");
 				// Copy scenario before saving
 				try {
 					ScenarioServiceUtils.copyURIData(new ExtensibleURIConverterImpl(), archiveURI, backupTarget);
@@ -617,6 +564,28 @@ public class ScenarioStorageUtil {
 					ResourceHelper.saveResource(resource);
 				} catch (final Exception e) {
 					e.printStackTrace();
+				}
+
+				// This is not very nice
+				if (modelRecord instanceof ScenarioModelRecord) {
+					ScenarioModelRecord scenarioModelRecord = (ScenarioModelRecord) modelRecord;
+					// Save manifest, migration may have changed it.
+					{
+						final URI manifestURI = createArtifactURI(archiveURI, PATH_MANIFEST_OBJECT);
+						final Manifest manifest = scenarioModelRecord.getManifest();
+
+						final Resource manifestResource = resourceSet.getResource(manifestURI, true);
+						manifestResource.getContents().clear();
+						// Copy before save as it will be reparented otherwise.
+						// FIXME: Keep hold of manifest resource(set)?
+						manifestResource.getContents().add(EcoreUtil.copy(manifest));
+						// manifest.getModelURIs().add(PATH_MANIFEST_OBJECT);
+						try {
+							manifestResource.save(null);
+						} catch (final IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 
 				final BasicCommandStack commandStack = (BasicCommandStack) d.getCommandStack();

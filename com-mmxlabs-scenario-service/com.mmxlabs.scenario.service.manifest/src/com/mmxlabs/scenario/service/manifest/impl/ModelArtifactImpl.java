@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ModelArtifactImpl#getType <em>Type</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ModelArtifactImpl#getPath <em>Path</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ModelArtifactImpl#getDataVersion <em>Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ModelArtifactImpl#getDisplayName <em>Display Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -130,6 +131,26 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 	 * @ordered
 	 */
 	protected String dataVersion = DATA_VERSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDisplayName() <em>Display Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDisplayName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DISPLAY_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDisplayName() <em>Display Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDisplayName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String displayName = DISPLAY_NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -270,6 +291,27 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDisplayName(String newDisplayName) {
+		String oldDisplayName = displayName;
+		displayName = newDisplayName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManifestPackage.MODEL_ARTIFACT__DISPLAY_NAME, oldDisplayName, displayName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -283,6 +325,8 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 				return getPath();
 			case ManifestPackage.MODEL_ARTIFACT__DATA_VERSION:
 				return getDataVersion();
+			case ManifestPackage.MODEL_ARTIFACT__DISPLAY_NAME:
+				return getDisplayName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -309,6 +353,9 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 				return;
 			case ManifestPackage.MODEL_ARTIFACT__DATA_VERSION:
 				setDataVersion((String)newValue);
+				return;
+			case ManifestPackage.MODEL_ARTIFACT__DISPLAY_NAME:
+				setDisplayName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -337,6 +384,9 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 			case ManifestPackage.MODEL_ARTIFACT__DATA_VERSION:
 				setDataVersion(DATA_VERSION_EDEFAULT);
 				return;
+			case ManifestPackage.MODEL_ARTIFACT__DISPLAY_NAME:
+				setDisplayName(DISPLAY_NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -359,6 +409,8 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 				return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
 			case ManifestPackage.MODEL_ARTIFACT__DATA_VERSION:
 				return DATA_VERSION_EDEFAULT == null ? dataVersion != null : !DATA_VERSION_EDEFAULT.equals(dataVersion);
+			case ManifestPackage.MODEL_ARTIFACT__DISPLAY_NAME:
+				return DISPLAY_NAME_EDEFAULT == null ? displayName != null : !DISPLAY_NAME_EDEFAULT.equals(displayName);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -383,6 +435,8 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 		result.append(path);
 		result.append(", dataVersion: ");
 		result.append(dataVersion);
+		result.append(", displayName: ");
+		result.append(displayName);
 		result.append(')');
 		return result.toString();
 	}

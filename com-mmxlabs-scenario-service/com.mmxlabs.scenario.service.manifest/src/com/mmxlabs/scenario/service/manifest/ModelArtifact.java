@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.manifest.ModelArtifact#getType <em>Type</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.ModelArtifact#getPath <em>Path</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.ModelArtifact#getDataVersion <em>Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.ModelArtifact#getDisplayName <em>Display Name</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getModelArtifact()
@@ -157,5 +158,31 @@ public interface ModelArtifact extends EObject {
 	 * @generated
 	 */
 	void setDataVersion(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Display Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Display Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Display Name</em>' attribute.
+	 * @see #setDisplayName(String)
+	 * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getModelArtifact_DisplayName()
+	 * @model
+	 * @generated
+	 */
+	String getDisplayName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.manifest.ModelArtifact#getDisplayName <em>Display Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Display Name</em>' attribute.
+	 * @see #getDisplayName()
+	 * @generated
+	 */
+	void setDisplayName(String value);
 
 } // ModelArtifact

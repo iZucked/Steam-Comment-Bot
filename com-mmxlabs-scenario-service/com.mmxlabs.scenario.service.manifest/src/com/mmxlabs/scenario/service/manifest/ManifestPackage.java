@@ -215,13 +215,22 @@ public interface ManifestPackage extends EPackage {
 	int MODEL_ARTIFACT__DATA_VERSION = 4;
 
 	/**
+	 * The feature id for the '<em><b>Display Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ARTIFACT__DISPLAY_NAME = 5;
+
+	/**
 	 * The number of structural features of the '<em>Model Artifact</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ARTIFACT_FEATURE_COUNT = 5;
+	int MODEL_ARTIFACT_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.manifest.StorageType <em>Storage Type</em>}' enum.
@@ -409,6 +418,17 @@ public interface ManifestPackage extends EPackage {
 	EAttribute getModelArtifact_DataVersion();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.manifest.ModelArtifact#getDisplayName <em>Display Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Display Name</em>'.
+	 * @see com.mmxlabs.scenario.service.manifest.ModelArtifact#getDisplayName()
+	 * @see #getModelArtifact()
+	 * @generated
+	 */
+	EAttribute getModelArtifact_DisplayName();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.scenario.service.manifest.StorageType <em>Storage Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -571,6 +591,14 @@ public interface ManifestPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MODEL_ARTIFACT__DATA_VERSION = eINSTANCE.getModelArtifact_DataVersion();
+
+		/**
+		 * The meta object literal for the '<em><b>Display Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MODEL_ARTIFACT__DISPLAY_NAME = eINSTANCE.getModelArtifact_DisplayName();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.manifest.StorageType <em>Storage Type</em>}' enum.

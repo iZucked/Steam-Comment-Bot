@@ -70,9 +70,12 @@ public class RenameElementHandler extends AbstractHandler {
 							}
 						} else if (element instanceof ScenarioFragment) {
 							final ScenarioFragment scenarioFragment = (ScenarioFragment) element;
-							final String newName = getNewName(scenarioFragment.getName());
-							if (newName != null) {
-								ScenarioServiceUtils.execute(scenarioFragment, f -> f.setName(newName));
+							// Only rename loaded elements
+							if (scenarioFragment.getFragment() != null) {
+								final String newName = getNewName(scenarioFragment.getName());
+								if (newName != null) {
+									ScenarioServiceUtils.execute(scenarioFragment, f -> f.setName(newName));
+								}
 							}
 						}
 					}

@@ -5,15 +5,20 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.Iterator;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.SameShellProvider;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -25,6 +30,11 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
@@ -52,23 +62,47 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 							openEditor(activePage, element);
 						} else if (element instanceof ScenarioFragment) {
 							final ScenarioFragment scenarioFragment = (ScenarioFragment) element;
-							
-							IScenarioFragmentOpenHandler handler = (IScenarioFragmentOpenHandler) Platform.getAdapterManager().loadAdapter(scenarioFragment.getFragment(), IScenarioFragmentOpenHandler.class.getCanonicalName());
-							if (handler != null) {
-								handler.open(scenarioFragment, scenarioFragment.getScenarioInstance());
-								return;
-							}
-							
-							
-							final IEditorPart part = openEditor(activePage, scenarioFragment.getScenarioInstance());
-							if (part instanceof IPartGotoTarget) {
-								((IPartGotoTarget) part).gotoTarget(scenarioFragment.getFragment());
-							} else {
-								final @Nullable IPartGotoTarget adapter = part.getAdapter(IPartGotoTarget.class);
-								if (adapter != null) {
-									adapter.gotoTarget(scenarioFragment.getFragment());
+
+							// There is a delay between loading a scenario and the Scenario Fragment being correctly populated.
+							// Use a completable future to wait about a second for this to happen after the scenario is loaded.
+							final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioFragment.getScenarioInstance());
+							final ModelReference ref = modelRecord.aquireReference("OpenScenarioCommandHandler");
+							CompletableFuture.completedFuture(ref).thenRunAsync(() -> {
+
+								int i = 10;
+								while (scenarioFragment.getFragment() == null) {
+									try {
+										Thread.sleep(100);
+									} catch (final InterruptedException e) {
+										e.printStackTrace();
+									}
+									if (--i < 0) {
+										break;
+									}
 								}
-							}
+								if (scenarioFragment.getFragment() != null) {
+									final IScenarioFragmentOpenHandler handler = (IScenarioFragmentOpenHandler) Platform.getAdapterManager().loadAdapter(scenarioFragment.getFragment(),
+											IScenarioFragmentOpenHandler.class.getCanonicalName());
+									if (handler != null) {
+										handler.open(scenarioFragment, scenarioFragment.getScenarioInstance());
+										return;
+									}
+
+									final IEditorPart part = openEditor(activePage, scenarioFragment.getScenarioInstance());
+									if (part instanceof IPartGotoTarget) {
+										((IPartGotoTarget) part).gotoTarget(scenarioFragment.getFragment());
+									} else {
+										final @Nullable IPartGotoTarget adapter = part.getAdapter(IPartGotoTarget.class);
+										if (adapter != null) {
+											adapter.gotoTarget(scenarioFragment.getFragment());
+										}
+									}
+								}
+							}).handleAsync((a, ex) -> {
+								// Make sure we always close the reference
+								ref.close();
+								return null;
+							});
 						}
 					}
 				}

@@ -65,6 +65,7 @@ public class ModelArtifactItemProvider
 			addTypePropertyDescriptor(object);
 			addPathPropertyDescriptor(object);
 			addDataVersionPropertyDescriptor(object);
+			addDisplayNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -180,6 +181,28 @@ public class ModelArtifactItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Display Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDisplayNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ModelArtifact_displayName_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ModelArtifact_displayName_feature", "_UI_ModelArtifact_type"),
+				 ManifestPackage.Literals.MODEL_ARTIFACT__DISPLAY_NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns ModelArtifact.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -198,7 +221,7 @@ public class ModelArtifactItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ModelArtifact)object).getKey();
+		String label = ((ModelArtifact)object).getDisplayName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ModelArtifact_type") :
 			getString("_UI_ModelArtifact_type") + " " + label;
@@ -222,6 +245,7 @@ public class ModelArtifactItemProvider
 			case ManifestPackage.MODEL_ARTIFACT__TYPE:
 			case ManifestPackage.MODEL_ARTIFACT__PATH:
 			case ManifestPackage.MODEL_ARTIFACT__DATA_VERSION:
+			case ManifestPackage.MODEL_ARTIFACT__DISPLAY_NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

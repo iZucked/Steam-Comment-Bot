@@ -270,6 +270,15 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getModelArtifact_DisplayName() {
+		return (EAttribute)modelArtifactEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EEnum getStorageType() {
 		return storageTypeEEnum;
@@ -321,6 +330,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__TYPE);
 		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__PATH);
 		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__DATA_VERSION);
+		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__DISPLAY_NAME);
 
 		// Create enums
 		storageTypeEEnum = createEEnum(STORAGE_TYPE);
@@ -373,6 +383,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		initEAttribute(getModelArtifact_Type(), ecorePackage.getEString(), "type", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelArtifact_Path(), ecorePackage.getEString(), "path", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelArtifact_DataVersion(), ecorePackage.getEString(), "dataVersion", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getModelArtifact_DisplayName(), ecorePackage.getEString(), "displayName", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(storageTypeEEnum, StorageType.class, "StorageType");
