@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
@@ -68,10 +69,11 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getUUID()
-	 * @generated
+	 * @generated NOT - replace default value with generated value; when loading the parser will replace this if needs be.b8smotel
+	 * 
 	 * @ordered
 	 */
-	protected String uuid = UUID_EDEFAULT;
+	protected String uuid = EcoreUtil.generateUUID();;
 
 	/**
 	 * The default value of the '{@link #getScenarioType() <em>Scenario Type</em>}' attribute.
