@@ -164,7 +164,7 @@ public class Application implements IApplication {
 			return IApplication.EXIT_OK;
 		}
 
-		// Don't abort LiNGO is p2 gargbage collect fails.
+		// Don't abort LiNGO is p2 garbage collect fails.
 		// For some reason this started to happen ~14 Dec 2017
 		try {
 			cleanupP2();
