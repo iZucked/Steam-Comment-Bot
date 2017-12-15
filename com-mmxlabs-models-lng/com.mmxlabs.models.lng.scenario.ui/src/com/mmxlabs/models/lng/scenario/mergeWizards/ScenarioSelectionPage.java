@@ -383,9 +383,15 @@ public class ScenarioSelectionPage extends WizardPage {
 
 		// create a radiobutton group for specifying how scenarios are selected
 		final String currentScenarioOption = currentScenario == null ? "" : String.format("Current ('%s')", currentScenario.getName());
-		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" },
-				new int[] { CHOICE_ALL_SCENARIOS, CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
-		// scenarioSelectionGroup.setSelectedIndex(0);
+		final int selectedButtonIdx;
+		if (currentScenario != null) {
+			scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" },
+					new int[] { CHOICE_ALL_SCENARIOS, CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
+			selectedButtonIdx = 2;
+		} else {
+			scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", "Selected" }, new int[] { CHOICE_ALL_SCENARIOS, CHOICE_SELECTED_SCENARIOS });
+			selectedButtonIdx = 1;
+		}
 
 		// create a container for the scenario tree control (so we can hide it)
 		final Composite viewerComposite = new Composite(container, SWT.BORDER);
@@ -421,8 +427,11 @@ public class ScenarioSelectionPage extends WizardPage {
 			}
 		});
 
+		// This will be current if available or selected
+		scenarioSelectionGroup.setSelectedIndex(1);
+
 		// only enable the scenario tree when the appropriate radio button is selected
-		final Button selectedOnlyButton = scenarioSelectionGroup.buttons.get(2);
+		final Button selectedOnlyButton = scenarioSelectionGroup.buttons.get(selectedButtonIdx);
 		scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 		selectedOnlyButton.addSelectionListener(new SelectionListener() {
 			@Override
