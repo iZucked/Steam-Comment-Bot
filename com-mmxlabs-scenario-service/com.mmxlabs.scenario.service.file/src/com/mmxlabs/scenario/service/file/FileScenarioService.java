@@ -506,15 +506,15 @@ public class FileScenarioService extends AbstractScenarioService {
 		// Unlock as we do not really need it
 		backupLock.release();
 
-		// HACk
-		while (!PlatformUI.isWorkbenchRunning()) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+//		// SG - can't remeber why this was here, but now causing issues blocking ITS.
+//		while (!PlatformUI.isWorkbenchRunning()) {
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
 
 		boolean attemptBackup = true;
 		boolean mainFileExists = false;
