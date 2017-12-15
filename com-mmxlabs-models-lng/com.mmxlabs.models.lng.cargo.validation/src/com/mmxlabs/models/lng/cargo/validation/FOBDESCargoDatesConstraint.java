@@ -60,12 +60,14 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 
 				if (loadSlot != null && dischargeSlot != null) {
 					// Check this is the correct type of DES Purchase and FOB Sale
-					if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy || SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
+					if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy || SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale
+							|| SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
 						final boolean valid;
 						if (loadSlot.getWindowStart() == null || dischargeSlot.getWindowStart() == null) {
 							valid = false;
 						} else {
-							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex());
+							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowStartWithSlotOrPortTime(),
+									dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex());
 						}
 						if (!valid) {
 
@@ -93,11 +95,11 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 		if (loadWindowEnd.isBefore(dischargeWindowStart)) {
 			return false;
 		}
-		
+
 		if (loadWindowStart.isAfter(dischargeWindowEnd)) {
 			return false;
 		}
-		
+
 		if ((loadWindowEnd.equals(dischargeWindowStart) && !(loadWindowStart.equals(loadWindowEnd)))) {
 			return false;
 		}
