@@ -126,19 +126,15 @@ public class ScenarioStorageUtil {
 
 	}
 
-	protected File getTemporaryFile(final ScenarioModelRecord modelRecord) {
+	protected File getTemporaryFile(final ScenarioModelRecord modelRecord) throws IOException {
 		final String name = modelRecord.getName();
-		final String uuid = modelRecord.getManifest().getUUID();
 
-		// We create a temporary folder so that the real scenario filename can be used, otherwise Windows paste handler will take the random filename.
-		final File uuidDir = new File(storageDirectory.toFile(), escape(uuid) + ".d");
-		if (uuidDir.exists() == false) {
-			uuidDir.mkdirs();
-			synchronized (tempDirectories) {
-				tempDirectories.add(uuidDir);
-			}
+		final Path tempDirectory = Files.createTempDirectory(storageDirectory, "lingo");
+
+		synchronized (tempDirectories) {
+			tempDirectories.add(tempDirectory.toFile());
 		}
-		return new File(uuidDir, escape(name) + ".lingo");
+		return new File(tempDirectory.toFile(), escape(name) + ".lingo");
 	}
 
 	private String escape(final String name) {
@@ -206,8 +202,8 @@ public class ScenarioStorageUtil {
 		// TODO: This data may change after loading/migration
 		for (final ModelArtifact artifact : scenarioDataProvider.getManifest().getModelDependencies()) {
 			if (artifact.getStorageType() == StorageType.COLOCATED && artifact.getType().equals("EOBJECT")) {
-				ISharedDataModelType key = ISharedDataModelType.REGISTRY.lookup(artifact.getKey());
-				EObject data = (EObject) scenarioDataProvider.getExtraData(key);
+				final ISharedDataModelType key = ISharedDataModelType.REGISTRY.lookup(artifact.getKey());
+				final EObject data = (EObject) scenarioDataProvider.getExtraData(key);
 				extraDataObjects.put(artifact.getKey(), EcoreUtil.copy(data));
 			}
 		}
@@ -318,7 +314,7 @@ public class ScenarioStorageUtil {
 								migrateLiNGOFile(mr, mon, uri, allowMigration);
 								// Add any new artifacts
 								for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-									ISharedDataModelType<?> artifactKey = ISharedDataModelType.registry().lookup(artifact.getKey());
+									final ISharedDataModelType<?> artifactKey = ISharedDataModelType.registry().lookup(artifact.getKey());
 									if (!mr.hasExtraDataRecord(artifactKey)) {
 										final LinkedList<File> extraDataTmp = new LinkedList<>();
 
@@ -402,7 +398,7 @@ public class ScenarioStorageUtil {
 		});
 	}
 
-	public static Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> initEditingDomain(Manifest manifest, final ResourceSet resourceSet,
+	public static Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> initEditingDomain(final Manifest manifest, final ResourceSet resourceSet,
 			final EObject rootObject) {
 
 		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack();
@@ -430,7 +426,7 @@ public class ScenarioStorageUtil {
 		return new Pair<>(editingDomain, commandStack);
 	}
 
-	private static BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFromReadWriteURI(final URI originalArchiveURI, Manifest manifest, ResourceSet resourceSet, final String path,
+	private static BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFromReadWriteURI(final URI originalArchiveURI, final Manifest manifest, final ResourceSet resourceSet, final String path,
 			final boolean copyToTemp, final boolean allowSave, final List<File> tempFiles, @Nullable final IScenarioCipherProvider scenarioCipherProvider,
 			final BiConsumer<ModelRecord, InstanceData> saveCallback, final Consumer<InstanceData> closeCallback, final TriConsumer<ModelRecord, URI, IProgressMonitor> migrationCallback) {
 		return (modelRecord, monitor) -> {
@@ -503,7 +499,7 @@ public class ScenarioStorageUtil {
 		};
 	}
 
-	public static void migrateLiNGOFile(final ScenarioModelRecord modelRecord, final IProgressMonitor monitor, final URI archiveURI, boolean allowMigration) {
+	public static void migrateLiNGOFile(final ScenarioModelRecord modelRecord, final IProgressMonitor monitor, final URI archiveURI, final boolean allowMigration) {
 		ServiceHelper.withOptionalServiceConsumer(IScenarioMigrationService.class, scenarioMigrationService -> {
 			if (scenarioMigrationService != null) {
 				if (scenarioMigrationService.needsMigrating(archiveURI, modelRecord.getManifest())) {
@@ -560,7 +556,7 @@ public class ScenarioStorageUtil {
 
 			try (ModelReference ref = modelRecord.aquireReference("ScenarioStorageUtil:2")) {
 				try {
-					Resource resource = resourceSet.getResource(createArtifactURI(archiveURI, fragment), false);
+					final Resource resource = resourceSet.getResource(createArtifactURI(archiveURI, fragment), false);
 					ResourceHelper.saveResource(resource);
 				} catch (final Exception e) {
 					e.printStackTrace();
@@ -568,7 +564,7 @@ public class ScenarioStorageUtil {
 
 				// This is not very nice
 				if (modelRecord instanceof ScenarioModelRecord) {
-					ScenarioModelRecord scenarioModelRecord = (ScenarioModelRecord) modelRecord;
+					final ScenarioModelRecord scenarioModelRecord = (ScenarioModelRecord) modelRecord;
 					// Save manifest, migration may have changed it.
 					{
 						final URI manifestURI = createArtifactURI(archiveURI, PATH_MANIFEST_OBJECT);
@@ -599,7 +595,7 @@ public class ScenarioStorageUtil {
 		return ResourceHelper.createResourceSet(cipherProvider);
 	}
 
-	private static BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFromInstance(Manifest manifest, final EObject rootObject, final String path) {
+	private static BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFromInstance(final Manifest manifest, final EObject rootObject, final String path) {
 		return (record, monitor) -> {
 			try {
 
