@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.migration;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -16,6 +17,7 @@ public class ModelsLNGVersionMaker {
 		return ServiceHelper.withOptionalService(IMigrationRegistry.class, (registry) -> {
 			if (registry != null && registry.getDefaultMigrationContext() != null) {
 				final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+				manifest.setUUID(EcoreUtil.generateUUID());
 				manifest.setVersionContext(registry.getDefaultMigrationContext());
 				manifest.setScenarioVersion(registry.getLatestContextVersion(manifest.getVersionContext()));
 
