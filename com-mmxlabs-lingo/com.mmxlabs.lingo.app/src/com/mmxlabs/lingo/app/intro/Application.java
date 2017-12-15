@@ -164,7 +164,14 @@ public class Application implements IApplication {
 			return IApplication.EXIT_OK;
 		}
 
-		cleanupP2();
+		// Don't abort LiNGO is p2 gargbage collect fails.
+		// For some reason this started to happen ~14 Dec 2017
+		try {
+			cleanupP2();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
 
 		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
 
