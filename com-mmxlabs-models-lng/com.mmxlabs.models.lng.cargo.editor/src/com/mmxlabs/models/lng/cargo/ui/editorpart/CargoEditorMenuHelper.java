@@ -274,7 +274,7 @@ public class CargoEditorMenuHelper {
 					createFOBDESSwitchMenu(manager, dischargeSlot);
 				}
 
-				if(cargoModel.getCanalBookings() != null) {
+				if (cargoModel.getCanalBookings() != null) {
 					panamaAssignmentMenu(manager, dischargeSlot);
 				}
 			}
@@ -362,8 +362,11 @@ public class CargoEditorMenuHelper {
 			} else {
 				for (final Pair<String, EObject> p : allowedValues) {
 					if (p.getSecond() != slot.getNominatedVessel()) {
-						final int capacity = ((Vessel) p.getSecond()).getVesselOrDelegateCapacity();
-						reassignMenuManager.add(new AssignAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000), (Vessel) p.getSecond()));
+						Vessel vessel = (Vessel) p.getSecond();
+						if (vessel != null) {
+							final int capacity = vessel.getVesselOrDelegateCapacity();
+							reassignMenuManager.add(new AssignAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000), vessel));
+						}
 					}
 				}
 			}
@@ -411,7 +414,7 @@ public class CargoEditorMenuHelper {
 					final CharterInMarket charterInMarket = (CharterInMarket) assignmentOption;
 					final Vessel vessel = charterInMarket.getVessel();
 					final int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
-					if (charterInMarket.isNominal()) {					
+					if (charterInMarket.isNominal()) {
 						nominalMenuUsed = true;
 						nominalMenu.add(new RunnableAction(String.format("%s (%dk)", charterInMarket.getName(), capacity / 1000),
 								() -> helper.assignCargoToSpotCharterIn(String.format("Assign to %s", charterInMarket.getName()), cargo, charterInMarket, -1)));
@@ -525,7 +528,7 @@ public class CargoEditorMenuHelper {
 
 		}
 	}
-	
+
 	private void createPanamaAssignmentMenus(final IMenuManager menuManager, final Slot slot) {
 		menuManager.add(new Separator());
 
@@ -603,7 +606,7 @@ public class CargoEditorMenuHelper {
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, loadSlot);
 				}
-				if(cargoModel.getCanalBookings() != null) {
+				if (cargoModel.getCanalBookings() != null) {
 					panamaAssignmentMenu(manager, loadSlot);
 				}
 			}
@@ -1323,9 +1326,9 @@ public class CargoEditorMenuHelper {
 			}
 		}
 	}
-	
+
 	private void panamaAssignmentMenu(final IMenuManager menuManager, final Slot slot) {
-		
+
 		class AssignCanalAction extends Action {
 			private final CanalBookingSlot canalBookingSlot;
 			private final CargoModel cargoModel;
@@ -1337,26 +1340,26 @@ public class CargoEditorMenuHelper {
 			}
 
 			public void run() {
-				
+
 				List<CanalBookingSlot> canalbookings = cargoModel.getCanalBookings().getCanalBookingSlots();
 				CompoundCommand cc = new CompoundCommand();
-				
-				for(CanalBookingSlot canalBookingSlot: canalbookings) {
+
+				for (CanalBookingSlot canalBookingSlot : canalbookings) {
 					if (canalBookingSlot.getSlot() == slot) {
-						Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(),  canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, SetCommand.UNSET_VALUE);
+						Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, SetCommand.UNSET_VALUE);
 						cc.append(cmd);
 					}
 				}
-				
-				Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(),  canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, slot);
+
+				Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, slot);
 				cc.append(cmd);
-				
+
 				if (cc.canExecute()) {
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 				}
 			}
 		}
-		
+
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		menuManager.add(new Separator());
 
@@ -1375,13 +1378,13 @@ public class CargoEditorMenuHelper {
 
 			if (canalbooking.getSlot() != null) {
 				canalBookingHandle = String.format("%s [%s]", canalbooking.getBookingDate(), canalbooking.getSlot().getName());
-			} 
-			
+			}
+
 			LocalDate windowStart = slot.getWindowStart();
 			LocalDate windowEnd = windowStart;
-			
+
 			switch (slot.getSlotOrPortWindowSizeUnits()) {
-			
+
 			case DAYS:
 				windowEnd = windowStart.plusDays(slot.getSlotOrPortWindowSize());
 				break;
@@ -1408,6 +1411,7 @@ public class CargoEditorMenuHelper {
 		}
 
 	}
+
 	/**
 	 */
 	public void editLDDCargo(final Cargo cargo, final boolean isNew) {
