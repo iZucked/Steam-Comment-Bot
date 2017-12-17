@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/distances-client-1.3.0-SNAPSHOT.jar" sourcepath="/Users/roberterdin/Development/lingo-ws/lingo-master/ws/ports-distances.git/target/generated-client/target/distances-client-1.3.0-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gson-2.8.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hamcrest-core-1.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/joda-time-2.9.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/okhttp-2.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swagger-annotations-1.5.15.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/morphia-1.3.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mongo-java-driver-3.4.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/okhttp-3.8.1.jar"/>

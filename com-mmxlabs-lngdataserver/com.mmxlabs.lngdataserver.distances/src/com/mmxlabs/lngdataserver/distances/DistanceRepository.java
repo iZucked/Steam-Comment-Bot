@@ -1,34 +1,60 @@
 package com.mmxlabs.lngdataserver.distances;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.apache.http.auth.AuthenticationException;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.ApiException;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.lngdataserver.DistancesApi;
+import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.distances.internal.Activator;
 import com.mmxlabs.lngdataserver.distances.preferences.PreferenceConstants;
+import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+
+import io.swagger.client.model.PublishRequest;
+import io.swagger.client.model.Version;
 
 /**
  * This implementation is not thread-safe.
  * 
  * @author Robert Erdin
  */
-@NonNullByDefault
 public class DistanceRepository {
+	
+	private static final String SYNC_ENDPOINT = "/distances/sync/publish";
+	
+	private DistancesApi distancesApi = new DistancesApi();
+	// used for long polling... timeout set to infinite
+	// Infinite timeout means listening for version can't effectively be cancelled
+	private DistancesApi waitingDistancesApi = new DistancesApi();
 
 	private static final Logger LOG = LoggerFactory.getLogger(DistanceRepository.class);
 	private Triple<String, String, String> auth;
+	private String backendUrl;
+	private String upstreamUrl;
+	private boolean listenForNewVersions;
+	private final List<Consumer<String>> newVersionCallbacks = new LinkedList<Consumer<String>>();
 
 	public DistanceRepository() {
 		auth = getUserServiceAuth();
+		upstreamUrl = getUpstreamUrl();
 	}
 
 	public DistanceRepository(String url) {
@@ -37,24 +63,106 @@ public class DistanceRepository {
 
 	private Triple<String, String, String> getUserServiceAuth() {
 		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
-		final String url = prefs.getString(PreferenceConstants.P_URL_KEY);
-		if ("".equals(url)) {
-			throw new RuntimeException("No URL found for upstream distance repository");
-		}
+		final String url = getUpstreamUrl();
 		final String username = prefs.getString(PreferenceConstants.P_USERNAME_KEY);
 		final String password = prefs.getString(PreferenceConstants.P_PASSWORD_KEY);
 
 		return new Triple<>(url, username, password);
 	}
-
-	public List<String> getVersions() {
-		try {
-			final Triple<String, String, String> serviceAuth = getServiceAuth();
-			return UpstreamDistancesFetcher.getUpstreamVersions(serviceAuth.getFirst(), serviceAuth.getSecond(), serviceAuth.getThird());
-		} catch (AuthenticationException | IOException | ParseException e) {
-			LOG.error("Error fetching versions from upstream service", e);
-			throw new RuntimeException("Error fetching versions from upstream service", e);
+	
+	private String getUpstreamUrl() {
+		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+		final String url = prefs.getString(PreferenceConstants.P_URL_KEY);
+		if ("".equals(url)) {
+			throw new RuntimeException("No URL found for upstream distance repository");
 		}
+		return url;
+	}
+
+	public List<DataVersion> getVersions() {
+		try {
+			return distancesApi.getVersionsUsingGET().stream().map(v -> {
+				LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getMillis()), ZoneId.of("UTC"));
+				return new DataVersion(v.getIdentifier(), createdAt, v.getPublished());
+			}).collect(Collectors.toList());
+		} catch (ApiException e) {
+			LOG.error("Error fetchinng distances versions" + e.getMessage());
+			throw new RuntimeException("Error fetching distances versionns", e);
+		}
+	}
+	
+	public void listenForNewVersions() {
+		listenForNewVersions = true;
+		
+		new Thread(() ->  {
+			while(listenForNewVersions) {
+				CompletableFuture<String> newVersion = waitForNewVersion();
+				try {
+					String version = newVersion.get();
+					newVersionCallbacks.forEach(c -> c.accept(version));
+				} catch (InterruptedException e) {
+					LOG.error(e.getMessage());
+				} catch (ExecutionException e) {
+					LOG.error(e.getMessage());
+				}
+				
+				// make sure not everything is blocked in case of consecutive failure
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}).start();
+	}
+	
+	public void stopListeningForNewVersions() {
+		listenForNewVersions = false;
+	}
+	
+	public void registerVersionListener(Consumer<String> versionConsumer) {
+		newVersionCallbacks.add(versionConsumer);
+	}
+	
+	private CompletableFuture<String> waitForNewVersion(){
+
+		CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+			Version futureVersion;
+			try {
+				futureVersion = distancesApi.getDistanceUpdateUsingGET();
+			} catch (ApiException e) {
+				throw new RuntimeException(e);
+			}
+			return futureVersion.getIdentifier();
+		});
+		return completableFuture;
+	}
+	
+	public boolean isReady() {
+		if (backendUrl != null) {
+			return true;
+		}else if(BackEndUrlProvider.INSTANCE.isAvailable()) {
+			backendUrl = BackEndUrlProvider.INSTANCE.getUrl();
+			distancesApi.getApiClient().setBasePath(backendUrl);
+			waitingDistancesApi.getApiClient().setBasePath(backendUrl);
+			waitingDistancesApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	private void ensureReady() {
+		if (!isReady()) {
+			throw new IllegalStateException("Distances back-end not ready yet");
+		}
+	}
+	
+	public void publishVersion(String version) throws ApiException {
+		PublishRequest publishRequest = new PublishRequest();
+		publishRequest.setVersion(version);
+		publishRequest.setUpstreamUrl(upstreamUrl + SYNC_ENDPOINT);
+		distancesApi.postSyncRequestUsingPOST(publishRequest);
 	}
 
 	public IDistanceProvider getDistances(final String version) {
@@ -75,11 +183,11 @@ public class DistanceRepository {
 
 	public @Nullable IDistanceProvider getLatestDistances() {
 
-		final List<String> versions = getVersions();
+		final List<DataVersion> versions = getVersions();
 		if (versions.isEmpty()) {
 			return null;
 		}
-		final String version = versions.get(0);
+		final String version = versions.get(0).getIdentifier();
 
 		try {
 			final Triple<String, String, String> serviceAuth = getServiceAuth();
@@ -90,5 +198,4 @@ public class DistanceRepository {
 			throw new RuntimeException("Error fetching versions from upstream service", e);
 		}
 	}
-
 }

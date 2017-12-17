@@ -1,15 +1,14 @@
-package com.mmxlabs.lngdataserver.pricing;
+package com.mmxlabs.lngdataserver.commons;
 
 import java.time.LocalDateTime;
 
-public class PricingVersion {
+public class DataVersion {
+	
 	private String identifier;
 	private LocalDateTime createdAt;
 	private boolean published;
 	
-	
-	
-	public PricingVersion(String identifier, LocalDateTime createdAt, boolean published) {
+	public DataVersion(String identifier, LocalDateTime createdAt, boolean published) {
 		this.identifier = identifier;
 		this.createdAt = createdAt;
 		this.published = published;

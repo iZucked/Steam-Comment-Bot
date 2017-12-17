@@ -18,10 +18,15 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.port,
  com.mmxlabs.rcp.common,
  com.mmxlabs.lngdataserver.lib,
- com.google.guava
+ com.google.guava,
+ com.mmxlabs.lngdataserver.server,
+ com.mmxlabs.lngdataserver.commons,
+ com.mmxlabs.lngdataserver.browser,
+ com.mmxlabs.lngdataserver.browser.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.slf4j
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lngdataserver.distances,
  com.mmxlabs.lngdataserver.distances.exceptions
 Bundle-Activator: com.mmxlabs.lngdataserver.distances.internal.Activator
+Bundle-ClassPath: .

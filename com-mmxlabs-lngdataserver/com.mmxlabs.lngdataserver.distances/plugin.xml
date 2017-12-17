@@ -29,4 +29,10 @@
             class="com.mmxlabs.lngdataserver.distances.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   	 <extension
+	   point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserExtension">
+		<DataBrowserExtension
+		      class="com.mmxlabs.lngdataserver.distances.DistancesDataExtension">
+		</DataBrowserExtension>
+	 </extension>
 </plugin>

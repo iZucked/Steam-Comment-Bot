@@ -1,14 +1,14 @@
 package com.mmxlabs.lngdataserver.distances.exceptions;
 
-public class PortNotFoundException extends RuntimeException {
+public class LocationNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public PortNotFoundException(){
+	public LocationNotFoundException(){
 		super();
 	}
 	
-	public PortNotFoundException(String message){
+	public LocationNotFoundException(String message){
 		super(message);
 	}
 }

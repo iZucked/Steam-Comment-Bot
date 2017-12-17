@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.distances.IDistanceProvider;
-import com.mmxlabs.lngdataserver.distances.exceptions.PortNotFoundException;
+import com.mmxlabs.lngdataserver.distances.exceptions.LocationNotFoundException;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -64,7 +64,7 @@ public class DistancesToScenarioCopier {
 							// keep track of potentially lost route lines
 							indexedRouteLines.remove(new Pair(from, to));
 						}
-					} catch (final PortNotFoundException e) {
+					} catch (final LocationNotFoundException e) {
 						// no action needed
 					}
 				}
