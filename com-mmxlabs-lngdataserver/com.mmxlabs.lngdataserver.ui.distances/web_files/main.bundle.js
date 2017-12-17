@@ -1,98 +1,18 @@
 webpackJsonp([1],{
 
-/***/ "../../../../../generated/ports-distances/api.module.ts":
+/***/ "../../../../../generated/ports-locations/api.module.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/ports-distances/configuration.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_countries_service__ = __webpack_require__("../../../../../generated/ports-distances/api/countries.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__api_distances_service__ = __webpack_require__("../../../../../generated/ports-distances/api/distances.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api_ports_service__ = __webpack_require__("../../../../../generated/ports-distances/api/ports.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/ports-locations/configuration.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_canals_service__ = __webpack_require__("../../../../../generated/ports-locations/api/canals.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__api_countries_service__ = __webpack_require__("../../../../../generated/ports-locations/api/countries.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api_distances_service__ = __webpack_require__("../../../../../generated/ports-locations/api/distances.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__api_locations_service__ = __webpack_require__("../../../../../generated/ports-locations/api/locations.service.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApiModule; });
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-
-
-
-
-
-var ApiModule = ApiModule_1 = (function () {
-    function ApiModule() {
-    }
-    ApiModule.forConfig = function (configurationFactory) {
-        return {
-            ngModule: ApiModule_1,
-            providers: [{ provide: __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */], useFactory: configurationFactory }]
-        };
-    };
-    return ApiModule;
-}());
-ApiModule = ApiModule_1 = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["b" /* NgModule */])({
-        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["a" /* CommonModule */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* HttpModule */]],
-        declarations: [],
-        exports: [],
-        providers: [__WEBPACK_IMPORTED_MODULE_4__api_countries_service__["a" /* CountriesService */], __WEBPACK_IMPORTED_MODULE_5__api_distances_service__["a" /* DistancesService */], __WEBPACK_IMPORTED_MODULE_6__api_ports_service__["a" /* PortsService */]]
-    })
-], ApiModule);
-
-var ApiModule_1;
-//# sourceMappingURL=api.module.js.map
-
-/***/ }),
-
-/***/ "../../../../../generated/ports-distances/api/api.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__countries_service__ = __webpack_require__("../../../../../generated/ports-distances/api/countries.service.ts");
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__distances_service__ = __webpack_require__("../../../../../generated/ports-distances/api/distances.service.ts");
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__distances_service__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ports_service__ = __webpack_require__("../../../../../generated/ports-distances/api/ports.service.ts");
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__ports_service__["a"]; });
-/* unused harmony export APIS */
-
-
-
-
-
-
-var APIS = [__WEBPACK_IMPORTED_MODULE_0__countries_service__["a" /* CountriesService */], __WEBPACK_IMPORTED_MODULE_1__distances_service__["a" /* DistancesService */], __WEBPACK_IMPORTED_MODULE_2__ports_service__["a" /* PortsService */]];
-//# sourceMappingURL=api.js.map
-
-/***/ }),
-
-/***/ "../../../../../generated/ports-distances/api/countries.service.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__rxjs_operators__ = __webpack_require__("../../../../../generated/ports-distances/rxjs-operators.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__variables__ = __webpack_require__("../../../../../generated/ports-distances/variables.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__configuration__ = __webpack_require__("../../../../../generated/ports-distances/configuration.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CountriesService; });
-/**
- * Minimax Labs Ports and Distances Service
- * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
- *
- * OpenAPI spec version: 1.0.0
- *
- *
- * NOTE: This class is auto generated by the swagger code generator program.
- * https://github.com/swagger-api/swagger-codegen.git
- * Do not edit the class manually.
- */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -105,19 +25,118 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+
+
+
+
+
+
+
+
+var ApiModule = ApiModule_1 = (function () {
+    function ApiModule(parentModule) {
+        if (parentModule) {
+            throw new Error('ApiModule is already loaded. Import your base AppModule only.');
+        }
+    }
+    ApiModule.forRoot = function (configurationFactory) {
+        return {
+            ngModule: ApiModule_1,
+            providers: [{ provide: __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */], useFactory: configurationFactory }]
+        };
+    };
+    return ApiModule;
+}());
+ApiModule = ApiModule_1 = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["CommonModule"], __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClientModule */]],
+        declarations: [],
+        exports: [],
+        providers: [
+            __WEBPACK_IMPORTED_MODULE_4__api_canals_service__["a" /* CanalsService */],
+            __WEBPACK_IMPORTED_MODULE_5__api_countries_service__["a" /* CountriesService */],
+            __WEBPACK_IMPORTED_MODULE_6__api_distances_service__["a" /* DistancesService */],
+            __WEBPACK_IMPORTED_MODULE_7__api_locations_service__["a" /* LocationsService */]
+        ]
+    }),
+    __param(0, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(0, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["SkipSelf"])()),
+    __metadata("design:paramtypes", [ApiModule])
+], ApiModule);
+
+var ApiModule_1;
+//# sourceMappingURL=api.module.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/api/api.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__canals_service__ = __webpack_require__("../../../../../generated/ports-locations/api/canals.service.ts");
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__countries_service__ = __webpack_require__("../../../../../generated/ports-locations/api/countries.service.ts");
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__distances_service__ = __webpack_require__("../../../../../generated/ports-locations/api/distances.service.ts");
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_2__distances_service__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__locations_service__ = __webpack_require__("../../../../../generated/ports-locations/api/locations.service.ts");
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__locations_service__["a"]; });
+/* unused harmony export APIS */
+
+
+
+
+
+
+
+
+var APIS = [__WEBPACK_IMPORTED_MODULE_0__canals_service__["a" /* CanalsService */], __WEBPACK_IMPORTED_MODULE_1__countries_service__["a" /* CountriesService */], __WEBPACK_IMPORTED_MODULE_2__distances_service__["a" /* DistancesService */], __WEBPACK_IMPORTED_MODULE_3__locations_service__["a" /* LocationsService */]];
+//# sourceMappingURL=api.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/api/canals.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/ports-locations/configuration.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CanalsService; });
+/**
+ * Minimax Labs Ports and Distances Service
+ * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
+ *
+ * OpenAPI spec version: 1.0.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
 /* tslint:disable:no-unused-variable member-ordering */
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 
 
 
 
-
-
-var CountriesService = (function () {
-    function CountriesService(http, basePath, configuration) {
-        this.http = http;
-        this.basePath = 'http://localhost:8090';
-        this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]();
-        this.configuration = new __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]();
+var CanalsService = (function () {
+    function CanalsService(httpClient, basePath, configuration) {
+        this.httpClient = httpClient;
+        this.basePath = 'https://localhost:54977';
+        this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpHeaders */]();
+        this.configuration = new __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */]();
         if (basePath) {
             this.basePath = basePath;
         }
@@ -127,19 +146,106 @@ var CountriesService = (function () {
         }
     }
     /**
-     *
-     * Extends object by coping non-existing properties.
-     * @param objA object to be extended
-     * @param objB source object
+     * @param consumes string[] mime-types
+     * @return true: consumes contains 'multipart/form-data', false: otherwise
      */
-    CountriesService.prototype.extendObj = function (objA, objB) {
-        for (var key in objB) {
-            if (objB.hasOwnProperty(key)) {
-                objA[key] = objB[key];
+    CanalsService.prototype.canConsumeForm = function (consumes) {
+        var form = 'multipart/form-data';
+        for (var _i = 0, consumes_1 = consumes; _i < consumes_1.length; _i++) {
+            var consume = consumes_1[_i];
+            if (form === consume) {
+                return true;
             }
         }
-        return objA;
+        return false;
     };
+    CanalsService.prototype.getCanalsUsingGET = function (observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        var headers = this.defaultHeaders;
+        // to determine the Accept header
+        var httpHeaderAccepts = [
+            '*/*'
+        ];
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/canals", {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    };
+    return CanalsService;
+}());
+CanalsService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_2__variables__["a" /* BASE_PATH */])), __param(2, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */]) === "function" && _a || Object, String, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */]) === "function" && _b || Object])
+], CanalsService);
+
+var _a, _b;
+//# sourceMappingURL=canals.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/api/countries.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/ports-locations/configuration.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CountriesService; });
+/**
+ * Minimax Labs Ports and Distances Service
+ * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
+ *
+ * OpenAPI spec version: 1.0.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+/* tslint:disable:no-unused-variable member-ordering */
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+
+
+var CountriesService = (function () {
+    function CountriesService(httpClient, basePath, configuration) {
+        this.httpClient = httpClient;
+        this.basePath = 'https://localhost:54977';
+        this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpHeaders */]();
+        this.configuration = new __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */]();
+        if (basePath) {
+            this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
+            this.basePath = basePath || configuration.basePath || this.basePath;
+        }
+    }
     /**
      * @param consumes string[] mime-types
      * @return true: consumes contains 'multipart/form-data', false: otherwise
@@ -154,51 +260,35 @@ var CountriesService = (function () {
         }
         return false;
     };
-    /**
-     * GET all countries
-     *
-     */
-    CountriesService.prototype.getCountriesUsingGET = function (extraHttpRequestParams) {
-        return this.getCountriesUsingGETWithHttpInfo(extraHttpRequestParams)
-            .map(function (response) {
-            if (response.status === 204) {
-                return undefined;
-            }
-            else {
-                return response.json() || {};
-            }
-        });
-    };
-    /**
-     * GET all countries
-     *
-     */
-    CountriesService.prototype.getCountriesUsingGETWithHttpInfo = function (extraHttpRequestParams) {
-        var path = this.basePath + '/countries';
-        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    CountriesService.prototype.getCountriesUsingGET = function (observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        var headers = this.defaultHeaders;
         // to determine the Accept header
-        var produces = [
+        var httpHeaderAccepts = [
             '*/*'
         ];
-        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
-            headers: headers,
-            search: queryParameters,
-            withCredentials: this.configuration.withCredentials
-        });
-        // https://github.com/swagger-api/swagger-codegen/issues/4037
-        if (extraHttpRequestParams) {
-            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
         }
-        return this.http.request(path, requestOptions);
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/countries", {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
     };
     return CountriesService;
 }());
 CountriesService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["d" /* Injectable */])(),
-    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Optional */])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["f" /* Inject */])(__WEBPACK_IMPORTED_MODULE_3__variables__["a" /* BASE_PATH */])), __param(2, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Optional */])()),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */]) === "function" && _a || Object, String, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]) === "function" && _b || Object])
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_2__variables__["a" /* BASE_PATH */])), __param(2, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */]) === "function" && _a || Object, String, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */]) === "function" && _b || Object])
 ], CountriesService);
 
 var _a, _b;
@@ -206,15 +296,15 @@ var _a, _b;
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/api/distances.service.ts":
+/***/ "../../../../../generated/ports-locations/api/distances.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__rxjs_operators__ = __webpack_require__("../../../../../generated/ports-distances/rxjs-operators.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__variables__ = __webpack_require__("../../../../../generated/ports-distances/variables.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__configuration__ = __webpack_require__("../../../../../generated/ports-distances/configuration.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__encoder__ = __webpack_require__("../../../../../generated/ports-locations/encoder.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__configuration__ = __webpack_require__("../../../../../generated/ports-locations/configuration.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DistancesService; });
 /**
  * Minimax Labs Ports and Distances Service
@@ -227,6 +317,7 @@ var _a, _b;
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+/* tslint:disable:no-unused-variable member-ordering */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -239,18 +330,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/* tslint:disable:no-unused-variable member-ordering */
-
 
 
 
 
 
 var DistancesService = (function () {
-    function DistancesService(http, basePath, configuration) {
-        this.http = http;
-        this.basePath = 'https://localhost:8080';
-        this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]();
+    function DistancesService(httpClient, basePath, configuration) {
+        this.httpClient = httpClient;
+        this.basePath = 'https://localhost:54977';
+        this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpHeaders */]();
         this.configuration = new __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]();
         if (basePath) {
             this.basePath = basePath;
@@ -260,20 +349,6 @@ var DistancesService = (function () {
             this.basePath = basePath || configuration.basePath || this.basePath;
         }
     }
-    /**
-     *
-     * Extends object by coping non-existing properties.
-     * @param objA object to be extended
-     * @param objB source object
-     */
-    DistancesService.prototype.extendObj = function (objA, objB) {
-        for (var key in objB) {
-            if (objB.hasOwnProperty(key)) {
-                objA[key] = objB[key];
-            }
-        }
-        return objA;
-    };
     /**
      * @param consumes string[] mime-types
      * @return true: consumes contains 'multipart/form-data', false: otherwise
@@ -288,289 +363,288 @@ var DistancesService = (function () {
         }
         return false;
     };
-    /**
-     * GET distance matrix for all ports
-     * Retrieve distance information for all available ports in either JSON or CSV format.    JSON format is Source Port-&gt;(Destination Port-&gt;Distance), e.g.   {\&quot;Chiba\&quot;: { \&quot;Copenhagen\&quot;: \&quot;15365.657\&quot;, \&quot;Melbourne\&quot;: \&quot;4962.625\&quot;}, \&quot;Copenhagen\&quot;:...}    CSV is a matrix in the format:   from,Chiba,Copenhagen,Melbourne   Chiba,0,15365.657,4962.625   Copenhagen,15365.657,0,12826.226   Melbourne,4962.735,12826.123,0    The content type can be changed by sending one of the following headers with the request: &#x60;Accept: text/csv&#x60; or &#x60;Accept: application/json&#x60;
-     * @param open A comma separated list of open routing points. Refer to [Available Routing Points](#available-routing-points) to see all available options.   __Default__ is no open routing points.     __Example__: PAN,SUZ     __Example__: PAN
-     * @param v The version of the distance. Ignore to get latest version.
-     */
-    DistancesService.prototype.getDistanceMatrixUsingGET = function (open, v, extraHttpRequestParams) {
-        return this.getDistanceMatrixUsingGETWithHttpInfo(open, v, extraHttpRequestParams)
-            .map(function (response) {
-            if (response.status === 204) {
-                return undefined;
-            }
-            else {
-                return response.json() || {};
-            }
-        });
-    };
-    /**
-     * GET a single distance
-     * Returns the distance for a voyage __potentially__ passing open Routing Points. Refer to  more the /distance/route/ endpoint if more information about the route taken is needed.
-     * @param srcPort __Source Port__, either a mmxId or a name
-     * @param dstPort __Destination Port__, either a mmxId or a name
-     * @param open A comma separated list of open routing points. Refer to [Available Routing Points](#available-routing-points) to see all available options.   __Default__ is no open routing points.     __Example__: PAN,SUZ     __Example__: PAN
-     * @param v The version of the distance. Ignore to get latest version.
-     */
-    DistancesService.prototype.getDistanceUsingGET = function (srcPort, dstPort, open, v, extraHttpRequestParams) {
-        return this.getDistanceUsingGETWithHttpInfo(srcPort, dstPort, open, v, extraHttpRequestParams)
-            .map(function (response) {
-            if (response.status === 204) {
-                return undefined;
-            }
-            else {
-                return response.json() || {};
-            }
-        });
-    };
-    /**
-     * GET a single route
-     * Returns the distance for a voyage including information which routing points are passed.
-     * @param srcPort __Source Port__, either a mmxId or a name
-     * @param dstPort __Destination Port__, either a mmxId or a name
-     * @param open A comma separated list of open routing points. Refer to [Available Routing Points](#available-routing-points) to see all available options.   __Default__ is no open routing points.     __Example__: PAN,SUZ     __Example__: PAN
-     * @param v The version of the distance. Ignore to get latest version.
-     */
-    DistancesService.prototype.getRouteUsingGET = function (srcPort, dstPort, open, v, extraHttpRequestParams) {
-        return this.getRouteUsingGETWithHttpInfo(srcPort, dstPort, open, v, extraHttpRequestParams)
-            .map(function (response) {
-            if (response.status === 204) {
-                return undefined;
-            }
-            else {
-                return response.json() || {};
-            }
-        });
-    };
-    /**
-     * GET all available versions
-     *
-     */
-    DistancesService.prototype.getVersionsUsingGET = function (extraHttpRequestParams) {
-        return this.getVersionsUsingGETWithHttpInfo(extraHttpRequestParams)
-            .map(function (response) {
-            if (response.status === 204) {
-                return undefined;
-            }
-            else {
-                return response.json() || {};
-            }
-        });
-    };
-    /**
-     * PUT a single distance
-     * Update a distance. Only direct distances can be updated since distances through a routing point are computed based on the direct distances.
-     * @param srcPort __Source Port__, either a mmxId or a name
-     * @param dstPort __Destination Port__, either a mmxId or a name
-     * @param distanceEditRequest The new distance
-     * @param v The version of the distance. Ignore to get latest version.
-     */
-    DistancesService.prototype.updateDistanceUsingPUT = function (srcPort, dstPort, distanceEditRequest, v, extraHttpRequestParams) {
-        return this.updateDistanceUsingPUTWithHttpInfo(srcPort, dstPort, distanceEditRequest, v, extraHttpRequestParams)
-            .map(function (response) {
-            if (response.status === 204) {
-                return undefined;
-            }
-            else {
-                return response.json() || {};
-            }
-        });
-    };
-    /**
-     * GET distance matrix for all ports
-     * Retrieve distance information for all available ports in either JSON or CSV format.    JSON format is Source Port-&gt;(Destination Port-&gt;Distance), e.g.   {\&quot;Chiba\&quot;: { \&quot;Copenhagen\&quot;: \&quot;15365.657\&quot;, \&quot;Melbourne\&quot;: \&quot;4962.625\&quot;}, \&quot;Copenhagen\&quot;:...}    CSV is a matrix in the format:   from,Chiba,Copenhagen,Melbourne   Chiba,0,15365.657,4962.625   Copenhagen,15365.657,0,12826.226   Melbourne,4962.735,12826.123,0    The content type can be changed by sending one of the following headers with the request: &#x60;Accept: text/csv&#x60; or &#x60;Accept: application/json&#x60;
-     * @param open A comma separated list of open routing points. Refer to [Available Routing Points](#available-routing-points) to see all available options.   __Default__ is no open routing points.     __Example__: PAN,SUZ     __Example__: PAN
-     * @param v The version of the distance. Ignore to get latest version.
-     */
-    DistancesService.prototype.getDistanceMatrixUsingGETWithHttpInfo = function (open, v, extraHttpRequestParams) {
-        var path = this.basePath + '/distances';
-        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    DistancesService.prototype.getDistanceMatrixUsingGET = function (open, v, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]({ encoder: new __WEBPACK_IMPORTED_MODULE_2__encoder__["a" /* CustomHttpUrlEncodingCodec */]() });
         if (open !== undefined) {
-            queryParameters.set('open', open);
+            queryParameters = queryParameters.set('open', open);
         }
         if (v !== undefined) {
-            queryParameters.set('v', v);
+            queryParameters = queryParameters.set('v', v);
         }
+        var headers = this.defaultHeaders;
         // to determine the Accept header
-        var produces = [
+        var httpHeaderAccepts = [
             'application/json',
             'text/csv'
         ];
-        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/distances", {
+            params: queryParameters,
+            withCredentials: this.configuration.withCredentials,
             headers: headers,
-            search: queryParameters,
-            withCredentials: this.configuration.withCredentials
+            observe: observe,
+            reportProgress: reportProgress
         });
-        // https://github.com/swagger-api/swagger-codegen/issues/4037
-        if (extraHttpRequestParams) {
-            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
-        }
-        return this.http.request(path, requestOptions);
     };
-    /**
-     * GET a single distance
-     * Returns the distance for a voyage __potentially__ passing open Routing Points. Refer to  more the /distance/route/ endpoint if more information about the route taken is needed.
-     * @param srcPort __Source Port__, either a mmxId or a name
-     * @param dstPort __Destination Port__, either a mmxId or a name
-     * @param open A comma separated list of open routing points. Refer to [Available Routing Points](#available-routing-points) to see all available options.   __Default__ is no open routing points.     __Example__: PAN,SUZ     __Example__: PAN
-     * @param v The version of the distance. Ignore to get latest version.
-     */
-    DistancesService.prototype.getDistanceUsingGETWithHttpInfo = function (srcPort, dstPort, open, v, extraHttpRequestParams) {
-        var path = this.basePath + '/distance/${srcPort}/${dstPort}'
-            .replace('${' + 'srcPort' + '}', String(srcPort))
-            .replace('${' + 'dstPort' + '}', String(dstPort));
-        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'srcPort' is not null or undefined
-        if (srcPort === null || srcPort === undefined) {
-            throw new Error('Required parameter srcPort was null or undefined when calling getDistanceUsingGET.');
+    DistancesService.prototype.getDistanceUpdateUsingGET = function (observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        var headers = this.defaultHeaders;
+        // to determine the Accept header
+        var httpHeaderAccepts = [
+            'application/json'
+        ];
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
         }
-        // verify required parameter 'dstPort' is not null or undefined
-        if (dstPort === null || dstPort === undefined) {
-            throw new Error('Required parameter dstPort was null or undefined when calling getDistanceUsingGET.');
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/distances/version_notification", {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    };
+    DistancesService.prototype.getDistanceUsingGET = function (srcLocation, dstLocation, open, v, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (srcLocation === null || srcLocation === undefined) {
+            throw new Error('Required parameter srcLocation was null or undefined when calling getDistanceUsingGET.');
         }
+        if (dstLocation === null || dstLocation === undefined) {
+            throw new Error('Required parameter dstLocation was null or undefined when calling getDistanceUsingGET.');
+        }
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]({ encoder: new __WEBPACK_IMPORTED_MODULE_2__encoder__["a" /* CustomHttpUrlEncodingCodec */]() });
         if (open !== undefined) {
-            queryParameters.set('open', open);
+            queryParameters = queryParameters.set('open', open);
         }
         if (v !== undefined) {
-            queryParameters.set('v', v);
+            queryParameters = queryParameters.set('v', v);
         }
+        var headers = this.defaultHeaders;
         // to determine the Accept header
-        var produces = [
+        var httpHeaderAccepts = [
             '*/*'
         ];
-        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/distance/" + encodeURIComponent(String(srcLocation)) + "/" + encodeURIComponent(String(dstLocation)), {
+            params: queryParameters,
+            withCredentials: this.configuration.withCredentials,
             headers: headers,
-            search: queryParameters,
-            withCredentials: this.configuration.withCredentials
+            observe: observe,
+            reportProgress: reportProgress
         });
-        // https://github.com/swagger-api/swagger-codegen/issues/4037
-        if (extraHttpRequestParams) {
-            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
-        }
-        return this.http.request(path, requestOptions);
     };
-    /**
-     * GET a single route
-     * Returns the distance for a voyage including information which routing points are passed.
-     * @param srcPort __Source Port__, either a mmxId or a name
-     * @param dstPort __Destination Port__, either a mmxId or a name
-     * @param open A comma separated list of open routing points. Refer to [Available Routing Points](#available-routing-points) to see all available options.   __Default__ is no open routing points.     __Example__: PAN,SUZ     __Example__: PAN
-     * @param v The version of the distance. Ignore to get latest version.
-     */
-    DistancesService.prototype.getRouteUsingGETWithHttpInfo = function (srcPort, dstPort, open, v, extraHttpRequestParams) {
-        var path = this.basePath + '/distance/route/${srcPort}/${dstPort}'
-            .replace('${' + 'srcPort' + '}', String(srcPort))
-            .replace('${' + 'dstPort' + '}', String(dstPort));
-        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'srcPort' is not null or undefined
-        if (srcPort === null || srcPort === undefined) {
-            throw new Error('Required parameter srcPort was null or undefined when calling getRouteUsingGET.');
+    DistancesService.prototype.getFullVersionUsingGET = function (versionId, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (versionId === null || versionId === undefined) {
+            throw new Error('Required parameter versionId was null or undefined when calling getFullVersionUsingGET.');
         }
-        // verify required parameter 'dstPort' is not null or undefined
-        if (dstPort === null || dstPort === undefined) {
-            throw new Error('Required parameter dstPort was null or undefined when calling getRouteUsingGET.');
+        var headers = this.defaultHeaders;
+        // to determine the Accept header
+        var httpHeaderAccepts = [
+            '*/*'
+        ];
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
         }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/distances/sync/versions/" + encodeURIComponent(String(versionId)), {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    };
+    DistancesService.prototype.getRouteUsingGET = function (srcLocation, dstLocation, open, v, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (srcLocation === null || srcLocation === undefined) {
+            throw new Error('Required parameter srcLocation was null or undefined when calling getRouteUsingGET.');
+        }
+        if (dstLocation === null || dstLocation === undefined) {
+            throw new Error('Required parameter dstLocation was null or undefined when calling getRouteUsingGET.');
+        }
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]({ encoder: new __WEBPACK_IMPORTED_MODULE_2__encoder__["a" /* CustomHttpUrlEncodingCodec */]() });
         if (open !== undefined) {
-            queryParameters.set('open', open);
+            queryParameters = queryParameters.set('open', open);
         }
         if (v !== undefined) {
-            queryParameters.set('v', v);
+            queryParameters = queryParameters.set('v', v);
         }
+        var headers = this.defaultHeaders;
         // to determine the Accept header
-        var produces = [
+        var httpHeaderAccepts = [
             '*/*'
         ];
-        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
-            headers: headers,
-            search: queryParameters,
-            withCredentials: this.configuration.withCredentials
-        });
-        // https://github.com/swagger-api/swagger-codegen/issues/4037
-        if (extraHttpRequestParams) {
-            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
         }
-        return this.http.request(path, requestOptions);
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/distance/route/" + encodeURIComponent(String(srcLocation)) + "/" + encodeURIComponent(String(dstLocation)), {
+            params: queryParameters,
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
     };
-    /**
-     * GET all available versions
-     *
-     */
-    DistancesService.prototype.getVersionsUsingGETWithHttpInfo = function (extraHttpRequestParams) {
-        var path = this.basePath + '/distances/versions';
-        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    DistancesService.prototype.getVersionsUsingGET = function (observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        var headers = this.defaultHeaders;
         // to determine the Accept header
-        var produces = [
+        var httpHeaderAccepts = [
             '*/*'
         ];
-        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/distances/versions", {
+            withCredentials: this.configuration.withCredentials,
             headers: headers,
-            search: queryParameters,
-            withCredentials: this.configuration.withCredentials
+            observe: observe,
+            reportProgress: reportProgress
         });
-        // https://github.com/swagger-api/swagger-codegen/issues/4037
-        if (extraHttpRequestParams) {
-            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
-        }
-        return this.http.request(path, requestOptions);
     };
-    /**
-     * PUT a single distance
-     * Update a distance. Only direct distances can be updated since distances through a routing point are computed based on the direct distances.
-     * @param srcPort __Source Port__, either a mmxId or a name
-     * @param dstPort __Destination Port__, either a mmxId or a name
-     * @param distanceEditRequest The new distance
-     * @param v The version of the distance. Ignore to get latest version.
-     */
-    DistancesService.prototype.updateDistanceUsingPUTWithHttpInfo = function (srcPort, dstPort, distanceEditRequest, v, extraHttpRequestParams) {
-        var path = this.basePath + '/distance/${srcPort}/${dstPort}'
-            .replace('${' + 'srcPort' + '}', String(srcPort))
-            .replace('${' + 'dstPort' + '}', String(dstPort));
-        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'srcPort' is not null or undefined
-        if (srcPort === null || srcPort === undefined) {
-            throw new Error('Required parameter srcPort was null or undefined when calling updateDistanceUsingPUT.');
+    DistancesService.prototype.postFullVersionUsingPOST = function (version, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (version === null || version === undefined) {
+            throw new Error('Required parameter version was null or undefined when calling postFullVersionUsingPOST.');
         }
-        // verify required parameter 'dstPort' is not null or undefined
-        if (dstPort === null || dstPort === undefined) {
-            throw new Error('Required parameter dstPort was null or undefined when calling updateDistanceUsingPUT.');
+        var headers = this.defaultHeaders;
+        // to determine the Accept header
+        var httpHeaderAccepts = [
+            '*/*'
+        ];
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
         }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        var httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+        return this.httpClient.post(this.basePath + "/distances/sync/versions", version, {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    };
+    DistancesService.prototype.postSyncRequestUsingPOST = function (publishRequest, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (publishRequest === null || publishRequest === undefined) {
+            throw new Error('Required parameter publishRequest was null or undefined when calling postSyncRequestUsingPOST.');
+        }
+        var headers = this.defaultHeaders;
+        // to determine the Accept header
+        var httpHeaderAccepts = [
+            '*/*'
+        ];
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        var httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+        return this.httpClient.post(this.basePath + "/distances/sync/publish", publishRequest, {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    };
+    DistancesService.prototype.updateDistanceUsingPUT = function (srcLocation, dstLocation, distanceEditRequest, v, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (srcLocation === null || srcLocation === undefined) {
+            throw new Error('Required parameter srcLocation was null or undefined when calling updateDistanceUsingPUT.');
+        }
+        if (dstLocation === null || dstLocation === undefined) {
+            throw new Error('Required parameter dstLocation was null or undefined when calling updateDistanceUsingPUT.');
+        }
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]({ encoder: new __WEBPACK_IMPORTED_MODULE_2__encoder__["a" /* CustomHttpUrlEncodingCodec */]() });
         if (v !== undefined) {
-            queryParameters.set('v', v);
+            queryParameters = queryParameters.set('v', v);
         }
+        var headers = this.defaultHeaders;
         // to determine the Accept header
-        var produces = [
+        var httpHeaderAccepts = [
             '*/*'
         ];
-        headers.set('Content-Type', 'application/json');
-        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Put,
-            headers: headers,
-            body: distanceEditRequest == null ? '' : JSON.stringify(distanceEditRequest),
-            search: queryParameters,
-            withCredentials: this.configuration.withCredentials
-        });
-        // https://github.com/swagger-api/swagger-codegen/issues/4037
-        if (extraHttpRequestParams) {
-            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
         }
-        return this.http.request(path, requestOptions);
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        var httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+        return this.httpClient.put(this.basePath + "/distance/" + encodeURIComponent(String(srcLocation)) + "/" + encodeURIComponent(String(dstLocation)), distanceEditRequest, {
+            params: queryParameters,
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
     };
     return DistancesService;
 }());
 DistancesService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["d" /* Injectable */])(),
-    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Optional */])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["f" /* Inject */])(__WEBPACK_IMPORTED_MODULE_3__variables__["a" /* BASE_PATH */])), __param(2, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Optional */])()),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */]) === "function" && _a || Object, String, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]) === "function" && _b || Object])
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_3__variables__["a" /* BASE_PATH */])), __param(2, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */]) === "function" && _a || Object, String, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]) === "function" && _b || Object])
 ], DistancesService);
 
 var _a, _b;
@@ -578,16 +652,16 @@ var _a, _b;
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/api/ports.service.ts":
+/***/ "../../../../../generated/ports-locations/api/locations.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__rxjs_operators__ = __webpack_require__("../../../../../generated/ports-distances/rxjs-operators.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__variables__ = __webpack_require__("../../../../../generated/ports-distances/variables.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__configuration__ = __webpack_require__("../../../../../generated/ports-distances/configuration.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PortsService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__encoder__ = __webpack_require__("../../../../../generated/ports-locations/encoder.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__configuration__ = __webpack_require__("../../../../../generated/ports-locations/configuration.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LocationsService; });
 /**
  * Minimax Labs Ports and Distances Service
  * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
@@ -599,6 +673,7 @@ var _a, _b;
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+/* tslint:disable:no-unused-variable member-ordering */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -611,18 +686,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/* tslint:disable:no-unused-variable member-ordering */
 
 
 
 
 
-
-var PortsService = (function () {
-    function PortsService(http, basePath, configuration) {
-        this.http = http;
-        this.basePath = 'http://localhost:8090';
-        this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]();
+var LocationsService = (function () {
+    function LocationsService(httpClient, basePath, configuration) {
+        this.httpClient = httpClient;
+        this.basePath = 'https://localhost:54977';
+        this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpHeaders */]();
         this.configuration = new __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]();
         if (basePath) {
             this.basePath = basePath;
@@ -633,24 +706,10 @@ var PortsService = (function () {
         }
     }
     /**
-     *
-     * Extends object by coping non-existing properties.
-     * @param objA object to be extended
-     * @param objB source object
-     */
-    PortsService.prototype.extendObj = function (objA, objB) {
-        for (var key in objB) {
-            if (objB.hasOwnProperty(key)) {
-                objA[key] = objB[key];
-            }
-        }
-        return objA;
-    };
-    /**
      * @param consumes string[] mime-types
      * @return true: consumes contains 'multipart/form-data', false: otherwise
      */
-    PortsService.prototype.canConsumeForm = function (consumes) {
+    LocationsService.prototype.canConsumeForm = function (consumes) {
         var form = 'multipart/form-data';
         for (var _i = 0, consumes_1 = consumes; _i < consumes_1.length; _i++) {
             var consume = consumes_1[_i];
@@ -660,120 +719,138 @@ var PortsService = (function () {
         }
         return false;
     };
-    /**
-     * GET a port
-     *
-     * @param port port
-     * @param v The version of the ports. Ignore to get latest version.
-     * @param fuzzy Whether or not fuzzy matching should be applied. For example, Barcelone -&gt; Barcelona
-     */
-    PortsService.prototype.getPortUsingGET = function (port, v, fuzzy, extraHttpRequestParams) {
-        return this.getPortUsingGETWithHttpInfo(port, v, fuzzy, extraHttpRequestParams)
-            .map(function (response) {
-            if (response.status === 204) {
-                return undefined;
-            }
-            else {
-                return response.json() || {};
-            }
-        });
-    };
-    /**
-     * GET all ports
-     *
-     * @param v The version of the ports. Ignore to get latest version.
-     */
-    PortsService.prototype.getPortsUsingGET = function (v, extraHttpRequestParams) {
-        return this.getPortsUsingGETWithHttpInfo(v, extraHttpRequestParams)
-            .map(function (response) {
-            if (response.status === 204) {
-                return undefined;
-            }
-            else {
-                return response.json() || {};
-            }
-        });
-    };
-    /**
-     * GET a port
-     *
-     * @param port port
-     * @param v The version of the ports. Ignore to get latest version.
-     * @param fuzzy Whether or not fuzzy matching should be applied. For example, Barcelone -&gt; Barcelona
-     */
-    PortsService.prototype.getPortUsingGETWithHttpInfo = function (port, v, fuzzy, extraHttpRequestParams) {
-        var path = this.basePath + '/ports/${port}'
-            .replace('${' + 'port' + '}', String(port));
-        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'port' is not null or undefined
-        if (port === null || port === undefined) {
-            throw new Error('Required parameter port was null or undefined when calling getPortUsingGET.');
+    LocationsService.prototype.getLocationUsingGET = function (location, v, fuzzy, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (location === null || location === undefined) {
+            throw new Error('Required parameter location was null or undefined when calling getLocationUsingGET.');
         }
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]({ encoder: new __WEBPACK_IMPORTED_MODULE_2__encoder__["a" /* CustomHttpUrlEncodingCodec */]() });
         if (v !== undefined) {
-            queryParameters.set('v', v);
+            queryParameters = queryParameters.set('v', v);
         }
         if (fuzzy !== undefined) {
-            queryParameters.set('fuzzy', fuzzy);
+            queryParameters = queryParameters.set('fuzzy', fuzzy);
         }
+        var headers = this.defaultHeaders;
         // to determine the Accept header
-        var produces = [
+        var httpHeaderAccepts = [
             '*/*'
         ];
-        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
-            headers: headers,
-            search: queryParameters,
-            withCredentials: this.configuration.withCredentials
-        });
-        // https://github.com/swagger-api/swagger-codegen/issues/4037
-        if (extraHttpRequestParams) {
-            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
         }
-        return this.http.request(path, requestOptions);
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/locations/" + encodeURIComponent(String(location)), {
+            params: queryParameters,
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
     };
-    /**
-     * GET all ports
-     *
-     * @param v The version of the ports. Ignore to get latest version.
-     */
-    PortsService.prototype.getPortsUsingGETWithHttpInfo = function (v, extraHttpRequestParams) {
-        var path = this.basePath + '/ports';
-        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    LocationsService.prototype.getLocationsUsingGET = function (v, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]({ encoder: new __WEBPACK_IMPORTED_MODULE_2__encoder__["a" /* CustomHttpUrlEncodingCodec */]() });
         if (v !== undefined) {
-            queryParameters.set('v', v);
+            queryParameters = queryParameters.set('v', v);
         }
+        var headers = this.defaultHeaders;
         // to determine the Accept header
-        var produces = [
+        var httpHeaderAccepts = [
             '*/*'
         ];
-        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
-            headers: headers,
-            search: queryParameters,
-            withCredentials: this.configuration.withCredentials
-        });
-        // https://github.com/swagger-api/swagger-codegen/issues/4037
-        if (extraHttpRequestParams) {
-            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
         }
-        return this.http.request(path, requestOptions);
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.get(this.basePath + "/locations", {
+            params: queryParameters,
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
     };
-    return PortsService;
+    LocationsService.prototype.patchLocationUsingPATCH = function (mmxId, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (mmxId === null || mmxId === undefined) {
+            throw new Error('Required parameter mmxId was null or undefined when calling patchLocationUsingPATCH.');
+        }
+        var headers = this.defaultHeaders;
+        // to determine the Accept header
+        var httpHeaderAccepts = [
+            '*/*'
+        ];
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        return this.httpClient.patch(this.basePath + "/locations/" + encodeURIComponent(String(mmxId)), null, {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    };
+    LocationsService.prototype.postLocationUsingPOST = function (location, observe, reportProgress) {
+        if (observe === void 0) { observe = 'body'; }
+        if (reportProgress === void 0) { reportProgress = false; }
+        if (location === null || location === undefined) {
+            throw new Error('Required parameter location was null or undefined when calling postLocationUsingPOST.');
+        }
+        var headers = this.defaultHeaders;
+        // to determine the Accept header
+        var httpHeaderAccepts = [
+            '*/*'
+        ];
+        var httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        var consumes = [
+            'application/json'
+        ];
+        var httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+        return this.httpClient.post(this.basePath + "/locations", location, {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    };
+    return LocationsService;
 }());
-PortsService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["d" /* Injectable */])(),
-    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Optional */])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["f" /* Inject */])(__WEBPACK_IMPORTED_MODULE_3__variables__["a" /* BASE_PATH */])), __param(2, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Optional */])()),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */]) === "function" && _a || Object, String, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]) === "function" && _b || Object])
-], PortsService);
+LocationsService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_3__variables__["a" /* BASE_PATH */])), __param(2, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */]) === "function" && _a || Object, String, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]) === "function" && _b || Object])
+], LocationsService);
 
 var _a, _b;
-//# sourceMappingURL=ports.service.js.map
+//# sourceMappingURL=locations.service.js.map
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/configuration.ts":
+/***/ "../../../../../generated/ports-locations/configuration.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -788,6 +865,56 @@ var Configuration = (function () {
         this.basePath = configurationParameters.basePath;
         this.withCredentials = configurationParameters.withCredentials;
     }
+    /**
+     * Select the correct content-type to use for a request.
+     * Uses {@link Configuration#isJsonMime} to determine the correct content-type.
+     * If no content type is found return the first found type if the contentTypes is not empty
+     * @param {string[]} contentTypes - the array of content types that are available for selection
+     * @returns {string} the selected content-type or <code>undefined</code> if no selection could be made.
+     */
+    Configuration.prototype.selectHeaderContentType = function (contentTypes) {
+        var _this = this;
+        if (contentTypes.length == 0) {
+            return undefined;
+        }
+        var type = contentTypes.find(function (x) { return _this.isJsonMime(x); });
+        if (type === undefined) {
+            return contentTypes[0];
+        }
+        return type;
+    };
+    /**
+     * Select the correct accept content-type to use for a request.
+     * Uses {@link Configuration#isJsonMime} to determine the correct accept content-type.
+     * If no content type is found return the first found type if the contentTypes is not empty
+     * @param {string[]} accepts - the array of content types that are available for selection.
+     * @returns {string} the selected content-type or <code>undefined</code> if no selection could be made.
+     */
+    Configuration.prototype.selectHeaderAccept = function (accepts) {
+        var _this = this;
+        if (accepts.length == 0) {
+            return undefined;
+        }
+        var type = accepts.find(function (x) { return _this.isJsonMime(x); });
+        if (type === undefined) {
+            return accepts[0];
+        }
+        return type;
+    };
+    /**
+     * Check if the given MIME is a JSON MIME.
+     * JSON MIME examples:
+     *   application/json
+     *   application/json; charset=UTF8
+     *   APPLICATION/JSON
+     *   application/vnd.company+json
+     * @param {string} mime - MIME (Multipurpose Internet Mail Extensions)
+     * @return {boolean} True if the given MIME is JSON, false otherwise.
+     */
+    Configuration.prototype.isJsonMime = function (mime) {
+        var jsonMime = new RegExp('^(application\/json|[^;/ \t]+\/[^;/ \t]+[+]json)[ \t]*(;.*)?$', 'i');
+        return mime != null && (jsonMime.test(mime) || mime.toLowerCase() === 'application/json-patch+json');
+    };
     return Configuration;
 }());
 
@@ -795,20 +922,62 @@ var Configuration = (function () {
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/index.ts":
+/***/ "../../../../../generated/ports-locations/encoder.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_api__ = __webpack_require__("../../../../../generated/ports-distances/api/api.ts");
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "PortsService", function() { return __WEBPACK_IMPORTED_MODULE_0__api_api__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CustomHttpUrlEncodingCodec; });
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+/**
+* CustomHttpUrlEncodingCodec
+* Fix plus sign (+) not encoding, so sent as blank space
+* See: https://github.com/angular/angular/issues/11058#issuecomment-247367318
+*/
+var CustomHttpUrlEncodingCodec = (function (_super) {
+    __extends(CustomHttpUrlEncodingCodec, _super);
+    function CustomHttpUrlEncodingCodec() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CustomHttpUrlEncodingCodec.prototype.encodeKey = function (k) {
+        k = _super.prototype.encodeKey.call(this, k);
+        return k.replace(/\+/gi, '%2B');
+    };
+    CustomHttpUrlEncodingCodec.prototype.encodeValue = function (v) {
+        v = _super.prototype.encodeValue.call(this, v);
+        return v.replace(/\+/gi, '%2B');
+    };
+    return CustomHttpUrlEncodingCodec;
+}(__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["e" /* HttpUrlEncodingCodec */]));
+
+//# sourceMappingURL=encoder.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/index.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_api__ = __webpack_require__("../../../../../generated/ports-locations/api/api.ts");
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "LocationsService", function() { return __WEBPACK_IMPORTED_MODULE_0__api_api__["a"]; });
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "DistancesService", function() { return __WEBPACK_IMPORTED_MODULE_0__api_api__["b"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__model_models__ = __webpack_require__("../../../../../generated/ports-distances/model/models.ts");
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__model_models__, "Port")) __webpack_require__.d(__webpack_exports__, "Port", function() { return __WEBPACK_IMPORTED_MODULE_1__model_models__["Port"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__variables__ = __webpack_require__("../../../../../generated/ports-distances/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__model_models__ = __webpack_require__("../../../../../generated/ports-locations/model/models.ts");
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__model_models__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_1__model_models__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/ports-distances/configuration.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/ports-locations/configuration.ts");
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_module__ = __webpack_require__("../../../../../generated/ports-distances/api.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_module__ = __webpack_require__("../../../../../generated/ports-locations/api.module.ts");
 /* unused harmony namespace reexport */
 
 
@@ -819,25 +988,14 @@ var Configuration = (function () {
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/model/country.ts":
+/***/ "../../../../../generated/ports-locations/model/country.ts":
 /***/ (function(module, exports) {
 
-/**
- * Minimax Labs Ports and Distances Service
- * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
- *
- * OpenAPI spec version: 1.0.0
- *
- *
- * NOTE: This class is auto generated by the swagger code generator program.
- * https://github.com/swagger-api/swagger-codegen.git
- * Do not edit the class manually.
- */
 //# sourceMappingURL=country.js.map
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/model/distanceEditRequest.ts":
+/***/ "../../../../../generated/ports-locations/model/distanceEditRequest.ts":
 /***/ (function(module, exports) {
 
 /**
@@ -855,7 +1013,43 @@ var Configuration = (function () {
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/model/identifier.ts":
+/***/ "../../../../../generated/ports-locations/model/futureVersion.ts":
+/***/ (function(module, exports) {
+
+/**
+ * Minimax Labs Ports and Distances Service
+ * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
+ *
+ * OpenAPI spec version: 1.0.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+//# sourceMappingURL=futureVersion.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/model/geographicPoint.ts":
+/***/ (function(module, exports) {
+
+/**
+ * Minimax Labs Ports and Distances Service
+ * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
+ *
+ * OpenAPI spec version: 1.0.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+//# sourceMappingURL=geographicPoint.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/model/identifier.ts":
 /***/ (function(module, exports) {
 
 /**
@@ -873,49 +1067,61 @@ var Configuration = (function () {
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/model/location.ts":
+/***/ "../../../../../generated/ports-locations/model/location.ts":
 /***/ (function(module, exports) {
 
-/**
- * Minimax Labs Ports and Distances Service
- * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
- *
- * OpenAPI spec version: 1.0.0
- *
- *
- * NOTE: This class is auto generated by the swagger code generator program.
- * https://github.com/swagger-api/swagger-codegen.git
- * Do not edit the class manually.
- */
 //# sourceMappingURL=location.js.map
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/model/models.ts":
+/***/ "../../../../../generated/ports-locations/model/models.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__country__ = __webpack_require__("../../../../../generated/ports-distances/model/country.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__country__ = __webpack_require__("../../../../../generated/ports-locations/model/country.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__country___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__country__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__country__, "Port")) __webpack_require__.d(__webpack_exports__, "Port", function() { return __WEBPACK_IMPORTED_MODULE_0__country__["Port"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__distanceEditRequest__ = __webpack_require__("../../../../../generated/ports-distances/model/distanceEditRequest.ts");
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__country__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_0__country__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__distanceEditRequest__ = __webpack_require__("../../../../../generated/ports-locations/model/distanceEditRequest.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__distanceEditRequest___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__distanceEditRequest__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__distanceEditRequest__, "Port")) __webpack_require__.d(__webpack_exports__, "Port", function() { return __WEBPACK_IMPORTED_MODULE_1__distanceEditRequest__["Port"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__identifier__ = __webpack_require__("../../../../../generated/ports-distances/model/identifier.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__identifier___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__identifier__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_2__identifier__, "Port")) __webpack_require__.d(__webpack_exports__, "Port", function() { return __WEBPACK_IMPORTED_MODULE_2__identifier__["Port"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__location__ = __webpack_require__("../../../../../generated/ports-distances/model/location.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__location___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__location__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_3__location__, "Port")) __webpack_require__.d(__webpack_exports__, "Port", function() { return __WEBPACK_IMPORTED_MODULE_3__location__["Port"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__port__ = __webpack_require__("../../../../../generated/ports-distances/model/port.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__port___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__port__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_4__port__, "Port")) __webpack_require__.d(__webpack_exports__, "Port", function() { return __WEBPACK_IMPORTED_MODULE_4__port__["Port"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__route__ = __webpack_require__("../../../../../generated/ports-distances/model/route.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__route___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__route__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_5__route__, "Port")) __webpack_require__.d(__webpack_exports__, "Port", function() { return __WEBPACK_IMPORTED_MODULE_5__route__["Port"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__version__ = __webpack_require__("../../../../../generated/ports-distances/model/version.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__version___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__version__);
-/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_6__version__, "Port")) __webpack_require__.d(__webpack_exports__, "Port", function() { return __WEBPACK_IMPORTED_MODULE_6__version__["Port"]; });
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__distanceEditRequest__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_1__distanceEditRequest__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__futureVersion__ = __webpack_require__("../../../../../generated/ports-locations/model/futureVersion.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__futureVersion___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__futureVersion__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_2__futureVersion__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_2__futureVersion__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__geographicPoint__ = __webpack_require__("../../../../../generated/ports-locations/model/geographicPoint.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__geographicPoint___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__geographicPoint__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_3__geographicPoint__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_3__geographicPoint__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__identifier__ = __webpack_require__("../../../../../generated/ports-locations/model/identifier.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__identifier___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__identifier__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_4__identifier__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_4__identifier__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__location__ = __webpack_require__("../../../../../generated/ports-locations/model/location.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__location___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__location__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_5__location__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_5__location__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__objectId__ = __webpack_require__("../../../../../generated/ports-locations/model/objectId.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__objectId___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__objectId__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_6__objectId__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_6__objectId__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__publishRequest__ = __webpack_require__("../../../../../generated/ports-locations/model/publishRequest.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__publishRequest___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__publishRequest__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_7__publishRequest__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_7__publishRequest__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__responseEntity__ = __webpack_require__("../../../../../generated/ports-locations/model/responseEntity.ts");
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__route__ = __webpack_require__("../../../../../generated/ports-locations/model/route.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__route___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__route__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_9__route__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_9__route__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__routes__ = __webpack_require__("../../../../../generated/ports-locations/model/routes.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__routes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__routes__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_10__routes__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_10__routes__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__routingPoint__ = __webpack_require__("../../../../../generated/ports-locations/model/routingPoint.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__routingPoint___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__routingPoint__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_11__routingPoint__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_11__routingPoint__["Location"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__version__ = __webpack_require__("../../../../../generated/ports-locations/model/version.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__version___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__version__);
+/* harmony namespace reexport (by used) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_12__version__, "Location")) __webpack_require__.d(__webpack_exports__, "Location", function() { return __WEBPACK_IMPORTED_MODULE_12__version__["Location"]; });
+
+
+
+
+
+
 
 
 
@@ -927,7 +1133,7 @@ var Configuration = (function () {
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/model/port.ts":
+/***/ "../../../../../generated/ports-locations/model/objectId.ts":
 /***/ (function(module, exports) {
 
 /**
@@ -941,11 +1147,118 @@ var Configuration = (function () {
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-//# sourceMappingURL=port.js.map
+//# sourceMappingURL=objectId.js.map
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/model/route.ts":
+/***/ "../../../../../generated/ports-locations/model/publishRequest.ts":
+/***/ (function(module, exports) {
+
+/**
+ * Minimax Labs Ports and Distances Service
+ * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
+ *
+ * OpenAPI spec version: 1.0.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+//# sourceMappingURL=publishRequest.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/model/responseEntity.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export ResponseEntity */
+/**
+ * Minimax Labs Ports and Distances Service
+ * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
+ *
+ * OpenAPI spec version: 1.0.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+var ResponseEntity;
+(function (ResponseEntity) {
+    ResponseEntity.StatusCodeEnum = {
+        _100: '100',
+        _101: '101',
+        _102: '102',
+        _103: '103',
+        _200: '200',
+        _201: '201',
+        _202: '202',
+        _203: '203',
+        _204: '204',
+        _205: '205',
+        _206: '206',
+        _207: '207',
+        _208: '208',
+        _226: '226',
+        _300: '300',
+        _301: '301',
+        _302: '302',
+        _303: '303',
+        _304: '304',
+        _305: '305',
+        _307: '307',
+        _308: '308',
+        _400: '400',
+        _401: '401',
+        _402: '402',
+        _403: '403',
+        _404: '404',
+        _405: '405',
+        _406: '406',
+        _407: '407',
+        _408: '408',
+        _409: '409',
+        _410: '410',
+        _411: '411',
+        _412: '412',
+        _413: '413',
+        _414: '414',
+        _415: '415',
+        _416: '416',
+        _417: '417',
+        _418: '418',
+        _419: '419',
+        _420: '420',
+        _421: '421',
+        _422: '422',
+        _423: '423',
+        _424: '424',
+        _426: '426',
+        _428: '428',
+        _429: '429',
+        _431: '431',
+        _451: '451',
+        _500: '500',
+        _501: '501',
+        _502: '502',
+        _503: '503',
+        _504: '504',
+        _505: '505',
+        _506: '506',
+        _507: '507',
+        _508: '508',
+        _509: '509',
+        _510: '510',
+        _511: '511'
+    };
+})(ResponseEntity || (ResponseEntity = {}));
+//# sourceMappingURL=responseEntity.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/model/route.ts":
 /***/ (function(module, exports) {
 
 /**
@@ -963,47 +1276,28 @@ var Configuration = (function () {
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/model/version.ts":
+/***/ "../../../../../generated/ports-locations/model/routes.ts":
 /***/ (function(module, exports) {
 
-/**
- * Minimax Labs Ports and Distances Service
- * ## Canals ### Panama Pacific entrance port: Balboa  <br>  Caribbean entrance port: Colon  <br> Balboa <> Colon: 39.2 nmi ### Suez Mediterranean entrance port: Port Said   <br>Red Sea entrance port: Suez   <br>Port Said <> Suez: 102.3 nmi ## Versions The distance data is versioned. Query the distance endpoint to get a list of all available versions. If no version is specified the latest available version is used. ## Routing Points Users can open Routing Points to get results for voyages __potentially__ passing open Routing Points. The service will always return the shortest voyage, only passing open routing points if it is the shortest option. Forcing a routing point has to be done manually by sending multiple requests, e.g. to get the distance from Zeebrugge to Barcelona via Panama:   Zeebrugge > Colon: 4757.215   Panama Canal length: 39.2   Colon > Barcelona:  11006.962   Total: 15803.3  ### Available Routing Points | Routing Point | Description  | | ------------- | -----------  | | SUZ           | Suez Canal   | | PAN           | Panama Canal | ## Errors Codes When querying a single distance, errors will be returned as a 4xx or 5xx HTTP status code with a description.When querying a whole matrix the distance related errors will be returned in the distance field.  | Code        | Description           | | ----------- | ------------- | | e: no pc    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no rp    | We don't currently have distance data for this route. Please contact us directly and we will seek to resolve the issue. | | e: no us    | Our upstream distance provider does not have a distance for this route. Please contact us directly and we will seek to resolve the issue. |
- *
- * OpenAPI spec version: 1.0.0
- *
- *
- * NOTE: This class is auto generated by the swagger code generator program.
- * https://github.com/swagger-api/swagger-codegen.git
- * Do not edit the class manually.
- */
+//# sourceMappingURL=routes.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/model/routingPoint.ts":
+/***/ (function(module, exports) {
+
+//# sourceMappingURL=routingPoint.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports-locations/model/version.ts":
+/***/ (function(module, exports) {
+
 //# sourceMappingURL=version.js.map
 
 /***/ }),
 
-/***/ "../../../../../generated/ports-distances/rxjs-operators.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_throw__ = __webpack_require__("../../../../rxjs/add/observable/throw.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_throw___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_throw__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/add/operator/catch.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_catch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
-// RxJS imports according to https://angular.io/docs/ts/latest/guide/server-communication.html#!#rxjs
-// See node_module/rxjs/Rxjs.js
-// Import just the rxjs statics and operators we need for THIS app.
-// Statics
-
-// Operators
-
-
-//# sourceMappingURL=rxjs-operators.js.map
-
-/***/ }),
-
-/***/ "../../../../../generated/ports-distances/variables.ts":
+/***/ "../../../../../generated/ports-locations/variables.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1011,7 +1305,7 @@ var Configuration = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BASE_PATH; });
 /* unused harmony export COLLECTION_FORMATS */
 
-var BASE_PATH = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* InjectionToken */]('basePath');
+var BASE_PATH = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["InjectionToken"]('basePath');
 var COLLECTION_FORMATS = {
     'csv': ',',
     'tsv': '   ',
@@ -1044,6 +1338,19 @@ webpackEmptyContext.id = "../../../../../src async recursive";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__distance_matrix_distance_matrix_component__ = __webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ports_ports_component__ = __webpack_require__("../../../../../src/app/ports/ports.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__port_detail_port_detail_component__ = __webpack_require__("../../../../../src/app/port-detail/port-detail.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pricing_pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pricing_commodities_commodities_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pricing_currencies_currencies_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pricing_basefuel_basefuel_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pricing_charter_charter_chart_charter_chart_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pricing_charter_charter_editor_charter_editor_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppRoutingModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1056,12 +1363,59 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 var routes = [
     { path: '', redirectTo: '/distances', pathMatch: 'full' },
     { path: 'distances', component: __WEBPACK_IMPORTED_MODULE_2__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */] },
     { path: 'distances/:version', component: __WEBPACK_IMPORTED_MODULE_2__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */] },
     { path: 'ports/:id', component: __WEBPACK_IMPORTED_MODULE_4__port_detail_port_detail_component__["a" /* PortDetailComponent */] },
-    { path: 'ports', component: __WEBPACK_IMPORTED_MODULE_3__ports_ports_component__["a" /* PortsComponent */] }
+    { path: 'ports', component: __WEBPACK_IMPORTED_MODULE_3__ports_ports_component__["a" /* PortsComponent */] },
+    {
+        path: 'pricing/:version', component: __WEBPACK_IMPORTED_MODULE_5__pricing_pricing_component__["a" /* PricingComponent */],
+        children: [
+            { path: '', redirectTo: 'commodities', pathMatch: 'full' },
+            {
+                path: 'commodities', component: __WEBPACK_IMPORTED_MODULE_6__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */], children: [
+                    { path: '', redirectTo: 'chart', pathMatch: 'full' },
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_11__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_10__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */] }
+                ]
+            },
+            {
+                path: 'currencies', component: __WEBPACK_IMPORTED_MODULE_7__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */], children: [
+                    { path: '', redirectTo: 'chart', pathMatch: 'full' },
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_12__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_13__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */] }
+                ]
+            },
+            {
+                path: 'basefuel', component: __WEBPACK_IMPORTED_MODULE_8__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */], children: [
+                    { path: '', redirectTo: 'chart', pathMatch: 'full' },
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_14__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__["a" /* BaseFuelChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_15__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__["a" /* BaseFuelEditorComponent */] }
+                ]
+            },
+            {
+                path: 'charter', component: __WEBPACK_IMPORTED_MODULE_9__pricing_charter_charter_component__["a" /* CharterComponent */], children: [
+                    { path: '', redirectTo: 'chart', pathMatch: 'full' },
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_16__pricing_charter_charter_chart_charter_chart_component__["a" /* CharterChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_17__pricing_charter_charter_editor_charter_editor_component__["a" /* CharterEditorComponent */] }
+                ]
+            }
+        ]
+    }
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {
@@ -1069,9 +1423,9 @@ var AppRoutingModule = (function () {
     return AppRoutingModule;
 }());
 AppRoutingModule = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["b" /* NgModule */])({
-        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */].forRoot(routes, { useHash: true })],
-        exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */]]
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["RouterModule"].forRoot(routes, { useHash: true })],
+        exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["RouterModule"]]
     })
 ], AppRoutingModule);
 
@@ -1112,14 +1466,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 var AppComponent = (function () {
     function AppComponent() {
-        this.title = 'Ports and Distances';
+        this.title = 'Data Navigator';
     }
     return AppComponent;
 }());
 AppComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'my-app',
-        template: "\n    <h1>{{title}}</h1>\n    <nav>\n        <a routerLink=\"/distances\" routerLinkActive=\"active\">Distances</a>\n        <a routerLink=\"/ports\" routerLinkActive=\"active\">Ports</a>\n    </nav>\n    <router-outlet></router-outlet>\n ",
+        template: "\n    <h1>{{title}}</h1>\n    <nav>\n        <a routerLink=\"/distances\" routerLinkActive=\"active\">Distances</a>\n        <a routerLink=\"/ports\" routerLinkActive=\"active\">Ports</a>\n        <a routerLink=\"/pricing/latest\" routerLinkActive=\"active\">Pricing</a>\n    </nav>\n    <router-outlet></router-outlet>\n ",
         styles: [__webpack_require__("../../../../../src/app/app.component.css")]
     })
 ], AppComponent);
@@ -1133,17 +1487,41 @@ AppComponent = __decorate([
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ng2_handsontable__ = __webpack_require__("../../../../ng2-handsontable/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__generated_ports_distances_api_module__ = __webpack_require__("../../../../../generated/ports-distances/api.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__distance_matrix_distance_matrix_component__ = __webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ports_ports_component__ = __webpack_require__("../../../../../src/app/ports/ports.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__port_detail_port_detail_component__ = __webpack_require__("../../../../../src/app/port-detail/port-detail.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__generated_ports_distances_variables__ = __webpack_require__("../../../../../generated/ports-distances/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/@angular/platform-browser/animations.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ng2_handsontable__ = __webpack_require__("../../../../ng2-handsontable/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__generated_ports_locations_api_module__ = __webpack_require__("../../../../../generated/ports-locations/api.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__distance_matrix_distance_matrix_component__ = __webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ports_ports_component__ = __webpack_require__("../../../../../src/app/ports/ports.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__port_detail_port_detail_component__ = __webpack_require__("../../../../../src/app/port-detail/port-detail.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__generated_ports_locations_variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pricing_pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_primeng_components_chart_chart__ = __webpack_require__("../../../../primeng/components/chart/chart.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_primeng_components_chart_chart___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14_primeng_components_chart_chart__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pricing_commodities_commodities_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pricing_currencies_currencies_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pricing_basefuel_basefuel_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_primeng_components_tabmenu_tabmenu__ = __webpack_require__("../../../../primeng/components/tabmenu/tabmenu.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_primeng_components_tabmenu_tabmenu___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_20_primeng_components_tabmenu_tabmenu__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_primeng_components_dropdown_dropdown__ = __webpack_require__("../../../../primeng/components/dropdown/dropdown.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_primeng_components_dropdown_dropdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_21_primeng_components_dropdown_dropdown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_primeng_components_button_button__ = __webpack_require__("../../../../primeng/components/button/button.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_primeng_components_button_button___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_22_primeng_components_button_button__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pricing_curve_editor_curve_editor_component__ = __webpack_require__("../../../../../src/app/pricing/curve-editor/curve-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pricing_charter_charter_editor_charter_editor_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pricing_charter_charter_chart_charter_chart_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts");
 /* unused harmony export getParameterByName */
 /* unused harmony export ApiBaseUrlFactory */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
@@ -1153,6 +1531,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { BASE_PATH as VESSELS_BASE_PATH} from "../../generated/vessels/variables";
+
+
+
+
+
+
+
 
 
 
@@ -1181,25 +1580,46 @@ var AppModule = (function () {
     return AppModule;
 }());
 AppModule = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["b" /* NgModule */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__angular_core__["NgModule"])({
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */],
-            __WEBPACK_IMPORTED_MODULE_8__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */],
-            __WEBPACK_IMPORTED_MODULE_9__ports_ports_component__["a" /* PortsComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__port_detail_port_detail_component__["a" /* PortDetailComponent */],
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__ports_ports_component__["a" /* PortsComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__port_detail_port_detail_component__["a" /* PortDetailComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__pricing_pricing_component__["a" /* PricingComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */],
+            __WEBPACK_IMPORTED_MODULE_18__pricing_charter_charter_component__["a" /* CharterComponent */],
+            __WEBPACK_IMPORTED_MODULE_19__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__pricing_curve_editor_curve_editor_component__["a" /* CurveEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_25__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_30__pricing_charter_charter_editor_charter_editor_component__["a" /* CharterEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_31__pricing_charter_charter_chart_charter_chart_component__["a" /* CharterChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_28__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__["a" /* BaseFuelChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_29__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__["a" /* BaseFuelEditorComponent */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_4__app_routing_module__["a" /* AppRoutingModule */],
-            __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_6_ng2_handsontable__["a" /* HotTableModule */],
-            __WEBPACK_IMPORTED_MODULE_7__generated_ports_distances_api_module__["a" /* ApiModule */]
+            __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+            __WEBPACK_IMPORTED_MODULE_14_primeng_components_chart_chart__["ChartModule"],
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormsModule"],
+            __WEBPACK_IMPORTED_MODULE_5__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* HttpModule */],
+            __WEBPACK_IMPORTED_MODULE_7_ng2_handsontable__["a" /* HotTableModule */],
+            __WEBPACK_IMPORTED_MODULE_8__generated_ports_locations_api_module__["a" /* ApiModule */],
+            __WEBPACK_IMPORTED_MODULE_20_primeng_components_tabmenu_tabmenu__["TabMenuModule"],
+            __WEBPACK_IMPORTED_MODULE_21_primeng_components_dropdown_dropdown__["DropdownModule"],
+            __WEBPACK_IMPORTED_MODULE_22_primeng_components_button_button__["ButtonModule"],
+            __WEBPACK_IMPORTED_MODULE_15__angular_common_http__["a" /* HttpClientModule */]
         ],
         providers: [
-            [{ provide: __WEBPACK_IMPORTED_MODULE_11__generated_ports_distances_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory }]
+            [{ provide: __WEBPACK_IMPORTED_MODULE_12__generated_ports_locations_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory }]
+            // [{ provide: VESSELS_BASE_PATH, useFactory: ApiBaseUrlFactory }] 
         ],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
 ], AppModule);
 
@@ -1237,7 +1657,7 @@ module.exports = "<label>From:</label> <input type=\"text\" (input)=\"fromChange
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__ = __webpack_require__("../../../../../generated/ports-distances/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__ = __webpack_require__("../../../../../generated/ports-locations/index.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
@@ -1256,16 +1676,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var DistanceMatrixComponent = (function () {
-    function DistanceMatrixComponent(route, portsService, distancesService) {
+    function DistanceMatrixComponent(route, locationsService, distancesService) {
         var _this = this;
         this.route = route;
-        this.portsService = portsService;
+        this.locationsService = locationsService;
         this.distancesService = distancesService;
         this.data = new Array();
         this.colHeaders = new Array();
-        this.ports = new Array();
+        this.locations = new Array();
         // name --> mmxId
-        this.portMap = new Map();
+        this.locationMap = new Map();
         if (route.snapshot.paramMap.has("version")) {
             this.version = route.snapshot.paramMap.get("version");
         }
@@ -1282,7 +1702,7 @@ var DistanceMatrixComponent = (function () {
                     // prevent update calls when building table
                     return;
                 }
-                _this.updateDistance(_this.portForRow(changes[0][0]), _this.portForColumn(changes[0][1]), changes[0][3]);
+                _this.updateDistance(_this.locationForRow(changes[0][0]), _this.locationForColumn(changes[0][1]), changes[0][3]);
             }
         };
     }
@@ -1291,17 +1711,17 @@ var DistanceMatrixComponent = (function () {
     };
     DistanceMatrixComponent.prototype.fetchUpstream = function () {
         var _this = this;
-        this.portsService.getPortsUsingGET(this.version, undefined).toPromise()
-            .then(function (ports) {
-            _this.ports = ports.filter(function (p) { return p.virtual == false; });
-            _this.data = new Array(_this.ports.length);
+        this.locationsService.getLocationsUsingGET(this.version, undefined).toPromise()
+            .then(function (locationns) {
+            _this.locations = locationns.filter(function (l) { return l.virtual == false; });
+            _this.data = new Array(_this.locations.length);
             for (var _i = 0; _i < _this.data.length; _i++) {
-                _this.data[_i] = new Array(_this.ports.length);
+                _this.data[_i] = new Array(_this.locations.length);
             }
-            _this.ports.filter(function (p) { return p.virtual == false; }).forEach(function (p) {
-                _this.portMap.set(p.name, p.mmxId);
-                _this.colHeaders.push(p.name);
-                _this.options.rowHeaders.push(p.name);
+            _this.locations.filter(function (l) { return l.virtual == false; }).forEach(function (l) {
+                _this.locationMap.set(l.name, l.mmxId);
+                _this.colHeaders.push(l.name);
+                _this.options.rowHeaders.push(l.name);
             });
         })
             .catch(function (error) { return console.log(error); });
@@ -1311,50 +1731,50 @@ var DistanceMatrixComponent = (function () {
             for (var i = 0; i < _this.colHeaders.length; i++) {
                 _this.data[i] = new Array();
                 for (var j = 0; j < _this.colHeaders.length; j++) {
-                    _this.data[i][j] = _this.distances[_this.portMap.get(_this.options.rowHeaders[i])][_this.portMap.get(_this.colHeaders[j])];
+                    _this.data[i][j] = _this.distances[_this.locationMap.get(_this.options.rowHeaders[i])][_this.locationMap.get(_this.colHeaders[j])];
                 }
             }
         });
     };
-    DistanceMatrixComponent.prototype.portForRow = function (row) {
+    DistanceMatrixComponent.prototype.locationForRow = function (row) {
         var _this = this;
-        return this.ports.find(function (p) { return p.name === _this.options.rowHeaders[row.toString()]; });
+        return this.locations.find(function (p) { return p.name === _this.options.rowHeaders[row.toString()]; });
     };
-    DistanceMatrixComponent.prototype.portForColumn = function (column) {
+    DistanceMatrixComponent.prototype.locationForColumn = function (column) {
         var _this = this;
-        return this.ports.find(function (p) { return p.name === _this.colHeaders[column.toString()]; });
+        return this.locations.find(function (p) { return p.name === _this.colHeaders[column.toString()]; });
     };
     DistanceMatrixComponent.prototype.updateDistance = function (from, to, distance) {
         this.distancesService.updateDistanceUsingPUT(from.mmxId, to.mmxId, { distance: distance, provider: "Web UI" }).toPromise()
             .then(function (result) { return console.log("successfully updated"); })
             .catch(function (error) { return console.log(error); });
-        console.log("zee update: " + from.name + " -> " + to.name + ": " + distance);
+        console.log("the update: " + from.name + " -> " + to.name + ": " + distance);
     };
     DistanceMatrixComponent.prototype.filterColumn = function (searchString) {
-        var filteredPorts = this.ports.filter(function (p) { return p.name.toLowerCase().startsWith(searchString.toLowerCase()); });
+        var filteredLocations = this.locations.filter(function (p) { return p.name.toLowerCase().startsWith(searchString.toLowerCase()); });
         // let filteredColHeaders = this.colHeaders.filter(e => e.startsWith(searchString))
         var filteredData = new Array();
         for (var i = 0; i < this.options.rowHeaders.length; i++) {
             filteredData[i] = new Array();
-            for (var j = 0; j < filteredPorts.length; j++) {
-                filteredData[i][j] = this.distances[this.portMap.get(this.options.rowHeaders[i])][filteredPorts[j].mmxId];
+            for (var j = 0; j < filteredLocations.length; j++) {
+                filteredData[i][j] = this.distances[this.locationMap.get(this.options.rowHeaders[i])][filteredLocations[j].mmxId];
             }
         }
-        this.colHeaders = filteredPorts.map(function (p) { return p.name; });
+        this.colHeaders = filteredLocations.map(function (p) { return p.name; });
         this.data = filteredData;
         this.options = Object.assign({}, this.options);
     };
     DistanceMatrixComponent.prototype.filterRow = function (searchString) {
-        var filteredPorts = this.ports.filter(function (p) { return p.name.toLowerCase().startsWith(searchString.toLowerCase()); });
+        var filteredLocations = this.locations.filter(function (p) { return p.name.toLowerCase().startsWith(searchString.toLowerCase()); });
         // let filteredColHeaders = this.colHeaders.filter(e => e.startsWith(searchString))
         var filteredData = new Array();
-        for (var i = 0; i < filteredPorts.length; i++) {
+        for (var i = 0; i < filteredLocations.length; i++) {
             filteredData[i] = new Array();
             for (var j = 0; j < this.colHeaders.length; j++) {
-                filteredData[i][j] = this.distances[filteredPorts[i].mmxId][this.portMap.get(this.colHeaders[j])];
+                filteredData[i][j] = this.distances[filteredLocations[i].mmxId][this.locationMap.get(this.colHeaders[j])];
             }
         }
-        this.options.rowHeaders = filteredPorts.map(function (p) { return p.name; });
+        this.options.rowHeaders = filteredLocations.map(function (p) { return p.name; });
         this.data = filteredData;
         this.options = Object.assign({}, this.options);
     };
@@ -1367,12 +1787,12 @@ var DistanceMatrixComponent = (function () {
     return DistanceMatrixComponent;
 }());
 DistanceMatrixComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-distance-matrix',
         template: __webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.html"),
         styles: [__webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* ActivatedRoute */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__["PortsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__["PortsService"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__["DistancesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__["DistancesService"]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["DistancesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["DistancesService"]) === "function" && _c || Object])
 ], DistanceMatrixComponent);
 
 var _a, _b, _c;
@@ -1412,7 +1832,7 @@ module.exports = "<div *ngIf=\"hero\">\n    <h2>{{hero.name}} details!</h2>\n   
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__generated_ports_distances_index__ = __webpack_require__("../../../../../generated/ports-distances/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__ = __webpack_require__("../../../../../generated/ports-locations/index.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap__ = __webpack_require__("../../../../rxjs/add/operator/switchMap.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PortDetailComponent; });
@@ -1431,19 +1851,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var PortDetailComponent = (function () {
-    function PortDetailComponent(route, location, portsService) {
+    function PortDetailComponent(route, angularLocation, locationsService) {
         this.route = route;
-        this.location = location;
-        this.portsService = portsService;
+        this.angularLocation = angularLocation;
+        this.locationsService = locationsService;
     }
     PortDetailComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.paramMap
-            .switchMap(function (params) { return _this.portsService.getPortUsingGET(params.get('id')); })
+            .switchMap(function (params) { return _this.locationsService.getLocationUsingGET(params.get('id')); })
             .subscribe(function (port) { return _this.port = port; });
     };
     PortDetailComponent.prototype.goBack = function () {
-        this.location.back();
+        this.angularLocation.back();
     };
     PortDetailComponent.prototype.save = function () {
         //
@@ -1451,16 +1871,16 @@ var PortDetailComponent = (function () {
     return PortDetailComponent;
 }());
 __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["O" /* Input */])(),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__generated_ports_distances_index__["Port"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__generated_ports_distances_index__["Port"]) === "function" && _a || Object)
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__["Location"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__["Location"]) === "function" && _a || Object)
 ], PortDetailComponent.prototype, "port", void 0);
 PortDetailComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-port-detail',
         template: __webpack_require__("../../../../../src/app/port-detail/port-detail.component.html"),
         styles: [__webpack_require__("../../../../../src/app/port-detail/port-detail.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* ActivatedRoute */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_common__["g" /* Location */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_common__["g" /* Location */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__generated_ports_distances_index__["PortsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__generated_ports_distances_index__["PortsService"]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_common__["Location"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_common__["Location"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__["LocationsService"]) === "function" && _d || Object])
 ], PortDetailComponent);
 
 var _a, _b, _c, _d;
@@ -1498,7 +1918,7 @@ module.exports = "<h2>Ports</h2>\n<ul class=\"ports\">\n    <li *ngFor=\"let por
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__ = __webpack_require__("../../../../../generated/ports-distances/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__ = __webpack_require__("../../../../../generated/ports-locations/index.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PortsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1523,27 +1943,1351 @@ var PortsComponent = (function () {
     };
     PortsComponent.prototype.getPorts = function () {
         var _this = this;
-        this.portsService.getPortsUsingGET().toPromise()
+        this.portsService.getLocationsUsingGET().toPromise()
             .then(function (ports) { return _this.ports = ports; })
             .catch(function (error) { return console.log(error); });
     };
-    PortsComponent.prototype.gotoDetail = function (selectedPort) {
-        this.router.navigate(['/detail', selectedPort.mmxId]);
+    PortsComponent.prototype.gotoDetail = function (selectedLocation) {
+        this.router.navigate(['/detail', selectedLocation.mmxId]);
     };
     return PortsComponent;
 }());
 PortsComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Component */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-ports',
         template: __webpack_require__("../../../../../src/app/ports/ports.component.html"),
         styles: [__webpack_require__("../../../../../src/app/ports/ports.component.css")],
-        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__["PortsService"]]
+        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* Router */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__["PortsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_distances_index__["PortsService"]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]) === "function" && _b || Object])
 ], PortsComponent);
 
 var _a, _b;
 //# sourceMappingURL=ports.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PricingService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+
+var PricingService = (function () {
+    function PricingService(http, basePath) {
+        this.http = http;
+        this.basePath = "http://localhost:8096";
+        if (basePath) {
+            this.basePath = basePath;
+        }
+    }
+    PricingService.prototype.getCurrencies = function (version) {
+        return this.getSpecific(this.basePath + "/currencies", version);
+    };
+    PricingService.prototype.getCommodities = function (version) {
+        return this.getSpecific(this.basePath + "/commodities", version);
+    };
+    PricingService.prototype.getBaseFuel = function (version) {
+        return this.getSpecific(this.basePath + "/basefuel", version);
+    };
+    PricingService.prototype.getCharter = function (version) {
+        return this.getSpecific(this.basePath + "/charter", version);
+    };
+    PricingService.prototype.getSpecific = function (endPoint, version) {
+        var _this = this;
+        var urlParams = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]();
+        if (version != undefined) {
+            urlParams = urlParams.append('v', version);
+        }
+        return this.http.get(endPoint, { params: urlParams }).toPromise().then(function (response) {
+            return _this.getCurves(response.map(function (e) { return e.name; }), version);
+        });
+    };
+    /**
+     * Bulk retrival of curves
+     * @param curves
+     */
+    PricingService.prototype.getCurves = function (curves, version) {
+        var urlParams = curves.reduce(function (params, element) { return params.append("curve", element); }, new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpParams */]());
+        if (version != undefined) {
+            urlParams = urlParams.append('v', version);
+        }
+        return this.http.get(this.basePath + "/bulk", {
+            params: urlParams
+        }).toPromise();
+    };
+    return PricingService;
+}());
+PricingService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_variables__["a" /* BASE_PATH */])),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpClient */]) === "function" && _a || Object, String])
+], PricingService);
+
+var _a;
+//# sourceMappingURL=pricing.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p-dropdown [options]=\"currencies\" [(ngModel)]=\"selectedCurrency\" (onChange)=\"currencyChange()\"></p-dropdown>\n<p-chart type=\"line\" [data]=\"data\"></p-chart>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseFuelChartComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var BaseFuelChartComponent = (function () {
+    function BaseFuelChartComponent(pricingService, route) {
+        this.pricingService = pricingService;
+        this.route = route;
+        this.unfilteredDataSets = new Array();
+        this.currencies = new Array();
+        var root = route.snapshot.root;
+        var pricingRoute = root.children.find(function (e) { return e.paramMap.keys.indexOf("version") > -1; });
+        if (pricingRoute != undefined && pricingRoute.params.version != "latest") {
+            this.version = pricingRoute.params.version;
+        }
+        else {
+            // leave undefined
+        }
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+    }
+    BaseFuelChartComponent.prototype.ngOnInit = function () {
+        this.colorStack = __WEBPACK_IMPORTED_MODULE_2__pricing_component__["a" /* PricingComponent */].COLORS.slice();
+        this.loadCurves();
+    };
+    BaseFuelChartComponent.prototype.loadCurves = function () {
+        var _this = this;
+        this.pricingService.getBaseFuel(this.version)
+            .then(function (result) {
+            _this.data.labels = result.curves[0].curve.map(function (e) { return e.date; });
+            result.curves.forEach(function (element) {
+                // TODO: expression curves are ignored for now. Need to be handled on the server
+                if (element['@class'] === ".ExpressionCurve") {
+                    return;
+                }
+                _this.unfilteredDataSets.push({
+                    currency: element.currency,
+                    label: element.name,
+                    data: element.curve.map(function (e) { return e.value; }),
+                    fill: false,
+                    borderColor: _this.colorStack.pop()
+                });
+            });
+            _this.getCurrencies(result.curves);
+        });
+    };
+    BaseFuelChartComponent.prototype.currencyChange = function () {
+        this.filterCurrencies(this.selectedCurrency);
+    };
+    BaseFuelChartComponent.prototype.getCurrencies = function (curves) {
+        var currencies = new Set();
+        curves.forEach(function (element) {
+            currencies.add(element.currency);
+        });
+        var currencyList = Array.from(currencies);
+        for (var i = 0; i < currencyList.length; i++) {
+            if (i == 0) {
+                this.selectedCurrency = currencyList[i];
+                this.filterCurrencies(currencyList[i]);
+            }
+            this.currencies.push({ label: currencyList[i], value: currencyList[i] });
+        }
+    };
+    BaseFuelChartComponent.prototype.filterCurrencies = function (currency) {
+        this.data = {
+            datasets: this.unfilteredDataSets.filter(function (e) { return e.currency === currency; }),
+            labels: this.data.labels
+        };
+    };
+    return BaseFuelChartComponent;
+}());
+BaseFuelChartComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-base-fuel-chart',
+        template: __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"]) === "function" && _b || Object])
+], BaseFuelChartComponent);
+
+var _a, _b;
+//# sourceMappingURL=base-fuel-chart.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  base-fuel-editor works!\n</p>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseFuelEditorComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var BaseFuelEditorComponent = (function () {
+    function BaseFuelEditorComponent() {
+    }
+    BaseFuelEditorComponent.prototype.ngOnInit = function () {
+    };
+    return BaseFuelEditorComponent;
+}());
+BaseFuelEditorComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-base-fuel-editor',
+        template: __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], BaseFuelEditorComponent);
+
+//# sourceMappingURL=base-fuel-editor.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/basefuel.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/basefuel.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<button pButton type=\"button\" [routerLink]=\"['chart']\" icon=\"fa-line-chart\"  class=\"ui-button-secondary\"></button>\n<button pButton type=\"button\" [routerLink]=\"['editor']\" icon=\"fa-table\"  class=\"ui-button-secondary\"></button>\n<router-outlet></router-outlet>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/basefuel/basefuel.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseFuelComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var BaseFuelComponent = (function () {
+    function BaseFuelComponent() {
+    }
+    BaseFuelComponent.prototype.ngOnInit = function () {
+    };
+    return BaseFuelComponent;
+}());
+BaseFuelComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-basefuel',
+        template: __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]]
+    }),
+    __metadata("design:paramtypes", [])
+], BaseFuelComponent);
+
+//# sourceMappingURL=basefuel.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p-dropdown [options]=\"currencies\" [(ngModel)]=\"selectedCurrency\" (onChange)=\"currencyChange()\"></p-dropdown>\n<p-chart type=\"line\" [data]=\"data\"></p-chart>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CharterChartComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var CharterChartComponent = (function () {
+    function CharterChartComponent(pricingService, route) {
+        this.pricingService = pricingService;
+        this.route = route;
+        this.unfilteredDataSets = new Array();
+        this.currencies = new Array();
+        var root = route.snapshot.root;
+        var pricingRoute = root.children.find(function (e) { return e.paramMap.keys.indexOf("version") > -1; });
+        if (pricingRoute != undefined && pricingRoute.params.version != "latest") {
+            this.version = pricingRoute.params.version;
+        }
+        else {
+            // leave undefined
+        }
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+    }
+    CharterChartComponent.prototype.ngOnInit = function () {
+        this.colorStack = __WEBPACK_IMPORTED_MODULE_2__pricing_component__["a" /* PricingComponent */].COLORS.slice();
+        this.loadCurves();
+    };
+    CharterChartComponent.prototype.loadCurves = function () {
+        var _this = this;
+        this.pricingService.getCharter(this.version)
+            .then(function (result) {
+            _this.data.labels = result.curves[0].curve.map(function (e) { return e.date; });
+            result.curves.forEach(function (element) {
+                // TODO: expression curves are ignored for now. Need to be handled on the server
+                if (element['@class'] === ".ExpressionCurve") {
+                    return;
+                }
+                _this.unfilteredDataSets.push({
+                    currency: element.currency,
+                    label: element.name,
+                    data: element.curve.map(function (e) { return e.value; }),
+                    fill: false,
+                    borderColor: _this.colorStack.pop()
+                });
+            });
+            _this.getCurrencies(result.curves);
+        });
+    };
+    CharterChartComponent.prototype.currencyChange = function () {
+        this.filterCurrencies(this.selectedCurrency);
+    };
+    CharterChartComponent.prototype.getCurrencies = function (curves) {
+        var currencies = new Set();
+        curves.forEach(function (element) {
+            currencies.add(element.currency);
+        });
+        var currencyList = Array.from(currencies);
+        for (var i = 0; i < currencyList.length; i++) {
+            if (i == 0) {
+                this.selectedCurrency = currencyList[i];
+                this.filterCurrencies(currencyList[i]);
+            }
+            this.currencies.push({ label: currencyList[i], value: currencyList[i] });
+        }
+    };
+    CharterChartComponent.prototype.filterCurrencies = function (currency) {
+        this.data = {
+            datasets: this.unfilteredDataSets.filter(function (e) { return e.currency === currency; }),
+            labels: this.data.labels
+        };
+    };
+    return CharterChartComponent;
+}());
+CharterChartComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-charter-chart',
+        template: __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"]) === "function" && _b || Object])
+], CharterChartComponent);
+
+var _a, _b;
+//# sourceMappingURL=charter-chart.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  charter-editor works!\n</p>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CharterEditorComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CharterEditorComponent = (function () {
+    function CharterEditorComponent() {
+    }
+    CharterEditorComponent.prototype.ngOnInit = function () {
+    };
+    return CharterEditorComponent;
+}());
+CharterEditorComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-charter-editor',
+        template: __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], CharterEditorComponent);
+
+//# sourceMappingURL=charter-editor.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<button pButton type=\"button\" [routerLink]=\"['chart']\" icon=\"fa-line-chart\"  class=\"ui-button-secondary\"></button>\n<button pButton type=\"button\" [routerLink]=\"['editor']\" icon=\"fa-table\"  class=\"ui-button-secondary\"></button>\n<router-outlet></router-outlet>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/charter/charter.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CharterComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var CharterComponent = (function () {
+    function CharterComponent() {
+    }
+    CharterComponent.prototype.ngOnInit = function () {
+    };
+    return CharterComponent;
+}());
+CharterComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-charter',
+        template: __webpack_require__("../../../../../src/app/pricing/charter/charter.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/charter/charter.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]]
+    }),
+    __metadata("design:paramtypes", [])
+], CharterComponent);
+
+//# sourceMappingURL=charter.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p-dropdown [options]=\"currencies\" [(ngModel)]=\"selectedCurrency\" (onChange)=\"currencyChange()\"></p-dropdown>\n<p-chart type=\"line\" [data]=\"data\"></p-chart>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CommoditiesChartComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var CommoditiesChartComponent = (function () {
+    function CommoditiesChartComponent(pricingService, route) {
+        this.pricingService = pricingService;
+        this.route = route;
+        this.unfilteredDataSets = new Array();
+        this.currencies = new Array();
+        var root = route.snapshot.root;
+        var pricingRoute = root.children.find(function (e) { return e.paramMap.keys.indexOf("version") > -1; });
+        if (pricingRoute != undefined && pricingRoute.params.version != "latest") {
+            this.version = pricingRoute.params.version;
+            console.log("version: " + this.version);
+        }
+        else {
+            console.log("latest version");
+            // leave undefined
+        }
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+    }
+    CommoditiesChartComponent.prototype.ngOnInit = function () {
+        this.colorStack = __WEBPACK_IMPORTED_MODULE_2__pricing_component__["a" /* PricingComponent */].COLORS.slice();
+        this.loadCurves();
+    };
+    CommoditiesChartComponent.prototype.loadCurves = function () {
+        var _this = this;
+        this.pricingService.getCommodities(this.version)
+            .then(function (result) {
+            _this.data.labels = result.curves[0].curve.map(function (e) { return e.date; });
+            result.curves.forEach(function (element) {
+                // TODO: expression curves are ignored for now. Need to be handled on the server
+                if (element['@class'] === ".ExpressionCurve") {
+                    return;
+                }
+                _this.unfilteredDataSets.push({
+                    currency: element.currency,
+                    label: element.name,
+                    data: element.curve.map(function (e) { return e.value; }),
+                    fill: false,
+                    borderColor: _this.colorStack.pop()
+                });
+            });
+            _this.getCurrencies(result.curves);
+        });
+    };
+    CommoditiesChartComponent.prototype.currencyChange = function () {
+        this.filterCurrencies(this.selectedCurrency);
+    };
+    CommoditiesChartComponent.prototype.getCurrencies = function (curves) {
+        var currencies = new Set();
+        curves.forEach(function (element) {
+            currencies.add(element.currency);
+        });
+        var currencyList = Array.from(currencies);
+        for (var i = 0; i < currencyList.length; i++) {
+            if (i == 0) {
+                this.selectedCurrency = currencyList[i];
+                this.filterCurrencies(currencyList[i]);
+            }
+            this.currencies.push({ label: currencyList[i], value: currencyList[i] });
+        }
+    };
+    CommoditiesChartComponent.prototype.filterCurrencies = function (currency) {
+        this.data = {
+            datasets: this.unfilteredDataSets.filter(function (e) { return e.currency === currency; }),
+            labels: this.data.labels
+        };
+    };
+    return CommoditiesChartComponent;
+}());
+CommoditiesChartComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-commodities-chart',
+        template: __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"]) === "function" && _b || Object])
+], CommoditiesChartComponent);
+
+var _a, _b;
+//# sourceMappingURL=commodities-chart.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<curve-editor [curves]=\"curves\" (afterChange)=\"afterChange($event)\"></curve-editor>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CommoditiesEditorComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var CommoditiesEditorComponent = (function () {
+    function CommoditiesEditorComponent(pricingService) {
+        this.pricingService = pricingService;
+    }
+    CommoditiesEditorComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.pricingService.getCommodities().then(function (commodities) {
+            _this.curves = commodities.curves;
+        });
+    };
+    CommoditiesEditorComponent.prototype.afterChange = function (changes) {
+        console.log("afterChange called!");
+    };
+    return CommoditiesEditorComponent;
+}());
+CommoditiesEditorComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-commodities-editor',
+        template: __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]) === "function" && _a || Object])
+], CommoditiesEditorComponent);
+
+var _a;
+//# sourceMappingURL=commodities-editor.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<button pButton type=\"button\" [routerLink]=\"['chart']\" icon=\"fa-line-chart\"  class=\"ui-button-secondary\"></button>\n<button pButton type=\"button\" [routerLink]=\"['editor']\" icon=\"fa-table\"  class=\"ui-button-secondary\"></button>\n<router-outlet></router-outlet>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/commodities/commodities.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CommoditiesComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CommoditiesComponent = (function () {
+    function CommoditiesComponent() {
+    }
+    CommoditiesComponent.prototype.ngOnInit = function () {
+    };
+    return CommoditiesComponent;
+}());
+CommoditiesComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-commodities',
+        template: __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], CommoditiesComponent);
+
+//# sourceMappingURL=commodities.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p-dropdown [options]=\"currencies\" [(ngModel)]=\"selectedCurrency\" (onChange)=\"currencyChange()\"></p-dropdown>\n<p-chart type=\"line\" [data]=\"data\"></p-chart>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CurrenciesChartComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var CurrenciesChartComponent = (function () {
+    function CurrenciesChartComponent(pricingService, route) {
+        this.pricingService = pricingService;
+        this.route = route;
+        this.unfilteredDataSets = new Array();
+        this.currencies = new Array();
+        var root = route.snapshot.root;
+        var pricingRoute = root.children.find(function (e) { return e.paramMap.keys.indexOf("version") > -1; });
+        if (pricingRoute != undefined && pricingRoute.params.version != "latest") {
+            this.version = pricingRoute.params.version;
+        }
+        else {
+            // leave undefined
+        }
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+    }
+    CurrenciesChartComponent.prototype.ngOnInit = function () {
+        this.colorStack = __WEBPACK_IMPORTED_MODULE_1__pricing_component__["a" /* PricingComponent */].COLORS.slice();
+        this.loadCurves();
+    };
+    CurrenciesChartComponent.prototype.loadCurves = function () {
+        var _this = this;
+        this.pricingService.getCurrencies(this.version)
+            .then(function (result) {
+            _this.data.labels = result.curves[0].curve.map(function (e) { return e.date; });
+            result.curves.forEach(function (element) {
+                // TODO: expression curves are ignored for now. Need to be handled on the server
+                if (element['@class'] === ".ExpressionCurve") {
+                    return;
+                }
+                _this.unfilteredDataSets.push({
+                    currency: element.currency,
+                    label: element.name,
+                    data: element.curve.map(function (e) { return e.value; }),
+                    fill: false,
+                    borderColor: _this.colorStack.pop()
+                });
+            });
+            _this.getCurrencies(result.curves);
+        });
+    };
+    CurrenciesChartComponent.prototype.currencyChange = function () {
+        this.filterCurrencies(this.selectedCurrency);
+    };
+    CurrenciesChartComponent.prototype.getCurrencies = function (curves) {
+        var currencies = new Set();
+        curves.forEach(function (element) {
+            currencies.add(element.currency);
+        });
+        var currencyList = Array.from(currencies);
+        for (var i = 0; i < currencyList.length; i++) {
+            if (i == 0) {
+                this.selectedCurrency = currencyList[i];
+                this.filterCurrencies(currencyList[i]);
+            }
+            this.currencies.push({ label: currencyList[i], value: currencyList[i] });
+        }
+    };
+    CurrenciesChartComponent.prototype.filterCurrencies = function (currency) {
+        this.data = {
+            datasets: this.unfilteredDataSets.filter(function (e) { return e.currency === currency; }),
+            labels: this.data.labels
+        };
+    };
+    return CurrenciesChartComponent;
+}());
+CurrenciesChartComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-currencies-chart',
+        template: __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__pricing_service__["a" /* PricingService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"]) === "function" && _b || Object])
+], CurrenciesChartComponent);
+
+var _a, _b;
+//# sourceMappingURL=currencies-chart.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  currencies-editor works!\n</p>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CurrenciesEditorComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CurrenciesEditorComponent = (function () {
+    function CurrenciesEditorComponent() {
+    }
+    CurrenciesEditorComponent.prototype.ngOnInit = function () {
+    };
+    return CurrenciesEditorComponent;
+}());
+CurrenciesEditorComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-currencies-editor',
+        template: __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], CurrenciesEditorComponent);
+
+//# sourceMappingURL=currencies-editor.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<button pButton type=\"button\" [routerLink]=\"['chart']\" icon=\"fa-line-chart\"  class=\"ui-button-secondary\"></button>\n<button pButton type=\"button\" [routerLink]=\"['editor']\" icon=\"fa-table\"  class=\"ui-button-secondary\"></button>\n<router-outlet></router-outlet>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/currencies/currencies.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CurrenciesComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var CurrenciesComponent = (function () {
+    function CurrenciesComponent() {
+    }
+    CurrenciesComponent.prototype.ngOnInit = function () {
+    };
+    return CurrenciesComponent;
+}());
+CurrenciesComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-currencies',
+        template: __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]]
+    }),
+    __metadata("design:paramtypes", [])
+], CurrenciesComponent);
+
+//# sourceMappingURL=currencies.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/curve-editor/curve-editor.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/curve-editor/curve-editor.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h2>Data Curves</h2>\n<hotTable [data]=\"data\"\n(after-change)=\"afterChange($event)\"\n(after-on-cell-mouse-down)=\"afterOnCellMouseDown($event)\"\n[colHeaders]=\"colHeaders\"\n[options]=\"options\"\n[colWidths]=\"colWidths\">\n</hotTable>\n\n<h2 *ngIf=\"expressionCurves.length > 0\">Expression Curves</h2>\n<div *ngFor=\"let curve of expressionCurves\">\n    <h3>{{curve.name}}</h3>\n    <input type=\"text\" pInputText [(ngModel)]=\"curve.expression\"/>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/curve-editor/curve-editor.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CurveEditorComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CurveEditorComponent = (function () {
+    function CurveEditorComponent() {
+        var _this = this;
+        /**
+         * Only called if there is a change. Null events are swallowed.
+         */
+        this.afterChange = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.data = new Array();
+        this.colHeaders = new Array();
+        this.expressionCurves = new Array();
+        this.options = {
+            // height: 400,
+            rowHeaders: new Array(),
+            rowHeaderWidth: 80,
+            stretchH: 'all',
+            columnSorting: true,
+            contextMenu: false,
+            className: 'htCenter htMiddle',
+            afterChange: function (changes) {
+                if (changes == null) {
+                    return;
+                }
+                console.log(changes);
+                changes.forEach(function (element) {
+                    _this.handleAfterChange(element);
+                });
+            }
+        };
+    }
+    Object.defineProperty(CurveEditorComponent.prototype, "curves", {
+        get: function () {
+            return this._curves;
+        },
+        set: function (curves) {
+            if (curves === undefined)
+                return;
+            this.createData(curves);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CurveEditorComponent.prototype.handleAfterChange = function (changes) {
+        var update = {
+            curveName: this.options.rowHeaders[changes[0]],
+            curveDate: this.colHeaders[changes[1]],
+            oldValue: changes[2],
+            newValue: Number(changes[3])
+        };
+        console.log(update);
+        this.afterChange.emit(update);
+    };
+    CurveEditorComponent.prototype.publishUpdates = function () {
+    };
+    CurveEditorComponent.prototype.ngOnInit = function () {
+    };
+    CurveEditorComponent.prototype.createData = function (curves) {
+        var _this = this;
+        // create headers based on first curve
+        // TODO: check for missmatch
+        curves.find(function (e) { return e['@class'] === '.DataCurve'; }).curve.forEach(function (e) {
+            _this.colHeaders.push(e.date);
+        });
+        var data = new Array();
+        curves.forEach(function (curve) {
+            _this.options.rowHeaders.push(curve.name);
+            if (curve['@class'] === ".ExpressionCurve")
+                return;
+            data.push(curve.curve.map(function (e) { return e.value; }));
+        });
+        this.data = data;
+        this.expressionCurves = curves.filter(function (e) { return e['@class'] === ".ExpressionCurve"; });
+    };
+    return CurveEditorComponent;
+}());
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], CurveEditorComponent.prototype, "curves", null);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]) === "function" && _a || Object)
+], CurveEditorComponent.prototype, "afterChange", void 0);
+CurveEditorComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'curve-editor',
+        template: __webpack_require__("../../../../../src/app/pricing/curve-editor/curve-editor.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/curve-editor/curve-editor.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], CurveEditorComponent);
+
+var _a;
+//# sourceMappingURL=curve-editor.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/pricing.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/pricing.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h2> Pricing </h2>\n<p-tabMenu [model]=\"items\"></p-tabMenu>\n<!-- <nav>\n    <a [routerLink]=\"['commodities']\" routerLinkActive=\"active\">Commodities</a>\n    <a [routerLink]=\"['currencies']\" routerLinkActive=\"active\">Currencies</a>\n    <a [routerLink]=\"['basefuel']\" routerLinkActive=\"active\">Base Fuel</a>\n    <a [routerLink]=\"['charter']\" routerLinkActive=\"active\">Charter</a>\n</nav> -->\n<router-outlet></router-outlet>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pricing/pricing.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PricingComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var PricingComponent = (function () {
+    function PricingComponent(route) {
+        this.route = route;
+        // if (route.snapshot.paramMap.has("version")){
+        //   this.version = route.snapshot.paramMap.get("version");
+        // }
+    }
+    PricingComponent.prototype.ngOnInit = function () {
+        this.items = [
+            { label: 'Commodities', icon: 'fa-fire', routerLink: ['commodities'] },
+            { label: 'Currencies', icon: 'fa-usd', routerLink: ['currencies'] },
+            { label: 'Base Fuel', icon: 'fa-tint', routerLink: ['basefuel'] },
+            { label: 'Charter', icon: 'fa-ship', routerLink: ['charter'] }
+        ];
+    };
+    return PricingComponent;
+}());
+PricingComponent.COLORS = ["#5cbae6", "#b6d957", "#fac364", "#8cd3ff", "#d998cb", "#f2d249", "#93b9c6", "#ccc5a8", "#52bacc", "#dbdb46", "#98aafb"];
+PricingComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-pricing',
+        template: __webpack_require__("../../../../../src/app/pricing/pricing.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pricing/pricing.component.css")],
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"]) === "function" && _a || Object])
+], PricingComponent);
+
+var _a;
+//# sourceMappingURL=pricing.component.js.map
 
 /***/ }),
 
@@ -1578,7 +3322,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["a" /* enableProdMode */])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["enableProdMode"])();
 }
 __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
     .catch(function (err) { return console.log(err); });
@@ -1839,7 +3583,7 @@ webpackContext.id = "../../../../moment/locale recursive ^\\.\\/.*$";
 
 /***/ }),
 
-/***/ 0:
+/***/ 1:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("../../../../../src/main.ts");
@@ -1847,5 +3591,5 @@ module.exports = __webpack_require__("../../../../../src/main.ts");
 
 /***/ })
 
-},[0]);
+},[1]);
 //# sourceMappingURL=main.bundle.js.map
