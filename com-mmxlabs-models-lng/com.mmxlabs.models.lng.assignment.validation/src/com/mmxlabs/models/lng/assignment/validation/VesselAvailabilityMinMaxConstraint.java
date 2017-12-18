@@ -15,6 +15,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -50,71 +51,76 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 
 		if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
-			final Vessel vessel = vesselAvailability.getVessel();
 
-			if (vessel != null) {
-				/**
-				 * Constraints check for min/max duration settings.
-				 */
-				// Min duration can't be greater than max duration
-				if (vesselAvailability.getAvailabilityOrContractMinDuration() != 0 && vesselAvailability.getAvailabilityOrContractMaxDuration() != 0) {
-					if (vesselAvailability.getAvailabilityOrContractMaxDuration() < vesselAvailability.getAvailabilityOrContractMinDuration()) {
-						final String message = String.format("Vessel|%s min duration is superior to the max duration.", vessel.getName());
-						createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MinDuration(), //
-								CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration(), CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities());
-					}
-				}
+			// Only check those in the main scenario
+			if (vesselAvailability.eContainer() instanceof CargoModel) {
 
-				// Max duration centric checks
-				if (vesselAvailability.isSetMaxDuration()) {
-					LocalDateTime startDate = null;
+				final Vessel vessel = vesselAvailability.getVessel();
 
-					if (vesselAvailability.isSetStartBy()) {
-						startDate = vesselAvailability.getStartBy();
-					}
-
-					if (startDate != null) {
-						// Compute the date corresponding to the max duration
-						// Depending on the starting date
-						final int maxDuration = vesselAvailability.getAvailabilityOrContractMaxDuration();
-						final LocalDateTime maxDate = startDate.plusDays(maxDuration);
-
-						if (vesselAvailability.isSetEndAfter()) {
-							// AFTER
-							// The max date should be set after the EndAfter date
-							if (vesselAvailability.getEndAfter().isAfter(maxDate)) {
-								final String message = String.format("Vessel|%s max duration is longer than minimum availability dates (%.1f days).", vessel.getName(),
-
-										(float) Hours.between(vesselAvailability.getStartBy(), vesselAvailability.getEndAfter()) / 24.0f);
-								createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration(), //
-										CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
-							}
-
+				if (vessel != null) {
+					/**
+					 * Constraints check for min/max duration settings.
+					 */
+					// Min duration can't be greater than max duration
+					if (vesselAvailability.getAvailabilityOrContractMinDuration() != 0 && vesselAvailability.getAvailabilityOrContractMaxDuration() != 0) {
+						if (vesselAvailability.getAvailabilityOrContractMaxDuration() < vesselAvailability.getAvailabilityOrContractMinDuration()) {
+							final String message = String.format("Vessel|%s min duration is superior to the max duration.", vessel.getName());
+							createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MinDuration(), //
+									CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration(), CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities());
 						}
 					}
-				}
 
-				// Min duration centric checks
-				if (vesselAvailability.isSetMinDuration()) {
-					LocalDateTime startDate = null;
+					// Max duration centric checks
+					if (vesselAvailability.isSetMaxDuration()) {
+						LocalDateTime startDate = null;
 
-					// select start time if available
-					if (vesselAvailability.isSetStartAfter()) {
-						startDate = vesselAvailability.getStartAfter();
+						if (vesselAvailability.isSetStartBy()) {
+							startDate = vesselAvailability.getStartBy();
+						}
+
+						if (startDate != null) {
+							// Compute the date corresponding to the max duration
+							// Depending on the starting date
+							final int maxDuration = vesselAvailability.getAvailabilityOrContractMaxDuration();
+							final LocalDateTime maxDate = startDate.plusDays(maxDuration);
+
+							if (vesselAvailability.isSetEndAfter()) {
+								// AFTER
+								// The max date should be set after the EndAfter date
+								if (vesselAvailability.getEndAfter().isAfter(maxDate)) {
+									final String message = String.format("Vessel|%s max duration is longer than minimum availability dates (%.1f days).", vessel.getName(),
+
+											(float) Hours.between(vesselAvailability.getStartBy(), vesselAvailability.getEndAfter()) / 24.0f);
+									createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration(), //
+											CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
+								}
+
+							}
+						}
 					}
 
-					if (startDate != null) {
-						// Compute the date corresponding to the min duration
-						// Depending on the ending date
-						final int minDuration = vesselAvailability.getAvailabilityOrContractMinDuration();
-						final LocalDateTime minDate = startDate.plusDays(minDuration);
+					// Min duration centric checks
+					if (vesselAvailability.isSetMinDuration()) {
+						LocalDateTime startDate = null;
 
-						if (vesselAvailability.isSetEndBy()) {
-							if (!(minDate.isBefore(vesselAvailability.getEndBy()) || vesselAvailability.getEndBy().isEqual(minDate))) {
-								final String message = String.format("Vessel|%s min duration is larger than the vessel is available for (%.1f days).", vessel.getName(),
-										(float) Hours.between(vesselAvailability.getStartAfter(), vesselAvailability.getEndBy()) / 24.0f);
-								createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MinDuration(), //
-										CargoPackage.eINSTANCE.getVesselAvailability_EndBy());
+						// select start time if available
+						if (vesselAvailability.isSetStartAfter()) {
+							startDate = vesselAvailability.getStartAfter();
+						}
+
+						if (startDate != null) {
+							// Compute the date corresponding to the min duration
+							// Depending on the ending date
+							final int minDuration = vesselAvailability.getAvailabilityOrContractMinDuration();
+							final LocalDateTime minDate = startDate.plusDays(minDuration);
+
+							if (vesselAvailability.isSetEndBy()) {
+								if (!(minDate.isBefore(vesselAvailability.getEndBy()) || vesselAvailability.getEndBy().isEqual(minDate))) {
+									final String message = String.format("Vessel|%s min duration is larger than the vessel is available for (%.1f days).", vessel.getName(),
+											(float) Hours.between(vesselAvailability.getStartAfter(), vesselAvailability.getEndBy()) / 24.0f);
+									createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MinDuration(), //
+											CargoPackage.eINSTANCE.getVesselAvailability_EndBy());
+								}
 							}
 						}
 					}
