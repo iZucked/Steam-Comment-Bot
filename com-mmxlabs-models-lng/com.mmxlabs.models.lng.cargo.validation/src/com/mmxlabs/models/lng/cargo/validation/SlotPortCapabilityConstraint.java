@@ -4,13 +4,15 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -18,13 +20,18 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
+public class SlotPortCapabilityConstraint extends AbstractModelMultiConstraint {
+
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	protected String validate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
+
 		final EObject object = ctx.getTarget();
 		if (object instanceof Slot) {
 			final EMFEventType eventType = ctx.getEventType();
@@ -37,12 +44,12 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 				final Port port = slot.getPort();
 				// Null ports outside of CargoModel are ok (specifically we expect them to be SpotSlots for non-shipped markets which will be filled in when the Schedule is applied to the scenario.)
 				if (port == null) {
-					if (slot.eContainer() instanceof CargoModel) {
+					if (slot.eContainer() instanceof CargoModel || extraContext.getContainer(slot) instanceof CargoModel) {
 						String message = String.format("[Slot|%s has not port", slot.getName());
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
-						return dsd;
+						statuses.add(dsd);
 					}
 				}
 
@@ -81,13 +88,13 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 							if (cargo != null) {
 								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
 							}
-							return dsd;
+							statuses.add(dsd);
 						}
 					}
 				}
 			}
 		}
-		return ctx.createSuccessStatus();
+		return Activator.PLUGIN_ID;
 	}
 
 }
