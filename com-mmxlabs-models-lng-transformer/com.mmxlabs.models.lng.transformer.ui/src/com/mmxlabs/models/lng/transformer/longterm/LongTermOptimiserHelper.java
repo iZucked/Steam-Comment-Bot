@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -28,7 +29,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -39,8 +42,14 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissio
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class LongTermOptimiserHelper {
+	public static enum ShippingType {
+		SHIPPED,
+		NON_SHIPPED,
+		ALL
+	}
 	/**
 	 * Moves everything to the unused list
 	 * @param sequences
@@ -183,6 +192,60 @@ public class LongTermOptimiserHelper {
 		calculator.run(nominalMarket, loads, discharges, new NullProgressMonitor(), new ProfitAndLossExtractor(optimiserRecorder));
 	}
 
+	/**
+	 * Updates the raw sequences given an allocations matrix
+	 * Note: Assumes that elements are on unused list already
+	 * @param rawSequences
+	 * @param pairingsMap
+	 * @param nominal
+	 * @param portSlotProvider 
+	 * @param virtualVesselSlotProvider 
+	 * @param vesselProvider 
+	 */
+	public static void updateVirtualSequences(@NonNull IModifiableSequences rawSequences, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal, IPortSlotProvider portSlotProvider, IVirtualVesselSlotProvider virtualVesselSlotProvider, IVesselProvider vesselProvider, ShippingType shippingType) {
+		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
+		int insertIndex = 0;
+		for (int i = 0; i < modifiableSequence.size(); i++) {
+			if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) != null && portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() == PortType.End) {
+				break;
+			}
+			insertIndex++;
+		}
+		List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
+		for (ILoadOption loadOption : pairingsMap.keySet()) {
+			IDischargeOption dischargeOption = pairingsMap.get(loadOption);
+			// skip if unallocated
+			if (dischargeOption == null)
+				continue;
+			if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
+				// FOB-DES
+				if (shippingType == ShippingType.SHIPPED || shippingType == ShippingType.ALL) {
+					modifiableSequence.insert(insertIndex++, portSlotProvider.getElement(loadOption));
+					modifiableSequence.insert(insertIndex++, portSlotProvider.getElement(dischargeOption));
+					unusedElements.remove(portSlotProvider.getElement(loadOption));
+					unusedElements.remove(portSlotProvider.getElement(dischargeOption));
+				}
+			} else if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeOption) {
+				// Fob Sale
+				if ((shippingType == ShippingType.NON_SHIPPED || shippingType == ShippingType.ALL)) {
+					IResource resource = LongTermOptimiserHelper.getVirtualResource(dischargeOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
+					if (resource != null) {
+						IModifiableSequence fobSale = rawSequences.getModifiableSequence(resource);
+						LongTermOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, fobSale, portSlotProvider);
+					}
+				}
+			} else if (loadOption instanceof ILoadOption && dischargeOption instanceof IDischargeSlot) {
+				// DES purchase
+				if (shippingType == ShippingType.NON_SHIPPED || shippingType == ShippingType.ALL) {
+					IResource resource = LongTermOptimiserHelper.getVirtualResource(loadOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
+					if (resource != null) {
+						IModifiableSequence desPurchase = rawSequences.getModifiableSequence(resource);
+						LongTermOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, desPurchase, portSlotProvider);
+					}
+				}
+			}
+		}
+	}
 
 
 }
