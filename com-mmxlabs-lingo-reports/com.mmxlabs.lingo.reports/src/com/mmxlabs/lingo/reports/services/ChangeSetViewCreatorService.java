@@ -95,7 +95,7 @@ public class ChangeSetViewCreatorService {
 						partService.switchPerspective(p);
 					} catch (final IllegalStateException e) {
 						// SG: I have seen this happen when we have a modal dialog open (it was the optimisation params).
-						log.error("Unable to open compare perspective", e);
+//						log.error("Unable to open compare perspective", e);
 					}
 					foundPerspective = true;
 					break;
