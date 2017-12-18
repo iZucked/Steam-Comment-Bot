@@ -269,27 +269,29 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		// TODO use other invocation with scheduling rule
-		try {
-			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
-				@Override
-				public void run(final IProgressMonitor monitor) throws CoreException {
-					try {
-						saving = true;
-						modelReference.save();
-						monitor.worked(1);
-					} catch (final IOException e) {
-						log.error("IO Error during save", e);
-					} finally {
-						monitor.done();
-						saving = false;
-						firePropertyChange(PROP_DIRTY);
+		modelReference.executeWithTryLock(false, 2_000, () -> { // Timeout after a few seconds to avoid blocking indefinitely
+			try {
+				ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
+					@Override
+					public void run(final IProgressMonitor monitor) throws CoreException {
+						try {
+							saving = true;
+							modelReference.save();
+							monitor.worked(1);
+						} catch (final IOException e) {
+							log.error("IO Error during save", e);
+						} finally {
+							monitor.done();
+							saving = false;
+							firePropertyChange(PROP_DIRTY);
+						}
 					}
-				}
 
-			}, new ScenarioInstanceSchedulingRule(scenarioInstance), 0, monitor);
-		} catch (final CoreException e) {
-			log.error("Error during save", e);
-		}
+				}, new ScenarioInstanceSchedulingRule(scenarioInstance), 0, monitor);
+			} catch (final CoreException e) {
+				log.error("Error during save", e);
+			}
+		});
 	}
 
 	@Override
