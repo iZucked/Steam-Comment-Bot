@@ -109,7 +109,9 @@ public class ScheduleModelKPIUtils {
 	public static long getScheduleProfitAndLoss(@NonNull final Schedule schedule) {
 
 		long totalPNL = 0L;
-
+		if (schedule == null) {
+			return totalPNL;
+		}
 		for (final Sequence seq : schedule.getSequences()) {
 
 			for (final Event evt : seq.getEvents()) {
@@ -523,10 +525,10 @@ public class ScheduleModelKPIUtils {
 					if (costType == ShippingCostType.ALL || costType == ShippingCostType.LNG_COSTS) {
 						// // Start event and charter out events pay for LNG use
 						if (priceBOG //
-//								|| grouping instanceof StartEvent //
-//								|| grouping instanceof EndEvent //
-//								|| grouping instanceof VesselEventVisit //
-//								|| grouping instanceof GeneratedCharterOut //
+						// || grouping instanceof StartEvent //
+						// || grouping instanceof EndEvent //
+						// || grouping instanceof VesselEventVisit //
+						// || grouping instanceof GeneratedCharterOut //
 						) {
 							total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 						}
