@@ -86,9 +86,9 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -100,6 +100,12 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * 
  */
 public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart */ {
+
+	private Image cellImageSteadyArrow;
+	private Image cellImageGreenArrowDown;
+	private Image cellImageGreenArrowUp;
+	private Image cellImageRedArrowDown;
+	private Image cellImageRedArrowUp;
 
 	@Inject
 	private ESelectionService selectionService;
@@ -126,11 +132,20 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	private boolean compareMode = true;
 	private boolean onlyDiffMode = false;
 
+	private Image createImage(String path) {
+		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
+		return imageDescriptor.createImage();
+	}
+
 	@PostConstruct
 	public void createPartControl(final Composite parent) {
 
-		final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/Pinned.gif");
-		pinImage = imageDescriptor.createImage();
+		pinImage = createImage("icons/Pinned.gif");
+		cellImageSteadyArrow = createImage("icons/steady_arrow.png");
+		cellImageGreenArrowDown = createImage("icons/green_arrow_down.png");
+		cellImageGreenArrowUp = createImage("icons/green_arrow_up.png");
+		cellImageRedArrowDown = createImage("icons/red_arrow_down.png");
+		cellImageRedArrowUp = createImage("icons/red_arrow_up.png");
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
@@ -170,6 +185,32 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			pinImage.dispose();
 			pinImage = null;
 		}
+
+		if (cellImageSteadyArrow != null) {
+			cellImageSteadyArrow.dispose();
+			cellImageSteadyArrow = null;
+		}
+
+		if (cellImageGreenArrowDown != null) {
+			cellImageGreenArrowDown.dispose();
+			cellImageGreenArrowDown = null;
+		}
+
+		if (cellImageGreenArrowUp != null) {
+			cellImageGreenArrowUp.dispose();
+			cellImageGreenArrowUp = null;
+		}
+
+		if (cellImageRedArrowDown != null) {
+			cellImageRedArrowDown.dispose();
+			cellImageRedArrowDown = null;
+		}
+
+		if (cellImageRedArrowUp != null) {
+			cellImageRedArrowUp.dispose();
+			cellImageRedArrowUp = null;
+		}
+
 		if (selectedObjects != null) {
 			selectedObjects.clear();
 		}
@@ -205,7 +246,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	 * A label provider for the "Name" column
 	 * 
 	 */
-	private static class FieldTypeNameLabelProvider extends ColumnLabelProvider {
+	private class FieldTypeNameLabelProvider extends ColumnLabelProvider {
 
 		@Override
 		public Image getImage(final Object element) {
@@ -232,25 +273,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	 * Label Provider created for each column. Returns text for the given {@link CargoEconsReportRow} enum (as the input element) for the {@link IFieldTypeMapper} object passed in during creation.
 	 * 
 	 */
-	private static class FieldTypeMapperLabelProvider extends ColumnLabelProvider {
+	private class FieldTypeMapperLabelProvider extends ColumnLabelProvider {
 
 		private final Object columnElement;
-
-		private final static ImageDescriptor imageDescriptorSteadyArrow = Activator.Implementation.getImageDescriptor("icons/steady_arrow.png");
-
-		private final static ImageDescriptor imageDescriptorGreenArrowDown = Activator.Implementation.getImageDescriptor("icons/green_arrow_down.png");
-		private final static ImageDescriptor imageDescriptorGreenArrowUp = Activator.Implementation.getImageDescriptor("icons/green_arrow_up.png");
-
-		private final static ImageDescriptor imageDescriptorRedArrowDown = Activator.Implementation.getImageDescriptor("icons/red_arrow_down.png");
-		private final static ImageDescriptor imageDescriptorRedArrowUp = Activator.Implementation.getImageDescriptor("icons/red_arrow_up.png");
-
-		private final Image cellImageSteadyArrow = imageDescriptorSteadyArrow.createImage();
-
-		private final Image cellImageGreenArrowDown = imageDescriptorGreenArrowDown.createImage();
-		private final Image cellImageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
-
-		private final Image cellImageRedArrowDown = imageDescriptorRedArrowDown.createImage();
-		private final Image cellImageRedArrowUp = imageDescriptorRedArrowUp.createImage();
 
 		public FieldTypeMapperLabelProvider(final Object columnElement) {
 			this.columnElement = columnElement;
