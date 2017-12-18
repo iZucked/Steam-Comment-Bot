@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
@@ -121,7 +122,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_CanalCosts");
 	}
 
-	private final AdapterImpl changeListener = new EContentAdapter() {
+	private final @NonNull AdapterImpl changeListener = new EContentAdapter() {
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			//
 			super.notifyChanged(msg);

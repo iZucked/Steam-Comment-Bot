@@ -419,7 +419,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	}
 
-	private final EContentAdapter historyRenameAdaptor = new EContentAdapter() {
+	private final @NonNull EContentAdapter historyRenameAdaptor = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -432,7 +432,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	/**
 	 * If the current model is deleted, then clear the input
 	 */
-	private final EContentAdapter deletedOptionModelAdapter = new EContentAdapter() {
+	private final @NonNull EContentAdapter deletedOptionModelAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -465,7 +465,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 	};
 
-	private final MMXContentAdapter refreshAdapter = new MMXContentAdapter() {
+	private final @NonNull MMXContentAdapter refreshAdapter = new MMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {

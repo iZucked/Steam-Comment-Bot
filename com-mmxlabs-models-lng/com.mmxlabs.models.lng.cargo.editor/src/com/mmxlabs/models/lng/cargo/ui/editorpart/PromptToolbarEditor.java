@@ -12,6 +12,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.ControlContribution;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
@@ -84,7 +85,7 @@ public class PromptToolbarEditor extends ControlContribution {
 
 	private boolean locked = false;
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final @NonNull EContentAdapter adapter = new EContentAdapter() {
 		public void notifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
 			if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) {

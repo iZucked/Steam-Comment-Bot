@@ -45,7 +45,7 @@ public class FleetVersionCommandWrapper implements IWrappedCommandProvider {
 
 	private EditingDomain editingDomain;
 	private final boolean[] changedRef = new boolean[1];
-	private final Adapter adapter = createAdapter(changedRef);
+	private final @NonNull Adapter adapter = createAdapter(changedRef);
 	private FleetModel fleetModel;
 	private ModelArtifact modelArtifact;
 
@@ -86,7 +86,7 @@ public class FleetVersionCommandWrapper implements IWrappedCommandProvider {
 		};
 	}
 
-	private Adapter createAdapter(final boolean[] changedRef) {
+	private @NonNull Adapter createAdapter(final boolean[] changedRef) {
 
 		return new EContentAdapter() {
 

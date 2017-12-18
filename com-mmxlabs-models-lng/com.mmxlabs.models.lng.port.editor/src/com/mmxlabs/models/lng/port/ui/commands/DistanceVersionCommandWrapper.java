@@ -43,7 +43,7 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 
 	private EditingDomain editingDomain;
 	private final boolean[] changedRef = new boolean[1];
-	private final Adapter adapter = createAdapter(changedRef);
+	private final @NonNull Adapter adapter = createAdapter(changedRef);
 	private PortModel portModel;
 	private ModelArtifact modelArtifact;
 
@@ -84,7 +84,7 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 		};
 	}
 
-	private Adapter createAdapter(final boolean[] changedRef) {
+	private @NonNull Adapter createAdapter(final boolean[] changedRef) {
 
 		return new EContentAdapter() {
 

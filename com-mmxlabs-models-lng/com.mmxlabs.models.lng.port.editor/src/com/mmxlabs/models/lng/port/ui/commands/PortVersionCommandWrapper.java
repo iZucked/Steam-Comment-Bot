@@ -84,7 +84,7 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 		};
 	}
 
-	private Adapter createAdapter(final boolean[] changedRef) {
+	private @NonNull Adapter createAdapter(final boolean[] changedRef) {
 
 		return new EContentAdapter() {
 

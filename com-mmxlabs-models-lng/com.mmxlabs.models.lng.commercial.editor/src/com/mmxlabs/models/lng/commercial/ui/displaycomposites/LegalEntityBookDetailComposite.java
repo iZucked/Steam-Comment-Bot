@@ -20,6 +20,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -197,7 +198,7 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 				final EditingDomain ed = commandHandler.getEditingDomain();
 				commandHandler.handleCommand(SetCommand.create(ed, element, attr, value)
 
-				, (EObject) element, attr);
+						, (EObject) element, attr);
 			}
 
 			@Override
@@ -315,7 +316,7 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 	}
 
 	BaseEntityBook oldValue = null;
-	final Adapter adapter = new MMXContentAdapter() {
+	private final @NonNull Adapter adapter = new MMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {

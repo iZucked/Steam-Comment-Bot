@@ -23,6 +23,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
@@ -380,7 +381,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	}
 
 	VesselStateAttributes oldValue = null;
-	final Adapter adapter = new MMXContentAdapter() {
+	private final @NonNull Adapter adapter = new MMXContentAdapter() {
 
 		@Override
 		public void reallyNotifyChanged(Notification notification) {

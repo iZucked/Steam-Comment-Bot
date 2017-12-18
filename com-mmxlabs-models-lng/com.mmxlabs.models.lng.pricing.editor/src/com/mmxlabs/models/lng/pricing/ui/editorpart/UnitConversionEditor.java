@@ -69,7 +69,7 @@ public class UnitConversionEditor extends Dialog {
 	private final IScenarioEditingLocation scenarioEditingLocation;
 	private DialogValidationSupport dialogValidationSupport;
 	private EObjectTableViewer viewer;
-	private EContentAdapter changeAdapter = new EContentAdapter() {
+	private final @NonNull EContentAdapter changeAdapter = new EContentAdapter() {
 		public void notifyChanged(org.eclipse.emf.common.notify.Notification notification) {
 			super.notifyChanged(notification);
 			if (pricingModel != null) {

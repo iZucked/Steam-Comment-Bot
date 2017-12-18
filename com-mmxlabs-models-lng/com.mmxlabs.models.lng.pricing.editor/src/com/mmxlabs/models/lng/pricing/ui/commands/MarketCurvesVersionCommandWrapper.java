@@ -46,7 +46,7 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 
 	private EditingDomain editingDomain;
 	private final boolean[] changedRef = new boolean[1];
-	private final Adapter adapter = createAdapter(changedRef);
+	private final @NonNull Adapter adapter = createAdapter(changedRef);
 	private PricingModel pricingModel;
 	private ModelArtifact modelArtifact;
 
@@ -87,7 +87,7 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 		};
 	}
 
-	private Adapter createAdapter(final boolean[] changedRef) {
+	private @NonNull Adapter createAdapter(final boolean[] changedRef) {
 
 		return new EContentAdapter() {
 
