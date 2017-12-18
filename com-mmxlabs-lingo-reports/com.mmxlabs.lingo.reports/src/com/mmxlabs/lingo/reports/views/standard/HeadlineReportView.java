@@ -95,7 +95,9 @@ public class HeadlineReportView extends ViewPart {
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_EQUITY(ColumnType.Label, "Equity", null, "features:report-equity-book"), VALUE_EQUITY(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:report-equity-book"), //
 		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null, "features:optimisation-charter-out-generation"), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME,
-				"features:optimisation-charter-out-generation"), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:optimisation-charter-out-generation"), //
+				"features:optimisation-charter-out-generation"), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-purchase-cost"), //
+		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"),  VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-purchase-cost"), //
+		LABEL_SALES_REVENUE(ColumnType.Label, "S. Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-sales-revenue"), //
 		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
 		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
 
@@ -192,7 +194,7 @@ public class HeadlineReportView extends ViewPart {
 							rowElements.add(pPinnedData);
 							pPinnedData = null;
 						} else {
-							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null, null));
+							rowElements.add(new RowData());
 						}
 					}
 
@@ -241,6 +243,10 @@ public class HeadlineReportView extends ViewPart {
 				return d.upstreamDownstreamPNL;
 			case VALUE_VIOLATIONS:
 				return d.capacityViolationCount;
+			case VALUE_PURCHASE_COST:
+				return d.purchaseCost;
+			case VALUE_SALES_REVENUE:
+				return d.salesRevenue;
 			default:
 				break;
 
@@ -361,6 +367,20 @@ public class HeadlineReportView extends ViewPart {
 						color = SWT.COLOR_BLACK;
 					} else {
 						color = (d.latenessExcludingFlex - pinD.latenessExcludingFlex) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
+					}
+					break;
+				case VALUE_PURCHASE_COST:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						color = (d.purchaseCost - pinD.purchaseCost) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case VALUE_SALES_REVENUE:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						color = (d.salesRevenue - pinD.salesRevenue) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
 				default:

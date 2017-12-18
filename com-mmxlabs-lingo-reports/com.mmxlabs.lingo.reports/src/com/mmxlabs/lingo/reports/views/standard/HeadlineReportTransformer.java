@@ -6,11 +6,14 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -24,8 +27,10 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 class HeadlineReportTransformer {
 
 	public static class RowData {
+
 		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long upstreamDownstreamPNL, final Long mtmPnl, final Long idleTime,
-				final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex) {
+				final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex, Long purchaseCost,
+				Long salesRevenue) {
 			super();
 			this.scheduleName = scheduleName;
 			this.totalPNL = totalPNL;
@@ -39,12 +44,14 @@ class HeadlineReportTransformer {
 			this.capacityViolationCount = capacityViolationCount;
 			this.latenessIncludingFlex = latenessIncludingFlex;
 			this.latenessExcludingFlex = latenessExcludingFlex;
+			this.purchaseCost = purchaseCost;
+			this.salesRevenue = salesRevenue;
 			this.dummy = false;
 		}
 
 		public RowData() {
 			super();
-			this.scheduleName = null;
+			this.scheduleName = "";
 			this.totalPNL = null;
 			this.tradingPNL = null;
 			this.shippingPNL = null;
@@ -56,6 +63,8 @@ class HeadlineReportTransformer {
 			this.capacityViolationCount = null;
 			this.latenessIncludingFlex = null;
 			this.latenessExcludingFlex = null;
+			this.salesRevenue = null;
+			this.purchaseCost = null;
 			this.dummy = true;
 		}
 
@@ -73,11 +82,15 @@ class HeadlineReportTransformer {
 		public final Long capacityViolationCount;
 		public final Long latenessIncludingFlex;
 		public final Long latenessExcludingFlex;
+		public final Long salesRevenue;
+		public final Long purchaseCost;
 	}
 
 	@NonNull
 	public RowData transform(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult) {
 
+		long totalSalesRevenue = 0L;
+		long totalPurchaseCost = 0L;
 		long totalMtMPNL = 0L;
 		long totalIdleHours = 0L;
 		long totalGCOHours = 0L;
@@ -99,6 +112,17 @@ class HeadlineReportTransformer {
 			totalMtMPNL += ScheduleModelKPIUtils.getElementShippingPNL(marketAllocation);
 		}
 
+		for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+			for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				if (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
+					totalPurchaseCost += slotAllocation.getVolumeValue();
+				} else {
+					totalSalesRevenue += slotAllocation.getVolumeValue();
+
+				}
+			}
+		}
+
 		final long[] scheduleProfitAndLoss = ScheduleModelKPIUtils.getScheduleProfitAndLossSplit(schedule);
 		final long totalTradingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.TRADING_PNL_IDX];
 		final long totalShippingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.SHIPPING_PNL_IDX];
@@ -112,6 +136,6 @@ class HeadlineReportTransformer {
 
 		ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 		return new RowData(modelRecord.getName(), totalTradingPNL + totalShippingPNL + totalUpstreamPNL, totalTradingPNL, totalShippingPNL, totalUpstreamPNL, totalMtMPNL, totalIdleHours,
-				totalGCOHours, totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex);
+				totalGCOHours, totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex, totalPurchaseCost, totalSalesRevenue);
 	}
 }
