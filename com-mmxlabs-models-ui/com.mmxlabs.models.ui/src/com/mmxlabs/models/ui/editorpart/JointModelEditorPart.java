@@ -129,7 +129,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 		@Override
 		public void dirtyStatusChanged(@NonNull ModelRecord modelRecord, boolean isDirty) {
-			firePropertyChange(PROP_DIRTY);
+			RunnerHelper.asyncExec(() -> firePropertyChange(PROP_DIRTY));
 		}
 	};
 
@@ -417,7 +417,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			site.setSelectionProvider(this);
 
 			validationContextStack.clear();
-			
+
 			boolean relaxedValidation = false;
 			final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
 			if (scenarioInstance != null) {
