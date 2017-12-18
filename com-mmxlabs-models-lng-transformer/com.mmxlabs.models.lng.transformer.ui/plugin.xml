@@ -50,48 +50,6 @@
             </activeWhen>
          </handler>
          <handler
-               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.ForkAndStartOptimisationHandler"
-               commandId="com.mmxlabs.commands.optimisation.forkandplay">
-            <enabledWhen>
-                  <with
-                        variable="selection">
-               <iterate
-                     ifEmpty="false">
-                  <and>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                     </instanceof>
-                     <not><test
-                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
-                          forcePluginActivation="true">
-                     </test></not>
-                                          <test
-                          property="com.mmxlabs.scenario.service.ui.caps.forking"
-                          forcePluginActivation="true">
-                     </test>
-                     <test
-                           forcePluginActivation="true"
-                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPlay">
-                     </test>
-                  </and>
-               </iterate>
-                  </with>
-            </enabledWhen>
-            <activeWhen>
-              <with
-                        variable="selection">
-               <iterate
-                        ifEmpty="false">
-                  <and>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                     </instanceof>
-                  </and>
-               </iterate>
-                    </with>
-            </activeWhen>
-         </handler>
-         <handler
                class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.StopOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.terminate">
             <enabledWhen>
@@ -260,11 +218,6 @@
                id="com.mmxlabs.commands.optimisation.evaluate"
                name="Evaluate Schedule">
          </command>
-         <command
-               categoryId="com.mmxlabs.commands.category.optimisation"
-               id="com.mmxlabs.commands.optimisation.forkandplay"
-               name="Fork and Optimise">
-         </command>
       </extension>
       
       <extension
@@ -294,36 +247,6 @@
                           property="com.mmxlabs.scenario.service.ui.flags.readonly"
                           forcePluginActivation="true">
                      </test></not>
-
-                           </iterate>
-                        </with>
-                        <count
-                              value="1">
-                        </count>
-                     </and>
-                  </visibleWhen>
-               </command>
-               <command
-                     commandId="com.mmxlabs.commands.optimisation.forkandplay"
-                     icon="icons/forkandoptimise.gif"
-                     id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
-                     label="Fork and Optimise"
-                     style="push"
-                     tooltip="Fork and Optimise">
-                  <visibleWhen
-                        checkEnabled="false">
-                     <and>
-                        <with
-                              variable="selection">
-                           <iterate
-                                 ifEmpty="false">
-                              <instanceof
-                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                              </instanceof>
-	 							                     <test
-                          property="com.mmxlabs.scenario.service.ui.caps.forking"
-                          forcePluginActivation="true">
-                     </test>
 
                            </iterate>
                         </with>
@@ -370,15 +293,6 @@
                   style="push"
                   toolbarPath="additions"
                   tooltip="Terminate optimisation">
-            </action>
-            <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartEditorActionDelegate"
-                  definitionId="com.mmxlabs.commands.optimisation.forkandplay"
-                  icon="icons/forkandoptimise.gif"
-                  id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
-                  label="Fork and Optimise"
-                  toolbarPath="additions"
-                  tooltip="Fork scenario and optimise the fork">
             </action>
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
