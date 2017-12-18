@@ -154,6 +154,37 @@ public class ModelReference implements Closeable {
 			return false;
 		}
 	}
+	/**
+	 * Execute some code within the context of a write lock.
+	 */
+	public boolean executeWithTryLock(final boolean disableCommandProviders, int timeOutInMillis, final Runnable hook) {
+		final ScenarioLock lock = getLock();
+		if (lock.tryLock(timeOutInMillis)) {
+			try {
+				CommandProviderAwareEditingDomain commandProviderEditingDomain = null;
+				try {
+					if (disableCommandProviders) {
+						final EditingDomain editingDomain = getEditingDomain();
+						if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+							commandProviderEditingDomain = (CommandProviderAwareEditingDomain) editingDomain;
+							commandProviderEditingDomain.setCommandProvidersDisabled(true);
+						}
+					}
+					
+					hook.run();
+				} finally {
+					if (commandProviderEditingDomain != null) {
+						commandProviderEditingDomain.setCommandProvidersDisabled(false);
+					}
+				}
+			} finally {
+				lock.unlock();
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	@Override
 	protected void finalize() throws Throwable {
