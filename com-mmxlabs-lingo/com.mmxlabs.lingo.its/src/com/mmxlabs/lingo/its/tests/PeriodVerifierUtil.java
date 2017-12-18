@@ -67,9 +67,9 @@ public class PeriodVerifierUtil {
 					if (checkPanamaBookings) {
 						// Assert.assertEquals(fullJourney.getCanalBooking(), periodJourney.getCanalBooking());
 						Assert.assertEquals(fullJourney.getCanalBookingPeriod(), periodJourney.getCanalBookingPeriod());
-						Assert.assertEquals(fullJourney.getCanalDate(), periodJourney.getCanalDate());
-						Assert.assertEquals(fullJourney.getCanalArrival(), periodJourney.getCanalArrival());
-						Assert.assertEquals(fullJourney.getLatestPossibleCanalDate(), periodJourney.getLatestPossibleCanalDate());
+						Assert.assertEquals(fullJourney.getCanalDateTime(), periodJourney.getCanalDateTime());
+						Assert.assertEquals(fullJourney.getCanalArrivalTime(), periodJourney.getCanalArrivalTime());
+						Assert.assertEquals(fullJourney.getLatestPossibleCanalDateTime(), periodJourney.getLatestPossibleCanalDateTime());
 						// Use Enum in master branch
 						// Assert.assertEquals(fullJourney.getCanalEntry(), periodJourney.getCanalEntry().getName());
 					}
