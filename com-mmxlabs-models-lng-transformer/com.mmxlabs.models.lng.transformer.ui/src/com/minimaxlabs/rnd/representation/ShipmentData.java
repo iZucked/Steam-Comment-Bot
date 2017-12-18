@@ -3,7 +3,7 @@ package com.minimaxlabs.rnd.representation;
 import java.io.Serializable;
 
 public class ShipmentData implements Serializable {
-    private static final long serialVersionUID = 5517835927614289513L;
+    private static final long serialVersionUID = 5517835927614289514L;
 
     private int m = 0;                      // cargo count - includes end index
     private int n = 0;                      // ship count
@@ -12,9 +12,8 @@ public class ShipmentData implements Serializable {
     private int[][] cargoTransit;           // cargo delivery time (port to port)
     private int cargoToCargoTime[][][];     // size: m x m x n
     private double[][][] cargoToCargoCost;
+    private boolean[][] cargoVesselRestrictions;
     private Interval[] load, discharge;
-
-//    public static ShipmentData INSTANCE = new ShipmentData();
 
     public ShipmentData(int m, int n, double[] pnl, int[][][] cargoToCargoTime, double[][][] cargoToCargoCost, Interval[] load) {
         this.m = m;
@@ -37,11 +36,12 @@ public class ShipmentData implements Serializable {
         this.load = load;
         this.discharge = discharge;
     }
-
-    // return same object at deserialization
-//    private Object readResolve() {
-//        return INSTANCE;
-//    }
+    
+    public ShipmentData(int m, int n, double[] cargoPNL, double[] vesselCapacities, int[][][] cargoToCargoTime, boolean[][] cargoVesselRestrictions, double[][][] cargoToCargoCost, int[][] cargoTransit,
+            Interval[] load, Interval[] discharge) {
+    		this(m, n, cargoPNL, vesselCapacities, cargoToCargoTime, cargoToCargoCost, cargoTransit, load, discharge);
+    		this.setCargoVesselRestrictions(cargoVesselRestrictions);
+    }
 
     public int[][] getCargoTransit() {
         return cargoTransit;
@@ -113,5 +113,13 @@ public class ShipmentData implements Serializable {
 
 	public void setVesselCapacities(double[] vesselCapacities) {
 		this.vesselCapacities = vesselCapacities;
+	}
+
+	public boolean[][] getCargoVesselRestrictions() {
+		return cargoVesselRestrictions;
+	}
+
+	public void setCargoVesselRestrictions(boolean[][] cargoVesselRestrictions) {
+		this.cargoVesselRestrictions = cargoVesselRestrictions;
 	}
 }
