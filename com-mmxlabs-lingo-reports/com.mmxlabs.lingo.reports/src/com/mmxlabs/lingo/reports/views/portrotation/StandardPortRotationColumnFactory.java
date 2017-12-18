@@ -357,15 +357,15 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canalarrival":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Canal Arrival", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, sp.getJourney_CanalArrival()));
+					new SimpleEmfBlockColumnFactory(columnID, "Canal Arrival", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterNoTz, sp.getJourney_CanalArrivalTime()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canaldate":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Canal Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, sp.getJourney_CanalDate()));
+					new SimpleEmfBlockColumnFactory(columnID, "Canal Date", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterNoTz, sp.getJourney_CanalDateTime()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.latestpossiblecanaldate":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Latest Canal Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, sp.getJourney_LatestPossibleCanalDate()));
+					new SimpleEmfBlockColumnFactory(columnID, "Latest Canal Date", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterNoTz, sp.getJourney_LatestPossibleCanalDateTime()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canalentry":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal Entry", null, ColumnType.NORMAL, new BaseFormatter() {

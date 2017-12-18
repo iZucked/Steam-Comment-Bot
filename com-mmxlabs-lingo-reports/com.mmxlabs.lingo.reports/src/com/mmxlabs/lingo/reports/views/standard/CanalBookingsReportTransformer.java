@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class CanalBookingsReportTransformer {
 		public final boolean dummy;
 		public final boolean preBooked;
 		public final String scheduleName;
-		public final @Nullable LocalDate bookingDate;
+		public final @Nullable LocalDateTime bookingDate;
 		public final @Nullable String entryPointName;
 		public final @Nullable PortVisit event;
 		public final RouteOption routeOption;
@@ -53,8 +54,9 @@ public class CanalBookingsReportTransformer {
 		public boolean warn;
 		public boolean pinned;
 
-		public RowData(final @NonNull String scheduleName, boolean pinned, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption, final @NonNull LocalDate bookingDate,
-				final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period, final @Nullable Slot nextSlot, @Nullable final String notes) {
+		public RowData(final @NonNull String scheduleName, boolean pinned, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption,
+				final @NonNull LocalDateTime bookingDate, final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period, final @Nullable Slot nextSlot,
+				@Nullable final String notes) {
 			super();
 			this.scheduleName = scheduleName;
 			this.pinned = pinned;
@@ -177,13 +179,13 @@ public class CanalBookingsReportTransformer {
 					if (journey.getCanalBooking() != null) {
 						final CanalBookingSlot booking = journey.getCanalBooking();
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), booking.getCanalEntrance());
-						result.add(new RowData(modelRecord.getName(), pinned, true, booking, journey.getRouteOption(), booking.getBookingDate(), entryPointName, (PortVisit) journey.getPreviousEvent(),
-								period, nextSlot, booking.getNotes()));
+						result.add(new RowData(modelRecord.getName(), pinned, true, booking, journey.getRouteOption(), booking.getBookingDate().atTime(3, 0), entryPointName,
+								(PortVisit) journey.getPreviousEvent(), period, nextSlot, booking.getNotes()));
 						existingBookings.remove(booking);
 					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
 
-						final RowData rowData = new RowData(modelRecord.getName(), pinned, false, null, journey.getRouteOption(), journey.getCanalDate(), entryPointName,
+						final RowData rowData = new RowData(modelRecord.getName(), pinned, false, null, journey.getRouteOption(), journey.getCanalDateTime(), entryPointName,
 								(PortVisit) journey.getPreviousEvent(), period, nextSlot, "");
 						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 							if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
@@ -208,7 +210,8 @@ public class CanalBookingsReportTransformer {
 		// unused options
 		for (final CanalBookingSlot booking : existingBookings) {
 			final String entryPointName = modelDistanceProvider.getCanalEntranceName(booking.getRouteOption(), booking.getCanalEntrance());
-			result.add(new RowData(modelRecord.getName(), pinned, true, booking, booking.getRouteOption(), booking.getBookingDate(), entryPointName, null, "Unused", null, booking.getNotes()));
+			result.add(new RowData(modelRecord.getName(), pinned, true, booking, booking.getRouteOption(), booking.getBookingDate().atTime(3, 0), entryPointName, null, "Unused", null,
+					booking.getNotes()));
 		}
 
 		return result;

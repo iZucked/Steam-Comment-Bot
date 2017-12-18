@@ -21,7 +21,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.common.time.Days;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -130,7 +130,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				newEvents.add(event);
 				if (event instanceof Journey) {
 					final Journey journey = (Journey) event;
-					if (journey.getCanalDate() != null) {
+					if (journey.getCanalDateTime() != null) {
 						if (journey.getRouteOption() == RouteOption.PANAMA) {
 							final IScenarioDataProvider scenarioDataProviderFor = getScenarioDataProviderFor(journey);
 							if (scenarioDataProviderFor != null) {
@@ -141,14 +141,14 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 									final CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
 									canal.setLinkedSequence(journey.getSequence());
 									canal.setLinkedJourney(journey);
-									canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
+									canal.setStart(journey.getCanalDateTime().atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME))));
 									canal.setEnd(canal.getStart().plusDays(1));
 									if (journey.getCanalBooking() == null) {
-										if (journey.getLatestPossibleCanalDate() != null) {
-											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate()
-													.atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
-											int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
-											canal.setEnd(canal.getStart().plusDays(days));
+										if (journey.getLatestPossibleCanalDateTime() != null) {
+											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDateTime()
+													.atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME)));
+											int hours = Math.max(1, Hours.between(canal.getStart(), atStartOfDay));
+											canal.setEnd(canal.getStart().plusHours(hours));
 										}
 									}
 									canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
@@ -173,7 +173,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 					newEvents.add(event);
 					if (event instanceof Journey) {
 						final Journey journey = (Journey) event;
-						if (journey.getCanalDate() != null) {
+						if (journey.getCanalDateTime() != null) {
 							if (journey.getRouteOption() == RouteOption.PANAMA) {
 								if (sequence.getCharterInMarket() == null || sequence.getSpotIndex() != -1) {
 									IScenarioDataProvider scenarioDataProvider = getScenarioDataProviderFor(journey);
@@ -186,14 +186,14 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 									final CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
 									canal.setLinkedSequence(journey.getSequence());
 									canal.setLinkedJourney(journey);
-									canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
+									canal.setStart(journey.getCanalDateTime().atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME))));
 									canal.setEnd(canal.getStart().plusDays(1));
 									if (journey.getCanalBooking() == null) {
-										if (journey.getLatestPossibleCanalDate() != null) {
-											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate()
-													.atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
-											int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
-											canal.setEnd(canal.getStart().plusDays(days));
+										if (journey.getLatestPossibleCanalDateTime() != null) {
+											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDateTime()
+													.atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME)));
+											int hours = Math.max(1, Hours.between(canal.getStart(), atStartOfDay));
+											canal.setEnd(canal.getStart().plusHours(hours));
 
 										}
 									}

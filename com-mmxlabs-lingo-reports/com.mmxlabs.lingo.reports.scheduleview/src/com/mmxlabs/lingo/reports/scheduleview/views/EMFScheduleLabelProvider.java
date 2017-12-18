@@ -9,6 +9,7 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -41,10 +42,9 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
@@ -184,25 +184,25 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final Vessel vessel = combinedSequence.getVessel();
 			String seqText = vessel == null ? "<Unallocated>" : vesselFormatter.render(vessel);
 			// Add scenario instance name to field if multiple scenarios are selected
-						final Object input = viewer.getInput();
-						if (input instanceof Collection<?>) {
-							final Collection<?> collection = (Collection<?>) input;
+			final Object input = viewer.getInput();
+			if (input instanceof Collection<?>) {
+				final Collection<?> collection = (Collection<?>) input;
 
-							if (collection.size() > 1) {
-								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-								if (selectedDataProvider != null) {
-									if (selectedScenariosService.getPinnedScenario() != null) {
-										// Do nothing now we have a pin icon
-									} else {
-										final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(combinedSequence.getSequences().get(0));
-										if (scenarioResult != null) {
-											seqText += "\n" + scenarioResult.getModelRecord().getName();
-										}
-									}
-								}
+				if (collection.size() > 1) {
+					final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+					if (selectedDataProvider != null) {
+						if (selectedScenariosService.getPinnedScenario() != null) {
+							// Do nothing now we have a pin icon
+						} else {
+							final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(combinedSequence.getSequences().get(0));
+							if (scenarioResult != null) {
+								seqText += "\n" + scenarioResult.getModelRecord().getName();
 							}
 						}
-						text = seqText;
+					}
+				}
+			}
+			text = seqText;
 		}
 		return text;
 	}
@@ -293,6 +293,13 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
 	}
 
+	private String dateToString(final LocalDateTime date, final String defaultString) {
+		if (date == null) {
+			return defaultString;
+		}
+		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
+	}
+
 	@Override
 	public String getToolTipText(final Object element) {
 
@@ -354,7 +361,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 				if (routeOption != null && routeOption != RouteOption.DIRECT) {
 					eventText.append(" | " + PortModelLabeller.getName(routeOption) + "\n");
-					if (routeOption== RouteOption.PANAMA) {
+					if (routeOption == RouteOption.PANAMA) {
 						final CanalBookingSlot canalBooking = journey.getCanalBooking();
 						String direction = "";
 						if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
@@ -364,17 +371,17 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 							direction = "northbound";
 						}
 						if (canalBooking != null) {
-							eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
+							eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
 						} else {
-							if (journey.getCanalDate() != null && journey.getCanalDate().equals(journey.getLatestPossibleCanalDate())) {
-								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
-							} else if (journey.getCanalDate() != null && journey.getLatestPossibleCanalDate() != null && journey.getLatestPossibleCanalDate().isBefore(journey.getCanalDate())) {
+							if (journey.getCanalDateTime() != null && journey.getCanalDateTime().equals(journey.getLatestPossibleCanalDateTime())) {
+								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
+							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null && journey.getLatestPossibleCanalDateTime().isBefore(journey.getCanalDateTime())) {
 								// eventText.append(String.format("Infeasible booking required: %s\n", direction));
 								// May be infeasible. However we do not store hour of day, so checks are not fully accurate
-								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
-							} else if (journey.getCanalDate() != null && journey.getLatestPossibleCanalDate() != null) {
-								eventText.append(String.format("Booking required between: %s and %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"),
-										dateToString(journey.getLatestPossibleCanalDate(), "<date unknown>"), direction));
+								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
+							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null) {
+								eventText.append(String.format("Booking required between: %s and %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"),
+										dateToString(journey.getLatestPossibleCanalDateTime(), "<date unknown>"), direction));
 							}
 						}
 					}
@@ -392,9 +399,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					direction = "northbound";
 				}
 				if (canalBooking != null) {
-					eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
+					eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
 				} else {
-					eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
+					eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
 				}
 			} else if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;

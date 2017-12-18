@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views.schedule;
 import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.OptionalInt;
 
@@ -439,13 +440,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Laden Canal Date", "Estimated or booked canal entry date", ColumnType.NORMAL, new BaseFormatter() {
 
-						private LocalDate getDate(final Object object) {
+						private LocalDateTime getDate(final Object object) {
 							if (object instanceof EObject) {
 								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
 								if (portVisit != null) {
 									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 									if (journey != null) {
-										return journey.getCanalDate();
+										return journey.getCanalDateTime();
 									}
 								}
 							}
@@ -455,7 +456,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						@Override
 						public String render(final Object object) {
 
-							final LocalDate date = getDate(object);
+							final LocalDateTime date = getDate(object);
 							if (date != null) {
 								return Formatters.asLocalDateFormatter.render(date);
 							}
@@ -465,7 +466,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 						@Override
 						public Comparable getComparable(final Object object) {
-							final LocalDate date = getDate(object);
+							final LocalDateTime date = getDate(object);
 							if (date != null) {
 								return date;
 							}
@@ -478,13 +479,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Laden Canal latest Date", "Latest canal arrival date", ColumnType.NORMAL, new BaseFormatter() {
 
-						private LocalDate getDate(final Object object) {
+						private LocalDateTime getDate(final Object object) {
 							if (object instanceof EObject) {
 								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
 								if (portVisit != null) {
 									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 									if (journey != null) {
-										return journey.getLatestPossibleCanalDate();
+										return journey.getLatestPossibleCanalDateTime();
 									}
 								}
 							}
@@ -494,7 +495,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						@Override
 						public String render(final Object object) {
 
-							final LocalDate date = getDate(object);
+							final LocalDateTime date = getDate(object);
 							if (date != null) {
 								return Formatters.asLocalDateFormatter.render(date);
 							}
@@ -504,7 +505,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 						@Override
 						public Comparable getComparable(final Object object) {
-							final LocalDate date = getDate(object);
+							final LocalDateTime date = getDate(object);
 							if (date != null) {
 								return date;
 							}
@@ -616,13 +617,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Ballast Canal Date", "Estimated or booked canal entry date", ColumnType.NORMAL, new BaseFormatter() {
 
-						private LocalDate getDate(final Object object) {
+						private LocalDateTime getDate(final Object object) {
 							if (object instanceof EObject) {
 								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
 								if (portVisit != null) {
 									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 									if (journey != null) {
-										return journey.getCanalDate();
+										return journey.getCanalDateTime();
 									}
 								}
 							}
@@ -632,7 +633,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						@Override
 						public String render(final Object object) {
 
-							final LocalDate date = getDate(object);
+							final LocalDateTime date = getDate(object);
 							if (date != null) {
 								return Formatters.asLocalDateFormatter.render(date);
 							}
@@ -642,7 +643,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 						@Override
 						public Comparable getComparable(final Object object) {
-							final LocalDate date = getDate(object);
+							final LocalDateTime date = getDate(object);
 							if (date != null) {
 								return date;
 							}
@@ -655,13 +656,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Ballast Canal Latest Date", "Latest canal arrival date", ColumnType.NORMAL, new BaseFormatter() {
 
-						private LocalDate getDate(final Object object) {
+						private LocalDateTime getDate(final Object object) {
 							if (object instanceof EObject) {
 								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
 								if (portVisit != null) {
 									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 									if (journey != null) {
-										return journey.getLatestPossibleCanalDate();
+										return journey.getLatestPossibleCanalDateTime();
 									}
 								}
 							}
@@ -671,7 +672,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						@Override
 						public String render(final Object object) {
 
-							final LocalDate date = getDate(object);
+							final LocalDateTime date = getDate(object);
 							if (date != null) {
 								return Formatters.asLocalDateFormatter.render(date);
 							}
@@ -681,7 +682,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 						@Override
 						public Comparable getComparable(final Object object) {
-							final LocalDate date = getDate(object);
+							final LocalDateTime date = getDate(object);
 							if (date != null) {
 								return date;
 							}

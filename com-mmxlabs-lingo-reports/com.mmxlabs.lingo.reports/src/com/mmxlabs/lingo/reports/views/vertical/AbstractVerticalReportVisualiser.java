@@ -151,7 +151,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		if (event instanceof Journey) {
 			Journey journey = (Journey) event;
 			final LocalDate eventStart = getLocalDateFor(event.getStart());
-			if (journey.getCanalDate() != null && date.equals(journey.getCanalDate())) {
+			if (journey.getCanalDateTime() != null && date.equals(journey.getCanalDateTime().toLocalDate())) {
 				IScenarioDataProvider scenarioDataProvider = getScenarioDataProviderFor(journey);
 				if (scenarioDataProvider != null) {
 					ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
