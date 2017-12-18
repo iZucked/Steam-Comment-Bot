@@ -1,17 +1,23 @@
 package com.mmxlabs.models.lng.transformer.ui.analytics.spec;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.management.RuntimeErrorException;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.CargoChange;
 import com.mmxlabs.models.lng.analytics.Change;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
@@ -176,6 +182,7 @@ public class ChangeModelToScheduleSpecification {
 				} else if (e instanceof VesselEvent) {
 					final VesselEvent vesselEvent = (VesselEvent) e;
 					final VesselEventSpecification eventSpecification = CargoFactory.eINSTANCE.createVesselEventSpecification();
+					eventSpecification.setVesselEvent(vesselEvent);
 					eventDefinitions.put(vesselEvent, eventSpecification);
 					vesselScheduleSpecification.getEvents().add(eventSpecification);
 				} else {
@@ -202,10 +209,24 @@ public class ChangeModelToScheduleSpecification {
 		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
 			final SlotSpecification slotSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 			slotSpecification.setSlot(slot);
+			if (slot.getCargo() == null) {
+				scheduleSpecification.getOpenEvents().add(slotSpecification);
+				cargoDefinitions.put(slot, Lists.newArrayList(slotSpecification));
+			}
+		}
+		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+			final SlotSpecification slotSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
+			slotSpecification.setSlot(slot);
+			if (slot.getCargo() == null) {
+				scheduleSpecification.getOpenEvents().add(slotSpecification);
+				cargoDefinitions.put(slot, Lists.newArrayList(slotSpecification));
+			}
 		}
 
 		final List<LoadSlot> extraLoads = new LinkedList<>();
 		final List<DischargeSlot> extraDischarges = new LinkedList<>();
+
+		List<BooleanSupplier> leftOvers = new LinkedList<>();
 
 		for (final Change change : changeDescription.getChanges()) {
 			final List<ScheduleSpecificationEvent> newEvents = new LinkedList<>();
@@ -216,7 +237,6 @@ public class ChangeModelToScheduleSpecification {
 				vesselAllocation = cargoChange.getVesselAllocation();
 				position = cargoChange.getPosition();
 				final List<SlotDescriptor> slotDescriptors = cargoChange.getSlotDescriptors();
-				final boolean first = true;
 				for (final SlotDescriptor descriptor : slotDescriptors) {
 					boolean newSlot = false;
 					Slot slot = null;
@@ -225,7 +245,9 @@ public class ChangeModelToScheduleSpecification {
 						final SlotType slotType = d.getSlotType();
 						final String key = "slot-" + slotType + "-" + d.getSlotName();
 						slot = (Slot) finderFunction.apply(key);
-
+						if (slot == null) {
+							throw new RuntimeException("Slot not found: " + d.getSlotName());
+						}
 					} else if (descriptor instanceof SpotMarketSlotDescriptor) {
 						final SpotMarketSlotDescriptor d = (SpotMarketSlotDescriptor) descriptor;
 						final SlotType slotType = d.getSlotType();
@@ -235,6 +257,9 @@ public class ChangeModelToScheduleSpecification {
 						if (slot == null) {
 							newSlot = true;
 							SpotMarket spotMarket = spotMarketsModelFinder.findSpotMarket(map(slotType), d.getMarketName());
+							if (spotMarket == null) {
+								throw new RuntimeException("Spot market not found: " + d.getMarketName());
+							}
 
 							if (d.getSlotType() == SlotType.DES_PURCHASE || d.getSlotType() == SlotType.FOB_PURCHASE) {
 								SpotLoadSlot load = CargoFactory.eINSTANCE.createSpotLoadSlot();
@@ -259,7 +284,7 @@ public class ChangeModelToScheduleSpecification {
 							// Set data
 							slot.setWindowStart(d.getDate().atDay(1));
 							// Set name -- TODO: Make unique
-							final String name = d.getMarketName() + String.format("%04d-%02d", d.getDate().getYear(), d.getDate().getMonthValue());
+							final String name = d.getMarketName() + String.format("-%04d-%02d", d.getDate().getYear(), d.getDate().getMonthValue());
 							slot.setName(name);
 						}
 					} else {
@@ -309,10 +334,29 @@ public class ChangeModelToScheduleSpecification {
 			} else if (change instanceof VesselEventChange) {
 				final VesselEventChange vesselEventChange = (VesselEventChange) change;
 				vesselAllocation = vesselEventChange.getVesselAllocation();
-				position = vesselEventChange.getPosition();
-				// TODO:
-				assert false;
 
+				String key = "event-" + vesselEventChange.getVesselEventDescriptor().getEventName();
+				VesselEvent vesselEvent = (VesselEvent) finderFunction.apply(key);
+
+				if (vesselEvent == null) {
+					throw new RuntimeException("Vessel event not found: " + vesselEventChange.getVesselEventDescriptor().getEventName());
+				}
+
+				position = vesselEventChange.getPosition();
+
+				final VesselEventSpecification spec = eventDefinitions.get(vesselEvent);
+				if (spec != null) {
+					// Existing cargo
+					if (spec.eContainer() instanceof VesselScheduleSpecification) {
+						final VesselScheduleSpecification vesselScheduleSpecification = (VesselScheduleSpecification) spec.eContainer();
+						vesselScheduleSpecification.getEvents().remove(spec);
+					} else {
+						// already removed
+					}
+					VesselEventSpecification newSpec = CargoFactory.eINSTANCE.createVesselEventSpecification();
+					newSpec.setVesselEvent(vesselEvent);
+					newEvents.add(newSpec);
+				}
 			} else if (change instanceof OpenSlotChange) {
 				final OpenSlotChange openSlotChange = (OpenSlotChange) change;
 				final SlotDescriptor descriptor = openSlotChange.getSlotDescriptor();
@@ -321,6 +365,9 @@ public class ChangeModelToScheduleSpecification {
 					final SlotType slotType = d.getSlotType();
 					final String key = "slot-" + slotType + "-" + d.getSlotName();
 					final Slot slot = (Slot) finderFunction.apply(key);
+					if (slot == null) {
+						throw new RuntimeException("Slot not found: " + d.getSlotName());
+					}
 					final List<SlotSpecification> list = cargoDefinitions.get(slot);
 					boolean foundExisting = false;
 					if (list != null) {
@@ -379,7 +426,9 @@ public class ChangeModelToScheduleSpecification {
 							}
 						}
 					}
-
+					if (targetVessel == null) {
+						throw new RuntimeException("Vessel availability not found for " + vesselName + " + (" + fleetVesselAllocationDescriptor.getCharterIndex() + ")");
+					}
 					assert targetVessel != null;
 					// TODO: Find correct vessel specification and insert
 				} else if (vesselAllocation instanceof MarketVesselAllocationDescriptor) {
@@ -398,39 +447,89 @@ public class ChangeModelToScheduleSpecification {
 						}
 					}
 
-					assert targetVessel != null;
-
+					if (targetVessel == null) {
+						throw new RuntimeException("Spot vessel market not found for " + marketName);
+					}
 				} else {
 					assert false;
 				}
 				final String afterID = position.getAfter();
 				final String beforeID = position.getBefore();
-				boolean inserted = false;
-				for (int i = 0; i < targetVessel.getEvents().size(); ++i) {
-					final ScheduleSpecificationEvent event = targetVessel.getEvents().get(i);
-					final String eventID = getEventID(event);
-					if (afterID != null && afterID.equalsIgnoreCase(eventID)) {
-						if (i + 1 == targetVessel.getEvents().size()) {
-							targetVessel.getEvents().addAll(newEvents);
-						} else {
-							targetVessel.getEvents().addAll(i + 1, newEvents);
+				final VesselScheduleSpecification pTargetVessel = targetVessel;
+				leftOvers.add(() -> {
+					String l = beforeID;
+					String m = afterID;
+					boolean inserted = false;
+					for (int i = 0; i < pTargetVessel.getEvents().size(); ++i) {
+						final ScheduleSpecificationEvent event = pTargetVessel.getEvents().get(i);
+						final String eventID = getEventID(event);
+						if (afterID != null && afterID.equalsIgnoreCase(eventID)) {
+							if (i + 1 == pTargetVessel.getEvents().size()) {
+								pTargetVessel.getEvents().addAll(newEvents);
+							} else {
+								pTargetVessel.getEvents().addAll(i + 1, newEvents);
+							}
+							inserted = true;
+							break;
+						} else if (beforeID != null && beforeID.equalsIgnoreCase(eventID)) {
+							pTargetVessel.getEvents().addAll(i, newEvents);
+							inserted = true;
+							break;
 						}
-						inserted = true;
-						break;
-					} else if (beforeID != null && beforeID.equalsIgnoreCase(eventID)) {
-						targetVessel.getEvents().addAll(i, newEvents);
-						inserted = true;
-						break;
+						if (event instanceof SlotSpecification) {
+							SlotSpecification slotSpecification = (SlotSpecification) event;
+							if (slotSpecification.getSlot() instanceof SpotSlot) {
+								if (afterID != null && afterID.toLowerCase().matches(eventID.toLowerCase() + "-[0-9]")) {
+									if (i + 1 == pTargetVessel.getEvents().size()) {
+										pTargetVessel.getEvents().addAll(newEvents);
+									} else {
+										pTargetVessel.getEvents().addAll(i + 1, newEvents);
+									}
+									inserted = true;
+									break;
+								} else if (beforeID != null && beforeID.toLowerCase().matches(eventID.toLowerCase() + "-[0-9]")) {
+									pTargetVessel.getEvents().addAll(i, newEvents);
+									inserted = true;
+									break;
+								}
+							}
+							
+						}
 					}
-				}
-				if (targetVessel.getEvents().isEmpty()) {
-					targetVessel.getEvents().addAll(newEvents);
-					inserted = true;
-				}
-				// TODO: Might not always be possible in first pass, might need to loop this a few times.
-				assert inserted;
+					if (pTargetVessel.getEvents().isEmpty()) {
+						pTargetVessel.getEvents().addAll(newEvents);
+						inserted = true;
+					}
+					return inserted;
+				});
 			}
 		}
+		boolean changed = true;
+		while (changed && !leftOvers.isEmpty()) {
+			changed = false;
+			Iterator<BooleanSupplier> itr = leftOvers.iterator();
+			while (itr.hasNext()) {
+				BooleanSupplier supplier = itr.next();
+				if (supplier.getAsBoolean()) {
+					itr.remove();
+					changed = true;
+				}
+			}
+		}
+		
+		if (!leftOvers .isEmpty()) {
+			Iterator<BooleanSupplier> itr = leftOvers.iterator();
+			while (itr.hasNext()) {
+				BooleanSupplier supplier = itr.next();
+				if (supplier.getAsBoolean()) {
+					itr.remove();
+					changed = true;
+				}
+			}
+		}
+		
+		assert leftOvers.isEmpty();
+
 		return new Pair<>(scheduleSpecification, new ExtraDataProvider(null, null, null, extraLoads, extraDischarges));
 	}
 

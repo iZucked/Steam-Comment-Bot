@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.Sequences;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -77,6 +78,7 @@ public class ScheduleSpecificationTransformer {
 		final List<IResource> orderedResources = new LinkedList<>();
 		final Map<IResource, ISequence> sequences = new HashMap<>();
 		final List<ISequenceElement> unusedElements = new LinkedList<>();
+		IOptimisationData optimisationData = dataTransformer.getOptimisationData();
 		for (final VesselScheduleSpecification vesselSpecificiation : scheduleSpecification.getVesselScheduleSpecifications()) {
 			final VesselAssignmentType vesselAllocation = vesselSpecificiation.getVesselAllocation();
 			IResource resource = null;
@@ -94,9 +96,10 @@ public class ScheduleSpecificationTransformer {
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
 
 				final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
-				for (final IResource o_resource : dataTransformer.getOptimisationData().getResources()) {
+				for (final IResource o_resource : optimisationData.getResources()) {
 					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-					if (o_vesselAvailability.getSpotCharterInMarket() != o_market) {
+					ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();
+					if (spotCharterInMarket != o_market) {
 						continue;
 					}
 					if (o_vesselAvailability.getSpotIndex() != spotIndex) {
