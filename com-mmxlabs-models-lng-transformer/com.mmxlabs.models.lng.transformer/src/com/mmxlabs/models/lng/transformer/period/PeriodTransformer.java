@@ -273,7 +273,7 @@ public class PeriodTransformer {
 		// Set initial end conditions - if open, use the evaluated end date to keep long ballast leg P&L the same
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
-			if (endEvent != null) {
+			if (endEvent != null && (!vesselAvailability.isSetMinDuration() || !vesselAvailability.isSetMaxDuration())) {
 				if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
 					if (output.isSetSchedulingEndDate() && periodRecord.upperBoundary != null && output.getSchedulingEndDate().isBefore(periodRecord.upperBoundary.toLocalDate())) {
 						vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
