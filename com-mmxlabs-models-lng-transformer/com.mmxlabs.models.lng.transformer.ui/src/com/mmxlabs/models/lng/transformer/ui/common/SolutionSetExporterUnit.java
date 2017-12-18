@@ -52,7 +52,7 @@ public class SolutionSetExporterUnit {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SolutionSetExporterUnit.class);
 
-	public static IChainLink exportMultipleSolutions(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner,
+	public static IChainLink exportMultipleSolutions(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge,
 			final Supplier<AbstractSolutionSet> solutionSetFactory, final OptionalLong portfolioBreakEvenTarget) {
 
 		final IChainLink link = new IChainLink() {
@@ -64,16 +64,17 @@ public class SolutionSetExporterUnit {
 				solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(initialSequences.getSequences(), new HashMap<>()));
 				monitor.beginTask("Export", solutions.size());
 
-				final LNGDataTransformer dataTransformer = runner.getDataTransformer();
+				final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 				Injector injector = dataTransformer.getInjector().createChildInjector();
-				SequencesUndoSpotHelper helper = injector.getInstance(SequencesUndoSpotHelper.class);
+				SequencesUndoSpotHelper spotUndoHelper = injector.getInstance(SequencesUndoSpotHelper.class);
 
 				try {
 					final AbstractSolutionSet plan = solutionSetFactory.get();
+					boolean firstSolution = true;					
 					for (final NonNullPair<ISequences, Map<String, Object>> changeSet : solutions) {
 
 						try {
-							ISequences sequences = helper.undoSpotMarketSwaps(initialSequences.getSequences(), changeSet.getFirst());
+							ISequences sequences = spotUndoHelper.undoSpotMarketSwaps(initialSequences.getSequences(), changeSet.getFirst());
 
 							// Perform a portfolio break-even if requested.
 							if (portfolioBreakEvenTarget.isPresent()) {
@@ -93,7 +94,7 @@ public class SolutionSetExporterUnit {
 								t.run(new NullProgressMonitor());
 							}
 
-							final Schedule child_schedule = runner.createSchedule(sequences, changeSet.getSecond());
+							final Schedule child_schedule = scenarioToOptimiserBridge.createSchedule(sequences, changeSet.getSecond());
 
 							final ScheduleModel scheduleModel = ScheduleFactory.eINSTANCE.createScheduleModel();
 							scheduleModel.setSchedule(child_schedule);
@@ -109,7 +110,12 @@ public class SolutionSetExporterUnit {
 							final SolutionOption option = AnalyticsFactory.eINSTANCE.createSolutionOption();
 							option.setScheduleModel(scheduleModel);
 
-							plan.getOptions().add(option);
+							if (firstSolution) {
+								firstSolution = false;
+								plan.setBaseOption(option);
+							} else {
+								plan.getOptions().add(option);
+							}
 						} catch (final Exception e) {
 							throw new RuntimeException("Unable to store scenario: " + e.getMessage(), e);
 						}
@@ -118,9 +124,9 @@ public class SolutionSetExporterUnit {
 					}
 
 					RunnerHelper.syncExecDisplayOptional(() -> {
-						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(runner.getScenarioDataProvider());
+						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioToOptimiserBridge.getScenarioDataProvider());
 						analyticsModel.getOptimisations().add(plan);
-						final ScenarioInstance instance = runner.getScenarioInstance();
+						final ScenarioInstance instance = scenarioToOptimiserBridge.getScenarioInstance();
 						if (instance != null) {
 							final ModelReference sharedReference = SSDataManager.Instance.getModelRecord(instance).getSharedReference();
 							if (sharedReference != null) {
