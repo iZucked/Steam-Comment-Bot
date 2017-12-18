@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -104,6 +105,11 @@ class HeadlineReportTransformer {
 					final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) evt;
 					totalGCOHours += evt.getDuration();
 					totalGCORevenue += generatedCharterOut.getRevenue();
+				}
+
+				if (evt instanceof Idle) {
+					final Idle idle = (Idle) evt;
+					totalIdleHours += idle.getDuration();
 				}
 			}
 		}
