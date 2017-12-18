@@ -273,9 +273,12 @@ public class SlotInsertionOptimiserUnit {
 
 							final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
 							return calculator.generate(optionElements, state, pTryNo);
+						} catch (Exception e) {
+							e.printStackTrace();
 						} finally {
 							monitor.worked(1);
 						}
+						return null;
 					}));
 				}
 				final List<Pair<ISequences, Long>> results = new LinkedList<>();
@@ -314,7 +317,7 @@ public class SlotInsertionOptimiserUnit {
 
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream() //
 						.distinct() //
-						.limit(500) //
+						.limit(300) //
 						.map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
 						.collect(Collectors.toList());
 
