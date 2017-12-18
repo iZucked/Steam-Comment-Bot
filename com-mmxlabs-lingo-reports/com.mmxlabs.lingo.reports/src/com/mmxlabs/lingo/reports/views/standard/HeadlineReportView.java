@@ -352,11 +352,11 @@ public class HeadlineReportView extends ViewPart {
 					}
 					break;
 				case VALUE_IDLE_DAYS:
-					if (pinD == null) {
+//					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
-					} else {
-						color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
-					}
+//					} else {
+//						color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+//					}
 					break;
 				case VALUE_GCO_DAYS:
 				case VALUE_GCO_REVENUE:
