@@ -1501,7 +1501,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getJourney_CanalDate() {
+	public EAttribute getJourney_CanalDateTime() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -1519,7 +1519,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getJourney_LatestPossibleCanalDate() {
+	public EAttribute getJourney_LatestPossibleCanalDateTime() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -1528,7 +1528,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getJourney_CanalArrival() {
+	public EAttribute getJourney_CanalArrivalTime() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -2366,10 +2366,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(journeyEClass, JOURNEY__DISTANCE);
 		createEAttribute(journeyEClass, JOURNEY__SPEED);
 		createEAttribute(journeyEClass, JOURNEY__CANAL_ENTRANCE);
-		createEAttribute(journeyEClass, JOURNEY__CANAL_DATE);
+		createEAttribute(journeyEClass, JOURNEY__CANAL_DATE_TIME);
 		createEReference(journeyEClass, JOURNEY__CANAL_BOOKING);
-		createEAttribute(journeyEClass, JOURNEY__LATEST_POSSIBLE_CANAL_DATE);
-		createEAttribute(journeyEClass, JOURNEY__CANAL_ARRIVAL);
+		createEAttribute(journeyEClass, JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME);
+		createEAttribute(journeyEClass, JOURNEY__CANAL_ARRIVAL_TIME);
 		createEAttribute(journeyEClass, JOURNEY__CANAL_BOOKING_PERIOD);
 		createEReference(journeyEClass, JOURNEY__CANAL_ENTRANCE_PORT);
 
@@ -2708,10 +2708,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getJourney_Distance(), ecorePackage.getEInt(), "distance", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_Speed(), ecorePackage.getEDouble(), "speed", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_CanalEntrance(), thePortPackage.getCanalEntry(), "canalEntrance", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getJourney_CanalDate(), theDateTimePackage.getLocalDate(), "canalDate", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_CanalDateTime(), theDateTimePackage.getLocalDateTime(), "canalDateTime", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getJourney_CanalBooking(), theCargoPackage.getCanalBookingSlot(), null, "canalBooking", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getJourney_LatestPossibleCanalDate(), theDateTimePackage.getLocalDate(), "latestPossibleCanalDate", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getJourney_CanalArrival(), theDateTimePackage.getLocalDate(), "canalArrival", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_LatestPossibleCanalDateTime(), theDateTimePackage.getLocalDateTime(), "latestPossibleCanalDateTime", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_CanalArrivalTime(), theDateTimePackage.getLocalDateTime(), "canalArrivalTime", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_CanalBookingPeriod(), this.getPanamaBookingPeriod(), "canalBookingPeriod", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getJourney_CanalEntrancePort(), thePortPackage.getPort(), null, "canalEntrancePort", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

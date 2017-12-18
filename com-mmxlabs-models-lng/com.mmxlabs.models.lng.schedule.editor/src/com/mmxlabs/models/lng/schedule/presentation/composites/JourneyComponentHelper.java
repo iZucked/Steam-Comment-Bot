@@ -71,10 +71,10 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 		add_distanceEditor(detailComposite, topClass);
 		add_speedEditor(detailComposite, topClass);
 		add_canalEntranceEditor(detailComposite, topClass);
-		add_canalDateEditor(detailComposite, topClass);
+		add_canalDateTimeEditor(detailComposite, topClass);
 		add_canalBookingEditor(detailComposite, topClass);
-		add_latestPossibleCanalDateEditor(detailComposite, topClass);
-		add_canalArrivalEditor(detailComposite, topClass);
+		add_latestPossibleCanalDateTimeEditor(detailComposite, topClass);
+		add_canalArrivalTimeEditor(detailComposite, topClass);
 		add_canalBookingPeriodEditor(detailComposite, topClass);
 		add_canalEntrancePortEditor(detailComposite, topClass);
 	}
@@ -140,12 +140,12 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the canalDate feature on Journey
+	 * Create the editor for the canalDateTime feature on Journey
 	 *
 	 * @generated
 	 */
-	protected void add_canalDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_DATE));
+	protected void add_canalDateTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME));
 	}
 
 	/**
@@ -158,21 +158,21 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the latestPossibleCanalDate feature on Journey
+	 * Create the editor for the latestPossibleCanalDateTime feature on Journey
 	 *
 	 * @generated
 	 */
-	protected void add_latestPossibleCanalDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE));
+	protected void add_latestPossibleCanalDateTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME));
 	}
 
 	/**
-	 * Create the editor for the canalArrival feature on Journey
+	 * Create the editor for the canalArrivalTime feature on Journey
 	 *
 	 * @generated
 	 */
-	protected void add_canalArrivalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_ARRIVAL));
+	protected void add_canalArrivalTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_ARRIVAL_TIME));
 	}
 
 	/**

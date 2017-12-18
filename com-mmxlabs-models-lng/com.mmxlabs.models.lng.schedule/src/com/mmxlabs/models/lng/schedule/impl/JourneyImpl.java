@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.impl;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -49,10 +50,10 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getSpeed <em>Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalEntrance <em>Canal Entrance</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalDate <em>Canal Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalDateTime <em>Canal Date Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBooking <em>Canal Booking</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalArrival <em>Canal Arrival</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getLatestPossibleCanalDateTime <em>Latest Possible Canal Date Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalArrivalTime <em>Canal Arrival Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBookingPeriod <em>Canal Booking Period</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalEntrancePort <em>Canal Entrance Port</em>}</li>
  * </ul>
@@ -201,24 +202,24 @@ public class JourneyImpl extends EventImpl implements Journey {
 	protected CanalEntry canalEntrance = CANAL_ENTRANCE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCanalDate() <em>Canal Date</em>}' attribute.
+	 * The default value of the '{@link #getCanalDateTime() <em>Canal Date Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCanalDate()
+	 * @see #getCanalDateTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate CANAL_DATE_EDEFAULT = null;
+	protected static final LocalDateTime CANAL_DATE_TIME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getCanalDate() <em>Canal Date</em>}' attribute.
+	 * The cached value of the '{@link #getCanalDateTime() <em>Canal Date Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCanalDate()
+	 * @see #getCanalDateTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate canalDate = CANAL_DATE_EDEFAULT;
+	protected LocalDateTime canalDateTime = CANAL_DATE_TIME_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getCanalBooking() <em>Canal Booking</em>}' reference.
@@ -231,44 +232,44 @@ public class JourneyImpl extends EventImpl implements Journey {
 	protected CanalBookingSlot canalBooking;
 
 	/**
-	 * The default value of the '{@link #getLatestPossibleCanalDate() <em>Latest Possible Canal Date</em>}' attribute.
+	 * The default value of the '{@link #getLatestPossibleCanalDateTime() <em>Latest Possible Canal Date Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLatestPossibleCanalDate()
+	 * @see #getLatestPossibleCanalDateTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate LATEST_POSSIBLE_CANAL_DATE_EDEFAULT = null;
+	protected static final LocalDateTime LATEST_POSSIBLE_CANAL_DATE_TIME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getLatestPossibleCanalDate() <em>Latest Possible Canal Date</em>}' attribute.
+	 * The cached value of the '{@link #getLatestPossibleCanalDateTime() <em>Latest Possible Canal Date Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLatestPossibleCanalDate()
+	 * @see #getLatestPossibleCanalDateTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate latestPossibleCanalDate = LATEST_POSSIBLE_CANAL_DATE_EDEFAULT;
+	protected LocalDateTime latestPossibleCanalDateTime = LATEST_POSSIBLE_CANAL_DATE_TIME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCanalArrival() <em>Canal Arrival</em>}' attribute.
+	 * The default value of the '{@link #getCanalArrivalTime() <em>Canal Arrival Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCanalArrival()
+	 * @see #getCanalArrivalTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate CANAL_ARRIVAL_EDEFAULT = null;
+	protected static final LocalDateTime CANAL_ARRIVAL_TIME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getCanalArrival() <em>Canal Arrival</em>}' attribute.
+	 * The cached value of the '{@link #getCanalArrivalTime() <em>Canal Arrival Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCanalArrival()
+	 * @see #getCanalArrivalTime()
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate canalArrival = CANAL_ARRIVAL_EDEFAULT;
+	protected LocalDateTime canalArrivalTime = CANAL_ARRIVAL_TIME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCanalBookingPeriod() <em>Canal Booking Period</em>}' attribute.
@@ -500,8 +501,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LocalDate getCanalDate() {
-		return canalDate;
+	public LocalDateTime getCanalDateTime() {
+		return canalDateTime;
 	}
 
 	/**
@@ -509,11 +510,11 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCanalDate(LocalDate newCanalDate) {
-		LocalDate oldCanalDate = canalDate;
-		canalDate = newCanalDate;
+	public void setCanalDateTime(LocalDateTime newCanalDateTime) {
+		LocalDateTime oldCanalDateTime = canalDateTime;
+		canalDateTime = newCanalDateTime;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_DATE, oldCanalDate, canalDate));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_DATE_TIME, oldCanalDateTime, canalDateTime));
 	}
 
 	/**
@@ -559,8 +560,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LocalDate getLatestPossibleCanalDate() {
-		return latestPossibleCanalDate;
+	public LocalDateTime getLatestPossibleCanalDateTime() {
+		return latestPossibleCanalDateTime;
 	}
 
 	/**
@@ -568,11 +569,11 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLatestPossibleCanalDate(LocalDate newLatestPossibleCanalDate) {
-		LocalDate oldLatestPossibleCanalDate = latestPossibleCanalDate;
-		latestPossibleCanalDate = newLatestPossibleCanalDate;
+	public void setLatestPossibleCanalDateTime(LocalDateTime newLatestPossibleCanalDateTime) {
+		LocalDateTime oldLatestPossibleCanalDateTime = latestPossibleCanalDateTime;
+		latestPossibleCanalDateTime = newLatestPossibleCanalDateTime;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE, oldLatestPossibleCanalDate, latestPossibleCanalDate));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME, oldLatestPossibleCanalDateTime, latestPossibleCanalDateTime));
 	}
 
 	/**
@@ -580,8 +581,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LocalDate getCanalArrival() {
-		return canalArrival;
+	public LocalDateTime getCanalArrivalTime() {
+		return canalArrivalTime;
 	}
 
 	/**
@@ -589,11 +590,11 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCanalArrival(LocalDate newCanalArrival) {
-		LocalDate oldCanalArrival = canalArrival;
-		canalArrival = newCanalArrival;
+	public void setCanalArrivalTime(LocalDateTime newCanalArrivalTime) {
+		LocalDateTime oldCanalArrivalTime = canalArrivalTime;
+		canalArrivalTime = newCanalArrivalTime;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_ARRIVAL, oldCanalArrival, canalArrival));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_ARRIVAL_TIME, oldCanalArrivalTime, canalArrivalTime));
 	}
 
 	/**
@@ -707,15 +708,15 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return getSpeed();
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
 				return getCanalEntrance();
-			case SchedulePackage.JOURNEY__CANAL_DATE:
-				return getCanalDate();
+			case SchedulePackage.JOURNEY__CANAL_DATE_TIME:
+				return getCanalDateTime();
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
 				if (resolve) return getCanalBooking();
 				return basicGetCanalBooking();
-			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
-				return getLatestPossibleCanalDate();
-			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
-				return getCanalArrival();
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME:
+				return getLatestPossibleCanalDateTime();
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL_TIME:
+				return getCanalArrivalTime();
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				return getCanalBookingPeriod();
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
@@ -759,17 +760,17 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
 				setCanalEntrance((CanalEntry)newValue);
 				return;
-			case SchedulePackage.JOURNEY__CANAL_DATE:
-				setCanalDate((LocalDate)newValue);
+			case SchedulePackage.JOURNEY__CANAL_DATE_TIME:
+				setCanalDateTime((LocalDateTime)newValue);
 				return;
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
 				setCanalBooking((CanalBookingSlot)newValue);
 				return;
-			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
-				setLatestPossibleCanalDate((LocalDate)newValue);
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME:
+				setLatestPossibleCanalDateTime((LocalDateTime)newValue);
 				return;
-			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
-				setCanalArrival((LocalDate)newValue);
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL_TIME:
+				setCanalArrivalTime((LocalDateTime)newValue);
 				return;
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				setCanalBookingPeriod((PanamaBookingPeriod)newValue);
@@ -813,17 +814,17 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
 				setCanalEntrance(CANAL_ENTRANCE_EDEFAULT);
 				return;
-			case SchedulePackage.JOURNEY__CANAL_DATE:
-				setCanalDate(CANAL_DATE_EDEFAULT);
+			case SchedulePackage.JOURNEY__CANAL_DATE_TIME:
+				setCanalDateTime(CANAL_DATE_TIME_EDEFAULT);
 				return;
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
 				setCanalBooking((CanalBookingSlot)null);
 				return;
-			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
-				setLatestPossibleCanalDate(LATEST_POSSIBLE_CANAL_DATE_EDEFAULT);
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME:
+				setLatestPossibleCanalDateTime(LATEST_POSSIBLE_CANAL_DATE_TIME_EDEFAULT);
 				return;
-			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
-				setCanalArrival(CANAL_ARRIVAL_EDEFAULT);
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL_TIME:
+				setCanalArrivalTime(CANAL_ARRIVAL_TIME_EDEFAULT);
 				return;
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				setCanalBookingPeriod(CANAL_BOOKING_PERIOD_EDEFAULT);
@@ -859,14 +860,14 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return speed != SPEED_EDEFAULT;
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
 				return canalEntrance != CANAL_ENTRANCE_EDEFAULT;
-			case SchedulePackage.JOURNEY__CANAL_DATE:
-				return CANAL_DATE_EDEFAULT == null ? canalDate != null : !CANAL_DATE_EDEFAULT.equals(canalDate);
+			case SchedulePackage.JOURNEY__CANAL_DATE_TIME:
+				return CANAL_DATE_TIME_EDEFAULT == null ? canalDateTime != null : !CANAL_DATE_TIME_EDEFAULT.equals(canalDateTime);
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
 				return canalBooking != null;
-			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
-				return LATEST_POSSIBLE_CANAL_DATE_EDEFAULT == null ? latestPossibleCanalDate != null : !LATEST_POSSIBLE_CANAL_DATE_EDEFAULT.equals(latestPossibleCanalDate);
-			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
-				return CANAL_ARRIVAL_EDEFAULT == null ? canalArrival != null : !CANAL_ARRIVAL_EDEFAULT.equals(canalArrival);
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME:
+				return LATEST_POSSIBLE_CANAL_DATE_TIME_EDEFAULT == null ? latestPossibleCanalDateTime != null : !LATEST_POSSIBLE_CANAL_DATE_TIME_EDEFAULT.equals(latestPossibleCanalDateTime);
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL_TIME:
+				return CANAL_ARRIVAL_TIME_EDEFAULT == null ? canalArrivalTime != null : !CANAL_ARRIVAL_TIME_EDEFAULT.equals(canalArrivalTime);
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				return canalBookingPeriod != CANAL_BOOKING_PERIOD_EDEFAULT;
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
@@ -959,12 +960,12 @@ public class JourneyImpl extends EventImpl implements Journey {
 		result.append(speed);
 		result.append(", canalEntrance: ");
 		result.append(canalEntrance);
-		result.append(", canalDate: ");
-		result.append(canalDate);
-		result.append(", latestPossibleCanalDate: ");
-		result.append(latestPossibleCanalDate);
-		result.append(", canalArrival: ");
-		result.append(canalArrival);
+		result.append(", canalDateTime: ");
+		result.append(canalDateTime);
+		result.append(", latestPossibleCanalDateTime: ");
+		result.append(latestPossibleCanalDateTime);
+		result.append(", canalArrivalTime: ");
+		result.append(canalArrivalTime);
 		result.append(", canalBookingPeriod: ");
 		result.append(canalBookingPeriod);
 		result.append(')');
@@ -1020,7 +1021,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return "UTC";
 			}
 			return l.getTimeZone();
-		} else	if (attribute == SchedulePackage.Literals.JOURNEY__CANAL_DATE || attribute == SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE) {
+		} else	if (attribute == SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME //
+				|| attribute == SchedulePackage.Literals.JOURNEY__CANAL_ARRIVAL_TIME //
+				|| attribute == SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME) {
 			final Port p = getCanalEntrancePort();
 			if (p == null) {
 				return "UTC";

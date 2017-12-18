@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,12 @@ public class MigrateToV86 extends AbstractMigrationUnit {
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
 		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
 		final EObjectWrapper model = modelRecord.getModelRoot();
+
+		final EObjectWrapper scheduleModel = model.getRef("scheduleModel");
+		if (scheduleModel != null) {
+			updateScheduleModel(modelRecord, scheduleModel);
+		}
+
 		final EObjectWrapper analyticsModel = model.getRef("analyticsModel");
 		if (analyticsModel == null) {
 			return;
@@ -64,13 +71,58 @@ public class MigrateToV86 extends AbstractMigrationUnit {
 					}
 				}
 			}
-
+			if (results != null) {
+				for (EObjectWrapper solution : results) {
+					updateScheduleModel(modelRecord, solution.getRef("scheduleModel"));
+				}
+			}
 			if (results != null && moveFirst && solutionSet.getRef("baseOption") == null) {
 				final List<EObjectWrapper> copy = new ArrayList<>(results);
 				final EObjectWrapper base = copy.remove(0);
 				solutionSet.setRef("baseOption", base);
 				solutionSet.setRef("options", copy);
 			}
+		}
+	}
+
+	private void updateScheduleModel(@NonNull final MigrationModelRecord modelRecord, final EObjectWrapper scheduleModel) {
+		if (scheduleModel == null) {
+			return;
+		}
+
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
+		final EPackage package_ScheduleModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		final EClass class_Journey = MetamodelUtils.getEClass(package_ScheduleModel, "Journey");
+
+		final EObjectWrapper schedule = scheduleModel.getRef("schedule");
+		if (schedule == null) {
+			return;
+		}
+		final List<EObjectWrapper> sequences = schedule.getRefAsList("sequences");
+		if (sequences == null) {
+			return;
+		}
+
+		for (final EObjectWrapper sequence : sequences) {
+			final List<EObjectWrapper> events = sequence.getRefAsList("events");
+			if (events == null) {
+				continue;
+			}
+			for (final EObjectWrapper event : events) {
+				if (class_Journey.isInstance(event)) {
+					convertDate(event, "canalDate");
+					convertDate(event, "latestPossibleCanalDate");
+					convertDate(event, "canalArrival");
+				}
+			}
+		}
+	}
+
+	private void convertDate(final EObjectWrapper event, final String featureName) {
+		final LocalDate date = event.getAttrib(featureName);
+		if (date != null) {
+			event.setAttrib(featureName + "Time", date.atStartOfDay());
+			event.unsetFeature(featureName);
 		}
 	}
 }

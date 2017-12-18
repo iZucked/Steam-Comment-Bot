@@ -57,10 +57,10 @@ public class JourneyItemProvider
 			addDistancePropertyDescriptor(object);
 			addSpeedPropertyDescriptor(object);
 			addCanalEntrancePropertyDescriptor(object);
-			addCanalDatePropertyDescriptor(object);
+			addCanalDateTimePropertyDescriptor(object);
 			addCanalBookingPropertyDescriptor(object);
-			addLatestPossibleCanalDatePropertyDescriptor(object);
-			addCanalArrivalPropertyDescriptor(object);
+			addLatestPossibleCanalDateTimePropertyDescriptor(object);
+			addCanalArrivalTimePropertyDescriptor(object);
 			addCanalBookingPeriodPropertyDescriptor(object);
 			addCanalEntrancePortPropertyDescriptor(object);
 		}
@@ -222,19 +222,19 @@ public class JourneyItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Canal Date feature.
+	 * This adds a property descriptor for the Canal Date Time feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCanalDatePropertyDescriptor(Object object) {
+	protected void addCanalDateTimePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Journey_canalDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalDate_feature", "_UI_Journey_type"),
-				 SchedulePackage.Literals.JOURNEY__CANAL_DATE,
+				 getString("_UI_Journey_canalDateTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalDateTime_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME,
 				 true,
 				 false,
 				 false,
@@ -266,19 +266,19 @@ public class JourneyItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Latest Possible Canal Date feature.
+	 * This adds a property descriptor for the Latest Possible Canal Date Time feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLatestPossibleCanalDatePropertyDescriptor(Object object) {
+	protected void addLatestPossibleCanalDateTimePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Journey_latestPossibleCanalDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_latestPossibleCanalDate_feature", "_UI_Journey_type"),
-				 SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE,
+				 getString("_UI_Journey_latestPossibleCanalDateTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_latestPossibleCanalDateTime_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME,
 				 true,
 				 false,
 				 false,
@@ -288,19 +288,19 @@ public class JourneyItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Canal Arrival feature.
+	 * This adds a property descriptor for the Canal Arrival Time feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCanalArrivalPropertyDescriptor(Object object) {
+	protected void addCanalArrivalTimePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Journey_canalArrival_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalArrival_feature", "_UI_Journey_type"),
-				 SchedulePackage.Literals.JOURNEY__CANAL_ARRIVAL,
+				 getString("_UI_Journey_canalArrivalTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalArrivalTime_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__CANAL_ARRIVAL_TIME,
 				 true,
 				 false,
 				 false,
@@ -427,9 +427,9 @@ public class JourneyItemProvider
 			case SchedulePackage.JOURNEY__DISTANCE:
 			case SchedulePackage.JOURNEY__SPEED:
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
-			case SchedulePackage.JOURNEY__CANAL_DATE:
-			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
-			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
+			case SchedulePackage.JOURNEY__CANAL_DATE_TIME:
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME:
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL_TIME:
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

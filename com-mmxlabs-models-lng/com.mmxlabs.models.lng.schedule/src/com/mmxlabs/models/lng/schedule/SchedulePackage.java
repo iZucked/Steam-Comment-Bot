@@ -2211,13 +2211,13 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__CANAL_ENTRANCE = EVENT_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Canal Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Canal Date Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY__CANAL_DATE = EVENT_FEATURE_COUNT + 8;
+	int JOURNEY__CANAL_DATE_TIME = EVENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Canal Booking</b></em>' reference.
@@ -2229,22 +2229,22 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__CANAL_BOOKING = EVENT_FEATURE_COUNT + 9;
 
 	/**
-	 * The feature id for the '<em><b>Latest Possible Canal Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Latest Possible Canal Date Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY__LATEST_POSSIBLE_CANAL_DATE = EVENT_FEATURE_COUNT + 10;
+	int JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME = EVENT_FEATURE_COUNT + 10;
 
 	/**
-	 * The feature id for the '<em><b>Canal Arrival</b></em>' attribute.
+	 * The feature id for the '<em><b>Canal Arrival Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY__CANAL_ARRIVAL = EVENT_FEATURE_COUNT + 11;
+	int JOURNEY__CANAL_ARRIVAL_TIME = EVENT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Canal Booking Period</b></em>' attribute.
@@ -6417,15 +6417,15 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getJourney_CanalEntrance();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDateTime <em>Canal Date Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Canal Date</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalDate()
+	 * @return the meta object for the attribute '<em>Canal Date Time</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalDateTime()
 	 * @see #getJourney()
 	 * @generated
 	 */
-	EAttribute getJourney_CanalDate();
+	EAttribute getJourney_CanalDateTime();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}'.
@@ -6439,26 +6439,26 @@ public interface SchedulePackage extends EPackage {
 	EReference getJourney_CanalBooking();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDateTime <em>Latest Possible Canal Date Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Latest Possible Canal Date</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate()
+	 * @return the meta object for the attribute '<em>Latest Possible Canal Date Time</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDateTime()
 	 * @see #getJourney()
 	 * @generated
 	 */
-	EAttribute getJourney_LatestPossibleCanalDate();
+	EAttribute getJourney_LatestPossibleCanalDateTime();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrival <em>Canal Arrival</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrivalTime <em>Canal Arrival Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Canal Arrival</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalArrival()
+	 * @return the meta object for the attribute '<em>Canal Arrival Time</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalArrivalTime()
 	 * @see #getJourney()
 	 * @generated
 	 */
-	EAttribute getJourney_CanalArrival();
+	EAttribute getJourney_CanalArrivalTime();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBookingPeriod <em>Canal Booking Period</em>}'.
@@ -8268,12 +8268,12 @@ public interface SchedulePackage extends EPackage {
 		EAttribute JOURNEY__CANAL_ENTRANCE = eINSTANCE.getJourney_CanalEntrance();
 
 		/**
-		 * The meta object literal for the '<em><b>Canal Date</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Canal Date Time</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute JOURNEY__CANAL_DATE = eINSTANCE.getJourney_CanalDate();
+		EAttribute JOURNEY__CANAL_DATE_TIME = eINSTANCE.getJourney_CanalDateTime();
 
 		/**
 		 * The meta object literal for the '<em><b>Canal Booking</b></em>' reference feature.
@@ -8284,20 +8284,20 @@ public interface SchedulePackage extends EPackage {
 		EReference JOURNEY__CANAL_BOOKING = eINSTANCE.getJourney_CanalBooking();
 
 		/**
-		 * The meta object literal for the '<em><b>Latest Possible Canal Date</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Latest Possible Canal Date Time</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute JOURNEY__LATEST_POSSIBLE_CANAL_DATE = eINSTANCE.getJourney_LatestPossibleCanalDate();
+		EAttribute JOURNEY__LATEST_POSSIBLE_CANAL_DATE_TIME = eINSTANCE.getJourney_LatestPossibleCanalDateTime();
 
 		/**
-		 * The meta object literal for the '<em><b>Canal Arrival</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Canal Arrival Time</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute JOURNEY__CANAL_ARRIVAL = eINSTANCE.getJourney_CanalArrival();
+		EAttribute JOURNEY__CANAL_ARRIVAL_TIME = eINSTANCE.getJourney_CanalArrivalTime();
 
 		/**
 		 * The meta object literal for the '<em><b>Canal Booking Period</b></em>' attribute feature.

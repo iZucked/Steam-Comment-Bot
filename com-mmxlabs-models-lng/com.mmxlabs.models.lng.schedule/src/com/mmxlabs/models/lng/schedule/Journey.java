@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,10 +26,10 @@ import java.time.LocalDate;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getSpeed <em>Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrance <em>Canal Entrance</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDateTime <em>Canal Date Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrival <em>Canal Arrival</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDateTime <em>Latest Possible Canal Date Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrivalTime <em>Canal Arrival Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBookingPeriod <em>Canal Booking Period</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrancePort <em>Canal Entrance Port</em>}</li>
  * </ul>
@@ -227,30 +228,30 @@ public interface Journey extends Event, FuelUsage {
 	void setCanalEntrance(CanalEntry value);
 
 	/**
-	 * Returns the value of the '<em><b>Canal Date</b></em>' attribute.
+	 * Returns the value of the '<em><b>Canal Date Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Canal Date</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Canal Date Time</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Canal Date</em>' attribute.
-	 * @see #setCanalDate(LocalDate)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalDate()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @return the value of the '<em>Canal Date Time</em>' attribute.
+	 * @see #setCanalDateTime(LocalDateTime)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalDateTime()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	LocalDate getCanalDate();
+	LocalDateTime getCanalDateTime();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDateTime <em>Canal Date Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Canal Date</em>' attribute.
-	 * @see #getCanalDate()
+	 * @param value the new value of the '<em>Canal Date Time</em>' attribute.
+	 * @see #getCanalDateTime()
 	 * @generated
 	 */
-	void setCanalDate(LocalDate value);
+	void setCanalDateTime(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Canal Booking</b></em>' reference.
@@ -279,56 +280,56 @@ public interface Journey extends Event, FuelUsage {
 	void setCanalBooking(CanalBookingSlot value);
 
 	/**
-	 * Returns the value of the '<em><b>Latest Possible Canal Date</b></em>' attribute.
+	 * Returns the value of the '<em><b>Latest Possible Canal Date Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Latest Possible Canal Date</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Latest Possible Canal Date Time</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Latest Possible Canal Date</em>' attribute.
-	 * @see #setLatestPossibleCanalDate(LocalDate)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_LatestPossibleCanalDate()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @return the value of the '<em>Latest Possible Canal Date Time</em>' attribute.
+	 * @see #setLatestPossibleCanalDateTime(LocalDateTime)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_LatestPossibleCanalDateTime()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	LocalDate getLatestPossibleCanalDate();
+	LocalDateTime getLatestPossibleCanalDateTime();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDateTime <em>Latest Possible Canal Date Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Latest Possible Canal Date</em>' attribute.
-	 * @see #getLatestPossibleCanalDate()
+	 * @param value the new value of the '<em>Latest Possible Canal Date Time</em>' attribute.
+	 * @see #getLatestPossibleCanalDateTime()
 	 * @generated
 	 */
-	void setLatestPossibleCanalDate(LocalDate value);
+	void setLatestPossibleCanalDateTime(LocalDateTime value);
 
 	/**
-	 * Returns the value of the '<em><b>Canal Arrival</b></em>' attribute.
+	 * Returns the value of the '<em><b>Canal Arrival Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Canal Arrival</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Canal Arrival Time</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Canal Arrival</em>' attribute.
-	 * @see #setCanalArrival(LocalDate)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalArrival()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @return the value of the '<em>Canal Arrival Time</em>' attribute.
+	 * @see #setCanalArrivalTime(LocalDateTime)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalArrivalTime()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	LocalDate getCanalArrival();
+	LocalDateTime getCanalArrivalTime();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrival <em>Canal Arrival</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrivalTime <em>Canal Arrival Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Canal Arrival</em>' attribute.
-	 * @see #getCanalArrival()
+	 * @param value the new value of the '<em>Canal Arrival Time</em>' attribute.
+	 * @see #getCanalArrivalTime()
 	 * @generated
 	 */
-	void setCanalArrival(LocalDate value);
+	void setCanalArrivalTime(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Canal Booking Period</b></em>' attribute.
