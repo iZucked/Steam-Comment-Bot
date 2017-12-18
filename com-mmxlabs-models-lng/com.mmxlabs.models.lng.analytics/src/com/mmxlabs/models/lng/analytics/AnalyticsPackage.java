@@ -1532,22 +1532,22 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_SOLUTION_SET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET__USER_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABSTRACT_SOLUTION_SET__OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int ABSTRACT_SOLUTION_SET__USER_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
@@ -1559,13 +1559,31 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_SOLUTION_SET__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Base Option</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__BASE_OPTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SOLUTION_SET__OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Abstract Solution Set</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int ABSTRACT_SOLUTION_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
@@ -1605,6 +1623,15 @@ s	 * <!-- end-user-doc -->
 	int ACTIONABLE_SET_PLAN__NAME = ABSTRACT_SOLUTION_SET__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__PORTFOLIO_BREAK_EVEN_MODE = ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE;
+
+	/**
 	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1614,15 +1641,6 @@ s	 * <!-- end-user-doc -->
 	int ACTIONABLE_SET_PLAN__USER_SETTINGS = ABSTRACT_SOLUTION_SET__USER_SETTINGS;
 
 	/**
-	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIONABLE_SET_PLAN__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
-
-	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1630,6 +1648,24 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int ACTIONABLE_SET_PLAN__EXTRA_SLOTS = ABSTRACT_SOLUTION_SET__EXTRA_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Base Option</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__BASE_OPTION = ABSTRACT_SOLUTION_SET__BASE_OPTION;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
 
 	/**
 	 * The number of structural features of the '<em>Actionable Set Plan</em>' class.
@@ -1678,6 +1714,15 @@ s	 * <!-- end-user-doc -->
 	int SLOT_INSERTION_OPTIONS__NAME = ABSTRACT_SOLUTION_SET__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__PORTFOLIO_BREAK_EVEN_MODE = ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE;
+
+	/**
 	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1687,15 +1732,6 @@ s	 * <!-- end-user-doc -->
 	int SLOT_INSERTION_OPTIONS__USER_SETTINGS = ABSTRACT_SOLUTION_SET__USER_SETTINGS;
 
 	/**
-	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_INSERTION_OPTIONS__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
-
-	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1703,6 +1739,24 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = ABSTRACT_SOLUTION_SET__EXTRA_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Base Option</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__BASE_OPTION = ABSTRACT_SOLUTION_SET__BASE_OPTION;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Slots Inserted</b></em>' reference list.
@@ -1927,6 +1981,15 @@ s	 * <!-- end-user-doc -->
 	int OPTIMISATION_RESULT__NAME = ABSTRACT_SOLUTION_SET__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__PORTFOLIO_BREAK_EVEN_MODE = ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE;
+
+	/**
 	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1936,15 +1999,6 @@ s	 * <!-- end-user-doc -->
 	int OPTIMISATION_RESULT__USER_SETTINGS = ABSTRACT_SOLUTION_SET__USER_SETTINGS;
 
 	/**
-	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISATION_RESULT__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
-
-	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1952,6 +2006,24 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int OPTIMISATION_RESULT__EXTRA_SLOTS = ABSTRACT_SOLUTION_SET__EXTRA_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Base Option</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__BASE_OPTION = ABSTRACT_SOLUTION_SET__BASE_OPTION;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_RESULT__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
 
 	/**
 	 * The number of structural features of the '<em>Optimisation Result</em>' class.
@@ -3405,6 +3477,17 @@ s	 * <!-- end-user-doc -->
 	EClass getAbstractSolutionSet();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isPortfolioBreakEvenMode <em>Portfolio Break Even Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Portfolio Break Even Mode</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isPortfolioBreakEvenMode()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EAttribute getAbstractSolutionSet_PortfolioBreakEvenMode();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getUserSettings <em>User Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3436,6 +3519,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAbstractSolutionSet_ExtraSlots();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getBaseOption <em>Base Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Base Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getBaseOption()
+	 * @see #getAbstractSolutionSet()
+	 * @generated
+	 */
+	EReference getAbstractSolutionSet_BaseOption();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan <em>Actionable Set Plan</em>}'.
@@ -4947,6 +5041,14 @@ s	 * <!-- end-user-doc -->
 		EClass ABSTRACT_SOLUTION_SET = eINSTANCE.getAbstractSolutionSet();
 
 		/**
+		 * The meta object literal for the '<em><b>Portfolio Break Even Mode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE = eINSTANCE.getAbstractSolutionSet_PortfolioBreakEvenMode();
+
+		/**
 		 * The meta object literal for the '<em><b>User Settings</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4969,6 +5071,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ABSTRACT_SOLUTION_SET__EXTRA_SLOTS = eINSTANCE.getAbstractSolutionSet_ExtraSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Option</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_SOLUTION_SET__BASE_OPTION = eINSTANCE.getAbstractSolutionSet_BaseOption();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.

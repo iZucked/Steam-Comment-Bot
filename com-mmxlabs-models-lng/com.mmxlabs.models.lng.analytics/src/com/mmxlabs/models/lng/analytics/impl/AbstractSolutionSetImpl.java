@@ -42,9 +42,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#isPortfolioBreakEvenMode <em>Portfolio Break Even Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getUserSettings <em>User Settings</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraSlots <em>Extra Slots</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getBaseOption <em>Base Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getOptions <em>Options</em>}</li>
  * </ul>
  *
  * @generated
@@ -71,6 +73,26 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	protected String name = NAME_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #isPortfolioBreakEvenMode() <em>Portfolio Break Even Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortfolioBreakEvenMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PORTFOLIO_BREAK_EVEN_MODE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPortfolioBreakEvenMode() <em>Portfolio Break Even Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPortfolioBreakEvenMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean portfolioBreakEvenMode = PORTFOLIO_BREAK_EVEN_MODE_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getUserSettings() <em>User Settings</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -81,16 +103,6 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	protected UserSettings userSettings;
 
 	/**
-	 * The cached value of the '{@link #getOptions() <em>Options</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOptions()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<SolutionOption> options;
-
-	/**
 	 * The cached value of the '{@link #getExtraSlots() <em>Extra Slots</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -99,6 +111,26 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * @ordered
 	 */
 	protected EList<Slot> extraSlots;
+
+	/**
+	 * The cached value of the '{@link #getBaseOption() <em>Base Option</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseOption()
+	 * @generated
+	 * @ordered
+	 */
+	protected SolutionOption baseOption;
+
+	/**
+	 * The cached value of the '{@link #getOptions() <em>Options</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<SolutionOption> options;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -138,6 +170,27 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isPortfolioBreakEvenMode() {
+		return portfolioBreakEvenMode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortfolioBreakEvenMode(boolean newPortfolioBreakEvenMode) {
+		boolean oldPortfolioBreakEvenMode = portfolioBreakEvenMode;
+		portfolioBreakEvenMode = newPortfolioBreakEvenMode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE, oldPortfolioBreakEvenMode, portfolioBreakEvenMode));
 	}
 
 	/**
@@ -212,15 +265,60 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public SolutionOption getBaseOption() {
+		return baseOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetBaseOption(SolutionOption newBaseOption, NotificationChain msgs) {
+		SolutionOption oldBaseOption = baseOption;
+		baseOption = newBaseOption;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION, oldBaseOption, newBaseOption);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBaseOption(SolutionOption newBaseOption) {
+		if (newBaseOption != baseOption) {
+			NotificationChain msgs = null;
+			if (baseOption != null)
+				msgs = ((InternalEObject)baseOption).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION, null, msgs);
+			if (newBaseOption != null)
+				msgs = ((InternalEObject)newBaseOption).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION, null, msgs);
+			msgs = basicSetBaseOption(newBaseOption, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION, newBaseOption, newBaseOption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
 				return basicSetUserSettings(null, msgs);
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
-				return ((InternalEList<?>)getOptions()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS:
 				return ((InternalEList<?>)getExtraSlots()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION:
+				return basicSetBaseOption(null, msgs);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
+				return ((InternalEList<?>)getOptions()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -235,12 +333,16 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		switch (featureID) {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 				return getName();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
+				return isPortfolioBreakEvenMode();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
 				return getUserSettings();
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
-				return getOptions();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS:
 				return getExtraSlots();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION:
+				return getBaseOption();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
+				return getOptions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -257,16 +359,22 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 				setName((String)newValue);
 				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
+				setPortfolioBreakEvenMode((Boolean)newValue);
+				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
 				setUserSettings((UserSettings)newValue);
-				return;
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
-				getOptions().clear();
-				getOptions().addAll((Collection<? extends SolutionOption>)newValue);
 				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS:
 				getExtraSlots().clear();
 				getExtraSlots().addAll((Collection<? extends Slot>)newValue);
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION:
+				setBaseOption((SolutionOption)newValue);
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
+				getOptions().clear();
+				getOptions().addAll((Collection<? extends SolutionOption>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -283,14 +391,20 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
+				setPortfolioBreakEvenMode(PORTFOLIO_BREAK_EVEN_MODE_EDEFAULT);
+				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
 				setUserSettings((UserSettings)null);
 				return;
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
-				getOptions().clear();
-				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS:
 				getExtraSlots().clear();
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION:
+				setBaseOption((SolutionOption)null);
+				return;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
+				getOptions().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -306,12 +420,16 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		switch (featureID) {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
+				return portfolioBreakEvenMode != PORTFOLIO_BREAK_EVEN_MODE_EDEFAULT;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
 				return userSettings != null;
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
-				return options != null && !options.isEmpty();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS:
 				return extraSlots != null && !extraSlots.isEmpty();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION:
+				return baseOption != null;
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
+				return options != null && !options.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -360,6 +478,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", portfolioBreakEvenMode: ");
+		result.append(portfolioBreakEvenMode);
 		result.append(')');
 		return result.toString();
 	}

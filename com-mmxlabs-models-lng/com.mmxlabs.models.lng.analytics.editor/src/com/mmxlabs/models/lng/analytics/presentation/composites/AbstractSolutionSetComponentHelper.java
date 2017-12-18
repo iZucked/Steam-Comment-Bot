@@ -71,10 +71,21 @@ public class AbstractSolutionSetComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_portfolioBreakEvenModeEditor(detailComposite, topClass);
 		add_userSettingsEditor(detailComposite, topClass);
-		add_optionsEditor(detailComposite, topClass);
 		add_extraSlotsEditor(detailComposite, topClass);
+		add_baseOptionEditor(detailComposite, topClass);
+		add_optionsEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the portfolioBreakEvenMode feature on AbstractSolutionSet
+	 *
+	 * @generated
+	 */
+	protected void add_portfolioBreakEvenModeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE));
+	}
+
 	/**
 	 * Create the editor for the userSettings feature on AbstractSolutionSet
 	 *
@@ -99,5 +110,14 @@ public class AbstractSolutionSetComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_extraSlotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS));
+	}
+
+	/**
+	 * Create the editor for the baseOption feature on AbstractSolutionSet
+	 *
+	 * @generated
+	 */
+	protected void add_baseOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__BASE_OPTION));
 	}
 }

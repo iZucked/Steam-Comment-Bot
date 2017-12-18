@@ -60,6 +60,7 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addPortfolioBreakEvenModePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -87,6 +88,28 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Portfolio Break Even Mode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortfolioBreakEvenModePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AbstractSolutionSet_portfolioBreakEvenMode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractSolutionSet_portfolioBreakEvenMode_feature", "_UI_AbstractSolutionSet_type"),
+				 AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -99,8 +122,9 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__USER_SETTINGS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__BASE_OPTION);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS);
 		}
 		return childrenFeatures;
 	}
@@ -157,11 +181,13 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 
 		switch (notification.getFeatureID(AbstractSolutionSet.class)) {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__NAME:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__USER_SETTINGS:
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -186,11 +212,6 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS,
-				 AnalyticsFactory.eINSTANCE.createSolutionOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS,
 				 CargoFactory.eINSTANCE.createLoadSlot()));
 
@@ -208,6 +229,39 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_SLOTS,
 				 CargoFactory.eINSTANCE.createSpotDischargeSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__BASE_OPTION,
+				 AnalyticsFactory.eINSTANCE.createSolutionOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS,
+				 AnalyticsFactory.eINSTANCE.createSolutionOption()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__BASE_OPTION ||
+			childFeature == AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

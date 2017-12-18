@@ -1442,8 +1442,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAbstractSolutionSet_PortfolioBreakEvenMode() {
+		return (EAttribute)abstractSolutionSetEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getAbstractSolutionSet_UserSettings() {
-		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(0);
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1452,7 +1461,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getAbstractSolutionSet_Options() {
-		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(1);
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1462,6 +1471,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EReference getAbstractSolutionSet_ExtraSlots() {
 		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAbstractSolutionSet_BaseOption() {
+		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2153,9 +2171,11 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(existingCharterMarketOptionEClass, EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX);
 
 		abstractSolutionSetEClass = createEClass(ABSTRACT_SOLUTION_SET);
+		createEAttribute(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__USER_SETTINGS);
-		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__OPTIONS);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_SLOTS);
+		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__BASE_OPTION);
+		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__OPTIONS);
 
 		actionableSetPlanEClass = createEClass(ACTIONABLE_SET_PLAN);
 
@@ -2439,9 +2459,11 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getExistingCharterMarketOption_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 0, 1, ExistingCharterMarketOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(abstractSolutionSetEClass, AbstractSolutionSet.class, "AbstractSolutionSet", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAbstractSolutionSet_PortfolioBreakEvenMode(), ecorePackage.getEBoolean(), "portfolioBreakEvenMode", null, 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_UserSettings(), theParametersPackage.getUserSettings(), null, "userSettings", null, 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAbstractSolutionSet_Options(), this.getSolutionOption(), null, "options", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractSolutionSet_BaseOption(), this.getSolutionOption(), null, "baseOption", null, 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractSolutionSet_Options(), this.getSolutionOption(), null, "options", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(actionableSetPlanEClass, ActionableSetPlan.class, "ActionableSetPlan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
