@@ -41,7 +41,7 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.Default
  */
 public class LNGEvaluationModule extends AbstractModule {
 
-	public static final String HINT_PORTFOLIO_BREAKEVEN = "LNGEvaluationModule-hint-portfolio-breakeven";
+	public static final @NonNull String HINT_PORTFOLIO_BREAKEVEN = "LNGEvaluationModule-hint-portfolio-breakeven";
 	@NonNull
 	private final Collection<String> hints;
 

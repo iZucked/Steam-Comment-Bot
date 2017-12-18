@@ -806,7 +806,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			super.dispose();
 		}
 
-		private final EContentAdapter adapter = new EContentAdapter() {
+		private final @NonNull EContentAdapter adapter = new EContentAdapter() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);

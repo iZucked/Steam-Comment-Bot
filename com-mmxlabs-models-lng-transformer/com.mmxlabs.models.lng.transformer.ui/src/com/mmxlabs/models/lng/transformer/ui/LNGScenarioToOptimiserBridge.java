@@ -52,7 +52,6 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -136,7 +135,7 @@ public class LNGScenarioToOptimiserBridge {
 
 		// Trigger initial evaluation - note no fitness state is saved
 		if (initialEvaluation) {
-		
+
 			RunnerHelper.syncExecDisplayOptional(() -> {
 				overwrite(0, originalDataTransformer.getInitialSequences(), null);
 			});
@@ -335,8 +334,7 @@ public class LNGScenarioToOptimiserBridge {
 		return optimiserDataTransformer.getInjector();
 	}
 
-	@NonNull
-	public IScenarioDataProvider getScenarioDataProvider() {
+	public @NonNull IScenarioDataProvider getScenarioDataProvider() {
 		return originalScenarioDataProvider;
 	}
 
@@ -368,8 +366,7 @@ public class LNGScenarioToOptimiserBridge {
 		return scenarioInstance;
 	}
 
-	@NonNull
-	public LNGDataTransformer getDataTransformer() {
+	public @NonNull LNGDataTransformer getDataTransformer() {
 		return optimiserDataTransformer;
 	}
 
@@ -378,7 +375,7 @@ public class LNGScenarioToOptimiserBridge {
 	 * 
 	 * @return
 	 */
-	public IScenarioDataProvider getOptimiserScenario() {
+	public @NonNull IScenarioDataProvider getOptimiserScenario() {
 		return optimiserScenarioDataProvider;
 	}
 
