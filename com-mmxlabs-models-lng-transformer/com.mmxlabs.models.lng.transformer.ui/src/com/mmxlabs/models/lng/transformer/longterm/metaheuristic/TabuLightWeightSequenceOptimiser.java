@@ -6,12 +6,14 @@ import java.io.ObjectOutputStream;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.minimaxlabs.rnd.representation.ShipmentData;
@@ -59,7 +61,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	public TabuLightWeightSequenceOptimiser() {
-		this(20_000, 1000, 6, 0);
+		this(10_000, 1000, 15, 0);
 	}
 
 	public TabuLightWeightSequenceOptimiser(int globalIterations, int searchIterations, int maxAge, int randomSeed) {
@@ -163,103 +165,170 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	       }
 	}
 
-	public List<List<Integer>> optimise(int id, boolean loggingFlag,
-			int cargoCount, int vesselCount,
-			double[] cargoPNL, double[] vesselCapacities,
-			double[][][] cargoToCargoCostsOnAvailability, List<List<Integer>> cargoVesselRestrictions,
-			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes,
-			Interval[] loads, Interval[] discharges) {
-		
+	public List<List<Integer>> optimise(int id, boolean loggingFlag, int cargoCount, int vesselCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
+			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges) {
+
 		List<HashSet<Integer>> tabu = new LinkedList<>();
-		List<List<Integer>> schedules = Arrays.stream(vesselCapacities, 0, vesselCount)
+
+		List<List<Integer>> schedule = Arrays.stream(vesselCapacities, 0, vesselCount)
 				.mapToObj(v -> (List<Integer>) new LinkedList<Integer>())
 				.collect(Collectors.toList());
-		List<List<Integer>> bestSchedules = schedules;
 
-		long lateness = 0;
+		List<List<Integer>> bestSchedule = null;
+
+		List<Integer> cargoes = IntStream.range(0, cargoCount).boxed().collect(Collectors.toList());
+		List<Integer> unusedCargoes = new ArrayList<>(cargoes);
+		List<Integer> usedCargoes = new ArrayList<>();
+
+		List<Integer> tabuFlat;
+
+		Random random = new Random();
+
+		double[] fitness = new double[search];
+		List<List<List<Integer>>> sequences = new ArrayList<>(search);
+		List<List<Integer>> tabus = new ArrayList<>(search);
+		List<TabuLightWeightSequenceOptimiserMoves.TabuSolution> tabuSolutions = new ArrayList<>(search);
+
 		int bestIteration = 0;
-		Double bestScore = -UNFULFILLED_FINE * cargoCount;
-		TabuLightWeightSequenceOptimiserMoves mover = new TabuLightWeightSequenceOptimiserMoves(r, cargoCount);
 
-		System.out.println("\nRUN " + id);
-		for (int i = 0; i < iterations; i++) {
-			if (i % (iterations / 10) == 0) {
-				System.out.print(i * 100 / iterations + "% ");
-			}
-			// add back tabu elements
-			if (tabu.size() == maxAge) {
-				HashSet<Integer> old = tabu.remove(0);
-				mover.addTabus(old);
-			}
+		Double bestFitness = -Double.MAX_VALUE;
 
-			int newCargo = 0;
-			HashSet<Integer> tabuSet = new HashSet<>();
-			List<List<Integer>> currentSchedules = mover.move(schedules);
-			double currentScore = evaluate(schedules, cargoCount, cargoPNL, vesselCapacities,
-					cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes,
-					cargoMinTravelTimes, loads, discharges);
-
-			TabuLightWeightSequenceOptimiserMoves newMover = TabuLightWeightSequenceOptimiserMoves.newInstance(mover);
-			newMover.registerDiff();
-
-			newCargo = mover.getCargo();
-			// tabuSet.add(mover.getCargo());
-
-			for (int j = 0; j < search; j++) {
-				List<List<Integer>> newSchedules = mover.move(schedules);
-				Double newScore = evaluate(newSchedules, cargoCount, cargoPNL, vesselCapacities,
-						cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes,
-						cargoMinTravelTimes, loads, discharges);
-
-				if (newScore > currentScore) {
-					currentSchedules = newSchedules;
-					currentScore = newScore;
-					newCargo = mover.getCargo();
-					newMover = TabuLightWeightSequenceOptimiserMoves.newInstance(mover);
-					newMover.registerDiff();
-				}
-				if (loggingFlag) {
-					series.get(0).add(currentScore);
-					series.get(1).add(newScore);
-					// series.get(2).add(bestScore);
-				}
-			}
-			if (currentScore > bestScore) {
-				bestSchedules = currentSchedules;
-				bestScore = currentScore;
-				lateness = totalLateness;
-				series.get(3).add((double) i);
-				bestIteration = i;
-			}
-			schedules = currentSchedules;
-			mover = newMover;
-
-			tabuSet.add(newCargo); // add new element to current set
-			mover.removeTabus(tabuSet);
-			tabu.add(tabuSet); // add new tabu elements to master set
+		for (int j = 0; j < search; j++) {
+			sequences.add(j, new ArrayList<>());
+			tabus.add(j, new ArrayList<>());
+			tabuSolutions.add(new TabuLightWeightSequenceOptimiserMoves.TabuSolution(null, null));
 		}
 
-		Double bestScoreBest = evaluate(bestSchedules, cargoCount, cargoPNL, vesselCapacities,
-				cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes,
-				cargoMinTravelTimes, loads, discharges);
+		for (int i = 0; i < iterations; i++) {
 
-		System.out.printf("\n\nFitness best (re-evaluated): %f\n", bestScoreBest);
-		System.out.printf("Lateness best (re-evaluated): %d hrs\n", totalLateness);
+			int currentIndex = -1;
+			tabuFlat = tabu.stream().flatMap(HashSet::stream).collect(Collectors.toList());
+
+			// add back tabu elements
+			if (tabu.size() > maxAge) {
+				HashSet<Integer> old = tabu.remove(0);
+			}
+
+			HashSet<Integer> tabuSet = new HashSet<>();
+
+			// Forced first move
+			TabuLightWeightSequenceOptimiserMoves.TabuSolution currentSolution = TabuLightWeightSequenceOptimiserMoves.move(copySolution(schedule), unusedCargoes, usedCargoes, random);
+			List<List<Integer>> currentSchedules = currentSolution.schedule;
+			List<Integer> currentTabu = currentSolution.tabu;
+
+			double currentFitness = evaluate(currentSchedules, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
+					cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+
+
+			final List<List<Integer>> lambdaSchedule = schedule;
+			final List<Integer> lambdaUnusedCargoes = unusedCargoes;
+			final List<Integer> lambdaUsedCargoes = usedCargoes;
+			final List<Integer> lambdaTabuFlat = tabuFlat;
+			
+			// Search the neighbourhood
+			tabuSolutions = tabuSolutions.parallelStream().map(t -> {
+				TabuLightWeightSequenceOptimiserMoves.TabuSolution tabuSolution = null;
+				// Try 100 moves
+				for (int k = 0; k < 100; k++) {
+					tabuSolution = TabuLightWeightSequenceOptimiserMoves.move(copySolution(lambdaSchedule), lambdaUnusedCargoes, lambdaUsedCargoes, random);
+					if (Collections.disjoint(tabuSolution.tabu, lambdaTabuFlat)) {
+						return tabuSolution;
+					}
+				}
+				return tabuSolution;
+			}).collect(Collectors.toList());
+
+			// Compute fitness
+			fitness = tabuSolutions.parallelStream()
+					.mapToDouble(s -> evaluate(s.schedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
+					cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges)).toArray();
+
+			// Set the base element to be the best of the iteration
+			for (int j = 0; j < search; j++) {
+				if (fitness[j] > currentFitness) {
+					currentFitness = fitness[j];
+					currentIndex = j;
+				}
+			}
+
+			// Set the new base solution for the next iteration
+			if (currentIndex == -1) {
+				schedule = copySolution(currentSchedules);
+				tabuSet.addAll(currentTabu);
+			} else {
+				schedule = copySolution(tabuSolutions.get(currentIndex).schedule);
+				tabuSet.addAll(tabuSolutions.get(currentIndex).tabu);
+			}
+
+			unusedCargoes = updateUnusedList(schedule, cargoes);
+			usedCargoes = updateUsedList(schedule);
+
+			// Add the tabuList to the master set
+			if (tabuSet.size() > 0) {
+				tabu.add(tabuSet);
+			}
+
+			// Elitism: keep the overall best solution
+			if (currentFitness > bestFitness) {
+				bestSchedule = copySolution(schedule);
+				bestFitness = currentFitness;
+				bestIteration = i;
+			}
+		}
+		
+		if (unusedCargoes.size() > 0) {
+			System.out.println(" Uncomplete solution :" + unusedCargoes.size());
+		}
+		
+		Double bestScoreBest = evaluate(bestSchedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
+				cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+
+		System.out.printf("\n\nFitness best : %f\n", bestScoreBest);
+		System.out.printf("iteration best : %d it\n", bestIteration);
 
 		System.out.println("\nOrdering");
-		for (List schedule : bestSchedules) {
-			System.out.print("Ship " + bestSchedules.indexOf(schedule) + ": ");
-			if (schedule.isEmpty()) {
+		for (List vessel : bestSchedule) {
+			System.out.print("Ship " + bestSchedule.indexOf(vessel) + ": ");
+			if (vessel.isEmpty()) {
 				System.out.print("empty");
 			} else {
-				for (Object i : schedule) {
-					System.out.print((int) i + " ");
+				for (Object i : vessel) {
+					System.out.print(i + " ");
 				}
 			}
 			System.out.println();
 		}
 
-		return bestSchedules;
+		return bestSchedule;
+	}
+
+	List<Integer> updateUsedList(List<List<Integer>> solution) {
+		Set used = new HashSet();
+
+		for (int i = 0; i < solution.size(); i++) {
+			for (int j = 0; j < solution.get(i).size(); j++) {
+				used.add(solution.get(i).get(j));
+			}
+		}
+
+		return new ArrayList<Integer>(used);
+	}
+
+	List<Integer> updateUnusedList(List<List<Integer>> solution, List<Integer> cargoes) {
+		List cargoesSet = new ArrayList(cargoes);
+		cargoesSet.removeAll(updateUsedList(solution));
+
+		return cargoesSet;
+	}
+
+	List<List<Integer>> copySolution(List<List<Integer>> solution) {
+		List<List<Integer>> clone = new ArrayList<>(solution.size());
+
+		for (int i = 0; i < solution.size(); i++) {
+			clone.add(new ArrayList<>(solution.get(i)));
+		}
+
+		return clone;
 	}
 
 	private double calculateCostOnSequence(List<Integer> sequence, int availability, double[][][] cargoToCargoCostsOnAvailability) {
