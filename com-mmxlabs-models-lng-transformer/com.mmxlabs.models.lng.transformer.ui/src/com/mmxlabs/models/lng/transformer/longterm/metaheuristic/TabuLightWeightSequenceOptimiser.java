@@ -28,7 +28,6 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 	public static final double MINUTES = 1.0 / 60;
 	public static final double HOURS = 1.0 / 3600;
-	private long totalLateness;
 
 	private int iterations;
 	private int maxAge;
@@ -385,7 +384,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges) {
 		double totalCost = 0;
 		double totalPNL = 0;
-		totalLateness = 0;
+		long totalLateness = 0;
 		int used = 0;
 
 		for (int availability = 0; availability < sequences.size(); availability++) {
