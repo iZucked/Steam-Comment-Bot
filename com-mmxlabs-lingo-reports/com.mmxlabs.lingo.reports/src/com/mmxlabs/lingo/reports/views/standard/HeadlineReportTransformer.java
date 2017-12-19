@@ -47,7 +47,6 @@ class HeadlineReportTransformer {
 			this.latenessExcludingFlex = latenessExcludingFlex;
 			this.purchaseCost = purchaseCost;
 			this.salesRevenue = salesRevenue;
-			this.dummy = false;
 		}
 
 		public RowData() {
@@ -66,10 +65,8 @@ class HeadlineReportTransformer {
 			this.latenessExcludingFlex = null;
 			this.salesRevenue = null;
 			this.purchaseCost = null;
-			this.dummy = true;
 		}
 
-		public final boolean dummy;
 		public final String scheduleName;
 		public final Long totalPNL;
 		public final Long tradingPNL;

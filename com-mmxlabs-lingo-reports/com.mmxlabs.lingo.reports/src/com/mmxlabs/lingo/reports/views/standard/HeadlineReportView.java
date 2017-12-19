@@ -262,9 +262,6 @@ public class HeadlineReportView extends ViewPart {
 		public String getText(final Object obj) {
 			if (obj instanceof RowData) {
 				final RowData d = (RowData) obj;
-				if (d.dummy) {
-					return "";
-				}
 				final RowData pinD = pinnedData;
 
 				if (columnDefinition.columnType == ColumnType.Label) {
@@ -314,9 +311,6 @@ public class HeadlineReportView extends ViewPart {
 
 			if (element instanceof RowData) {
 				final RowData d = (RowData) element;
-				if (d.dummy) {
-					return null;
-				}
 				final RowData pinD = pinnedData;
 				int color = SWT.COLOR_DARK_GRAY;
 				if (columnDefinition.getColumnType() == ColumnType.Label) {
