@@ -68,7 +68,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -683,7 +682,7 @@ public class ChangeSetViewColumnHelper {
 				if (value instanceof GridItem) {
 					final GridItem gridItem = (GridItem) value;
 					Object data = gridItem.getData();
-		 
+
 					if (data instanceof ChangeSetTableGroup) {
 						final int currentLineWidth = gc.getLineWidth();
 						gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
@@ -1335,8 +1334,8 @@ public class ChangeSetViewColumnHelper {
 				Object element = cell.getElement();
 				cell.setText("");
 				if (element instanceof ChangeSetTableGroup) {
-//					ChangeSetNode changeSetNode = (ChangeSetNode) element;
-					final ChangeSetTableGroup changeSet =( ChangeSetTableGroup)element;
+					// ChangeSetNode changeSetNode = (ChangeSetNode) element;
+					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
 					cell.setFont(boldFont);
 					final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSet.eContainer();
 					int idx = 0;
@@ -1691,31 +1690,93 @@ public class ChangeSetViewColumnHelper {
 
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
+					final StringBuilder sb = new StringBuilder();
+					sb.append("Prices:\n");
+					boolean hasTooltip = false;
 					if (isLoad) {
-						final SlotAllocation allocation = change.getLhsAfter() != null ? change.getLhsAfter().getLoadAllocation() : null;
-						if (allocation != null) {
-							final Slot slot = allocation.getSlot();
-							if (slot != null) {
-								final String expr = slot.getPriceExpression();
-								if (expr != null && expr.contains("?")) {
-									return String.format("Break-even price is %,.2f", allocation.getPrice());
+						{
+							final SlotAllocation allocation = change.getLhsBefore() != null ? change.getLhsBefore().getLoadAllocation() : null;
+							if (allocation != null) {
+								final Slot slot = allocation.getSlot();
+								if (slot != null) {
+									final String expr = slot.getPriceExpression();
+									if (expr != null && expr.contains("?")) {
+										// return String.format("Break-even price is %,.2f", allocation.getPrice());
+									} else {
+
+										hasTooltip = true;
+										sb.append(String.format("Before: %,.2f\n", allocation.getPrice()));
+									}
+								}
+							}
+						}
+						{
+							final SlotAllocation allocation = change.getLhsAfter() != null ? change.getLhsAfter().getLoadAllocation() : null;
+							if (allocation != null) {
+								final Slot slot = allocation.getSlot();
+								if (slot != null) {
+									final String expr = slot.getPriceExpression();
+									if (expr != null && expr.contains("?")) {
+										return String.format("Break-even price is %,.2f", allocation.getPrice());
+									} else {
+
+										hasTooltip = true;
+										sb.append(String.format("After: %,.2f", allocation.getPrice()));
+									}
 								}
 							}
 						}
 					} else {
-						final SlotAllocation allocation = change.getRhsAfter() != null ? change.getRhsAfter().getDischargeAllocation() : null;
-						if (allocation != null) {
-							final Slot slot = allocation.getSlot();
-							if (slot != null) {
-								final String expr = slot.getPriceExpression();
-								if (expr != null && expr.contains("?")) {
-									return String.format("Break-even price is %,.2f", allocation.getPrice());
+						{
+							final SlotAllocation allocation = change.getRhsBefore() != null ? change.getRhsBefore().getDischargeAllocation() : null;
+							if (allocation != null) {
+								final Slot slot = allocation.getSlot();
+								if (slot != null) {
+									final String expr = slot.getPriceExpression();
+									if (expr != null && expr.contains("?")) {
+										// return String.format("Break-even price is %,.2f", allocation.getPrice());
+									} else {
+										hasTooltip = true;
+										sb.append(String.format("Before: %,.2f (current sale)\n", allocation.getPrice()));
+									}
+								}
+							}
+						}
+						{
+							final SlotAllocation allocation = change.getLhsBefore() != null ? change.getLhsBefore().getDischargeAllocation() : null;
+							if (allocation != null) {
+								final Slot slot = allocation.getSlot();
+								if (slot != null) {
+									final String expr = slot.getPriceExpression();
+									if (expr != null && expr.contains("?")) {
+										// return String.format("Break-even price is %,.2f", allocation.getPrice());
+									} else {
+										hasTooltip = true;
+										sb.append(String.format("Before: %,.2f (previous sale)\n", allocation.getPrice()));
+									}
+								}
+							}
+						}
+						{
+							final SlotAllocation allocation = change.getRhsAfter() != null ? change.getRhsAfter().getDischargeAllocation() : null;
+							if (allocation != null) {
+								final Slot slot = allocation.getSlot();
+								if (slot != null) {
+									final String expr = slot.getPriceExpression();
+									if (expr != null && expr.contains("?")) {
+										return String.format("Break-even price is %,.2f", allocation.getPrice());
+									} else {
+										hasTooltip = true;
+										sb.append(String.format("After: %,.2f (current sale)", allocation.getPrice()));
+									}
 								}
 							}
 						}
 					}
+					if (hasTooltip) {
+						return sb.toString();
+					}
 				}
-
 				return null;
 			}
 		};
@@ -1789,7 +1850,7 @@ public class ChangeSetViewColumnHelper {
 	public static @NonNull BiFunction<ChangeSetTableGroup, Integer, String> getDefaultLabelProvider() {
 		return (changeSet, index) -> {
 
-//			final ChangeSetTableGroup changeSet = node.getTableGroup();
+			// final ChangeSetTableGroup changeSet = node.getTableGroup();
 			if (changeSet.getDescription() != null && !changeSet.getDescription().isEmpty()) {
 				return changeSet.getDescription();
 			} else {
@@ -1797,7 +1858,7 @@ public class ChangeSetViewColumnHelper {
 			}
 		};
 	}
-	
+
 	public static @NonNull BiFunction<ChangeSetTableGroup, Integer, String> getMultipleSolutionLabelProvider() {
 		return (changeSet, index) -> {
 			return String.format("Solution %s", index + 1);
