@@ -138,7 +138,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					}
 				}
 			};
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
 
