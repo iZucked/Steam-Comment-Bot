@@ -30,7 +30,23 @@ public final class ViewerHelper {
 		@Nullable
 		Object getInput();
 	}
-	
+
+	public static <T extends Viewer> void runIfViewerValid(@Nullable final T viewer, final boolean syncExec, @NonNull final Runnable runnable) {
+		if (viewer == null) {
+			return;
+		}
+		final Runnable runnable2 = new Runnable() {
+			@Override
+			public void run() {
+				final Control control = viewer.getControl();
+				if (control != null && !control.isDisposed()) {
+					runnable.run();
+				}
+			}
+		};
+		RunnerHelper.exec(runnable2, syncExec);
+	}
+
 	public static <T extends Viewer> void runIfViewerValid(@Nullable final T viewer, final boolean syncExec, @NonNull final Consumer<T> consumer) {
 		if (viewer == null) {
 			return;
@@ -97,6 +113,7 @@ public final class ViewerHelper {
 
 	/**
 	 * If the viewer has been created and has not been disposed, call a refresh then execute the supplied runnable
+	 * 
 	 * @param viewer
 	 * @param syncExec
 	 * @param then
