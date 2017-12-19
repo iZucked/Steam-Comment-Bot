@@ -95,10 +95,10 @@ public class ReportTester {
 		// A side-effect is the initial evaluation.
 		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
 		});
-		testReports_NoEvalute(modelRecord, scenarioDataProvider, scenarioURL, reportID, shortName, extension, preAction);
+		testReports_NoEvaluate(modelRecord, scenarioDataProvider, scenarioURL, reportID, shortName, extension, preAction);
 	}
 
-	public static void testReports_NoEvalute(final @NonNull ScenarioModelRecord modelRecord, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
+	public static void testReports_NoEvaluate(final @NonNull ScenarioModelRecord modelRecord, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
 
 		if (preAction != null) {

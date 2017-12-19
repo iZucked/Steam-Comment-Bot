@@ -45,8 +45,10 @@ public abstract class AbstractReportTester_CSV extends AbstractReportTester {
 	@Override
 	protected void testReports(final String reportID, final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 		final URL url = getClass().getResource(key.getSecond());
-		final IScenarioDataProvider scenarioDataProvider =  CSVImporter.importCSVScenario(url.toString());
-		final ScenarioModelRecord modelRecord = ScenarioStorageUtil.createFromCopyOf(url.getPath(), scenarioDataProvider);
-		ReportTester.testReports(modelRecord, scenarioDataProvider, url, reportID, shortName, extension, preAction);
+
+		final ScenarioModelRecord modelRecord = ScenarioStorageUtil.createFromCopyOf(url.getPath(), CSVImporter.importCSVScenario(url.toString()));
+		try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("AbstractReportTester_CSV")) {
+			ReportTester.testReports(modelRecord, scenarioDataProvider, url, reportID, shortName, extension, preAction);
+		}
 	}
 }

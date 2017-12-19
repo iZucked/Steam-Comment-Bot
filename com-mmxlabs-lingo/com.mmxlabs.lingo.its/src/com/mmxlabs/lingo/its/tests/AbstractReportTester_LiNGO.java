@@ -102,6 +102,6 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 		Assert.assertNotNull(modelRecord);
 		Assert.assertNotNull(scenarioDataProvider);
 
-		ReportTester.testReports_NoEvalute(modelRecord, scenarioDataProvider, url, reportID, shortName, extension, preAction);
+		ReportTester.testReports_NoEvaluate(modelRecord, scenarioDataProvider, url, reportID, shortName, extension, preAction);
 	}
 }
