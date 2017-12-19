@@ -52,7 +52,7 @@ public class ChainRunner implements IChainRunner {
 //		IChainLink firstLink = chain.get(0);
 		@NonNull
 		IMultiStateResult solutionBuilderSequences = dataTransformer.getInitialResult();
-		initialSequencesContainer = new SequencesContainer(solutionBuilderSequences.getBestSolution().getFirst());
+		initialSequencesContainer = new SequencesContainer(solutionBuilderSequences.getBestSolution());
 //		firstLink.init(initialSequencesContainer, solutionBuilderSequences);
 		initialState = solutionBuilderSequences;
 	}

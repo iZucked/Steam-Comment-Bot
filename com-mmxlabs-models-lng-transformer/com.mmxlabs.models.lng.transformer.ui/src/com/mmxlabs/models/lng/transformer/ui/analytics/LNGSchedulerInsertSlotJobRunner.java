@@ -282,7 +282,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> plan, portfolioBreakEvenTarget);
 
 		SequencesContainer initialSequencesContainer = initialSequencesContainer = new SequencesContainer(
-				scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution().getFirst());
+				scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
 		link.run(initialSequencesContainer, results, monitor);
 
 		return plan;

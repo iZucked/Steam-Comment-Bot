@@ -61,7 +61,7 @@ public class SolutionSetExporterUnit {
 			public @NonNull IMultiStateResult run(@NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final IProgressMonitor monitor) {
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = inputState.getSolutions();
 
-				solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(initialSequences.getSequences(), new HashMap<>()));
+				solutions.add(0, initialSequences.getSequencesPair());
 				monitor.beginTask("Export", solutions.size());
 
 				final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
@@ -70,7 +70,7 @@ public class SolutionSetExporterUnit {
 
 				try {
 					final AbstractSolutionSet plan = solutionSetFactory.get();
-					boolean firstSolution = true;					
+					boolean firstSolution = true;
 					for (final NonNullPair<ISequences, Map<String, Object>> changeSet : solutions) {
 
 						try {

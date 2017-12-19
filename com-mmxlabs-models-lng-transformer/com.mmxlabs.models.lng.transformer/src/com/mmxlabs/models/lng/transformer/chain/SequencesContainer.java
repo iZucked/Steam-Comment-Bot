@@ -4,24 +4,31 @@
  */
 package com.mmxlabs.models.lng.transformer.chain;
 
+import java.util.Map;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.optimiser.core.ISequences;
 
 @NonNullByDefault
 public final class SequencesContainer {
 
-	private ISequences sequences;
+	private NonNullPair<ISequences, Map<String, Object>> sequences;
 
-	public SequencesContainer(final ISequences sequences) {
+	public SequencesContainer(final NonNullPair<ISequences, Map<String, Object>> sequences) {
 		this.sequences = sequences;
 	}
 
-	public ISequences getSequences() {
+	public NonNullPair<ISequences, Map<String, Object>> getSequencesPair() {
 		return sequences;
 	}
 
-	public void setSequences(final ISequences sequences) {
+	public ISequences getSequences() {
+		return sequences.getFirst();
+	}
+
+	public void setSequencesPair(final NonNullPair<ISequences, Map<String, Object>> sequences) {
 		this.sequences = sequences;
 	}
 }

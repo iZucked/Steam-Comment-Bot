@@ -189,7 +189,7 @@ public class LNGUnitCostGeneratorUnit implements ILNGStateTransformerUnit {
 
 					final IMultiStateResult result = new MultiStateResult(output.get(0), output);
 					// Update initial sequences for subsequent optimisation stages
-					initialSequencesContainer.setSequences(result.getBestSolution().getFirst());
+					initialSequencesContainer.setSequencesPair(result.getBestSolution());
 					return result;
 				} finally {
 					if (runnerHook != null) {

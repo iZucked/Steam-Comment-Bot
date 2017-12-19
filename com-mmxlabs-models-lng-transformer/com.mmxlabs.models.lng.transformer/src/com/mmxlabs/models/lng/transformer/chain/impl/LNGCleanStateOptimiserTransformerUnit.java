@@ -191,7 +191,7 @@ public class LNGCleanStateOptimiserTransformerUnit implements ILNGStateTransform
 
 					final IMultiStateResult result = new MultiStateResult(output.get(0), output);
 					// Update initial sequences for subsequent optimisation stages
-					initialSequencesContainer.setSequences(result.getBestSolution().getFirst());
+					initialSequencesContainer.setSequencesPair(result.getBestSolution());
 					return result;
 				} finally {
 					if (runnerHook != null) {
@@ -243,7 +243,8 @@ public class LNGCleanStateOptimiserTransformerUnit implements ILNGStateTransform
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_AnnealingSettingsModule(stageSettings.getSeed(), stageSettings.getAnnealingSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(CollectionsUtil.makeLinkedList(new LNGOptimisationModule(), new LocalSearchOptimiserModule()), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(CollectionsUtil.makeLinkedList(new LNGOptimisationModule(), new LocalSearchOptimiserModule()), services,
+				IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();

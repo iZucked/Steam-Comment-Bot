@@ -25,7 +25,7 @@ public class ResetInitialSequencesUnit {
 			public IMultiStateResult run(final SequencesContainer initialSequencesContainer, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				monitor.beginTask("Reset initial sequences", 1);
 				try {
-					initialSequencesContainer.setSequences(inputState.getBestSolution().getFirst());
+					initialSequencesContainer.setSequencesPair(inputState.getBestSolution());
 					monitor.worked(1);
 				} finally {
 					monitor.done();
