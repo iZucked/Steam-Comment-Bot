@@ -1,9 +1,7 @@
 package com.mmxlabs.models.lng.transformer.longterm.metaheuristic;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+
+import java.util.*;
 
 public class TabuLightWeightSequenceOptimiserMoves {
 
@@ -22,20 +20,22 @@ public class TabuLightWeightSequenceOptimiserMoves {
 	}
 
 
-	static public TabuSolution move(List<List<Integer>> sequences, List<Integer> unusedCargoes, List<Integer> usedCargoes, Random random) {
+	static public TabuSolution move(List<List<Integer>> sequences, List<Integer> unusedCargoes, List<Integer> usedCargoes, Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping, Random random) {
 		double d = random.nextDouble();
 
 		if (unusedCargoes.size() > 0) {
 			if (usedCargoes.size() > 1) {
-				int choice = random.nextInt(4);
+				int choice = random.nextInt(5);
 				if (choice == 0) {
 					return insertUnusedCargo(sequences, unusedCargoes, random);
 				} else if (choice == 1) {
-					return moveCargo(sequences, random);
+					return moveCargo(sequences, usedCargoes, mapping, random);
 				} else if (choice == 2) {
-					return swapCargo(sequences, random);
+					return swapCargo(sequences, usedCargoes, mapping, random);
 				} else if (choice == 3) {
-					return removeUsedCargo(sequences, random);
+					return removeUsedCargo(sequences, usedCargoes, mapping, random);
+				} else if (choice == 4) {
+					return replaceWithUnusedCargo(sequences, usedCargoes, unusedCargoes, mapping, random);
 				}
 			} else {
 				return insertUnusedCargo(sequences, unusedCargoes, random);
@@ -44,11 +44,11 @@ public class TabuLightWeightSequenceOptimiserMoves {
 			int choice = random.nextInt(3);
 
 			if (choice == 0) {
-				return removeUsedCargo(sequences, random);
+				return removeUsedCargo(sequences, usedCargoes, mapping, random);
 			} else if (choice == 1) {
-				return moveCargo(sequences, random);
+				return moveCargo(sequences, usedCargoes, mapping, random);
 			} else if (choice == 2) {
-				return swapCargo(sequences, random);
+				return swapCargo(sequences, usedCargoes, mapping, random);
 			}
 		}
 
@@ -74,43 +74,31 @@ public class TabuLightWeightSequenceOptimiserMoves {
 	}
 
 
-	static private TabuSolution removeUsedCargo(List<List<Integer>> sequences, Random random) {
-		int vesselIndex = random.nextInt(sequences.size());
+	static private TabuSolution removeUsedCargo(List<List<Integer>> sequences, List<Integer> usedCargoes, Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping, Random random) {
 
-		while (sequences.get(vesselIndex).size() == 0) {
-			vesselIndex = random.nextInt(sequences.size());
-		}
+		final int choiceIndex = random.nextInt(usedCargoes.size());
+		final int cargo = usedCargoes.get(choiceIndex);
 
-		final int cargoIndex = random.nextInt(sequences.get(vesselIndex).size());
-
-		final int cargo = sequences.get(vesselIndex).get(cargoIndex);
-		sequences.get(vesselIndex).remove(cargoIndex);
+		sequences.get(mapping.get(cargo).getKey()).remove((int) mapping.get(cargo).getValue());
 
 		return new TabuSolution(sequences, Arrays.asList(cargo));
 	}
 
 
-	static private TabuSolution moveCargo(List<List<Integer>> sequences, Random random) {
+	static private TabuSolution moveCargo(List<List<Integer>> sequences,  List<Integer> usedCargoes, Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping, Random random) {
 		// Select and remove cargo
-		int vesselIndex = random.nextInt(sequences.size());
+		final int choiceIndex = random.nextInt(usedCargoes.size());
+		final int cargo = usedCargoes.get(choiceIndex);
 
-		while (sequences.get(vesselIndex).size() == 0) {
-			vesselIndex = random.nextInt(sequences.size());
-		}
-
-		final int cargoIndex = random.nextInt(sequences.get(vesselIndex).size());
-
-		final int cargo = sequences.get(vesselIndex).get(cargoIndex);
-		sequences.get(vesselIndex).remove(cargoIndex);
+		sequences.get(mapping.get(cargo).getKey()).remove((int) mapping.get(cargo).getValue());
 
 		//Insert cargo
 		int newVesselIndex = random.nextInt(sequences.size());
+		int newCargoIndex = 0;
 
-		while (newVesselIndex == vesselIndex) {
+		while (newVesselIndex == mapping.get(cargo).getKey()) {
 			newVesselIndex = random.nextInt(sequences.size());
 		}
-
-		int newCargoIndex = 0;
 
 		if (sequences.get(newVesselIndex).size() != 0) {
 			newCargoIndex = random.nextInt(sequences.get(newVesselIndex).size());
@@ -122,40 +110,46 @@ public class TabuLightWeightSequenceOptimiserMoves {
 	}
 
 
-	static private TabuSolution swapCargo(List<List<Integer>> sequences, Random random) {
+	static private TabuSolution swapCargo(List<List<Integer>> sequences,   List<Integer> usedCargoes, Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping, Random random) {
 		final List<Integer> tabu = new ArrayList<>();
 
-		int firstVesselIdx = random.nextInt(sequences.size());
-		while (sequences.get(firstVesselIdx).size() == 0) {
-			firstVesselIdx = random.nextInt(sequences.size());
+		final int choiceAIndex = random.nextInt(usedCargoes.size());
+		final Integer cargoA = usedCargoes.get(choiceAIndex);
+
+		int choiceBIndex = random.nextInt(usedCargoes.size());
+
+		while(choiceAIndex == choiceBIndex) {
+			choiceBIndex = random.nextInt(usedCargoes.size());
 		}
 
-		int secondVesselIdx = random.nextInt(sequences.size());
+		final Integer cargoB = usedCargoes.get(choiceBIndex);
 
-		while (sequences.get(secondVesselIdx).size() == 0 || secondVesselIdx == firstVesselIdx) {
-			secondVesselIdx = random.nextInt(sequences.size());
-		}
+		sequences.get(mapping.get(cargoA).getKey()).set(mapping.get(cargoA).getValue(), cargoB);
+		sequences.get(mapping.get(cargoB).getKey()).set(mapping.get(cargoB).getValue(), cargoA);
 
-		final int firstVesselSize = sequences.get(firstVesselIdx).size();
-		final int secondVesselSize = sequences.get(secondVesselIdx).size();
+		tabu.add(cargoA);
+		tabu.add(cargoB);
 
-		if (firstVesselIdx == secondVesselIdx || firstVesselSize == 0 || secondVesselSize == 0) {
-			return new TabuSolution(sequences, new ArrayList<Integer>());
-		} else {
-			final int cargoIdxFirstVessel = random.nextInt(firstVesselSize);
-			final int cargoIdxSecondVessel = random.nextInt(secondVesselSize);
-
-			final int cargoFirstVessel = sequences.get(firstVesselIdx).get(cargoIdxFirstVessel);
-			final int cargoSecondVessel = sequences.get(secondVesselIdx).get(cargoIdxSecondVessel);
-
-			tabu.add(cargoFirstVessel);
-			tabu.add(cargoSecondVessel);
-			sequences.get(firstVesselIdx).set(cargoIdxFirstVessel, cargoSecondVessel);
-			sequences.get(secondVesselIdx).set(cargoIdxSecondVessel, cargoFirstVessel);
-		}
 		return new TabuSolution(sequences, tabu);
 	}
 
+	static private TabuSolution replaceWithUnusedCargo(List<List<Integer>> sequences, List<Integer> usedCargoes, List<Integer> unusedCargoes, Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping, Random random) {
+		final List<Integer> tabu = new ArrayList<>();
+
+		final int choiceUsedIndex = random.nextInt(usedCargoes.size());
+		final Integer usedCargo = usedCargoes.get(choiceUsedIndex);
+
+		int choiceUnusedIndex = random.nextInt(unusedCargoes.size());
+
+		final Integer unusedCargo = unusedCargoes.get(choiceUnusedIndex);
+
+		sequences.get(mapping.get(usedCargo).getKey()).set(mapping.get(usedCargo).getValue(), unusedCargo);
+
+		tabu.add(unusedCargo);
+		tabu.add(usedCargo);
+
+		return new TabuSolution(sequences, tabu);
+	}
 
 	static private TabuSolution mergeRoute(List<List<Integer>> sequences, List<Integer> tabuList, Random random) {
 		final List<Integer> tabu = new ArrayList<>();

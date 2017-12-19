@@ -4,12 +4,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.time.ZonedDateTime;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -167,140 +170,155 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	public List<List<Integer>> optimise(int id, boolean loggingFlag, int cargoCount, int vesselCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
 			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges) {
 
-		List<HashSet<Integer>> tabu = new LinkedList<>();
+        List<HashSet<Integer>> tabu = new LinkedList<>();
 
-		List<List<Integer>> schedule = Arrays.stream(vesselCapacities, 0, vesselCount)
-				.mapToObj(v -> (List<Integer>) new LinkedList<Integer>())
-				.collect(Collectors.toList());
+        List<List<Integer>> schedule = Arrays.stream(vesselCapacities, 0, vesselCount)
+                .mapToObj(v -> (List<Integer>) new LinkedList<Integer>())
+                .collect(Collectors.toList());
 
-		List<List<Integer>> bestSchedule = null;
+        List<List<Integer>> bestSchedule = null;
 
-		List<Integer> cargoes = IntStream.range(0, cargoCount).boxed().collect(Collectors.toList());
-		List<Integer> unusedCargoes = new ArrayList<>(cargoes);
-		List<Integer> usedCargoes = new ArrayList<>();
+        List<Integer> cargoes = IntStream.range(0, cargoCount).boxed().collect(Collectors.toList());
+        List<Integer> unusedCargoes = new ArrayList<>(cargoes);
+        List<Integer> usedCargoes = new ArrayList<>();
 
-		List<Integer> tabuFlat;
+        List<Integer> tabuFlat;
 
-		Random random = new Random();
+        Random random = new Random();
 
-		double[] fitness = new double[search];
-		List<List<List<Integer>>> sequences = new ArrayList<>(search);
-		List<List<Integer>> tabus = new ArrayList<>(search);
-		List<TabuLightWeightSequenceOptimiserMoves.TabuSolution> tabuSolutions = new ArrayList<>(search);
+        double[] fitness = new double[search];
+        Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping = getMapping(schedule);
+        List<TabuLightWeightSequenceOptimiserMoves.TabuSolution> tabuSolutions = new ArrayList<>(search);
 
-		int bestIteration = 0;
+        int bestIteration = 0;
 
-		Double bestFitness = -Double.MAX_VALUE;
+        Double bestFitness = -Double.MAX_VALUE;
 
-		for (int j = 0; j < search; j++) {
-			sequences.add(j, new ArrayList<>());
-			tabus.add(j, new ArrayList<>());
-			tabuSolutions.add(new TabuLightWeightSequenceOptimiserMoves.TabuSolution(null, null));
-		}
+        for (int j = 0; j < search; j++) {
+            tabuSolutions.add(new TabuLightWeightSequenceOptimiserMoves.TabuSolution(null, null));
+        }
 
-		for (int i = 0; i < iterations; i++) {
+        for (int i = 0; i < iterations; i++) {
 
-			int currentIndex = -1;
-			tabuFlat = tabu.stream().flatMap(HashSet::stream).collect(Collectors.toList());
+            int currentIndex = -1;
 
-			// add back tabu elements
-			if (tabu.size() > maxAge) {
-				HashSet<Integer> old = tabu.remove(0);
-			}
+            // Remove tabu element from the list of "movable" element
+            HashSet<Integer> tabuSet = new HashSet<>();
+            tabuFlat = tabu.stream().flatMap(HashSet::stream).collect(Collectors.toList());
 
-			HashSet<Integer> tabuSet = new HashSet<>();
+            unusedCargoes.removeAll(tabuFlat);
+            usedCargoes.removeAll(tabuFlat);
 
-			// Forced first move
-			TabuLightWeightSequenceOptimiserMoves.TabuSolution currentSolution = TabuLightWeightSequenceOptimiserMoves.move(copySolution(schedule), unusedCargoes, usedCargoes, random);
-			List<List<Integer>> currentSchedules = currentSolution.schedule;
-			List<Integer> currentTabu = currentSolution.tabu;
+            // Print progess
+            if (i % (iterations / 10) == 0) {
+                System.out.print(i * 100 / iterations + "% ");
+            }
 
-			double currentFitness = evaluate(currentSchedules, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
-					cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+            // add back tabu elements
+            if (tabu.size() > maxAge) {
+                HashSet<Integer> old = tabu.remove(0);
+            }
 
 
-			final List<List<Integer>> lambdaSchedule = schedule;
-			final List<Integer> lambdaUnusedCargoes = unusedCargoes;
-			final List<Integer> lambdaUsedCargoes = usedCargoes;
-			final List<Integer> lambdaTabuFlat = tabuFlat;
-			
-			// Search the neighbourhood
-			tabuSolutions = tabuSolutions.parallelStream().map(t -> {
-				TabuLightWeightSequenceOptimiserMoves.TabuSolution tabuSolution = null;
-				// Try 100 moves
-				for (int k = 0; k < 100; k++) {
-					tabuSolution = TabuLightWeightSequenceOptimiserMoves.move(copySolution(lambdaSchedule), lambdaUnusedCargoes, lambdaUsedCargoes, random);
-					if (Collections.disjoint(tabuSolution.tabu, lambdaTabuFlat)) {
-						return tabuSolution;
-					}
-				}
-				return tabuSolution;
-			}).collect(Collectors.toList());
+            // Forced first move
+            TabuLightWeightSequenceOptimiserMoves.TabuSolution currentSolution = TabuLightWeightSequenceOptimiserMoves.move(copySolution(schedule), unusedCargoes, usedCargoes, mapping, random);
+            List<List<Integer>> currentSchedules = currentSolution.schedule;
+            List<Integer> currentTabu = currentSolution.tabu;
 
-			// Compute fitness
-			fitness = tabuSolutions.parallelStream()
-					.mapToDouble(s -> evaluate(s.schedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
-					cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges)).toArray();
+            double currentFitness = evaluate(currentSchedules, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
+                    cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
 
-			// Set the base element to be the best of the iteration
-			for (int j = 0; j < search; j++) {
-				if (fitness[j] > currentFitness) {
-					currentFitness = fitness[j];
-					currentIndex = j;
-				}
-			}
 
-			// Set the new base solution for the next iteration
-			if (currentIndex == -1) {
-				schedule = copySolution(currentSchedules);
-				tabuSet.addAll(currentTabu);
-			} else {
-				schedule = copySolution(tabuSolutions.get(currentIndex).schedule);
-				tabuSet.addAll(tabuSolutions.get(currentIndex).tabu);
-			}
+            // Search the neighbourhood
+            final List<List<Integer>> lambdaSchedule = schedule;
+            final List<Integer> lambdaUnusedCargoes = unusedCargoes;
+            final List<Integer> lambdaUsedCargoes = usedCargoes;
+            final Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> lambdaMapping = mapping;
 
-			unusedCargoes = updateUnusedList(schedule, cargoes);
-			usedCargoes = updateUsedList(schedule);
+            tabuSolutions = tabuSolutions.parallelStream().map(t -> {
+                    return TabuLightWeightSequenceOptimiserMoves.move(copySolution(lambdaSchedule), lambdaUnusedCargoes, lambdaUsedCargoes, lambdaMapping, random);
+            }).collect(Collectors.toList());
 
-			// Add the tabuList to the master set
-			if (tabuSet.size() > 0) {
-				tabu.add(tabuSet);
-			}
+            // Evaluate solutions
+            fitness = tabuSolutions.parallelStream().mapToDouble(s ->
+                    evaluate(s.schedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
+                            cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges)).toArray();
 
-			// Elitism: keep the overall best solution
-			if (currentFitness > bestFitness) {
-				bestSchedule = copySolution(schedule);
-				bestFitness = currentFitness;
-				bestIteration = i;
-			}
-		}
-		
-		if (unusedCargoes.size() > 0) {
-			System.out.println(" Uncomplete solution :" + unusedCargoes.size());
-		}
-		
-		Double bestScoreBest = evaluate(bestSchedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
-				cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+            // Set the new base solution for the next iteration
+            for (int j = 0; j < search; j++) {
+                if (fitness[j] > currentFitness) {
+                    currentFitness = fitness[j];
+                    currentIndex = j;
+                }
+            }
 
-		System.out.printf("\n\nFitness best : %f\n", bestScoreBest);
-		System.out.printf("iteration best : %d it\n", bestIteration);
+            if (currentIndex == -1) {
+                schedule = copySolution(currentSchedules);
+                tabuSet.addAll(currentTabu);
+            } else {
+                schedule = copySolution(tabuSolutions.get(currentIndex).schedule);
+                tabuSet.addAll(tabuSolutions.get(currentIndex).tabu);
+            }
 
-		System.out.println("\nOrdering");
-		for (List vessel : bestSchedule) {
-			System.out.print("Ship " + bestSchedule.indexOf(vessel) + ": ");
-			if (vessel.isEmpty()) {
-				System.out.print("empty");
-			} else {
-				for (Object i : vessel) {
-					System.out.print(i + " ");
-				}
-			}
-			System.out.println();
-		}
+            mapping = getMapping(schedule);
+            unusedCargoes = updateUnusedList(schedule, cargoes);
+            usedCargoes = updateUsedList(schedule);
 
+            // Add the tabuList to the master set
+            if (tabuSet.size() > 0) {
+                tabu.add(tabuSet);
+            }
+
+            // Elitism: keep the overall best solution
+            if (currentFitness > bestFitness) {
+                bestSchedule = copySolution(schedule);
+                bestFitness = currentFitness;
+                bestIteration = i;
+            }
+        }
+
+        // Print final result
+        if (unusedCargoes.size() > 0) {
+            System.out.println(" Uncomplete solution :"+ unusedCargoes.size());
+        }
+
+        Double bestScoreBest = evaluate(bestSchedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
+                cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+
+        System.out.printf("\n\nFitness best : %f\n", bestScoreBest);
+        System.out.printf("Iteration best: %d it\n", bestIteration);
+
+        printSolution(bestSchedule);
 		return bestSchedule;
 	}
 
+    Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> getMapping (List<List<Integer>> solution) {
+        Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping = new HashMap<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>>();
+
+        for (List<Integer> vessel: solution) {
+            for (Integer cargo: vessel) {
+                mapping.put(cargo, new AbstractMap.SimpleImmutableEntry<Integer, Integer>(solution.indexOf(vessel), vessel.indexOf(cargo)));
+            }
+        }
+        return mapping;
+    }
+
+    void printSolution(List<List<Integer>> solution) {
+
+        System.out.println("\nOrdering");
+        for (List vessel : solution) {
+            System.out.print("Ship " + solution.indexOf(vessel) + ": ");
+            if (vessel.isEmpty()) {
+                System.out.print("empty");
+            }
+            else {
+                for (Object i : vessel) {
+                    System.out.print( i + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
 	List<Integer> updateUsedList(List<List<Integer>> solution) {
 		Set used = new HashSet();
 
