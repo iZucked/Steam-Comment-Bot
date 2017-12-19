@@ -135,6 +135,23 @@ public final class ViewerHelper {
 		RunnerHelper.exec(runnable, syncExec);
 	}
 
+	public static <T extends Viewer> void refreshThen(@Nullable final T viewer, final boolean syncExec, @NonNull Consumer<T> then) {
+		if (viewer == null) {
+			return;
+		}
+		final Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				final Control control = viewer.getControl();
+				if (control != null && !control.isDisposed()) {
+					viewer.refresh();
+					then.accept(viewer);
+				}
+			}
+		};
+		RunnerHelper.exec(runnable, syncExec);
+	}
+
 	public static void setFocus(@Nullable final Viewer viewer) {
 		if (viewer == null) {
 			return;
