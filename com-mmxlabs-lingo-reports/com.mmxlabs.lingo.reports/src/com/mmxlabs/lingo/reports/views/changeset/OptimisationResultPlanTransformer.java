@@ -31,13 +31,7 @@ public class OptimisationResultPlanTransformer {
 		LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
 		ScenarioResult base = new ScenarioResult(instance, scenarioModel.getScheduleModel());
 
-		boolean first = true;
 		for (final SolutionOption option : plan.getOptions()) {
-			if (first) {
-				// Skip first solution as it should be the original base case
-				first = false;
-				continue;
-			}
 			stages.add(new ScenarioResult(instance, option.getScheduleModel()));
 		}
 		try {
