@@ -184,7 +184,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
         List<Integer> tabuFlat;
 
-        Random random = new Random();
+        Random random = new Random(this.seed);
 
         double[] fitness = new double[search];
         Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping = getMapping(schedule);
@@ -235,7 +235,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
             final List<Integer> lambdaUsedCargoes = usedCargoes;
             final Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> lambdaMapping = mapping;
 
-            tabuSolutions = tabuSolutions.parallelStream().map(t -> {
+            tabuSolutions = tabuSolutions.stream().map(t -> {
                     return TabuLightWeightSequenceOptimiserMoves.move(copySolution(lambdaSchedule), lambdaUnusedCargoes, lambdaUsedCargoes, lambdaMapping, random);
             }).collect(Collectors.toList());
 
