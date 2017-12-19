@@ -23,7 +23,9 @@ public class ActionableSetPlanTransformer {
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
 		final List<ScenarioResult> stages = new LinkedList<>();
-
+		if (plan.getBaseOption() != null) {
+			stages.add(new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel()));
+		}
 		// Assuming first option is the base.
 		for (final SolutionOption option : plan.getOptions()) {
 			stages.add(new ScenarioResult(scenarioInstance, option.getScheduleModel()));
