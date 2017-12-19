@@ -5,11 +5,13 @@
 package com.mmxlabs.scenario.service.model.manager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -75,9 +77,6 @@ public class ScenarioStorageUtil {
 	protected Path storageDirectory;
 	protected File lastTemporaryFile;
 
-	private static final List<File> tempFiles = new LinkedList<>();
-	private static final List<File> tempDirectories = new LinkedList<>();
-
 	protected ScenarioStorageUtil() {
 		try {
 			final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
@@ -97,21 +96,35 @@ public class ScenarioStorageUtil {
 
 				@Override
 				public void run() {
-					/* Delete your file here. */
-					while (!tempFiles.isEmpty()) {
-						final File f = tempFiles.remove(0);
-						try {
-							Files.deleteIfExists(f.toPath());
-						} catch (final IOException e) {
-							log.error(e.getMessage(), e);
+					if (storageDirectory != null) {
+
+						final File tempDirectory = storageDirectory.toFile();
+
+						if (tempDirectory.exists() && tempDirectory.isDirectory()) {
+							final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
+							try {
+								final Path tempDir = tempDirectory.toPath();
+								Files.walkFileTree(tempDir, new SimpleFileVisitor<Path>() {
+									@Override
+									public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+										if (!tempDir.equals(dir)) {
+											dir.toFile().delete();
+										}
+										return FileVisitResult.CONTINUE;
+									}
+
+									@Override
+									public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+										FileDeleter.delete(file.toFile(), secureDelete);
+										return FileVisitResult.CONTINUE;
+									}
+								});
+							} catch (final IOException e) {
+								e.printStackTrace();
+							}
 						}
 					}
-					while (!tempDirectories.isEmpty()) {
-						final File f = tempDirectories.remove(0);
-						if (f.exists()) {
-							f.delete();
-						}
-					}
+
 					try {
 						Files.deleteIfExists(storageDirectory);
 					} catch (final IOException e) {
@@ -131,9 +144,6 @@ public class ScenarioStorageUtil {
 
 		final Path tempDirectory = Files.createTempDirectory(storageDirectory, "lingo");
 
-		synchronized (tempDirectories) {
-			tempDirectories.add(tempDirectory.toFile());
-		}
 		return new File(tempDirectory.toFile(), escape(name) + ".lingo");
 	}
 
@@ -148,9 +158,6 @@ public class ScenarioStorageUtil {
 
 	public static String storeToTemporaryFile(final ScenarioModelRecord instance) throws IOException {
 		final File tempFile = INSTANCE.getTemporaryFile(instance);
-		synchronized (tempFiles) {
-			tempFiles.add(tempFile);
-		}
 		storeToFile(instance, tempFile);
 
 		return tempFile.getAbsolutePath();
@@ -524,20 +531,11 @@ public class ScenarioStorageUtil {
 			for (final File f : tmpFiles) {
 				try {
 					FileDeleter.delete(f, secureDelete);
-					synchronized (tempFiles) {
-						tempFiles.remove(f);
-					}
-				} catch (final FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (final IOException e) {
-					// TODO Auto-generated catch block
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
-
 			}
 			tmpFiles.clear();
-
 		};
 	}
 
