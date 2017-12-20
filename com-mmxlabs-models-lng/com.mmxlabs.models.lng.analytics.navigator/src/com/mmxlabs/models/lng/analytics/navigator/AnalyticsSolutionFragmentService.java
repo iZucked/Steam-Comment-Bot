@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.analytics.navigator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -193,10 +194,19 @@ public class AnalyticsSolutionFragmentService {
 				}
 				analyticsModel.eAdapters().add(ModelAdapter.this);
 				List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
-				if (allArtifacts.retainAll(seenArtifacts)) {
-					modelReference.setDirty();
+				Iterator<ModelArtifact> itr = allArtifacts.iterator();
+				Set<ScenarioFragment> fragmentsToRemove = new HashSet<>();
+				while (itr.hasNext()) {
+					ModelArtifact artifact = itr.next();
+					if (!seenArtifacts.contains(artifact)) {
+						itr.remove();
+						fragmentsToRemove.add(uuidToFragmentMap.remove(artifact.getKey()));
+						modelReference.setDirty();
+					}
 				}
-
+				
+				fragmentsToRemove.remove(null);
+				modelRecord.getScenarioInstance().getFragments().removeAll(fragmentsToRemove);
 			}
 			this.scenarioModel = scenarioModel;
 		}
