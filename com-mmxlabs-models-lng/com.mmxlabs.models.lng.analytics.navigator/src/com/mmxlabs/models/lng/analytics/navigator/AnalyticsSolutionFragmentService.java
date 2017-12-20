@@ -191,10 +191,12 @@ public class AnalyticsSolutionFragmentService {
 					}
 					createFragment(fragment, plan, modelReference);
 				}
-				Set<ModelArtifact> allArtifacts = new HashSet<>(modelRecord.getManifest().getModelFragments());
-				allArtifacts.retainAll(seenArtifacts);
-
 				analyticsModel.eAdapters().add(ModelAdapter.this);
+				List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
+				if (allArtifacts.retainAll(seenArtifacts)) {
+					modelReference.setDirty();
+				}
+
 			}
 			this.scenarioModel = scenarioModel;
 		}
