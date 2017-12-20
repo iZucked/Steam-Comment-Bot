@@ -202,16 +202,14 @@ public class AnalyticsSolutionFragmentService {
 		public void dispose() {
 
 			manager.dispose();
-			try (final ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("OptionAnalysisModelFragmentService:dispose")) {
-				if (scenarioModel != null) {
-					if (scenarioModel.getAnalyticsModel() != null) {
-						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-						analyticsModel.eAdapters().remove(ModelAdapter.this);
-						for (final AbstractSolutionSet plan : analyticsModel.getOptimisations()) {
-							ScenarioFragment fragment = uuidToFragmentMap.get(plan.getUuid());
-							if (fragment != null) {
-								fragment.setFragment(null);
-							}
+			if (scenarioModel != null) {
+				if (scenarioModel.getAnalyticsModel() != null) {
+					final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
+					analyticsModel.eAdapters().remove(ModelAdapter.this);
+					for (final AbstractSolutionSet plan : analyticsModel.getOptimisations()) {
+						ScenarioFragment fragment = uuidToFragmentMap.get(plan.getUuid());
+						if (fragment != null) {
+							fragment.setFragment(null);
 						}
 					}
 				}
