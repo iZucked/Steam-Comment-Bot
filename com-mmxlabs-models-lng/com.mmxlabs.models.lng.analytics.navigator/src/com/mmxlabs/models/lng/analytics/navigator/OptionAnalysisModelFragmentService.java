@@ -129,20 +129,18 @@ public class OptionAnalysisModelFragmentService {
 		public void dispose() {
 
 			manager.dispose();
-			try (final ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("OptionAnalysisModelFragmentService:dispose")) {
-				if (scenarioModel != null) {
-					if (scenarioModel.getAnalyticsModel() != null) {
+			if (scenarioModel != null) {
+				final AnalyticsModel analyticsModel = scenarioModel.getAnalyticsModel();
+				if (analyticsModel != null) {
 
-						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-						analyticsModel.eAdapters().remove(ModelAdapter.this);
-						for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
-							removeFragment(plan);
-						}
+					analyticsModel.eAdapters().remove(ModelAdapter.this);
+					for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
+						removeFragment(plan);
+					}
 
-						// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
-						for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
-							removeFragment(plan);
-						}
+					// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
+					for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
+						removeFragment(plan);
 					}
 				}
 			}
