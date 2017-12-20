@@ -32,6 +32,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	private final LNGSchedulerInsertSlotJobRunner runner;
 	private final ExecutorService executorService;
 	private SlotInsertionOptions slotInsertionPlan;
+	private String taskName;
 
 	public LNGSchedulerInsertSlotJobControl(final LNGSlotInsertionJobDescriptor jobDescriptor) {
 		super(jobDescriptor.getJobName());
@@ -63,7 +64,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 		final List<Slot> targetSlots = jobDescriptor.getTargetSlots();
 		final List<VesselEvent> targetEvents = jobDescriptor.getTargetEvents();
 		final UserSettings userSettings = jobDescriptor.getUserSettings();
-
+		this.taskName = jobDescriptor.getJobName();
 		runner = new LNGSchedulerInsertSlotJobRunner(executorService, scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
@@ -77,6 +78,9 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	@Override
 	protected void doRunJob(final IProgressMonitor progressMonitor) {
 		this.slotInsertionPlan = runner.doRunJob(1_000_000, progressMonitor);
+		if (this.slotInsertionPlan != null) {
+			this.slotInsertionPlan.setName(taskName);
+		}
 	}
 
 	@Override

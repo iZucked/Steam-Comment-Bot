@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecore.EObject;
@@ -42,6 +43,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -167,7 +169,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			}
 
 			if (cargoes.size() == 1) {
-				final List<Slot> slots = cargoes.iterator().next().getSortedSlots();
+				final List<Slot> slots = cargoes.stream().flatMap(c -> c.getSortedSlots().stream()).collect(Collectors.toList());
 				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
 				for (final Slot slot : slots) {
@@ -210,7 +212,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			UserSettings userSettings = null;
 			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
-			final String taskName = "Insert " + AnalyticsSolutionHelper.generateInsertionName(targetSlots);
+			String taskName = AnalyticsSolutionHelper.generateInsertionName(targetSlots);
 			{
 
 				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
@@ -223,7 +225,9 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						original.getFragments().forEach(f -> existingNames.add(f.getName()));
 						original.getElements().forEach(f -> existingNames.add(f.getName()));
 
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, taskName, existingNames);
+						NameProvider nameProvider = new NameProvider(taskName, existingNames);
+						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
+						taskName = nameProvider.getNameSuggestion();
 					}
 				}
 			}
@@ -236,9 +240,9 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			userSettings.setCleanStateOptimisation(false);
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 			final UserSettings pUserSettings = userSettings;
-
+			final String pTaskName = taskName;
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSlotInsertionJobDescriptor(taskName, original, pUserSettings, targetSlots, Collections.emptyList());
+				return new LNGSlotInsertionJobDescriptor(pTaskName, original, pUserSettings, targetSlots, Collections.emptyList());
 			};
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
@@ -248,7 +252,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 					if (plan != null) {
 
 						final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-						final AnalyticsSolution data = new AnalyticsSolution(original, plan, taskName);
+						final AnalyticsSolution data = new AnalyticsSolution(original, plan, pTaskName);
 						data.setCreateInsertionOptions(true);
 						data.setCreateDiffToBaseAction(true);
 						eventBroker.post(ChangeSetViewCreatorService_Topic, data);

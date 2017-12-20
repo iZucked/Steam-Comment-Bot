@@ -101,6 +101,14 @@ public final class OptimisationHelper {
 
 		String nameSuggestion;
 		Set<String> existingNames;
+
+		public String getNameSuggestion() {
+			return nameSuggestion;
+		}
+
+		public Set<String> getExistingNames() {
+			return existingNames;
+		}
 	}
 
 	public static final String PARAMETER_MODE_CUSTOM = "Custom";
@@ -526,7 +534,7 @@ public final class OptimisationHelper {
 	}
 
 	public static UserSettings promptForInsertionUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
-			String nameSuggestion, Set<String> existingNames) {
+			NameProvider nameProvider) {
 		UserSettings previousSettings = null;
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
@@ -539,7 +547,7 @@ public final class OptimisationHelper {
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
-			previousSettings = openInsertionPlanUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameSuggestion, existingNames);
+			previousSettings = openInsertionPlanUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider);
 		}
 
 		if (previousSettings == null) {
@@ -556,13 +564,13 @@ public final class OptimisationHelper {
 	}
 
 	public static UserSettings openInsertionPlanUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled, String nameSuggestion, Set<String> existingNames) {
+			final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
 		return openInsertionPlanUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
-				displayOnlyIfOptionsEnabled, nameSuggestion, existingNames);
+				displayOnlyIfOptionsEnabled, nameProvider);
 	}
 
 	public static UserSettings openInsertionPlanUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
-			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, String nameSuggestion, Set<String> existingNames) {
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
 		boolean optionAdded = false;
 		boolean enabledOptionAdded = false;
 
@@ -587,8 +595,8 @@ public final class OptimisationHelper {
 		// Reset disabled features
 		resetDisabledFeatures(copy);
 
-		if (!forEvaluation) {
-			dialog.addNameOption(nameSuggestion, existingNames);
+		if (!forEvaluation && nameProvider != null) {
+			dialog.addNameOption(nameProvider.nameSuggestion, nameProvider.existingNames);
 		}
 
 		if (!forEvaluation) {
@@ -817,6 +825,9 @@ public final class OptimisationHelper {
 			if (ret[0] != Window.OK) {
 				return null;
 			}
+		}
+		if (nameProvider != null) {
+			nameProvider.nameSuggestion = dialog.getNameSuggestion();
 		}
 		return copy;
 	}

@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -135,7 +136,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
 			UserSettings userSettings = null;
 
-			final String taskName = "Insert " + AnalyticsSolutionHelper.generateInsertionName(originalTargetEvents);
+			String taskName = AnalyticsSolutionHelper.generateInsertionName(originalTargetEvents);
 			{
 
 				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertEventContextMenuExtension:1")) {
@@ -147,7 +148,9 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 						Set<String> existingNames = new HashSet<>();
 						original.getFragments().forEach(f -> existingNames.add(f.getName()));
 						original.getElements().forEach(f -> existingNames.add(f.getName()));
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, taskName, existingNames);
+						NameProvider nameProvider = new NameProvider(taskName, existingNames);
+						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
+						taskName = nameProvider.getNameSuggestion();
 					}
 				}
 			}
@@ -163,8 +166,9 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 			final List<VesselEvent> targetEvents = new LinkedList<>();
 
+			final String pTaskName = taskName;
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSlotInsertionJobDescriptor(taskName, original, pUserSettings, Collections.emptyList(), targetEvents);
+				return new LNGSlotInsertionJobDescriptor(pTaskName, original, pUserSettings, Collections.emptyList(), targetEvents);
 			};
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
@@ -173,7 +177,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 					if (plan != null) {
 
 						final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-						final AnalyticsSolution data = new AnalyticsSolution(original, plan, taskName);
+						final AnalyticsSolution data = new AnalyticsSolution(original, plan, pTaskName);
 						data.setCreateInsertionOptions(true);
 						data.setCreateDiffToBaseAction(true);
 
