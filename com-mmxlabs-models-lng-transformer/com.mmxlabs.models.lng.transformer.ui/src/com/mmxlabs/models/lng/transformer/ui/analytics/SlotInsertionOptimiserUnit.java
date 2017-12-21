@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
@@ -93,13 +94,14 @@ public class SlotInsertionOptimiserUnit {
 
 	private @NonNull ExecutorService executorService;
 
-	private IVesselAvailability nominalMarketAvailability;
+	private @NonNull InsertionOptimisationStage stage;
 
 	@SuppressWarnings("null")
 	public SlotInsertionOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
-			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> initialHints) {
+			@NonNull final InsertionOptimisationStage stage, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences, @NonNull final IMultiStateResult inputState,
+			@NonNull final Collection<String> initialHints) {
 
+		this.stage = stage;
 		Set<String> hints = new HashSet<>(initialHints);
 		hints.add(LNGTransformerHelper.HINT_OPTIMISE_INSERTION);
 
@@ -112,7 +114,7 @@ public class SlotInsertionOptimiserUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, constainAndFitnessSettings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, stage.getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 
@@ -158,6 +160,10 @@ public class SlotInsertionOptimiserUnit {
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 
 		this.inputState = inputState;
+	}
+
+	public IMultiStateResult run(final @NonNull List<Slot> slotsToInsert, final List<VesselEvent> eventsToInsert, @NonNull final IProgressMonitor monitor) {
+		return run(slotsToInsert, eventsToInsert, stage.getIterations(), monitor);
 	}
 
 	public IMultiStateResult run(final @NonNull List<Slot> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {

@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
@@ -42,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
@@ -334,6 +336,41 @@ public class ScenarioUtils {
 	}
 
 	@NonNull
+	public static InsertionOptimisationStage createDefaultInsertionSettings() {
+		@NonNull
+		final ConstraintAndFitnessSettings constraintAndFitnessSettings = createDefaultConstraintAndFitnessSettings();
+
+		// Fitness not required.
+		constraintAndFitnessSettings.getObjectives().clear();
+
+		{
+			// Filter nominal cargoes constraints
+			final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
+			while (iterator.hasNext()) {
+				final Constraint constraint = iterator.next();
+				if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+					iterator.remove();
+				}
+				if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+					iterator.remove();
+				}
+
+			}
+
+			// Enable if not already done so.
+			ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
+			ScenarioUtils.createOrUpdateContraints(LockedUnusedElementsConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
+		}
+
+		InsertionOptimisationStage stage = ParametersFactory.eINSTANCE.createInsertionOptimisationStage();
+		stage.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
+
+		stage.setIterations(1_000_000);
+
+		return stage;
+	}
+
+	@NonNull
 	public static SolutionBuilderSettings createDefaultSolutionBuilderSettings(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
 		final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
 		solutionBuilderSettings.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
@@ -401,6 +438,15 @@ public class ScenarioUtils {
 		return (int) Math.ceil(d);
 	}
 
+	public static void setInsertionStageIterations(final OptimisationPlan plan, final int iterations) {
+		for (final OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof InsertionOptimisationStage) {
+				final InsertionOptimisationStage insertionOptimisationStage = (InsertionOptimisationStage) stage;
+				insertionOptimisationStage.setIterations(iterations);
+			}
+		}
+	}
+
 	public static void setLSOStageIterations(final OptimisationPlan plan, final int iterations) {
 		for (final OptimisationStage stage : plan.getStages()) {
 			if (stage instanceof LocalSearchOptimisationStage) {
@@ -450,8 +496,8 @@ public class ScenarioUtils {
 
 	public static void createOrUpdateAllConstraints(OptimisationPlan plan, String name, boolean enabled) {
 		for (OptimisationStage stage : plan.getStages()) {
-			if (stage instanceof ParallelOptimisationStage) {
-				ParallelOptimisationStage parallelOptimisationStage = (ParallelOptimisationStage) stage;
+			if (stage instanceof ParallelOptimisationStage<?>) {
+				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>) stage;
 				stage = parallelOptimisationStage.getTemplate();
 			}
 			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
@@ -488,8 +534,8 @@ public class ScenarioUtils {
 
 	public static void createOrUpdateAllObjectives(OptimisationPlan plan, String name, boolean enabled, double weight) {
 		for (OptimisationStage stage : plan.getStages()) {
-			if (stage instanceof ParallelOptimisationStage) {
-				ParallelOptimisationStage parallelOptimisationStage = (ParallelOptimisationStage) stage;
+			if (stage instanceof ParallelOptimisationStage<?>) {
+				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>) stage;
 				stage = parallelOptimisationStage.getTemplate();
 			}
 			if (stage instanceof ConstraintsAndFitnessSettingsStage) {

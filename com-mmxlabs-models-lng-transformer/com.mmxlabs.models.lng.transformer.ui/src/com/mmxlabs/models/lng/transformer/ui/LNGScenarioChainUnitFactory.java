@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -148,6 +149,9 @@ public class LNGScenarioChainUnitFactory {
 		} else if (template instanceof ResetInitialSequencesStage) {
 			ResetInitialSequencesStage stageSettings = (ResetInitialSequencesStage) template;
 			ResetInitialSequencesUnit.chain(builder, stageSettings.getName(), userSettings, stageSettings, 1);
+		} else if (template instanceof InsertionOptimisationStage) {
+			// Currently we directly construct the chain up code, particulary due to the extra inputs required.
+			 return null;
 		} else {
 			throw new IllegalArgumentException("Unknown stage type");
 		}

@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.util.OpenStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,9 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -98,6 +101,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	private OptimisationPlan plan;
 
+	private InsertionOptimisationStage insertionStage;
+
 	public LNGSchedulerInsertSlotJobRunner(final ExecutorService executorService, @Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider,
 			final EditingDomain editingDomain, final UserSettings userSettings, final List<Slot> targetSlots, final List<VesselEvent> targetEvents) {
 
@@ -110,27 +115,17 @@ public class LNGSchedulerInsertSlotJobRunner {
 		plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 		plan.setUserSettings(EcoreUtil.copy(userSettings));
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
+		plan.getStages().add(ScenarioUtils.createDefaultInsertionSettings());
 
-		plan = LNGScenarioRunnerUtils.createExtendedSettings(plan, true, false);
+		plan = LNGScenarioRunnerUtils.createExtendedSettings(plan, true, true);
 
-		{
-			// TODO: Filter
-			final ConstraintAndFitnessSettings constraintAndFitnessSettings = plan.getSolutionBuilderSettings().getConstraintAndFitnessSettings();
-			final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
-			while (iterator.hasNext()) {
-				final Constraint constraint = iterator.next();
-				if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-					iterator.remove();
-				}
-				if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-					iterator.remove();
-				}
-
+		for (OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof InsertionOptimisationStage) {
+				insertionStage = (InsertionOptimisationStage) stage;
+				break;
 			}
-			// Enable if not already done so.
-			ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
-			ScenarioUtils.createOrUpdateContraints(LockedUnusedElementsConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 		}
+		assert insertionStage != null;
 
 		final IOptimiserInjectorService extraService = buildSpotSlotLimitModule();
 
@@ -225,14 +220,14 @@ public class LNGSchedulerInsertSlotJobRunner {
 		scenarioRunner.evaluateInitialState();
 	}
 
-	public SlotInsertionOptions doRunJob(final int iterations, final IProgressMonitor progressMonitor) {
+	public SlotInsertionOptions doRunJob(final IProgressMonitor progressMonitor) {
 		final long start = System.currentTimeMillis();
 		final SubMonitor subMonitor = SubMonitor.convert(progressMonitor, "Inserting option(s)", 100);
 		try {
 			final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioToOptimiserBridge.getOptimiserScenario()).getSchedule();
 			final long targetPNL = performBreakEven ? ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule) : 0L;
 
-			final IMultiStateResult results = runInsertion(iterations, subMonitor.split(90));
+			final IMultiStateResult results = runInsertion(subMonitor.split(90));
 			if (results == null) {
 				System.out.printf("Found no solutions\n");
 				return null;
@@ -260,14 +255,12 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	}
 
-	public IMultiStateResult runInsertion(final int iterations, final IProgressMonitor progressMonitor) {
+	public IMultiStateResult runInsertion(final IProgressMonitor progressMonitor) {
 
-		final ConstraintAndFitnessSettings constraintAndFitnessSettings = plan.getSolutionBuilderSettings().getConstraintAndFitnessSettings();
-
-		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), constraintAndFitnessSettings,
+		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), insertionStage,
 				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 
-		final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, iterations, progressMonitor);
+		final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, progressMonitor);
 		return results;
 	}
 

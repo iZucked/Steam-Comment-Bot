@@ -77,7 +77,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 	@Override
 	protected void doRunJob(final IProgressMonitor progressMonitor) {
-		this.slotInsertionPlan = runner.doRunJob(1_000_000, progressMonitor);
+		this.slotInsertionPlan = runner.doRunJob(progressMonitor);
 		if (this.slotInsertionPlan != null) {
 			this.slotInsertionPlan.setName(taskName);
 		}
