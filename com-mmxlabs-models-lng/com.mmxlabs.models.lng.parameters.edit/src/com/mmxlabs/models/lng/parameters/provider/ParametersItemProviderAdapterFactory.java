@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.util.ParametersAdapterFactory;
 
@@ -388,6 +389,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.InsertionOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InsertionOptimisationStageItemProvider insertionOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.InsertionOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInsertionOptimisationStageAdapter() {
+		if (insertionOptimisationStageItemProvider == null) {
+			insertionOptimisationStageItemProvider = new InsertionOptimisationStageItemProvider(this);
+		}
+
+		return insertionOptimisationStageItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -651,6 +675,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		if (hillClimbOptimisationStageItemProvider != null) hillClimbOptimisationStageItemProvider.dispose();
 		if (actionPlanOptimisationStageItemProvider != null) actionPlanOptimisationStageItemProvider.dispose();
 		if (resetInitialSequencesStageItemProvider != null) resetInitialSequencesStageItemProvider.dispose();
+		if (insertionOptimisationStageItemProvider != null) insertionOptimisationStageItemProvider.dispose();
 		if (breakEvenOptimisationStageItemProvider != null) breakEvenOptimisationStageItemProvider.dispose();
 		if (solutionBuilderSettingsItemProvider != null) solutionBuilderSettingsItemProvider.dispose();
 		if (multipleSolutionSimilarityOptimisationStageItemProvider != null) multipleSolutionSimilarityOptimisationStageItemProvider.dispose();

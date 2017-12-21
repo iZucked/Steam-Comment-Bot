@@ -92,6 +92,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE: return createHillClimbOptimisationStage();
 			case ParametersPackage.ACTION_PLAN_OPTIMISATION_STAGE: return createActionPlanOptimisationStage();
 			case ParametersPackage.RESET_INITIAL_SEQUENCES_STAGE: return createResetInitialSequencesStage();
+			case ParametersPackage.INSERTION_OPTIMISATION_STAGE: return createInsertionOptimisationStage();
 			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: return createBreakEvenOptimisationStage();
 			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: return createSolutionBuilderSettings();
 			case ParametersPackage.MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: return createMultipleSolutionSimilarityOptimisationStage();
@@ -271,6 +272,16 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public ResetInitialSequencesStage createResetInitialSequencesStage() {
 		ResetInitialSequencesStageImpl resetInitialSequencesStage = new ResetInitialSequencesStageImpl();
 		return resetInitialSequencesStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public InsertionOptimisationStage createInsertionOptimisationStage() {
+		InsertionOptimisationStageImpl insertionOptimisationStage = new InsertionOptimisationStageImpl();
+		return insertionOptimisationStage;
 	}
 
 	/**

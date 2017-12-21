@@ -935,6 +935,52 @@ public interface ParametersPackage extends EPackage {
 	int RESET_INITIAL_SEQUENCES_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.InsertionOptimisationStageImpl <em>Insertion Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.InsertionOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getInsertionOptimisationStage()
+	 * @generated
+	 */
+	int INSERTION_OPTIMISATION_STAGE = 17;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INSERTION_OPTIMISATION_STAGE__NAME = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INSERTION_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
+
+	/**
+	 * The feature id for the '<em><b>Iterations</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INSERTION_OPTIMISATION_STAGE__ITERATIONS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Insertion Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INSERTION_OPTIMISATION_STAGE_FEATURE_COUNT = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptimisationStageImpl <em>Break Even Optimisation Stage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -942,7 +988,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptimisationStage()
 	 * @generated
 	 */
-	int BREAK_EVEN_OPTIMISATION_STAGE = 17;
+	int BREAK_EVEN_OPTIMISATION_STAGE = 18;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -979,7 +1025,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSolutionBuilderSettings()
 	 * @generated
 	 */
-	int SOLUTION_BUILDER_SETTINGS = 18;
+	int SOLUTION_BUILDER_SETTINGS = 19;
 
 	/**
 	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
@@ -1007,7 +1053,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getMultipleSolutionSimilarityOptimisationStage()
 	 * @generated
 	 */
-	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 19;
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 20;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1062,7 +1108,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
 	 * @generated
 	 */
-	int SIMILARITY_MODE = 20;
+	int SIMILARITY_MODE = 21;
 
 
 	/**
@@ -1621,6 +1667,27 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getResetInitialSequencesStage();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.InsertionOptimisationStage <em>Insertion Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Insertion Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.InsertionOptimisationStage
+	 * @generated
+	 */
+	EClass getInsertionOptimisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.InsertionOptimisationStage#getIterations <em>Iterations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Iterations</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.InsertionOptimisationStage#getIterations()
+	 * @see #getInsertionOptimisationStage()
+	 * @generated
+	 */
+	EAttribute getInsertionOptimisationStage_Iterations();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage <em>Break Even Optimisation Stage</em>}'.
@@ -2259,6 +2326,24 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EClass RESET_INITIAL_SEQUENCES_STAGE = eINSTANCE.getResetInitialSequencesStage();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.InsertionOptimisationStageImpl <em>Insertion Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.InsertionOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getInsertionOptimisationStage()
+		 * @generated
+		 */
+		EClass INSERTION_OPTIMISATION_STAGE = eINSTANCE.getInsertionOptimisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Iterations</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INSERTION_OPTIMISATION_STAGE__ITERATIONS = eINSTANCE.getInsertionOptimisationStage_Iterations();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptimisationStageImpl <em>Break Even Optimisation Stage</em>}' class.

@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
@@ -152,6 +153,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	private EClass resetInitialSequencesStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass insertionOptimisationStageEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -785,6 +793,24 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getInsertionOptimisationStage() {
+		return insertionOptimisationStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInsertionOptimisationStage_Iterations() {
+		return (EAttribute)insertionOptimisationStageEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getBreakEvenOptimisationStage() {
 		return breakEvenOptimisationStageEClass;
@@ -1047,6 +1073,9 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		resetInitialSequencesStageEClass = createEClass(RESET_INITIAL_SEQUENCES_STAGE);
 
+		insertionOptimisationStageEClass = createEClass(INSERTION_OPTIMISATION_STAGE);
+		createEAttribute(insertionOptimisationStageEClass, INSERTION_OPTIMISATION_STAGE__ITERATIONS);
+
 		breakEvenOptimisationStageEClass = createEClass(BREAK_EVEN_OPTIMISATION_STAGE);
 		createEAttribute(breakEvenOptimisationStageEClass, BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS);
 
@@ -1107,6 +1136,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		hillClimbOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		actionPlanOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		resetInitialSequencesStageEClass.getESuperTypes().add(this.getOptimisationStage());
+		insertionOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		breakEvenOptimisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
 		multipleSolutionSimilarityOptimisationStageEClass.getESuperTypes().add(this.getLocalSearchOptimisationStage());
 
@@ -1190,6 +1220,9 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getActionPlanOptimisationStage_SearchDepth(), ecorePackage.getEInt(), "searchDepth", null, 1, 1, ActionPlanOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resetInitialSequencesStageEClass, ResetInitialSequencesStage.class, "ResetInitialSequencesStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(insertionOptimisationStageEClass, InsertionOptimisationStage.class, "InsertionOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getInsertionOptimisationStage_Iterations(), ecorePackage.getEInt(), "iterations", null, 0, 1, InsertionOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(breakEvenOptimisationStageEClass, BreakEvenOptimisationStage.class, "BreakEvenOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBreakEvenOptimisationStage_TargetProfitAndLoss(), ecorePackage.getELong(), "targetProfitAndLoss", null, 0, 1, BreakEvenOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

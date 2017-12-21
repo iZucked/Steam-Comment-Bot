@@ -199,6 +199,14 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ParametersPackage.INSERTION_OPTIMISATION_STAGE: {
+				InsertionOptimisationStage insertionOptimisationStage = (InsertionOptimisationStage)theEObject;
+				T1 result = caseInsertionOptimisationStage(insertionOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(insertionOptimisationStage);
+				if (result == null) result = caseOptimisationStage(insertionOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: {
 				BreakEvenOptimisationStage breakEvenOptimisationStage = (BreakEvenOptimisationStage)theEObject;
 				T1 result = caseBreakEvenOptimisationStage(breakEvenOptimisationStage);
@@ -448,6 +456,21 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseResetInitialSequencesStage(ResetInitialSequencesStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Insertion Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Insertion Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseInsertionOptimisationStage(InsertionOptimisationStage object) {
 		return null;
 	}
 

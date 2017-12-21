@@ -132,6 +132,9 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResetInitialSequencesStage" eSuperTypes="#//OptimisationStage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InsertionOptimisationStage" eSuperTypes="#//ConstraintsAndFitnessSettingsStage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iterations" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BreakEvenOptimisationStage" eSuperTypes="#//OptimisationStage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetProfitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
