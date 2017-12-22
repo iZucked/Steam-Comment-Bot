@@ -9,9 +9,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -37,7 +39,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -59,10 +60,11 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.scheduler.optimiser.actionplan.ChangeChecker;
+import com.mmxlabs.scheduler.optimiser.actionplan.SimilarityState;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiser;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserInitialState;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
@@ -102,7 +104,7 @@ public class SlotInsertionOptimiserUnit {
 			@NonNull final Collection<String> initialHints) {
 
 		this.stage = stage;
-		Set<String> hints = new HashSet<>(initialHints);
+		final Set<String> hints = new HashSet<>(initialHints);
 		hints.add(LNGTransformerHelper.HINT_OPTIMISE_INSERTION);
 
 		this.dataTransformer = dataTransformer;
@@ -285,7 +287,7 @@ public class SlotInsertionOptimiserUnit {
 
 							final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
 							return calculator.generate(optionElements, state, pTryNo);
-						} catch (Exception e) {
+						} catch (final Exception e) {
 							e.printStackTrace();
 						} finally {
 							monitor.worked(1);
@@ -293,7 +295,7 @@ public class SlotInsertionOptimiserUnit {
 						return null;
 					}));
 				}
-				final List<Pair<ISequences, Long>> results = new LinkedList<>();
+				List<Pair<ISequences, Long>> results = new LinkedList<>();
 
 				// Block until all futures completed
 				for (final Future<Pair<ISequences, Long>> f : futures) {
@@ -315,23 +317,95 @@ public class SlotInsertionOptimiserUnit {
 					return null;
 				}
 
-				Collections.sort(results, (a, b) -> {
-					final long al = a.getSecond();
-					final long bl = b.getSecond();
-					if (al > bl) {
-						return -1;
-					} else if (al < bl) {
-						return 1;
-					} else {
-						return 0;
-					}
-				});
+				// Reduce result to unique solutions
+				results = results.parallelStream().distinct().collect(Collectors.toList());
 
-				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream() //
-						.distinct() //
-						.limit(300) //
-						.map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
-						.collect(Collectors.toList());
+				final int maxSize = 300;
+				final List<NonNullPair<ISequences, Map<String, Object>>> solutions;
+				if (results.size() > maxSize) {
+					final SimilarityState initialSimilarityState = injector.getInstance(SimilarityState.class);
+					initialSimilarityState.init(state.originalRawSequences);
+
+					final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+					// Categories solutions
+					final Map<Record, List<Pair<ISequences, Long>>> m = results.parallelStream().distinct() //
+							.collect(Collectors.groupingBy(p -> {
+								final Record record = new Record();
+								record.pnl = p.getSecond();
+
+								final SimilarityState thisSimilarityState = injector.getInstance(SimilarityState.class);
+								thisSimilarityState.init(p.getFirst());
+
+								for (final IPortSlot s : slotElements) {
+									final ISequenceElement e = portSlotProvider.getElement(s);
+									if (e instanceof ILoadOption) {
+										final ISequenceElement other = thisSimilarityState.getDischargeElementForLoad(e);
+										record.linkedTo.add(other);
+									} else {
+										final ISequenceElement other = thisSimilarityState.getLoadElementForDischarge(e);
+										record.linkedTo.add(other);
+									}
+								}
+								// TODO: Vessel events
+								final ChangeChecker checker = injector.getInstance(ChangeChecker.class);
+								checker.init(initialSimilarityState, thisSimilarityState, state.originalRawSequences);
+								record.complexity = checker.getFullDifferences().size();
+								return record;
+							}));
+					// ,
+
+					// Sort
+					m.values().forEach(l -> {
+						Collections.sort(l, (a, b) -> {
+							final long al = a.getSecond();
+							final long bl = b.getSecond();
+							if (al > bl) {
+								return -1;
+							} else if (al < bl) {
+								return 1;
+							} else {
+								return 0;
+							}
+						});
+					});
+
+					solutions = new ArrayList<>(Math.min(maxSize, results.size()));
+					while (solutions.size() < maxSize && !m.isEmpty()) {
+						final Iterator<Map.Entry<Record, List<Pair<ISequences, Long>>>> itr = m.entrySet().iterator();
+						while (itr.hasNext()) {
+							final List<Pair<ISequences, Long>> l = itr.next().getValue();
+							if (!l.isEmpty()) {
+								solutions.add(new NonNullPair<ISequences, Map<String, Object>>(l.remove(0).getFirst(), new HashMap<>()));
+								if (solutions.size() == maxSize) {
+									break;
+								}
+							}
+							if (l.isEmpty()) {
+								itr.remove();
+							}
+						}
+					}
+				} else {
+					solutions = results.stream() //
+							.sorted((a, b) -> {
+								final long al = a.getSecond();
+								final long bl = b.getSecond();
+								if (al > bl) {
+									return -1;
+								} else if (al < bl) {
+									return 1;
+								} else {
+									return 0;
+								}
+							}).map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
+							.collect(Collectors.toList());
+				}
+
+				if (solutions.size() < results.size()) {
+					System.out.printf("Found %d insertion options - clamped to %d.\n", results.size(), solutions.size());
+				} else {
+					System.out.printf("Found %d insertion options.\n", solutions.size());
+				}
 
 				solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(inputState.getBestSolution().getFirst(), new HashMap<>()));
 
@@ -350,6 +424,32 @@ public class SlotInsertionOptimiserUnit {
 			threadCache_SlotInsertionOptimiser.clear();
 
 			threadCache_EvaluationHelper.clear();
+		}
+	}
+
+	private static class Record {
+		long pnl;
+		int complexity;
+		List<ISequenceElement> linkedTo = new LinkedList<>();
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(pnl, complexity, linkedTo);
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+			if (obj == this) {
+				return true;
+			}
+			if (obj instanceof Record) {
+				final Record other = (Record) obj;
+				return pnl == other.pnl //
+						&& complexity == other.complexity //
+						&& linkedTo.equals(other.linkedTo) //
+				;
+			}
+			return false;
 		}
 	}
 }

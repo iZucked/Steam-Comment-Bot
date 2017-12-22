@@ -243,8 +243,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 				return null;
 			}
 
-			System.out.printf("Found %d solutions\n", solutions.size() - 1);
-
 			return exportSolutions(results, targetPNL, subMonitor.split(10));
 		} finally {
 			SubMonitor.done(progressMonitor);
