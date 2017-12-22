@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui;
+package com.mmxlabs.models.lng.transformer.actionplan;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -17,14 +17,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.Difference;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.StochasticActionSetUtils;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.actionplan.Change;
+import com.mmxlabs.scheduler.optimiser.actionplan.ChangeSet;
+import com.mmxlabs.scheduler.optimiser.actionplan.Difference;
+import com.mmxlabs.scheduler.optimiser.actionplan.JobState;
+import com.mmxlabs.scheduler.optimiser.actionplan.StochasticActionSetUtils;
+import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
 public class ActionSetLogger implements ILoggingDataStore {
 

@@ -7,7 +7,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui.breakdown.chain;
+package com.mmxlabs.models.lng.transformer.actionplan;
 
 import static org.ops4j.peaberry.Peaberry.service;
 

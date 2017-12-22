@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.stochasticactionsets;
+package com.mmxlabs.models.lng.transformer.breakeven;
 
 import java.util.LinkedList;
 import java.util.List;

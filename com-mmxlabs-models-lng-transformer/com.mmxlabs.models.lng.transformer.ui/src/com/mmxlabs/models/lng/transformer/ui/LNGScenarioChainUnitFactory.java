@@ -30,6 +30,8 @@ import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationS
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.transformer.actionplan.LNGActionSetTransformerUnit;
+import com.mmxlabs.models.lng.transformer.breakeven.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGCleanStateOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
@@ -37,8 +39,6 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerU
 import com.mmxlabs.models.lng.transformer.chain.impl.ResetInitialSequencesUnit;
 import com.mmxlabs.models.lng.transformer.longterm.LightWeightSchedulerOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
-import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransformerUnit;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGActionSetTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 
 public class LNGScenarioChainUnitFactory {

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui.breakdown.chain;
+package com.mmxlabs.models.lng.transformer.actionplan;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,12 +36,13 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BagOptimiser;
+import com.mmxlabs.models.lng.transformer.ui.WrappedProgressMonitor;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.scheduler.optimiser.actionplan.BagMover;
+import com.mmxlabs.scheduler.optimiser.actionplan.BagOptimiser;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -183,7 +184,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			}
 
 			@Provides
-			@Named("MAIN_MOVER")
+			@Named(BagOptimiser.ACTION_PLAN__MAIN_MOVER)
 			private EvaluationHelper provideMainBagMover(@NonNull final Injector injector) {
 				final EvaluationHelper bagMover = injector.getInstance(EvaluationHelper.class);
 				bagMover.setStrictChecking(true);
@@ -213,7 +214,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 				final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
 				final ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INPUT)));
-				final IMultiStateResult result = instance.optimise(inputRawSequences, new SubProgressMonitor(monitor, 95), 1000);
+				final IMultiStateResult result = instance.optimise(inputRawSequences, new WrappedProgressMonitor(new SubProgressMonitor(monitor, 95)), 1000);
 				if (result != null) {
 					return result;
 				}
