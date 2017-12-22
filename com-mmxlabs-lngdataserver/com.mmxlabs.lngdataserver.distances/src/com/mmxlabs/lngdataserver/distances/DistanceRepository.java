@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import org.apache.http.auth.AuthenticationException;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.joda.time.DateTime;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,8 @@ public class DistanceRepository {
 	// used for long polling... timeout set to infinite
 	// Infinite timeout means listening for version can't effectively be cancelled
 	private DistancesApi waitingDistancesApi = new DistancesApi();
+	
+	private DistancesApi upstreamDistancesApi = new DistancesApi();
 
 	private static final Logger LOG = LoggerFactory.getLogger(DistanceRepository.class);
 	private Triple<String, String, String> auth;
@@ -55,6 +59,7 @@ public class DistanceRepository {
 	public DistanceRepository() {
 		auth = getUserServiceAuth();
 		upstreamUrl = getUpstreamUrl();
+		upstreamDistancesApi.getApiClient().setBasePath(upstreamUrl);
 	}
 
 	public DistanceRepository(String url) {
@@ -180,6 +185,15 @@ public class DistanceRepository {
 	private Triple<String, String, String> getServiceAuth() {
 		return auth;
 	}
+	
+	public List<DataVersion> updateAvailable() throws ApiException{
+		List<Version> upstreamVersions = upstreamDistancesApi.getVersionsUsingGET();
+		Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
+		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
+		return upstreamVersions.stream()
+				.map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.getPublished()))
+				.collect(Collectors.toList());
+	}
 
 	public @Nullable IDistanceProvider getLatestDistances() {
 
@@ -197,5 +211,9 @@ public class DistanceRepository {
 			LOG.error("Error fetching versions from upstream service", e);
 			throw new RuntimeException("Error fetching versions from upstream service", e);
 		}
+	}
+	
+	private static LocalDateTime fromDateTimeAtUTC(DateTime dateTime) {
+		return LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime.getMillis()), ZoneId.of("UTC"));
 	}
 }

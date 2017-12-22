@@ -41,52 +41,6 @@ public class UpstreamDistancesFetcher {
 	}
 
 	/**
-	 * Returns whether an update is available based on the <b>latest remote</b>
-	 * version available.
-	 * 
-	 * @param localVersions
-	 *            list of local versions in repository
-	 * @return update available or not
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws ParseException
-	 * @throws AuthenticationException 
-	 */
-	public static boolean checkForUpdates(List<String> localVersions, String url, String username, String password) throws ClientProtocolException, IOException, ParseException, AuthenticationException {
-
-		String latestUpstream = getUpstreamVersions(url, username, password).get(0);
-		
-		return !localVersions.stream().anyMatch(e -> {
-			return e.equals(latestUpstream);
-		});
-	}
-	
-	public static List<String> getUpstreamVersions(String url, String username, String password) throws AuthenticationException, ClientProtocolException, IOException, ParseException{
-		String rawJSON = UrlFetcher.fetchURLContent(url + VERSIONS_URL, username, password);
-		JSONParser parser = new JSONParser();
-
-		Object versionList = parser.parse(rawJSON);
-		if (!(versionList instanceof JSONArray)) {
-			throw new RuntimeException("Response from server was not a list");
-		}
-		JSONArray versions = (JSONArray) versionList;
-
-		List<Object> sortedVersions = (List<Object>) versions.stream().sorted((e1, e2) -> {
-			LocalDateTime d1 = LocalDateTime.parse((String) ((JSONObject) e1).get("createdAt"));
-			LocalDateTime d2 = LocalDateTime.parse((String) ((JSONObject) e1).get("createdAt"));
-			return d1.compareTo(d2);
-		}).collect(Collectors.toList());
-		
-		List<String> result = new ArrayList<String>();
-		
-		sortedVersions.forEach(e -> {
-			result.add((String) ((JSONObject) e).get("identifier"));
-		});
-		
-		return result;
-	}
-
-	/**
 	 * Returns the latest version of the distances
 	 * @param url
 	 * @param username

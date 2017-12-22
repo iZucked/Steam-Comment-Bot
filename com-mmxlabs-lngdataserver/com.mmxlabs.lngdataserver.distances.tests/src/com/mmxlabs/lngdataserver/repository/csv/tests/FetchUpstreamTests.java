@@ -47,24 +47,6 @@ public class FetchUpstreamTests {
 	// repo.initRepository(new File("D:/workspace/lingo-ws/lingo-master/runtime-g.product/distance-repository"));
 	// }
 
-	@Test
-	public void updateAvailableTest() throws ClientProtocolException, IOException, ParseException, AuthenticationException {
-		List<String> localVersions = new ArrayList(2);
-		localVersions.add("foo");
-		localVersions.add("bar");
-
-		assertEquals(true, UpstreamDistancesFetcher.checkForUpdates(localVersions, SERVICE_URL, "user", "pw"));
-	}
-
-	@Test
-	public void updateUnavailableTest() throws ClientProtocolException, IOException, ParseException, AuthenticationException {
-		List<String> localVersions = new ArrayList(3);
-		localVersions.add("foo");
-		localVersions.add("v1.0.5.153_1");
-		localVersions.add("bar");
-
-		assertEquals(false, UpstreamDistancesFetcher.checkForUpdates(localVersions, SERVICE_URL, "user", "pw"));
-	}
 
 	@Test
 	public void fetchDistancesTest() throws AuthenticationException, ClientProtocolException, IOException, ParseException {
