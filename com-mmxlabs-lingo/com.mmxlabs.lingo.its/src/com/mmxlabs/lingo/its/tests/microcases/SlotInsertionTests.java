@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -167,23 +168,10 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 
-		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
-		// TODO: Filter
-		final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
-		while (iterator.hasNext()) {
-			final Constraint constraint = iterator.next();
-			if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-				iterator.remove();
-			}
-			if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-				iterator.remove();
-			}
-		}
+		final InsertionOptimisationStage stage = ScenarioUtils.createDefaultInsertionSettings();
 
-		ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
-
-		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), constraintAndFitnessSettings,
-				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());
+		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage, scenarioRunner.getExecutorService(),
+				dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());
 		return slotInserter;
 	}
 
