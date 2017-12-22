@@ -461,7 +461,7 @@ public class BagOptimiser {
 		final IModifiableSequences potentialFullSequences = sequencesManipulator.createManipulatedSequences(targetRawSequences);
 
 		final IEvaluationState evaluationState = evaluateAndGetIEvaluationState(potentialFullSequences);
-		targetSimilarityState.init(potentialFullSequences);
+		targetSimilarityState.init(targetRawSequences);
 
 		fitnessHelper.evaluateSequencesFromComponents(potentialFullSequences, evaluationState, fitnessComponents, null);
 		bestFitness = fitnessCombiner.calculateFitness(fitnessComponents);
