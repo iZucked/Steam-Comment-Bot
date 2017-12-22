@@ -226,7 +226,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 
-								final int availableTime = 1 + Hours.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime) - prevSlot.getSlotOrPortDuration();
+								final int availableTime = Hours.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime) - prevSlot.getSlotOrPortDuration();
 
 								if (constraintID.equals(DATE_ORDER_ID)) {
 									validateSlotOrder(ctx, cargo, prevSlot, availableTime, failures);
