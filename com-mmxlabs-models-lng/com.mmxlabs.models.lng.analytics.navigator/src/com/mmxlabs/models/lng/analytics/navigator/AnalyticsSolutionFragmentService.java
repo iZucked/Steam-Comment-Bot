@@ -204,7 +204,7 @@ public class AnalyticsSolutionFragmentService {
 						modelReference.setDirty();
 					}
 				}
-				
+
 				fragmentsToRemove.remove(null);
 				modelRecord.getScenarioInstance().getFragments().removeAll(fragmentsToRemove);
 			}
@@ -263,11 +263,48 @@ public class AnalyticsSolutionFragmentService {
 							fragment.setContentType(uuid);
 							uuidToFragmentMap.put(uuid, fragment);
 						}
+
+						{
+							boolean found = false;
+							List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
+							Iterator<ModelArtifact> itr = allArtifacts.iterator();
+							while (itr.hasNext()) {
+								ModelArtifact artifact = itr.next();
+								if (uuid.equals(artifact.getKey())) {
+									found = true;
+									break;
+								}
+							}
+							if (!found) {
+								ModelArtifact artifact = ManifestFactory.eINSTANCE.createModelArtifact();
+								artifact.setKey(uuid);
+								artifact.setStorageType(StorageType.INTERNAL);
+								artifact.setType(TYPE_SOLUTION);
+								artifact.setDisplayName(plan.getName());
+								uuidToArtifactMap.put(uuid, artifact);
+								modelRecord.getManifest().getModelFragments().add(artifact);
+							}
+						}
 						createFragment(fragment, plan, modelRecord.getSharedReference());
 					}
+
 				} else if (notification.getEventType() == Notification.REMOVE) {
 					final EObject eObj = (EObject) notification.getOldValue();
-					removeFragment(eObj);
+					if (eObj instanceof AbstractSolutionSet) {
+						AbstractSolutionSet plan = (AbstractSolutionSet) eObj;
+						String uuid = plan.getUuid();
+						removeFragment(eObj);
+
+						List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
+						Iterator<ModelArtifact> itr = allArtifacts.iterator();
+						while (itr.hasNext()) {
+							ModelArtifact artifact = itr.next();
+							if (uuid.equals(artifact.getKey())) {
+								itr.remove();
+								uuidToArtifactMap.remove(uuid);
+							}
+						}
+					}
 				}
 				// TODO: Handle ADD_/REMOVE_MANY ?
 			}
