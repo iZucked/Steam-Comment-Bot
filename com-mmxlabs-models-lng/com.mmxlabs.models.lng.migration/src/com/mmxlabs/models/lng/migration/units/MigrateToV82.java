@@ -63,6 +63,8 @@ public class MigrateToV82 extends AbstractMigrationUnit {
 		// Update vessels
 		for (final EObjectWrapper vessel : vessels) {
 			final EObjectWrapper vesselClass = vessel.getRef("vesselClass");
+			String className = vesselClass.getAttrib("name");
+			setVesselType(vessel, className);
 
 			vesselClassToVessels.computeIfAbsent(vesselClass, k -> new LinkedList<>()).add(vessel);
 			// Existing overrides
@@ -116,6 +118,7 @@ public class MigrateToV82 extends AbstractMigrationUnit {
 				for (final EObjectWrapper vessel : classList) {
 					final String vesselName = vessel.getAttrib("name");
 					final String className = vesselClass.getAttrib("name");
+					setVesselType(vessel, className);
 
 					if (className.replaceAll(" ", "").replaceAll("-", "").toLowerCase().contains(vesselName.replaceAll(" ", "").replaceAll("-", "").toLowerCase())) {
 						buildPrototype = false;
@@ -152,19 +155,21 @@ public class MigrateToV82 extends AbstractMigrationUnit {
 					}
 				}
 			}
+			String className = vesselClass.getAttrib("name");
 			if (buildPrototype) {
 				// Create prototype
 				final EObjectWrapper vessel = (EObjectWrapper) package_FleetModel.getEFactoryInstance().create(class_Vessel);
 
 				vesselClassToVessels.getOrDefault(vesselClass, Collections.emptyList()).forEach(v -> v.setRef("reference", vessel));
 
+				setVesselType(vessel, className);
 				// Update existing vessels to reference this class
 				// vesselClassToVessels.get(vesselClass).forEach(v -> v.setRef("reference", vessel));
 
 				vesselClassToVessels.computeIfAbsent(vesselClass, k -> new LinkedList<>()).add(vessel);
 
 				vessel.setRef("inaccessiblePorts", vesselClass.getRefAsList("inaccessiblePorts"));
-				vessel.setAttrib("name", vesselClass.getAttrib("name"));
+				vessel.setAttrib("name", className);
 				vessel.setAttrib("inaccessibleRoutes", vesselClass.getAttribAsList("inaccessibleRoutes"));
 				vessel.setAttrib("capacity", vesselClass.getAttrib("capacity"));
 				vessel.setAttrib("fillCapacity", vesselClass.getAttrib("fillCapacity"));
@@ -195,7 +200,7 @@ public class MigrateToV82 extends AbstractMigrationUnit {
 			} else {
 			}
 			final EObjectWrapper group = (EObjectWrapper) package_FleetModel.getEFactoryInstance().create(class_VesselGroup);
-			group.setAttrib("name", vesselClass.getAttrib("name"));
+			group.setAttrib("name", className);
 			group.setRef("vessels", vesselClassToVessels.get(vesselClass));
 
 			newVesselGroups.add(group);
@@ -306,6 +311,26 @@ public class MigrateToV82 extends AbstractMigrationUnit {
 					EcoreUtil.replace(setting, vesselClass, vesselClassToVesselClassGroup.get(vesselClass));
 				}
 			}
+		}
+	}
+
+	private void setVesselType(final EObjectWrapper vessel, String className) {
+		if (className == null || className.isEmpty()) {
+			return;
+		}
+
+		if (className.toUpperCase().startsWith("DFDE")) {
+			vessel.setAttrib("type", "DFDE");
+		} else if (className.toUpperCase().startsWith("TFDE")) {
+			vessel.setAttrib("type", "TFDE");
+		} else if (className.toUpperCase().startsWith("STEAM")) {
+			vessel.setAttrib("type", "STEAM");
+		} else if (className.toUpperCase().startsWith("ST ")) {
+			vessel.setAttrib("type", "STEAM");
+		} else if (className.toUpperCase().startsWith("STRH")) {
+			vessel.setAttrib("type", "STRH");
+		} else if (className.toUpperCase().startsWith("MEGI ")) {
+			vessel.setAttrib("type", "MEGI");
 		}
 	}
 }

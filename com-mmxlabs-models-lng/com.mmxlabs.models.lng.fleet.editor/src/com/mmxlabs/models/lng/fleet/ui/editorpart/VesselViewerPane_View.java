@@ -71,6 +71,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
 
 		addTypicalColumn("Capacity (m³)", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Capacity(), editingDomain));
+		addTypicalColumn("Type", new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Type(), editingDomain));
 		addTypicalColumn("Reference vessel", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_Reference(), scenarioEditingLocation.getReferenceValueProviderCache(), editingDomain));
 		addTypicalColumn("Inaccessible Ports", new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_InaccessiblePorts(), scenarioEditingLocation.getReferenceValueProviderCache(),
 				editingDomain, MMXCorePackage.eINSTANCE.getNamedObject_Name()));

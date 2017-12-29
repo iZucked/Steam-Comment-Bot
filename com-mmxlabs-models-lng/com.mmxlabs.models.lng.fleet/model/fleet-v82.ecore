@@ -23,6 +23,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Vessel">
     <eOperations name="getShortenedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>    
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Vessel"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessiblePortsOverride"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>

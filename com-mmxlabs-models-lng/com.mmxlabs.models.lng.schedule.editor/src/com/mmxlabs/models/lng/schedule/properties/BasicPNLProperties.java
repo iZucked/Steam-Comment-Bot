@@ -62,7 +62,7 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 
 	@Nullable
 	private DetailProperty createTree(@NonNull final ProfitAndLossContainer profitAndLossContainer, @Nullable final MMXRootObject rootObject) {
-		final DetailPropertyFactoryRegistry registry = DetailPropertyFactoryRegistry.createRegistry();
+		final DetailPropertyFactoryRegistry registry = DetailPropertyFactoryRegistry.getInstance();
 
 		final GroupProfitAndLoss groupPnL = profitAndLossContainer.getGroupProfitAndLoss();
 		final DetailProperty dp = PropertiesFactory.eINSTANCE.createDetailProperty();
