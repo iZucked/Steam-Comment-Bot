@@ -106,9 +106,7 @@ public class DetailPropertyFactoryRegistry {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("null")
-	@NonNull
-	public static DetailPropertyFactoryRegistry createRegistry() {
+	private static @NonNull DetailPropertyFactoryRegistry createRegistry() {
 		final BundleContext bc = FrameworkUtil.getBundle(DetailPropertyFactoryRegistry.class).getBundleContext();
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
@@ -121,4 +119,11 @@ public class DetailPropertyFactoryRegistry {
 		});
 		return injector.getInstance(DetailPropertyFactoryRegistry.class);
 	}
+
+	private static @NonNull DetailPropertyFactoryRegistry INSTANCE = createRegistry();
+
+	public static @NonNull DetailPropertyFactoryRegistry getInstance() {
+		return INSTANCE;
+	}
+
 }

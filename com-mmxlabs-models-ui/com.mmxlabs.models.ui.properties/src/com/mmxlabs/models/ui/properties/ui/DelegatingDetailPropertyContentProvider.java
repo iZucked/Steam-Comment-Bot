@@ -46,7 +46,7 @@ public class DelegatingDetailPropertyContentProvider implements ITreeContentProv
 	public DelegatingDetailPropertyContentProvider(@NonNull final ITreeContentProvider delegate, @NonNull final String category) {
 		this.delegate = delegate;
 		this.category = category;
-		this.registry = DetailPropertyFactoryRegistry.createRegistry();
+		this.registry = DetailPropertyFactoryRegistry.getInstance();
 	}
 
 	@Override
