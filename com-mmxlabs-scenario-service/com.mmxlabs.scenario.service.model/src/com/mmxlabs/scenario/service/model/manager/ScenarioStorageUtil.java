@@ -92,16 +92,14 @@ public class ScenarioStorageUtil {
 			// it to remain copied so perhaps we should delete all but the most recent copied thing?
 			// Is that a job for the copy handler anyway?
 
+			final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 
 				@Override
 				public void run() {
 					if (storageDirectory != null) {
-
 						final File tempDirectory = storageDirectory.toFile();
-
 						if (tempDirectory.exists() && tempDirectory.isDirectory()) {
-							final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
 							try {
 								final Path tempDir = tempDirectory.toPath();
 								Files.walkFileTree(tempDir, new SimpleFileVisitor<Path>() {
