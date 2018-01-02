@@ -143,26 +143,37 @@ public class Application implements IApplication {
 
 		// Start peaberry activation - only for ITS runs inside eclipse.
 		try {
+			Platform.getBundle("org.eclipse.equinox.event").start();
+		} catch (BundleException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			Platform.getBundle("org.eclipse.equinox.ds").start();
+		} catch (BundleException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			Platform.getBundle("org.ops4j.peaberry.activation").start();
 		} catch (BundleException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		initAccessControl();
-
 		final Display display = PlatformUI.createDisplay();
-
-		WorkbenchStateManager.cleanupWorkbenchState();
-
 		final LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
-
+			
 			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license: " + validity.getMessage());
-
+			
 			display.dispose();
 			return IApplication.EXIT_OK;
 		}
+
+		initAccessControl();
+		WorkbenchStateManager.cleanupWorkbenchState();
+
 
 		// Don't abort LiNGO is p2 garbage collect fails.
 		// For some reason this started to happen ~14 Dec 2017
