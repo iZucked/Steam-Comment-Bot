@@ -17,6 +17,7 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.garbagecollector.GarbageCollector;
@@ -31,6 +32,7 @@ import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
@@ -43,6 +45,8 @@ import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.rcp.common.application.WorkbenchStateManager;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
@@ -140,33 +144,26 @@ public class Application implements IApplication {
 				}
 			}
 		}
-
 		// Start peaberry activation - only for ITS runs inside eclipse.
-		try {
-			Platform.getBundle("org.eclipse.equinox.event").start();
-		} catch (BundleException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			Platform.getBundle("org.eclipse.equinox.ds").start();
-		} catch (BundleException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			Platform.getBundle("org.ops4j.peaberry.activation").start();
-		} catch (BundleException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		final String[] bundlesToStart = { "org.eclipse.equinox.common", //
+				"org.eclipse.equinox.ds", //
+				"org.eclipse.equinox.event", //
+				"org.ops4j.peaberry.activation", //
+		};
 
+		for (final String bundleName : bundlesToStart) {
+			try {
+				Platform.getBundle(bundleName).start();
+			} catch (final BundleException e1) {
+				e1.printStackTrace();
+			}
+		}
 		final Display display = PlatformUI.createDisplay();
 		final LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
-			
+
 			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license: " + validity.getMessage());
-			
+
 			display.dispose();
 			return IApplication.EXIT_OK;
 		}
@@ -174,12 +171,13 @@ public class Application implements IApplication {
 		initAccessControl();
 		WorkbenchStateManager.cleanupWorkbenchState();
 
-
 		// Don't abort LiNGO is p2 garbage collect fails.
 		// For some reason this started to happen ~14 Dec 2017
-		try {
+		try
+
+		{
 			cleanupP2();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 
 			e.printStackTrace();
 		}
