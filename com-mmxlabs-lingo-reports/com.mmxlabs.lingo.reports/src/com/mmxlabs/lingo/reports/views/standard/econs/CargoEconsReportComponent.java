@@ -127,6 +127,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	private final List<GridViewerColumn> dataColumns = new LinkedList<GridViewerColumn>();
 	private final EconsOptions options = new EconsOptions();
 
+	private Map<String, GridColumnGroup> gridColumnGroupsMap = new HashMap<String, GridColumnGroup>();
+	
 	private Image pinImage = null;
 
 	private boolean compareMode = true;
@@ -829,6 +831,12 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			return;
 		}
 
+		for (final GridColumnGroup gcg : gridColumnGroupsMap.values()) {
+			gcg.dispose();
+		}
+		
+		gridColumnGroupsMap.clear();
+		
 		if (compareMode == true) {
 
 			final List<CargoAllocation> cargoAllocations = new ArrayList<>();
@@ -897,7 +905,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		// Feed the element to be displayed
 
-		final Map<String, GridColumnGroup> gridColumnGroupsMap = createColumnGroups(validObjects);
+		gridColumnGroupsMap = createColumnGroups(validObjects);
 		for (final Object selectedObject : validObjects) {
 			// Currently only CargoAllocations
 
