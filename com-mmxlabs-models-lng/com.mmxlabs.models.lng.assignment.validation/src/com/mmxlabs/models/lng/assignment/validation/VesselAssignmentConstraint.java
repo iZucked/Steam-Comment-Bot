@@ -66,6 +66,10 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 				return Activator.PLUGIN_ID;
 			}
 
+			if (vessel == null) {
+				return Activator.PLUGIN_ID;
+			}
+
 			final Set<Port> restrictedPorts = new HashSet<>();
 			{
 				final EList<APortSet<Port>> inaccessiblePorts = vessel.getVesselOrDelegateInaccessiblePorts();

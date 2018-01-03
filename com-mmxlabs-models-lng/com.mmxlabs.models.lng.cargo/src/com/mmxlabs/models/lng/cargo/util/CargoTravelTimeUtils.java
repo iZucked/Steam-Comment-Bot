@@ -61,7 +61,7 @@ public class CargoTravelTimeUtils {
 		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
-private static int getMinTimeFromAllowedRoutes(final Slot from, final Slot to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
+	private static int getMinTimeFromAllowedRoutes(final Slot from, final Slot to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
 			final ModelDistanceProvider modelDistanceProvider) {
 
 		return TravelTimeUtils.getMinTimeFromAllowedRoutes(from.getPort(), to.getPort(), vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
@@ -98,6 +98,10 @@ private static int getMinTimeFromAllowedRoutes(final Slot from, final Slot to, f
 			final VesselAvailability va = (VesselAvailability) vesselAssignmentType;
 			vessel = va.getVessel();
 		}
+		if (vessel == null) {
+			return new Pair<>();
+		}
+
 		vesselDisabledRoutes = vessel.getVesselOrDelegateInaccessibleRoutes();
 		return new Pair(vessel, vesselDisabledRoutes);
 	}
