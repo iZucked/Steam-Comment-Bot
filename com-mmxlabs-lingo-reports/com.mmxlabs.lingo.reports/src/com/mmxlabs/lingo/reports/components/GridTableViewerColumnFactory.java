@@ -186,17 +186,16 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					CostFormatter costFormatter = (CostFormatter) formatter;
 					CostFormatter.Type typeFormatter = costFormatter.getType();
 					if (typeFormatter == CostFormatter.Type.COST) {
-						// pin pin !
 						String formattedValue = cell.getText();
 						if (formattedValue != null) {
 							List<String> nullValues = new ArrayList<>();
 							nullValues.add("0");
 							nullValues.add("$0");
-							nullValues.add("$0/mmBtu");
-							nullValues.add("0mmBtu");
+							nullValues.add("$0mmbtu");
+							nullValues.add("0mmbtu");
 
-							if (nullValues.contains(formattedValue)) {
-								cell.setImage(cellImageSteadyArrow);
+							if (nullValues.contains(formattedValue.toLowerCase())) {
+								//cell.setImage(cellImageSteadyArrow);
 							} else {
 								if (formattedValue.contains("-")) {
 									cell.setImage(cellImageGreenArrowDown);
@@ -207,17 +206,16 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						}
 
 					} else if (typeFormatter == CostFormatter.Type.REVENUE) {
-						// pon pon !
 						String formattedValue = cell.getText();
 						if (formattedValue != null) {
 							List<String> nullValues = new ArrayList<>();
 							nullValues.add("0");
 							nullValues.add("$0");
-							nullValues.add("$0/mmBtu");
-							nullValues.add("0mmBtu");
+							nullValues.add("$0mmbtu");
+							nullValues.add("0mmbtu");
 
-							if (nullValues.contains(formattedValue)) {
-								cell.setImage(cellImageSteadyArrow);
+							if (nullValues.contains(formattedValue.toLowerCase())) {
+								//cell.setImage(cellImageSteadyArrow);
 							} else {
 								if (formattedValue.contains("-")) {
 

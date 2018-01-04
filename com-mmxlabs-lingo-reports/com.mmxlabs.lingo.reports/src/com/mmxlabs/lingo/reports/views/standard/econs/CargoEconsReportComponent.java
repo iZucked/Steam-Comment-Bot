@@ -336,11 +336,11 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					if (formattedValue != null) {
 						final List<String> nullValues = new ArrayList<>();
 						nullValues.add("$0");
-						nullValues.add("$0/mmBtu");
-						nullValues.add("0mmBtu");
+						nullValues.add("$0mmbtu");
+						nullValues.add("0mmbtu");
 
-						if (nullValues.contains(formattedValue)) {
-							cell.setImage(cellImageSteadyArrow);
+						if (nullValues.contains(formattedValue.toLowerCase())) {
+							//cell.setImage(cellImageSteadyArrow);
 						} else {
 							if (row.isCost && formattedValue.contains("-")) {
 								cell.setImage(cellImageGreenArrowDown);

@@ -569,8 +569,7 @@ public class ChangeSetView extends ViewPart {
 							}
 						}
 
-						while (selectedElements.remove(null))
-							;
+						while (selectedElements.remove(null));
 
 						// Update selected elements
 						scenarioComparisonService.setSelectedElements(selectedElements);
