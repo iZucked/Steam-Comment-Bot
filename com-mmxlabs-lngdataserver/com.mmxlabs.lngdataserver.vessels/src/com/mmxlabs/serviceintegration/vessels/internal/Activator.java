@@ -7,7 +7,7 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.ApiException;
+import com.mmxlabs.lngdataserver.vessel.ApiException;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;

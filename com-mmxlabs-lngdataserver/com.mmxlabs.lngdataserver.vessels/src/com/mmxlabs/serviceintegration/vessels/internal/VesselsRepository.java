@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import com.mmxlabs.ApiException;
-import com.mmxlabs.lngdataserver.VesselsApi;
+import com.mmxlabs.lngdataserver.vessel.ApiException;
+import com.mmxlabs.lngdataserver.vessel.api.VesselsApi;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 
 public class VesselsRepository {
@@ -29,10 +29,14 @@ public class VesselsRepository {
 	
 	public List<VesselsVersion> getVersions() throws IOException, ApiException {
 		ensureReady();
-		return vesselsApi.getVersionsUsingGET().stream().map(v -> {
-			VesselsVersion vv = new VesselsVersion(v.getIdentifier(), LocalDateTime.now(), false);
-			return vv;
-		}).collect(Collectors.toList());
+		try {
+			return vesselsApi.getVersionsUsingGET().stream().map(v -> {
+				VesselsVersion vv = new VesselsVersion(v.getIdentifier(), LocalDateTime.now(), false);
+				return vv;
+			}).collect(Collectors.toList());
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	private void ensureReady() {
