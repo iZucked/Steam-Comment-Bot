@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
 package com.minimaxlabs.rnd.representation;
 
 import java.io.Serializable;
