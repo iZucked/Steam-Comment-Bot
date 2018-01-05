@@ -1,8 +1,7 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
 import java.util.ArrayList;
