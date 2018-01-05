@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.its;
 
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
