@@ -365,6 +365,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						output.setFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT(), supplementalBaseInMT);
 					}
 				}
+			} else {
+				usePilotLight = true;
 			}
 			if (usePilotLight) {
 				final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
