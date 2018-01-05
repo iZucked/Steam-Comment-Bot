@@ -65,7 +65,7 @@ public class CipherPreferencesPage extends PreferencePage implements IWorkbenchP
 					final KeyFile newKey = KeyFile.generateKey(256);
 					final File f = new File("C:/temp/lingo.data");
 					try (FileOutputStream fos = new FileOutputStream(f)) {
-						final KeyFileHeader header = new KeyFileHeader(KeyFileHeader.VERSION__0, KeyFileHeader.PASSWORD_TYPE__PROMPT, dialog.getName());
+						final KeyFileHeader header = new KeyFileHeader(KeyFileHeader.VERSION__0, KeyFileHeader.PASSWORD_TYPE__DEFAULT, dialog.getName());
 						header.write(fos);
 
 						final char[] password = dialog.getPassword();
