@@ -44,7 +44,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, // start to load
+		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class,  // start to load
 				SlotVisit.class, Journey.class, Idle.class, // load to discharge
 				SlotVisit.class, Journey.class, Idle.class, // discharge to end
 				EndEvent.class };
@@ -159,7 +159,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		checker.setExpectedValue(0, Expectations.HEEL_COST, StartEvent.class, 0);
 		// 14 extra units of gas loaded
 		checker.setExpectedValue(1, Expectations.MIN_HEEL_VIOLATIONS, StartEvent.class, 0);
-		checker.setExpectedValue(1, Expectations.COOLDOWN_VIOLATION, SlotVisit.class, 0);
+//		checker.setExpectedValue(1, Expectations.COOLDOWN_VIOLATION, SlotVisit.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
