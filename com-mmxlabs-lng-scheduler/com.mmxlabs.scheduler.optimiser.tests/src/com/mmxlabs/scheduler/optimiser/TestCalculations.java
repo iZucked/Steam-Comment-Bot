@@ -628,7 +628,7 @@ public class TestCalculations {
 
 				Assert.assertEquals(6 * 400 / 24L, journeyDetails.getFuelConsumption(vessel1.getIdleBaseFuelInMT()));
 
-				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelConsumption(vessel1.getTravelBaseFuelInMT()));
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.IdleBase));
 			}
 			{
 
