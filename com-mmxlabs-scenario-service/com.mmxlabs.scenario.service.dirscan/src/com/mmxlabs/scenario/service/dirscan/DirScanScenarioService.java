@@ -810,6 +810,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	@Override
 	public String getSerivceID() {
-		return "dir-scan";
+		return "dir-scan-" + serviceName;
 	}
 }
