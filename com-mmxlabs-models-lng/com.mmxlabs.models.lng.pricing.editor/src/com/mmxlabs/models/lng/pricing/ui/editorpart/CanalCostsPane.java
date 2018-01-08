@@ -246,7 +246,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 		{
 			final Label lbl = new Label(parametersParent, SWT.NONE);
-			lbl.setText("Pricing bands per m³ of capacity");
+			lbl.setText("Pricing bands based on SCNT");
 			lbl.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 
 			final TableViewer tableViewer = new TableViewer(parametersParent, SWT.FULL_SELECTION);
