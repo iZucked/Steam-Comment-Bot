@@ -295,6 +295,12 @@
  <extension
        point="com.mmxlabs.models.ui.componenthelpers">
     <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.composite_inject.BaseFuelPriceInjector"
+          id="com.mmxlabs.models.lng.pricing.editor.basePriceInjector"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+    </componentHelper>
+    <componentHelper
           helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PanamaCanalTariffComponentHelper"
           id="com.mmxlabs.models.lng.pricing.presentation.composites.PanamaCanalTariffComponentHelper"
           inheritable="true"
