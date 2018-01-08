@@ -98,14 +98,14 @@ public class VesselTest {
 		final VesselState state1 = VesselState.Laden;
 		final VesselState state2 = VesselState.Ballast;
 
-		final IConsumptionRateCalculator calc = Mockito.mock(IConsumptionRateCalculator.class);
+		final IConsumptionRateCalculator calc1 = Mockito.mock(IConsumptionRateCalculator.class);
+		final IConsumptionRateCalculator calc2 = Mockito.mock(IConsumptionRateCalculator.class);
 
 		final Vessel vessel = new Vessel("name", 123456);
-		Assert.assertNull(vessel.getConsumptionRate(state1));
-		Assert.assertNull(vessel.getConsumptionRate(state2));
-		vessel.setConsumptionRate(state1, calc);
-		Assert.assertSame(calc, vessel.getConsumptionRate(state1));
-		Assert.assertNull(vessel.getConsumptionRate(state2));
+		vessel.setConsumptionRate(state1, calc1);
+		vessel.setConsumptionRate(state2, calc2);
+		Assert.assertSame(calc1, vessel.getConsumptionRate(state1));
+		Assert.assertSame(calc2, vessel.getConsumptionRate(state2));
 
 	}
 

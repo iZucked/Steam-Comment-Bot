@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
+import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
 
 public class SchedulerBuilderTest {
 
@@ -104,7 +105,7 @@ public class SchedulerBuilderTest {
 	}
 
 	private SchedulerBuilder createScheduleBuilder() {
-		final SchedulerBuilder builder = new SchedulerBuilder();
+//		final SchedulerBuilder builder = new SchedulerBuilder();
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new SharedDataModule(), new AbstractModule() {
 
 			@Override
@@ -114,7 +115,11 @@ public class SchedulerBuilderTest {
 			}
 
 		});
-		injector.injectMembers(builder);
+		final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
+
+		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
+		
+//		injector.injectMembers(builder);
 		return builder;
 	}
 }

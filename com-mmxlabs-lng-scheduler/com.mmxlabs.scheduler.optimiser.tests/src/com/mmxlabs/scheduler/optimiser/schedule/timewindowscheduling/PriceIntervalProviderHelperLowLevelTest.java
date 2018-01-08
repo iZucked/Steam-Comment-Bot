@@ -25,7 +25,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
-
 public class PriceIntervalProviderHelperLowLevelTest {
 
 	@Test
@@ -33,7 +32,7 @@ public class PriceIntervalProviderHelperLowLevelTest {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 30));
 	}
-	
+
 	@Test
 	public void testIsFeasible_2() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
@@ -57,61 +56,61 @@ public class PriceIntervalProviderHelperLowLevelTest {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		Assert.assertFalse(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 101));
 	}
-	
+
 	@Test
 	public void testIdealLoadAndDischargeTimes_LoadLate() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(0, 20, 50, 80, 5, 5, 10);
-		Assert.assertArrayEquals(new int[]{20, 50}, times);
+		Assert.assertArrayEquals(new int[] { 15, 50 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_LoadEarlier() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(0, 20, 50, 80, 5, 30, 40);
-		Assert.assertArrayEquals(new int[]{5, 50}, times);
+		Assert.assertArrayEquals(new int[] { 5, 50 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_DischargeLater() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(20, 20, 50, 80, 5, 30, 40);
-		Assert.assertArrayEquals(new int[]{20, 65}, times);
+		Assert.assertArrayEquals(new int[] { 20, 65 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_LoadEarlierDischargeLater() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(15, 20, 50, 80, 5, 30, 40);
-		Assert.assertArrayEquals(new int[]{15, 60}, times);
+		Assert.assertArrayEquals(new int[] { 15, 60 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_MaxInterval() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 50, 80, 5, 60, 90);
-		Assert.assertArrayEquals(new int[]{10, 80}, times);
+		Assert.assertArrayEquals(new int[] { 10, 80 }, times);
 	}
-	
+
 	@Test
 	public void testIdealLoadAndDischargeTimes_AlmostMaxSpeed() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 50, 80, 5, 60, 60);
-		Assert.assertArrayEquals(new int[]{10, 75}, times);
+		Assert.assertArrayEquals(new int[] { 10, 75 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_MaxSpeed1() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 75, 80, 5, 60, 60);
-		Assert.assertArrayEquals(new int[]{10, 75}, times);
+		Assert.assertArrayEquals(new int[] { 10, 75 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_MaxSpeed2() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 85, 100, 5, 60, 60);
-		Assert.assertArrayEquals(new int[]{20, 85}, times);
+		Assert.assertArrayEquals(new int[] { 20, 85 }, times);
 	}
 
 	private PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiff) {
@@ -121,7 +120,7 @@ public class PriceIntervalProviderHelperLowLevelTest {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
-				final int input = (int) args[0]+timeDiff;
+				final int input = (int) args[0] + timeDiff;
 				return input;
 			}
 		});
@@ -129,7 +128,7 @@ public class PriceIntervalProviderHelperLowLevelTest {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
-				final int input = (int) args[0]-timeDiff;
+				final int input = (int) args[0] - timeDiff;
 				return input;
 			}
 		});
@@ -137,11 +136,11 @@ public class PriceIntervalProviderHelperLowLevelTest {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
-				final int input = (int) args[0]-2;
+				final int input = (int) args[0] - 2;
 				return input;
 			}
 		});
-		
+
 		Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override

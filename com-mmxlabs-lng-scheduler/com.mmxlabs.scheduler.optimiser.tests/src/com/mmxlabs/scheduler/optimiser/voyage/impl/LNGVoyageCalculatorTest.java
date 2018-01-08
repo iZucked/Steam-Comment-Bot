@@ -570,7 +570,7 @@ public class LNGVoyageCalculatorTest {
 		indexingContext.assignIndex(IBaseFuel.LNG);
 
 		final VoyagePlan plan = new VoyagePlan();
-		final IVessel vessel = Mockito.mock(IVessel.class);
+		final IVessel vessel = new Vessel("vessel", Long.MAX_VALUE);
 		vessel.setTravelBaseFuel(new BaseFuel(indexingContext, "FUEL"));
 		vessel.setIdleBaseFuel(new BaseFuel(indexingContext, "IDLE"));
 		vessel.setPilotLightBaseFuel(new BaseFuel(indexingContext, "PILOT"));
