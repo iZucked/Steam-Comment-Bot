@@ -93,7 +93,12 @@ public class ScenarioStorageUtil {
 			// Is that a job for the copy handler anyway?
 
 			final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
-			Runtime.getRuntime().addShutdownHook(new Thread() {
+
+			// Define a function here to try and avoid class not found exceptions later on when running the shutdown hook.
+			// Hopefully this means the class is still referenced after the common util plugin has stopped.
+			final CheckedBiFunction<File, Boolean, Boolean, IOException> d = FileDeleter::delete;
+
+			Runtime.getRuntime().addShutdownHook(new Thread("Cleanup hook") {
 
 				@Override
 				public void run() {
@@ -113,7 +118,7 @@ public class ScenarioStorageUtil {
 
 									@Override
 									public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-										FileDeleter.delete(file.toFile(), secureDelete);
+										d.apply(file.toFile(), secureDelete);
 										return FileVisitResult.CONTINUE;
 									}
 								});
