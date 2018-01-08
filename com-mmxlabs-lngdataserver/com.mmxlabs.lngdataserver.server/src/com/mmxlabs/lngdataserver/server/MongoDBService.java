@@ -55,6 +55,15 @@ public class MongoDBService {
 		final IPath mongoPath = workspaceLocation.append("mongo");
 		mongoPath.toFile().mkdirs();
 
+		// Create mongo data dir in workspace folder
+		IPath dataPath = mongoPath.append("mongo_data");
+		if (!dataPath.toFile().exists()) {
+			dataPath.toFile().mkdirs();
+		}
+
+		// Ignore input data location
+		setEmbeddedDataLocation(dataPath.toOSString());
+
 		final String mongoPortFile = mongoPath.append("mongodb.port").toOSString();
 		try {
 			final int port = readInt(mongoPortFile);
@@ -83,7 +92,7 @@ public class MongoDBService {
 				final ITempNaming executableNaming = new ITempNaming() {
 					@Override
 					public String nameFor(final String arg0, final String arg1) {
-						return mongoPath.append(String.format("%s-%s-%s", arg0, UUID.randomUUID().toString(), arg1)).toOSString();
+						return mongoPath.append(String.format("%s-%s-%s", "lingo", UUID.randomUUID().toString(), arg1)).toOSString();
 					}
 				};
 
@@ -119,6 +128,7 @@ public class MongoDBService {
 				// .net(new Net(host, getPort(), false))
 				.net(new Net("127.0.0.1", Network.getFreeServerPort(), false))
 				// .setParameter("bind_ip","127.0.0.1")
+				.setParameter("diagnosticDataCollectionEnabled", "false") //
 				.cmdOptions(new MongoCmdOptionsBuilder().syncDelay(10).build()).build());
 
 		mongodProcess = mongodExecutable.start();

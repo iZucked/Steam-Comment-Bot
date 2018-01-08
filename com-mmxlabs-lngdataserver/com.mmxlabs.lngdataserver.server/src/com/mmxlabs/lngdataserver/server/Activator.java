@@ -50,29 +50,28 @@ public class Activator implements BundleActivator {
 	public void start(final BundleContext context) throws Exception {
 		plugin = this;
 
-		Job background = new Job("Start data server") {
+		final Job background = new Job("Start data server") {
 			@Override
-			public IStatus run(IProgressMonitor monitor) {
+			public IStatus run(final IProgressMonitor monitor) {
 				// Having a method called "main" in the stacktrace stops SpringBoot throwing an exception in the logging framework
 				return main(monitor);
 			}
 
-			public IStatus main(IProgressMonitor monitor) {
+			public IStatus main(final IProgressMonitor monitor) {
 				monitor.beginTask("Starting data server", IProgressMonitor.UNKNOWN);
 				try {
 					monitor.subTask("Starting database");
-					String binariesPath = new MongoProvider().getStringPath();
+					final String binariesPath = new MongoProvider().getStringPath();
 
 					mongoService = new MongoDBService();
 					mongoService.setEmbeddedBinariesLocation(binariesPath);
-					// mongoService.setEmbeddedDataLocation("/Users/roberterdin/tmp/mongo_data");
-					mongoService.setEmbeddedDataLocation(getMongoDataPath());
-					int port = mongoService.start();
+
+					final int port = mongoService.start();
 					monitor.subTask("Starting internal webserver");
 
 					// this is a bit dangerous, should probably let the server choose it's own port with server.port=0
-					int randomPort = randomPort();
-					String[] args = {
+					final int randomPort = randomPort();
+					final String[] args = {
 							// "--db.embeddedBinaries=" + binariesPath,
 							"--server.port=" + randomPort, //
 							"--db.embedded=false", //
@@ -84,7 +83,7 @@ public class Activator implements BundleActivator {
 					};
 					monitor.subTask("Gathering end points");
 
-					Object[] endPoints = DataServerEndPointExtensionUtil.getEndPoints();
+					final Object[] endPoints = DataServerEndPointExtensionUtil.getEndPoints();
 					monitor.worked(1);
 					monitor.subTask("Starting webserver");
 					servletContext = SpringApplication.run(endPoints, args);
@@ -93,7 +92,7 @@ public class Activator implements BundleActivator {
 					monitor.worked(1);
 					BackEndUrlProvider.INSTANCE.setAvailable(true);
 					monitor.worked(1);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					setProperty(IProgressConstants2.KEEP_PROPERTY, Boolean.TRUE);
 					return Status.CANCEL_STATUS;
 				} finally {
@@ -125,7 +124,7 @@ public class Activator implements BundleActivator {
 		throw new IOException("No free port available 49152-65534");
 	}
 
-	private static boolean portAvailable(int port) {
+	private static boolean portAvailable(final int port) {
 		LOGGER.info("--------------Testing port " + port);
 		Socket s = null;
 		try {
@@ -135,14 +134,14 @@ public class Activator implements BundleActivator {
 			// something is using the port and has responded.
 			LOGGER.info("--------------Port " + port + " is not available");
 			return false;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			LOGGER.info("--------------Port " + port + " is available");
 			return true;
 		} finally {
 			if (s != null) {
 				try {
 					s.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					LOGGER.error("Error closing probing socket", e);
 					throw new RuntimeException("Error closing probing socket", e);
 				}
@@ -152,7 +151,7 @@ public class Activator implements BundleActivator {
 
 	private String getMongoDataPath() throws URISyntaxException, IOException {
 		final Bundle bundle = FrameworkUtil.getBundle(Activator.class);
-		String result = new File(FileLocator.toFileURL(bundle.getResource("/mongo_data")).toURI()).getAbsolutePath();
+		final String result = new File(FileLocator.toFileURL(bundle.getResource("/mongo_data")).toURI()).getAbsolutePath();
 		LOGGER.info("MongoDB directory: " + result);
 		return result;
 	}
