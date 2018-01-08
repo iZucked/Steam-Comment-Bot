@@ -82,7 +82,11 @@ public class ScenarioStorageUtil {
 			final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 
 			storageDirectory = workspaceLocation.append("temp").toFile().toPath();
-			storageDirectory.toFile().mkdirs();
+			if (!storageDirectory.toFile().exists()) {
+				if (!storageDirectory.toFile().mkdirs()) {
+					log.error("Unable to create temporary directory: " + storageDirectory.toString());
+				}
+			}
 			// there is a race here; the only way to really avoid it is to use
 			// something like java.nio in java 7, which has a createTempDir method.
 			// if (storageDirectory.delete()) {
