@@ -59,7 +59,10 @@ public class RenameElementHandler extends AbstractHandler {
 								ScenarioServiceUtils.execute(instance, i -> {
 									i.setName(newName);
 									final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(i);
-									mr.setName(newName);
+									if (mr != null) {
+										// May be null from network drive
+										mr.setName(newName);
+									}
 								});
 							}
 						} else if (element instanceof Folder) {
