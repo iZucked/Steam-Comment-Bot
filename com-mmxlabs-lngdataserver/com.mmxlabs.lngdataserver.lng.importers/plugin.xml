@@ -23,14 +23,9 @@
          <menuContribution
                allPopups="false"
                locationURI="menu:data?after=dataStart">
-     		<command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.ports"
-                  label="Import ports"
-                  style="push">
-            </command>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.distances"
-                  label="Import distances"
+                  label="Import ports and distances"
                   style="push">
             </command>
          </menuContribution>
@@ -40,13 +35,8 @@
          <command
                defaultHandler="com.mmxlabs.lngdataserver.lng.importers.distances.ui.ImportDistancesWizardHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.distances"
-               name="Copy distances to scenario">
-         </command>
- <command
-               defaultHandler="com.mmxlabs.lngdataserver.lng.importers.ports.ui.ImportPortsWizardHandler"
-               id="com.mmxlabs.models.lng.scenario.import.wizards.ports"
-               name="Copy ports to scenario">
-         </command>         
+               name="Copy ports and distances to scenario">
+         </command>       
       </extension>
       
       <!-- PRICES -->

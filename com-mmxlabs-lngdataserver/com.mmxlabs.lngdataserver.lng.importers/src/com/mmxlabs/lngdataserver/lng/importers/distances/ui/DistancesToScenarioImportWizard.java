@@ -1,14 +1,10 @@
 package com.mmxlabs.lngdataserver.lng.importers.distances.ui;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -18,22 +14,19 @@ import org.eclipse.ui.IWorkbench;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngdataserver.distances.DefaultPortProvider;
 import com.mmxlabs.lngdataserver.distances.DistanceRepository;
 import com.mmxlabs.lngdataserver.distances.IDistanceProvider;
-import com.mmxlabs.lngdataserver.lng.importers.distances.DistancesToScenarioCopier;
+import com.mmxlabs.lngdataserver.distances.IPortProvider;
+import com.mmxlabs.lngdataserver.distances.PortRepository;
+import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
-import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -44,14 +37,15 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 	private ScenarioSelectionPage scenarioSelectionPage;
 	private DistancesSelectionPage distancesSelectionPage;
-	private DistanceSanityCheckPage distanceSanityCheckPage;
+	// private DistanceSanityCheckPage distanceSanityCheckPage;
 	private boolean canFinish = false;
 
-	private IDistanceProvider distanceProvider;
+	// private IDistanceProvider distanceProvider;
+	// private String version;
 
-	private ScenarioInstance currentInstance;
+	private final ScenarioInstance currentInstance;
 
-	public DistancesToScenarioImportWizard(ScenarioInstance currentInstance) {
+	public DistancesToScenarioImportWizard(final ScenarioInstance currentInstance) {
 		this.currentInstance = currentInstance;
 	}
 
@@ -62,20 +56,20 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", currentInstance);
 		distancesSelectionPage = new DistancesSelectionPage("Distances");
-		distanceSanityCheckPage = new DistanceSanityCheckPage("Verify Distances", distancesSelectionPage);
+		// distanceSanityCheckPage = new DistanceSanityCheckPage("Verify Distances", distancesSelectionPage);
 	}
 
 	@Override
 	public boolean performFinish() {
 		checkDistances();
-
-		if (distanceProvider == null) {
-			return false;
-		}
-
-		if (distancesSelectionPage.getLostDistances().isEmpty()) {
-			canFinish = true;
-		}
+		//
+		// if (distanceProvider == null) {
+		// return false;
+		// }
+		//
+		// if (distancesSelectionPage.getLostDistances().isEmpty()) {
+		// }
+		canFinish = true;
 
 		if (canFinish) {
 			try {
@@ -85,30 +79,42 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						monitor.beginTask("Copy distances", scenarioSelectionPage.getSelectedScenarios().size() * 3);
 
-						final DistancesToScenarioCopier copier = new DistancesToScenarioCopier();
+						try {
+							final DistanceRepository distanceRepository = new DistanceRepository(BackEndUrlProvider.INSTANCE.getUrl());
+							final String versionTag = distancesSelectionPage.getVersionTag();
+							final IDistanceProvider distanceProvider = distanceRepository.getDistances(versionTag);
 
-						for (final ScenarioInstance scenarioInstance : scenarioSelectionPage.getSelectedScenarios()) {
+							final PortRepository portRepository = new PortRepository(BackEndUrlProvider.INSTANCE.getUrl());
+							IPortProvider portProvider;
+							portProvider = new DefaultPortProvider(versionTag, portRepository.getPorts(versionTag));
+							final PortAndDistancesToScenarioCopier copier = new PortAndDistancesToScenarioCopier();
 
-							final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-							try (ModelReference modelReference = modelRecord.aquireReference(DistancesToScenarioImportWizard.class.getSimpleName())) {
-								modelReference.executeWithLock(true, () -> {
-									monitor.subTask(String.format("Importing %s into %s", distanceProvider.getVersion(), modelRecord.getName()));
+							for (final ScenarioInstance scenarioInstance : scenarioSelectionPage.getSelectedScenarios()) {
 
-									PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
-									EditingDomain editingDomain = modelReference.getEditingDomain();
-									final Pair<Command, Map<RouteOption, List<RouteLine>>> updateDistancesCommand = copier.getUpdateDistancesCommand(editingDomain, distanceProvider, portModel);
+								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+								try (ModelReference modelReference = modelRecord.aquireReference(DistancesToScenarioImportWizard.class.getSimpleName())) {
+									modelReference.executeWithLock(true, () -> {
+										monitor.subTask(String.format("Importing %s into %s", distanceProvider.getVersion(), modelRecord.getName()));
 
-									Command command = updateDistancesCommand.getFirst();
+										final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
+										final EditingDomain editingDomain = modelReference.getEditingDomain();
+										final Command command = copier.getUpdateCommand(editingDomain, portProvider, distanceProvider, portModel);
 
-									if (!command.canExecute()) {
-										throw new RuntimeException("Unable to execute command");
-									}
+										if (!command.canExecute()) {
+											throw new RuntimeException("Unable to execute command");
+										}
 
-									RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(command));
-									monitor.worked(1);
-								});
+										RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(command));
+										monitor.worked(1);
+									});
+								}
 							}
+						} catch (final Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+
 						}
+
 					}
 				});
 			} catch (final InvocationTargetException e) {
@@ -128,7 +134,6 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 		super.addPages();
 		addPage(scenarioSelectionPage);
 		addPage(distancesSelectionPage);
-		addPage(distanceSanityCheckPage);
 	}
 
 	@Override
@@ -136,6 +141,7 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 		return distancesSelectionPage.isPageComplete();
 	}
 
+	@Override
 	public IWizardPage getNextPage(final IWizardPage page) {
 		if (page == distancesSelectionPage) {
 			checkDistances();
@@ -144,53 +150,53 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 	}
 
 	private void checkDistances() {
-		if (!distancesSelectionPage.isChecked()) {
-			try {
-				getContainer().run(false, true, new IRunnableWithProgress() {
-
-					@Override
-					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						final DistancesToScenarioCopier copier = new DistancesToScenarioCopier();
-						monitor.beginTask("task", scenarioSelectionPage.getSelectedScenarios().size() * 3);
-
-						final DistanceRepository dr = new DistanceRepository(BackEndUrlProvider.INSTANCE.getUrl());
-						distanceProvider = dr.getDistances(distancesSelectionPage.getVersionTag());
-
-						for (final ScenarioInstance scenarioInstance : scenarioSelectionPage.getSelectedScenarios()) {
-							if (monitor.isCanceled()) {
-								throw new InterruptedException("Cancelled");
-							}
-							final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-
-							try (ModelReference modelReference = modelRecord.aquireReference(DistancesToScenarioImportWizard.class.getSimpleName())) {
-								modelReference.executeWithLock(true, () -> {
-
-									final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
-									final LNGReferenceModel referenceModel = scenarioModel.getReferenceModel();
-
-									final EditingDomain editingDomain = modelReference.getEditingDomain();
-
-									monitor.subTask(String.format("Importing %s into %s", distanceProvider.getVersion(), referenceModel.getUuid()));
-
-									final Pair<Command, Map<RouteOption, List<RouteLine>>> updateDistancesCommand = copier.getUpdateDistancesCommand(editingDomain, distanceProvider,
-											referenceModel.getPortModel());
-
-									if (!updateDistancesCommand.getSecond().isEmpty()) {
-										distancesSelectionPage.getLostDistances().put(scenarioInstance, updateDistancesCommand.getSecond());
-									}
-
-								});
-							}
-
-						}
-					}
-				});
-			} catch (final InvocationTargetException e) {
-				e.printStackTrace();
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
-			}
-			distancesSelectionPage.setChecked(true);
-		}
+		// if (!distancesSelectionPage.isChecked()) {
+		// try {
+		// getContainer().run(false, true, new IRunnableWithProgress() {
+		//
+		// @Override
+		// public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		// final DistancesToScenarioCopier copier = new DistancesToScenarioCopier();
+		// monitor.beginTask("task", scenarioSelectionPage.getSelectedScenarios().size() * 3);
+		//
+		// final DistanceRepository dr = new DistanceRepository(BackEndUrlProvider.INSTANCE.getUrl());
+		// distanceProvider = dr.getDistances(distancesSelectionPage.getVersionTag());
+		//
+		// for (final ScenarioInstance scenarioInstance : scenarioSelectionPage.getSelectedScenarios()) {
+		// if (monitor.isCanceled()) {
+		// throw new InterruptedException("Cancelled");
+		// }
+		// final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		//
+		// try (ModelReference modelReference = modelRecord.aquireReference(DistancesToScenarioImportWizard.class.getSimpleName())) {
+		// modelReference.executeWithLock(true, () -> {
+		//
+		// final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
+		// final LNGReferenceModel referenceModel = scenarioModel.getReferenceModel();
+		//
+		// final EditingDomain editingDomain = modelReference.getEditingDomain();
+		//
+		// monitor.subTask(String.format("Importing %s into %s", distanceProvider.getVersion(), referenceModel.getUuid()));
+		//
+		// final Pair<Command, Map<RouteOption, List<RouteLine>>> updateDistancesCommand = null;// copier.getUpdateDistancesCommand(editingDomain, distanceProvider,
+		// // referenceModel.getPortModel());
+		//
+		// if (!updateDistancesCommand.getSecond().isEmpty()) {
+		// distancesSelectionPage.getLostDistances().put(scenarioInstance, updateDistancesCommand.getSecond());
+		// }
+		//
+		// });
+		// }
+		//
+		// }
+		// }
+		// });
+		// } catch (final InvocationTargetException e) {
+		// e.printStackTrace();
+		// } catch (final InterruptedException e) {
+		// e.printStackTrace();
+		// }
+		distancesSelectionPage.setChecked(true);
+		// }
 	}
 }

@@ -1,9 +1,5 @@
 package com.mmxlabs.lngdataserver.lng.importers.distances.ui;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
@@ -17,25 +13,12 @@ import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.lngdataserver.distances.DistanceRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class DistancesSelectionPage extends WizardPage {
 
 	private String versionTag;
 	private boolean isSelected = false;
 	private boolean checked = false;
-	private Map<ScenarioInstance, Map<RouteOption, List<RouteLine>>> lostDistances = new HashMap<ScenarioInstance, Map<RouteOption, List<RouteLine>>>();
-
-	public Map<ScenarioInstance, Map<RouteOption, List<RouteLine>>> getLostDistances() {
-		return lostDistances;
-	}
-
-	public void setLostDistances(Map<ScenarioInstance, Map<RouteOption, List<RouteLine>>> lostDistances) {
-		this.lostDistances = lostDistances;
-	}
 
 	protected DistancesSelectionPage(String pageName) {
 		super(pageName);
@@ -57,6 +40,8 @@ public class DistancesSelectionPage extends WizardPage {
 		dr.getVersions().forEach(v -> combo.add(v.getIdentifier()));
 
 		combo.addSelectionListener(new SelectionListener() {
+
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				versionTag = combo.getText();
 				isSelected = true;
@@ -64,6 +49,7 @@ public class DistancesSelectionPage extends WizardPage {
 				getWizard().getContainer().updateButtons();
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				versionTag = combo.getText();
 				getWizard().getContainer().updateButtons();
@@ -72,11 +58,6 @@ public class DistancesSelectionPage extends WizardPage {
 			}
 		});
 		setControl(container);
-	}
-
-	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete();
 	}
 
 	@Override
@@ -109,7 +90,7 @@ public class DistancesSelectionPage extends WizardPage {
 
 	private void cleanChecked() {
 		checked = false;
-		lostDistances.clear();
+		// lostDistances.clear();
 	}
 
 }

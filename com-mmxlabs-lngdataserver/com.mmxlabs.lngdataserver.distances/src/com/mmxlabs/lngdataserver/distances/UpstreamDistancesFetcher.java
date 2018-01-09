@@ -28,8 +28,10 @@ public class UpstreamDistancesFetcher {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamDistancesFetcher.class);
 
 	private static Map<Via, String> routeOpt;
-	private static final String DISTANCES_URL = "/distances";
 	private static final String VERSIONS_URL = "/distances/versions";
+	private static final String DISTANCES_URL = "/distances";
+	private static final String CANALS_URL = "/canals";
+
 	static {
 		Map<Via, String> map = new HashMap<>();
 
