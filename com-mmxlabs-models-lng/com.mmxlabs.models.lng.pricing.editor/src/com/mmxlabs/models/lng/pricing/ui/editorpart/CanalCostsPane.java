@@ -246,7 +246,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 		{
 			final Label lbl = new Label(parametersParent, SWT.NONE);
-			lbl.setText("Pricing bands based on SCNT");
+			lbl.setText("Pricing bands per m³ of capacity");
 			lbl.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 
 			final TableViewer tableViewer = new TableViewer(parametersParent, SWT.FULL_SELECTION);
@@ -450,7 +450,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			tableParent.setLayout(GridLayoutFactory.fillDefaults().create());
 
 			final Label lbl = new Label(tableParent, SWT.NONE);
-			lbl.setText("Pricing bands per m³ of capacity");
+			lbl.setText("Pricing bands based on SCNT");
 			tableParent.setLayoutData(GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.TOP).create());
 			lbl.setLayoutData(GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.TOP).create());
 
