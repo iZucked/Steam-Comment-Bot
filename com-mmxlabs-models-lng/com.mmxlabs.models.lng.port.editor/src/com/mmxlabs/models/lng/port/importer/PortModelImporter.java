@@ -49,12 +49,12 @@ public class PortModelImporter implements ISubmodelImporter {
 	/**
 	 * 
 	 */
-	private static final String SUEZ_CANAL_NAME = "Suez canal";
-	private static final String PANAMA_CANAL_NAME = "Panama canal";
+	public static final String SUEZ_CANAL_NAME = "Suez canal";
+	public static final String PANAMA_CANAL_NAME = "Panama canal";
 	/**
 	 * 
 	 */
-	private static final String DIRECT_NAME = "Direct";
+	public static final String DIRECT_NAME = "Direct";
 	public static final String PORT_KEY = "PORT";
 	public static final String PORT_GROUP_KEY = "PORTGROUP";
 	public static final String DISTANCES_KEY = "DISTANCES";
