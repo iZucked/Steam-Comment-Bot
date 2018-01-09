@@ -45,7 +45,7 @@ public class SlotPortCapabilityConstraint extends AbstractModelMultiConstraint {
 				// Null ports outside of CargoModel are ok (specifically we expect them to be SpotSlots for non-shipped markets which will be filled in when the Schedule is applied to the scenario.)
 				if (port == null) {
 					if (slot.eContainer() instanceof CargoModel || extraContext.getContainer(slot) instanceof CargoModel) {
-						String message = String.format("[Slot|%s has not port", slot.getName());
+						String message = String.format("[Slot|%s has no port", slot.getName());
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
