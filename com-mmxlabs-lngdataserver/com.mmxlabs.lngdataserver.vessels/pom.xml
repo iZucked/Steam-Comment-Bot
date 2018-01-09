@@ -9,6 +9,6 @@
 		<version>4.3.15-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.mmxlabs.lngdataserver.pricing</artifactId>
+	<artifactId>com.mmxlabs.lngdataserver.vessels</artifactId>
 	<packaging>eclipse-plugin</packaging>
 </project>
