@@ -52,7 +52,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof CooldownPrice) {
 			CooldownPrice c = (CooldownPrice) target;
 
-			final String portSetName = ScenarioElementNameHelper.getName(c.getPorts(), "<No ports>");
+			final String portSetName = ScenarioElementNameHelper.getName(c.getPorts(), "Cooldown Cost <No ports>");
 			final DetailConstraintStatusFactory factoryBase = DetailConstraintStatusFactory.makeStatus().withName(portSetName);
 
 			if (c.getExpression() == null) {

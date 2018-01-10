@@ -40,7 +40,7 @@ public class PortCostsConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof PortCost) {
 			final PortCost portCost = (PortCost) target;
 
-			final String portSetName = ScenarioElementNameHelper.getName(portCost.getPorts(), "<No ports>");
+			final String portSetName = ScenarioElementNameHelper.getName(portCost.getPorts(), "Port Cost <No ports>");
 			final DetailConstraintStatusFactory factoryBase = DetailConstraintStatusFactory.makeStatus().withName(portSetName);
 
 			if (portCost.getPorts().isEmpty()) {
