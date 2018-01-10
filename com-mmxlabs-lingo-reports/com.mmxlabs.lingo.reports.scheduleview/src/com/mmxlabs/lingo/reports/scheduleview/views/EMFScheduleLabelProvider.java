@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -335,6 +336,26 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						// tt.append("Spot " + (slot instanceof LoadSlot ? "purchase" : "sale") + " \n");
 					}
 					tt.append(" \n");
+
+					if (slotVisit.getSequence().getSequenceType() == SequenceType.FOB_SALE) {
+						try {
+							CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+							Vessel nominatedVessel = cargoAllocation.getSlotAllocations().get(1).getSlot().getNominatedVessel();
+							tt.append("Vessel: " + nominatedVessel.getName() + " \n\n");
+						} catch (NullPointerException e) {
+							// I am being lazy...
+						}
+					}
+					if (slotVisit.getSequence().getSequenceType() == SequenceType.DES_PURCHASE) {
+						try {
+							CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+							Vessel nominatedVessel = cargoAllocation.getSlotAllocations().get(0).getSlot().getNominatedVessel();
+							tt.append("Vessel: " + nominatedVessel.getName() + " \n\n");
+						} catch (NullPointerException e) {
+							// I am being lazy...
+						}
+					}
+
 				}
 			}
 
@@ -375,7 +396,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						} else {
 							if (journey.getCanalDateTime() != null && journey.getCanalDateTime().equals(journey.getLatestPossibleCanalDateTime())) {
 								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
-							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null && journey.getLatestPossibleCanalDateTime().isBefore(journey.getCanalDateTime())) {
+							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null
+									&& journey.getLatestPossibleCanalDateTime().isBefore(journey.getCanalDateTime())) {
 								// eventText.append(String.format("Infeasible booking required: %s\n", direction));
 								// May be infeasible. However we do not store hour of day, so checks are not fully accurate
 								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), "<date unknown>"), direction));
