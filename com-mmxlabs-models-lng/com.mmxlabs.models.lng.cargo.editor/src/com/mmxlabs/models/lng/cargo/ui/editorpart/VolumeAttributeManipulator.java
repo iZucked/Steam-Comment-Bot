@@ -89,7 +89,7 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 		if (setValue instanceof Number) {
 			final Number number = (Number) setValue;
 			if (number.equals(Integer.MAX_VALUE) || (number.intValue() == 0 && field == CargoPackage.Literals.SLOT__MAX_QUANTITY)) {
-				return "∞";
+				return "-";
 			}
 			final double n = number.doubleValue();
 			return String.format("%sk", super.renderSetValue(container, (int) Math.round(n / 1000.0)));
