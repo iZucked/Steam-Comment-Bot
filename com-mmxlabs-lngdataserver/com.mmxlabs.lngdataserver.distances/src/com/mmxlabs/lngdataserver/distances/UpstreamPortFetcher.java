@@ -23,7 +23,7 @@ public class UpstreamPortFetcher {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamPortFetcher.class);
 
-	private static final String PORTS_URL = "/ports";
+	private static final String PORTS_URL = "/locations";
 
 	/**
 	 * Returns the latest version of the ports
@@ -55,9 +55,13 @@ public class UpstreamPortFetcher {
 	 * @throws AuthenticationException
 	 */
 	public static List<Port> getPorts(String baseUrl, String version, String username, String password) throws ClientProtocolException, IOException, ParseException, AuthenticationException {
-		List<Port> result = new ArrayList<Port>();
+		List<Port> result = new ArrayList<>();
 
-		String rawJSON = UrlFetcher.fetchURLContent(baseUrl + PORTS_URL, username, password);
+		String url = baseUrl + PORTS_URL;
+		if (version != null) {
+			url = url + "?v=" + version;
+		}
+		String rawJSON = UrlFetcher.fetchURLContent(url, username, password);
 		JSONParser parser = new JSONParser();
 		Object portsJSON = parser.parse(rawJSON);
 
@@ -93,10 +97,10 @@ public class UpstreamPortFetcher {
 			p.setName((String) currentMap.get("name"));
 			l.setName((String) currentMap.get("name"));
 			l.setMmxId((String) currentMap.get("mmxId"));
-			l.setCountry((String) ((Map) currentMap.get("location")).get("country"));
-			l.setLat((Double) ((Map) currentMap.get("location")).get("lat"));
-			l.setLon((Double) ((Map) currentMap.get("location")).get("lon"));
-			l.setTimeZone((String) ((Map) currentMap.get("location")).get("timeZone"));
+			l.setCountry((String) ((Map) currentMap.get("geographicPoint")).get("country"));
+			l.setLat((Double) ((Map) currentMap.get("geographicPoint")).get("lat"));
+			l.setLon((Double) ((Map) currentMap.get("geographicPoint")).get("lon"));
+			l.setTimeZone((String) ((Map) currentMap.get("geographicPoint")).get("timeZone"));
 
 			if (currentMap.containsKey("aliases") && currentMap.get("aliases") instanceof JSONArray) {
 				((JSONArray) currentMap.get("aliases")).forEach(a -> l.getOtherNames().add((String) a));
