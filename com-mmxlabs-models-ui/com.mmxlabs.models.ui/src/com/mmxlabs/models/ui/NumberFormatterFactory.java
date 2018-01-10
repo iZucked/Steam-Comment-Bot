@@ -79,7 +79,7 @@ public class NumberFormatterFactory {
 			}
 			// Custom code: Show infinity
 			if (Objects.equal(Integer.MAX_VALUE, getValue())) {
-				return "∞";
+				return "-";
 			}
 			return super.getDisplayString();
 		};
@@ -142,7 +142,7 @@ public class NumberFormatterFactory {
 			}
 			// Custom code: Show infinity
 			if (Objects.equal(Long.MAX_VALUE, getValue())) {
-				return "∞";
+				return "-";
 			}
 			return super.getDisplayString();
 		};
@@ -205,7 +205,7 @@ public class NumberFormatterFactory {
 			}
 			// Custom code: Show infinity
 			if (Objects.equal(Float.MAX_VALUE, getValue())) {
-				return "∞";
+				return "-";
 			}
 			return super.getDisplayString();
 		};
@@ -268,7 +268,7 @@ public class NumberFormatterFactory {
 			}
 			// Custom code: Show infinity
 			if (Objects.equal(Double.MAX_VALUE, getValue())) {
-				return "∞";
+				return "-";
 			}
 			return super.getDisplayString();
 		};
