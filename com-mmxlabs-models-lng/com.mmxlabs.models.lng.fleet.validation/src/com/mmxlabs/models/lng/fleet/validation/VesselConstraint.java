@@ -44,6 +44,34 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 						.make(ctx, statuses);
 			}
 
+			if (vessel.getVesselOrDelegateBaseFuel() == null) {
+				String message = "Vessel has no travel base fuel";
+				baseFactory.copyName() //
+						.withMessage(message) //
+						.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_BaseFuel()) //
+						.make(ctx, statuses);
+			}
+			if (vessel.getVesselOrDelegateIdleBaseFuel() == null) {
+				String message = "Vessel has no idle base fuel";
+				baseFactory.copyName() //
+				.withMessage(message) //
+				.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_IdleBaseFuel()) //
+				.make(ctx, statuses);
+			}
+			if (vessel.getVesselOrDelegatePilotLightBaseFuel() == null) {
+				String message = "Vessel has no pilot light base fuel";
+				baseFactory.copyName() //
+				.withMessage(message) //
+				.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_PilotLightBaseFuel()) //
+				.make(ctx, statuses);
+			}
+			if (vessel.getVesselOrDelegateInPortBaseFuel() == null) {
+				String message = "Vessel has no in port base fuel";
+				baseFactory.copyName() //
+				.withMessage(message) //
+				.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_InPortBaseFuel()) //
+				.make(ctx, statuses);
+			}
 			if (vessel.getReference() != null) {
 				if (vessel.getReference().getReference() != null) {
 					String message = "Reference vessel can not have a reference vessel";
@@ -53,22 +81,22 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 							.make(ctx, statuses);
 				}
 			}
-//			if (vessel.isPrototype()) {
-//				String message = "Prototype vessels cannot inherit attributes";
-//				DetailConstraintStatusFactory factory = baseFactory.copyName() //
-//						.withMessage(message);
-//
-//				boolean foundFault = false;
-//
-//				if (vessel.getBasedOn() != null) {
-//					foundFault = true;
-//					factory.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_Reference());
-//				}
-//
-//				if (foundFault) {
-//					factory.make(ctx, statuses);
-//				}
-//			}
+			// if (vessel.isPrototype()) {
+			// String message = "Prototype vessels cannot inherit attributes";
+			// DetailConstraintStatusFactory factory = baseFactory.copyName() //
+			// .withMessage(message);
+			//
+			// boolean foundFault = false;
+			//
+			// if (vessel.getBasedOn() != null) {
+			// foundFault = true;
+			// factory.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_Reference());
+			// }
+			//
+			// if (foundFault) {
+			// factory.make(ctx, statuses);
+			// }
+			// }
 		}
 
 		return Activator.PLUGIN_ID;
