@@ -169,6 +169,37 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Load/Start Window", "Load or vessel event window start date", ColumnType.NORMAL, new BaseFormatter() {
+
+						@Override
+						public Comparable getComparable(Object object) {
+							if (object instanceof Row) {
+								final Row row = (Row) object;
+								final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
+								if (openSlotAllocation != null) {
+									final Slot slot = openSlotAllocation.getSlot();
+									if (slot != null) {
+										return slot.getWindowStart();
+									}
+								}
+								final SlotAllocation slotAllocation = row.getLoadAllocation();
+								if (slotAllocation != null) {
+									final Slot slot = slotAllocation.getSlot();
+									if (slot instanceof LoadSlot) {
+										return slot.getWindowStart();
+									}
+								}
+								if (row.getTarget() instanceof VesselEventVisit) {
+									final VesselEventVisit visit = (VesselEventVisit) row.getTarget();
+									final VesselEvent event = visit.getVesselEvent();
+									if (event != null) {
+										return event.getStartAfter().toLocalDate();
+
+									}
+								}
+							}
+							return null;
+						}
+
 						@Override
 						public String render(final Object object) {
 
