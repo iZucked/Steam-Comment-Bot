@@ -229,7 +229,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	@Provides
 	@Named(OPTIMISER_REEVALUATE)
 	private boolean isOptimiserReevaluating() {
-		return true;
+		return false;
 	}
 
 	@Provides
