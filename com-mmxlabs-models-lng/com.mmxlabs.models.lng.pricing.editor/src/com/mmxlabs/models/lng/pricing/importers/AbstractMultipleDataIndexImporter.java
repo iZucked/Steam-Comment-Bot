@@ -134,7 +134,7 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 		if (row.containsKey(CURRENCY_UNITS)) {
 			result.setCurrencyUnit(row.get(CURRENCY_UNITS));
 		}
-		final Index<Double> indexData = importDoubleIndex(row, isUnified ? getIgnoreSet(NAME, TYPE_KEY) : Collections.singleton(NAME), context);
+		final Index<Double> indexData = importDoubleIndex(row, getIgnoreSet(NAME, TYPE_KEY), context);
 		result.setData(indexData);
 
 		context.registerNamedObject(result);
