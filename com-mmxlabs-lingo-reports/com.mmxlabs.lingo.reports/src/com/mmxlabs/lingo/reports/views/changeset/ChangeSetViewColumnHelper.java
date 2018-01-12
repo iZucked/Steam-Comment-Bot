@@ -821,6 +821,47 @@ public class ChangeSetViewColumnHelper {
 				}
 			}
 
+			@Override
+			public String getToolTipText(final Object element) {
+
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
+
+					final StringBuilder sb = new StringBuilder();
+
+					final SlotAllocation originalAllocation;
+					final SlotAllocation newAllocation;
+					if (lhs) {
+						originalAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
+						newAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
+					} else {
+						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						originalAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+						newAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+					}
+
+					Slot s = null;
+					if (newAllocation != null) {
+						s = newAllocation.getSlot();
+					} else if (originalAllocation != null) {
+						s = originalAllocation.getSlot();
+					}
+					if (s != null) {
+						sb.append(s.getName());
+						if (s.getContract() != null) {
+							sb.append("\nContract: " + s.getContract().getName());
+						}
+						;
+						if (s.getPort() != null) {
+							sb.append("\nPort: " + s.getPort().getName());
+						}
+					}
+
+					return sb.toString();
+				}
+				return super.getToolTipText(element);
+			}
+
 		};
 	}
 
