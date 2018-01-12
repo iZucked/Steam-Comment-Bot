@@ -39,6 +39,15 @@ public class VesselsRepository {
 		}
 	}
 	
+	public IVesselsProvider getVesselsProvider(String versionTag) {
+		try {
+			return new DefaultVesselsProvider(versionTag, vesselsApi.getVesselsUsingGET());
+		} catch (Exception e) {
+			// Pass
+		}
+		return null;
+	}
+	
 	private void ensureReady() {
 		if (!isReady()) {
 			throw new IllegalStateException("Pricing back-end not ready yet");

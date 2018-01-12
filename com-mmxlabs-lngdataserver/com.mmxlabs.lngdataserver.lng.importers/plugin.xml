@@ -61,4 +61,24 @@
                name="Copy prices to scenario">
          </command>
       </extension>
+      <extension
+            point="org.eclipse.ui.commands">
+         <command
+               defaultHandler="com.mmxlabs.lngdataserver.lng.importers.vessels.ui.ImportVesselsWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.vessels"
+               name="Copy vessels to scenario">
+         </command>
+      </extension>
+      <extension
+            point="org.eclipse.ui.menus">
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=dataStart">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.vessels"
+                  label="Import vessels"
+                  style="push">
+            </command>
+         </menuContribution>
+      </extension>
 </plugin>

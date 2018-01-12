@@ -27,3 +27,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.serviceintegration.vessels.internal.Activator
 Bundle-ClassPath: lib/vessels-client-1.0.0.jar,
  .
+Export-Package: com.mmxlabs.lngdataserver.vessel,
+ com.mmxlabs.lngdataserver.vessel.model,
+ com.mmxlabs.serviceintegration.vessels.internal
