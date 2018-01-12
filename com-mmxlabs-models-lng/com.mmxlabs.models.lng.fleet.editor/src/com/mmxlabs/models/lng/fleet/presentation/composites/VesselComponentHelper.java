@@ -97,6 +97,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_hasReliqCapabilityOverrideEditor(detailComposite, topClass);
 		add_hasReliqCapabilityEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
+		add_mmxIdEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the shortName feature on Vessel
@@ -298,6 +299,15 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_notesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new MultiTextInlineEditor(FleetPackage.Literals.VESSEL__NOTES));
+	}
+
+	/**
+	 * Create the editor for the mmxId feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_mmxIdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__MMX_ID));
 	}
 
 	/**

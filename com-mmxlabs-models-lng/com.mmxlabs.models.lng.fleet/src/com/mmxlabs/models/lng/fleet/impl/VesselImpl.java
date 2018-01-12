@@ -67,6 +67,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isHasReliqCapabilityOverride <em>Has Reliq Capability Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMmxId <em>Mmx Id</em>}</li>
  * </ul>
  *
  * @generated
@@ -676,6 +677,26 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected String notes = NOTES_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMmxId() <em>Mmx Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMmxId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String MMX_ID_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getMmxId() <em>Mmx Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMmxId()
+	 * @generated
+	 * @ordered
+	 */
+	protected String mmxId = MMX_ID_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1593,6 +1614,27 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getMmxId() {
+		return mmxId;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMmxId(String newMmxId) {
+		String oldMmxId = mmxId;
+		mmxId = newMmxId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__MMX_ID, oldMmxId, mmxId));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getScnt() {
 		return scnt;
 	}
@@ -2107,6 +2149,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isHasReliqCapability();
 			case FleetPackage.VESSEL__NOTES:
 				return getNotes();
+			case FleetPackage.VESSEL__MMX_ID:
+				return getMmxId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -2209,6 +2253,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__NOTES:
 				setNotes((String)newValue);
 				return;
+			case FleetPackage.VESSEL__MMX_ID:
+				setMmxId((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -2307,6 +2354,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL__MMX_ID:
+				setMmxId(MMX_ID_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -2376,6 +2426,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return hasReliqCapability != HAS_RELIQ_CAPABILITY_EDEFAULT;
 			case FleetPackage.VESSEL__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
+			case FleetPackage.VESSEL__MMX_ID:
+				return MMX_ID_EDEFAULT == null ? mmxId != null : !MMX_ID_EDEFAULT.equals(mmxId);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2388,7 +2440,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (shortName: ");
 		result.append(shortName);
 		result.append(", IMO: ");
@@ -2429,6 +2481,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(hasReliqCapability);
 		result.append(", notes: ");
 		result.append(notes);
+		result.append(", mmxId: ");
+		result.append(mmxId);
 		result.append(')');
 		return result.toString();
 	}

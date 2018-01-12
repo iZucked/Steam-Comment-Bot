@@ -862,7 +862,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (nboRate: ");
 		if (nboRateESet) result.append(nboRate); else result.append("<unset>");
 		result.append(", idleNBORate: ");

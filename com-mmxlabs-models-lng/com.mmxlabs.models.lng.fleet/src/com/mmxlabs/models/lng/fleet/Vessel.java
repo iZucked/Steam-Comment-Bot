@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapabilityOverride <em>Has Reliq Capability Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMmxId <em>Mmx Id</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -858,6 +859,32 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	void setNotes(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Mmx Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Mmx Id</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mmx Id</em>' attribute.
+	 * @see #setMmxId(String)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MmxId()
+	 * @model
+	 * @generated
+	 */
+	String getMmxId();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMmxId <em>Mmx Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mmx Id</em>' attribute.
+	 * @see #getMmxId()
+	 * @generated
+	 */
+	void setMmxId(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.
