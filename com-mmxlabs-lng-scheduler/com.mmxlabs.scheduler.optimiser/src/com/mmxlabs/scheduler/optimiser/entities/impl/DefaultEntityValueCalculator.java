@@ -257,7 +257,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Calculate transfer pricing etc between entities
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
-		evaluateCargoPNL(evaluationMode, cargoPNLData, baseEntity, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		evaluateCargoPNL(evaluationMode, vesselAvailability, plan, cargoPNLData, baseEntity, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
 
 		// Shipping Entity for non-cargo costings - handle any transfer pricing etc required
 		IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
@@ -380,8 +380,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param baseEntity
 	 * @param entityProfit
 	 */
-	protected void evaluateCargoPNL(@NonNull final EvaluationMode evaluationMode, @NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final IEntity baseEntity,
-			@NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+	protected void evaluateCargoPNL(@NonNull final EvaluationMode evaluationMode, @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan plan,
+			@NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final IEntity baseEntity, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit,
+			@Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		int idx = 0;
 		for (final IPortSlot slot : cargoPNLData.getSlots()) {
