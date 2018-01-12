@@ -453,6 +453,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="capacities" upperBound="-1"
         eType="#//InventoryCapacityRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="InventoryFrequency">
     <eLiterals name="Cargo"/>

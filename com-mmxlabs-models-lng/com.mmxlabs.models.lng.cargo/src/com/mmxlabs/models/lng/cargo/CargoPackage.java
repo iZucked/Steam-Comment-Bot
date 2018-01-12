@@ -5287,13 +5287,22 @@ public interface CargoPackage extends EPackage {
 	int INVENTORY__NAME = 5;
 
 	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__PORT = 6;
+
+	/**
 	 * The number of structural features of the '<em>Inventory</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_FEATURE_COUNT = 6;
+	int INVENTORY_FEATURE_COUNT = 7;
 
 	/**
 	 * The number of operations of the '<em>Inventory</em>' class.
@@ -7918,6 +7927,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getInventory_Name();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Inventory#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getPort()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EReference getInventory_Port();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot <em>Canal Booking Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9893,6 +9913,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INVENTORY__NAME = eINSTANCE.getInventory_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY__PORT = eINSTANCE.getInventory_Port();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl <em>Canal Booking Slot</em>}' class.

@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.port.Port;
 import java.time.LocalDate;
 
 import org.eclipse.emf.common.util.EList;
@@ -27,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Inventory#getOfftakes <em>Offtakes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Inventory#getCapacities <em>Capacities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Inventory#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Inventory#getPort <em>Port</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventory()
@@ -159,5 +161,31 @@ public interface Inventory extends EObject {
 	 * @generated
 	 */
 	void setName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port</em>' reference.
+	 * @see #setPort(Port)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventory_Port()
+	 * @model
+	 * @generated
+	 */
+	Port getPort();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Inventory#getPort <em>Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port</em>' reference.
+	 * @see #getPort()
+	 * @generated
+	 */
+	void setPort(Port value);
 
 } // Inventory

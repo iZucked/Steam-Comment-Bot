@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 
+import com.mmxlabs.models.lng.port.Port;
 import java.time.LocalDate;
 
 import java.util.Collection;
@@ -43,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getOfftakes <em>Offtakes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getCapacities <em>Capacities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getPort <em>Port</em>}</li>
  * </ul>
  *
  * @generated
@@ -137,6 +139,16 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port port;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -261,6 +273,44 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Port getPort() {
+		if (port != null && port.eIsProxy()) {
+			InternalEObject oldPort = (InternalEObject)port;
+			port = (Port)eResolveProxy(oldPort);
+			if (port != oldPort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.INVENTORY__PORT, oldPort, port));
+			}
+		}
+		return port;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetPort() {
+		return port;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPort(Port newPort) {
+		Port oldPort = port;
+		port = newPort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY__PORT, oldPort, port));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -294,6 +344,9 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 				return getCapacities();
 			case CargoPackage.INVENTORY__NAME:
 				return getName();
+			case CargoPackage.INVENTORY__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -328,6 +381,9 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 			case CargoPackage.INVENTORY__NAME:
 				setName((String)newValue);
 				return;
+			case CargoPackage.INVENTORY__PORT:
+				setPort((Port)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -358,6 +414,9 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 			case CargoPackage.INVENTORY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case CargoPackage.INVENTORY__PORT:
+				setPort((Port)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -382,6 +441,8 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 				return capacities != null && !capacities.isEmpty();
 			case CargoPackage.INVENTORY__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case CargoPackage.INVENTORY__PORT:
+				return port != null;
 		}
 		return super.eIsSet(featureID);
 	}

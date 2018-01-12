@@ -73,6 +73,7 @@ public class InventoryComponentHelper extends BaseComponentHelper {
 		add_offtakesEditor(detailComposite, topClass);
 		add_capacitiesEditor(detailComposite, topClass);
 		add_nameEditor(detailComposite, topClass);
+		add_portEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the startDate feature on Inventory
@@ -123,5 +124,14 @@ public class InventoryComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_nameEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY__NAME));
+	}
+
+	/**
+	 * Create the editor for the port feature on Inventory
+	 *
+	 * @generated
+	 */
+	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY__PORT));
 	}
 }

@@ -1953,6 +1953,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getInventory_Port() {
+		return (EReference)inventoryEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCanalBookingSlot() {
 		return canalBookingSlotEClass;
 	}
@@ -2611,6 +2620,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(inventoryEClass, INVENTORY__OFFTAKES);
 		createEReference(inventoryEClass, INVENTORY__CAPACITIES);
 		createEAttribute(inventoryEClass, INVENTORY__NAME);
+		createEReference(inventoryEClass, INVENTORY__PORT);
 
 		canalBookingSlotEClass = createEClass(CANAL_BOOKING_SLOT);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__ROUTE_OPTION);
@@ -2989,6 +2999,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getInventory_Offtakes(), this.getInventoryEventRow(), null, "offtakes", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventory_Capacities(), this.getInventoryCapacityRow(), null, "capacities", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventory_Name(), ecorePackage.getEString(), "name", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventory_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalBookingSlotEClass, CanalBookingSlot.class, "CanalBookingSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCanalBookingSlot_RouteOption(), thePortPackage.getRouteOption(), "routeOption", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
