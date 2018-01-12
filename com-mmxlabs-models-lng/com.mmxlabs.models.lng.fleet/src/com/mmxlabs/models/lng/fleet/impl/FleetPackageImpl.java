@@ -111,7 +111,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link FleetPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -125,7 +125,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		if (isInited) return (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Obtain or create and register package
-		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new FleetPackageImpl());
+		Object registeredFleetPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		FleetPackageImpl theFleetPackage = registeredFleetPackage instanceof FleetPackageImpl ? (FleetPackageImpl)registeredFleetPackage : new FleetPackageImpl();
 
 		isInited = true;
 
@@ -144,7 +145,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		// Mark meta-data to indicate it can't be changed
 		theFleetPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(FleetPackage.eNS_URI, theFleetPackage);
 		return theFleetPackage;
@@ -355,6 +355,15 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	public EAttribute getVessel_Notes() {
 		return (EAttribute)vesselEClass.getEStructuralFeatures().get(28);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVessel_MmxId() {
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(29);
 	}
 
 	/**
@@ -739,6 +748,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselEClass, VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE);
 		createEAttribute(vesselEClass, VESSEL__HAS_RELIQ_CAPABILITY);
 		createEAttribute(vesselEClass, VESSEL__NOTES);
+		createEAttribute(vesselEClass, VESSEL__MMX_ID);
 
 		vesselGroupEClass = createEClass(VESSEL_GROUP);
 		createEReference(vesselGroupEClass, VESSEL_GROUP__VESSELS);
@@ -856,6 +866,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVessel_HasReliqCapabilityOverride(), ecorePackage.getEBoolean(), "hasReliqCapabilityOverride", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_HasReliqCapability(), ecorePackage.getEBoolean(), "hasReliqCapability", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_MmxId(), ecorePackage.getEString(), "mmxId", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(vesselEClass, ecorePackage.getEString(), "getShortenedName", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -961,169 +972,169 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getBaseFuel_EquivalenceFactor(), 
-		   source, 
+		  (getBaseFuel_EquivalenceFactor(),
+		   source,
 		   new String[] {
-			 "unit", "mmBtu/mt",
-			 "formatString", "##.###"
-		   });	
+			   "unit", "mmBtu/mt",
+			   "formatString", "##.###"
+		   });
 		addAnnotation
-		  (getVessel_Capacity(), 
-		   source, 
+		  (getVessel_Capacity(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
-		   });	
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0"
+		   });
 		addAnnotation
-		  (getVessel_FillCapacity(), 
-		   source, 
+		  (getVessel_FillCapacity(),
+		   source,
 		   new String[] {
-			 "scale", "100",
-			 "formatString", "##0.#",
-			 "unit", "%",
-			 "exportFormatString", "#.###"
-		   });	
+			   "scale", "100",
+			   "formatString", "##0.#",
+			   "unit", "%",
+			   "exportFormatString", "#.###"
+		   });
 		addAnnotation
-		  (getVessel_MinSpeed(), 
-		   source, 
+		  (getVessel_MinSpeed(),
+		   source,
 		   new String[] {
-			 "unit", "kts",
-			 "formatString", "#0.###"
-		   });	
+			   "unit", "kts",
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getVessel_MaxSpeed(), 
-		   source, 
+		  (getVessel_MaxSpeed(),
+		   source,
 		   new String[] {
-			 "unit", "kts",
-			 "formatString", "#0.###"
-		   });	
+			   "unit", "kts",
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getVessel_SafetyHeel(), 
-		   source, 
+		  (getVessel_SafetyHeel(),
+		   source,
 		   new String[] {
-			 "formatString", "###,##0",
-			 "unit", "m\u00b3"
-		   });	
+			   "formatString", "###,##0",
+			   "unit", "m\u00b3"
+		   });
 		addAnnotation
-		  (getVessel_WarmingTime(), 
-		   source, 
+		  (getVessel_WarmingTime(),
+		   source,
 		   new String[] {
-			 "unit", "hrs",
-			 "formatString", "##0"
-		   });	
+			   "unit", "hrs",
+			   "formatString", "##0"
+		   });
 		addAnnotation
-		  (getVessel_CoolingVolume(), 
-		   source, 
+		  (getVessel_CoolingVolume(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
-		   });	
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0"
+		   });
 		addAnnotation
-		  (getVessel_PilotLightRate(), 
-		   source, 
+		  (getVessel_PilotLightRate(),
+		   source,
 		   new String[] {
-			 "unit", "MT/day",
-			 "formatString", "##0.##"
-		   });	
+			   "unit", "MT/day",
+			   "formatString", "##0.##"
+		   });
 		addAnnotation
-		  (getVessel_MinBaseFuelConsumption(), 
-		   source, 
+		  (getVessel_MinBaseFuelConsumption(),
+		   source,
 		   new String[] {
-			 "unit", "MT/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "MT/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselStateAttributes_NboRate(), 
-		   source, 
+		  (getVesselStateAttributes_NboRate(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "m\u00b3/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselStateAttributes_IdleNBORate(), 
-		   source, 
+		  (getVesselStateAttributes_IdleNBORate(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "m\u00b3/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselStateAttributes_IdleBaseRate(), 
-		   source, 
+		  (getVesselStateAttributes_IdleBaseRate(),
+		   source,
 		   new String[] {
-			 "unit", "MT/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "MT/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselStateAttributes_InPortBaseRate(), 
-		   source, 
+		  (getVesselStateAttributes_InPortBaseRate(),
+		   source,
 		   new String[] {
-			 "unit", "MT/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "MT/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselStateAttributes_ServiceSpeed(), 
-		   source, 
+		  (getVesselStateAttributes_ServiceSpeed(),
+		   source,
 		   new String[] {
-			 "unit", "kts",
-			 "formatString", "#0.###"
-		   });	
+			   "unit", "kts",
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getVesselStateAttributes_InPortNBORate(), 
-		   source, 
+		  (getVesselStateAttributes_InPortNBORate(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "m\u00b3/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getFuelConsumption_Speed(), 
-		   source, 
+		  (getFuelConsumption_Speed(),
+		   source,
 		   new String[] {
-			 "unit", "kts",
-			 "formatString", "#0.###"
-		   });	
+			   "unit", "kts",
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getFuelConsumption_Consumption(), 
-		   source, 
+		  (getFuelConsumption_Consumption(),
+		   source,
 		   new String[] {
-			 "unit", "MT/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "MT/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselClassRouteParameters_ExtraTransitTime(), 
-		   source, 
+		  (getVesselClassRouteParameters_ExtraTransitTime(),
+		   source,
 		   new String[] {
-			 "unit", "hours",
-			 "formatString", "##0"
-		   });	
+			   "unit", "hours",
+			   "formatString", "##0"
+		   });
 		addAnnotation
-		  (getVesselClassRouteParameters_LadenConsumptionRate(), 
-		   source, 
+		  (getVesselClassRouteParameters_LadenConsumptionRate(),
+		   source,
 		   new String[] {
-			 "unit", "MT/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "MT/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselClassRouteParameters_LadenNBORate(), 
-		   source, 
+		  (getVesselClassRouteParameters_LadenNBORate(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "m\u00b3/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselClassRouteParameters_BallastConsumptionRate(), 
-		   source, 
+		  (getVesselClassRouteParameters_BallastConsumptionRate(),
+		   source,
 		   new String[] {
-			 "unit", "MT/day",
-			 "formatString", "##0.###"
-		   });	
+			   "unit", "MT/day",
+			   "formatString", "##0.###"
+		   });
 		addAnnotation
-		  (getVesselClassRouteParameters_BallastNBORate(), 
-		   source, 
+		  (getVesselClassRouteParameters_BallastNBORate(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3/day",
-			 "formatString", "##0.###"
+			   "unit", "m\u00b3/day",
+			   "formatString", "##0.###"
 		   });
 	}
 
@@ -1134,10 +1145,10 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	protected void createFeatureOverrideAnnotations() {
-		String source = "http://www.mmxlabs.com/models/featureOverride";	
+		String source = "http://www.mmxlabs.com/models/featureOverride";
 		addAnnotation
-		  (vesselEClass, 
-		   source, 
+		  (vesselEClass,
+		   source,
 		   new String[] {
 		   },
 		   new URI[] {
@@ -1152,12 +1163,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	protected void createFeatureEnablementAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/featureEnablement";	
+		String source = "http://www.mmxlabs.com/models/ui/featureEnablement";
 		addAnnotation
-		  (getVessel_HasReliqCapability(), 
-		   source, 
+		  (getVessel_HasReliqCapability(),
+		   source,
 		   new String[] {
-			 "feature", "reliq-support"
+			   "feature", "reliq-support"
 		   });
 	}
 
@@ -1168,12 +1179,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	protected void createCsvAnnotations() {
-		String source = "http://www.mmxlabs.com/models/csv";	
+		String source = "http://www.mmxlabs.com/models/csv";
 		addAnnotation
-		  (vesselGroupEClass, 
-		   source, 
+		  (vesselGroupEClass,
+		   source,
 		   new String[] {
-			 "namePrefix", "VesselGroup"
+			   "namePrefix", "VesselGroup"
 		   });
 	}
 
@@ -1184,10 +1195,10 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	protected void createFeatureOverrideByContainerAnnotations() {
-		String source = "http://www.mmxlabs.com/models/featureOverrideByContainer";	
+		String source = "http://www.mmxlabs.com/models/featureOverrideByContainer";
 		addAnnotation
-		  (vesselStateAttributesEClass, 
-		   source, 
+		  (vesselStateAttributesEClass,
+		   source,
 		   new String[] {
 		   },
 		   new URI[] {
