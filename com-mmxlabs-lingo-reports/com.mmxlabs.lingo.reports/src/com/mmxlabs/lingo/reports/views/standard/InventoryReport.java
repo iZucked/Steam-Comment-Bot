@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -68,15 +69,14 @@ public class InventoryReport extends ViewPart {
 					if (toDisplay != null) {
 						final LNGScenarioModel scenarioModel = (LNGScenarioModel) toDisplay.getRootObject();
 						final CargoModel cargoModel = scenarioModel.getCargoModel();
-						Inventory inventory = null;
-						for (final Inventory invent : cargoModel.getInventoryModels()) {
-							if (invent.getName().equals("Bintulu")) {
-								inventory = invent;
-								break;
-							}
-						}
-						if (inventory != null) {
-							final ISeriesSet seriesSet = viewer.getSeriesSet();
+						// Inventory inventory = null;
+						final ISeriesSet seriesSet = viewer.getSeriesSet();
+						// TODO: Delete existing data
+						// seriesSet.getSeries().
+
+						int colour = 3;
+						for (final Inventory inventory : cargoModel.getInventoryModels()) {
+
 							{
 								final List<Pair<LocalDate, Integer>> changes = new LinkedList<>();
 								for (final InventoryEventRow r : inventory.getFeeds()) {
@@ -129,8 +129,10 @@ public class InventoryReport extends ViewPart {
 									final Schedule schedule = scheduleModel.getSchedule();
 									if (schedule != null) {
 										for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
-											if (slotAllocation.getPort().getName().equals("Bintulu")) {
-												changes.add(new Pair<>(LocalDate.from(slotAllocation.getSlotVisit().getStart()), -slotAllocation.getPhysicalVolumeTransferred()));
+											if (slotAllocation.getPort() == inventory.getPort()) {
+												int change = (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) ? -slotAllocation.getPhysicalVolumeTransferred()
+														: slotAllocation.getPhysicalVolumeTransferred();
+												changes.add(new Pair<>(LocalDate.from(slotAllocation.getSlotVisit().getStart()), change));
 											}
 										}
 									}
@@ -138,6 +140,7 @@ public class InventoryReport extends ViewPart {
 
 								//
 								final Map<LocalDate, List<Integer>> m = changes.stream() //
+										.filter(p -> p.getFirst() != null && p.getSecond() != null) //
 										.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
 
 								final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m);
@@ -156,10 +159,15 @@ public class InventoryReport extends ViewPart {
 								}
 
 								{
-									final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Bintulu");
+									final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, inventory.getName());
 									createSeries.setXDateSeries(dates);
 									createSeries.setYSeries(values);
 									createSeries.setSymbolSize(2);
+									// Used for max level
+									if (colour == SWT.COLOR_RED) {
+										colour++;
+									}
+									createSeries.setLineColor(Display.getDefault().getSystemColor(colour++));
 
 								}
 							}
@@ -172,51 +180,54 @@ public class InventoryReport extends ViewPart {
 								}
 								{
 									final Map<LocalDate, List<Integer>> m = max_level.stream() //
+											.filter(p -> p.getFirst() != null && p.getSecond() != null) //
 											.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
 
-									final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m);
+									if (m.size() > 0) {
 
-									final Date[] dates = new Date[2 * sorted.size() - 1];
-									final double[] values = new double[2* sorted.size() - 1];
-									int idx = 0;
-									for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
-										
-										if (idx != 0) {
+										final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m);
+
+										final Date[] dates = new Date[2 * sorted.size() - 1];
+										final double[] values = new double[2 * sorted.size() - 1];
+										int idx = 0;
+										for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
+
+											if (idx != 0) {
+												dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
+												values[idx] = values[idx - 1];
+												idx++;
+											}
+
+											final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
+
 											dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-											values[idx] = values[idx - 1];
+											values[idx] = (double) sum;
 											idx++;
 										}
-										
-										final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
-										
-										dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-										values[idx] = (double) sum;
-										idx++;
+										final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, inventory.getName() + "-Max");
+										createSeries.setXDateSeries(dates);
+										createSeries.setYSeries(values);
+										createSeries.setSymbolSize(2);
+										createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 									}
-
-									final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Bintulu-Max");
-									createSeries.setXDateSeries(dates);
-									createSeries.setYSeries(values);
-									createSeries.setSymbolSize(2);
-									createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 								}
 							}
-
-							final IAxisSet axisSet = viewer.getAxisSet();
-
-							viewer.getTitle().setText("Bintulu Inventory");
-							viewer.getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-							viewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-							viewer.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-							viewer.getAxisSet().getXAxis(0).getTitle().setText("Date");
-							viewer.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-							viewer.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-							viewer.getAxisSet().getYAxis(0).getTitle().setText("Volume");
-							// 5. adjust the range for all axes.
-
-							axisSet.adjustRange();
-							viewer.redraw();
 						}
+						final IAxisSet axisSet = viewer.getAxisSet();
+
+						viewer.getTitle().setText("Inventory");
+						viewer.getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+						viewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+						viewer.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+						viewer.getAxisSet().getXAxis(0).getTitle().setText("Date");
+						viewer.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+						viewer.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+						viewer.getAxisSet().getYAxis(0).getTitle().setText("Volume");
+						// 5. adjust the range for all axes.
+
+						axisSet.adjustRange();
+						viewer.redraw();
+
 					}
 				}
 			};
