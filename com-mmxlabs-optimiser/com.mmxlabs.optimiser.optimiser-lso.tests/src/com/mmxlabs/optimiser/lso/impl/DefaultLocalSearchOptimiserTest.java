@@ -5,6 +5,7 @@
 package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -102,6 +103,16 @@ public class DefaultLocalSearchOptimiserTest {
 		lso.setLookupManager(new ILookupManager() {
 			@Override
 			public void createLookup(@NonNull ISequences sequences) {
+
+			}
+
+			@Override
+			public void updateLookup(@NonNull ISequences sequences, @Nullable Collection<IResource> changedResources) {
+
+			}
+
+			@Override
+			public void updateLookup(@NonNull ISequences sequences, IResource... changedResources) {
 
 			}
 

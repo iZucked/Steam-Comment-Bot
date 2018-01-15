@@ -164,7 +164,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 				updateSequences(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move.getAffectedResources());
 
 				// Update move sequences.
-				setSequences(pinnedPotentialRawSequences);
+				updateSequencesLookup(pinnedPotentialRawSequences, move.getAffectedResources());
 
 				setNumberOfMovesAccepted(getNumberOfMovesAccepted() + 1);
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {

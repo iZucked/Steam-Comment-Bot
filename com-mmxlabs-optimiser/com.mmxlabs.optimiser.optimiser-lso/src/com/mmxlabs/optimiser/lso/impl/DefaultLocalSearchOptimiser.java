@@ -93,7 +93,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		evaluateInputSequences(inputRawSequences);
 
 		// Set initial sequences
-		setSequences(potentialRawSequences);
+		updateSequencesLookup(potentialRawSequences, null);
 
 		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution();
 		if (annotatedBestSolution == null) {
@@ -227,7 +227,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			updateSequences(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move.getAffectedResources());
 
 			// Update move sequences.
-			setSequences(pinnedPotentialRawSequences);
+			updateSequencesLookup(pinnedPotentialRawSequences, move.getAffectedResources());
 
 			++numberOfMovesAccepted;
 			if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
