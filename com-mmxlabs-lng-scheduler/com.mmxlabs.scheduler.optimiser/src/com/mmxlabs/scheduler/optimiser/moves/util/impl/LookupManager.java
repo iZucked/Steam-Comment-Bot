@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.moves.util.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
@@ -45,35 +47,91 @@ public class LookupManager implements ILookupManager {
 
 	@Override
 	public void createLookup(final @NonNull ISequences rawSequences) {
+		updateLookup(rawSequences, (Collection<IResource>) null);
+	}
+
+	@Override
+	public void updateLookup(final @NonNull ISequences rawSequences, @Nullable Collection<IResource> changedResources) {
 
 		this.rawSequences = rawSequences;
-		this.reverseLookup.clear();
+		// Currently this is always true. In future update IMove API/usage to include null for unused list
+		boolean lookAtUnused = true;
 
-		// build table for elements in conventional sequences
-		for (final IResource resource : rawSequences.getResources()) {
-			final ISequence sequence = rawSequences.getSequence(resource);
-			for (int j = 0; j < sequence.size(); j++) {
-				final ISequenceElement element = sequence.get(j);
-				reverseLookup.put(element, new Pair<>(resource, j));
-				if (alternativeElementProvider != null && alternativeElementProvider.hasAlternativeElement(element)) {
-					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
-					// Negative numbers now indicate alternative
-					reverseLookup.put(alt, new Pair<>(null, -1));
-					// reverseLookup.get(alt).setBoth(null, -1);
-				}
-			}
+		final Collection<IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = rawSequences.getResources();
+			this.reverseLookup.clear();
+			lookAtUnused = true;
+		} else {
+			loopResources = changedResources;
 		}
 
+		// build table for elements in conventional sequences
+		for (final IResource resource : loopResources) {
+			if (resource == null) {
+				lookAtUnused = true;
+				continue;
+			}
+
+			updateSequence(rawSequences, resource);
+		}
+
+		if (lookAtUnused) {
+			updateUnusedElements(rawSequences);
+		}
+	}
+
+	@Override
+	public void updateLookup(final @NonNull ISequences rawSequences, IResource... changedResources) {
+
+		if (changedResources == null || changedResources.length == 0) {
+			createLookup(rawSequences);
+			return;
+		}
+
+		this.rawSequences = rawSequences;
+
+		boolean lookAtUnused = false;
+
+		// build table for elements in conventional sequences
+		for (final IResource resource : changedResources) {
+			if (resource == null) {
+				lookAtUnused = true;
+				continue;
+			}
+
+			updateSequence(rawSequences, resource);
+		}
+
+		if (lookAtUnused) {
+			updateUnusedElements(rawSequences);
+		}
+	}
+
+	private void updateUnusedElements(final @NonNull ISequences rawSequences) {
 		// build table for excluded elements
-		if (alternativeElementProvider != null) {
-			int x = 0;
-			for (final ISequenceElement element : rawSequences.getUnusedElements()) {
-				reverseLookup.put(element, new Pair<>(null, x));
+		int x = 0;
+		for (final ISequenceElement element : rawSequences.getUnusedElements()) {
+			reverseLookup.put(element, new Pair<>(null, x));
+			if (alternativeElementProvider != null) {
 				if (alternativeElementProvider.hasAlternativeElement(element)) {
 					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
 					reverseLookup.put(alt, new Pair<>(null, -1));
 				}
-				x++;
+			}
+			x++;
+		}
+	}
+
+	private void updateSequence(final @NonNull ISequences rawSequences, final @NonNull IResource resource) {
+		final ISequence sequence = rawSequences.getSequence(resource);
+		for (int j = 0; j < sequence.size(); j++) {
+			final ISequenceElement element = sequence.get(j);
+			reverseLookup.put(element, new Pair<>(resource, j));
+			if (alternativeElementProvider != null && alternativeElementProvider.hasAlternativeElement(element)) {
+				final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
+				// Negative numbers now indicate alternative
+				reverseLookup.put(alt, new Pair<>(null, -1));
 			}
 		}
 	}
