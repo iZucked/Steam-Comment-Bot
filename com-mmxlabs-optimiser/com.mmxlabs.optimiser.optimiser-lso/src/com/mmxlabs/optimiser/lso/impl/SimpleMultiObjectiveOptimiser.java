@@ -103,7 +103,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			// choose a solution from the archive
 			ISequences nonDominatedSolution = (ISequences) archive.get(r.nextInt(archive.size())).getFirst();
 			updateSequences(nonDominatedSolution, pinnedPotentialRawSequences, nonDominatedSolution.getResources());
-			setSequences(pinnedPotentialRawSequences);
+			updateSequencesLookup(pinnedPotentialRawSequences, nonDominatedSolution.getResources());
 
 			// Generate a new move
 			final IMove move = generateNewMove();

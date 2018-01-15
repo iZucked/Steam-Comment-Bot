@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.components;
 
+import java.util.Collection;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -22,7 +24,31 @@ public interface ILookupManager {
 	@Nullable
 	Pair<@Nullable IResource, @NonNull Integer> lookup(@NonNull ISequenceElement element);
 
+	/**
+	 * Initialise a new lookup table.
+	 * 
+	 * @param sequences
+	 */
 	void createLookup(@NonNull ISequences sequences);
+
+	/**
+	 * Update an existing lookup table with the changed resources. If the collection is null, perform a full initialisation.
+	 * 
+	 * Note: This method *always* updates the unused list.
+	 * 
+	 * @param sequences
+	 * @param changedResources
+	 */
+	void updateLookup(@NonNull ISequences sequences, @Nullable Collection<IResource> changedResources);
+	/**
+	 * Update an existing lookup table with the changed resources. If the array is empty/null, perform a full initialisation.
+	 * 
+	 * Note: This method will *only* update the unused list if null is passed in as an argument.
+	 * 
+	 * @param sequences
+	 * @param changedResources
+	 */
+	void updateLookup(@NonNull ISequences sequences, IResource... changedResources);
 
 	@NonNull
 	ISequences getRawSequences();

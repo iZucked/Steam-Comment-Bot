@@ -10,11 +10,12 @@ import java.util.Collection;
 import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
-import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.AbstractSequencesOptimiser;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
@@ -73,7 +74,7 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 		this.lookupManager = stateManager;
 	}
 
-	protected void setSequences(@NonNull ISequences rawSequences) {
+	protected void updateSequencesLookup(@NonNull ISequences rawSequences, @Nullable Collection<IResource> changedResources) {
 		this.lookupManager.createLookup(rawSequences);
 	}
 }
