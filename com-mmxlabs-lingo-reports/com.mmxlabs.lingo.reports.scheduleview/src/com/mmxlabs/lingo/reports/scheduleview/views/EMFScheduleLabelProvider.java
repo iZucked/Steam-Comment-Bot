@@ -60,6 +60,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -337,25 +338,24 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					}
 					tt.append(" \n");
 
-					if (slotVisit.getSequence().getSequenceType() == SequenceType.FOB_SALE) {
-						try {
-							CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-							Vessel nominatedVessel = cargoAllocation.getSlotAllocations().get(1).getSlot().getNominatedVessel();
-							tt.append("Vessel: " + nominatedVessel.getName() + " \n\n");
-						} catch (NullPointerException e) {
-							// I am being lazy...
+					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+					Sequence sequence = slotVisit.getSequence();
+					if (slotAllocation != null && sequence != null) {
+						final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+						if (cargoAllocation != null && cargoAllocation.getSlotAllocations().size() == 2) {
+							if (sequence.getSequenceType() == SequenceType.FOB_SALE) {
+								final Vessel nominatedVessel = cargoAllocation.getSlotAllocations().get(1).getSlot().getNominatedVessel();
+								if (nominatedVessel != null) {
+									tt.append("Vessel: " + nominatedVessel.getName() + " \n\n");
+								}
+							} else if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
+								final Vessel nominatedVessel = cargoAllocation.getSlotAllocations().get(0).getSlot().getNominatedVessel();
+								if (nominatedVessel != null) {
+									tt.append("Vessel: " + nominatedVessel.getName() + " \n\n");
+								}
+							}
 						}
 					}
-					if (slotVisit.getSequence().getSequenceType() == SequenceType.DES_PURCHASE) {
-						try {
-							CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-							Vessel nominatedVessel = cargoAllocation.getSlotAllocations().get(0).getSlot().getNominatedVessel();
-							tt.append("Vessel: " + nominatedVessel.getName() + " \n\n");
-						} catch (NullPointerException e) {
-							// I am being lazy...
-						}
-					}
-
 				}
 			}
 
