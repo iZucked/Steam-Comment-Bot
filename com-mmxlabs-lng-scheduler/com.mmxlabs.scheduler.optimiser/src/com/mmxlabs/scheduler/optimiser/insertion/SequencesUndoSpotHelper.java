@@ -40,6 +40,8 @@ public class SequencesUndoSpotHelper {
 
 		final IModifiableSequences revertedSeq = new ModifiableSequences(current);
 
+		IResource changedResources[] = new IResource[2];
+
 		for (final IResource r : revertedSeq.getResources()) {
 			final IModifiableSequence seq = revertedSeq.getModifiableSequence(r);
 
@@ -68,12 +70,15 @@ public class SequencesUndoSpotHelper {
 							if (!spotMarketSlotsProvider.isSpotMarketSlot(originalElement)) {
 								continue;
 							}
+
 							if (originalElement == e) {
 								// Same element, no change
 							} else if (spotMarketSlotsProvider.isEquivalentOption(originalElement, e)) {
 								// Same market and month, just another instance!
 								// Swap the current for the original.
 								seq.set(i, originalElement);
+								changedResources[0] = r;
+
 								final Pair<@Nullable IResource, Integer> lookup = currentLookup.lookup(originalElement);
 								if (lookup != null) {
 									final IResource newResource = lookup.getFirst();
@@ -82,15 +87,24 @@ public class SequencesUndoSpotHelper {
 									} else {
 										revertedSeq.getModifiableSequence(newResource).set(lookup.getSecond(), e);
 									}
+									changedResources[1] = newResource;
+								} else {
+									changedResources[1] = null;
 								}
 								// Re-generate the lookup table
-								currentLookup.createLookup(revertedSeq);
+								currentLookup.updateLookup(revertedSeq, changedResources);
 							}
 						}
 					}
 				}
 			}
 		}
+
+		if (!SequencesHitchHikerHelper.checkValidSequences(revertedSeq)) {
+			// Error!
+			return current;
+		}
+
 		return revertedSeq;
 	}
 
