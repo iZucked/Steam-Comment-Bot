@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Inventory;
 
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,13 +41,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class InventoryItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends NamedObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -68,78 +63,9 @@ public class InventoryItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addStartDatePropertyDescriptor(object);
-			addStartVolumePropertyDescriptor(object);
-			addNamePropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Start Date feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addStartDatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Inventory_startDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Inventory_startDate_feature", "_UI_Inventory_type"),
-				 CargoPackage.Literals.INVENTORY__START_DATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Start Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addStartVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Inventory_startVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Inventory_startVolume_feature", "_UI_Inventory_type"),
-				 CargoPackage.Literals.INVENTORY__START_VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Inventory_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Inventory_name_feature", "_UI_Inventory_type"),
-				 CargoPackage.Literals.INVENTORY__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -234,11 +160,6 @@ public class InventoryItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Inventory.class)) {
-			case CargoPackage.INVENTORY__START_DATE:
-			case CargoPackage.INVENTORY__START_VOLUME:
-			case CargoPackage.INVENTORY__NAME:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case CargoPackage.INVENTORY__FEEDS:
 			case CargoPackage.INVENTORY__OFFTAKES:
 			case CargoPackage.INVENTORY__CAPACITIES:
@@ -296,17 +217,6 @@ public class InventoryItemProvider
 				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

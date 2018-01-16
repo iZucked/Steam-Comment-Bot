@@ -284,6 +284,8 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 			case CargoPackage.INVENTORY: {
 				Inventory inventory = (Inventory)theEObject;
 				T1 result = caseInventory(inventory);
+				if (result == null) result = caseNamedObject(inventory);
+				if (result == null) result = caseMMXObject(inventory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

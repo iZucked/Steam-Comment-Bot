@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 import java.time.LocalDate;
 
 import java.util.Collection;
@@ -38,57 +39,24 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getStartDate <em>Start Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getStartVolume <em>Start Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getFeeds <em>Feeds</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getOfftakes <em>Offtakes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getCapacities <em>Capacities</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl#getPort <em>Port</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class InventoryImpl extends EObjectImpl implements Inventory {
+public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	/**
-	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStartDate()
+	 * @see #getPort()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate START_DATE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStartDate()
-	 * @generated
-	 * @ordered
-	 */
-	protected LocalDate startDate = START_DATE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getStartVolume() <em>Start Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStartVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int START_VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getStartVolume() <em>Start Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStartVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int startVolume = START_VOLUME_EDEFAULT;
+	protected Port port;
 
 	/**
 	 * The cached value of the '{@link #getFeeds() <em>Feeds</em>}' containment reference list.
@@ -121,36 +89,6 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 	protected EList<InventoryCapacityRow> capacities;
 
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port port;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -167,48 +105,6 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.INVENTORY;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LocalDate getStartDate() {
-		return startDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setStartDate(LocalDate newStartDate) {
-		LocalDate oldStartDate = startDate;
-		startDate = newStartDate;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY__START_DATE, oldStartDate, startDate));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getStartVolume() {
-		return startVolume;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setStartVolume(int newStartVolume) {
-		int oldStartVolume = startVolume;
-		startVolume = newStartVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY__START_VOLUME, oldStartVolume, startVolume));
 	}
 
 	/**
@@ -245,27 +141,6 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 			capacities = new EObjectContainmentEList.Resolving<InventoryCapacityRow>(InventoryCapacityRow.class, this, CargoPackage.INVENTORY__CAPACITIES);
 		}
 		return capacities;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY__NAME, oldName, name));
 	}
 
 	/**
@@ -332,21 +207,15 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.INVENTORY__START_DATE:
-				return getStartDate();
-			case CargoPackage.INVENTORY__START_VOLUME:
-				return getStartVolume();
+			case CargoPackage.INVENTORY__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 			case CargoPackage.INVENTORY__FEEDS:
 				return getFeeds();
 			case CargoPackage.INVENTORY__OFFTAKES:
 				return getOfftakes();
 			case CargoPackage.INVENTORY__CAPACITIES:
 				return getCapacities();
-			case CargoPackage.INVENTORY__NAME:
-				return getName();
-			case CargoPackage.INVENTORY__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -360,11 +229,8 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.INVENTORY__START_DATE:
-				setStartDate((LocalDate)newValue);
-				return;
-			case CargoPackage.INVENTORY__START_VOLUME:
-				setStartVolume((Integer)newValue);
+			case CargoPackage.INVENTORY__PORT:
+				setPort((Port)newValue);
 				return;
 			case CargoPackage.INVENTORY__FEEDS:
 				getFeeds().clear();
@@ -378,12 +244,6 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 				getCapacities().clear();
 				getCapacities().addAll((Collection<? extends InventoryCapacityRow>)newValue);
 				return;
-			case CargoPackage.INVENTORY__NAME:
-				setName((String)newValue);
-				return;
-			case CargoPackage.INVENTORY__PORT:
-				setPort((Port)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -396,11 +256,8 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.INVENTORY__START_DATE:
-				setStartDate(START_DATE_EDEFAULT);
-				return;
-			case CargoPackage.INVENTORY__START_VOLUME:
-				setStartVolume(START_VOLUME_EDEFAULT);
+			case CargoPackage.INVENTORY__PORT:
+				setPort((Port)null);
 				return;
 			case CargoPackage.INVENTORY__FEEDS:
 				getFeeds().clear();
@@ -410,12 +267,6 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 				return;
 			case CargoPackage.INVENTORY__CAPACITIES:
 				getCapacities().clear();
-				return;
-			case CargoPackage.INVENTORY__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case CargoPackage.INVENTORY__PORT:
-				setPort((Port)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -429,42 +280,16 @@ public class InventoryImpl extends EObjectImpl implements Inventory {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.INVENTORY__START_DATE:
-				return START_DATE_EDEFAULT == null ? startDate != null : !START_DATE_EDEFAULT.equals(startDate);
-			case CargoPackage.INVENTORY__START_VOLUME:
-				return startVolume != START_VOLUME_EDEFAULT;
+			case CargoPackage.INVENTORY__PORT:
+				return port != null;
 			case CargoPackage.INVENTORY__FEEDS:
 				return feeds != null && !feeds.isEmpty();
 			case CargoPackage.INVENTORY__OFFTAKES:
 				return offtakes != null && !offtakes.isEmpty();
 			case CargoPackage.INVENTORY__CAPACITIES:
 				return capacities != null && !capacities.isEmpty();
-			case CargoPackage.INVENTORY__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case CargoPackage.INVENTORY__PORT:
-				return port != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (startDate: ");
-		result.append(startDate);
-		result.append(", startVolume: ");
-		result.append(startVolume);
-		result.append(", name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } //InventoryImpl

@@ -1899,26 +1899,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getInventory_StartDate() {
-		return (EAttribute)inventoryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getInventory_StartVolume() {
-		return (EAttribute)inventoryEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getInventory_Feeds() {
-		return (EReference)inventoryEClass.getEStructuralFeatures().get(2);
+		return (EReference)inventoryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1927,7 +1909,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getInventory_Offtakes() {
-		return (EReference)inventoryEClass.getEStructuralFeatures().get(3);
+		return (EReference)inventoryEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1936,16 +1918,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getInventory_Capacities() {
-		return (EReference)inventoryEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getInventory_Name() {
-		return (EAttribute)inventoryEClass.getEStructuralFeatures().get(5);
+		return (EReference)inventoryEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1954,7 +1927,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getInventory_Port() {
-		return (EReference)inventoryEClass.getEStructuralFeatures().get(6);
+		return (EReference)inventoryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -2614,13 +2587,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__MAX_VOLUME);
 
 		inventoryEClass = createEClass(INVENTORY);
-		createEAttribute(inventoryEClass, INVENTORY__START_DATE);
-		createEAttribute(inventoryEClass, INVENTORY__START_VOLUME);
+		createEReference(inventoryEClass, INVENTORY__PORT);
 		createEReference(inventoryEClass, INVENTORY__FEEDS);
 		createEReference(inventoryEClass, INVENTORY__OFFTAKES);
 		createEReference(inventoryEClass, INVENTORY__CAPACITIES);
-		createEAttribute(inventoryEClass, INVENTORY__NAME);
-		createEReference(inventoryEClass, INVENTORY__PORT);
 
 		canalBookingSlotEClass = createEClass(CANAL_BOOKING_SLOT);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__ROUTE_OPTION);
@@ -2749,6 +2719,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		vesselTypeGroupEClass.getEGenericSuperTypes().add(g1);
 		startHeelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		inventoryEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		canalBookingSlotEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		canalBookingsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		vesselEventSpecificationEClass.getESuperTypes().add(this.getScheduleSpecificationEvent());
@@ -2993,13 +2964,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getInventoryCapacityRow_MaxVolume(), ecorePackage.getEInt(), "maxVolume", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(inventoryEClass, Inventory.class, "Inventory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getInventory_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getInventory_StartVolume(), ecorePackage.getEInt(), "startVolume", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventory_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventory_Feeds(), this.getInventoryEventRow(), null, "feeds", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventory_Offtakes(), this.getInventoryEventRow(), null, "offtakes", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventory_Capacities(), this.getInventoryCapacityRow(), null, "capacities", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getInventory_Name(), ecorePackage.getEString(), "name", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getInventory_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalBookingSlotEClass, CanalBookingSlot.class, "CanalBookingSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCanalBookingSlot_RouteOption(), thePortPackage.getRouteOption(), "routeOption", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
