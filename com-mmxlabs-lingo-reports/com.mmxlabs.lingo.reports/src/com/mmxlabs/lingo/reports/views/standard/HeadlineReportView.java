@@ -90,6 +90,7 @@ public class HeadlineReportView extends ViewPart {
 	 * which is used to calculate the required column width.
 	 */
 	public enum ColumnDefinition {
+		LABEL_SALES_REVENUE(ColumnType.Label, "Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-sales-revenue"), 
 		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
@@ -98,8 +99,7 @@ public class HeadlineReportView extends ViewPart {
 				"features:headline-idle-days"), //
 		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null, "features:optimisation-charter-out-generation"), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME,
 				"features:optimisation-charter-out-generation"), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:optimisation-charter-out-generation"), //
-		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"),  VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-purchase-cost"), //
-		LABEL_SALES_REVENUE(ColumnType.Label, "S. Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-sales-revenue"), //
+		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"),  VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-purchase-cost"), //	
 		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
 		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
 
