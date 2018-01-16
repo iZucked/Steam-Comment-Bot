@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -209,6 +210,8 @@ public class SlotInsertionOptimiserUnit {
 									"Unable to perform insertion on this scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
 						}
 						state.originalRawSequences = initialRawSequences;
+						state.lookupManager = injector.getInstance(ILookupManager.class);
+						state.lookupManager.createLookup(initialRawSequences);
 					}
 
 					{
@@ -221,10 +224,10 @@ public class SlotInsertionOptimiserUnit {
 						}
 
 						// Makes sure target slots are not contained in the solution.
+						final LookupManager lookupManager = new LookupManager(tmpRawSequences);
 						for (final IPortSlot portSlot : optionElements) {
 							final ISequenceElement element = portSlotProvider.getElement(portSlot);
 
-							final LookupManager lookupManager = new LookupManager(tmpRawSequences);
 							final @Nullable Pair<IResource, Integer> lookup = lookupManager.lookup(element);
 							if (lookup != null && lookup.getFirst() != null) {
 								@NonNull
