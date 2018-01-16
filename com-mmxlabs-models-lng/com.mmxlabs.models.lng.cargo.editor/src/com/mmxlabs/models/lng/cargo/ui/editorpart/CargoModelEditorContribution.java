@@ -6,24 +6,16 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.GroupMarker;
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -65,7 +57,6 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 
 /**
  */
@@ -245,14 +236,15 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				public void widgetSelected(SelectionEvent e) {
 
 					final Inventory inventory = CargoFactory.eINSTANCE.createInventory();
+					editorPart.getModelReference().executeWithTryLock(true, 200, () -> {
 
-					final CompoundCommand cmd = new CompoundCommand("New storage");
-					cmd.append(AddCommand.create(editorPart.getEditingDomain(), modelObject, CargoPackage.eINSTANCE.getCargoModel_InventoryModels(), inventory));
+						final CompoundCommand cmd = new CompoundCommand("New storage");
+						cmd.append(AddCommand.create(editorPart.getEditingDomain(), modelObject, CargoPackage.eINSTANCE.getCargoModel_InventoryModels(), inventory));
 
-					CommandStack commandStack = editorPart.getModelReference().getCommandStack();
-					commandStack.execute(cmd);
-					DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorPart, inventory, commandStack.getMostRecentCommand());
-
+						CommandStack commandStack = editorPart.getModelReference().getCommandStack();
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorPart, inventory, commandStack.getMostRecentCommand());
+					});
 					comboViewer.setInput(modelObject.getInventoryModels());
 				}
 
