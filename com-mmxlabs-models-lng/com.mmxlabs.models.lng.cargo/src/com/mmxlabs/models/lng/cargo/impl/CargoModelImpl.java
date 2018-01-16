@@ -123,7 +123,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	protected EList<VesselTypeGroup> vesselTypeGroups;
 
 	/**
-	 * The cached value of the '{@link #getInventoryModels() <em>Inventory Models</em>}' reference list.
+	 * The cached value of the '{@link #getInventoryModels() <em>Inventory Models</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getInventoryModels()
@@ -262,7 +262,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 */
 	public EList<Inventory> getInventoryModels() {
 		if (inventoryModels == null) {
-			inventoryModels = new EObjectResolvingEList<Inventory>(Inventory.class, this, CargoPackage.CARGO_MODEL__INVENTORY_MODELS);
+			inventoryModels = new EObjectContainmentEList.Resolving<Inventory>(Inventory.class, this, CargoPackage.CARGO_MODEL__INVENTORY_MODELS);
 		}
 		return inventoryModels;
 	}
@@ -367,6 +367,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
 				return ((InternalEList<?>)getVesselTypeGroups()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
+				return ((InternalEList<?>)getInventoryModels()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
 				return basicSetCanalBookings(null, msgs);
 			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:

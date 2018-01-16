@@ -148,7 +148,7 @@ public interface CargoModel extends UUIDObject {
 	EList<VesselTypeGroup> getVesselTypeGroups();
 
 	/**
-	 * Returns the value of the '<em><b>Inventory Models</b></em>' reference list.
+	 * Returns the value of the '<em><b>Inventory Models</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Inventory}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -156,9 +156,9 @@ public interface CargoModel extends UUIDObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Inventory Models</em>' reference list.
+	 * @return the value of the '<em>Inventory Models</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_InventoryModels()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Inventory> getInventoryModels();
