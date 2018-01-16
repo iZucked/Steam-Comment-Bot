@@ -425,8 +425,9 @@
     <factory
           ID="com.mmxlabs.models.lng.cargo.InventoryEventRow.Factory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Offtake"
+          label="Event"
           outputEClass="com.mmxlabs.models.lng.cargo.InventoryEventRow"
+          replacementEReference="offtakes"
           targetEClass="com.mmxlabs.models.lng.cargo.InventoryEventRow">
     </factory>
     <factory
