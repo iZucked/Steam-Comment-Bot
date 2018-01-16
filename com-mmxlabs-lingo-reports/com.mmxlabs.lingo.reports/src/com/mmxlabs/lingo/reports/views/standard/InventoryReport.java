@@ -96,7 +96,18 @@ public class InventoryReport extends ViewPart {
 						List<Inventory> models = cargoModel.getInventoryModels().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 						comboViewer.setInput(models);
 						if (!models.isEmpty()) {
-							selectedInventory = cargoModel.getInventoryModels().get(0);
+							if (lastFacility != null) {
+								for (Inventory inventory : cargoModel.getInventoryModels()) {
+									if (lastFacility.equals(inventory.getName())) {
+										selectedInventory = inventory;
+										break;
+									}
+								}
+							}
+							if (selectedInventory == null) {
+								selectedInventory = cargoModel.getInventoryModels().get(0);
+							}
+							lastFacility = selectedInventory.getName();
 							comboViewer.setSelection(new StructuredSelection(selectedInventory));
 							updatePlots(Collections.singleton(selectedInventory), currentResult);
 						} else {
@@ -112,6 +123,8 @@ public class InventoryReport extends ViewPart {
 	private SelectedScenariosService selectedScenariosService;
 
 	private ComboViewer comboViewer;
+
+	private String lastFacility = null;
 
 	/**
 	 * The constructor.
@@ -147,15 +160,20 @@ public class InventoryReport extends ViewPart {
 				@Override
 				public void selectionChanged(final SelectionChangedEvent event) {
 					selectedInventory = (Inventory) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
+					if (selectedInventory != null) {
+						lastFacility = selectedInventory.getName();
+					} else {
+						lastFacility = null;
+					}
 					updatePlots(Collections.singleton(selectedInventory), currentResult);
 				}
 			});
 		}
 		viewer = new Chart(parent, SWT.NONE);
 		viewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-		
+
 		viewer.getTitle().setVisible(false);
-		
+
 		// Create the help context id for the viewer's control
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_Fitness");
 		// makeActions();
@@ -261,11 +279,12 @@ public class InventoryReport extends ViewPart {
 			{
 				final List<Pair<LocalDate, Integer>> changes = new LinkedList<>();
 				final List<Pair<LocalDate, Integer>> cargo_changes = new LinkedList<>();
+				final List<Pair<LocalDate, Integer>> other_cargo_changes = new LinkedList<>();
 				for (final InventoryEventRow r : inventory.getFeeds()) {
 					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
 						changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
 						if (r.getPeriod() == InventoryFrequency.CARGO) {
-							cargo_changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
+							other_cargo_changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
 						}
 					} else {
 						LocalDateTime start = r.getStartDate().atStartOfDay();
@@ -292,7 +311,7 @@ public class InventoryReport extends ViewPart {
 					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
 						changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
 						if (r.getPeriod() == InventoryFrequency.CARGO) {
-							cargo_changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
+							other_cargo_changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
 						}
 					} else {
 						LocalDateTime start = r.getStartDate().atStartOfDay();
@@ -334,6 +353,9 @@ public class InventoryReport extends ViewPart {
 				final Map<LocalDate, List<Integer>> m2 = cargo_changes.stream() //
 						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
 						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
+				final Map<LocalDate, List<Integer>> m3 = other_cargo_changes.stream() //
+						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
+						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
 
 				if (m.size() > 0) {
 					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m);
@@ -351,7 +373,7 @@ public class InventoryReport extends ViewPart {
 					}
 
 					{
-						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, inventory.getName());
+						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Inventory");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
 						createSeries.setSymbolSize(2);
@@ -360,7 +382,7 @@ public class InventoryReport extends ViewPart {
 
 					}
 				}
-				{
+				if (m2.size() > 0) 	{
 					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m2);
 					final Date[] dates = new Date[sorted.size() * 2];
 					final double[] values = new double[sorted.size() * 2];
@@ -379,7 +401,7 @@ public class InventoryReport extends ViewPart {
 					}
 
 					{
-						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, inventory.getName() + " Cargoes");
+						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Portfolio Cargoes");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
 						createSeries.setBarWidth(2);
@@ -389,6 +411,35 @@ public class InventoryReport extends ViewPart {
 
 					}
 				}
+				if (m3.size() > 0) 	{
+					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m3);
+					final Date[] dates = new Date[sorted.size() * 2];
+					final double[] values = new double[sorted.size() * 2];
+					int idx = 0;
+					
+					int total = 0;
+					for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
+						final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
+						dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
+						total += sum;
+						values[idx] = (double) sum;
+						++idx;
+						dates[idx] = Date.from(e.getKey().plusDays(1).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
+						values[idx] = 0;
+						++idx;
+					}
+					
+					{
+						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Other Cargoes");
+						createSeries.setXDateSeries(dates);
+						createSeries.setYSeries(values);
+						createSeries.setBarWidth(2);
+						// createSeries.setSymbolSize(2);
+						
+						createSeries.setBarColor(Display.getDefault().getSystemColor(colour + 2));
+						
+					}
+				}
 			}
 			{
 				final List<Pair<LocalDate, Integer>> min_level = new LinkedList<>();
@@ -396,6 +447,40 @@ public class InventoryReport extends ViewPart {
 				for (final InventoryCapacityRow r : inventory.getCapacities()) {
 					min_level.add(new Pair<>(r.getDate(), r.getMinVolume()));
 					max_level.add(new Pair<>(r.getDate(), r.getMaxVolume()));
+				}
+				{
+					final Map<LocalDate, List<Integer>> m = min_level.stream() //
+							.filter(p -> p.getFirst() != null && p.getSecond() != null) //
+							.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
+
+					if (m.size() > 0) {
+
+						final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m);
+
+						final Date[] dates = new Date[2 * sorted.size() - 1];
+						final double[] values = new double[2 * sorted.size() - 1];
+						int idx = 0;
+						for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
+
+							if (idx != 0) {
+								dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
+								values[idx] = values[idx - 1];
+								idx++;
+							}
+
+							final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
+
+							dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
+							values[idx] = (double) sum;
+							idx++;
+						}
+						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Tank min");
+						createSeries.setXDateSeries(dates);
+						createSeries.setYSeries(values);
+						createSeries.setSymbolSize(2);
+						createSeries.setLineStyle(LineStyle.DASH);
+						createSeries.setLineColor(Display.getDefault().getSystemColor(colour));
+					}
 				}
 				{
 					final Map<LocalDate, List<Integer>> m = max_level.stream() //
@@ -423,7 +508,7 @@ public class InventoryReport extends ViewPart {
 							values[idx] = (double) sum;
 							idx++;
 						}
-						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, inventory.getName() + "-Max");
+						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Tank max");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
 						createSeries.setSymbolSize(2);
