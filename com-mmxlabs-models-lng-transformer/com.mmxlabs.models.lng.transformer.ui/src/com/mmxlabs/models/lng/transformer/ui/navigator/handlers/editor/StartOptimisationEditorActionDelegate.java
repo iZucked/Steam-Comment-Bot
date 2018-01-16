@@ -73,6 +73,11 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 
 			@NonNull
 			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			if (modelRecord == null) {
+				action.setEnabled(false);
+				return;
+			}
+			
 			if (instance.isReadonly()) {
 				action.setEnabled(false);
 				return;
