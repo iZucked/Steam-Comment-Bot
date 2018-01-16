@@ -100,7 +100,8 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private void checkThatEverythingIsOverriddenWhenUnitsSet(IValidationContext ctx, List<IStatus> failures, Slot slot) {
-		if (slot.isSetVolumeLimitsUnit()) {
+		// Only check if the parent and child have different units 
+		if (slot.getVolumeLimitsUnit()!= slot.getUnsetValue(CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT)) {
 			boolean volLimitsOverriden = checkVolumeLimitsOverriden(slot);
 			if (!volLimitsOverriden) {
 				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
