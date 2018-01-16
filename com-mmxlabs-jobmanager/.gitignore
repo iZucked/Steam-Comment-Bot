@@ -3,6 +3,5 @@
 *.swp
 bin/
 target/
-.project
 *~
 
