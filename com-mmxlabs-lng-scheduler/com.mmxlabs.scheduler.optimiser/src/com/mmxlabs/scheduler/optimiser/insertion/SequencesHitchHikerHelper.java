@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
@@ -29,9 +30,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
-import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 @NonNullByDefault
@@ -39,20 +38,22 @@ public class SequencesHitchHikerHelper {
 	@Inject
 	private IMoveHandlerHelper moveHandlerHelper;
 	@Inject
-	private IMoveHelper moveHelper;
-
-	@Inject
 	private IVesselProvider vesselProvider;
 
 	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
-	@Inject
-	private ISpotMarketSlotsProvider spotMarketSlotsProvider;
 
+	@Inject
+	private Provider<LookupManager> lookupManagerProvider;
+
+	
 	private ISequences __undoUnrelatedChanges(final ISequences source, final ISequences target, final Collection<ISequenceElement> initialElements) {
 
-		final ILookupManager sourceLookup = new LookupManager(source);
-		final ILookupManager targetLookup = new LookupManager(target);
+		final ILookupManager sourceLookup = lookupManagerProvider.get();
+		sourceLookup.createLookup(source);
+		
+		final ILookupManager targetLookup = lookupManagerProvider.get();
+		targetLookup.createLookup(source);
 
 		// The collection of elements to include
 		final List<ISequenceElement> queue = new LinkedList<>();

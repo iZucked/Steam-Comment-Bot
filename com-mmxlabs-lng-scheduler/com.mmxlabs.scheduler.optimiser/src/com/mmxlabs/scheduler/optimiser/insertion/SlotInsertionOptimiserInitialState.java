@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.insertion;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 
@@ -30,6 +31,8 @@ public class SlotInsertionOptimiserInitialState {
 	 */
 	public ISequences originalRawSequences;
 
+	public ILookupManager lookupManager;
+	
 	/**
 	 * The input solution with any cargoes linked to the target elements moved to the unused list
 	 * 

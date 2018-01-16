@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -65,6 +67,9 @@ public class SlotInsertionOptimiser {
 	@Inject
 	private IMoveHandlerHelper moveHandlerHelper;
 
+	@Inject
+	private Provider<LookupManager> lookupManagerProvider;
+	
 	private @Nullable Pair<ISequences, Long> insert(final SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> _slots) {
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
@@ -87,10 +92,6 @@ public class SlotInsertionOptimiser {
 
 			mg.setTargetElements(Collections.singleton(slot));
 
-			// final IMoveHelperImpl helper = injector.getInstance(
-			final LookupManager lookupManager = new LookupManager();
-			lookupManager.createLookup(currentSequences);
-
 			final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
 
 			final Random optionsRnd = new Random(seed);
@@ -107,7 +108,7 @@ public class SlotInsertionOptimiser {
 			options.setInsertCanRemove(true);
 			options.setNum_tries(10);
 
-			final MoveResult p = mg.generateMove(currentSequences, lookupManager, optionsRnd, Collections.emptyList(), initialMetrics, options);
+			final MoveResult p = mg.generateMove(currentSequences, optionsRnd, Collections.emptyList(), initialMetrics, options);
 			if (p == null) {
 				return null;
 			}
@@ -143,8 +144,10 @@ public class SlotInsertionOptimiser {
 			{
 				boolean sameSolutionBasis = true;
 
-				final LookupManager beforeManager = new LookupManager(state.originalRawSequences);
-				final LookupManager afterManager = new LookupManager(currentSequences);
+				final ILookupManager beforeManager = state.lookupManager;
+				final LookupManager afterManager = lookupManagerProvider.get();
+				afterManager.createLookup(currentSequences);
+				
 				for (final ISequenceElement slot : slots) {
 					IResource afterResource;
 					List<ISequenceElement> afterSegment;
@@ -161,12 +164,13 @@ public class SlotInsertionOptimiser {
 					IResource beforeResource;
 					List<ISequenceElement> beforeSegment;
 					{
-						final Pair<IResource, Integer> lookup = beforeManager.lookup(slot);
+						final Pair<@Nullable IResource, @NonNull Integer> lookup = beforeManager.lookup(slot);
 						if (lookup == null || lookup.getFirst() == null) {
 							beforeResource = null;
 							beforeSegment = null;
 						} else {
 							beforeResource = lookup.getFirst();
+							assert beforeResource != null;
 							beforeSegment = moveHandlerHelper.extractSegment(state.originalRawSequences.getSequence(beforeResource), slot);
 						}
 					}

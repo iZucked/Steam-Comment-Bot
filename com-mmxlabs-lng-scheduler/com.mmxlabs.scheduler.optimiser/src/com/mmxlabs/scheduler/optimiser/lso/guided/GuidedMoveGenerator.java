@@ -103,7 +103,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 
 		final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, options.isCheckEvaluatedState(),
 				null, null);
-		final MoveResult p = generateMove(rawSequences, lookupManager, random, Collections.emptyList(), initialMetrics, options);
+		final MoveResult p = generateMove(rawSequences, random, Collections.emptyList(), initialMetrics, options);
 		if (p != null) {
 			return p.move;
 		}
@@ -135,8 +135,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 
 	}
 
-	public MoveResult generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random, final List<ISequenceElement> forbidden, final long[] initialMetrics,
-			final GuideMoveGeneratorOptions options) {
+	public MoveResult generateMove(final ISequences rawSequences, final Random random, final List<ISequenceElement> forbidden, final long[] initialMetrics, final GuideMoveGeneratorOptions options) {
 
 		this.providedRawSequences = rawSequences;
 
@@ -158,10 +157,14 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 				.filter(e -> optionalElementsProvider.isElementRequired(e)) //
 				.count();
 		MoveResult checkPointResult = null;
+
+		final LookupManager lookupManager = lookupManagerProvider.get();
+		lookupManager.createLookup(currentRawSequences);
+
 		for (int i = 0; i < num_tries; ++i) {
 
 			// Generate a move step
-			final Pair<IMove, Hints> moveData = getNextMove(currentRawSequences, random, options, hintManager);
+			final Pair<IMove, Hints> moveData = getNextMove(currentRawSequences, lookupManager, random, options, hintManager);
 			if (moveData == null) {
 				continue;
 			}
@@ -176,6 +179,10 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 				// Circular move, give up
 				return null;
 			}
+
+			// Update the lookup table
+			lookupManager.updateLookup(currentRawSequences, move.getAffectedResources());
+
 			// Strictly we remove the original slots from this set and reject the state if there are any slots left rather than just see if there is an overall increase in number as this allows
 			// "swimming" slot violations.
 
@@ -239,13 +246,12 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		return null;
 	}
 
-	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences rawSequences, final @NonNull Random random, final @NonNull GuideMoveGeneratorOptions options, final HintManager hintManager) {
+	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences rawSequences, final @NonNull ILookupManager lookupManager, final @NonNull Random random,
+			final @NonNull GuideMoveGeneratorOptions options, final HintManager hintManager) {
 
 		final List<@NonNull ISequenceElement> targetElements = getNextElements(options, hintManager);
 
 		Collections.shuffle(targetElements, random);
-		final LookupManager lookupManager = lookupManagerProvider.get();
-		lookupManager.createLookup(rawSequences);
 
 		for (final ISequenceElement element : targetElements) {
 

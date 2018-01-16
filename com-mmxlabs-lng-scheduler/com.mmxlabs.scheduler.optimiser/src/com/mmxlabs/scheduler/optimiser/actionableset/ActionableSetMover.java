@@ -13,7 +13,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -82,10 +81,9 @@ public class ActionableSetMover {
 
 	}
 
-	public ActionableSetJobState search(@NonNull ActionableSetJobState state, @NonNull ILookupManager stateManager, long seed) {
+	public ActionableSetJobState search(@NonNull ActionableSetJobState state, long seed) {
 
 		IModifiableSequences rawSequences = new ModifiableSequences(state.getRawSequences());
-		stateManager.createLookup(rawSequences);
 		// String note = (String.format("s: %s move: %s", seed, move));
 		String note = null;
 		final Random random = new Random(seed);
@@ -102,7 +100,7 @@ public class ActionableSetMover {
 		options.setInsertCanRemove(random.nextBoolean());
 		options.setNum_tries(random.nextInt(10));
 
-		final MoveResult p = moveGenerator.generateMove(rawSequences, stateManager, random, state.getUsedElements(), state.getMetrics(), options);
+		final MoveResult p = moveGenerator.generateMove(rawSequences, random, state.getUsedElements(), state.getMetrics(), options);
 		if (p == null) {
 			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 		}

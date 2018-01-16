@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -33,10 +34,15 @@ public class SequencesUndoSpotHelper {
 	@Inject
 	private ISpotMarketSlotsProvider spotMarketSlotsProvider;
 
+	@Inject
+	private Provider<LookupManager> lookupManagerProvider;
+
 	public ISequences undoSpotMarketSwaps(final ISequences original, final ISequences current) {
 
-		final ILookupManager originalLookup = new LookupManager(original);
-		final ILookupManager currentLookup = new LookupManager(current);
+		final ILookupManager originalLookup = lookupManagerProvider.get();
+		originalLookup.createLookup(original);
+		final ILookupManager currentLookup = lookupManagerProvider.get();
+		currentLookup.createLookup(current);
 
 		final IModifiableSequences revertedSeq = new ModifiableSequences(current);
 

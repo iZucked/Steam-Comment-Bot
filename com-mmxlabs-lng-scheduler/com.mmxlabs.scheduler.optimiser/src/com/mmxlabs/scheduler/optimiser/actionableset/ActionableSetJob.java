@@ -31,10 +31,7 @@ public final class ActionableSetJob implements Callable<ActionableSetJobState> {
 		try {
 			final ActionableSetMover mover = injector.getInstance(ActionableSetMover.class);
 			try {
-				final ISequences rawSequences = baseState.getRawSequences();
-				final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
-				lookupManager.createLookup(rawSequences);
-				return mover.search(baseState, lookupManager, seed);
+				return mover.search(baseState, seed);
 			} catch (final Throwable e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
