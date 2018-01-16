@@ -378,7 +378,7 @@ public class InventoryReport extends ViewPart {
 						createSeries.setYSeries(values);
 						createSeries.setSymbolSize(1);
 						//
-						createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+						createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 
 					}
 				}
@@ -436,7 +436,7 @@ public class InventoryReport extends ViewPart {
 						createSeries.setBarWidth(2);
 						// createSeries.setSymbolSize(2);
 						
-						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 						
 					}
 				}
