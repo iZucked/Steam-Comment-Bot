@@ -245,6 +245,7 @@ public class SlotInsertionOptimiserUnit {
 										++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
 									}
 								}
+								lookupManager.updateLookup(tmpRawSequences, lookup.getFirst(), null);
 
 							}
 						}
