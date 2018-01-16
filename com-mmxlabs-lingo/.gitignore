@@ -3,7 +3,6 @@
 *.swp
 bin/
 target/
-.project
 com.mmxlabs.lingo.doc/index/
 *~
 
