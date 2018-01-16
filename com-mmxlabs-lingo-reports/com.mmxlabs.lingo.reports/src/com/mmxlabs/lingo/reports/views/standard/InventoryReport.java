@@ -376,9 +376,9 @@ public class InventoryReport extends ViewPart {
 						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Inventory");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
-						createSeries.setSymbolSize(2);
+						createSeries.setSymbolSize(1);
 						//
-						createSeries.setLineColor(Display.getDefault().getSystemColor(colour));
+						createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 
 					}
 				}
@@ -401,13 +401,13 @@ public class InventoryReport extends ViewPart {
 					}
 
 					{
-						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Portfolio Cargoes");
+						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Portfolio cargoes");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
 						createSeries.setBarWidth(2);
 						// createSeries.setSymbolSize(2);
 
-						createSeries.setBarColor(Display.getDefault().getSystemColor(colour));
+						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
 
 					}
 				}
@@ -430,13 +430,13 @@ public class InventoryReport extends ViewPart {
 					}
 					
 					{
-						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Other Cargoes");
+						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "3rd-party");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
 						createSeries.setBarWidth(2);
 						// createSeries.setSymbolSize(2);
 						
-						createSeries.setBarColor(Display.getDefault().getSystemColor(colour + 2));
+						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 						
 					}
 				}
@@ -479,7 +479,7 @@ public class InventoryReport extends ViewPart {
 						createSeries.setYSeries(values);
 						createSeries.setSymbolSize(2);
 						createSeries.setLineStyle(LineStyle.DASH);
-						createSeries.setLineColor(Display.getDefault().getSystemColor(colour));
+						createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW));
 					}
 				}
 				{
@@ -513,7 +513,7 @@ public class InventoryReport extends ViewPart {
 						createSeries.setYSeries(values);
 						createSeries.setSymbolSize(2);
 						createSeries.setLineStyle(LineStyle.DASH);
-						createSeries.setLineColor(Display.getDefault().getSystemColor(colour));
+						createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 					}
 				}
 			}
