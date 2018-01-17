@@ -47,6 +47,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
@@ -95,6 +96,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
@@ -626,7 +628,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		columnManager.addColumns("TRADES_TABLE", columnBlockManager);
 		for (String groupName : orderedColumnGroupNames) {
 			for (final ColumnHandler handler : columnBlockManager.getHandlerGroup(groupName)) {
-				final GridColumn column = handler.createColumn().getColumn();
+				final GridViewerColumn gvcolumn = handler.createColumn();
+//				GridViewerHelper.configureLookAndFeel(gvcolumn);
+				final GridColumn column = gvcolumn.getColumn();
 				DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
 				colRenderer.setWordWrap(true);
 				column.setHeaderRenderer(colRenderer);
@@ -873,6 +877,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 
 		};
+		
+		
+//		GridViewerHelper.configureLookAndFeel(viewer);
+		
 		return viewer;
 	}
 
