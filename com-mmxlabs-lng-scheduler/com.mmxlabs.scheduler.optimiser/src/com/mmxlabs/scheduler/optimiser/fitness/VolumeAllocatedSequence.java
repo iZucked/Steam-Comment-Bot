@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
@@ -423,7 +423,7 @@ public class VolumeAllocatedSequence {
 						final long thisHeelCost = Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU);
 						heelCost += thisHeelCost;
 					}
-					assert currentHeelInM3 + VoyagePlanner.ROUNDING_EPSILON >= 0;
+					assert currentHeelInM3 + IVoyagePlanner.ROUNDING_EPSILON >= 0;
 
 					final long endHeelInM3 = currentHeelInM3;
 					record.portHeelRecord = new HeelValueRecord(startHeelInM3, endHeelInM3);

@@ -12,7 +12,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * Used for plan evaluation in the {@link VoyagePlanner} and Charter Out Generation
+ * Used for plan evaluation in the {@link IVoyagePlanner} and Charter Out Generation
  */
 public class PlanEvaluationData {
 

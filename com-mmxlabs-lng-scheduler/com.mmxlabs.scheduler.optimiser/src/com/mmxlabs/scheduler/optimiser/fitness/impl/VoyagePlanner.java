@@ -73,9 +73,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  */
-public class VoyagePlanner {
-
-	public static final int ROUNDING_EPSILON = 0;
+public class VoyagePlanner implements IVoyagePlanner {
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -204,7 +202,7 @@ public class VoyagePlanner {
 			options.setNBOSpeed(nboSpeed);
 		}
 		// Can be determined by voyage plan optimiser
-		if (isReliq && (useNBO || forceNBO)) {
+		if (useNBO || forceNBO) {
 			// If NBO is enabled for a reliq vessel, then force FBO too
 			options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 		} else {
@@ -267,16 +265,27 @@ public class VoyagePlanner {
 					vpoChoices.add(new ReliqVoyagePlanChoice(previousOptions, options));
 				}
 			} else {
-				if (vesselState == VesselState.Ballast && !forceNBO) {
+				if (vesselState == VesselState.Laden) {
 					vpoChoices.add(new TravelVoyagePlanChoice(previousOptions, options));
 				} else {
-					// Set an NBO based choice so that the useNBO value in the next call is correct
-					// TODO: This probably does not cover all possible cases...
-					options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
-					vpoChoices.add(new TravelSupplementVoyagePlanChoice(previousOptions, options));
-				}
-				if (!forceNBO) {
-					vpoChoices.add(new IdleNBOVoyagePlanChoice(options));
+					boolean forceBallastNBO = forceBallastNBO(prevPortSlot, thisPortSlot, availableTime);
+					if (forceBallastNBO) {
+						options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+						options.setIdleFuelChoice(IdleFuelChoice.NBO);
+						vpoChoices.add(new TravelSupplementVoyagePlanChoice(previousOptions, options));
+					} else {
+						if (!forceNBO) {
+							vpoChoices.add(new TravelVoyagePlanChoice(previousOptions, options));
+						} else {
+							// Set an NBO based choice so that the useNBO value in the next call is correct
+							// TODO: This probably does not cover all possible cases...
+							options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+							vpoChoices.add(new TravelSupplementVoyagePlanChoice(previousOptions, options));
+						}
+						if (!forceNBO) {
+							vpoChoices.add(new IdleNBOVoyagePlanChoice(options));
+						}
+					}
 				}
 			}
 		}
@@ -358,6 +367,18 @@ public class VoyagePlanner {
 
 		return options;
 
+	}
+
+	/**
+	 * Should this ballast voyage be forced to use NBO for travel and idle?
+	 * 
+	 * @param prevPortSlot
+	 * @param toPortSlot
+	 * @param availableTime
+	 * @return
+	 */
+	protected boolean forceBallastNBO(final @NonNull IPortSlot prevPortSlot, final @NonNull IPortSlot toPortSlot, final int availableTime) {
+		return false;
 	}
 
 	/**

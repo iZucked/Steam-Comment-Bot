@@ -175,13 +175,13 @@ public final class VoyagePlannerTest {
 				bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
-				bind(VoyagePlanner.class);
+				bind(IVoyagePlanner.class).to(VoyagePlanner.class);
 				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 			}
 		});
 
 		// Init scheduler and ensure all required components are in place
-		final VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
+		final IVoyagePlanner planner = injector.getInstance(IVoyagePlanner.class);
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions(loadSlot1, dischargeSlot1);
 		expectedVoyageOptions1.setAvailableTime(4);

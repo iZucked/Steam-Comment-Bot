@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.Evaluatio
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -56,7 +56,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private VoyagePlanner voyagePlanner;
+	private IVoyagePlanner voyagePlanner;
 
 	@FunctionalInterface
 	private interface Setter {
