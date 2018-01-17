@@ -28,6 +28,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui.tabular,
+ com.mmxlabs.models.ui.tabular.columngeneration,
  com.mmxlabs.models.ui.tabular.filter,
  com.mmxlabs.models.ui.tabular.generic,
  com.mmxlabs.models.ui.tabular.manipulators,
