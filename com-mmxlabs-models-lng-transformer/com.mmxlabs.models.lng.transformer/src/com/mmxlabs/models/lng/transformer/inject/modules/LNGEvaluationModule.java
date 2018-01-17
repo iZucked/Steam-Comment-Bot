@@ -8,6 +8,8 @@ import static org.ops4j.peaberry.Peaberry.service;
 
 import java.util.Collection;
 
+import javax.inject.Singleton;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -21,6 +23,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.moves.util.LegalSequencingChecker;
@@ -54,7 +57,8 @@ public class LNGEvaluationModule extends AbstractModule {
 
 		install(new SequencesManipulatorModule());
 
-		bind(VoyagePlanner.class);
+		bind(VoyagePlanner.class).in(Singleton.class);
+		bind(IVoyagePlanner.class).to(VoyagePlanner.class);
 		bind(IdleTimeChecker.class);
 		bind(LatenessChecker.class);
 		bind(CapacityViolationChecker.class);
