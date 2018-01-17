@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.importer.AssignmentModelImporter;
 import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
 import com.mmxlabs.models.lng.cargo.importer.CargoModelImporter;
 import com.mmxlabs.models.lng.cargo.importer.DischargeSlotImporter;
+import com.mmxlabs.models.lng.cargo.importer.InventoryExtraImporter;
 import com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter;
 import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -160,6 +161,7 @@ public class CSVImporter {
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, createURL(urlRoot, "Assignments.csv"));
 		dataMap.put(CargoModelImporter.CANAL_BOOKINGS_KEY, createURL(urlRoot, "Canal Bookings.csv"));
 		dataMap.put(VesselAvailabilityBallastBonusImporterExtraImporter.BALLASTBONUS_KEY, createURL(urlRoot, "Vessel Availability--Ballast Bonus.csv"));
+		dataMap.put(InventoryExtraImporter.INVENTORY_KEY, createURL(urlRoot, "Inventories.csv"));
 	}
 
 	public void importStandardComponents(@NonNull final String urlRoot) throws MalformedURLException {
