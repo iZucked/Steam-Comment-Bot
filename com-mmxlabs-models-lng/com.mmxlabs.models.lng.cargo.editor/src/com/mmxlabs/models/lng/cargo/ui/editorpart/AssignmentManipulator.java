@@ -31,7 +31,7 @@ import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
-class AssignmentManipulator implements ICellRenderer, ICellManipulator {
+public class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	/**
 	 * 
 	 */
