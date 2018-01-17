@@ -98,32 +98,12 @@ public class EntityTransformerExtension implements ITransformerExtension, ISlotT
 				entityProvider.setEntityBook(entity, EntityBookType.Upstream, book);
 			}
 		}
-
-		// Generic stuff -> split into separate extension
-//		final CargoModel cargoModel = rootObject.getCargoModel();
-//		for (final VesselAvailability eVesselAvailability : cargoModel.getVesselAvailabilities()) {
-//			final IVesselAvailability vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(eVesselAvailability, IVesselAvailability.class);
-//			final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(eVesselAvailability.getEntity(), IEntity.class);
-//			entityProvider.setEntityForVesselAvailability(entity, vesselAvailability);
-//		}
-
-		// set up contract association or slot association or whatever
-//		final Collection<Slot> slots = modelEntityMap.getAllModelObjects(Slot.class);
-//		for (final Slot slot : slots) {
-//			assert slot != null;
-//			final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
-//			if (portSlot != null) {
-//				final BaseLegalEntity slotEntity = slot.getSlotOrDelegatedEntity();
-//				final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(slotEntity, IEntity.class);
-//				entityProvider.setEntityForSlot(entity, portSlot);
-//			}
-//		}
 	}
 
 	@Override
 	public void slotTransformed(@NonNull Slot modelSlot, @NonNull IPortSlot optimiserSlot) {
-			final BaseLegalEntity slotEntity = modelSlot.getSlotOrDelegatedEntity();
-			final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(slotEntity, IEntity.class);
-			entityProvider.setEntityForSlot(entity, optimiserSlot);
+		final BaseLegalEntity slotEntity = modelSlot.getSlotOrDelegatedEntity();
+		final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(slotEntity, IEntity.class);
+		entityProvider.setEntityForSlot(entity, optimiserSlot);
 	}
 }
