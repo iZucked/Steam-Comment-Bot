@@ -136,7 +136,23 @@ public class GenericEMFTableDataModel {
 		valueRef.setName(value);
 		return valueRef;
 	}
-
+	/**
+	 * Create an {@link EReference} for use with a "Row" object.
+	 * 
+	 * @param value
+	 * @param type
+	 * @return
+	 */
+	public static EReference createRowReference(final EClass owner, final EClassifier type, final String value) {
+		final EReference valueRef = EcoreFactory.eINSTANCE.createEReference();
+		valueRef.setContainment(false);
+		valueRef.setLowerBound(0);
+		valueRef.setUpperBound(1);
+		valueRef.setEType(type);
+		valueRef.setName(FEATURE_VALUE_PREFIX + value);
+		owner.getEStructuralFeatures().add(valueRef);
+		return valueRef;
+	}
 	/**
 	 * Create an {@link EReference} for use with a "Row" object.
 	 * 
@@ -168,6 +184,10 @@ public class GenericEMFTableDataModel {
 		return eClassifier.getEStructuralFeature(FEATURE_VALUE_PREFIX + value);
 	}
 
+	public static EStructuralFeature getRowFeature(final EClass row, final String value) {
+		return row.getEStructuralFeature(FEATURE_VALUE_PREFIX + value);
+	}
+	
 	/**
 	 * Instantiate a new root data item for the table.
 	 * 
