@@ -98,6 +98,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					DEFAULT_ORDER_KEY, rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecounterparty": {
+			BasicAttributeManipulator rendMan = new BasicAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, editingDomain);
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory("PURCHASE_COUNTERPARTY", "Counterparty", null, ColumnType.NORMAL, LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE,
+					DEFAULT_ORDER_KEY, rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+		}
+		break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-override-restrictions": {
 			BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_OverrideRestrictions(), editingDomain);
 			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory("LOAD_OVERRIDE_RESTRICTIONS", "Override Restrictions", null, ColumnType.NORMAL, LOAD_MAIN_GROUP,
@@ -180,6 +186,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					DEFAULT_ORDER_KEY, rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescounterparty": {
+			BasicAttributeManipulator rendMan = new BasicAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, editingDomain);
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory("SALES_COUNTERPARTY", "Counterparty", null, ColumnType.NORMAL, DISCHARGE_MAIN_GROUP, DEFAULT_BLOCK_TYPE,
+					DEFAULT_ORDER_KEY, rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+		}
+		break;			
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.assignment": {
 			final AssignmentManipulator rendMan = new AssignmentManipulator(editingLocation);
 			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory("ASSIGNMENT", "Assignment", null, ColumnType.NORMAL, CARGO_END_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,

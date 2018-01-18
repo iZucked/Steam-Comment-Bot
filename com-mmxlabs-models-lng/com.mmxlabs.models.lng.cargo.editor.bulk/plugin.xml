@@ -54,138 +54,78 @@
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-vol">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-date">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-window-length">
       </TradesBasedColumn>
-   </extension>
-      <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-override-restrictions">
       </TradesBasedColumn>
-   </extension>
-      <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-restrictions-permissive">
       </TradesBasedColumn>
-   </extension>
-      <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-restricted-ports">
       </TradesBasedColumn>
-   </extension>
-      <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-restricted-contracts">
       </TradesBasedColumn>
-   </extension>
-      <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-allowed-vessels">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecontract">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
+      <TradesBasedColumn
+            handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
+            id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecounterparty">
+      </TradesBasedColumn>
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-id">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-port">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-vol">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-date">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-window-length">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescontract">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
+      <TradesBasedColumn
+            handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
+            id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescounterparty">
+      </TradesBasedColumn>
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.assignment">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-terminal">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-terminal">
