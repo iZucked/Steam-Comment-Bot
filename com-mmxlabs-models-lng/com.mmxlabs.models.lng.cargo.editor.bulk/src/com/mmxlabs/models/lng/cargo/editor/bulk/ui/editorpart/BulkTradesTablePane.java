@@ -632,9 +632,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final GridViewerColumn gvcolumn = handler.createColumn();
 				// GridViewerHelper.configureLookAndFeel(gvcolumn);
 				final GridColumn column = gvcolumn.getColumn();
-				DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
-				colRenderer.setWordWrap(true);
-				column.setHeaderRenderer(colRenderer);
+//				DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
+//				colRenderer.setWordWrap(true);
+//				column.setHeaderRenderer(colRenderer);
 				column.setMinimumWidth(70);
 				column.setResizeable(false);
 				handlerToColumnMap.put(handler, column);
