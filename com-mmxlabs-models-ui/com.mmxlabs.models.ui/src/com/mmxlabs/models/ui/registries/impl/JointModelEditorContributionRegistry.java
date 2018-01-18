@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,11 +33,11 @@ public class JointModelEditorContributionRegistry implements IJointModelEditorCo
 
 	@Override
 	public List<IJointModelEditorContribution> initEditorContributions(final JointModelEditorPart part, final MMXRootObject root) {
-		final List<Pair<IJointModelEditorExtension, UUIDObject>> matches = new ArrayList<Pair<IJointModelEditorExtension, UUIDObject>>(10);
+		final List<Pair<IJointModelEditorExtension, UUIDObject>> matches = new ArrayList<>(10);
 
-		final HashMap<String, IJointModelEditorExtension> extensionsByModel = new HashMap<String, IJointModelEditorExtension>();
+		final HashMap<String, List<IJointModelEditorExtension>> extensionsByModel = new HashMap<>();
 		for (final IJointModelEditorExtension ex : extensions) {
-			extensionsByModel.put(ex.getSubModelClassName(), ex);
+			extensionsByModel.computeIfAbsent(ex.getSubModelClassName(), k -> new LinkedList<>()).add(ex);
 		}
 
 		final TreeIterator<EObject> itr = root.eAllContents();
@@ -44,9 +45,9 @@ public class JointModelEditorContributionRegistry implements IJointModelEditorCo
 			final EObject obj = itr.next();
 			final String subClassName = obj.eClass().getInstanceClass().getCanonicalName();
 			if (extensionsByModel.containsKey(subClassName)) {
-				final IJointModelEditorExtension ex = extensionsByModel.get(subClassName);
-				if (ex != null) {
-					matches.add(new Pair<IJointModelEditorExtension, UUIDObject>(ex, (UUIDObject)obj));
+				final List<IJointModelEditorExtension> ex_list = extensionsByModel.get(subClassName);
+				if (ex_list != null) {
+					ex_list.forEach(ex -> matches.add(new Pair<>(ex, (UUIDObject) obj)));
 				}
 				// Skip the subtree
 				itr.prune();
