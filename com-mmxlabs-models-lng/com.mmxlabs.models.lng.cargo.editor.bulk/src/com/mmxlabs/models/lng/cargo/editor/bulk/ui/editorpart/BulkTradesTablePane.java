@@ -256,6 +256,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		};
 		lockAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/lock.gif"));
 		toolbar.appendToGroup(VIEW_GROUP, lockAction);
+		toolbar.update(true);
 	}
 
 	private List<ITradesBasedFilterHandler> getFiltersList(Set<ITradesBasedFilterHandler> allColumnFilterHandlers) {

@@ -4,15 +4,18 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.awt.Desktop.Action;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -29,8 +32,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -44,20 +51,27 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.IAlternativeEditorProvider;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.TradesTableEditorExtension;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.TradesTableEditorProviderModule;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.models.ui.tabular.Activator;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 /**
  */
 public class CargoModelEditorContribution extends BaseJointModelEditorContribution<CargoModel> {
+	private int currentEditorIndex = 0;
 	private int tradesViewerPageNumber = -1;
-	private TradesWiringViewer tradesViewer;
+	private ScenarioTableViewerPane tradesViewer;
 	private VesselViewerPane_Editor vesselViewerPane;
 	// private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
@@ -70,15 +84,42 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private InventoryCapacityPane inventoryCapacityPane;
 	int inventoryPage;
 
+	private List<IAlternativeEditorProvider> extensions = new LinkedList<>();
+
 	@Override
 	public void addPages(final Composite parent) {
+		initialiseExtensions();
+		if (!extensions.isEmpty()) {
+			{
+				IAlternativeEditorProvider provider = extensions.get(0);
+				this.tradesViewer = provider.init(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), parent, modelObject);
+			}
+			tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
+			editorPart.setPageText(tradesViewerPageNumber, "Trades");
+			currentEditorIndex = 0;
+			if (extensions.size() > 1) {
+				toggleAction = new RunnableAction("Toggle editor mode", () -> {
+					editorPart.setControl(tradesViewerPageNumber, null);
 
-		this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		tradesViewer.createControl(parent);
-		tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory(), editorPart.getModelReference());
-		tradesViewer.getViewer().setInput(modelObject);
-		tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
-		editorPart.setPageText(tradesViewerPageNumber, "Trades");
+					tradesViewer.getControl().dispose();
+					++currentEditorIndex;
+					if (currentEditorIndex >= extensions.size()) {
+						currentEditorIndex = 0;
+					}
+					IAlternativeEditorProvider provider = extensions.get(currentEditorIndex);
+					this.tradesViewer = provider.init(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), parent, modelObject);
+
+					editorPart.setControl(tradesViewerPageNumber, tradesViewer.getControl());
+
+					tradesViewer.getToolBarManager().add(toggleAction);
+					tradesViewer.getToolBarManager().update(true);
+
+				});
+				toggleAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/editormode.gif"));
+				tradesViewer.getToolBarManager().add(toggleAction);
+				tradesViewer.getToolBarManager().update(true);
+			}
+		}
 		{
 
 			final SashForm sash = new SashForm(parent, SWT.VERTICAL);
@@ -228,6 +269,23 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 	}
 
+	private void initialiseExtensions() {
+		class Temp {
+			@Inject(optional = true)
+			public Iterable<TradesTableEditorExtension> extensions;
+		}
+		final Injector injector = Guice.createInjector(new TradesTableEditorProviderModule());
+		Temp t = new Temp();
+		injector.injectMembers(t);
+		for (TradesTableEditorExtension e : t.extensions) {
+			extensions.add(e.getInstance());
+		}
+		if (extensions.size() > 1) {
+			Collections.sort(extensions, (a, b) -> Integer.compare(a.getPriority(), b.getPriority()));
+		}
+
+	}
+
 	@Override
 	public void setLocked(final boolean locked) {
 		if (tradesViewer != null) {
@@ -252,6 +310,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 	private static final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, StartHeelOptions.class, EndHeelOptions.class, Cargo.class, LoadSlot.class,
 			DischargeSlot.class, SlotContractParams.class, SlotVisit.class, EndEvent.class };
+	private RunnableAction toggleAction;
 
 	@Override
 	public boolean canHandle(final IStatus status) {

@@ -23,15 +23,6 @@
    <extension-point id="TradesBasedRowTransformer" name="TradesBasedRowTransformer" schema="schema/TradesBasedRowTransformer.exsd"/>
    <extension-point id="TradesBasedMenuFilter" name="TradesBasedMenuFilter" schema="schema/TradesBasedMenuFilter.exsd"/>
 
-    <extension
-       point="org.eclipse.ui.views">
-    <view
-          category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.cargo.editor.bulk.views.BulkTradesViewerView"
-          id="com.mmxlabs.models.lng.cargo.editor.bulk.views.BulkTradesViewerView"
-          name="Bulk trades editor">
-    </view>
- </extension>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated cargobulkeditor -->
@@ -228,4 +219,10 @@
             id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedMenuFilter.default">
       </TradesBasedMenuFilter>
    </extension>
+<extension
+      point="com.mmxlabs.models.lng.cargo.editor.TradesTableEditor">
+   <TradesTableEditor
+         class="com.mmxlabs.models.lng.cargo.editor.bulk.ui.BulkTradesTableProvider">
+   </TradesTableEditor>
+</extension>   
 </plugin>

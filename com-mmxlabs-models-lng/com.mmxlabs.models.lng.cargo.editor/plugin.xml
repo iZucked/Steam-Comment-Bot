@@ -17,6 +17,7 @@
 <plugin>
    <extension-point id="TradesTableContextMenuExtension" name="TradesTableContextMenuExtension" schema="schema/TradesTableContextMenuExtension.exsd"/>
    <extension-point id="VesselEventsTableContextMenuExtension" name="VesselEventsTableContextMenuExtension" schema="schema/VesselEventsTableContextMenuExtension.exsd"/>
+   <extension-point id="TradesTableEditor" name="TradesTableEditor" schema="schema/TradesTableEditor.exsd"/>
 
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
@@ -548,6 +549,12 @@
             name="Panama Bookings"
             restorable="true">
       </view>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.lng.cargo.editor.TradesTableEditor">
+      <TradesTableEditor
+            class="com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.DefaultTradesTableProvider">
+      </TradesTableEditor>
    </extension>
 
 </plugin>
