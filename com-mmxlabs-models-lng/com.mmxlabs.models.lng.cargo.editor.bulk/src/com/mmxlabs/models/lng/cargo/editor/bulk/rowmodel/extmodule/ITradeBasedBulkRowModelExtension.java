@@ -4,12 +4,10 @@ package com.mmxlabs.models.lng.cargo.editor.bulk.rowmodel.extmodule;
  * All rights reserved.
  */
 
-
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedRowModelTransformerFactory;
-import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesColumnFactory;
 
 @ExtensionBean("com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedRowModelTransformer")
 public interface ITradeBasedBulkRowModelExtension {
@@ -20,7 +18,6 @@ public interface ITradeBasedBulkRowModelExtension {
 	@MapName("handlerID")
 	String getHandlerID();
 
-	@MapName("class")
+	@MapName("factory")
 	ITradesBasedRowModelTransformerFactory getFactory();
-
 }

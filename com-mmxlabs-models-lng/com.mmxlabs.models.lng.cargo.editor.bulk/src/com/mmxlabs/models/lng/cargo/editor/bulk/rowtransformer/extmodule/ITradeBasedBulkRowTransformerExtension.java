@@ -19,7 +19,7 @@ public interface ITradeBasedBulkRowTransformerExtension {
 	@MapName("handlerID")
 	String getHandlerID();
 
-	@MapName("class")
+	@MapName("factory")
 	ITradesRowTransformerFactory getFactory();
 
 }
