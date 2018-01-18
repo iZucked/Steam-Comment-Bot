@@ -877,6 +877,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 
 		};
+		
+		viewer.getSortingSupport().setSortOnlyOnSelect(true);
 
 		// GridViewerHelper.configureLookAndFeel(viewer);
 
