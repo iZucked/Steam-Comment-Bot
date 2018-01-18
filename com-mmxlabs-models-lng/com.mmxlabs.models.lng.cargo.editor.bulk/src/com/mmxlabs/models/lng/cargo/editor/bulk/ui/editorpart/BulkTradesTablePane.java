@@ -50,12 +50,10 @@ import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -89,6 +87,7 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedRowModelTransf
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -137,8 +136,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	/*
 	 * This is used to determine the order of column groups
 	 */
-	private final String[] orderedColumnGroupNames = new String[] {
-			TradesBasedColumnFactory.LOAD_START_GROUP, //
+	private final String[] orderedColumnGroupNames = new String[] { TradesBasedColumnFactory.LOAD_START_GROUP, //
 			TradesBasedColumnFactory.LOAD_MAIN_GROUP, //
 			TradesBasedColumnFactory.LOAD_EXTRA_GROUP, //
 			TradesBasedColumnFactory.LOAD_END_GROUP, //
@@ -148,8 +146,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			TradesBasedColumnFactory.DISCHARGE_END_GROUP, //
 			TradesBasedColumnFactory.CARGO_START_GROUP, //
 			TradesBasedColumnFactory.CARGO_END_GROUP //
-			};
-	
+	};
+
 	/*
 	 * This is used to determine the default visible column groups
 	 */
@@ -162,7 +160,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			TradesBasedColumnFactory.DISCHARGE_END_GROUP, //
 			TradesBasedColumnFactory.CARGO_END_GROUP //
 	};
-	
+
 	private EPackage customRowPackage = createCustomisedRowEcore();
 	private ColumnFilters columnFilters;
 	private Set<ITradesBasedFilterHandler> allColumnFilterHandlers = new HashSet<>();
@@ -173,6 +171,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private Map<ColumnHandler, GridColumn> handlerToColumnMap = new HashMap<>();
 
 	protected final SortData sortData = new SortData();
+
+	private PromptToolbarEditor promptToolbarEditor;
 
 	public BulkTradesTablePane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -219,6 +219,11 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		final ToolBarManager toolbar = getToolBarManager();
 		toolbar.removeAll();
+
+		setMinToolbarHeight(30);
+		promptToolbarEditor = new PromptToolbarEditor("prompt", scenarioEditingLocation.getEditingDomain(), (LNGScenarioModel) scenarioEditingLocation.getRootObject());
+		toolbar.add(promptToolbarEditor);
+
 		toolbar.add(new GroupMarker(EDIT_GROUP));
 		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
 		toolbar.add(new GroupMarker(VIEW_GROUP));
@@ -252,10 +257,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
-//		final Action lockAction = new Action("Lock") {
-//		};
-//		lockAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/lock.gif"));
-//		toolbar.appendToGroup(VIEW_GROUP, lockAction);
+		// final Action lockAction = new Action("Lock") {
+		// };
+		// lockAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/lock.gif"));
+		// toolbar.appendToGroup(VIEW_GROUP, lockAction);
 		toolbar.update(true);
 	}
 
@@ -632,9 +637,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final GridViewerColumn gvcolumn = handler.createColumn();
 				// GridViewerHelper.configureLookAndFeel(gvcolumn);
 				final GridColumn column = gvcolumn.getColumn();
-//				DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
-//				colRenderer.setWordWrap(true);
-//				column.setHeaderRenderer(colRenderer);
+				// DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
+				// colRenderer.setWordWrap(true);
+				// column.setHeaderRenderer(colRenderer);
 				column.setMinimumWidth(70);
 				column.setResizeable(false);
 				handlerToColumnMap.put(handler, column);
@@ -877,7 +882,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 
 		};
-		
+
 		viewer.getSortingSupport().setSortOnlyOnSelect(true);
 
 		// GridViewerHelper.configureLookAndFeel(viewer);
@@ -931,6 +936,15 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	@Override
 	public ScenarioTableViewer getScenarioViewer() {
 		return super.getScenarioViewer();
+	}
+
+	public void setLocked(final boolean locked) {
+
+		if (promptToolbarEditor != null) {
+			promptToolbarEditor.setLocked(locked);
+		}
+
+		super.setLocked(locked);
 	}
 
 }
