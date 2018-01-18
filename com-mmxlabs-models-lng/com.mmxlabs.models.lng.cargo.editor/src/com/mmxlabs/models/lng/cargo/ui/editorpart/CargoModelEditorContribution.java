@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.time.LocalDate;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
@@ -41,9 +40,6 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.Inventory;
-import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
-import com.mmxlabs.models.lng.cargo.InventoryEventRow;
-import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -53,7 +49,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -171,42 +166,6 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			inventoryCapacityPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Capacities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			inventoryCapacityPane.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-			if (false && modelObject.getInventoryModels().isEmpty()) {
-				// Demo data - note! outside of commands!
-				final Inventory bin = CargoFactory.eINSTANCE.createInventory();
-				bin.setName("Bintulu");
-
-				makeCapacity(bin, LocalDate.of(2017, 1, 1), 6_000, 460_000);
-				makeCapacity(bin, LocalDate.of(2017, 6, 1), 6_000, 540_000);
-				makeCapacity(bin, LocalDate.of(2017, 8, 1), 6_000, 480_000);
-
-				makeFeed(bin, LocalDate.of(2017, 1, 1), LocalDate.of(2017, 1, 1), "Upstream", InventoryFrequency.LEVEL, 400_000);
-				makeFeed(bin, LocalDate.of(2017, 1, 1), LocalDate.of(2017, 5, 31), "Upstream", InventoryFrequency.DAILY, 20_000);
-				makeFeed(bin, LocalDate.of(2017, 5, 1), LocalDate.of(2017, 5, 31), "Upstream", InventoryFrequency.DAILY, 15_000);
-
-				makeOfftake(bin, LocalDate.of(2017, 1, 15), LocalDate.of(2017, 1, 15), InventoryFrequency.CARGO, "Tepco", 150_000);
-
-				final Inventory sing = CargoFactory.eINSTANCE.createInventory();
-				sing.setName("Singapore");
-				makeCapacity(sing, LocalDate.of(2017, 1, 1), 1_000, 300_000);
-
-				for (final LoadSlot slot : modelObject.getLoadSlots()) {
-					if (slot.getPort().getName().equals("Bintulu")) {
-						int volume = slot.getSlotOrContractMaxQuantity();
-						if (volume != Integer.MAX_VALUE && slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU) {
-							volume = (int) ((double) volume / slot.getSlotOrDelegatedCV());
-						}
-						makeOfftake(bin, slot.getWindowStart(), slot.getWindowStart(), InventoryFrequency.CARGO, slot.getName(), volume);
-					}
-				}
-
-				final Inventory dragon = CargoFactory.eINSTANCE.createInventory();
-				dragon.setName("Dragon");
-
-				modelObject.getInventoryModels().add(bin);
-				modelObject.getInventoryModels().add(sing);
-				modelObject.getInventoryModels().add(dragon);
-			}
 			inventoryPage = editorPart.addPage(sash);
 			editorPart.setPageText(inventoryPage, "Inventory");
 
@@ -221,7 +180,6 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 				@Override
 				public void selectionChanged(final SelectionChangedEvent event) {
-					// TODO Auto-generated method stub
 					final Inventory inventory = (Inventory) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
 					inventoryFeedPane.getViewer().setInput(inventory);
 					inventoryOfftakePane.getViewer().setInput(inventory);
@@ -430,36 +388,5 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			}
 
 		}
-	}
-
-	private void makeFeed(final Inventory inventory, final LocalDate start, final LocalDate end, final String counterParty, final InventoryFrequency freq, final int volume) {
-		final InventoryEventRow row = CargoFactory.eINSTANCE.createInventoryEventRow();
-		row.setStartDate(start);
-		row.setEndDate(end);
-		row.setCounterParty(counterParty);
-		row.setPeriod(freq);
-		row.setVolume(volume);
-
-		inventory.getFeeds().add(row);
-	}
-
-	private void makeOfftake(final Inventory inventory, final LocalDate start, final LocalDate end, final InventoryFrequency freq, final String counterParty, final int volume) {
-		final InventoryEventRow row = CargoFactory.eINSTANCE.createInventoryEventRow();
-		row.setStartDate(start);
-		row.setEndDate(end);
-		row.setPeriod(freq);
-		row.setCounterParty(counterParty);
-		row.setVolume(volume);
-
-		inventory.getOfftakes().add(row);
-	}
-
-	private void makeCapacity(final Inventory inventory, final LocalDate start, final int minVolume, final int maxVolume) {
-		final InventoryCapacityRow row = CargoFactory.eINSTANCE.createInventoryCapacityRow();
-		row.setDate(start);
-		row.setMinVolume(minVolume);
-		row.setMaxVolume(maxVolume);
-
-		inventory.getCapacities().add(row);
 	}
 }
