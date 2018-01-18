@@ -252,10 +252,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
-		final Action lockAction = new Action("Lock") {
-		};
-		lockAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/lock.gif"));
-		toolbar.appendToGroup(VIEW_GROUP, lockAction);
+//		final Action lockAction = new Action("Lock") {
+//		};
+//		lockAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/lock.gif"));
+//		toolbar.appendToGroup(VIEW_GROUP, lockAction);
 		toolbar.update(true);
 	}
 
