@@ -116,7 +116,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 					return null;
 
 				}
-				if (names.contains(value.toString().trim())) {
+				if (value != null && names.contains(value.toString().trim())) {
 					return null;
 				}
 				return "Unknown port name";
@@ -182,6 +182,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 		if (x == -1) {
 			// Ignore warning - this can happen where there is no existing selection
 			// log.warn(String.format("Index of %s (value: %s) to be selected is -1, so it is not a legal option in the control", object, value));
+			return "";
 		}
 		return names.get(x);
 	}
