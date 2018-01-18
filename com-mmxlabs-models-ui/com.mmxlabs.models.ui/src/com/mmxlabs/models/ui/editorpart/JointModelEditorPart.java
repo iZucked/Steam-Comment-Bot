@@ -50,6 +50,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
@@ -643,7 +644,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	@Override
 	public void setFocus() {
-		getControl(getActivePage()).setFocus();
+		Control control = getControl(getActivePage());
+		if (control != null) {
+			control.setFocus();
+		}
 	}
 
 	/*
