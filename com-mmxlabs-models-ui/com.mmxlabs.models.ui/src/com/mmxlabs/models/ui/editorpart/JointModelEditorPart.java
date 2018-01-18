@@ -644,7 +644,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	@Override
 	public void setFocus() {
-		getControl(getActivePage()).setFocus();
+		Control control = getControl(getActivePage());
+		if (control != null) {
+			control.setFocus();
+		}
 	}
 
 	/*
@@ -930,7 +933,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		return false;
 	}
 
-	
 	@Override
 	public void setControl(int pageIndex, Control control) {
 		// This is here to make method public
