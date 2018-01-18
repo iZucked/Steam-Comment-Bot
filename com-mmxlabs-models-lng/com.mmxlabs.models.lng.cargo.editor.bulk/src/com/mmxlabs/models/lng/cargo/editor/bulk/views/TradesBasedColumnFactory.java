@@ -44,19 +44,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
-	public static final String LOAD_START_GROUP = "TradesBasedColumnFactory.LOAD_START_GROUP";
-	public static final String LOAD_MAIN_GROUP = "TradesBasedColumnFactory.LOAD_MAIN_GROUP";
-	public static final String LOAD_EXTRA_GROUP = "TradesBasedColumnFactory.LOAD_EXTRA_GROUP";
-	public static final String LOAD_END_GROUP = "TradesBasedColumnFactory.LOAD_END_GROUP";
-	public static final String DISCHARGE_START_GROUP = "TradesBasedColumnFactory.DISCHARGE_START_GROUP";
-	public static final String DISCHARGE_MAIN_GROUP = "TradesBasedColumnFactory.DISCHARGE_MAIN_GROUP";
-	public static final String DISCHARGE_EXTRA_GROUP = "TradesBasedColumnFactory.DISCHARGE_EXTRA_GROUP";
-	public static final String DISCHARGE_END_GROUP = "TradesBasedColumnFactory.DISCHARGE_END_GROUP";
-	public static final String CARGO_START_GROUP = "TradesBasedColumnFactory.CARGO_START_GROUP";
-	public static final String CARGO_END_GROUP = "TradesBasedColumnFactory.CARGO_END_GROUP";
-
-	public static final String DEFAULT_BLOCK_TYPE = null;
-	public static final String DEFAULT_ORDER_KEY = null;
+	
 	@Override
 	public void registerColumn(final String columnID, final EMFReportColumnManager columnManager, IReferenceValueProviderProvider referenceValueProvider, EditingDomain editingDomain, IScenarioEditingLocation editingLocation, EClass eclass, final IAdaptable report) {
 		switch (columnID) {
