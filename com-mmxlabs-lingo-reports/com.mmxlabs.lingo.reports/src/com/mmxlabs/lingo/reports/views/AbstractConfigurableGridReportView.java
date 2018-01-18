@@ -13,7 +13,6 @@ import java.util.List;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
@@ -61,13 +60,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.lingo.reports.components.ColumnBlock;
-import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
-import com.mmxlabs.lingo.reports.components.ColumnHandler;
-import com.mmxlabs.lingo.reports.components.GridTableViewerColumnFactory;
+import com.mmxlabs.lingo.reports.components.DiffingGridTableViewerColumnFactory;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
-import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
@@ -82,6 +77,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -288,7 +286,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			filterField.setFilterSupport(filterSupport);
 
 			getBlockManager().setGrid(viewer.getGrid());
-			getBlockManager().setColumnFactory(new GridTableViewerColumnFactory(viewer, sortingSupport, filterSupport));
+			getBlockManager().setColumnFactory(new DiffingGridTableViewerColumnFactory(viewer, sortingSupport, filterSupport));
 			// filterField.setFilterSupport(viewer.getFilterSupport());
 
 			viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));

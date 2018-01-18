@@ -10,9 +10,9 @@ import java.util.List;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
-import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class PortRotationsReportTransformer {

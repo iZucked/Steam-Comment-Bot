@@ -12,15 +12,11 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.AsDateTimeFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
-import com.mmxlabs.lingo.reports.views.portrotation.IPortRotationColumnFactory;
-import com.mmxlabs.lingo.reports.views.portrotation.PortRotationBasedReportBuilder;
-import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
@@ -32,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class PortRotationActualsColumnFactory implements IPortRotationColumnFactory {

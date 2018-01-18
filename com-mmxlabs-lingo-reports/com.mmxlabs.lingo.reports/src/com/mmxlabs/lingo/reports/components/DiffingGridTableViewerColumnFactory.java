@@ -29,6 +29,7 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
@@ -39,12 +40,13 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.IImageProvider;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
+import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
+import com.mmxlabs.models.ui.tabular.columngeneration.IRowSpanProvider;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
-import com.mmxlabs.lingo.reports.internal.Activator;
-
-public class GridTableViewerColumnFactory implements IColumnFactory {
+public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 	private final GridTableViewer viewer;
 	private final EObjectTableViewerSortingSupport sortingSupport;
@@ -62,7 +64,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 	private static final Image cellImageRedArrowDown = imageDescriptorRedArrowDown.createImage();
 	private static final Image cellImageRedArrowUp = imageDescriptorRedArrowUp.createImage();
 
-	public GridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport) {
+	public DiffingGridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport) {
 		this.viewer = viewer;
 		this.sortingSupport = sortingSupport;
 		this.filterSupport = filterSupport;

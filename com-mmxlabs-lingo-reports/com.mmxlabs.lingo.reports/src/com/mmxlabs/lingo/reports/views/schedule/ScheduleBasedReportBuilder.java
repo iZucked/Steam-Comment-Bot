@@ -17,11 +17,6 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.components.ColumnBlock;
-import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
-import com.mmxlabs.lingo.reports.components.ColumnHandler;
-import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
@@ -51,7 +46,11 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
+import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;
 
 /**
  * Big helper class for any report based on {@link CargoAllocation}s, {@link OpenSlotAllocation}s, or other events. This builds the internal report data model and handles pin/diff comparison hooks.

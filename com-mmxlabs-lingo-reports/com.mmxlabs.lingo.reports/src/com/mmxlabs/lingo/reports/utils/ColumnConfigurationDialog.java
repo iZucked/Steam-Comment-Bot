@@ -59,8 +59,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 
 /**
  * Adapted from MarkersViewColumnsDialog in Eclipse code:

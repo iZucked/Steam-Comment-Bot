@@ -6,12 +6,12 @@ package com.mmxlabs.lingo.reports.views.schedule.formatters;
 
 import org.eclipse.jface.viewers.ViewerCell;
 
-import com.mmxlabs.lingo.reports.components.IRowSpanProvider;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.ui.tabular.columngeneration.IRowSpanProvider;
 
 public class PNLDeltaFormatter extends IntegerFormatter implements IRowSpanProvider {
 	@Override

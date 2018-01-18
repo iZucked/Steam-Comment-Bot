@@ -6,35 +6,17 @@ package com.mmxlabs.lingo.reports.views.schedule;
 
 import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.OptionalInt;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.CellLabelProvider;
-import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.Grid;
-import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.GridColumnGroup;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
-import com.mmxlabs.lingo.reports.components.ColumnBlock;
-import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
-import com.mmxlabs.lingo.reports.components.ColumnHandler;
-import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.components.IColumnFactory;
-import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -54,7 +36,6 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.RowTypeFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -98,10 +79,9 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostTy
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
-import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
-import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
+import com.mmxlabs.models.ui.tabular.columngeneration.MultiObjectEmfBlockColumnFactory;
+import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {

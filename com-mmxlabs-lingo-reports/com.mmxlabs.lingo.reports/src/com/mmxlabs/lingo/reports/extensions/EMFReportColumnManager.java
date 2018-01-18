@@ -11,11 +11,11 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.ETypedElement;
 
-import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
-import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
+import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;
+import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
 
 /**
  * A class to manage columns which are shared by reports of the same report type.

@@ -13,11 +13,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.ui.IMemento;
 
-import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 
 /**
  * @author Simon Goodall

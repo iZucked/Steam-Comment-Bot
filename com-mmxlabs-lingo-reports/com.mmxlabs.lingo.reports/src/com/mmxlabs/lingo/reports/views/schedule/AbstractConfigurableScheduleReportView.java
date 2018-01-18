@@ -28,8 +28,6 @@ import org.eclipse.ui.IMemento;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.lingo.reports.components.ColumnBlock;
-import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
@@ -49,6 +47,8 @@ import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;

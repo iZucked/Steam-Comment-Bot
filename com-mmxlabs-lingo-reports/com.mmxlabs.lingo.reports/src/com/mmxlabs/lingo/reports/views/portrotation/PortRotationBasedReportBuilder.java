@@ -11,17 +11,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
-import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.GridColumnGroup;
-
-import com.mmxlabs.lingo.reports.components.ColumnBlock;
-import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
-import com.mmxlabs.lingo.reports.components.ColumnHandler;
-import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
@@ -36,6 +27,11 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
+import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;
 
 /**
  * Big helper class for any report based on {@link CargoAllocation}s,

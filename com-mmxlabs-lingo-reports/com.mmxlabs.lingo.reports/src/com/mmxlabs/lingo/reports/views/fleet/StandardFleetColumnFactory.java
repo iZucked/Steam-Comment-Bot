@@ -8,12 +8,6 @@ import static com.mmxlabs.lingo.reports.views.fleet.FleetBasedReportBuilder.FLEE
 
 import org.eclipse.swt.graphics.Image;
 
-import com.mmxlabs.lingo.reports.components.ColumnBlock;
-import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
-import com.mmxlabs.lingo.reports.components.ColumnHandler;
-import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.PinnedScheduleFormatter;
@@ -32,6 +26,12 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.TotalWithBOGFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
+import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;
+import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
 
 public class StandardFleetColumnFactory implements IFleetColumnFactory {
 
