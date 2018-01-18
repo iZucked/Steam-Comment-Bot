@@ -5,12 +5,12 @@
 package com.mmxlabs.models.ui.tabular.columngeneration;
 
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class ColumnHandler {
@@ -29,7 +29,7 @@ public class ColumnHandler {
 	private final ETypedElement[][] features;
 	private IColumnFactory columnFactory;
 
-	public ColumnHandler(final ColumnBlock block, final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement[] features, final String title, final IColumnFactory columnFactory) {
+	public ColumnHandler(final ColumnBlock block, final ICellRenderer formatter, final @Nullable ICellManipulator manipulator, final ETypedElement[] features, final String title, final IColumnFactory columnFactory) {
 		super();
 		this.formatter = formatter;
 		this.manipulator = manipulator;
@@ -41,7 +41,7 @@ public class ColumnHandler {
 		this.block = block;
 	}
 
-	public ColumnHandler(final ColumnBlock block, final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement[][] features, final String title, final IColumnFactory columnFactory) {
+	public ColumnHandler(final ColumnBlock block, final ICellRenderer formatter, final @Nullable ICellManipulator manipulator, final ETypedElement[][] features, final String title, final IColumnFactory columnFactory) {
 		super();
 		this.formatter = formatter;
 		this.manipulator = manipulator;

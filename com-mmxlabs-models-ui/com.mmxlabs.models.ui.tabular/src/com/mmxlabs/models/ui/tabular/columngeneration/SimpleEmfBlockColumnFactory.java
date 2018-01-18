@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+* Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.tabular.columngeneration;
@@ -21,8 +21,13 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 	protected final String blockType;
 	protected final String blockGroup;
 	protected final String orderKey;
-	
-	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final String blockType, String blockGroup, final String orderKey, final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement... path) {
+
+	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
+		this(blockID, title, tooltip, columnType, null, null, null, formatter,null, path);
+	}
+
+	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final String blockType, String blockGroup, final String orderKey,
+			final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement... path) {
 		this.blockID = blockID;
 		this.columnName = title;
 		this.blockDisplayName = title;
@@ -36,8 +41,8 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 		this.orderKey = orderKey;
 	}
 
-	protected SimpleEmfBlockColumnFactory(final String blockID, final String title, final String blockName, final String tooltip, final ColumnType columnType, final String blockType, String blockGroup, final String orderKey, final ICellRenderer formatter,
-			final ICellManipulator manipulator, final ETypedElement... path) {
+	protected SimpleEmfBlockColumnFactory(final String blockID, final String title, final String blockName, final String tooltip, final ColumnType columnType, final String blockType,
+			String blockGroup, final String orderKey, final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement... path) {
 		this.blockID = blockID;
 		this.columnName = title;
 		this.blockDisplayName = blockName;

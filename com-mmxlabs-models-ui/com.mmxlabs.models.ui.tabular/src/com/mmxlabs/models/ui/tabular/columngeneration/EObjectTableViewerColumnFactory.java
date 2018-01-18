@@ -11,6 +11,7 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class EObjectTableViewerColumnFactory implements IColumnFactory {
@@ -32,7 +33,9 @@ public class EObjectTableViewerColumnFactory implements IColumnFactory {
 		final String tooltip = handler.getTooltip();
 
 		final GridViewerColumn column = viewer.addColumn(title, formatter, manipulator, paths[0]);
+		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 
+		
 		final GridColumn tc = column.getColumn();
 
 		if (tooltip != null) {

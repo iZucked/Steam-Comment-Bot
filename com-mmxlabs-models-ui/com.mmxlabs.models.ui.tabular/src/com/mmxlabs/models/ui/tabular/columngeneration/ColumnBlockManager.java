@@ -45,9 +45,9 @@ public class ColumnBlockManager {
 	private final Map<String, List<ColumnHandler>> handlerGroups = new HashMap<>();
 
 	private IColumnFactory columnFactory;
-	
+
 	private Comparator naturalOrderingComparator = new NaturalOrderComparator();
-	
+
 	protected ColumnBlock findColumnBlock(final GridColumn column) {
 		for (final ColumnBlock block : blocks) {
 			if (block.findHandler(column) != null) {
@@ -68,6 +68,10 @@ public class ColumnBlockManager {
 		return null;
 	}
 
+	public ColumnBlock createBlock(final String blockID, final String blockName, final ColumnType columnType) {
+		return createBlock(blockID, blockName, null, null, null, columnType);
+	}
+
 	public ColumnBlock createBlock(final String blockID, final String blockName, final String blockType, final String blockGroup, final String blockOrderKey, final ColumnType columnType) {
 
 		for (final ColumnBlock block : blocks) {
@@ -78,7 +82,7 @@ public class ColumnBlockManager {
 
 		final ColumnBlock namedBlock = new ColumnBlock(blockID, blockName, blockType, blockGroup, blockOrderKey, columnType);
 		blocks.add(namedBlock);
-		
+
 		return namedBlock;
 	}
 
@@ -313,20 +317,46 @@ public class ColumnBlockManager {
 		return configureHandler(block, handler, true);
 	}
 
-	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ICellManipulator manipulator, final boolean create, final ETypedElement... path) {
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ETypedElement... path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, null, path, title, columnFactory);
+
+		return configureHandler(block, handler, true);
+	}
+
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ICellManipulator manipulator, final boolean create,
+			final ETypedElement... path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, manipulator, path, title, columnFactory);
 
 		return configureHandler(block, handler, create);
 	}
 
-	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ICellManipulator manipulator, final boolean create, final ETypedElement[][] path) {
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final boolean create, final ETypedElement... path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, null, path, title, columnFactory);
+
+		return configureHandler(block, handler, create);
+	}
+
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ICellManipulator manipulator, final boolean create,
+			final ETypedElement[][] path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, manipulator, path, title, columnFactory);
+
+		return configureHandler(block, handler, true);
+	}
+
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final boolean create, final ETypedElement[][] path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, null, path, title, columnFactory);
 
 		return configureHandler(block, handler, true);
 	}
 
 	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement[][] path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, manipulator, path, title, columnFactory);
+
+		return configureHandler(block, handler, true);
+	}
+
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ETypedElement[][] path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, null, path, title, columnFactory);
 
 		return configureHandler(block, handler, true);
 	}
@@ -355,26 +385,26 @@ public class ColumnBlockManager {
 
 	public List<ColumnHandler> getHandlerGroup(String groupName) {
 		if (handlerGroups.get(groupName) == null) {
-			return Collections.<ColumnHandler>emptyList();
+			return Collections.<ColumnHandler> emptyList();
 		} else {
 			List<ColumnHandler> group = handlerGroups.get(groupName);
 			Collections.sort(group, new Comparator<ColumnHandler>() {
-			    public int compare(ColumnHandler obj1, ColumnHandler obj2) {
-			    	if (obj1.block.blockOrderKey != null && obj2.block.blockOrderKey == null) {
-			    		return 1;
-			    	} else if (obj1.block.blockOrderKey == null && obj2.block.blockOrderKey != null) {
-			    		return -1;
-			    	} else if (obj1.block.blockOrderKey != null && obj2.block.blockOrderKey != null) {
-			    		return naturalOrderingComparator.compare(obj1.block.blockOrderKey, obj2.block.blockOrderKey);
-			    	}
-			      return obj1.block.blockName.compareTo(obj2.block.blockName);
-			    }
+				public int compare(ColumnHandler obj1, ColumnHandler obj2) {
+					if (obj1.block.blockOrderKey != null && obj2.block.blockOrderKey == null) {
+						return 1;
+					} else if (obj1.block.blockOrderKey == null && obj2.block.blockOrderKey != null) {
+						return -1;
+					} else if (obj1.block.blockOrderKey != null && obj2.block.blockOrderKey != null) {
+						return naturalOrderingComparator.compare(obj1.block.blockOrderKey, obj2.block.blockOrderKey);
+					}
+					return obj1.block.blockName.compareTo(obj2.block.blockName);
+				}
 
 			});
 			return group;
 		}
 	}
-	
+
 	public void removeColumn(final String title) {
 
 		for (final ColumnHandler h : handlers) {
@@ -386,6 +416,14 @@ public class ColumnBlockManager {
 				break;
 			}
 		}
+	}
+
+	public void removeColumn(final ColumnHandler h) {
+
+		h.destroy();
+		handlers.remove(h);
+		handlersInOrder.remove(h);
+		h.block.getColumnHandlers().remove(h);
 	}
 
 	public void makeAllBlocksVisible() {

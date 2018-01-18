@@ -21,6 +21,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.IImageProvider;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class GridTableViewerColumnFactory implements IColumnFactory {
@@ -52,6 +53,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 			col = new GridColumn(viewer.getGrid(), SWT.NONE);
 		}
 		final GridViewerColumn column = new GridViewerColumn(viewer, col);
+		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		column.getColumn().setText(title);
 		column.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, formatter);
 
@@ -194,10 +196,13 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 	@Override
 	public void destroy(final GridViewerColumn gvc) {
 		// filterSupport.removeColum(column);
-		if (sortingSupport != null) {
-			sortingSupport.removeSortableColumn(gvc.getColumn());
+
+		if (gvc != null) {
+			if (sortingSupport != null) {
+				sortingSupport.removeSortableColumn(gvc.getColumn());
+			}
+			gvc.getColumn().dispose();
 		}
-		gvc.getColumn().dispose();
 	}
 
 	private void setRowSpan(final ICellRenderer formatter, final ViewerCell cell, Object element) {
