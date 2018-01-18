@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.fieldassist.IControlContentAdapter;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
@@ -57,11 +58,7 @@ public class AutoCompleteHelper {
 				if (factory != null) {
 					final IMMXContentProposalProvider proposalProvider = supplier.apply(factory);
 					if (proposalProvider != null) {
-						final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(control, controlContentAdapter, proposalProvider, getActivationKeystroke(), getAutoactivationChars());
-						proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_NONE);
-						proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
-						proposalAdapter.setPropagateKeys(true);
-						return proposalProvider;
+						return createProposal(control, controlContentAdapter, proposalProvider);
 					}
 				}
 				try {
@@ -75,8 +72,16 @@ public class AutoCompleteHelper {
 		return null;
 	}
 
+	public static <T extends IContentProposalProvider> T createProposal(final Control control, IControlContentAdapter controlContentAdapter, final T proposalProvider) {
+		final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(control, controlContentAdapter, proposalProvider, getActivationKeystroke(), getAutoactivationChars());
+		proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_NONE);
+		proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
+		proposalAdapter.setPropagateKeys(true);
+		return proposalProvider;
+	}
+
 	// this logic is from swt addons project
-	private static char[] getAutoactivationChars() {
+	public static char[] getAutoactivationChars() {
 
 		final String LCL = "abcdefghijklmnopqrstuvwxy";
 		final String UCL = LCL.toUpperCase();
@@ -87,7 +92,7 @@ public class AutoCompleteHelper {
 		return allChars.toCharArray();
 	}
 
-	private static KeyStroke getActivationKeystroke() {
+	public static KeyStroke getActivationKeystroke() {
 		final KeyStroke instance = KeyStroke.getInstance(new Integer(SWT.CTRL).intValue(), new Integer(' ').intValue());
 		return instance;
 	}
