@@ -5,10 +5,9 @@ import java.util.Set;
 import org.eclipse.jface.action.Action;
 
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
-import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
+import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 
 public class StartOfContractTradesBasedFilterHandler implements ITradesBasedFilterHandler {
 
@@ -34,7 +33,7 @@ public class StartOfContractTradesBasedFilterHandler implements ITradesBasedFilt
 
 	@Override
 	public void deactivate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters) {
-		activeFilters.remove(this); // DO NOT COMMIT - how about isActive?
+		activeFilters.remove(this); // TODO - how about isActive?
 		columnFilters.removeGroupFilter(TradesBasedColumnFactory.LOAD_START_GROUP, TradesBasedColumnFactory.LOAD_START_GROUP);
 		columnFilters.removeGroupFilter(TradesBasedColumnFactory.DISCHARGE_START_GROUP, TradesBasedColumnFactory.DISCHARGE_START_GROUP);
 	}

@@ -24,7 +24,7 @@ public class DefaultTradesBasedFilterHandler implements ITradesBasedFilterHandle
 						filter.deactivate(columnFilters, activeFilters);
 					}
 				}
-				viewer.setColumnsVisibility(); // DO NOT COMMIT (move this method out of NewStyleCargoEditorPane)
+				viewer.setColumnsVisibility(); // TODO (move this method out of NewStyleCargoEditorPane)
 				viewer.getScenarioViewer().refresh();
 			}
 		};
