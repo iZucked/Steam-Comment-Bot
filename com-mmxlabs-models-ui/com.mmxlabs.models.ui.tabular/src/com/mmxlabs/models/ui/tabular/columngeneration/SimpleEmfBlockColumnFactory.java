@@ -23,7 +23,7 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 	protected final String orderKey;
 
 	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
-		this(blockID, title, tooltip, columnType, null, null, null, formatter,null, path);
+		this(blockID, title, tooltip, columnType, null, null, null, formatter, null, path);
 	}
 
 	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final String blockType, String blockGroup, final String orderKey,
