@@ -37,13 +37,25 @@ public class EObjectTableViewerSortingSupport {
 	 * Overridding sort order of objects. Any change in column sort order will set this back to null.
 	 */
 	private List<Object> fixedSortOrder = null;
-	private final List<GridColumn> columnSortOrder = new ArrayList< >();
+	private final List<GridColumn> columnSortOrder = new ArrayList<>();
 
 	private boolean sortDescending = false;
 
 	public void removeSortableColumn(final GridColumn tColumn) {
 		columnSortOrder.remove(tColumn);
 	}
+
+	private boolean sortOnlyOnSelect = false;
+
+	public boolean isSortOnlyOnSelect() {
+		return sortOnlyOnSelect;
+	}
+
+	public void setSortOnlyOnSelect(boolean sortOnlyOnSelect) {
+		this.sortOnlyOnSelect = sortOnlyOnSelect;
+	}
+
+	private boolean doSort = false;
 
 	/**
 	 * Register a listener on the column header to change sorting on click
@@ -56,7 +68,7 @@ public class EObjectTableViewerSortingSupport {
 		if (getColumnSortOrder().contains(tColumn)) {
 			return;
 		}
-		
+
 		getColumnSortOrder().add(tColumn);
 
 		column.getColumn().addSelectionListener(new SelectionListener() {
@@ -68,7 +80,9 @@ public class EObjectTableViewerSortingSupport {
 			public void widgetSelected(final SelectionEvent e) {
 
 				sortColumnsBy(tColumn);
+				doSort = true;
 				viewer.refresh(false);
+				doSort = false;
 			}
 
 		});
@@ -90,7 +104,7 @@ public class EObjectTableViewerSortingSupport {
 		}
 		tColumn.setSort(isSortDescending() ? SWT.UP : SWT.DOWN);
 	}
-	
+
 	/**
 	 * Set a predefined sort order to override current column sort order. This will be overridden if the column sort order changes.
 	 * 
@@ -133,6 +147,14 @@ public class EObjectTableViewerSortingSupport {
 	 */
 	public ViewerComparator createViewerComparer() {
 		return new ViewerComparator() {
+
+			@Override
+			public void sort(Viewer viewer, Object[] elements) {
+				if (!sortOnlyOnSelect || doSort) {
+					super.sort(viewer, elements);
+				}
+			}
+
 			@Override
 			// BE for completeness -- this one's not actually used, see compare() below
 			public int category(Object object) {
@@ -182,8 +204,8 @@ public class EObjectTableViewerSortingSupport {
 							rightOwner = path.get((EObject) rightObject);
 						} else if (data instanceof EMFPath[]) {
 
-							leftOwner = null;//leftObject;
-							rightOwner =null;// rightObject;
+							leftOwner = null;// leftObject;
+							rightOwner = null;// rightObject;
 
 							EMFPath[] paths = (EMFPath[]) data;
 							for (final EMFPath p : paths) {
