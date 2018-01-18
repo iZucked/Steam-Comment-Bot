@@ -50,6 +50,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
@@ -927,5 +928,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	public boolean isSaveOnCloseNeeded() {
 		// Handled by ScenarioServiceSaveHook. Avoid double save prompt.
 		return false;
+	}
+
+	
+	@Override
+	public void setControl(int pageIndex, Control control) {
+		// This is here to make method public
+		super.setControl(pageIndex, control);
 	}
 }
