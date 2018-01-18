@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
@@ -36,6 +35,8 @@ import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.bindings.keys.IKeyLookup;
+import org.eclipse.jface.bindings.keys.KeyLookupFactory;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -45,7 +46,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
@@ -55,6 +55,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -88,7 +89,6 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedRowModelTransf
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -96,7 +96,6 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
-import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
@@ -121,7 +120,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	@Inject(optional = true)
 	private Iterable<ITradeBasedBulkRowTransformerFactoryExtension> rowTransformerFactoryExtensions;
-	
+
 	@Inject(optional = true)
 	private Iterable<ITradeBasedBulkRowTransformerExtension> rowTransformerExtensions;
 
@@ -132,36 +131,36 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private Table table;
 	private CargoPackage cargoPkg = CargoPackage.eINSTANCE;
 	private EMFReportColumnManager columnManager = new EMFReportColumnManager();
-	
+
 	private Map<EObject, Row> rowDataToRow = new HashMap<>();
-	
+
 	/*
 	 * This is used to determine the order of column groups
 	 */
 	private final String[] orderedColumnGroupNames = new String[] {
-			TradesBasedColumnFactory.LOAD_START_GROUP,
-			TradesBasedColumnFactory.LOAD_MAIN_GROUP,
-			TradesBasedColumnFactory.LOAD_EXTRA_GROUP,
-			TradesBasedColumnFactory.LOAD_END_GROUP,
-			TradesBasedColumnFactory.DISCHARGE_START_GROUP,
-			TradesBasedColumnFactory.DISCHARGE_MAIN_GROUP,
-			TradesBasedColumnFactory.DISCHARGE_EXTRA_GROUP,
-			TradesBasedColumnFactory.DISCHARGE_END_GROUP,
-			TradesBasedColumnFactory.CARGO_START_GROUP,
-			TradesBasedColumnFactory.CARGO_END_GROUP
+			TradesBasedColumnFactory.LOAD_START_GROUP, //
+			TradesBasedColumnFactory.LOAD_MAIN_GROUP, //
+			TradesBasedColumnFactory.LOAD_EXTRA_GROUP, //
+			TradesBasedColumnFactory.LOAD_END_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_START_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_MAIN_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_EXTRA_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_END_GROUP, //
+			TradesBasedColumnFactory.CARGO_START_GROUP, //
+			TradesBasedColumnFactory.CARGO_END_GROUP //
 			};
 	
 	/*
 	 * This is used to determine the default visible column groups
 	 */
-	private String[] defaultFilters = {
-			TradesBasedColumnFactory.LOAD_START_GROUP,
-			TradesBasedColumnFactory.LOAD_MAIN_GROUP,
-			TradesBasedColumnFactory.LOAD_END_GROUP,
-			TradesBasedColumnFactory.DISCHARGE_START_GROUP,
-			TradesBasedColumnFactory.DISCHARGE_MAIN_GROUP,
-			TradesBasedColumnFactory.DISCHARGE_END_GROUP,
-			TradesBasedColumnFactory.CARGO_END_GROUP
+	private String[] defaultFilters = { //
+			TradesBasedColumnFactory.LOAD_START_GROUP, //
+			TradesBasedColumnFactory.LOAD_MAIN_GROUP, //
+			TradesBasedColumnFactory.LOAD_END_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_START_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_MAIN_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_END_GROUP, //
+			TradesBasedColumnFactory.CARGO_END_GROUP //
 	};
 	
 	private EPackage customRowPackage = createCustomisedRowEcore();
@@ -174,7 +173,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private Map<ColumnHandler, GridColumn> handlerToColumnMap = new HashMap<>();
 
 	protected final SortData sortData = new SortData();
-		
+
 	public BulkTradesTablePane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		Injector injector = Guice.createInjector(new TradeBasedBulkModule());
@@ -186,13 +185,13 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		
+
 		extendRowModel();
 		createColumns();
 		buildRowTransformerHandlers(rowTransformerHandlers);
-		
+
 		buildToolbar();
-		
+
 	}
 
 	public Object getAdapter(Class c) {
@@ -217,7 +216,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		final Action newDischargeSlot = getNewDischargeSlotAction();
 		final Action addLoadSlotToDischarge = getAddLoadToDischargeAction();
 		final Action addDischargeSlotToLoad = getAddDischargeToLoadAction();
-		
+
 		final ToolBarManager toolbar = getToolBarManager();
 		toolbar.removeAll();
 		toolbar.add(new GroupMarker(EDIT_GROUP));
@@ -229,22 +228,22 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
-//		getToolBarManager().add(newCargo);
-//		getToolBarManager().add(newLoadSlot);
-//		getToolBarManager().add(newDischargeSlot);
-//		getToolBarManager().add(addLoadSlotToDischarge);
-//		getToolBarManager().add(addDischargeSlotToLoad);
+		// getToolBarManager().add(newCargo);
+		// getToolBarManager().add(newLoadSlot);
+		// getToolBarManager().add(newDischargeSlot);
+		// getToolBarManager().add(addLoadSlotToDischarge);
+		// getToolBarManager().add(addDischargeSlotToLoad);
 		List<Action> filterActions = new LinkedList<>();
 		for (ITradesBasedFilterHandler filterHandler : getFiltersList(allColumnFilterHandlers)) {
 			if (filterHandler.activateAction(columnFilters, activeColumnFilterHandlers, this) != null) {
 				filterActions.add(filterHandler.activateAction(columnFilters, activeColumnFilterHandlers, this));
 			}
 		}
-		
+
 		final Action filterAction = new FilterMenuAction("Filter", filterActions.toArray(new Action[filterActions.size()]));
 		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
 		toolbar.appendToGroup(VIEW_GROUP, filterAction);
-		
+
 		deleteAction = createDeleteAction(null); // TODO: NEW check this
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
@@ -261,7 +260,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	private List<ITradesBasedFilterHandler> getFiltersList(Set<ITradesBasedFilterHandler> allColumnFilterHandlers) {
 		if (allColumnFilterHandlers.isEmpty()) {
-			return Collections.<ITradesBasedFilterHandler>emptyList();
+			return Collections.<ITradesBasedFilterHandler> emptyList();
 		}
 		List<ITradesBasedFilterHandler> filters = new LinkedList<>(allColumnFilterHandlers);
 		Collections.sort(filters, new Comparator<ITradesBasedFilterHandler>() {
@@ -335,7 +334,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	private class AddAction extends DefaultMenuCreatorAction {
 		private Action[] actions;
-		public AddAction(final String label, final Action ... actions) {
+
+		public AddAction(final String label, final Action... actions) {
 			super(label);
 			this.actions = actions;
 		}
@@ -349,18 +349,19 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 		private Action[] actions;
-		public FilterMenuAction(final String label, final Action ... actions) {
+
+		public FilterMenuAction(final String label, final Action... actions) {
 			super(label);
 			this.actions = actions;
 		}
-		
+
 		protected void populate(final Menu menu) {
 			for (Action action : actions) {
 				addActionToMenu(action, menu);
 			}
 		}
 	}
-	
+
 	private Action getAddDischargeToLoadAction() {
 		return new Action("Add Discharge To Load") {
 			public void run() {
@@ -376,10 +377,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 								final Cargo newCargo = CargoFactory.eINSTANCE.createCargo();
 								final LoadSlot loadSlot = row.getLoadSlot();
 								final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(),
-										dischargeSlot));
-								cmd.append(
-										AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
+								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
+										CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
+								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
+										CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 								cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
 								cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
 								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
@@ -406,10 +407,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 								final Cargo newCargo = CargoFactory.eINSTANCE.createCargo();
 								final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
 								final DischargeSlot dischargeSlot = row.getDischargeSlot();
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(),
-										loadSlot));
-								cmd.append(
-										AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
+								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
+										CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
+								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
+										CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 								cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
 								cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
 								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
@@ -442,8 +443,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final CompoundCommand cmd = new CompoundCommand("New Load");
 
 				final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
-				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(),
-						loadSlot));
+				cmd.append(
+						AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
 				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 			}
 		};
@@ -460,10 +461,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(),
 						dischargeSlot));
-				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(),
-						loadSlot));
 				cmd.append(
-						AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
+						AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
+				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 				cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
 				cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
 				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
@@ -553,7 +553,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			if (ref.isContainment()) {
 				if (ref.isMany()) {
 					Collection<Object> collection = (Collection<Object>) parent.eGet(ref);
-					for (Object o : collection) {	
+					for (Object o : collection) {
 						if (o instanceof EObject) {
 							EObject obj = (EObject) o;
 							rowDataToRow.put(obj, row);
@@ -573,7 +573,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 		}
 	}
-	
+
 	private DischargeSlot getDischargeSlot(Cargo cargo) {
 		return (DischargeSlot) (cargo.getSortedSlots().get(cargo.getSortedSlots().size() - 1));
 	}
@@ -606,10 +606,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				handlerMap.put(handlerID, ext.getFactory());
 			}
 		}
-		
+
 		// Now find the column definitions themselves.
 		if (columnExtensions != null) {
-			
+
 			for (final ITradeBasedBulkColumnExtension ext : columnExtensions) {
 				ITradesColumnFactory factory;
 				System.out.println(ext.getColumnID());
@@ -623,13 +623,13 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				}
 			}
 		}
-		
+
 		// Create the actual columns instances.
 		columnManager.addColumns("TRADES_TABLE", columnBlockManager);
 		for (String groupName : orderedColumnGroupNames) {
 			for (final ColumnHandler handler : columnBlockManager.getHandlerGroup(groupName)) {
 				final GridViewerColumn gvcolumn = handler.createColumn();
-//				GridViewerHelper.configureLookAndFeel(gvcolumn);
+				// GridViewerHelper.configureLookAndFeel(gvcolumn);
 				final GridColumn column = gvcolumn.getColumn();
 				DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
 				colRenderer.setWordWrap(true);
@@ -647,7 +647,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 		scenarioViewer.getGrid().recalculateHeader();
 	}
-	
+
 	public void setColumnsVisibility() {
 		for (String groupName : orderedColumnGroupNames) {
 			for (final ColumnHandler handler : columnBlockManager.getHandlerGroup(groupName)) {
@@ -661,9 +661,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 		scenarioViewer.getGrid().recalculateHeader();
 	}
-	
+
 	protected void registerColumnFilterHandlers() {
-  		if (columnFilterExtensions != null) {
+		if (columnFilterExtensions != null) {
 			for (final ITradeBasedBulkColumnFilterExtension ext : columnFilterExtensions) {
 				ITradesBasedFilterHandler handler = ext.getFactory();
 				allColumnFilterHandlers.add(handler);
@@ -738,16 +738,17 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		ScenarioTableViewer viewer = new ScenarioTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
-			
+
 			@Override
-					public void refresh() {
-						// TODO Auto-generated method stub
-						super.refresh();
-						for (GridColumn c : this.getGrid().getColumns()) {
-							c.setMinimumWidth(70);
-						}
-						this.getGrid().recalculateHeader();
-					}
+			public void refresh() {
+				// TODO Auto-generated method stub
+				super.refresh();
+				for (GridColumn c : this.getGrid().getColumns()) {
+					c.setMinimumWidth(70);
+				}
+				this.getGrid().recalculateHeader();
+			}
+
 			@Override
 			public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
 				super.init(adapterFactory, modelReference, path);
@@ -760,7 +761,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 					@Override
 					public Object[] getElements(final Object inputElement) {
-						
+
 						setCargoes(table, lngScenarioModel);
 						return table.getRows().toArray();
 					}
@@ -784,12 +785,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					public boolean hasChildren(final Object element) {
 						return false;
 					}
-					
-					
 
 				}, modelReference);
 			}
-			
+
 			@Override
 			protected Object[] getSortedChildren(final Object parent) {
 				// This is the filtered and sorted children.
@@ -877,10 +876,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 
 		};
-		
-		
-//		GridViewerHelper.configureLookAndFeel(viewer);
-		
+
+		// GridViewerHelper.configureLookAndFeel(viewer);
+
 		return viewer;
 	}
 
@@ -888,7 +886,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	public ScenarioTableViewer createViewer(final Composite parent) {
 		if (scenarioViewer == null) {
 			scenarioViewer = constructViewer(parent);
-//			scenarioViewer.setAutoPreferredHeight(true);
+			// scenarioViewer.setAutoPreferredHeight(true);
 			scenarioViewer.getGrid().setCellSelectionEnabled(true);
 			enableOpenListener();
 
@@ -897,15 +895,27 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
 				@Override
 				protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-					return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION
-							|| (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.CR);
+					boolean activate = event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION //
+							|| event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC //
+							|| event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL;
+					if (activate) {
+						return true;
+					}
+					if (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) {
+						if (event.keyCode == KeyLookupFactory.getDefault().formalKeyLookup(IKeyLookup.ENTER_NAME)) {
+							return true;
+						}
+					}
+					return false;
 				}
 			};
 
 			GridViewerEditor.create(scenarioViewer, actSupport, ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.KEYBOARD_ACTIVATION);
 
 			return scenarioViewer;
-		} else {
+		} else
+
+		{
 			throw new RuntimeException("Did not expect two calls to createViewer()");
 		}
 
@@ -914,11 +924,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	@Override
 	protected void enableOpenListener() {
 	}
-	
+
 	@Override
 	public ScenarioTableViewer getScenarioViewer() {
 		return super.getScenarioViewer();
 	}
 
-	
 }
