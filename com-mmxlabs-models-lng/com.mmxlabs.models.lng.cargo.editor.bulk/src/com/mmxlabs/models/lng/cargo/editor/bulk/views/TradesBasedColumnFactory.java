@@ -38,7 +38,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.CellRenderer;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
@@ -67,7 +67,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-port": {
-			SingleReferenceManipulator rendMan = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
+			TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
 			columnManager.registerColumn("TRADES_TABLE",
 					new SimpleEmfBlockColumnFactory("LOAD_PORT", "Port", "", ColumnType.NORMAL, LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
@@ -146,7 +146,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-port": {
-			SingleReferenceManipulator rendMan = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
+			TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
 			columnManager.registerColumn("TRADES_TABLE",
 					new SimpleEmfBlockColumnFactory("DISCHARGE_PORT", "Port", "", ColumnType.NORMAL, DISCHARGE_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
