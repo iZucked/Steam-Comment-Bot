@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -285,7 +286,11 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 			@Override
 			protected Object getValue(final Object element) {
-				return manipulator.getValue(path.get((EObject) element));
+				Object value = manipulator.getValue(path.get((EObject) element));
+				if (value == SetCommand.UNSET_VALUE) {
+					return null;
+				}
+				return value;
 			}
 
 			@Override

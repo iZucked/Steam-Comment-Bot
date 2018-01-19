@@ -35,7 +35,8 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	protected final EStructuralFeature field;
 	protected final EditingDomain editingDomain;
 	protected boolean isOverridable;
-	private final EAnnotation overrideAnnotation;
+	protected final EAnnotation overrideAnnotation;
+	protected EStructuralFeature overrideToggleFeature;
 
 	public BasicAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
 		super();
@@ -51,6 +52,8 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 					for (EStructuralFeature f : field.getEContainingClass().getEAllAttributes()) {
 						if (f.getName().equals(field.getName() + "Override")) {
 							isOverridable = true;
+							overrideToggleFeature = f;
+							break;
 						}
 					}
 				}
@@ -131,7 +134,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 			return null;
 		}
 
-		if (field.isUnsettable()) {
+		if (!isOverridable && field.isUnsettable()) {
 			final CellEditorWrapper wrapper = new CellEditorWrapper(c);
 			wrapper.setDelegate(createCellEditor(wrapper.getInnerComposite(), object));
 			return wrapper;
