@@ -73,8 +73,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						return "Y";
 					}
 				}
+				return "N";
 			}
-			return "N";
+			return "";
 		}
 	}
 
