@@ -157,11 +157,11 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 			}
 			final double n = number.doubleValue();
 			String unit = "k";
-			if (container instanceof Slot) {
-				unit = ((Slot)container).getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
-			} else if (container instanceof Contract) {
-				unit = ((Contract)container).getVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
-			}
+//			if (container instanceof Slot) {
+//				unit = ((Slot)container).getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
+//			} else if (container instanceof Contract) {
+//				unit = ((Contract)container).getVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
+//			}
 			return String.format("%s%s", super.renderSetValue(container, (int) Math.round(n / 1000.0)), unit);
 		}
 
