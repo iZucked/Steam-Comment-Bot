@@ -65,6 +65,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -633,13 +634,14 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		// Create the actual columns instances.
 		columnManager.addColumns("TRADES_TABLE", columnBlockManager);
+		List<Integer> columnOrderList = new LinkedList<>();
 		for (String groupName : orderedColumnGroupNames) {
 			for (final ColumnHandler handler : columnBlockManager.getHandlerGroup(groupName)) {
-				  GridViewerColumn gvcolumn = handler.column;
-				  if (gvcolumn == null) {
-					  gvcolumn = handler.createColumn();
-					  GridViewerHelper.configureLookAndFeel(gvcolumn);
-				  }
+				GridViewerColumn gvcolumn = handler.column;
+				if (gvcolumn == null) {
+					gvcolumn = handler.createColumn();
+					GridViewerHelper.configureLookAndFeel(gvcolumn);
+				}
 				final GridColumn column = gvcolumn.getColumn();
 				// DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
 				// colRenderer.setWordWrap(true);
@@ -653,8 +655,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				if (columnFilters.isColumnVisible(handler.block)) {
 					column.setVisible(true);
 				}
+				columnOrderList.add(scenarioViewer.getGrid().indexOf(column));
 			}
 		}
+
+		scenarioViewer.getGrid().setColumnOrder(CollectionsUtil.integersToIntArray(columnOrderList));
+
 		scenarioViewer.getGrid().recalculateHeader();
 	}
 
