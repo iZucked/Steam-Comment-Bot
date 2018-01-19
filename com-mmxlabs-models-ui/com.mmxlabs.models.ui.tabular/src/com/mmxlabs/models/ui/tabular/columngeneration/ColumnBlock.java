@@ -12,7 +12,10 @@ import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.TreeEvent;
+import org.eclipse.swt.events.TreeListener;
 
+import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 
 /**
@@ -37,8 +40,29 @@ public class ColumnBlock {
 	 * Place holder columns are not purged.
 	 */
 	private boolean placeholder;
+	// Coloum group behaviour
+	private boolean expandable = false;
+	private boolean expandByDefault = true;
+
+	public boolean isExpandable() {
+		return expandable;
+	}
+
+	public void setExpandable(boolean expandable) {
+		this.expandable = expandable;
+	}
+
+	public boolean isExpandByDefault() {
+		return expandByDefault;
+	}
+
+	public void setExpandByDefault(boolean expandByDefault) {
+		this.expandByDefault = expandByDefault;
+	}
+
 	public String tooltip;
 	private GridColumnGroup gridColumnGroup;
+	private boolean forceGroup;
 
 	public ColumnBlock(final String blockID, final String blockName, final String blockType, final String blockGroup, final String blockOrderKey, final ColumnType columnType) {
 		this.blockID = blockID;
@@ -131,11 +155,17 @@ public class ColumnBlock {
 	}
 
 	public GridColumnGroup getOrCreateColumnGroup(final Grid grid) {
-		if (gridColumnGroup == null) {
-			if (columnHandlers.size() > 1) {
-				gridColumnGroup = new GridColumnGroup(grid, SWT.NONE);
-				gridColumnGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
+		if (gridColumnGroup == null && grid != null) {
+			if (forceGroup || columnHandlers.size() > 1) {
+				int style = SWT.CENTER;
+				if (expandable) {
+					style |= SWT.TOGGLE;
+				}
+
+				gridColumnGroup = new GridColumnGroup(grid, style);
+				gridColumnGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());				
 				gridColumnGroup.setText(blockName);
+				gridColumnGroup.setExpanded(false);
 			}
 		}
 		return gridColumnGroup;
@@ -153,6 +183,10 @@ public class ColumnBlock {
 	@NonNull
 	public String getblockGroup() {
 		return blockGroup == null ? getblockType() : blockGroup;
+	}
+
+	public void setForceGroup(boolean forceGroup) {
+		this.forceGroup = forceGroup;
 	}
 
 }

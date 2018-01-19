@@ -32,6 +32,7 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItemDataVisualizer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -72,7 +73,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	private CommandStack currentCommandStack;
 	private ModelReference currentModelReference;
-	
+
 	private final CommandStackListener commandStackListener = new CommandStackListener() {
 
 		@Override
@@ -88,7 +89,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	};
 
 	private boolean autoResizeable = true;
-	
+
 	protected IColorProvider delegateColourProvider;
 
 	protected IToolTipProvider delegateToolTipProvider;
@@ -216,12 +217,22 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
+		return addColumn(columnName, null, renderer, manipulator, path);
+	}
+
+	public GridViewerColumn addColumn(final String columnName, GridColumnGroup group, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
 
 		// create a column
 		final GridTreeViewer viewer = this;
 
-		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-		final GridColumn tColumn = column.getColumn();
+		final GridColumn tColumn;
+		if (group != null) {
+			tColumn = new GridColumn(group, SWT.CENTER);
+		} else {
+			tColumn = new GridColumn(viewer.getGrid(), SWT.CENTER);
+		}
+		final GridViewerColumn column = new GridViewerColumn(viewer, tColumn);
+
 		tColumn.setHeaderRenderer(new ColumnHeaderRenderer());
 
 		{
