@@ -95,6 +95,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
@@ -634,8 +635,11 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		columnManager.addColumns("TRADES_TABLE", columnBlockManager);
 		for (String groupName : orderedColumnGroupNames) {
 			for (final ColumnHandler handler : columnBlockManager.getHandlerGroup(groupName)) {
-				final GridViewerColumn gvcolumn = handler.createColumn();
-				// GridViewerHelper.configureLookAndFeel(gvcolumn);
+				  GridViewerColumn gvcolumn = handler.column;
+				  if (gvcolumn == null) {
+					  gvcolumn = handler.createColumn();
+					  GridViewerHelper.configureLookAndFeel(gvcolumn);
+				  }
 				final GridColumn column = gvcolumn.getColumn();
 				// DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
 				// colRenderer.setWordWrap(true);
