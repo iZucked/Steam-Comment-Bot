@@ -1,7 +1,5 @@
 package com.mmxlabs.models.lng.cargo.editor.bulk.views;
 
-import java.lang.instrument.IllegalClassFormatException;
-
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ETypedElement;
@@ -25,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
@@ -102,7 +101,18 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-date": {
+
 			final LocalDateAttributeManipulator rendMan = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editingDomain) {
+				@Override
+				public String renderSetValue(final Object owner, final Object object) {
+					final String v = super.renderSetValue(owner, object);
+					if (v != "") {
+						final String suffix = getTimeWindowSuffix(owner);
+						return v + suffix;
+					}
+					return v;
+				}
+
 				@Override
 				public Comparable<?> getComparable(final Object object) {
 
@@ -128,8 +138,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecontract": {
 			final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory("PURCHASE_CONTRACT", "Buy at", null, ColumnType.NORMAL, LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE,
-					DEFAULT_ORDER_KEY, rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory("PURCHASE_CONTRACT", "Buy at", null, ColumnType.NORMAL, LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+					rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecounterparty": {
@@ -224,6 +234,17 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-date": {
 			final LocalDateAttributeManipulator rendMan = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editingDomain) {
+
+				@Override
+				public String renderSetValue(final Object owner, final Object object) {
+					final String v = super.renderSetValue(owner, object);
+					if (v != "") {
+						final String suffix = getTimeWindowSuffix(owner);
+						return v + suffix;
+					}
+					return v;
+				}
+
 				@Override
 				public Comparable<?> getComparable(final Object object) {
 
@@ -427,4 +448,33 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			}
 		};
 	}
+
+	protected String getTimeWindowSuffix(final Object owner) {
+		if (owner instanceof Slot) {
+			final Slot slot = (Slot) owner;
+			final int size = slot.getSlotOrPortWindowSize();
+			final TimePeriod units = slot.getSlotOrPortWindowSizeUnits();
+			String suffix = "h";
+			switch (units) {
+			case DAYS:
+				suffix = "d";
+				break;
+			case HOURS:
+				suffix = "h";
+				break;
+			case MONTHS:
+				suffix = "m";
+				break;
+			default:
+				return "";
+
+			}
+			if (size > 0) {
+				return String.format(" +%d%s", size, suffix);
+			}
+
+		}
+		return "";
+	}
+
 }
