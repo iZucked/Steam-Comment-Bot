@@ -13,6 +13,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="openSlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputEquivalents" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlotContractParams"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SlotContractParams"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlotContractParams"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SlotContractParams"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Table">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"/>

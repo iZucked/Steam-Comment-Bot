@@ -2,14 +2,22 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
 
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
@@ -86,7 +94,16 @@ public class CargoBulkEditorPackageImpl extends EPackageImpl implements CargoBul
 		isInited = true;
 
 		// Initialize simple dependencies
+		CommercialPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
+		PricingPackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
+		SpotMarketsPackage.eINSTANCE.eClass();
+		CargoPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theCargoBulkEditorPackage.createPackageContents();
@@ -189,6 +206,24 @@ public class CargoBulkEditorPackageImpl extends EPackageImpl implements CargoBul
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getRow_LoadSlotContractParams() {
+		return (EReference)rowEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRow_DischargeSlotContractParams() {
+		return (EReference)rowEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getRow__GetAssignableObject() {
 		return rowEClass.getEOperations().get(0);
 	}
@@ -248,6 +283,8 @@ public class CargoBulkEditorPackageImpl extends EPackageImpl implements CargoBul
 		createEReference(rowEClass, ROW__DISCHARGE_ALLOCATION);
 		createEReference(rowEClass, ROW__OPEN_SLOT_ALLOCATION);
 		createEReference(rowEClass, ROW__INPUT_EQUIVALENTS);
+		createEReference(rowEClass, ROW__LOAD_SLOT_CONTRACT_PARAMS);
+		createEReference(rowEClass, ROW__DISCHARGE_SLOT_CONTRACT_PARAMS);
 		createEOperation(rowEClass, ROW___GET_ASSIGNABLE_OBJECT);
 
 		tableEClass = createEClass(TABLE);
@@ -280,6 +317,7 @@ public class CargoBulkEditorPackageImpl extends EPackageImpl implements CargoBul
 		// Obtain other dependent packages
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
+		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -297,6 +335,8 @@ public class CargoBulkEditorPackageImpl extends EPackageImpl implements CargoBul
 		initEReference(getRow_DischargeAllocation(), theSchedulePackage.getSlotAllocation(), null, "dischargeAllocation", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_OpenSlotAllocation(), theSchedulePackage.getOpenSlotAllocation(), null, "openSlotAllocation", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_InputEquivalents(), ecorePackage.getEObject(), null, "inputEquivalents", null, 0, -1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRow_LoadSlotContractParams(), theCommercialPackage.getSlotContractParams(), null, "loadSlotContractParams", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRow_DischargeSlotContractParams(), theCommercialPackage.getSlotContractParams(), null, "dischargeSlotContractParams", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getRow__GetAssignableObject(), ecorePackage.getEObject(), "getAssignableObject", 0, 1, IS_UNIQUE, IS_ORDERED);
 

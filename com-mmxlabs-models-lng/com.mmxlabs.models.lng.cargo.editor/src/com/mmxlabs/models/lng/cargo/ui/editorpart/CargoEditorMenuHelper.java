@@ -236,7 +236,7 @@ public class CargoEditorMenuHelper {
 
 	}
 
-	IMenuListener createDischargeSlotMenuListener(final List<DischargeSlot> dischargeSlots, final int index) {
+	public IMenuListener createDischargeSlotMenuListener(final List<DischargeSlot> dischargeSlots, final int index) {
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		return new IMenuListener() {
 

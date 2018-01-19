@@ -140,13 +140,31 @@ public interface CargoBulkEditorPackage extends EPackage {
 	int ROW__INPUT_EQUIVALENTS = 7;
 
 	/**
+	 * The feature id for the '<em><b>Load Slot Contract Params</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__LOAD_SLOT_CONTRACT_PARAMS = 8;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Slot Contract Params</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__DISCHARGE_SLOT_CONTRACT_PARAMS = 9;
+
+	/**
 	 * The number of structural features of the '<em>Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW_FEATURE_COUNT = 8;
+	int ROW_FEATURE_COUNT = 10;
 
 	/**
 	 * The operation id for the '<em>Get Assignable Object</em>' operation.
@@ -303,6 +321,28 @@ public interface CargoBulkEditorPackage extends EPackage {
 	EReference getRow_InputEquivalents();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getLoadSlotContractParams <em>Load Slot Contract Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Load Slot Contract Params</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getLoadSlotContractParams()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EReference getRow_LoadSlotContractParams();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getDischargeSlotContractParams <em>Discharge Slot Contract Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Discharge Slot Contract Params</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getDischargeSlotContractParams()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EReference getRow_DischargeSlotContractParams();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getAssignableObject() <em>Get Assignable Object</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -429,6 +469,22 @@ public interface CargoBulkEditorPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROW__INPUT_EQUIVALENTS = eINSTANCE.getRow_InputEquivalents();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Slot Contract Params</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROW__LOAD_SLOT_CONTRACT_PARAMS = eINSTANCE.getRow_LoadSlotContractParams();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Slot Contract Params</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROW__DISCHARGE_SLOT_CONTRACT_PARAMS = eINSTANCE.getRow_DischargeSlotContractParams();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Assignable Object</b></em>' operation.

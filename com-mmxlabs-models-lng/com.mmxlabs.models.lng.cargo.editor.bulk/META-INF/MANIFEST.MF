@@ -14,6 +14,17 @@ Export-Package: com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor,
  com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart,
  com.mmxlabs.models.lng.cargo.editor.bulk.views
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
+ org.eclipse.emf.ecore;visibility:=reexport,
+ com.mmxlabs.models.lng.commercial;visibility:=reexport,
+ com.mmxlabs.models.datetime;visibility:=reexport,
+ com.mmxlabs.models.lng.fleet;visibility:=reexport,
+ com.mmxlabs.models.lng.types;visibility:=reexport,
+ com.mmxlabs.models.mmxcore;visibility:=reexport,
+ com.mmxlabs.models.lng.port;visibility:=reexport,
+ com.mmxlabs.models.lng.pricing;visibility:=reexport,
+ com.mmxlabs.models.lng.schedule;visibility:=reexport,
+ com.mmxlabs.models.lng.spotmarkets;visibility:=reexport,
+ com.mmxlabs.models.lng.cargo;visibility:=reexport,
  org.eclipse.core.resources;visibility:=reexport,
  com.mmxlabs.models.lng.cargo.edit;bundle-version="3.9.6";visibility:=reexport,
  com.google.guava;bundle-version="11.0.1",
@@ -31,7 +42,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.datetime.ui;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.cargo.editor,
- org.eclipse.swt
+ org.eclipse.swt,
+ com.mmxlabs.license.features;bundle-version="4.4.1",
+ com.mmxlabs.models.util
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"

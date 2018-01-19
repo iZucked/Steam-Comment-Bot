@@ -24,6 +24,40 @@ public interface ITradesColumnFactory {
 	public static final String DEFAULT_BLOCK_TYPE = null;
 	public static final String DEFAULT_ORDER_KEY = null;
 
+	public static boolean isLoadGroup(String group) {
+		if (group == null) {
+			return false;
+		}
+		switch (group) {
+		case LOAD_START_GROUP:
+			return true;
+		case LOAD_MAIN_GROUP:
+			return true;
+		case LOAD_EXTRA_GROUP:
+			return true;
+		case LOAD_END_GROUP:
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isDischargeGroup(String group) {
+		if (group == null) {
+			return false;
+		}
+		switch (group) {
+		case DISCHARGE_START_GROUP:
+			return true;
+		case DISCHARGE_MAIN_GROUP:
+			return true;
+		case DISCHARGE_EXTRA_GROUP:
+			return true;
+		case DISCHARGE_END_GROUP:
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * 
 	 * @param report

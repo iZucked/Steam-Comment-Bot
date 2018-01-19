@@ -147,10 +147,12 @@
             id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedMenuFilter.default">
       </TradesBasedMenuFilter>
    </extension>
-<extension
-      point="com.mmxlabs.models.lng.cargo.editor.TradesTableEditor">
-   <TradesTableEditor
-         class="com.mmxlabs.models.lng.cargo.editor.bulk.ui.BulkTradesTableProvider">
-   </TradesTableEditor>
-</extension>   
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="bulk-editor"
+            plugin.xml="bulk-plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
+  
 </plugin>

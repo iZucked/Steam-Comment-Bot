@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 
+import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -42,6 +43,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.impl.RowImpl#getDischargeAllocation <em>Discharge Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.impl.RowImpl#getOpenSlotAllocation <em>Open Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.impl.RowImpl#getInputEquivalents <em>Input Equivalents</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.impl.RowImpl#getLoadSlotContractParams <em>Load Slot Contract Params</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.impl.RowImpl#getDischargeSlotContractParams <em>Discharge Slot Contract Params</em>}</li>
  * </ul>
  *
  * @generated
@@ -126,6 +129,26 @@ public class RowImpl extends EObjectImpl implements Row {
 	 * @ordered
 	 */
 	protected EList<EObject> inputEquivalents;
+
+	/**
+	 * The cached value of the '{@link #getLoadSlotContractParams() <em>Load Slot Contract Params</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLoadSlotContractParams()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotContractParams loadSlotContractParams;
+
+	/**
+	 * The cached value of the '{@link #getDischargeSlotContractParams() <em>Discharge Slot Contract Params</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDischargeSlotContractParams()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotContractParams dischargeSlotContractParams;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -427,6 +450,82 @@ public class RowImpl extends EObjectImpl implements Row {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotContractParams getLoadSlotContractParams() {
+		if (loadSlotContractParams != null && loadSlotContractParams.eIsProxy()) {
+			InternalEObject oldLoadSlotContractParams = (InternalEObject)loadSlotContractParams;
+			loadSlotContractParams = (SlotContractParams)eResolveProxy(oldLoadSlotContractParams);
+			if (loadSlotContractParams != oldLoadSlotContractParams) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoBulkEditorPackage.ROW__LOAD_SLOT_CONTRACT_PARAMS, oldLoadSlotContractParams, loadSlotContractParams));
+			}
+		}
+		return loadSlotContractParams;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotContractParams basicGetLoadSlotContractParams() {
+		return loadSlotContractParams;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLoadSlotContractParams(SlotContractParams newLoadSlotContractParams) {
+		SlotContractParams oldLoadSlotContractParams = loadSlotContractParams;
+		loadSlotContractParams = newLoadSlotContractParams;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoBulkEditorPackage.ROW__LOAD_SLOT_CONTRACT_PARAMS, oldLoadSlotContractParams, loadSlotContractParams));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotContractParams getDischargeSlotContractParams() {
+		if (dischargeSlotContractParams != null && dischargeSlotContractParams.eIsProxy()) {
+			InternalEObject oldDischargeSlotContractParams = (InternalEObject)dischargeSlotContractParams;
+			dischargeSlotContractParams = (SlotContractParams)eResolveProxy(oldDischargeSlotContractParams);
+			if (dischargeSlotContractParams != oldDischargeSlotContractParams) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoBulkEditorPackage.ROW__DISCHARGE_SLOT_CONTRACT_PARAMS, oldDischargeSlotContractParams, dischargeSlotContractParams));
+			}
+		}
+		return dischargeSlotContractParams;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotContractParams basicGetDischargeSlotContractParams() {
+		return dischargeSlotContractParams;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDischargeSlotContractParams(SlotContractParams newDischargeSlotContractParams) {
+		SlotContractParams oldDischargeSlotContractParams = dischargeSlotContractParams;
+		dischargeSlotContractParams = newDischargeSlotContractParams;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoBulkEditorPackage.ROW__DISCHARGE_SLOT_CONTRACT_PARAMS, oldDischargeSlotContractParams, dischargeSlotContractParams));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public EObject getAssignableObject() {
@@ -470,6 +569,12 @@ public class RowImpl extends EObjectImpl implements Row {
 				return basicGetOpenSlotAllocation();
 			case CargoBulkEditorPackage.ROW__INPUT_EQUIVALENTS:
 				return getInputEquivalents();
+			case CargoBulkEditorPackage.ROW__LOAD_SLOT_CONTRACT_PARAMS:
+				if (resolve) return getLoadSlotContractParams();
+				return basicGetLoadSlotContractParams();
+			case CargoBulkEditorPackage.ROW__DISCHARGE_SLOT_CONTRACT_PARAMS:
+				if (resolve) return getDischargeSlotContractParams();
+				return basicGetDischargeSlotContractParams();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -508,6 +613,12 @@ public class RowImpl extends EObjectImpl implements Row {
 				getInputEquivalents().clear();
 				getInputEquivalents().addAll((Collection<? extends EObject>)newValue);
 				return;
+			case CargoBulkEditorPackage.ROW__LOAD_SLOT_CONTRACT_PARAMS:
+				setLoadSlotContractParams((SlotContractParams)newValue);
+				return;
+			case CargoBulkEditorPackage.ROW__DISCHARGE_SLOT_CONTRACT_PARAMS:
+				setDischargeSlotContractParams((SlotContractParams)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -544,6 +655,12 @@ public class RowImpl extends EObjectImpl implements Row {
 			case CargoBulkEditorPackage.ROW__INPUT_EQUIVALENTS:
 				getInputEquivalents().clear();
 				return;
+			case CargoBulkEditorPackage.ROW__LOAD_SLOT_CONTRACT_PARAMS:
+				setLoadSlotContractParams((SlotContractParams)null);
+				return;
+			case CargoBulkEditorPackage.ROW__DISCHARGE_SLOT_CONTRACT_PARAMS:
+				setDischargeSlotContractParams((SlotContractParams)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -572,6 +689,10 @@ public class RowImpl extends EObjectImpl implements Row {
 				return openSlotAllocation != null;
 			case CargoBulkEditorPackage.ROW__INPUT_EQUIVALENTS:
 				return inputEquivalents != null && !inputEquivalents.isEmpty();
+			case CargoBulkEditorPackage.ROW__LOAD_SLOT_CONTRACT_PARAMS:
+				return loadSlotContractParams != null;
+			case CargoBulkEditorPackage.ROW__DISCHARGE_SLOT_CONTRACT_PARAMS:
+				return dischargeSlotContractParams != null;
 		}
 		return super.eIsSet(featureID);
 	}

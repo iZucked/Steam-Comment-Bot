@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+<extension
+      point="com.mmxlabs.models.lng.cargo.editor.TradesTableEditor">
+   <TradesTableEditor
+         class="com.mmxlabs.models.lng.cargo.editor.bulk.ui.BulkTradesTableProvider">
+   </TradesTableEditor>
+</extension>   
+</plugin>

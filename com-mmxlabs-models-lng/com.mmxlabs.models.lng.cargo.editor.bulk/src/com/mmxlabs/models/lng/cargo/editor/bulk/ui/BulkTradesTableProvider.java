@@ -19,12 +19,12 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class BulkTradesTableProvider implements IAlternativeEditorProvider {
-	
+
 	@Override
 	public int getPriority() {
 		return 10;
 	}
-	
+
 	@Override
 	public ScenarioTableViewerPane init(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation scenarioEditingLocation, IActionBars actionBars, Composite parent, EObject modelObject) {
 		BulkTradesTablePane tradesViewer = new BulkTradesTablePane(page, part, scenarioEditingLocation, actionBars);
@@ -36,7 +36,7 @@ public class BulkTradesTableProvider implements IAlternativeEditorProvider {
 		tradesViewer.init(Arrays.asList(new EReference[] { CargoBulkEditorPackage.eINSTANCE.getTable_Rows() }), null, scenarioEditingLocation.getModelReference());
 		tradesViewer.setCargoes(table, (LNGScenarioModel) scenarioEditingLocation.getRootObject());
 		tradesViewer.setlngScenarioModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()));
-		tradesViewer.getViewer().setInput(table);
+		tradesViewer.setInput(table);
 		return tradesViewer;
 	}
 }

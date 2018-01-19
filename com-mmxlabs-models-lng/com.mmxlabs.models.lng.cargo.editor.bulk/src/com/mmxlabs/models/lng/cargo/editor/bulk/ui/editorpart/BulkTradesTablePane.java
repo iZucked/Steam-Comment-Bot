@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.print.DocFlavor.CHAR_ARRAY;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -33,7 +35,10 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.bindings.keys.IKeyLookup;
 import org.eclipse.jface.bindings.keys.KeyLookupFactory;
@@ -49,10 +54,16 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -88,11 +99,17 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedRowModelTransf
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingCommands;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
+import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
@@ -106,6 +123,8 @@ import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAdaptable {
+
+	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
 
 	@Inject(optional = true)
 	private Iterable<ITradeBasedBulkColumnFactoryExtension> columnFactoryExtensions;
@@ -176,12 +195,22 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	private PromptToolbarEditor promptToolbarEditor;
 
+	private CargoEditingCommands cec;
+	private CargoEditorMenuHelper menuHelper;
+
+	private boolean locked;
+
 	public BulkTradesTablePane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		Injector injector = Guice.createInjector(new TradeBasedBulkModule());
 		injector.injectMembers(this);
 		columnFilters = new ColumnFilters(defaultFilters);
 		registerColumnFilterHandlers();
+		final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+
+		this.cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, ScenarioModelUtil.getCargoModel(scenarioModel),
+				ScenarioModelUtil.getCommercialModel(scenarioModel), Activator.getDefault().getModelFactoryRegistry());
+		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
 	}
 
 	@Override
@@ -501,9 +530,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			LoadSlot load = getLoadSlot(cargo);
 			row.setLoadSlot(load);
 			slotsInCargo.add(load);
+			row.setLoadSlotContractParams(SlotContractParamsHelper.findSlotContractParams(load));
 			DischargeSlot discharge = getDischargeSlot(cargo);
 			row.setDischargeSlot(discharge);
 			slotsInCargo.add(discharge);
+			row.setDischargeSlotContractParams(SlotContractParamsHelper.findSlotContractParams(discharge));
+
 			transformRowWithExtensions(cargo, row);
 			addRowToTable(table, row);
 		}
@@ -515,6 +547,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				EClass customRowClass = (EClass) dataModel.getEClassifier("CustomisableRow");
 				Row row = (Row) factory.create(customRowClass);
 				row.setLoadSlot(loadSlot);
+				row.setLoadSlotContractParams(SlotContractParamsHelper.findSlotContractParams(loadSlot));
+
 				transformRowWithExtensions(null, row);
 				addRowToTable(table, row);
 			}
@@ -527,6 +561,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				EClass customRowClass = (EClass) dataModel.getEClassifier("CustomisableRow");
 				Row row = (Row) factory.create(customRowClass);
 				row.setDischargeSlot(dischargeSlot);
+				row.setDischargeSlotContractParams(SlotContractParamsHelper.findSlotContractParams(dischargeSlot));
+
 				transformRowWithExtensions(null, row);
 				addRowToTable(table, row);
 			}
@@ -895,6 +931,144 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		viewer.getSortingSupport().setSortOnlyOnSelect(true);
 
+		final MenuManager mgr = new MenuManager();
+
+		contextMenuExtensions = TradesTableContextMenuExtensionUtil.getContextMenuExtensions();
+
+		viewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
+
+			private Menu menu;
+
+			private void populateSingleSelectionMenu(final GridItem item, final GridColumn column) {
+				if (item == null) {
+					return;
+				}
+
+				final Object data = item.getData();
+				if (data instanceof Row) {
+
+					// final RowData rowDataItem = (RowData) data;
+					// final int idx = rootData.getRows().indexOf(rowDataItem);
+
+					Row row = (Row) data;
+					if (menu == null) {
+						menu = mgr.createContextMenu(scenarioViewer.getGrid());
+					}
+					mgr.removeAll();
+					{
+						final IContributionItem[] items = mgr.getItems();
+						mgr.removeAll();
+						for (final IContributionItem mItem : items) {
+							mItem.dispose();
+						}
+					}
+					String blockType = null;
+					ColumnHandler handler = (ColumnHandler) column.getData(ColumnHandler.COLUMN_HANDLER);
+					if (handler != null) {
+						blockType = handler.block.getblockType();
+					}
+
+					if (ITradesColumnFactory.isLoadGroup(blockType)) {
+						if (row.getLoadSlot() != null) {
+							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(Collections.singletonList(row.getLoadSlot()), 0);
+							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = row.getLoadSlot();
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+								}
+							}
+						} else {
+							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(Collections.singletonList(row.getDischargeSlot()), 0);
+							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = row.getDischargeSlot();
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+								}
+							}
+						}
+					}
+					if (ITradesColumnFactory.isDischargeGroup(blockType)) {
+						if (row.getDischargeSlot() != null) {
+							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(Collections.singletonList(row.getDischargeSlot()), 0);
+							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = row.getDischargeSlot();
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+								}
+							}
+						} else if (row.getLoadSlot() != null) {
+							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(Collections.singletonList(row.getLoadSlot()), 0);
+							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = row.getLoadSlot();
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+								}
+							}
+						}
+					}
+
+					menu.setVisible(true);
+				}
+			}
+
+			@Override
+			public void menuDetected(final MenuDetectEvent e) {
+
+				if (locked) {
+					return;
+				}
+
+				final Grid grid = getScenarioViewer().getGrid();
+
+				final Point mousePoint = grid.toControl(new Point(e.x, e.y));
+				final GridColumn column = grid.getColumn(mousePoint);
+
+				final IStructuredSelection selection = (IStructuredSelection) getScenarioViewer().getSelection();
+				final GridItem[] items = grid.getSelection();
+
+				if (selection.size() <= 1) {
+					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
+				} else {
+					final Set<Cargo> cargoes = new HashSet<Cargo>();
+					for (final Object item : selection.toList()) {
+						final Cargo cargo = ((Row) item).getCargo();
+						if (cargo != null) {
+							cargoes.add(cargo);
+						}
+					}
+					populateMultipleSelectionMenu(cargoes, selection);
+				}
+			}
+
+			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, final IStructuredSelection selection) {
+				if (menu == null) {
+					menu = mgr.createContextMenu(scenarioViewer.getGrid());
+				}
+				mgr.removeAll();
+				{
+					final IContributionItem[] items = mgr.getItems();
+					mgr.removeAll();
+					for (final IContributionItem item : items) {
+						item.dispose();
+					}
+				}
+				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes);
+				listener.menuAboutToShow(mgr);
+
+				if (contextMenuExtensions != null) {
+					for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+						ext.contributeToMenu(scenarioEditingLocation, selection, mgr);
+					}
+				}
+
+				menu.setVisible(true);
+			}
+		});
+
 		// GridViewerHelper.configureLookAndFeel(viewer);
 
 		return viewer;
@@ -950,11 +1124,33 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	public void setLocked(final boolean locked) {
 
+		this.locked = locked;
 		if (promptToolbarEditor != null) {
 			promptToolbarEditor.setLocked(locked);
 		}
 
 		super.setLocked(locked);
+	}
+
+	public void setInput(Table table2) {
+		viewer.setInput(table2);
+		// Trigger sorting on the load date column to make this the initial sort column.
+		{
+			for (GridColumn gc : scenarioViewer.getGrid().getColumns()) {
+				ColumnHandler handler = (ColumnHandler) gc.getData(ColumnHandler.COLUMN_HANDLER);
+				if (handler != null) {
+					if ("com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-date".equals(handler.block.blockID)) {
+						final Listener[] listeners = gc.getListeners(SWT.Selection);
+						for (final Listener l : listeners) {
+							final org.eclipse.swt.widgets.Event e = new org.eclipse.swt.widgets.Event();
+							e.type = SWT.Selection;
+							e.widget = gc;
+							l.handleEvent(e);
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

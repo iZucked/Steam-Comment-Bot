@@ -5,6 +5,7 @@ package com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -29,6 +30,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getDischargeAllocation <em>Discharge Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getOpenSlotAllocation <em>Open Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getInputEquivalents <em>Input Equivalents</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getLoadSlotContractParams <em>Load Slot Contract Params</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getDischargeSlotContractParams <em>Discharge Slot Contract Params</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage#getRow()
@@ -233,6 +236,58 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	EList<EObject> getInputEquivalents();
+
+	/**
+	 * Returns the value of the '<em><b>Load Slot Contract Params</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Load Slot Contract Params</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Load Slot Contract Params</em>' reference.
+	 * @see #setLoadSlotContractParams(SlotContractParams)
+	 * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage#getRow_LoadSlotContractParams()
+	 * @model
+	 * @generated
+	 */
+	SlotContractParams getLoadSlotContractParams();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getLoadSlotContractParams <em>Load Slot Contract Params</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Load Slot Contract Params</em>' reference.
+	 * @see #getLoadSlotContractParams()
+	 * @generated
+	 */
+	void setLoadSlotContractParams(SlotContractParams value);
+
+	/**
+	 * Returns the value of the '<em><b>Discharge Slot Contract Params</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Discharge Slot Contract Params</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Discharge Slot Contract Params</em>' reference.
+	 * @see #setDischargeSlotContractParams(SlotContractParams)
+	 * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage#getRow_DischargeSlotContractParams()
+	 * @model
+	 * @generated
+	 */
+	SlotContractParams getDischargeSlotContractParams();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row#getDischargeSlotContractParams <em>Discharge Slot Contract Params</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Discharge Slot Contract Params</em>' reference.
+	 * @see #getDischargeSlotContractParams()
+	 * @generated
+	 */
+	void setDischargeSlotContractParams(SlotContractParams value);
 
 	/**
 	 * <!-- begin-user-doc -->
