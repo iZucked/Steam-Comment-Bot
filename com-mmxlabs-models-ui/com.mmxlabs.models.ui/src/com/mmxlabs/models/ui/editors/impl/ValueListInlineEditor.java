@@ -78,6 +78,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 				if (f.getName().equals(feature.getName() + "Override")) {
 					isOverridable = true;
 					this.overrideToggleFeature = f;
+					break;
 				}
 			}
 			if (feature.isUnsettable()) {
