@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.models.util.emfpath.IEMFPath;
 
 /**
  * Sorting related code for the {@link EObjectTableViewer}
@@ -189,7 +190,7 @@ public class EObjectTableViewerSortingSupport {
 					// additional text rendering information and comparison information
 					final IComparableProvider renderer = (IComparableProvider) column.getData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER);
 
-					final EMFPath sortPath = (EMFPath) column.getData(EObjectTableViewer.COLUMN_SORT_PATH);
+					final IEMFPath sortPath = (IEMFPath) column.getData(EObjectTableViewer.COLUMN_SORT_PATH);
 					Object leftOwner = null;
 					Object rightOwner = null;
 
