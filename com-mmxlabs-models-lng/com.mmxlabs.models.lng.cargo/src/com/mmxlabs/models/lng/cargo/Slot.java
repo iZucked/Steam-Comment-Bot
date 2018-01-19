@@ -1466,22 +1466,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<Contract> getSlotOrContractRestrictedContracts();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	EList<Port> getSlotOrContractRestrictedPorts();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
 	boolean getSlotOrContractRestrictedListsArePermissive();
 
 	/**

@@ -2710,10 +2710,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowSizeInHours();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_ENTITY:
 				return getSlotOrDelegatedEntity();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS:
-				return getSlotOrContractRestrictedContracts();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS:
-				return getSlotOrContractRestrictedPorts();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return getSlotOrContractRestrictedListsArePermissive();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION:

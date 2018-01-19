@@ -58,6 +58,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import org.eclipse.emf.common.util.URI;
 
 /**
  * <!-- begin-user-doc -->
@@ -846,7 +847,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractRestrictedContracts() {
+	public EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive_1() {
 		return slotEClass.getEOperations().get(12);
 	}
 
@@ -855,7 +856,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractRestrictedPorts() {
+	public EOperation getSlot__GetSlotOrContractCancellationExpression() {
 		return slotEClass.getEOperations().get(13);
 	}
 
@@ -864,7 +865,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive() {
+	public EOperation getSlot__GetSlotOrDelegatedPricingEvent() {
 		return slotEClass.getEOperations().get(14);
 	}
 
@@ -873,7 +874,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractCancellationExpression() {
+	public EOperation getSlot__GetPricingDateAsDateTime() {
 		return slotEClass.getEOperations().get(15);
 	}
 
@@ -882,7 +883,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrDelegatedPricingEvent() {
+	public EOperation getSlot__GetSlotContractParams() {
 		return slotEClass.getEOperations().get(16);
 	}
 
@@ -891,26 +892,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetPricingDateAsDateTime() {
-		return slotEClass.getEOperations().get(17);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getSlot__GetSlotContractParams() {
-		return slotEClass.getEOperations().get(18);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EOperation getSlot__GetSlotOrContractCounterparty() {
-		return slotEClass.getEOperations().get(19);
+		return slotEClass.getEOperations().get(17);
 	}
 
 	/**
@@ -2463,8 +2446,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_SIZE_IN_HOURS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATED_ENTITY);
-		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS);
-		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT);
@@ -2812,11 +2793,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSlotOrDelegatedEntity(), theCommercialPackage.getBaseLegalEntity(), "getSlotOrDelegatedEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetSlotOrContractRestrictedContracts(), theCommercialPackage.getContract(), "getSlotOrContractRestrictedContracts", 0, -1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getSlot__GetSlotOrContractRestrictedPorts(), thePortPackage.getPort(), "getSlotOrContractRestrictedPorts", 0, -1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getSlot__GetSlotOrContractRestrictedListsArePermissive(), ecorePackage.getEBoolean(), "getSlotOrContractRestrictedListsArePermissive", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetSlotOrContractRestrictedListsArePermissive_1(), ecorePackage.getEBoolean(), "getSlotOrContractRestrictedListsArePermissive", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrContractCancellationExpression(), ecorePackage.getEString(), "getSlotOrContractCancellationExpression", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -3056,6 +3033,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
 		createNamedObjectAnnotations();
+		// http://www.mmxlabs.com/models/featureOverride
+		createFeatureOverrideAnnotations();
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
@@ -3081,6 +3060,21 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source, 
 		   new String[] {
 			 "nonUniqueChildren", "true"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/featureOverride</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createFeatureOverrideAnnotations() {
+		String source = "http://www.mmxlabs.com/models/featureOverride";	
+		addAnnotation
+		  (slotEClass, 
+		   source, 
+		   new String[] {
 		   });
 	}
 
