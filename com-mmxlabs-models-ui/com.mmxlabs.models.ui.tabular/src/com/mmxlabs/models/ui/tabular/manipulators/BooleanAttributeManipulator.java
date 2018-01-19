@@ -33,7 +33,7 @@ public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	protected CellEditor createCellEditor(final Composite parent, final Object object) {
-		return new ComboBoxCellEditor(parent, new String[] { trueString, falseString });
+		return new ComboBoxCellEditor(parent, new String[] { trueString, falseString, "" });
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 			return ((Boolean) object2) ? 0 : 1;
 		}
 
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -64,7 +64,14 @@ public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-		return ((Integer) getValue(object)) == 0 ? trueString : falseString;
+		Integer value = (Integer) getValue(object);
+		if (value == 0) {
+			return trueString;
+		}
+		if (value == 1) {
+			return falseString;
+		}
+		return "";
 	}
 
 	@Override
