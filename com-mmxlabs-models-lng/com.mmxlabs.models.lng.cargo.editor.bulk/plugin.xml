@@ -60,10 +60,6 @@
       </TradesBasedColumn>
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-            id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-window-length">
-      </TradesBasedColumn>
-      <TradesBasedColumn
-            handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-restrictions">
       </TradesBasedColumn>
       <TradesBasedColumn
@@ -89,10 +85,6 @@
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-date">
-      </TradesBasedColumn>
-      <TradesBasedColumn
-            handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-            id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-window-length">
       </TradesBasedColumn>
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"

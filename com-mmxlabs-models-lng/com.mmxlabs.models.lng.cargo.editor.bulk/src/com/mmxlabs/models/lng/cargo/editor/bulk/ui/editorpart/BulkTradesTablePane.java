@@ -1115,12 +1115,14 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				ColumnHandler handler = (ColumnHandler) gc.getData(ColumnHandler.COLUMN_HANDLER);
 				if (handler != null) {
 					if ("com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-date".equals(handler.block.blockID)) {
-						final Listener[] listeners = gc.getListeners(SWT.Selection);
-						for (final Listener l : listeners) {
-							final org.eclipse.swt.widgets.Event e = new org.eclipse.swt.widgets.Event();
-							e.type = SWT.Selection;
-							e.widget = gc;
-							l.handleEvent(e);
+						if ("Date".equals(handler.title)) {
+							final Listener[] listeners = gc.getListeners(SWT.Selection);
+							for (final Listener l : listeners) {
+								final org.eclipse.swt.widgets.Event e = new org.eclipse.swt.widgets.Event();
+								e.type = SWT.Selection;
+								e.widget = gc;
+								l.handleEvent(e);
+							}
 						}
 					}
 				}
