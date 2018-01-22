@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views.standard;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -41,6 +42,7 @@ import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.ISeriesSet;
 import org.swtchart.LineStyle;
+import org.swtchart.Range;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -267,6 +269,8 @@ public class InventoryReport extends ViewPart {
 			names.forEach(s -> seriesSet.deleteSeries(s));
 		}
 		int colour = 2;
+		LocalDate minDate = null;
+		LocalDate maxDate = null;
 		for (final Inventory inventory : inventoryModels) {
 			// Used for max level
 			++colour;
@@ -277,16 +281,29 @@ public class InventoryReport extends ViewPart {
 				continue;
 			}
 			{
+
 				final List<Pair<LocalDate, Integer>> changes = new LinkedList<>();
 				final List<Pair<LocalDate, Integer>> cargo_changes = new LinkedList<>();
 				final List<Pair<LocalDate, Integer>> other_cargo_changes = new LinkedList<>();
 				for (final InventoryEventRow r : inventory.getFeeds()) {
+					if (minDate == null || r.getStartDate().isBefore(minDate)) {
+						minDate = r.getStartDate();
+					}
+					if (maxDate == null || r.getStartDate().isAfter(maxDate)) {
+						maxDate = r.getStartDate();
+					}
+
 					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
 						changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
 						if (r.getPeriod() == InventoryFrequency.CARGO) {
 							other_cargo_changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
 						}
 					} else {
+
+						if (maxDate == null || r.getEndDate().isAfter(maxDate)) {
+							maxDate = r.getEndDate();
+						}
+
 						LocalDateTime start = r.getStartDate().atStartOfDay();
 						if (r.getStartDate() == r.getEndDate()) {
 							changes.add(new Pair<>(LocalDate.from(start), r.getVolume()));
@@ -308,12 +325,24 @@ public class InventoryReport extends ViewPart {
 					}
 				}
 				for (final InventoryEventRow r : inventory.getOfftakes()) {
+
+					if (minDate == null || r.getStartDate().isBefore(minDate)) {
+						minDate = r.getStartDate();
+					}
+					if (maxDate == null || r.getStartDate().isAfter(maxDate)) {
+						maxDate = r.getStartDate();
+					}
 					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
 						changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
 						if (r.getPeriod() == InventoryFrequency.CARGO) {
 							other_cargo_changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
 						}
 					} else {
+
+						if (maxDate == null || r.getEndDate().isAfter(maxDate)) {
+							maxDate = r.getEndDate();
+						}
+
 						LocalDateTime start = r.getStartDate().atStartOfDay();
 						while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
 							changes.add(new Pair<>(LocalDate.from(start), -r.getVolume()));
@@ -339,8 +368,17 @@ public class InventoryReport extends ViewPart {
 							if (slotAllocation.getPort() == inventory.getPort()) {
 								int change = (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) ? -slotAllocation.getPhysicalVolumeTransferred()
 										: slotAllocation.getPhysicalVolumeTransferred();
-								changes.add(new Pair<>(LocalDate.from(slotAllocation.getSlotVisit().getStart()), change));
-								cargo_changes.add(new Pair<>(LocalDate.from(slotAllocation.getSlotVisit().getStart()), change));
+								LocalDate date = LocalDate.from(slotAllocation.getSlotVisit().getStart());
+								changes.add(new Pair<>(date, change));
+								cargo_changes.add(new Pair<>(date, change));
+
+								if (minDate == null || date.isBefore(minDate)) {
+									minDate = date;
+								}
+								if (maxDate == null || date.isAfter(maxDate)) {
+									maxDate = date;
+								}
+
 							}
 						}
 					}
@@ -382,7 +420,7 @@ public class InventoryReport extends ViewPart {
 
 					}
 				}
-				if (m2.size() > 0) 	{
+				if (m2.size() > 0) {
 					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m2);
 					final Date[] dates = new Date[sorted.size() * 2];
 					final double[] values = new double[sorted.size() * 2];
@@ -411,12 +449,12 @@ public class InventoryReport extends ViewPart {
 
 					}
 				}
-				if (m3.size() > 0) 	{
+				if (m3.size() > 0) {
 					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m3);
 					final Date[] dates = new Date[sorted.size() * 2];
 					final double[] values = new double[sorted.size() * 2];
 					int idx = 0;
-					
+
 					int total = 0;
 					for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
 						final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
@@ -428,16 +466,16 @@ public class InventoryReport extends ViewPart {
 						values[idx] = 0;
 						++idx;
 					}
-					
+
 					{
 						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "3rd-party");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
 						createSeries.setBarWidth(2);
 						// createSeries.setSymbolSize(2);
-						
+
 						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-						
+
 					}
 				}
 			}
@@ -525,13 +563,30 @@ public class InventoryReport extends ViewPart {
 		viewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		viewer.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		viewer.getAxisSet().getXAxis(0).getTitle().setText("Date");
+
 		viewer.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		viewer.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		viewer.getAxisSet().getYAxis(0).getTitle().setText("Volume");
 		// 5. adjust the range for all axes.
 
+		// Auto adjust everything
 		axisSet.adjustRange();
+		// Month align the date range
+		if (minDate != null && maxDate != null) {
+			viewer.getAxisSet().getXAxis(0).setRange(new Range( //
+					1000L * minDate.withDayOfMonth(1).atStartOfDay().toEpochSecond(ZoneOffset.of("Z")),
+					1000L * maxDate.withDayOfMonth(1).atStartOfDay().plusMonths(1).toEpochSecond(ZoneOffset.of("Z"))));
+		} else {
+			viewer.getAxisSet().getXAxis(0).setRange(new Range( //
+					1000L * LocalDate.now().withDayOfMonth(1).atStartOfDay().toEpochSecond(ZoneOffset.of("Z")),
+					1000L * LocalDate.now().withDayOfMonth(1).atStartOfDay().plusMonths(1).toEpochSecond(ZoneOffset.of("Z"))));
+		}
+		// Try to force month labels
+		viewer.getAxisSet().getXAxis(0).getTick().setTickMarkStepHint((int) (15L));
 		viewer.getAxisSet().getXAxis(0).getTick().setTickLabelAngle(45);
+
+		viewer.updateLayout();
+
 		viewer.redraw();
 	}
 }
