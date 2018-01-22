@@ -531,6 +531,7 @@ public class InventoryReport extends ViewPart {
 		// 5. adjust the range for all axes.
 
 		axisSet.adjustRange();
+		viewer.getAxisSet().getXAxis(0).getTick().setTickLabelAngle(45);
 		viewer.redraw();
 	}
 }
