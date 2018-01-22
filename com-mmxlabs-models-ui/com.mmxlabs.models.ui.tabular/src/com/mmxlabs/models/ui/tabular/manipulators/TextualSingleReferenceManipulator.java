@@ -42,8 +42,9 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  */
 public class TextualSingleReferenceManipulator extends BasicAttributeManipulator {
 
-	final List<EObject> valueList = new ArrayList<>();
-	final List<String> names = new ArrayList<>();
+	protected final List<EObject> valueList = new ArrayList<>();
+	protected final List<String> names = new ArrayList<>();
+	protected final List<String> lowerNames = new ArrayList<>();
 
 	final IReferenceValueProvider valueProvider;
 	final EditingDomain editingDomain;
@@ -93,7 +94,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 
 	@Override
 	public void doSetValue(final Object object, final Object value) {
-		if (value.equals(-1)) {
+		if (value.equals(-1) || value == null) {
 			return;
 		}
 		final int idx = names.indexOf(value);
@@ -101,6 +102,13 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 
 			final EObject newValue = valueList.get(idx);
 			super.runSetCommand(object, newValue);
+		} else {
+			final int idx2 = lowerNames.indexOf(value.toString().toLowerCase());
+			if (idx2 >= 0) {
+
+				final EObject newValue = valueList.get(idx2);
+				super.runSetCommand(object, newValue);
+			}
 		}
 	}
 
@@ -114,12 +122,13 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 			public String isValid(final Object value) {
 				if (names.contains(value)) {
 					return null;
-
 				}
-				if (value != null && names.contains(value.toString().trim())) {
-					return null;
+				if (value instanceof String) {
+					if (lowerNames.contains(value.toString().toLowerCase())) {
+						return null;
+					}
 				}
-				return "Unknown port name";
+				return "Unknown name";
 			}
 		});
 
@@ -145,6 +154,18 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 			}
 		};
 
+		final IContentProposalProvider proposalProvider = createProposalProvider();
+
+		final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(editor.getControl(), controlContentAdapter, proposalProvider, AutoCompleteHelper.getActivationKeystroke(),
+				AutoCompleteHelper.getAutoactivationChars());
+		proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_NONE);
+		proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
+		proposalAdapter.setPropagateKeys(true);
+
+		return editor;
+	}
+
+	protected IContentProposalProvider createProposalProvider() {
 		final IContentProposalProvider proposalProvider = new IContentProposalProvider() {
 
 			@Override
@@ -165,14 +186,7 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 				return list.toArray(new IContentProposal[list.size()]);
 			}
 		};
-
-		final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(editor.getControl(), controlContentAdapter, proposalProvider, AutoCompleteHelper.getActivationKeystroke(),
-				AutoCompleteHelper.getAutoactivationChars());
-		proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_NONE);
-		proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
-		proposalAdapter.setPropagateKeys(true);
-
-		return editor;
+		return proposalProvider;
 	}
 
 	@Override
@@ -194,8 +208,10 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 
 		valueList.clear();
 		names.clear();
+		lowerNames.clear();
 		for (final Pair<String, EObject> value : values) {
 			names.add(value.getFirst());
+			lowerNames.add(value.getFirst().toLowerCase());
 			valueList.add(value.getSecond());
 		}
 
