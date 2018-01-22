@@ -64,72 +64,86 @@ public class InventoryExtraImporter implements IExtraModelImporter {
 
 	@Override
 	public void importModel(@NonNull final MMXRootObject rootObject, @NonNull final Map<String, CSVReader> inputs, @NonNull final IMMXImportContext context) {
-		if (!LicenseFeatures.isPermitted("features:inventory-model")) {
-			return;
-		}
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 
-			if (cargoModel != null) {
+		final CSVReader reader = inputs.get(INVENTORY_KEY);
 
-				final CSVReader reader = inputs.get(INVENTORY_KEY);
+		if (reader != null) {
 
-				if (reader != null) {
+			try {
+				context.pushReader(reader);
 
-					final Map<String, Inventory> inventories = new HashMap<>();
+				List<Inventory> inventories = doImportModel(reader, context);
 
-					final Map<String, List<InventoryEventRow>> feeds = new HashMap<>();
-					final Map<String, List<InventoryEventRow>> offtakes = new HashMap<>();
-					final Map<String, List<InventoryCapacityRow>> capacities = new HashMap<>();
+				if (inventories == null) {
+					return;
+				}
 
-					try {
+				if (rootObject instanceof LNGScenarioModel) {
+					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+					final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 
-						final DefaultClassImporter importer = new DefaultClassImporter();
-
-						context.pushReader(reader);
-						Map<String, String> row;
-						while ((row = reader.readRow(true)) != null) {
-							if (row.containsKey(KEY_INVENTORY_PORT) && !row.get(KEY_INVENTORY_PORT).isEmpty()) {
-								final Inventory inventory = CargoFactory.eINSTANCE.createInventory();
-								inventory.setName(row.get(KEY_INVENTORY_NAME));
-								inventory.setPort((Port) context.getNamedObject(row.get(KEY_INVENTORY_PORT), PortPackage.Literals.PORT));
-								inventories.put(inventory.getName(), inventory);
-							} else {
-								final ImportResults importObject = importer.importObject(null, EcorePackage.eINSTANCE.getEObject(), row, context);
-								final String inventory = row.get(KEY_INVENTORY_NAME);
-								final String type = row.get(KEY_TYPE);
-								if (KEY_FLOW_TYPE_FEED.equals(type)) {
-									feeds.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryEventRow) importObject.importedObject);
-								} else if (KEY_FLOW_TYPE_OFFTAKE.equals(type)) {
-									offtakes.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryEventRow) importObject.importedObject);
-								} else if (KEY_CAPACITY.equals(type)) {
-									capacities.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryCapacityRow) importObject.importedObject);
-								}
-							}
-						}
-						for (final Inventory inventory : inventories.values()) {
-
-							inventory.getFeeds().addAll(feeds.getOrDefault(inventory.getName(), Collections.emptyList()));
-							inventory.getOfftakes().addAll(offtakes.getOrDefault(inventory.getName(), Collections.emptyList()));
-							inventory.getCapacities().addAll(capacities.getOrDefault(inventory.getName(), Collections.emptyList()));
-
-							cargoModel.getInventoryModels().add(inventory);
-						}
-					} catch (final IOException e) {
-					} finally {
-						try {
-							reader.close();
-						} catch (final IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						context.popReader();
+					if (cargoModel != null) {
+						cargoModel.getInventoryModels().addAll(inventories);
 					}
+				}
 
+			} catch (final IOException e) {
+			} finally {
+				try {
+					reader.close();
+				} catch (final IOException e) {
+					e.printStackTrace();
+				}
+				context.popReader();
+			}
+		}
+	}
+
+	public List<Inventory> doImportModel(@NonNull CSVReader reader, @NonNull final IMMXImportContext context) throws IOException {
+		if (!LicenseFeatures.isPermitted("features:inventory-model")) {
+			return null;
+		}
+
+		LinkedList<Inventory> results = new LinkedList<>();
+
+		final Map<String, Inventory> inventories = new HashMap<>();
+
+		final Map<String, List<InventoryEventRow>> feeds = new HashMap<>();
+		final Map<String, List<InventoryEventRow>> offtakes = new HashMap<>();
+		final Map<String, List<InventoryCapacityRow>> capacities = new HashMap<>();
+
+		final DefaultClassImporter importer = new DefaultClassImporter();
+
+		Map<String, String> row;
+		while ((row = reader.readRow(true)) != null) {
+			if (row.containsKey(KEY_INVENTORY_PORT) && !row.get(KEY_INVENTORY_PORT).isEmpty()) {
+				final Inventory inventory = CargoFactory.eINSTANCE.createInventory();
+				inventory.setName(row.get(KEY_INVENTORY_NAME));
+				inventory.setPort((Port) context.getNamedObject(row.get(KEY_INVENTORY_PORT), PortPackage.Literals.PORT));
+				inventories.put(inventory.getName(), inventory);
+			} else {
+				final ImportResults importObject = importer.importObject(null, EcorePackage.eINSTANCE.getEObject(), row, context);
+				final String inventory = row.get(KEY_INVENTORY_NAME);
+				final String type = row.get(KEY_TYPE);
+				if (KEY_FLOW_TYPE_FEED.equals(type)) {
+					feeds.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryEventRow) importObject.importedObject);
+				} else if (KEY_FLOW_TYPE_OFFTAKE.equals(type)) {
+					offtakes.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryEventRow) importObject.importedObject);
+				} else if (KEY_CAPACITY.equals(type)) {
+					capacities.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryCapacityRow) importObject.importedObject);
 				}
 			}
 		}
+		for (final Inventory inventory : inventories.values()) {
+
+			inventory.getFeeds().addAll(feeds.getOrDefault(inventory.getName(), Collections.emptyList()));
+			inventory.getOfftakes().addAll(offtakes.getOrDefault(inventory.getName(), Collections.emptyList()));
+			inventory.getCapacities().addAll(capacities.getOrDefault(inventory.getName(), Collections.emptyList()));
+
+			results.add(inventory);
+		}
+
+		return results;
 
 	}
 
