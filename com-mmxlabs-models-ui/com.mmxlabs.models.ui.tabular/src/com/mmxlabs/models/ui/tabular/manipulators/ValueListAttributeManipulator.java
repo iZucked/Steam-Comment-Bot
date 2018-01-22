@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * Analog to {@link com.mmxlabs.shiplingo.ui.detailview.editors.ValueListInlineEditor}, but in column form.
@@ -40,7 +41,16 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-		Object value = super.getValue(object);
+		Object value;
+		if (isValueUnset(object)) {
+			value = (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : SetCommand.UNSET_VALUE;
+		} else {
+			value = super.getValue(object);
+		}
+
+		if (value == SetCommand.UNSET_VALUE) {
+			return "";
+		}
 		final int index = valueList.indexOf(value);
 		if (index == -1) {
 			return (value == null || value == SetCommand.UNSET_VALUE) ? "" : value.toString();
