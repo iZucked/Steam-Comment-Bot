@@ -1312,6 +1312,9 @@ public class CargoEditorMenuHelper {
 		final Contract contract = slot.getContract();
 		assert (contract == null || contract.getContractType() == ContractType.BOTH);
 
+		if (slot instanceof SpotSlot) {
+			return;
+		}
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
 			if (SlotClassifier.classify(loadSlot) == SlotType.FOB_Buy) {
