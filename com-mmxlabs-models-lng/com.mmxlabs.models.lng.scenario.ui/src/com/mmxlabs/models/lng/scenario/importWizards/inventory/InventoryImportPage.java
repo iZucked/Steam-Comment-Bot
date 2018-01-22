@@ -46,9 +46,10 @@ import com.mmxlabs.scenario.service.model.ScenarioService;
  */
 public class InventoryImportPage extends WizardPage {
 
+	private static final String LAST_FILE = "lastFile";
 	private static final String DELIMITER_KEY = "lastDelimiter";
 	private static final String DECIMAL_SEPARATOR_KEY = "lastDecimalSeparator";
-	private static final String SECTION_NAME = "BulkImportPage.section";
+	private static final String SECTION_NAME = "InventoryImportPage.section";
 
 	protected Control control = null;
 	// private RadioSelectionGroup dataImportGroup;
@@ -401,6 +402,9 @@ public class InventoryImportPage extends WizardPage {
 	@Override
 	public void createControl(final Composite parent) {
 		final Composite container = new Composite(parent, SWT.NONE);
+		
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
 
 		// set the layout for the whole functional region
 		final GridLayout layout = new GridLayout(2, false);
@@ -431,7 +435,11 @@ public class InventoryImportPage extends WizardPage {
 				InventoryImportPage.this.getContainer().updateButtons();
 			}
 		});
+		if (section != null && section.get(LAST_FILE) != null) {
+			importFileEditor.setStringValue(section.get(LAST_FILE));
+		}
 
+		
 		// Composite separatorsC = new Composite(container, SWT.BORDER);
 		// final RowLayout l = new RowLayout();//(2, false);
 		// l.marginLeft = 0;
@@ -471,8 +479,7 @@ public class InventoryImportPage extends WizardPage {
 		decimalSelectionGroup.setLayoutData(decimalLayoutData);
 
 		// get the default export directory from the settings
-		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
-		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+	
 		int delimiterValue = CHOICE_COMMA;
 		if (section != null && section.get(DELIMITER_KEY) != null) {
 			delimiterValue = section.getInt(DELIMITER_KEY);
@@ -573,5 +580,6 @@ public class InventoryImportPage extends WizardPage {
 		}
 		section.put(DELIMITER_KEY, csvSelectionGroup.getSelectedValue());
 		section.put(DECIMAL_SEPARATOR_KEY, decimalSelectionGroup.getSelectedValue());
+		section.put(LAST_FILE, importFileEditor.getStringValue());
 	}
 }
