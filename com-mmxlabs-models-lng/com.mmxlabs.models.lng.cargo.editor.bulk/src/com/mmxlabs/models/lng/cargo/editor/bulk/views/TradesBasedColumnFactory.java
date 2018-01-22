@@ -1,9 +1,16 @@
 package com.mmxlabs.models.lng.cargo.editor.bulk.views;
 
+import java.util.ArrayList;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.fieldassist.ContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
@@ -23,6 +30,8 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -51,6 +60,47 @@ import com.mmxlabs.models.util.emfpath.EMFMultiPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class TradesBasedColumnFactory implements ITradesColumnFactory {
+
+	private final class TextualPortSingleReferenceManipulatorExtension extends TextualSingleReferenceManipulator {
+		private TextualPortSingleReferenceManipulatorExtension(EReference field, IReferenceValueProviderProvider valueProviderProvider, EditingDomain editingDomain) {
+			super(field, valueProviderProvider, editingDomain);
+		}
+
+		protected IContentProposalProvider createProposalProvider() {
+			final IContentProposalProvider proposalProvider = new IContentProposalProvider() {
+
+				@Override
+				public IContentProposal[] getProposals(final String full_contents, final int position) {
+
+					final int completeFrom = 0;
+
+					final String contents = full_contents.substring(completeFrom, position);
+					final ArrayList<ContentProposal> list = new ArrayList<>();
+					for (int i = 0; i < names.size(); ++i) {
+						final String proposal = names.get(i);
+						if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+							final String c = proposal.substring(contents.length());
+							String description = "";
+							EObject eObject = valueList.get(i);
+							if (eObject instanceof Port) {
+								Port port = (Port) eObject;
+								Location l = port.getLocation();
+								if (l != null) {
+									description = " - " + l.getCountry();
+								}
+							}
+
+							list.add(new ContentProposal(c, proposal + description, null, c.length()));
+
+						}
+					}
+
+					return list.toArray(new IContentProposal[list.size()]);
+				}
+			};
+			return proposalProvider;
+		}
+	}
 
 	private final class HasRestrictionsFormatter extends BaseFormatter {
 		public String render(Object object) {
@@ -96,7 +146,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-port": {
-			final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
+			final TextualSingleReferenceManipulator rendMan = new TextualPortSingleReferenceManipulatorExtension(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
 			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
 					rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
@@ -329,7 +379,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-port": {
-			final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
+			final TextualSingleReferenceManipulator rendMan = new TextualPortSingleReferenceManipulatorExtension(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
 			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, DISCHARGE_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
 					rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
