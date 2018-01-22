@@ -10,7 +10,6 @@
 package com.mmxlabs.models.lng.cargo.editor.bulk.views;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -34,7 +33,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
-import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.SortData;
 
 public class SlotTypePainter implements PaintListener {
 
@@ -68,10 +66,6 @@ public class SlotTypePainter implements PaintListener {
 	 * The {@link Table} data structure containing all the required data
 	 */
 	private Table table;
-	/**
-	 * Class representing the current sort order of the table contents.
-	 */
-	private SortData sortData;
 
 	private final boolean isLoad;
 
@@ -136,13 +130,6 @@ public class SlotTypePainter implements PaintListener {
 			return;
 		}
 
-		int[] sortedIndices = null;
-		int[] reverseSortedIndices = null;
-		if (sortData != null) {
-			sortedIndices = sortData.sortedIndices;
-			reverseSortedIndices = sortData.reverseSortedIndices;
-		}
-
 		// // Copy ref in case of concurrent change during paint
 		final Table root = table;
 		// Get a list of terminal positions from subclass
@@ -174,8 +161,7 @@ public class SlotTypePainter implements PaintListener {
 		graphics.setLineWidth(borderWidth);
 		rawI = 0;
 		for (final float midpoint : terminalPositions) {
-			// Map back between current row (sorted) and data (unsorted)
-			final int i = (reverseSortedIndices != null && rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
+			final int i = rawI;
 			// -1 indicates filtered row
 			if (i == -1) {
 				continue;
@@ -329,13 +315,4 @@ public class SlotTypePainter implements PaintListener {
 	public void setTable(final Table table) {
 		this.table = table;
 	}
-
-	public SortData getSortData() {
-		return sortData;
-	}
-
-	public void setSortData(final SortData sortData) {
-		this.sortData = sortData;
-	}
-
 }

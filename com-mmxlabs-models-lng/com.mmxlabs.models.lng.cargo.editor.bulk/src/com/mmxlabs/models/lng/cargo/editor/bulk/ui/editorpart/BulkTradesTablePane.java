@@ -191,8 +191,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private ColumnBlockManager columnBlockManager = new ColumnBlockManager();
 	private Map<ColumnHandler, GridColumn> handlerToColumnMap = new HashMap<>();
 
-	protected final SortData sortData = new SortData();
-
 	private PromptToolbarEditor promptToolbarEditor;
 
 	private CargoEditingCommands cec;
@@ -231,9 +229,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 		if (Table.class.isAssignableFrom(c)) {
 			return getTable();
-		}
-		if (SortData.class.isAssignableFrom(c)) {
-			return sortData;
 		}
 		if (EObjectTableViewer.class.isAssignableFrom(c)) {
 			return getScenarioViewer();
@@ -839,26 +834,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					}
 
 				}, modelReference);
-			}
-
-			@Override
-			protected Object[] getSortedChildren(final Object parent) {
-				// This is the filtered and sorted children.
-				// This may be smaller than the original set.
-				sortData.sortedChildren = super.getSortedChildren(parent);
-
-				sortData.sortedIndices = new int[getTable() == null ? 0 : getTable().getRows().size()];
-				sortData.reverseSortedIndices = new int[getTable() == null ? 0 : getTable().getRows().size()];
-
-				Arrays.fill(sortData.sortedIndices, -1);
-				Arrays.fill(sortData.reverseSortedIndices, -1);
-
-				for (int i = 0; i < sortData.sortedChildren.length; ++i) {
-					final int rawIndex = getTable().getRows().indexOf(sortData.sortedChildren[i]);
-					sortData.sortedIndices[rawIndex] = i;
-					sortData.reverseSortedIndices[i] = rawIndex;
-				}
-				return sortData.sortedChildren;
 			}
 
 			@Override
