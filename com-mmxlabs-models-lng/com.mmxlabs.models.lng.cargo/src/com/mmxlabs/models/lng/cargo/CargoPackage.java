@@ -6551,7 +6551,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedListsArePermissive()
 	 * @generated
 	 */
-	EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive_1();
+	EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationExpression() <em>Get Slot Or Contract Cancellation Expression</em>}' operation.
@@ -8773,7 +8773,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrContractRestrictedListsArePermissive_1();
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrContractRestrictedListsArePermissive();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Cancellation Expression</b></em>' operation.

@@ -847,7 +847,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive_1() {
+	public EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive() {
 		return slotEClass.getEOperations().get(12);
 	}
 
@@ -2793,7 +2793,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSlotOrDelegatedEntity(), theCommercialPackage.getBaseLegalEntity(), "getSlotOrDelegatedEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetSlotOrContractRestrictedListsArePermissive_1(), ecorePackage.getEBoolean(), "getSlotOrContractRestrictedListsArePermissive", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetSlotOrContractRestrictedListsArePermissive(), ecorePackage.getEBoolean(), "getSlotOrContractRestrictedListsArePermissive", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrContractCancellationExpression(), ecorePackage.getEString(), "getSlotOrContractCancellationExpression", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -3033,8 +3033,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
 		createNamedObjectAnnotations();
-		// http://www.mmxlabs.com/models/featureOverride
-		createFeatureOverrideAnnotations();
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
@@ -3060,21 +3058,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source, 
 		   new String[] {
 			 "nonUniqueChildren", "true"
-		   });
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/featureOverride</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createFeatureOverrideAnnotations() {
-		String source = "http://www.mmxlabs.com/models/featureOverride";	
-		addAnnotation
-		  (slotEClass, 
-		   source, 
-		   new String[] {
 		   });
 	}
 
