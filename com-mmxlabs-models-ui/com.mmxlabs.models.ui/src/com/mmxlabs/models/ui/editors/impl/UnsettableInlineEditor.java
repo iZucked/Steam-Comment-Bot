@@ -4,12 +4,9 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
@@ -26,7 +23,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
-import com.mmxlabs.models.ui.editors.util.CommandUtil;
 
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
