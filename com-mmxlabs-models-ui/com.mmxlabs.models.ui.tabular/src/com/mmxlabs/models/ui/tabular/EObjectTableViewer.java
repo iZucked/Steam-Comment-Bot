@@ -300,7 +300,9 @@ public class EObjectTableViewer extends GridTreeViewer {
 				if (lockedForEditing) {
 					return;
 				}
-				manipulator.setValue(path.get((EObject) element), value);
+				Object obj = path.get((EObject) element);
+				manipulator.setParent(element, obj);
+				manipulator.setValue(obj, value);
 				refresh();
 			}
 		});

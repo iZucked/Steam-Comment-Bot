@@ -44,7 +44,7 @@ public abstract class NonEditableColumn implements ICellManipulator, ICellRender
 	public boolean isValueUnset(Object object) {
 		return false;
 	}
-	
+
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
@@ -60,4 +60,13 @@ public abstract class NonEditableColumn implements ICellManipulator, ICellRender
 		return getComparable(object);
 	}
 
+	@Override
+	public void setParent(Object parent, Object object) {
+
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+
+	}
 }

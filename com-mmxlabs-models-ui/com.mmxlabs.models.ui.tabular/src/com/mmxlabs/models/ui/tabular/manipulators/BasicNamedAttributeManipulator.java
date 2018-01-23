@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -32,6 +33,8 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 public class BasicNamedAttributeManipulator implements ICellManipulator, ICellRenderer {
 	protected final String fieldName;
 	protected final EditingDomain editingDomain;
+	private IExtraCommandsHook extraCommandsHook;
+	private Object parent;
 
 	public BasicNamedAttributeManipulator(final String fieldName, final EditingDomain editingDomain) {
 		super();
@@ -103,9 +106,13 @@ public class BasicNamedAttributeManipulator implements ICellManipulator, ICellRe
 
 		final EStructuralFeature field = getNamedField(object);
 
+		CompoundCommand cmd = new CompoundCommand();
 		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
-		// command.setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
-		editingDomain.getCommandStack().execute(command);
+		cmd.append(command);
+		if (extraCommandsHook != null) {
+			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
+		}
+		editingDomain.getCommandStack().execute(cmd);
 	}
 
 	public void doSetValue(final Object object, final Object value) {
@@ -178,5 +185,17 @@ public class BasicNamedAttributeManipulator implements ICellManipulator, ICellRe
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+		this.parent = parent;
+
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+		this.extraCommandsHook = extraCommandsHook;
+
 	}
 }

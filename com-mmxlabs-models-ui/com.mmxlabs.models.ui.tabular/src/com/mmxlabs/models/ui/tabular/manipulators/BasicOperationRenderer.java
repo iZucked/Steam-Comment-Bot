@@ -49,7 +49,7 @@ public class BasicOperationRenderer implements ICellManipulator, ICellRenderer {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean isValueUnset(Object object) {
 		return false;
@@ -92,7 +92,7 @@ public class BasicOperationRenderer implements ICellManipulator, ICellRenderer {
 	}
 
 	private Object reallyGetValue(final Object object) {
-		
+
 		if (object == null) {
 			return null;
 		}
@@ -123,5 +123,15 @@ public class BasicOperationRenderer implements ICellManipulator, ICellRenderer {
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+
 	}
 }

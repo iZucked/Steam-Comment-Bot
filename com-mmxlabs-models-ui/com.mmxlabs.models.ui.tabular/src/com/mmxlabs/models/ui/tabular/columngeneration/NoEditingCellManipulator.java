@@ -36,4 +36,14 @@ public final class NoEditingCellManipulator implements ICellManipulator {
 	public boolean canEdit(final Object object) {
 		return false;
 	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+
+	}
 }

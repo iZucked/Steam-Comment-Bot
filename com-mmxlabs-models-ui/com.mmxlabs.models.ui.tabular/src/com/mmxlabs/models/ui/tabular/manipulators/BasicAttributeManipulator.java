@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -37,6 +38,8 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	protected boolean isOverridable;
 	protected final EAnnotation overrideAnnotation;
 	protected EStructuralFeature overrideToggleFeature;
+	private IExtraCommandsHook extraCommandsHook;
+	private Object parent;
 
 	public BasicAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
 		super();
@@ -118,10 +121,14 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
 			return;
 		}
-
+		CompoundCommand cmd = new CompoundCommand();
 		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
+		cmd.append(command);
+		if (extraCommandsHook != null) {
+			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
+		}
 		// command.setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
-		editingDomain.getCommandStack().execute(command);
+		editingDomain.getCommandStack().execute(cmd);
 	}
 
 	public void doSetValue(final Object object, final Object value) {
@@ -199,5 +206,16 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+		this.parent = parent;
+
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+		this.extraCommandsHook = extraCommandsHook;
 	}
 }

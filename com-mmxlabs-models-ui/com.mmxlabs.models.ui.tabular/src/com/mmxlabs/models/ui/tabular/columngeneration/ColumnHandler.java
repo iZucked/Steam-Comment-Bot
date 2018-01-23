@@ -72,6 +72,9 @@ public class ColumnHandler {
 
 	public void setTooltip(final String tooltip) {
 		this.tooltip = tooltip;
+		if (column != null) {
+			column.getColumn().setHeaderTooltip(tooltip);
+		}
 	}
 	
 	public ICellRenderer getFormatter() {

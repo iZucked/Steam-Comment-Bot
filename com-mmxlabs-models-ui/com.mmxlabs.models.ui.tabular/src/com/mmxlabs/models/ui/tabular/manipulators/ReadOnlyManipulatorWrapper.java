@@ -54,7 +54,7 @@ public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRender
 	public boolean isValueUnset(final Object object) {
 		return wrapped.isValueUnset(object);
 	}
-	
+
 	@Override
 	public void setValue(final Object object, final Object value) {
 
@@ -73,5 +73,15 @@ public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRender
 	@Override
 	public boolean canEdit(final Object object) {
 		return false;
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+		wrapped.setParent(parent, object);
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+		wrapped.setExtraCommandsHook(extraCommandsHook);
 	}
 }
