@@ -205,7 +205,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			TradesBasedColumnFactory.LOAD_END_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_START_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_PORT_GROUP, //
-			TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_PRICING_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_VOLUME_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_WINDOW_GROUP, //
