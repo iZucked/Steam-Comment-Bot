@@ -141,7 +141,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link PortPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -155,7 +155,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		if (isInited) return (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 
 		// Obtain or create and register package
-		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new PortPackageImpl());
+		Object registeredPortPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		PortPackageImpl thePortPackage = registeredPortPackage instanceof PortPackageImpl ? (PortPackageImpl)registeredPortPackage : new PortPackageImpl();
 
 		isInited = true;
 
@@ -173,7 +174,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Mark meta-data to indicate it can't be changed
 		thePortPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(PortPackage.eNS_URI, thePortPackage);
 		return thePortPackage;
@@ -294,6 +294,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 */
 	public EAttribute getPort_MaxCvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_MmxId() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -635,6 +644,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE_UNITS);
 		createEAttribute(portEClass, PORT__MIN_CV_VALUE);
 		createEAttribute(portEClass, PORT__MAX_CV_VALUE);
+		createEAttribute(portEClass, PORT__MMX_ID);
 
 		routeEClass = createEClass(ROUTE);
 		createEReference(routeEClass, ROUTE__LINES);
@@ -753,6 +763,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_DefaultWindowSizeUnits(), theTypesPackage.getTimePeriod(), "defaultWindowSizeUnits", "HOURS", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_MmxId(), ecorePackage.getEString(), "mmxId", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(portEClass, theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -832,12 +843,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	protected void createNamedobjectAnnotations() {
-		String source = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";	
+		String source = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";
 		addAnnotation
-		  (locationEClass, 
-		   source, 
+		  (locationEClass,
+		   source,
 		   new String[] {
-			 "showOtherNames", "true"
+			   "showOtherNames", "true"
 		   });
 	}
 
@@ -848,66 +859,66 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getPort_LoadDuration(), 
-		   source, 
+		  (getPort_LoadDuration(),
+		   source,
 		   new String[] {
-			 "unit", "hours",
-			 "formatString", "##,##0"
-		   });	
+			   "unit", "hours",
+			   "formatString", "##,##0"
+		   });
 		addAnnotation
-		  (getPort_DischargeDuration(), 
-		   source, 
+		  (getPort_DischargeDuration(),
+		   source,
 		   new String[] {
-			 "unit", "hours",
-			 "formatString", "##,##0"
-		   });	
+			   "unit", "hours",
+			   "formatString", "##,##0"
+		   });
 		addAnnotation
-		  (getPort_CvValue(), 
-		   source, 
+		  (getPort_CvValue(),
+		   source,
 		   new String[] {
-			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "#0.###"
-		   });	
+			   "unit", "mmBtu/m\u00b3",
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getPort_DefaultWindowSize(), 
-		   source, 
+		  (getPort_DefaultWindowSize(),
+		   source,
 		   new String[] {
-			 "formatString", "##,##0"
-		   });	
+			   "formatString", "##,##0"
+		   });
 		addAnnotation
-		  (getPort_DefaultWindowSizeUnits(), 
-		   source, 
+		  (getPort_DefaultWindowSizeUnits(),
+		   source,
 		   new String[] {
-			 "unit", "hours",
-			 "formatString", "##,##0"
-		   });	
+			   "unit", "hours",
+			   "formatString", "##,##0"
+		   });
 		addAnnotation
-		  (getPort_MinCvValue(), 
-		   source, 
+		  (getPort_MinCvValue(),
+		   source,
 		   new String[] {
-			 "formatString", "#0.###"
-		   });	
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getPort_MaxCvValue(), 
-		   source, 
+		  (getPort_MaxCvValue(),
+		   source,
 		   new String[] {
-			 "formatString", "#0.###"
-		   });	
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getLocation_Lat(), 
-		   source, 
+		  (getLocation_Lat(),
+		   source,
 		   new String[] {
-			 "formatString", "-##0.###",
-			 "exportFormatString", "##0.###"
-		   });	
+			   "formatString", "-##0.###",
+			   "exportFormatString", "##0.###"
+		   });
 		addAnnotation
-		  (getLocation_Lon(), 
-		   source, 
+		  (getLocation_Lon(),
+		   source,
 		   new String[] {
-			 "formatString", "-##0.###",
-			 "exportFormatString", "##0.###"
+			   "formatString", "-##0.###",
+			   "exportFormatString", "##0.###"
 		   });
 	}
 
@@ -918,24 +929,24 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	protected void createCsvAnnotations() {
-		String source = "http://www.mmxlabs.com/models/csv";	
+		String source = "http://www.mmxlabs.com/models/csv";
 		addAnnotation
-		  (portGroupEClass, 
-		   source, 
+		  (portGroupEClass,
+		   source,
 		   new String[] {
-			 "namePrefix", "Group"
-		   });	
+			   "namePrefix", "Group"
+		   });
 		addAnnotation
-		  (capabilityGroupEClass, 
-		   source, 
+		  (capabilityGroupEClass,
+		   source,
 		   new String[] {
-			 "namePrefix", "CapGroup"
-		   });	
+			   "namePrefix", "CapGroup"
+		   });
 		addAnnotation
-		  (portCountryGroupEClass, 
-		   source, 
+		  (portCountryGroupEClass,
+		   source,
 		   new String[] {
-			 "namePrefix", "CountryGroup"
+			   "namePrefix", "CountryGroup"
 		   });
 	}
 
