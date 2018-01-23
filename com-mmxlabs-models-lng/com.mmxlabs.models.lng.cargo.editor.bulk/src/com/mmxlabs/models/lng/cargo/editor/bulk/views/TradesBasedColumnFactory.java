@@ -290,8 +290,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecontract": {
 			final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Buy at", null, ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
-					rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Buy at", null, ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+					rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecounterparty": {
@@ -523,8 +523,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescounterparty": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE,
+					DEFAULT_ORDER_KEY, rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-restrictions": {
@@ -685,7 +685,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						// Create the custom rendering stuff
 						final Grid grid = viewer.getGrid();
 						diagram = new SlotTypePainter(grid, column, isLoad);
-						diagram.setTable(table);
 
 						GridViewerHelper.configureLookAndFeel(column);
 						return column;

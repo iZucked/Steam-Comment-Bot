@@ -65,8 +65,6 @@ public class SlotTypePainter implements PaintListener {
 	/**
 	 * The {@link Table} data structure containing all the required data
 	 */
-	private Table table;
-
 	private final boolean isLoad;
 
 	/**
@@ -126,14 +124,8 @@ public class SlotTypePainter implements PaintListener {
 			return;
 		}
 
-		if (table == null) {
-			return;
-		}
-
-		// // Copy ref in case of concurrent change during paint
-		final Table root = table;
 		// Get a list of terminal positions from subclass
-		final List<Float> terminalPositions = getTerminalPositions(root);
+		final List<Float> terminalPositions = getTerminalPositions();
 
 		final GC graphics = e.gc;
 
@@ -160,14 +152,16 @@ public class SlotTypePainter implements PaintListener {
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		graphics.setLineWidth(borderWidth);
 		rawI = 0;
+		GridItem[] rootItems = grid.getRootItems();
 		for (final float midpoint : terminalPositions) {
 			final int i = rawI;
 			// -1 indicates filtered row
 			if (i == -1) {
 				continue;
 			}
-
-			final Row row = root.getRows().get(i);
+			GridItem itm = rootItems[i];
+			Object o = itm.getData();
+			final Row row = (Row) o;// root.getRows().get(i);
 			final boolean drawLoad = row.getLoadSlot() != null;
 			final boolean drawDischarge = row.getDischargeSlot() != null;
 
@@ -230,12 +224,12 @@ public class SlotTypePainter implements PaintListener {
 		grid.redraw();
 	}
 
-	protected List<Float> getTerminalPositions(final Table rootData) {
+	protected List<Float> getTerminalPositions() {
 
 		// Determine the mid-point in each row and generate an ordered list of heights.
 
 		// +1 to to make loop simpler
-		final int[] heights = new int[rootData.getRows().size() + 1];
+		final int[] heights = new int[grid.getItemCount() + 1];
 		heights[0] = grid.getHeaderHeight();
 
 		// Pass one, get heights
@@ -307,13 +301,5 @@ public class SlotTypePainter implements PaintListener {
 		offset -= grid.getHorizontalBar().getSelection();
 		// TODO: Take into account h scroll final int colWidth = grid.getColumn(wiringColumnIndex).getWidth();
 		return new Rectangle(area.x + offset, area.y + grid.getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
-	}
-
-	public Table getTable() {
-		return table;
-	}
-
-	public void setTable(final Table table) {
-		this.table = table;
 	}
 }

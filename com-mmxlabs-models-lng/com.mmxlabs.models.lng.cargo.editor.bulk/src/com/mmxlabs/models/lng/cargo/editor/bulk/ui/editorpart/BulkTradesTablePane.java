@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.print.DocFlavor.CHAR_ARRAY;
-
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
@@ -29,8 +28,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
@@ -48,6 +50,7 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
@@ -77,8 +80,10 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -99,18 +104,26 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedRowModelTransf
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingCommands;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.ComplexCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
+import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -118,6 +131,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.EObjectTableViewerColumnFactory;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -272,7 +286,11 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		toolbar.add(new GroupMarker(VIEW_GROUP));
 		toolbar.appendToGroup(VIEW_GROUP, new PackGridTreeColumnsAction(scenarioViewer));
 
-		final Action addAction = new AddAction("Add", newCargo, newLoadSlot, newDischargeSlot, addLoadSlotToDischarge, addDischargeSlotToLoad);
+		final Action addAction = new AddAction("Add", addLoadSlotToDischarge, addDischargeSlotToLoad);
+		//
+		// final Action addAction = AddModelAction.create(CargoPackage.Literals.SLOT, getAddContext(CargoPackage.Literals.CARGO_MODEL__CARGOES),
+		// new Action[] { addLoadSlotToDischarge, addDischargeSlotToLoad });
+
 		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
@@ -379,21 +397,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			aci.fill(m, -1);
 		}
 
-	}
-
-	private class AddAction extends DefaultMenuCreatorAction {
-		private Action[] actions;
-
-		public AddAction(final String label, final Action... actions) {
-			super(label);
-			this.actions = actions;
-		}
-
-		protected void populate(final Menu menu) {
-			for (Action action : actions) {
-				addActionToMenu(action, menu);
-			}
-		}
 	}
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
@@ -921,7 +924,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		};
 
-		viewer.getSortingSupport().setSortOnlyOnSelect(true);
+//		viewer.getSortingSupport().setSortOnlyOnSelect(true);
 
 		final MenuManager mgr = new MenuManager();
 
@@ -1147,4 +1150,237 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 	}
 
+	protected IAddContext getAddContext(final EReference containment) {
+		return new IAddContext() {
+			@Override
+			public MMXRootObject getRootObject() {
+				return scenarioEditingLocation.getRootObject();
+			}
+
+			@Override
+			public EReference getContainment() {
+				return containment;
+			}
+
+			@Override
+			public EObject getContainer() {
+				return scenarioViewer.getCurrentContainer();
+			}
+
+			@Override
+			public ICommandHandler getCommandHandler() {
+				return scenarioEditingLocation.getDefaultCommandHandler();
+			}
+
+			@Override
+			public IScenarioEditingLocation getEditorPart() {
+				return scenarioEditingLocation;
+			}
+
+			@Override
+			public @Nullable Collection<@NonNull EObject> getCurrentSelection() {
+				return SelectionHelper.convertToList(viewer.getSelection(), EObject.class);
+			}
+		};
+	}
+
+	// private class AddAction extends DefaultMenuCreatorAction {
+	//
+	// public AddAction(final String label) {
+	// super(label);
+	// }
+	//
+	// protected void populate(final Menu menu) {
+	//
+	// }
+	// }
+	private class AddAction extends DefaultMenuCreatorAction {
+
+		private Action[] actions;
+
+		public AddAction(final String label, final Action... actions) {
+			super(label);
+			this.actions = actions;
+		}
+
+		/**
+		 * Subclasses should fill their menu with actions here.
+		 * 
+		 * @param menu
+		 *            the menu which is about to be displayed
+		 */
+		protected void populate(final Menu menu) {
+			{
+				final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
+				// Translate into real objects, not just row object!
+				final List<Object> selectedObjects = new LinkedList<Object>();
+				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
+
+					final Iterator<?> itr = structuredSelection.iterator();
+					while (itr.hasNext()) {
+						final Object o = itr.next();
+						if (o instanceof Row) {
+							final Row rowData = (Row) o;
+							// TODO: Check logic, a row may contain two distinct items
+							if (rowData.getCargo() != null) {
+								selectedObjects.add(rowData.getCargo());
+								continue;
+							}
+							if (rowData.getLoadSlot() != null) {
+								selectedObjects.add(rowData.getLoadSlot());
+							}
+							if (rowData.getDischargeSlot() != null) {
+								selectedObjects.add(rowData.getDischargeSlot());
+							}
+						}
+					}
+				}
+
+				result.selectionChanged(new SelectionChangedEvent(scenarioViewer, new StructuredSelection(selectedObjects)));
+				addActionToMenu(result, menu);
+			}
+
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioEditingLocation.getScenarioDataProvider());
+			final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
+
+			Row discoveredRowData = null;
+			final ISelection selection = getScenarioViewer().getSelection();
+			if (selection instanceof IStructuredSelection) {
+				final Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+				if (firstElement instanceof Row) {
+					discoveredRowData = (Row) firstElement;
+				}
+			}
+			final Row referenceRowData = discoveredRowData;
+			{
+				final Action newLoad = new Action("Cargo") {
+					public void run() {
+
+						final List<Command> setCommands = new LinkedList<Command>();
+
+						final Cargo newCargo = cec.createNewCargo(setCommands, cargoModel);
+
+						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, false);
+						initialiseSlot(newLoad, true, referenceRowData);
+
+						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, false);
+						initialiseSlot(newDischarge, false, referenceRowData);
+
+						newLoad.setCargo(newCargo);
+						newDischarge.setCargo(newCargo);
+
+						newCargo.setAllowRewiring(true);
+						final CompoundCommand cmd = new CompoundCommand("Cargo");
+						setCommands.forEach(c -> cmd.append(c));
+
+//						scenarioViewer .getSortingSupport().setSortOnlyOnSelect(false);
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+//						scenarioViewer .getSortingSupport().setSortOnlyOnSelect(true);
+					}
+				};
+				addActionToMenu(newLoad, menu);
+			}
+			{
+				final Action newLoad = new Action("FOB Purchase") {
+					public void run() {
+
+						final List<Command> setCommands = new LinkedList<Command>();
+
+						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, false);
+						initialiseSlot(newLoad, true, referenceRowData);
+
+						final CompoundCommand cmd = new CompoundCommand("FOB Purchase");
+						setCommands.forEach(c -> cmd.append(c));
+
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newLoad, commandStack.getMostRecentCommand());
+					}
+				};
+				addActionToMenu(newLoad, menu);
+			}
+			{
+				final Action newDESPurchase = new Action("DES Purchase") {
+					public void run() {
+
+						final List<Command> setCommands = new LinkedList<Command>();
+
+						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, true);
+						initialiseSlot(newLoad, true, referenceRowData);
+
+						final CompoundCommand cmd = new CompoundCommand("DES Purchase");
+						setCommands.forEach(c -> cmd.append(c));
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newLoad, commandStack.getMostRecentCommand());
+					}
+				};
+				addActionToMenu(newDESPurchase, menu);
+			}
+			{
+				final Action newDischarge = new Action("DES Sale") {
+					public void run() {
+
+						final List<Command> setCommands = new LinkedList<Command>();
+
+						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, false);
+						initialiseSlot(newDischarge, false, referenceRowData);
+
+						final CompoundCommand cmd = new CompoundCommand("DES Sale");
+						setCommands.forEach(c -> cmd.append(c));
+
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newDischarge, commandStack.getMostRecentCommand());
+					}
+				};
+
+				addActionToMenu(newDischarge, menu);
+			}
+			{
+				final Action newFOBSale = new Action("FOB Sale") {
+					public void run() {
+
+						final List<Command> setCommands = new LinkedList<Command>();
+
+						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, true);
+						initialiseSlot(newDischarge, false, referenceRowData);
+
+						final CompoundCommand cmd = new CompoundCommand("FOB Sale");
+						setCommands.forEach(c -> cmd.append(c));
+
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newDischarge, commandStack.getMostRecentCommand());
+					}
+				};
+				addActionToMenu(newFOBSale, menu);
+			}
+
+			if (LicenseFeatures.isPermitted("features:complex-cargo")) {
+				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo", scenarioEditingLocation, viewer.getControl().getShell());
+				addActionToMenu(newComplexCargo, menu);
+			}
+			if (actions != null) {
+				for (Action action : actions) {
+					addActionToMenu(action, menu);
+				}
+			}
+		}
+
+		private final void initialiseSlot(final Slot newSlot, final boolean isLoad, final Row referenceRowData) {
+			newSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+			newSlot.setOptional(false);
+			newSlot.setName("");
+			// Set window so that via default sorting inserts new slot at current table position
+			if (referenceRowData != null) {
+				final Slot primarySortSlot = isLoad ? referenceRowData.getLoadSlot() : referenceRowData.getDischargeSlot();
+				final Slot secondarySortSlot = isLoad ? referenceRowData.getDischargeSlot() : referenceRowData.getLoadSlot();
+				if (primarySortSlot != null) {
+					newSlot.setWindowStart(primarySortSlot.getWindowStart());
+					newSlot.setPort(primarySortSlot.getPort());
+				} else if (secondarySortSlot != null) {
+					newSlot.setWindowStart(secondarySortSlot.getWindowStart());
+				}
+			}
+		}
+
+	}
 }
