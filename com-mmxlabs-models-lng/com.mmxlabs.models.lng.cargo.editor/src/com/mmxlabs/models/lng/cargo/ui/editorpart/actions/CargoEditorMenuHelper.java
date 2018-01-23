@@ -295,8 +295,9 @@ public class CargoEditorMenuHelper {
 				if (LicenseFeatures.isPermitted("features:complex-cargo")) {
 					newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
 				}
+			} else {
+				newMenuManager.add(new EditAction("Edit Cargo", cargo));
 			}
-			// newMenuManager.add(new EditAction("Edit Cargo", cargo));
 		}
 	}
 
