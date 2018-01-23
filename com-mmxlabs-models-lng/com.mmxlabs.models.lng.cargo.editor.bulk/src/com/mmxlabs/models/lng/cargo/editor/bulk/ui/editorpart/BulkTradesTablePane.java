@@ -415,7 +415,26 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	}
 
 	private Action getAddDischargeToLoadAction() {
-		return new Action("Add Discharge To Load") {
+		return new Action("Create discharge for load") {
+
+			@Override
+			public boolean isEnabled() {
+				ISelection selection = viewer.getSelection();
+				if (selection instanceof TreeSelection) {
+					Object[] elements = ((TreeSelection) selection).toArray();
+					if (elements.length == 1) {
+						Object o = elements[0];
+						if (o instanceof Row) {
+							Row row = (Row) o;
+							if (row.getCargo() == null && row.getDischargeSlot() == null && row.getLoadSlot() != null) {
+								return true;
+							}
+						}
+					}
+				}
+				return false;
+			}
+
 			public void run() {
 				ISelection selection = viewer.getSelection();
 				if (selection instanceof TreeSelection) {
@@ -425,10 +444,13 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						if (o instanceof Row) {
 							Row row = (Row) o;
 							if (row.getCargo() == null && row.getDischargeSlot() == null && row.getLoadSlot() != null) {
-								final CompoundCommand cmd = new CompoundCommand("Add Discharge to Load");
+								final CompoundCommand cmd = new CompoundCommand("Create discharge for load");
 								final Cargo newCargo = CargoFactory.eINSTANCE.createCargo();
 								final LoadSlot loadSlot = row.getLoadSlot();
+
 								final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+								dischargeSlot.setWindowStart(loadSlot.getWindowStart());
+
 								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
 										CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
 								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
@@ -445,7 +467,26 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	}
 
 	private Action getAddLoadToDischargeAction() {
-		return new Action("Add Load To Discharge") {
+		return new Action("Create load for discharge") {
+			
+			@Override
+			public boolean isEnabled() {
+				ISelection selection = viewer.getSelection();
+				if (selection instanceof TreeSelection) {
+					Object[] elements = ((TreeSelection) selection).toArray();
+					if (elements.length == 1) {
+						Object o = elements[0];
+						if (o instanceof Row) {
+							Row row = (Row) o;
+							if (row.getCargo() == null && row.getLoadSlot() == null && row.getDischargeSlot() != null) {
+								return true;
+							}
+						}
+					}
+				}
+				return false;
+			}
+			
 			public void run() {
 				ISelection selection = viewer.getSelection();
 				if (selection instanceof TreeSelection) {
@@ -455,10 +496,11 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						if (o instanceof Row) {
 							Row row = (Row) o;
 							if (row.getCargo() == null && row.getLoadSlot() == null && row.getDischargeSlot() != null) {
-								final CompoundCommand cmd = new CompoundCommand("Add Load to Discharge");
+								final CompoundCommand cmd = new CompoundCommand("Create load for discharge");
 								final Cargo newCargo = CargoFactory.eINSTANCE.createCargo();
 								final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
 								final DischargeSlot dischargeSlot = row.getDischargeSlot();
+								loadSlot.setWindowStart(dischargeSlot.getWindowStart());
 								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
 										CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
 								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
@@ -924,7 +966,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		};
 
-//		viewer.getSortingSupport().setSortOnlyOnSelect(true);
+		// viewer.getSortingSupport().setSortOnlyOnSelect(true);
 
 		final MenuManager mgr = new MenuManager();
 
@@ -1274,9 +1316,9 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						final CompoundCommand cmd = new CompoundCommand("Cargo");
 						setCommands.forEach(c -> cmd.append(c));
 
-//						scenarioViewer .getSortingSupport().setSortOnlyOnSelect(false);
+						// scenarioViewer .getSortingSupport().setSortOnlyOnSelect(false);
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-//						scenarioViewer .getSortingSupport().setSortOnlyOnSelect(true);
+						// scenarioViewer .getSortingSupport().setSortOnlyOnSelect(true);
 					}
 				};
 				addActionToMenu(newLoad, menu);
