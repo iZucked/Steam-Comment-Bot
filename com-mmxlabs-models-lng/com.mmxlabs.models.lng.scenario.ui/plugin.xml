@@ -178,6 +178,14 @@
                   commandId="com.mmxlabs.models.lng.scenario.ui.import.inventory"
                   label="Import inventory"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:inventory-model"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>
             </command>
          </menuContribution>
          <!--
