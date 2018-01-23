@@ -209,7 +209,7 @@ public class SlotInsertionOptimiserUnit {
 									"Unable to perform insertion on this scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
 						}
 						state.originalRawSequences = initialRawSequences;
-						state.lookupManager = new LookupManager();
+						state.lookupManager = new LookupManager();// .getInstance(ILookupManager.class);
 						state.lookupManager.createLookup(initialRawSequences);
 					}
 
