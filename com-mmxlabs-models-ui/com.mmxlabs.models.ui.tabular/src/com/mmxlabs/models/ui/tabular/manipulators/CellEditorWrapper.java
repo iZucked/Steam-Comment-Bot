@@ -113,7 +113,7 @@ public class CellEditorWrapper extends CellEditor {
 		
 		@Override
 		protected void doSetValue(Object value) {
-			if (value == SetCommand.UNSET_VALUE) {
+			if (value == null || value == SetCommand.UNSET_VALUE) {
 				inner.setChecked(false);
 			} else {
 				inner.setChecked(true);
