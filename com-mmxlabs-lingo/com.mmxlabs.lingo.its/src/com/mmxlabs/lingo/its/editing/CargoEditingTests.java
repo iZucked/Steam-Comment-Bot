@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingHelper;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingHelper;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 
