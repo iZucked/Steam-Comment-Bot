@@ -587,6 +587,18 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 					return (element instanceof DataIndex<?>);
 				}
+
+				@Override
+				public void setParent(Object parent, Object object) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+					// TODO Auto-generated method stub
+					
+				}
 			};
 			col.getColumn().setData(EObjectTableViewer.COLUMN_MANIPULATOR, manipulator);
 

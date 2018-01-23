@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -60,6 +61,10 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	 * Label provider to map between contracts and price expressions to strings.
 	 */
 	private final LabelProvider labelProvider;
+
+	private IExtraCommandsHook extraCommandsHook;
+
+	private Object parent;
 
 	/**
 	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
@@ -272,7 +277,12 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		} else {
 			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSpotSlot_Market(), value));
 		}
-		editingDomain.getCommandStack().execute(command);
+		CompoundCommand cmd = new CompoundCommand();
+		cmd.append(command);
+		if (extraCommandsHook != null) {
+			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
+		}
+		editingDomain.getCommandStack().execute(cmd);
 	}
 
 	private void runSetCommand(final Object object, final Contract value) {
@@ -287,7 +297,12 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		} else {
 			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_Contract(), value));
 		}
-		editingDomain.getCommandStack().execute(command);
+		CompoundCommand cmd = new CompoundCommand();
+		cmd.append(command);
+		if (extraCommandsHook != null) {
+			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
+		}
+		editingDomain.getCommandStack().execute(cmd);
 	}
 
 	public void runSetCommand(final Object object, final String value) {
@@ -302,7 +317,12 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_PriceExpression(), SetCommand.UNSET_VALUE));
 
 		}
-		editingDomain.getCommandStack().execute(command);
+		CompoundCommand cmd = new CompoundCommand();
+		cmd.append(command);
+		if (extraCommandsHook != null) {
+			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
+		}
+		editingDomain.getCommandStack().execute(cmd);
 	}
 
 	@Override
@@ -333,5 +353,16 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	@Override
 	public Comparable getComparable(final Object object) {
 		return render(object);
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+		this.parent = parent;
+
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+		this.extraCommandsHook = extraCommandsHook;
 	}
 }

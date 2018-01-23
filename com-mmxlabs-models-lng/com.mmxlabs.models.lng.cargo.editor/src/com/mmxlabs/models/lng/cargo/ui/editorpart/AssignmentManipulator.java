@@ -40,6 +40,8 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	private final IReferenceValueProvider cargoValueProvider;
 	private List<Pair<String, EObject>> allowedValues;
 	private EReference reference;
+	private IExtraCommandsHook extraCommandsHook;
+	private Object parent;
 
 	public AssignmentManipulator(final IScenarioEditingLocation location) {
 		this.location = location;
@@ -188,5 +190,16 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
 		return null;
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+		this.parent = parent;
+		
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+		this.extraCommandsHook = extraCommandsHook;
 	}
 }
