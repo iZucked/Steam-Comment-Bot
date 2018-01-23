@@ -33,6 +33,7 @@
 		<module>com.mmxlabs.models.lng.cargo</module>
 		<module>com.mmxlabs.models.lng.cargo.edit</module>
 		<module>com.mmxlabs.models.lng.cargo.editor</module>
+		<module>com.mmxlabs.models.lng.cargo.editor.bulk</module>
 		<module>com.mmxlabs.models.lng.cargo.validation</module>
 
 		<module>com.mmxlabs.models.lng.commercial</module>
