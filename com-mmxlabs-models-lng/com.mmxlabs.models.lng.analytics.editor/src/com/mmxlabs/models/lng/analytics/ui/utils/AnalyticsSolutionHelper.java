@@ -34,7 +34,8 @@ public class AnalyticsSolutionHelper {
 		for (final NamedObject s : objects) {
 			names.add(s.getName());
 		}
-
+		while (names.remove(null))
+			;
 		return "Inserting: " + Joiner.on(", ").join(names);
 	}
 
