@@ -209,7 +209,8 @@ public class SlotTypePainter implements PaintListener {
 		int x = 0;
 		x = ca.x + (ca.width / 2) - (terminalSize / 2) - extraRadius / 2;
 		int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
-		graphics.setForeground(outlineColour);
+		graphics.setForeground(terminalColour == InvalidTerminalColour ? InvalidTerminalColour : outlineColour);
+
 		graphics.setBackground(fillColour);
 		graphics.fillOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
 		graphics.drawOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
