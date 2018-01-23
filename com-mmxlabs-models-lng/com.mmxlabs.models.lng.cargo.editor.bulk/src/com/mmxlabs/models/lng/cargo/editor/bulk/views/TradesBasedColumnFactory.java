@@ -287,6 +287,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
 					}
+					{
+						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Duration", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.setTooltip("Visit duration in hours");
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
 					return null;
 				}
 			});
@@ -516,6 +523,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final EnumAttributeManipulator rendMan = new EnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), editingDomain);
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					{
+						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Duration", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.setTooltip("Visit duration in hours");
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
 					}
