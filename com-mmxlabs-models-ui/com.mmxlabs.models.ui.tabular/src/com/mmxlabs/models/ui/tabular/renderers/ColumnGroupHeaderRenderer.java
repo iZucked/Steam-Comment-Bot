@@ -174,7 +174,8 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 			}
 		}
 
-		return false;
+		// Always return true to avoid selecting all the cells in the column when cell selection in enabled.
+		return true;
 	}
 
 	/**
