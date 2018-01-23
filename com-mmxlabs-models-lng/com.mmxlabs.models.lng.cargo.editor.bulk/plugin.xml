@@ -38,18 +38,14 @@
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-id">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-port">
       </TradesBasedColumn>
-   </extension>
-   <extension
-         id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">
+      <TradesBasedColumn
+            handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
+            id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-cv">
+      </TradesBasedColumn>
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-vol">
