@@ -11,9 +11,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
-import org.eclipse.jface.viewers.CellLabelProvider;
-import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -33,10 +30,12 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -638,7 +637,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							return null;
 						}
 
-						final GridTreeViewer viewer = (GridTreeViewer) report.getAdapter(GridTreeViewer.class);
+						final ScenarioTableViewer viewer = (ScenarioTableViewer) report.getAdapter(ScenarioTableViewer.class);
 						final Table table = (Table) report.getAdapter(Table.class);
 
 						final GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
@@ -659,11 +658,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						column.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, formatter);
 
 						// Set a default label provider
-						column.setLabelProvider(new CellLabelProvider() {
-
+						column.setLabelProvider(new EObjectTableViewerColumnProvider(viewer, null, null) {
 							@Override
-							public void update(final ViewerCell cell) {
-								// No normal cell update
+							public String getText(final Object element) {
+								return null;
 							}
 						});
 
