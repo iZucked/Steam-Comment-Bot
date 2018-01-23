@@ -147,7 +147,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-port": {
 			final TextualSingleReferenceManipulator rendMan = new TextualPortSingleReferenceManipulatorExtension(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
 					rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
@@ -159,7 +159,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", LOAD_VOLUME_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -219,7 +219,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", LOAD_WINDOW_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -290,13 +290,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecontract": {
 			final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Buy at", null, ColumnType.NORMAL, LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Buy at", null, ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
 					rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecounterparty": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
 					rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
@@ -308,7 +308,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "Restrictions", LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "Restrictions", LOAD_EXTRA_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -380,7 +380,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-port": {
 			final TextualSingleReferenceManipulator rendMan = new TextualPortSingleReferenceManipulatorExtension(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, DISCHARGE_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, DISCHARGE_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
 					rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
@@ -392,7 +392,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", DISCHARGE_VOLUME_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -452,7 +452,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", DISCHARGE_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", DISCHARGE_WINDOW_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -517,13 +517,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescontract": {
 			final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Sell at", null, ColumnType.NORMAL, DISCHARGE_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Sell at", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
 					rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescounterparty": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, DISCHARGE_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
+			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
 					rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;
@@ -535,7 +535,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "Restrictions", DISCHARGE_MAIN_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "Restrictions", DISCHARGE_EXTRA_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);

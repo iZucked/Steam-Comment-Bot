@@ -11,13 +11,22 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 public interface ITradesColumnFactory {
 
 	public static final String LOAD_START_GROUP = "TradesBasedColumnFactory.LOAD_START_GROUP";
-	public static final String LOAD_MAIN_GROUP = "TradesBasedColumnFactory.LOAD_MAIN_GROUP";
+	public static final String LOAD_PORT_GROUP = "TradesBasedColumnFactory.LOAD_PORT_GROUP";
+	public static final String LOAD_PRICING_GROUP = "TradesBasedColumnFactory.LOAD_PRICING_GROUP";
+	public static final String LOAD_PRICING_EXTRA_GROUP = "TradesBasedColumnFactory.LOAD_PRICING_EXTRA_GROUP";
+	public static final String LOAD_VOLUME_GROUP = "TradesBasedColumnFactory.LOAD_VOLUME_GROUP";
+	public static final String LOAD_WINDOW_GROUP = "TradesBasedColumnFactory.LOAD_WINDOW_GROUP";
 	public static final String LOAD_EXTRA_GROUP = "TradesBasedColumnFactory.LOAD_EXTRA_GROUP";
 	public static final String LOAD_END_GROUP = "TradesBasedColumnFactory.LOAD_END_GROUP";
 	public static final String DISCHARGE_START_GROUP = "TradesBasedColumnFactory.DISCHARGE_START_GROUP";
-	public static final String DISCHARGE_MAIN_GROUP = "TradesBasedColumnFactory.DISCHARGE_MAIN_GROUP";
+	public static final String DISCHARGE_PORT_GROUP = "TradesBasedColumnFactory.DISCHARGE_PORT_GROUP";
+	public static final String DISCHARGE_PRICING_GROUP = "TradesBasedColumnFactory.DISCHARGE_PRICING_GROUP";
+	public static final String DISCHARGE_PRICING_EXTRA_GROUP = "TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP";
+	public static final String DISCHARGE_VOLUME_GROUP = "TradesBasedColumnFactory.DISCHARGE_VOLUME_GROUP";
+	public static final String DISCHARGE_WINDOW_GROUP = "TradesBasedColumnFactory.DISCHARGE_WINDOW_GROUP";
 	public static final String DISCHARGE_EXTRA_GROUP = "TradesBasedColumnFactory.DISCHARGE_EXTRA_GROUP";
 	public static final String DISCHARGE_END_GROUP = "TradesBasedColumnFactory.DISCHARGE_END_GROUP";
+	
 	public static final String CARGO_START_GROUP = "TradesBasedColumnFactory.CARGO_START_GROUP";
 	public static final String CARGO_END_GROUP = "TradesBasedColumnFactory.CARGO_END_GROUP";
 
@@ -30,11 +39,12 @@ public interface ITradesColumnFactory {
 		}
 		switch (group) {
 		case LOAD_START_GROUP:
-			return true;
-		case LOAD_MAIN_GROUP:
-			return true;
+		case LOAD_PORT_GROUP:
+		case LOAD_WINDOW_GROUP:
+		case LOAD_PRICING_GROUP:
+		case LOAD_PRICING_EXTRA_GROUP:
+		case LOAD_VOLUME_GROUP:
 		case LOAD_EXTRA_GROUP:
-			return true;
 		case LOAD_END_GROUP:
 			return true;
 		}
@@ -47,11 +57,12 @@ public interface ITradesColumnFactory {
 		}
 		switch (group) {
 		case DISCHARGE_START_GROUP:
-			return true;
-		case DISCHARGE_MAIN_GROUP:
-			return true;
+		case DISCHARGE_PORT_GROUP:
+		case DISCHARGE_WINDOW_GROUP:
+		case DISCHARGE_PRICING_GROUP:
+		case DISCHARGE_PRICING_EXTRA_GROUP:
+		case DISCHARGE_VOLUME_GROUP:
 		case DISCHARGE_EXTRA_GROUP:
-			return true;
 		case DISCHARGE_END_GROUP:
 			return true;
 		}

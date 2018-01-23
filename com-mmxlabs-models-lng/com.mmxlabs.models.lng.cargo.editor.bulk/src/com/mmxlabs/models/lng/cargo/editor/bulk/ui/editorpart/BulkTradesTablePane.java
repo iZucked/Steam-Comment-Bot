@@ -157,12 +157,21 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	/*
 	 * This is used to determine the order of column groups
 	 */
-	private final String[] orderedColumnGroupNames = new String[] { TradesBasedColumnFactory.LOAD_START_GROUP, //
-			TradesBasedColumnFactory.LOAD_MAIN_GROUP, //
+	private final String[] orderedColumnGroupNames = new String[] { //
+			TradesBasedColumnFactory.LOAD_START_GROUP, //
+			TradesBasedColumnFactory.LOAD_PORT_GROUP, //
+			TradesBasedColumnFactory.LOAD_PRICING_GROUP, //
+			TradesBasedColumnFactory.LOAD_PRICING_EXTRA_GROUP, //
+			TradesBasedColumnFactory.LOAD_VOLUME_GROUP, //
+			TradesBasedColumnFactory.LOAD_WINDOW_GROUP, //
 			TradesBasedColumnFactory.LOAD_EXTRA_GROUP, //
 			TradesBasedColumnFactory.LOAD_END_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_START_GROUP, //
-			TradesBasedColumnFactory.DISCHARGE_MAIN_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_PORT_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_PRICING_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_VOLUME_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_WINDOW_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_EXTRA_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_END_GROUP, //
 			TradesBasedColumnFactory.CARGO_START_GROUP, //
@@ -174,10 +183,18 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	 */
 	private String[] defaultFilters = { //
 			TradesBasedColumnFactory.LOAD_START_GROUP, //
-			TradesBasedColumnFactory.LOAD_MAIN_GROUP, //
+			TradesBasedColumnFactory.LOAD_PORT_GROUP, //
+			TradesBasedColumnFactory.LOAD_PRICING_GROUP, //
+			TradesBasedColumnFactory.LOAD_PRICING_EXTRA_GROUP, //
+			TradesBasedColumnFactory.LOAD_VOLUME_GROUP, //
+			TradesBasedColumnFactory.LOAD_WINDOW_GROUP, //
 			TradesBasedColumnFactory.LOAD_END_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_START_GROUP, //
-			TradesBasedColumnFactory.DISCHARGE_MAIN_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_PORT_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_VOLUME_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_WINDOW_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_END_GROUP, //
 			TradesBasedColumnFactory.CARGO_END_GROUP //
 	};
