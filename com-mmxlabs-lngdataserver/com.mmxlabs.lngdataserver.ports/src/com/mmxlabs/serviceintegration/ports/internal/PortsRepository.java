@@ -39,6 +39,16 @@ public class PortsRepository {
 		}
 	}
 	
+	
+	public IPortsProvider getPortsProvider(String versionTag) {
+		try {
+			return new DefaultPortsProvider(versionTag, portsApi.fetchAllUsingGET());
+		} catch (Exception e) {
+			// Pass
+		}
+		return null;
+	}
+	
 	private void ensureReady() {
 		if (!isReady()) {
 			throw new IllegalStateException("Ports back-end not ready yet");
