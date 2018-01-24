@@ -33,7 +33,7 @@ public class PortsEditorView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
 		browser = new Browser(parent, SWT.NONE);
-		System.out.println("Browser: " + browser.getBrowserType());
+		System.out.println("Browser port: " + browser.getBrowserType());
 
 		browser.setBounds(0, 0, 600, 800);
 
@@ -68,7 +68,6 @@ public class PortsEditorView extends ViewPart {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> RunnerHelper.asyncExec(() -> {
 			if (!browser.isDisposed()) {
 				browser.setUrl(getUrl(""));
@@ -84,7 +83,7 @@ public class PortsEditorView extends ViewPart {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
-		String url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/ports/latest" + "?apiBaseUrl=" + encodedBackend;
+		String url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/ports" + "?apiBaseUrl=" + encodedBackend;
 		if (version != "") {
 			url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/ports" + "/" + version + "?apiBaseUrl=" + encodedBackend;
 		}

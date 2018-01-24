@@ -33,7 +33,7 @@ public class VesselsEditorView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
 		browser = new Browser(parent, SWT.NONE);
-		System.out.println("Browser: " + browser.getBrowserType());
+		System.out.println("Browser vessels: " + browser.getBrowserType());
 
 		browser.setBounds(0, 0, 600, 800);
 
@@ -88,7 +88,7 @@ public class VesselsEditorView extends ViewPart {
 		if (version != "") {
 			url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/vessels" + "/" + version + "?apiBaseUrl=" + encodedBackend;
 		}
-		System.out.println("PRICING calling: " + url);
+		System.out.println("Vessels calling: " + url);
 		return url;
 	}
 
