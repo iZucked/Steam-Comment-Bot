@@ -490,14 +490,19 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			final long transferVolumeMMBTU, final long transferVolumeM3) {
 		for (int i = 0; i < slots.size(); ++i) {
 			final IPortSlot slot = slots.get(i);
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
 			annotation.setCommercialSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
 			if (transferVolumeM3 != -1) {
+				annotation.setPhysicalSlotVolumeInM3(slot, transferVolumeM3);
 				annotation.setCommercialSlotVolumeInM3(slot, transferVolumeM3);
 			} else {
 				final int slotCV = allocationRecord.slotCV.get(i);
 				if (slotCV > 0) {
-					annotation.setCommercialSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV));
+					long convertMMBTuToM3 = Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV);
+					annotation.setPhysicalSlotVolumeInM3(slot, convertMMBTuToM3);
+					annotation.setCommercialSlotVolumeInM3(slot, convertMMBTuToM3);
 				} else {
+					annotation.setPhysicalSlotVolumeInM3(slot, 0);
 					annotation.setCommercialSlotVolumeInM3(slot, 0);
 				}
 			}
