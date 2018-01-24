@@ -123,7 +123,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertEventAction(final IScenarioEditingLocation scenarioEditingLocation, final List<VesselEvent> targetVesselEvents) {
-			super(AnalyticsSolutionHelper.generateInsertionName(targetVesselEvents) + " (Beta)");
+			super(AnalyticsSolutionHelper.generateInsertionName(targetVesselEvents));
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.originalTargetEvents = targetVesselEvents;
 		}

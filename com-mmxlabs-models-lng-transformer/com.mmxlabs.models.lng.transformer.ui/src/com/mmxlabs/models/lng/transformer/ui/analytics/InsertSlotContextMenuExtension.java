@@ -199,7 +199,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot> targetSlots) {
-			super(AnalyticsSolutionHelper.generateInsertionName(targetSlots) + " (Beta)");
+			super(AnalyticsSolutionHelper.generateInsertionName(targetSlots));
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.targetSlots = targetSlots;
 		}
