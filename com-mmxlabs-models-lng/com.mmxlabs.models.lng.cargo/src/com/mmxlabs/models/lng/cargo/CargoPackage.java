@@ -194,7 +194,7 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__VESSEL_TYPE_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Inventory Models</b></em>' reference list.
+	 * The feature id for the '<em><b>Inventory Models</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5233,49 +5233,13 @@ public interface CargoPackage extends EPackage {
 	int INVENTORY = 20;
 
 	/**
-	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY__START_DATE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Start Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INVENTORY__START_VOLUME = 1;
-
-	/**
-	 * The feature id for the '<em><b>Feeds</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INVENTORY__FEEDS = 2;
-
-	/**
-	 * The feature id for the '<em><b>Offtakes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INVENTORY__OFFTAKES = 3;
-
-	/**
-	 * The feature id for the '<em><b>Capacities</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INVENTORY__CAPACITIES = 4;
+	int INVENTORY__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5284,7 +5248,43 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY__NAME = 5;
+	int INVENTORY__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__PORT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Feeds</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__FEEDS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Offtakes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__OFFTAKES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Capacities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__CAPACITIES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Inventory</em>' class.
@@ -5293,7 +5293,34 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_FEATURE_COUNT = 6;
+	int INVENTORY_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Inventory</em>' class.
@@ -5302,7 +5329,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_OPERATION_COUNT = 0;
+	int INVENTORY_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl <em>Canal Booking Slot</em>}' class.
@@ -6954,10 +6981,10 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_VesselTypeGroups();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels <em>Inventory Models</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels <em>Inventory Models</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Inventory Models</em>'.
+	 * @return the meta object for the containment reference list '<em>Inventory Models</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels()
 	 * @see #getCargoModel()
 	 * @generated
@@ -7852,28 +7879,6 @@ public interface CargoPackage extends EPackage {
 	EClass getInventory();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Inventory#getStartDate <em>Start Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start Date</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Inventory#getStartDate()
-	 * @see #getInventory()
-	 * @generated
-	 */
-	EAttribute getInventory_StartDate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Inventory#getStartVolume <em>Start Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start Volume</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Inventory#getStartVolume()
-	 * @see #getInventory()
-	 * @generated
-	 */
-	EAttribute getInventory_StartVolume();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.Inventory#getFeeds <em>Feeds</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7907,15 +7912,15 @@ public interface CargoPackage extends EPackage {
 	EReference getInventory_Capacities();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Inventory#getName <em>Name</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Inventory#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Inventory#getName()
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getPort()
 	 * @see #getInventory()
 	 * @generated
 	 */
-	EAttribute getInventory_Name();
+	EReference getInventory_Port();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot <em>Canal Booking Slot</em>}'.
@@ -9143,7 +9148,7 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_MODEL__VESSEL_TYPE_GROUPS = eINSTANCE.getCargoModel_VesselTypeGroups();
 
 		/**
-		 * The meta object literal for the '<em><b>Inventory Models</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Inventory Models</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -9847,22 +9852,6 @@ public interface CargoPackage extends EPackage {
 		EClass INVENTORY = eINSTANCE.getInventory();
 
 		/**
-		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INVENTORY__START_DATE = eINSTANCE.getInventory_StartDate();
-
-		/**
-		 * The meta object literal for the '<em><b>Start Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INVENTORY__START_VOLUME = eINSTANCE.getInventory_StartVolume();
-
-		/**
 		 * The meta object literal for the '<em><b>Feeds</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -9887,12 +9876,12 @@ public interface CargoPackage extends EPackage {
 		EReference INVENTORY__CAPACITIES = eINSTANCE.getInventory_Capacities();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute INVENTORY__NAME = eINSTANCE.getInventory_Name();
+		EReference INVENTORY__PORT = eINSTANCE.getInventory_Port();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl <em>Canal Booking Slot</em>}' class.

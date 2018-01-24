@@ -16,6 +16,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -33,6 +35,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,16 +165,26 @@ public class ImportCSVFilesPage extends WizardPage {
 		gl.marginLeft = 0;
 		gl.marginWidth = 0;
 		holder.setLayout(gl);
+		holder.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 		// GridData gd = new GridData();
 		// gd.verticalIndent = 0;
 		// gd.horizontalIndent = 0;
 		// // gd.grabExcessHorizontalSpace = true;
 		// holder.setLayoutData(gd);
+		
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+		final String lastDirectoryName = section == null ? null : section.get(FILTER_KEY);
+
 
 		final Button auto = new Button(holder, SWT.NONE);
 		auto.setText("Choose &Directory...");
-
+		Label directory = new Label(holder, SWT.NONE);
+		directory.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		if (lastDirectoryName != null) {
+			directory.setText(lastDirectoryName);
+		}
 		auto.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -198,6 +211,8 @@ public class ImportCSVFilesPage extends WizardPage {
 							c.setFromDirectory(dir);
 						}
 					}
+					directory.setText(d);
+
 					// Trigger 'Next' button focus
 					setPageComplete(true);
 
@@ -209,28 +224,10 @@ public class ImportCSVFilesPage extends WizardPage {
 			}
 		});
 
-		csvSelectionGroup = new RadioSelectionGroup(holder, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
-
-		decimalSelectionGroup = new RadioSelectionGroup(holder, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
-		// get the default export directory from the settings
-		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
-		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
-		int delimiterValue = CHOICE_COMMA;
-		if (section != null && section.get(DELIMITER_KEY) != null) {
-			delimiterValue = section.getInt(DELIMITER_KEY);
-		}
-		int decimalValue = CHOICE_PERIOD;
-		if (section != null && section.get(DECIMAL_SEPARATOR_KEY) != null) {
-			decimalValue = section.getInt(DECIMAL_SEPARATOR_KEY);
-		}
-		// use it to populate the editor
-		csvSelectionGroup.setSelectedIndex(delimiterValue);
-		decimalSelectionGroup.setSelectedIndex(decimalValue);
-
 		GridData layout;
 
 		final ExpandableComposite fieldComposite = new ExpandableComposite(top, SWT.NONE);
-		fieldComposite.setText("Custom Files");
+		fieldComposite.setText("Advanced");
 		fieldComposite.setLayout(new GridLayout(1, false));
 		layout = new GridData(SWT.FILL, SWT.FILL, true, true);
 		// for some reason, horizontal and vertical fill do not work without width / height hints set
@@ -244,6 +241,28 @@ public class ImportCSVFilesPage extends WizardPage {
 		final Composite inner = new Composite(fieldScroller, SWT.NONE);
 		inner.setLayout(new GridLayout(1, false));
 
+		{
+			final Composite radioCompo = new Composite(inner, SWT.NONE);
+			radioCompo.setLayout(GridLayoutFactory.fillDefaults().margins(0, 0).numColumns(2).equalWidth(true).create());
+
+			csvSelectionGroup = new RadioSelectionGroup(radioCompo, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
+
+			decimalSelectionGroup = new RadioSelectionGroup(radioCompo, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
+			// get the default export directory from the settings
+		
+			int delimiterValue = CHOICE_COMMA;
+			if (section != null && section.get(DELIMITER_KEY) != null) {
+				delimiterValue = section.getInt(DELIMITER_KEY);
+			}
+			int decimalValue = CHOICE_PERIOD;
+			if (section != null && section.get(DECIMAL_SEPARATOR_KEY) != null) {
+				decimalValue = section.getInt(DECIMAL_SEPARATOR_KEY);
+			}
+			// use it to populate the editor
+			csvSelectionGroup.setSelectedIndex(delimiterValue);
+			decimalSelectionGroup.setSelectedIndex(decimalValue);
+
+		}
 		/*
 		 * fieldComposite.addExpansionListener(new IExpansionListener() {
 		 * 
@@ -255,6 +274,15 @@ public class ImportCSVFilesPage extends WizardPage {
 		 * fieldScroller.setSize(fieldScroller.computeSize(SWT.DEFAULT, SWT.DEFAULT)); fieldScroller.layout(); fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		 * fieldComposite.layout(); } });
 		 */
+		
+		File lastDirectoryFile = null; 
+		if (lastDirectoryName != null) {
+			final File dir = new File(lastDirectoryName);
+			if (dir.exists() && dir.isDirectory()) {
+				lastDirectoryFile = dir;
+			}
+		}
+		
 
 		// add a load of fields to the editor based on registered submodel importers
 		for (final ISubmodelImporter importer : Activator.getDefault().getImporterRegistry().getAllSubModelImporters()) {
@@ -266,8 +294,10 @@ public class ImportCSVFilesPage extends WizardPage {
 			final Map<String, String> parts = importer.getRequiredInputs();
 			subModelChunks.add(chunk);
 			chunk.friendlyNames.putAll(parts);
-			if (parts.keySet().isEmpty())
+			if (parts.keySet().isEmpty()) {
 				continue;
+			}
+			
 			final Group g = new Group(inner, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
@@ -287,6 +317,9 @@ public class ImportCSVFilesPage extends WizardPage {
 				});
 				chunk.editors.put(entry.getKey(), ffe);
 			}
+			if (lastDirectoryFile != null) {
+				chunk.setFromDirectory(lastDirectoryFile);
+			}
 		}
 
 		for (final IExtraModelImporter importer : Activator.getDefault().getImporterRegistry().getExtraModelImporters()) {
@@ -297,8 +330,10 @@ public class ImportCSVFilesPage extends WizardPage {
 			final Map<String, String> parts = importer.getRequiredInputs();
 			extraModelChunks.add(chunk);
 			chunk.friendlyNames.putAll(parts);
-			if (parts.keySet().isEmpty())
+			if (parts.keySet().isEmpty()) {
 				continue;
+			}
+		 
 			final Group g = new Group(inner, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
@@ -317,6 +352,9 @@ public class ImportCSVFilesPage extends WizardPage {
 					}
 				});
 				chunk.editors.put(entry.getKey(), ffe);
+			}
+			if (lastDirectoryFile != null) {
+				chunk.setFromDirectory(lastDirectoryFile);
 			}
 		}
 

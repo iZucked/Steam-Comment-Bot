@@ -148,6 +148,12 @@
                id="com.mmxlabs.models.lng.cargo.presentation.composites.CharterInMarketOverrideComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.CharterInMarketOverride">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.Inventory">
          </componentHelper>        
 	</extension>
  <extension
@@ -419,8 +425,9 @@
     <factory
           ID="com.mmxlabs.models.lng.cargo.InventoryEventRow.Factory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Offtake"
+          label="Event"
           outputEClass="com.mmxlabs.models.lng.cargo.InventoryEventRow"
+          replacementEReference="offtakes"
           targetEClass="com.mmxlabs.models.lng.cargo.InventoryEventRow">
     </factory>
     <factory
@@ -434,6 +441,12 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Booking"
           targetEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory_Inventory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Storage Facility"
+          targetEClass="com.mmxlabs.models.lng.cargo.Inventory">
     </factory>    
  </extension>
  <extension

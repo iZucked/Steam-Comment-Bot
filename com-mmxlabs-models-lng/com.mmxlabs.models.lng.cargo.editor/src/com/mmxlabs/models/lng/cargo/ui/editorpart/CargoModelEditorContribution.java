@@ -8,8 +8,11 @@ import java.time.LocalDate;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -20,7 +23,10 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
@@ -49,6 +55,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -109,20 +116,45 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		}
 
 		if (LicenseFeatures.isPermitted("features:inventory-model")) {
-			
+
 			// TODO: Add/Remove facilities
 			// TODO: CSV Import/Export
 			// TODO: Validation hooks and validation model
-			
+
 			final Composite sash = new Composite(parent, SWT.NONE);
 
 			sash.setLayout(new GridLayout(3, true));
 			final Composite selector = new Composite(sash, SWT.NONE);
+			selector.setLayoutData(GridDataFactory.fillDefaults().span(3, 1).create());
+
+			Button btn_new = new Button(selector, SWT.PUSH);
+			btn_new.setText("New");
+
 			final Label label = new Label(selector, SWT.NONE);
 			label.setText("Facility: ");
-			selector.setLayout(new GridLayout(2, false));
+			selector.setLayout(new GridLayout(4, false));
 			final ComboViewer comboViewer = new ComboViewer(selector);
-			selector.setLayoutData(GridDataFactory.fillDefaults().span(3, 1).create());
+			comboViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().hint(70, SWT.DEFAULT).create());
+
+			{
+				Button btn = new Button(selector, SWT.PUSH);
+				btn.setText("Edit");
+				btn.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						// TODO Auto-generated method stub
+						IStructuredSelection selection = comboViewer.getStructuredSelection();
+						DetailCompositeDialogUtil.editSelection(editorPart, selection);
+						comboViewer.refresh();
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
+			}
 
 			inventoryFeedPane = new InventoryFeedPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			inventoryFeedPane.createControl(sash);
@@ -194,6 +226,30 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 					inventoryFeedPane.getViewer().setInput(inventory);
 					inventoryOfftakePane.getViewer().setInput(inventory);
 					inventoryCapacityPane.getViewer().setInput(inventory);
+
+				}
+			});
+
+			btn_new.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					final Inventory inventory = CargoFactory.eINSTANCE.createInventory();
+					editorPart.getModelReference().executeWithTryLock(true, 200, () -> {
+
+						final CompoundCommand cmd = new CompoundCommand("New storage");
+						cmd.append(AddCommand.create(editorPart.getEditingDomain(), modelObject, CargoPackage.eINSTANCE.getCargoModel_InventoryModels(), inventory));
+
+						CommandStack commandStack = editorPart.getModelReference().getCommandStack();
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorPart, inventory, commandStack.getMostRecentCommand());
+					});
+					comboViewer.setInput(modelObject.getInventoryModels());
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
 
 				}
 			});
