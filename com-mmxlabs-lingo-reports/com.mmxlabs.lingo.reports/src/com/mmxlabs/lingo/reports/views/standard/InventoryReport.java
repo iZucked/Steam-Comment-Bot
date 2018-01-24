@@ -49,10 +49,13 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -95,11 +98,11 @@ public class InventoryReport extends ViewPart {
 						final CargoModel cargoModel = scenarioModel.getCargoModel();
 						// Inventory inventory = null;
 
-						List<Inventory> models = cargoModel.getInventoryModels().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
+						final List<Inventory> models = cargoModel.getInventoryModels().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
 						comboViewer.setInput(models);
 						if (!models.isEmpty()) {
 							if (lastFacility != null) {
-								for (Inventory inventory : cargoModel.getInventoryModels()) {
+								for (final Inventory inventory : cargoModel.getInventoryModels()) {
 									if (lastFacility.equals(inventory.getName())) {
 										selectedInventory = inventory;
 										break;
@@ -143,7 +146,7 @@ public class InventoryReport extends ViewPart {
 		parent.setLayout(new GridLayout(1, true));
 		{
 
-			Composite selector = new Composite(parent, SWT.NONE);
+			final Composite selector = new Composite(parent, SWT.NONE);
 			selector.setLayout(new GridLayout(2, false));
 			final Label label = new Label(selector, SWT.NONE);
 			label.setText("Facility: ");
@@ -257,13 +260,13 @@ public class InventoryReport extends ViewPart {
 		super.dispose();
 	}
 
-	private void updatePlots(Collection<Inventory> inventoryModels, ScenarioResult toDisplay) {
+	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
 
 		final ISeriesSet seriesSet = viewer.getSeriesSet();
 		// Delete existing data
 		{
-			Set<String> names = new HashSet<>();
-			for (ISeries s : seriesSet.getSeries()) {
+			final Set<String> names = new HashSet<>();
+			for (final ISeries s : seriesSet.getSeries()) {
 				names.add(s.getId());
 			}
 			names.forEach(s -> seriesSet.deleteSeries(s));
@@ -365,10 +368,22 @@ public class InventoryReport extends ViewPart {
 					final Schedule schedule = scheduleModel.getSchedule();
 					if (schedule != null) {
 						for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								final LoadSlot loadSlot = (LoadSlot) slot;
+								if (loadSlot.isDESPurchase()) {
+									continue;
+								}
+							} else if (slot instanceof DischargeSlot) {
+								final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+								if (dischargeSlot.isFOBSale()) {
+									continue;
+								}
+							}
 							if (slotAllocation.getPort() == inventory.getPort()) {
-								int change = (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) ? -slotAllocation.getPhysicalVolumeTransferred()
+								final int change = (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) ? -slotAllocation.getPhysicalVolumeTransferred()
 										: slotAllocation.getPhysicalVolumeTransferred();
-								LocalDate date = LocalDate.from(slotAllocation.getSlotVisit().getStart());
+								final LocalDate date = LocalDate.from(slotAllocation.getSlotVisit().getStart());
 								changes.add(new Pair<>(date, change));
 								cargo_changes.add(new Pair<>(date, change));
 
