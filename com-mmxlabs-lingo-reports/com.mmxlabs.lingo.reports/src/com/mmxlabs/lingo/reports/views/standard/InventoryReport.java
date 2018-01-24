@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -17,18 +20,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.swing.text.html.parser.DTD;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -37,6 +49,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.swtchart.Chart;
 import org.swtchart.IAxisSet;
 import org.swtchart.IBarSeries;
+import org.swtchart.ILegend;
 import org.swtchart.ILineSeries;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
@@ -44,6 +57,7 @@ import org.swtchart.ISeriesSet;
 import org.swtchart.LineStyle;
 import org.swtchart.Range;
 
+import com.mmxlabs.common.DateTreeSet;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -61,6 +75,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -68,7 +83,8 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class InventoryReport extends ViewPart {
 	public static final String ID = "com.mmxlabs.lingo.reports.views.InventoryReport";
 
-	private Chart viewer;
+	private Chart chartViewer;
+	private GridTableViewer tableViewer;
 
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
@@ -118,6 +134,9 @@ public class InventoryReport extends ViewPart {
 						} else {
 							updatePlots(Collections.emptyList(), currentResult);
 						}
+					} else {
+						comboViewer.setInput(Collections.emptyList());
+						updatePlots(Collections.emptyList(), null);
 					}
 				}
 			};
@@ -174,10 +193,45 @@ public class InventoryReport extends ViewPart {
 				}
 			});
 		}
-		viewer = new Chart(parent, SWT.NONE);
-		viewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-		viewer.getTitle().setVisible(false);
+		CTabFolder folder = new CTabFolder(parent, SWT.BOTTOM);
+		folder.setLayout(new GridLayout(1, true));
+		folder.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
+		CTabItem chartItem = new CTabItem(folder, SWT.NONE);
+		chartItem.setText("Chart");
+
+		CTabItem tableItem = new CTabItem(folder, SWT.NONE);
+		tableItem.setText("Table");
+		{
+			chartViewer = new Chart(folder, SWT.NONE);
+			chartViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
+			chartViewer.getTitle().setVisible(false);
+			chartItem.setControl(chartViewer);
+		}
+		{
+			tableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
+			tableViewer.setContentProvider(new ArrayContentProvider());
+			tableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
+			GridViewerHelper.configureLookAndFeel(tableViewer);
+			tableViewer.getGrid().setTreeLinesVisible(true);
+			tableViewer.getGrid().setHeaderVisible(true);
+			DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+			{
+				createColumn("Date", 150, o -> "" + o.date.format(formatter));
+				createColumn("Type", 150, o -> o.type);
+				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
+				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
+				// createColumn("Date", o -> o.toString());
+				tableItem.setControl(tableViewer.getControl());
+
+			}
+
+		}
+
+		folder.setSelection(0);
 
 		// Create the help context id for the viewer's control
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_Fitness");
@@ -249,7 +303,7 @@ public class InventoryReport extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		ViewerHelper.setFocus(viewer);
+		ViewerHelper.setFocus(chartViewer);
 	}
 
 	@Override
@@ -262,7 +316,7 @@ public class InventoryReport extends ViewPart {
 
 	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
 
-		final ISeriesSet seriesSet = viewer.getSeriesSet();
+		final ISeriesSet seriesSet = chartViewer.getSeriesSet();
 		// Delete existing data
 		{
 			final Set<String> names = new HashSet<>();
@@ -274,6 +328,10 @@ public class InventoryReport extends ViewPart {
 		int colour = 2;
 		LocalDate minDate = null;
 		LocalDate maxDate = null;
+		List<InventoryLevel> tableLevels = new LinkedList<>();
+
+		DateTreeSet<Pair<LocalDate, Integer>> minLevelSet = new DateTreeSet<>(l -> Date.from(l.getFirst().atStartOfDay(ZoneId.of("UTC")).toInstant()));
+		DateTreeSet<Pair<LocalDate, Integer>> maxLevelSet = new DateTreeSet<>(l -> Date.from(l.getFirst().atStartOfDay(ZoneId.of("UTC")).toInstant()));
 		for (final Inventory inventory : inventoryModels) {
 			// Used for max level
 			++colour;
@@ -298,6 +356,7 @@ public class InventoryReport extends ViewPart {
 
 					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
 						changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
+						tableLevels.add(new InventoryLevel(r.getStartDate(), r.getPeriod(), r.getVolume()));
 						if (r.getPeriod() == InventoryFrequency.CARGO) {
 							other_cargo_changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
 						}
@@ -310,9 +369,11 @@ public class InventoryReport extends ViewPart {
 						LocalDateTime start = r.getStartDate().atStartOfDay();
 						if (r.getStartDate() == r.getEndDate()) {
 							changes.add(new Pair<>(LocalDate.from(start), r.getVolume()));
+							tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), r.getVolume()));
 						} else {
 							while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
 								changes.add(new Pair<>(LocalDate.from(start), r.getVolume()));
+								tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), r.getVolume()));
 
 								if (r.getPeriod() == InventoryFrequency.HOURLY) {
 									start = start.plusHours(1);
@@ -337,6 +398,7 @@ public class InventoryReport extends ViewPart {
 					}
 					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
 						changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
+						tableLevels.add(new InventoryLevel(r.getStartDate(), r.getPeriod(), -r.getVolume()));
 						if (r.getPeriod() == InventoryFrequency.CARGO) {
 							other_cargo_changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
 						}
@@ -349,7 +411,7 @@ public class InventoryReport extends ViewPart {
 						LocalDateTime start = r.getStartDate().atStartOfDay();
 						while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
 							changes.add(new Pair<>(LocalDate.from(start), -r.getVolume()));
-
+							tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), -r.getVolume()));
 							if (r.getPeriod() == InventoryFrequency.HOURLY) {
 								start = start.plusHours(1);
 							} else if (r.getPeriod() == InventoryFrequency.DAILY) {
@@ -383,8 +445,11 @@ public class InventoryReport extends ViewPart {
 							if (slotAllocation.getPort() == inventory.getPort()) {
 								final int change = (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) ? -slotAllocation.getPhysicalVolumeTransferred()
 										: slotAllocation.getPhysicalVolumeTransferred();
-								final LocalDate date = LocalDate.from(slotAllocation.getSlotVisit().getStart());
+								ZonedDateTime start = slotAllocation.getSlotVisit().getStart();
+								final LocalDate date = start.toLocalDate();
 								changes.add(new Pair<>(date, change));
+								tableLevels.add(new InventoryLevel(date, "SCHEDULE", change));
+
 								cargo_changes.add(new Pair<>(date, change));
 
 								if (minDate == null || date.isBefore(minDate)) {
@@ -500,6 +565,9 @@ public class InventoryReport extends ViewPart {
 				for (final InventoryCapacityRow r : inventory.getCapacities()) {
 					min_level.add(new Pair<>(r.getDate(), r.getMinVolume()));
 					max_level.add(new Pair<>(r.getDate(), r.getMaxVolume()));
+					minLevelSet.add(new Pair<>(r.getDate(), r.getMinVolume()));
+					maxLevelSet.add(new Pair<>(r.getDate(), r.getMaxVolume()));
+
 				}
 				{
 					final Map<LocalDate, List<Integer>> m = min_level.stream() //
@@ -571,37 +639,116 @@ public class InventoryReport extends ViewPart {
 				}
 			}
 		}
-		final IAxisSet axisSet = viewer.getAxisSet();
+		final IAxisSet axisSet = chartViewer.getAxisSet();
 
 		// viewer.getTitle().setText("Inventory");
 		// viewer.getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		viewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		viewer.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		viewer.getAxisSet().getXAxis(0).getTitle().setText("Date");
+		chartViewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		chartViewer.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		chartViewer.getAxisSet().getXAxis(0).getTitle().setText("Date");
 
-		viewer.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		viewer.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		viewer.getAxisSet().getYAxis(0).getTitle().setText("Volume");
+		chartViewer.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		chartViewer.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		chartViewer.getAxisSet().getYAxis(0).getTitle().setText("Volume");
 		// 5. adjust the range for all axes.
 
 		// Auto adjust everything
 		axisSet.adjustRange();
 		// Month align the date range
 		if (minDate != null && maxDate != null) {
-			viewer.getAxisSet().getXAxis(0).setRange(new Range( //
+			chartViewer.getAxisSet().getXAxis(0).setRange(new Range( //
 					1000L * minDate.withDayOfMonth(1).atStartOfDay().toEpochSecond(ZoneOffset.of("Z")),
 					1000L * maxDate.withDayOfMonth(1).atStartOfDay().plusMonths(1).toEpochSecond(ZoneOffset.of("Z"))));
 		} else {
-			viewer.getAxisSet().getXAxis(0).setRange(new Range( //
+			chartViewer.getAxisSet().getXAxis(0).setRange(new Range( //
 					1000L * LocalDate.now().withDayOfMonth(1).atStartOfDay().toEpochSecond(ZoneOffset.of("Z")),
 					1000L * LocalDate.now().withDayOfMonth(1).atStartOfDay().plusMonths(1).toEpochSecond(ZoneOffset.of("Z"))));
 		}
 		// Try to force month labels
-		viewer.getAxisSet().getXAxis(0).getTick().setTickMarkStepHint((int) (15L));
-		viewer.getAxisSet().getXAxis(0).getTick().setTickLabelAngle(45);
+		chartViewer.getAxisSet().getXAxis(0).getTick().setTickMarkStepHint((int) (15L));
+		chartViewer.getAxisSet().getXAxis(0).getTick().setTickLabelAngle(45);
 
-		viewer.updateLayout();
+		chartViewer.updateLayout();
 
-		viewer.redraw();
+		chartViewer.redraw();
+
+		Collections.sort(tableLevels, (a, b) -> a.date.compareTo(b.date));
+
+		int total = 0;
+		for (InventoryLevel lvl : tableLevels) {
+			lvl.runningTotal = total + lvl.changeInM3;
+			total = lvl.runningTotal;
+
+			Date d = Date.from(lvl.date.atStartOfDay(ZoneId.of("UTC")).toInstant());
+			if (!minLevelSet.isEmpty()) {
+				Pair<LocalDate, Integer> floor = minLevelSet.floor(d);
+				if (floor != null) {
+					int min = floor.getSecond();
+					if (total < min) {
+						lvl.breach = true;
+					}
+				}
+			}
+			if (!maxLevelSet.isEmpty()) {
+				Pair<LocalDate, Integer> floor = maxLevelSet.floor(d);
+				if (floor != null) {
+					int max = floor.getSecond();
+					if (total > max) {
+						lvl.breach = true;
+					}
+				}
+			}
+		}
+
+		tableViewer.setInput(tableLevels);
 	}
+
+	private GridViewerColumn createColumn(final String title, int width, final Function<InventoryLevel, String> labelProvider) {
+		final GridViewerColumn column = new GridViewerColumn(tableViewer, SWT.NONE);
+		GridViewerHelper.configureLookAndFeel(column);
+
+		column.getColumn().setText(title);
+		column.getColumn().setWidth(width);
+		column.setLabelProvider(new CellLabelProvider() {
+			@Override
+			public void update(final ViewerCell cell) {
+
+				final Object element = cell.getElement();
+
+				InventoryLevel lvl = (InventoryLevel) element;
+				cell.setText(labelProvider.apply(lvl));
+				cell.setBackground(null);
+				if (lvl.breach) {
+					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_YELLOW));
+				}
+			}
+		});
+
+		return column;
+	}
+
+	private static class InventoryLevel {
+
+		public final LocalDate date;
+		public final int changeInM3;
+		public final String type;
+		public int runningTotal = 0;
+		public boolean breach = false;
+
+		public InventoryLevel(LocalDate date, InventoryFrequency type, int changeInM3) {
+			this.date = date;
+			this.type = type.toString();
+			this.changeInM3 = changeInM3;
+
+		}
+
+		public InventoryLevel(LocalDate date, String type, int changeInM3) {
+			this.date = date;
+			this.type = type;
+			this.changeInM3 = changeInM3;
+
+		}
+
+	}
+
 }
