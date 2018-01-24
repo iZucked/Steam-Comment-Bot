@@ -134,7 +134,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var CanalsService = (function () {
     function CanalsService(httpClient, basePath, configuration) {
         this.httpClient = httpClient;
-        this.basePath = 'https://localhost:8080';
+        this.basePath = 'https://localhost:54977';
         this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpHeaders */]();
         this.configuration = new __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */]();
         if (basePath) {
@@ -338,7 +338,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var DistancesService = (function () {
     function DistancesService(httpClient, basePath, configuration) {
         this.httpClient = httpClient;
-        this.basePath = 'https://localhost:8080';
+        this.basePath = 'https://localhost:54977';
         this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpHeaders */]();
         this.configuration = new __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]();
         if (basePath) {
@@ -694,7 +694,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var LocationsService = (function () {
     function LocationsService(httpClient, basePath, configuration) {
         this.httpClient = httpClient;
-        this.basePath = 'https://localhost:8080';
+        this.basePath = 'https://localhost:54977';
         this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpHeaders */]();
         this.configuration = new __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]();
         if (basePath) {
@@ -1316,16 +1316,16 @@ var COLLECTION_FORMATS = {
 
 /***/ }),
 
-/***/ "../../../../../generated/vessels/api.module.ts":
+/***/ "../../../../../generated/ports/api.module.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/vessels/configuration.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_vessels_service__ = __webpack_require__("../../../../../generated/vessels/api/vessels.service.ts");
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return VesselApiModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/ports/configuration.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_port_service__ = __webpack_require__("../../../../../generated/ports/api/port.service.ts");
+/* unused harmony export ApiModule */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1337,27 +1337,595 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var VesselApiModule = VesselApiModule_1 = (function () {
-    function VesselApiModule() {
+var ApiModule = ApiModule_1 = (function () {
+    function ApiModule() {
     }
-    VesselApiModule.forConfig = function (configurationFactory) {
+    ApiModule.forConfig = function (configurationFactory) {
         return {
-            ngModule: VesselApiModule_1,
+            ngModule: ApiModule_1,
             providers: [{ provide: __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */], useFactory: configurationFactory }]
         };
     };
-    return VesselApiModule;
+    return ApiModule;
 }());
-VesselApiModule = VesselApiModule_1 = __decorate([
+ApiModule = ApiModule_1 = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["CommonModule"], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* HttpModule */]],
+        declarations: [],
+        exports: [],
+        providers: [__WEBPACK_IMPORTED_MODULE_4__api_port_service__["a" /* PortService */]]
+    })
+], ApiModule);
+
+var ApiModule_1;
+//# sourceMappingURL=api.module.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/api/api.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__port_service__ = __webpack_require__("../../../../../generated/ports/api/port.service.ts");
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__port_service__["a"]; });
+/* unused harmony export APIS */
+
+
+var APIS = [__WEBPACK_IMPORTED_MODULE_0__port_service__["a" /* PortService */]];
+//# sourceMappingURL=api.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/api/port.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__rxjs_operators__ = __webpack_require__("../../../../../generated/ports/rxjs-operators.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__variables__ = __webpack_require__("../../../../../generated/ports/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__configuration__ = __webpack_require__("../../../../../generated/ports/configuration.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PortService; });
+/**
+ * Minimax Port Service
+ * This service holds LNG specific port data. It is an enrichment to the location information available in the [distances service](null/distances).
+ *
+ * OpenAPI spec version: 0.1.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+/* tslint:disable:no-unused-variable member-ordering */
+
+
+
+
+
+
+var PortService = (function () {
+    function PortService(http, basePath, configuration) {
+        this.http = http;
+        this.basePath = 'http://localhost:8095';
+        this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]();
+        this.configuration = new __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]();
+        if (basePath) {
+            this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
+            this.basePath = basePath || configuration.basePath || this.basePath;
+        }
+    }
+    /**
+     *
+     * Extends object by coping non-existing properties.
+     * @param objA object to be extended
+     * @param objB source object
+     */
+    PortService.prototype.extendObj = function (objA, objB) {
+        for (var key in objB) {
+            if (objB.hasOwnProperty(key)) {
+                objA[key] = objB[key];
+            }
+        }
+        return objA;
+    };
+    /**
+     * @param consumes string[] mime-types
+     * @return true: consumes contains 'multipart/form-data', false: otherwise
+     */
+    PortService.prototype.canConsumeForm = function (consumes) {
+        var form = 'multipart/form-data';
+        for (var _i = 0, consumes_1 = consumes; _i < consumes_1.length; _i++) {
+            var consume = consumes_1[_i];
+            if (form === consume) {
+                return true;
+            }
+        }
+        return false;
+    };
+    /**
+     * POST a list of ports. This only triggers one new version with all the ports added to it.
+     * The &#x60;defaultStartTime&#x60; field of the Port is a JSR310 time string (ISO 8601), e.g. HH:mm:ss -&gt; 07:30:00
+     * @param ports ports
+     */
+    PortService.prototype.bulkInsertUsingPOST = function (ports, extraHttpRequestParams) {
+        return this.bulkInsertUsingPOSTWithHttpInfo(ports, extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
+    };
+    /**
+     * GET all ports
+     *
+     */
+    PortService.prototype.fetchAllUsingGET = function (extraHttpRequestParams) {
+        return this.fetchAllUsingGETWithHttpInfo(extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
+    };
+    /**
+     * GET a port
+     *
+     * @param mmxId mmxId
+     */
+    PortService.prototype.fetchUsingGET = function (mmxId, extraHttpRequestParams) {
+        return this.fetchUsingGETWithHttpInfo(mmxId, extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
+    };
+    /**
+     * GET versions
+     *
+     */
+    PortService.prototype.fetchVersionsUsingGET = function (extraHttpRequestParams) {
+        return this.fetchVersionsUsingGETWithHttpInfo(extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
+    };
+    /**
+     * POST a port
+     * The &#x60;defaultStartTime&#x60; field of the Port is a JSR310 time string (ISO 8601), e.g. HH:mm:ss -&gt; 07:30:00   versions and mmxId field **will be ignored**.
+     * @param port port
+     */
+    PortService.prototype.insertUsingPOST = function (port, extraHttpRequestParams) {
+        return this.insertUsingPOSTWithHttpInfo(port, extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
+    };
+    /**
+     * PATCH a port attribute change
+     * Change a port attribute.
+     * @param mmxId mmxId
+     */
+    PortService.prototype.patchUsingPATCH = function (mmxId, extraHttpRequestParams) {
+        return this.patchUsingPATCHWithHttpInfo(mmxId, extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
+    };
+    /**
+     * POST a list of ports. This only triggers one new version with all the ports added to it.
+     * The &#x60;defaultStartTime&#x60; field of the Port is a JSR310 time string (ISO 8601), e.g. HH:mm:ss -&gt; 07:30:00
+     * @param ports ports
+     */
+    PortService.prototype.bulkInsertUsingPOSTWithHttpInfo = function (ports, extraHttpRequestParams) {
+        var path = this.basePath + '/bulk/ports';
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'ports' is not null or undefined
+        if (ports === null || ports === undefined) {
+            throw new Error('Required parameter ports was null or undefined when calling bulkInsertUsingPOST.');
+        }
+        // to determine the Accept header
+        var produces = [
+            '*/*'
+        ];
+        headers.set('Content-Type', 'application/json');
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Post,
+            headers: headers,
+            body: ports == null ? '' : JSON.stringify(ports),
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
+    };
+    /**
+     * GET all ports
+     *
+     */
+    PortService.prototype.fetchAllUsingGETWithHttpInfo = function (extraHttpRequestParams) {
+        var path = this.basePath + '/ports';
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // to determine the Accept header
+        var produces = [
+            'application/json'
+        ];
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
+            headers: headers,
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
+    };
+    /**
+     * GET a port
+     *
+     * @param mmxId mmxId
+     */
+    PortService.prototype.fetchUsingGETWithHttpInfo = function (mmxId, extraHttpRequestParams) {
+        var path = this.basePath + '/ports/${mmxId}'
+            .replace('${' + 'mmxId' + '}', String(mmxId));
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'mmxId' is not null or undefined
+        if (mmxId === null || mmxId === undefined) {
+            throw new Error('Required parameter mmxId was null or undefined when calling fetchUsingGET.');
+        }
+        // to determine the Accept header
+        var produces = [
+            'application/json'
+        ];
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
+            headers: headers,
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
+    };
+    /**
+     * GET versions
+     *
+     */
+    PortService.prototype.fetchVersionsUsingGETWithHttpInfo = function (extraHttpRequestParams) {
+        var path = this.basePath + '/ports/versions';
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // to determine the Accept header
+        var produces = [
+            'application/json'
+        ];
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
+            headers: headers,
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
+    };
+    /**
+     * POST a port
+     * The &#x60;defaultStartTime&#x60; field of the Port is a JSR310 time string (ISO 8601), e.g. HH:mm:ss -&gt; 07:30:00   versions and mmxId field **will be ignored**.
+     * @param port port
+     */
+    PortService.prototype.insertUsingPOSTWithHttpInfo = function (port, extraHttpRequestParams) {
+        var path = this.basePath + '/ports';
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'port' is not null or undefined
+        if (port === null || port === undefined) {
+            throw new Error('Required parameter port was null or undefined when calling insertUsingPOST.');
+        }
+        // to determine the Accept header
+        var produces = [
+            '*/*'
+        ];
+        headers.set('Content-Type', 'application/json');
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Post,
+            headers: headers,
+            body: port == null ? '' : JSON.stringify(port),
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
+    };
+    /**
+     * PATCH a port attribute change
+     * Change a port attribute.
+     * @param mmxId mmxId
+     */
+    PortService.prototype.patchUsingPATCHWithHttpInfo = function (mmxId, extraHttpRequestParams) {
+        var path = this.basePath + '/ports/${mmxId}'
+            .replace('${' + 'mmxId' + '}', String(mmxId));
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'mmxId' is not null or undefined
+        if (mmxId === null || mmxId === undefined) {
+            throw new Error('Required parameter mmxId was null or undefined when calling patchUsingPATCH.');
+        }
+        // to determine the Accept header
+        var produces = [
+            '*/*'
+        ];
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Patch,
+            headers: headers,
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
+    };
+    return PortService;
+}());
+PortService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(1, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_3__variables__["a" /* BASE_PATH */])), __param(2, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */]) === "function" && _a || Object, String, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]) === "function" && _b || Object])
+], PortService);
+
+var _a, _b;
+//# sourceMappingURL=port.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/configuration.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Configuration; });
+var Configuration = (function () {
+    function Configuration(configurationParameters) {
+        if (configurationParameters === void 0) { configurationParameters = {}; }
+        this.apiKeys = configurationParameters.apiKeys;
+        this.username = configurationParameters.username;
+        this.password = configurationParameters.password;
+        this.accessToken = configurationParameters.accessToken;
+        this.basePath = configurationParameters.basePath;
+        this.withCredentials = configurationParameters.withCredentials;
+    }
+    return Configuration;
+}());
+
+//# sourceMappingURL=configuration.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/index.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_api__ = __webpack_require__("../../../../../generated/ports/api/api.ts");
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "PortService", function() { return __WEBPACK_IMPORTED_MODULE_0__api_api__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__model_models__ = __webpack_require__("../../../../../generated/ports/model/models.ts");
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__variables__ = __webpack_require__("../../../../../generated/ports/variables.ts");
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/ports/configuration.ts");
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_module__ = __webpack_require__("../../../../../generated/ports/api.module.ts");
+/* unused harmony namespace reexport */
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/model/models.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__port__ = __webpack_require__("../../../../../generated/ports/model/port.ts");
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__version__ = __webpack_require__("../../../../../generated/ports/model/version.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__version___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__version__);
+/* unused harmony namespace reexport */
+
+
+//# sourceMappingURL=models.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/model/port.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Port */
+/**
+ * Minimax Port Service
+ * This service holds LNG specific port data. It is an enrichment to the location information available in the [distances service](null/distances).
+ *
+ * OpenAPI spec version: 0.1.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+var Port;
+(function (Port) {
+    var CapabilitiesEnum;
+    (function (CapabilitiesEnum) {
+        CapabilitiesEnum[CapabilitiesEnum["LOAD"] = 'LOAD'] = "LOAD";
+        CapabilitiesEnum[CapabilitiesEnum["DISCHARGE"] = 'DISCHARGE'] = "DISCHARGE";
+        CapabilitiesEnum[CapabilitiesEnum["DRYDOCK"] = 'DRYDOCK'] = "DRYDOCK";
+        CapabilitiesEnum[CapabilitiesEnum["MAINTENANCE"] = 'MAINTENANCE'] = "MAINTENANCE";
+    })(CapabilitiesEnum = Port.CapabilitiesEnum || (Port.CapabilitiesEnum = {}));
+})(Port || (Port = {}));
+//# sourceMappingURL=port.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/model/version.ts":
+/***/ (function(module, exports) {
+
+/**
+ * Minimax Port Service
+ * This service holds LNG specific port data. It is an enrichment to the location information available in the [distances service](null/distances).
+ *
+ * OpenAPI spec version: 0.1.0
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+//# sourceMappingURL=version.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/rxjs-operators.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_throw__ = __webpack_require__("../../../../rxjs/add/observable/throw.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_throw___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_throw__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/add/operator/catch.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_catch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
+// RxJS imports according to https://angular.io/docs/ts/latest/guide/server-communication.html#!#rxjs
+// See node_module/rxjs/Rxjs.js
+// Import just the rxjs statics and operators we need for THIS app.
+// Statics
+
+// Operators
+
+
+//# sourceMappingURL=rxjs-operators.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/ports/variables.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BASE_PATH; });
+/* unused harmony export COLLECTION_FORMATS */
+
+var BASE_PATH = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["InjectionToken"]('basePath');
+var COLLECTION_FORMATS = {
+    'csv': ',',
+    'tsv': '   ',
+    'ssv': ' ',
+    'pipes': '|'
+};
+//# sourceMappingURL=variables.js.map
+
+/***/ }),
+
+/***/ "../../../../../generated/vessels/api.module.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__configuration__ = __webpack_require__("../../../../../generated/vessels/configuration.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_vessels_service__ = __webpack_require__("../../../../../generated/vessels/api/vessels.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApiModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+var ApiModule = ApiModule_1 = (function () {
+    function ApiModule() {
+    }
+    ApiModule.forConfig = function (configurationFactory) {
+        return {
+            ngModule: ApiModule_1,
+            providers: [{ provide: __WEBPACK_IMPORTED_MODULE_3__configuration__["a" /* Configuration */], useFactory: configurationFactory }]
+        };
+    };
+    return ApiModule;
+}());
+ApiModule = ApiModule_1 = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
         imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["CommonModule"], __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* HttpModule */]],
         declarations: [],
         exports: [],
         providers: [__WEBPACK_IMPORTED_MODULE_4__api_vessels_service__["a" /* VesselsService */]]
     })
-], VesselApiModule);
+], ApiModule);
 
-var VesselApiModule_1;
+var ApiModule_1;
 //# sourceMappingURL=api.module.js.map
 
 /***/ }),
@@ -1419,7 +1987,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var VesselsService = (function () {
     function VesselsService(http, basePath, configuration) {
         this.http = http;
-        this.basePath = 'https://localhost:8095';
+        this.basePath = 'https://localhost:8090';
         this.defaultHeaders = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]();
         this.configuration = new __WEBPACK_IMPORTED_MODULE_4__configuration__["a" /* Configuration */]();
         if (basePath) {
@@ -1457,6 +2025,21 @@ var VesselsService = (function () {
             }
         }
         return false;
+    };
+    /**
+     * GET all version
+     * Get all versions
+     */
+    VesselsService.prototype.getVersionsUsingGET = function (extraHttpRequestParams) {
+        return this.getVersionsUsingGETWithHttpInfo(extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
     };
     /**
      * GET a vessel
@@ -1504,6 +2087,62 @@ var VesselsService = (function () {
                 return response.json() || {};
             }
         });
+    };
+    /**
+     * POST bulk post vessel
+     * Post a new vessel to the database. Leave out the mmxxId field. If it is provided it will be overwritten when persisting!
+     * @param vessels vessels
+     */
+    VesselsService.prototype.insertVesselsUsingPOST = function (vessels, extraHttpRequestParams) {
+        return this.insertVesselsUsingPOSTWithHttpInfo(vessels, extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
+    };
+    /**
+     * GET remove a vessel
+     * Remove a specific vessel
+     * @param vesselId vesselId
+     */
+    VesselsService.prototype.removeVesselUsingGET = function (vesselId, extraHttpRequestParams) {
+        return this.removeVesselUsingGETWithHttpInfo(vesselId, extraHttpRequestParams)
+            .map(function (response) {
+            if (response.status === 204) {
+                return undefined;
+            }
+            else {
+                return response.json() || {};
+            }
+        });
+    };
+    /**
+     * GET all version
+     * Get all versions
+     */
+    VesselsService.prototype.getVersionsUsingGETWithHttpInfo = function (extraHttpRequestParams) {
+        var path = this.basePath + '/versions';
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // to determine the Accept header
+        var produces = [
+            'application/json'
+        ];
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
+            headers: headers,
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
     };
     /**
      * GET a vessel
@@ -1565,7 +2204,7 @@ var VesselsService = (function () {
      * @param vessel vessel
      */
     VesselsService.prototype.insertVesselUsingPOSTWithHttpInfo = function (vessel, extraHttpRequestParams) {
-        var path = this.basePath + '/vessels';
+        var path = this.basePath + '/vessel';
         var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         // verify required parameter 'vessel' is not null or undefined
@@ -1581,6 +2220,67 @@ var VesselsService = (function () {
             method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Post,
             headers: headers,
             body: vessel == null ? '' : JSON.stringify(vessel),
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
+    };
+    /**
+     * POST bulk post vessel
+     * Post a new vessel to the database. Leave out the mmxxId field. If it is provided it will be overwritten when persisting!
+     * @param vessels vessels
+     */
+    VesselsService.prototype.insertVesselsUsingPOSTWithHttpInfo = function (vessels, extraHttpRequestParams) {
+        var path = this.basePath + '/vessels';
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'vessels' is not null or undefined
+        if (vessels === null || vessels === undefined) {
+            throw new Error('Required parameter vessels was null or undefined when calling insertVesselsUsingPOST.');
+        }
+        // to determine the Accept header
+        var produces = [
+            'application/json'
+        ];
+        headers.set('Content-Type', 'application/json');
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Post,
+            headers: headers,
+            body: vessels == null ? '' : JSON.stringify(vessels),
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = Object.assign(requestOptions, extraHttpRequestParams);
+        }
+        return this.http.request(path, requestOptions);
+    };
+    /**
+     * GET remove a vessel
+     * Remove a specific vessel
+     * @param vesselId vesselId
+     */
+    VesselsService.prototype.removeVesselUsingGETWithHttpInfo = function (vesselId, extraHttpRequestParams) {
+        var path = this.basePath + '/vessels/remove/${vesselId}'
+            .replace('${' + 'vesselId' + '}', String(vesselId));
+        var queryParameters = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* URLSearchParams */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */](this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'vesselId' is not null or undefined
+        if (vesselId === null || vesselId === undefined) {
+            throw new Error('Required parameter vesselId was null or undefined when calling removeVesselUsingGET.');
+        }
+        // to determine the Accept header
+        var produces = [
+            'application/json'
+        ];
+        var requestOptions = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            method: __WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get,
+            headers: headers,
             search: queryParameters,
             withCredentials: this.configuration.withCredentials
         });
@@ -1806,22 +2506,23 @@ webpackEmptyContext.id = "../../../../../src async recursive";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__distance_matrix_distance_matrix_component__ = __webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ports_ports_component__ = __webpack_require__("../../../../../src/app/ports/ports.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vessel_vessel_component__ = __webpack_require__("../../../../../src/app/vessel/vessel.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vessels_vessels_component__ = __webpack_require__("../../../../../src/app/vessels/vessels.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__port_detail_port_detail_component__ = __webpack_require__("../../../../../src/app/port-detail/port-detail.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pricing_pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pricing_commodities_commodities_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pricing_currencies_currencies_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pricing_basefuel_basefuel_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pricing_charter_charter_chart_charter_chart_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pricing_charter_charter_editor_charter_editor_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__locations_locations_component__ = __webpack_require__("../../../../../src/app/locations/locations.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vessel_vessel_component__ = __webpack_require__("../../../../../src/app/vessel/vessel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__vessels_vessels_component__ = __webpack_require__("../../../../../src/app/vessels/vessels.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__location_location_detail_component__ = __webpack_require__("../../../../../src/app/location/location-detail.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pricing_pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pricing_commodities_commodities_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pricing_currencies_currencies_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pricing_basefuel_basefuel_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pricing_charter_charter_chart_charter_chart_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pricing_charter_charter_editor_charter_editor_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppRoutingModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1849,44 +2550,46 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
     { path: '', redirectTo: '/distances', pathMatch: 'full' },
-    { path: 'vessel/:version/:id', component: __WEBPACK_IMPORTED_MODULE_4__vessel_vessel_component__["a" /* VesselComponent */] },
-    { path: 'vessels/:version', component: __WEBPACK_IMPORTED_MODULE_5__vessels_vessels_component__["a" /* VesselsComponent */] },
+    { path: 'vessel/:version/:id', component: __WEBPACK_IMPORTED_MODULE_5__vessel_vessel_component__["a" /* VesselComponent */] },
+    { path: 'vessels/:version', component: __WEBPACK_IMPORTED_MODULE_6__vessels_vessels_component__["a" /* VesselsComponent */] },
     { path: 'distances', component: __WEBPACK_IMPORTED_MODULE_2__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */] },
     { path: 'distances/:version', component: __WEBPACK_IMPORTED_MODULE_2__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */] },
-    { path: 'ports/:id', component: __WEBPACK_IMPORTED_MODULE_6__port_detail_port_detail_component__["a" /* PortDetailComponent */] },
+    { path: 'locations/:id', component: __WEBPACK_IMPORTED_MODULE_7__location_location_detail_component__["a" /* LocationDetailComponent */] },
+    { path: 'locations', component: __WEBPACK_IMPORTED_MODULE_4__locations_locations_component__["a" /* LocationsComponent */] },
     { path: 'ports', component: __WEBPACK_IMPORTED_MODULE_3__ports_ports_component__["a" /* PortsComponent */] },
     {
-        path: 'pricing/:version', component: __WEBPACK_IMPORTED_MODULE_7__pricing_pricing_component__["a" /* PricingComponent */],
+        path: 'pricing/:version', component: __WEBPACK_IMPORTED_MODULE_8__pricing_pricing_component__["a" /* PricingComponent */],
         children: [
             { path: '', redirectTo: 'commodities', pathMatch: 'full' },
             {
-                path: 'commodities', component: __WEBPACK_IMPORTED_MODULE_8__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */], children: [
+                path: 'commodities', component: __WEBPACK_IMPORTED_MODULE_9__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */], children: [
                     { path: '', redirectTo: 'chart', pathMatch: 'full' },
-                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_13__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */] },
-                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_12__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */] }
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_14__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_13__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */] }
                 ]
             },
             {
-                path: 'currencies', component: __WEBPACK_IMPORTED_MODULE_9__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */], children: [
+                path: 'currencies', component: __WEBPACK_IMPORTED_MODULE_10__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */], children: [
                     { path: '', redirectTo: 'chart', pathMatch: 'full' },
-                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_14__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */] },
-                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_15__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */] }
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_15__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_16__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */] }
                 ]
             },
             {
-                path: 'basefuel', component: __WEBPACK_IMPORTED_MODULE_10__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */], children: [
+                path: 'basefuel', component: __WEBPACK_IMPORTED_MODULE_11__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */], children: [
                     { path: '', redirectTo: 'chart', pathMatch: 'full' },
-                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_16__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__["a" /* BaseFuelChartComponent */] },
-                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_17__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__["a" /* BaseFuelEditorComponent */] }
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_17__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__["a" /* BaseFuelChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_18__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__["a" /* BaseFuelEditorComponent */] }
                 ]
             },
             {
-                path: 'charter', component: __WEBPACK_IMPORTED_MODULE_11__pricing_charter_charter_component__["a" /* CharterComponent */], children: [
+                path: 'charter', component: __WEBPACK_IMPORTED_MODULE_12__pricing_charter_charter_component__["a" /* CharterComponent */], children: [
                     { path: '', redirectTo: 'chart', pathMatch: 'full' },
-                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_18__pricing_charter_charter_chart_charter_chart_component__["a" /* CharterChartComponent */] },
-                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_19__pricing_charter_charter_editor_charter_editor_component__["a" /* CharterEditorComponent */] }
+                    { path: 'chart', component: __WEBPACK_IMPORTED_MODULE_19__pricing_charter_charter_chart_charter_chart_component__["a" /* CharterChartComponent */] },
+                    { path: 'editor', component: __WEBPACK_IMPORTED_MODULE_20__pricing_charter_charter_editor_charter_editor_component__["a" /* CharterEditorComponent */] }
                 ]
             }
         ]
@@ -1985,35 +2688,38 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__generated_vessels_api_module__ = __webpack_require__("../../../../../generated/vessels/api.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__distance_matrix_distance_matrix_component__ = __webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ports_ports_component__ = __webpack_require__("../../../../../src/app/ports/ports.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__port_detail_port_detail_component__ = __webpack_require__("../../../../../src/app/port-detail/port-detail.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__generated_ports_locations_variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__generated_vessels_variables__ = __webpack_require__("../../../../../generated/vessels/variables.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pricing_pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_primeng_components_chart_chart__ = __webpack_require__("../../../../primeng/components/chart/chart.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_primeng_components_chart_chart___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18_primeng_components_chart_chart__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pricing_commodities_commodities_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pricing_currencies_currencies_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pricing_basefuel_basefuel_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24_primeng_components_tabmenu_tabmenu__ = __webpack_require__("../../../../primeng/components/tabmenu/tabmenu.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24_primeng_components_tabmenu_tabmenu___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_24_primeng_components_tabmenu_tabmenu__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_primeng_components_dropdown_dropdown__ = __webpack_require__("../../../../primeng/components/dropdown/dropdown.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_primeng_components_dropdown_dropdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_25_primeng_components_dropdown_dropdown__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_primeng_components_button_button__ = __webpack_require__("../../../../primeng/components/button/button.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_primeng_components_button_button___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_26_primeng_components_button_button__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__pricing_curve_editor_curve_editor_component__ = __webpack_require__("../../../../../src/app/pricing/curve-editor/curve-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pricing_charter_charter_editor_charter_editor_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__pricing_charter_charter_chart_charter_chart_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__vessels_vessels_component__ = __webpack_require__("../../../../../src/app/vessels/vessels.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__vessel_vessel_component__ = __webpack_require__("../../../../../src/app/vessel/vessel.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__vessel_vessel_state_attributes_vessel_state_attributes_component__ = __webpack_require__("../../../../../src/app/vessel/vessel-state-attributes/vessel-state-attributes.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__locations_locations_component__ = __webpack_require__("../../../../../src/app/locations/locations.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__location_location_detail_component__ = __webpack_require__("../../../../../src/app/location/location-detail.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__generated_ports_locations_variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__generated_vessels_variables__ = __webpack_require__("../../../../../generated/vessels/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pricing_pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_primeng_components_chart_chart__ = __webpack_require__("../../../../primeng/components/chart/chart.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_primeng_components_chart_chart___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_19_primeng_components_chart_chart__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pricing_commodities_commodities_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pricing_currencies_currencies_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pricing_basefuel_basefuel_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_primeng_components_tabmenu_tabmenu__ = __webpack_require__("../../../../primeng/components/tabmenu/tabmenu.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_primeng_components_tabmenu_tabmenu___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_25_primeng_components_tabmenu_tabmenu__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_primeng_components_dropdown_dropdown__ = __webpack_require__("../../../../primeng/components/dropdown/dropdown.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_primeng_components_dropdown_dropdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_26_primeng_components_dropdown_dropdown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_primeng_components_button_button__ = __webpack_require__("../../../../primeng/components/button/button.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_primeng_components_button_button___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_27_primeng_components_button_button__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_multiselect_multiselect__ = __webpack_require__("../../../../primeng/components/multiselect/multiselect.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_multiselect_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_28_primeng_components_multiselect_multiselect__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pricing_curve_editor_curve_editor_component__ = __webpack_require__("../../../../../src/app/pricing/curve-editor/curve-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pricing_charter_charter_editor_charter_editor_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__pricing_charter_charter_chart_charter_chart_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__vessels_vessels_component__ = __webpack_require__("../../../../../src/app/vessels/vessels.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__vessel_vessel_component__ = __webpack_require__("../../../../../src/app/vessel/vessel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__vessel_vessel_state_attributes_vessel_state_attributes_component__ = __webpack_require__("../../../../../src/app/vessel/vessel-state-attributes/vessel-state-attributes.component.ts");
 /* unused harmony export getParameterByName */
 /* unused harmony export ApiBaseUrlFactory */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
@@ -2063,6 +2769,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
+
 function getParameterByName(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.hash);
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
@@ -2071,7 +2780,7 @@ function ApiBaseUrlFactory() {
     if (location.hash.includes('apiBaseUrl')) {
         return getParameterByName('apiBaseUrl');
     }
-    return "http://localhost:8080";
+    return "http://localhost:8090";
 }
 var AppModule = (function () {
     function AppModule() {
@@ -2084,47 +2793,51 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */],
             __WEBPACK_IMPORTED_MODULE_12__distance_matrix_distance_matrix_component__["a" /* DistanceMatrixComponent */],
             __WEBPACK_IMPORTED_MODULE_13__ports_ports_component__["a" /* PortsComponent */],
-            __WEBPACK_IMPORTED_MODULE_14__port_detail_port_detail_component__["a" /* PortDetailComponent */],
-            __WEBPACK_IMPORTED_MODULE_17__pricing_pricing_component__["a" /* PricingComponent */],
-            __WEBPACK_IMPORTED_MODULE_20__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */],
-            __WEBPACK_IMPORTED_MODULE_21__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */],
-            __WEBPACK_IMPORTED_MODULE_22__pricing_charter_charter_component__["a" /* CharterComponent */],
-            __WEBPACK_IMPORTED_MODULE_23__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */],
-            __WEBPACK_IMPORTED_MODULE_27__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_28__pricing_curve_editor_curve_editor_component__["a" /* CurveEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_29__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_30__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_31__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_34__pricing_charter_charter_editor_charter_editor_component__["a" /* CharterEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_35__pricing_charter_charter_chart_charter_chart_component__["a" /* CharterChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_32__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__["a" /* BaseFuelChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_33__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__["a" /* BaseFuelEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_36__vessels_vessels_component__["a" /* VesselsComponent */],
-            __WEBPACK_IMPORTED_MODULE_37__vessel_vessel_component__["a" /* VesselComponent */],
-            __WEBPACK_IMPORTED_MODULE_38__vessel_vessel_state_attributes_vessel_state_attributes_component__["a" /* VesselStateAttributesComponent */]
+            __WEBPACK_IMPORTED_MODULE_14__locations_locations_component__["a" /* LocationsComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__location_location_detail_component__["a" /* LocationDetailComponent */],
+            __WEBPACK_IMPORTED_MODULE_18__pricing_pricing_component__["a" /* PricingComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__pricing_charter_charter_component__["a" /* CharterComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */],
+            __WEBPACK_IMPORTED_MODULE_29__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_30__pricing_curve_editor_curve_editor_component__["a" /* CurveEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_31__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_32__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_33__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_36__pricing_charter_charter_editor_charter_editor_component__["a" /* CharterEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_37__pricing_charter_charter_chart_charter_chart_component__["a" /* CharterChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_34__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__["a" /* BaseFuelChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_35__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__["a" /* BaseFuelEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_38__vessels_vessels_component__["a" /* VesselsComponent */],
+            __WEBPACK_IMPORTED_MODULE_39__vessel_vessel_component__["a" /* VesselComponent */],
+            __WEBPACK_IMPORTED_MODULE_38__vessels_vessels_component__["b" /* MyTableCellComponent */],
+            __WEBPACK_IMPORTED_MODULE_40__vessel_vessel_state_attributes_vessel_state_attributes_component__["a" /* VesselStateAttributesComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-            __WEBPACK_IMPORTED_MODULE_18_primeng_components_chart_chart__["ChartModule"],
+            __WEBPACK_IMPORTED_MODULE_19_primeng_components_chart_chart__["ChartModule"],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormsModule"],
             __WEBPACK_IMPORTED_MODULE_7__app_routing_module__["a" /* AppRoutingModule */],
             __WEBPACK_IMPORTED_MODULE_8__angular_http__["a" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_9_ng2_handsontable__["a" /* HotTableModule */],
             __WEBPACK_IMPORTED_MODULE_10__generated_ports_locations_api_module__["a" /* ApiModule */],
-            __WEBPACK_IMPORTED_MODULE_11__generated_vessels_api_module__["a" /* VesselApiModule */],
-            __WEBPACK_IMPORTED_MODULE_24_primeng_components_tabmenu_tabmenu__["TabMenuModule"],
-            __WEBPACK_IMPORTED_MODULE_25_primeng_components_dropdown_dropdown__["DropdownModule"],
-            __WEBPACK_IMPORTED_MODULE_26_primeng_components_button_button__["ButtonModule"],
+            __WEBPACK_IMPORTED_MODULE_11__generated_vessels_api_module__["a" /* ApiModule */],
+            __WEBPACK_IMPORTED_MODULE_25_primeng_components_tabmenu_tabmenu__["TabMenuModule"],
+            __WEBPACK_IMPORTED_MODULE_26_primeng_components_dropdown_dropdown__["DropdownModule"],
+            __WEBPACK_IMPORTED_MODULE_27_primeng_components_button_button__["ButtonModule"],
             __WEBPACK_IMPORTED_MODULE_4_primeng_components_inputtext_inputtext__["InputTextModule"],
             __WEBPACK_IMPORTED_MODULE_5_primeng_primeng__["SpinnerModule"],
-            __WEBPACK_IMPORTED_MODULE_19__angular_common_http__["a" /* HttpClientModule */],
-            __WEBPACK_IMPORTED_MODULE_5_primeng_primeng__["FieldsetModule"]
+            __WEBPACK_IMPORTED_MODULE_20__angular_common_http__["a" /* HttpClientModule */],
+            __WEBPACK_IMPORTED_MODULE_5_primeng_primeng__["FieldsetModule"],
+            __WEBPACK_IMPORTED_MODULE_28_primeng_components_multiselect_multiselect__["MultiSelectModule"],
         ],
+        entryComponents: [__WEBPACK_IMPORTED_MODULE_38__vessels_vessels_component__["b" /* MyTableCellComponent */]],
         providers: [
             [
-                { provide: __WEBPACK_IMPORTED_MODULE_15__generated_ports_locations_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory },
-                { provide: __WEBPACK_IMPORTED_MODULE_16__generated_vessels_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory }
+                { provide: __WEBPACK_IMPORTED_MODULE_16__generated_ports_locations_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory },
+                { provide: __WEBPACK_IMPORTED_MODULE_17__generated_vessels_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory }
             ]
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */]]
@@ -2156,7 +2869,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/distance-matrix/distance-matrix.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<label>From:</label> <input type=\"text\" (input)=\"fromChange($event.target.value)\" />\n<label>To:</label> <input type=\"text\" (input)=\"toChange($event.target.value)\" />\n\n\n<hotTable [data]=\"data\"\n          (after-change)=\"afterChange($event)\"\n          (after-on-cell-mouse-down)=\"afterOnCellMouseDown($event)\"\n          [colHeaders]=\"colHeaders\"\n          [options]=\"options\"\n          [colWidths]=\"colWidths\">\n</hotTable>"
+module.exports = "<br/>\n<label>From:</label> <input type=\"text\" (input)=\"fromChange($event.target.value)\" />\n<label>To:</label> <input type=\"text\" (input)=\"toChange($event.target.value)\" />\n<button pButton (click)=\"showLocations()\" class=\"ui-button-secondary\" icon=\"fa-edit\" type=\"submit\" label=\"Locations\"></button>\n<br/>\n<hotTable [data]=\"data\"\n          (after-change)=\"afterChange($event)\"\n          (after-on-cell-mouse-down)=\"afterOnCellMouseDown($event)\"\n          [colHeaders]=\"colHeaders\"\n          [options]=\"options\"\n          [colWidths]=\"colWidths\">\n</hotTable>\n"
 
 /***/ }),
 
@@ -2184,8 +2897,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var DistanceMatrixComponent = (function () {
-    function DistanceMatrixComponent(route, locationsService, distancesService) {
+    function DistanceMatrixComponent(router, route, locationsService, distancesService) {
         var _this = this;
+        this.router = router;
         this.route = route;
         this.locationsService = locationsService;
         this.distancesService = distancesService;
@@ -2292,6 +3006,9 @@ var DistanceMatrixComponent = (function () {
     DistanceMatrixComponent.prototype.toChange = function (seachString) {
         this.filterColumn(seachString);
     };
+    DistanceMatrixComponent.prototype.showLocations = function () {
+        this.router.navigate(['/locations']);
+    };
     return DistanceMatrixComponent;
 }());
 DistanceMatrixComponent = __decorate([
@@ -2300,15 +3017,15 @@ DistanceMatrixComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.html"),
         styles: [__webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["DistancesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["DistancesService"]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["DistancesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["DistancesService"]) === "function" && _d || Object])
 ], DistanceMatrixComponent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d;
 //# sourceMappingURL=distance-matrix.component.js.map
 
 /***/ }),
 
-/***/ "../../../../../src/app/port-detail/port-detail.component.css":
+/***/ "../../../../../src/app/location/location-detail.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
@@ -2326,14 +3043,14 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ "../../../../../src/app/port-detail/port-detail.component.html":
+/***/ "../../../../../src/app/location/location-detail.component.html":
 /***/ (function(module, exports) {
 
 module.exports = "<div *ngIf=\"hero\">\n    <h2>{{hero.name}} details!</h2>\n    <div><label>id: </label>{{hero.id}}</div>\n    <div>\n      <label>name: </label>\n      <input [(ngModel)]=\"hero.name\" placeholder=\"name\"/>\n    </div>\n    <button (click)=\"goBack()\">Back</button>\n    <button (click)=\"save()\">Save</button>\n</div>"
 
 /***/ }),
 
-/***/ "../../../../../src/app/port-detail/port-detail.component.ts":
+/***/ "../../../../../src/app/location/location-detail.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2343,7 +3060,7 @@ module.exports = "<div *ngIf=\"hero\">\n    <h2>{{hero.name}} details!</h2>\n   
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__ = __webpack_require__("../../../../../generated/ports-locations/index.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap__ = __webpack_require__("../../../../rxjs/add/operator/switchMap.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PortDetailComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LocationDetailComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2358,41 +3075,120 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var PortDetailComponent = (function () {
-    function PortDetailComponent(route, angularLocation, locationsService) {
+var LocationDetailComponent = (function () {
+    function LocationDetailComponent(route, angularLocation, locationsService) {
         this.route = route;
         this.angularLocation = angularLocation;
         this.locationsService = locationsService;
     }
-    PortDetailComponent.prototype.ngOnInit = function () {
+    LocationDetailComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.paramMap
             .switchMap(function (params) { return _this.locationsService.getLocationUsingGET(params.get('id')); })
             .subscribe(function (port) { return _this.port = port; });
     };
-    PortDetailComponent.prototype.goBack = function () {
+    LocationDetailComponent.prototype.goBack = function () {
         this.angularLocation.back();
     };
-    PortDetailComponent.prototype.save = function () {
+    LocationDetailComponent.prototype.save = function () {
         //
     };
-    return PortDetailComponent;
+    return LocationDetailComponent;
 }());
 __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
     __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__["Location"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__["Location"]) === "function" && _a || Object)
-], PortDetailComponent.prototype, "port", void 0);
-PortDetailComponent = __decorate([
+], LocationDetailComponent.prototype, "port", void 0);
+LocationDetailComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'app-port-detail',
-        template: __webpack_require__("../../../../../src/app/port-detail/port-detail.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/port-detail/port-detail.component.css")]
+        selector: 'app-location-detail',
+        template: __webpack_require__("../../../../../src/app/location/location-detail.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/location/location-detail.component.css")]
     }),
     __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_common__["Location"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_common__["Location"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__generated_ports_locations_index__["LocationsService"]) === "function" && _d || Object])
-], PortDetailComponent);
+], LocationDetailComponent);
 
 var _a, _b, _c, _d;
-//# sourceMappingURL=port-detail.component.js.map
+//# sourceMappingURL=location-detail.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/locations/locations.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "selected {\n    background-color: #CFD8DC !important;\n    color: white;\n  }\n  .ports {\n    margin: 0 0 2em 0;\n    list-style-type: none;\n    padding: 0;\n    width: 20em;\n  }\n  .ports li {\n    cursor: pointer;\n    position: relative;\n    left: 0;\n    background-color: #EEE;\n    margin: .5em;\n    padding: .3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n  }\n  .ports li:hover {\n    color: #607D8B;\n    background-color: #DDD;\n    left: .1em;\n  }\n  .ports li.selected:hover {\n    background-color: #BBD8DC !important;\n    color: white;\n  }\n  .ports .text {\n    position: relative;\n    top: -3px;\n  }\n  .ports .badge {\n    display: inline-block;\n    font-size: small;\n    color: white;\n    padding: 0.8em 0.7em 0 0.7em;\n    background-color: #607D8B;\n    line-height: 1em;\n    position: relative;\n    left: -1px;\n    top: -4px;\n    height: 1.8em;\n    width: 8em;\n    margin-right: .8em;\n    border-radius: 4px 0 0 4px;\n  }\n  button {\n    font-family: Arial;\n    background-color: #eee;\n    border: none;\n    padding: 5px 10px;\n    border-radius: 4px;\n    cursor: pointer;\n    cursor: hand;\n  }\n  button:hover {\n    background-color: #cfd8dc;\n  }\n\n  button.delete {\n    float:right;\n    margin-top: 2px;\n    margin-right: .8em;\n    background-color: gray !important;\n    color:white;\n  }", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/locations/locations.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h2>Locations</h2>\n<ul class=\"ports\">\n    <li *ngFor=\"let port of ports\" (click)=\"gotoDetail(port)\">\n      <span class=\"badge\">{{port.country}} {{port.mmxId}}</span> {{port.name}}\n    </li>\n</ul>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/locations/locations.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__ = __webpack_require__("../../../../../generated/ports-locations/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LocationsComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var LocationsComponent = (function () {
+    function LocationsComponent(router, portsService) {
+        this.router = router;
+        this.portsService = portsService;
+    }
+    LocationsComponent.prototype.ngOnInit = function () {
+        this.getPorts();
+    };
+    LocationsComponent.prototype.getPorts = function () {
+        var _this = this;
+        this.portsService.getLocationsUsingGET().toPromise()
+            .then(function (ports) { return _this.ports = ports; })
+            .catch(function (error) { return console.log(error); });
+    };
+    LocationsComponent.prototype.gotoDetail = function (selectedLocation) {
+        this.router.navigate(['/locations', selectedLocation.mmxId]);
+    };
+    return LocationsComponent;
+}());
+LocationsComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-locations',
+        template: __webpack_require__("../../../../../src/app/locations/locations.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/locations/locations.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]) === "function" && _b || Object])
+], LocationsComponent);
+
+var _a, _b;
+//# sourceMappingURL=locations.component.js.map
 
 /***/ }),
 
@@ -2417,7 +3213,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/ports/ports.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Ports</h2>\n<ul class=\"ports\">\n    <li *ngFor=\"let port of ports\" (click)=\"onSelect(port)\" [class.selected]=\"port === selectedPort\">\n        <span class=\"badge\">{{port.location.country}}</span> {{port.name}}\n    </li>\n\n</ul>\n<div *ngIf=\"selectedPort\">\n    <h2>\n        {{selectedPort.name | uppercase}} is my hero\n    </h2>\n    <button (click)=\"gotoDetail()\">View Details</button>\n</div>"
+module.exports = "<h2>Ports</h2>\n<hotTable [colHeaders]=\"colHeaders\"\n[columns]=\"columns\"\n[options]=\"options\">\n</hotTable>\n<br />\n<button pButton (click)=\"savePorts()\" class=\"ui-button-secondary\" icon=\"fa-save\" type=\"submit\" label=\"Save\"></button>\n<div #templateContainer\n    [hidden]=\"true\">\n</div>\n"
 
 /***/ }),
 
@@ -2426,8 +3222,9 @@ module.exports = "<h2>Ports</h2>\n<ul class=\"ports\">\n    <li *ngFor=\"let por
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__ = __webpack_require__("../../../../../generated/ports-locations/index.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_ports_index__ = __webpack_require__("../../../../../generated/ports/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__ = __webpack_require__("../../../../../generated/ports-locations/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PortsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2441,22 +3238,124 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var PortsComponent = (function () {
-    function PortsComponent(router, portsService) {
+    function PortsComponent(router, portService, locationsService, distancesService) {
         this.router = router;
-        this.portsService = portsService;
+        this.portService = portService;
+        this.locationsService = locationsService;
+        this.distancesService = distancesService;
+        this.locations = new Array();
     }
     PortsComponent.prototype.ngOnInit = function () {
         this.getPorts();
     };
     PortsComponent.prototype.getPorts = function () {
         var _this = this;
-        this.portsService.getLocationsUsingGET().toPromise()
-            .then(function (ports) { return _this.ports = ports; })
-            .catch(function (error) { return console.log(error); });
+        this.portService.fetchAllUsingGET().toPromise()
+            .then(function (ports) {
+            _this.ports = ports;
+            _this.distancesService.getVersionsUsingGET().toPromise()
+                .then(function (versions) {
+                if (versions.length > 0) {
+                    _this.locationsService.getLocationsUsingGET(versions[0].identifier).toPromise()
+                        .then(function (locations) {
+                        _this.locations = locations;
+                        _this.createSpreadsheet();
+                    })
+                        .catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            })
+                .catch(function (error) {
+                console.log(error);
+            });
+        })
+            .catch(function (error) {
+            console.log(error);
+            _this.ports = [];
+            _this.createSpreadsheet();
+        });
     };
-    PortsComponent.prototype.gotoDetail = function (selectedLocation) {
-        this.router.navigate(['/detail', selectedLocation.mmxId]);
+    PortsComponent.prototype.createEmptyPort = function () {
+        var port = { 'mmxId': '',
+            'locationMmxId': '',
+            'defaultStartTime': null,
+            'allowCooldown': null,
+            'berths': null,
+            'capabilities': [],
+            'cvValue': null,
+            'dischargeDuration': null,
+            'loadDuration': null,
+            'maxCvValue': null,
+            'minCvValue': null,
+        };
+        return port;
+    };
+    PortsComponent.prototype.createSpreadsheet = function () {
+        var source = this.locations
+            .filter(function (l) { return l.virtual == false; })
+            .map(function (l) {
+            var res = [];
+            res.push(l.name);
+            res.push.apply(res, l.aliases);
+            return res;
+        })
+            .reduce(function (a, b) { return a.concat(b); }, []);
+        this.columns = [
+            { data: "locationMmxId", title: 'Location Id', type: 'autocomplete',
+                source: source,
+                strict: true,
+                allowInvalid: false,
+                width: 180 },
+            { data: 'defaultStartTime', title: 'Start Time', type: 'time', timeFormat: 'h:mm', correctFormat: true },
+            { data: 'dischargeDuration', title: 'Discharge duration (hrs)', type: 'numeric' },
+            { data: 'loadDuration', title: 'Load duration (hrs)', type: 'numeric' },
+            { data: 'cvValue', title: 'CV (mmBTU)', type: 'numeric' },
+            { data: 'maxCvValue', title: 'Max CV (mmBTU)', type: 'numeric' },
+            { data: 'minCvValue', title: 'Min CV (mmBTU)', type: 'numeric' },
+            { data: 'allowCooldown', title: 'Allow Cooldown', type: 'checkbox' },
+            { data: 'berths', title: 'Berths', type: 'numeric' },
+            { data: 'capabilities', title: 'Capabilities', type: 'dropdown', source: ['LOAD', 'DISCHARGE', 'DRYDOCK', 'MAINTENANCE'] },
+        ];
+        this.rowHeaders = [];
+        this.rowHeaders = this.ports.map(function (p) { return p.mmxId; });
+        this.options = {
+            data: this.ports,
+            rowHeaders: this.rowHeaders,
+            colHeaders: this.colHeaders,
+            columns: this.columns,
+            rowHeaderWidth: 150,
+            autoColumnSize: true,
+            manualColumnMove: true,
+            manualRowMove: true,
+            manualColumnResize: true,
+            bindRowsWithHeaders: true,
+            manualRowResize: true,
+            minSpareRows: 1,
+            contextMenu: true,
+            search: true,
+            columnSorting: true,
+            sortIndicator: true,
+            undo: true,
+        };
+    };
+    PortsComponent.prototype.isEmpty = function (obj) {
+        return Object.values(obj).every(function (x) { return (x == false || x === "" || x == null); });
+    };
+    PortsComponent.prototype.savePorts = function () {
+        var _this = this;
+        var ports = this.ports.map(function (p) {
+            return Object.assign(_this.createEmptyPort(), p);
+        });
+        ports = ports.filter(function (p) {
+            return !_this.isEmpty(p);
+        });
+        console.log(ports);
+        this.portService.bulkInsertUsingPOST(ports).toPromise()
+            .then(function () { console.log('Ok !'); })
+            .catch(function () { console.log('Not Ok!'); });
     };
     return PortsComponent;
 }());
@@ -2465,12 +3364,12 @@ PortsComponent = __decorate([
         selector: 'app-ports',
         template: __webpack_require__("../../../../../src/app/ports/ports.component.html"),
         styles: [__webpack_require__("../../../../../src/app/ports/ports.component.css")],
-        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]]
+        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["LocationsService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["DistancesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["DistancesService"]) === "function" && _d || Object])
 ], PortsComponent);
 
-var _a, _b;
+var _a, _b, _c, _d;
 //# sourceMappingURL=ports.component.js.map
 
 /***/ }),
@@ -3925,10 +4824,10 @@ var VesselComponent = (function () {
             identifier: '',
             vessels: null
         };
-        this.fuelConsumption = {
-            consumption: 0,
-            speed: 0
-        };
+        this.fuelConsumption = [{
+                consumption: 0,
+                speed: 0
+            }];
         this.ladenAttributes = {
             fuelConsumption: this.fuelConsumption,
             idleBaseRate: 0,
@@ -3966,7 +4865,6 @@ var VesselComponent = (function () {
             name: '',
             pilotLightRate: 0,
             scnt: 0,
-            versions: new Array(),
             warmingTime: 0
         };
     }
@@ -4029,7 +4927,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/vessels/vessels.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<br />\n<button pButton (click)=\"toggleTableOrientation()\" class=\"ui-button-info\" icon=\"fa-rotate-right\" type=\"submit\" label=\"transpose\"></button>\n<hotTable [data]=\"data\"\n(after-change)=\"afterChange($event)\"\n(after-on-cell-mouse-down)=\"afterOnCellMouseDown($event)\"\n[colHeaders]=\"colHeaders\"\n[options]=\"options\"\n[colWidths]=\"colWidths\">\n</hotTable>\n"
+module.exports = "<br />\n<button pButton (click)=\"toggleTableOrientation()\" class=\"ui-button-info\" icon=\"fa-rotate-right\" type=\"submit\" label=\"transpose\"></button>\n<button pButton (click)=\"saveVessels()\" class=\"ui-button-secondary\" icon=\"fa-save\" type=\"submit\"></button>\n<hotTable \n           [colHeaders]=\"colHeaders\"\n           [columns]=\"columns\"\n           [options]=\"options\"></hotTable>\n\n    <div #templateContainer\n        [hidden]=\"true\">\n    </div>\n"
 
 /***/ }),
 
@@ -4041,6 +4939,9 @@ module.exports = "<br />\n<button pButton (click)=\"toggleTableOrientation()\" c
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__ = __webpack_require__("../../../../../generated/vessels/index.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__ = __webpack_require__("../../../../ng2-handsontable/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__("../../../../jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MyTableCellComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return VesselsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4055,16 +4956,76 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+var MyTableCellComponent = (function () {
+    function MyTableCellComponent() {
+        this.counter = 0;
+        //An array of cities
+        this.cities2 = [
+            { name: 'New York', code: 'NY' },
+            { name: 'Rome', code: 'RM' },
+            { name: 'London', code: 'LDN' },
+            { name: 'Istanbul', code: 'IST' },
+            { name: 'Paris', code: 'PRS' }
+        ];
+    }
+    MyTableCellComponent.prototype.incrTest = function (counter) {
+        console.log("" + counter);
+        this.counter++;
+    };
+    return MyTableCellComponent;
+}());
+MyTableCellComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'my-table-cell',
+        //template: '<b (click)="incrTest(counter)">Counter: {{counter}}, data: {{data.id}}<b>'
+        template: '<div style="width:500;"> <p-multiSelect  [options]="cities2" [(ngModel)]="selectedCities2" optionLabel="name"></p-multiSelect><div>'
+    }),
+    __metadata("design:paramtypes", [])
+], MyTableCellComponent);
+
 var VesselsComponent = (function () {
-    function VesselsComponent(router, vesselsService) {
+    function VesselsComponent(router, vesselsService, factoryResolver) {
         this.router = router;
         this.vesselsService = vesselsService;
-        this.ignoreKeyList = ['mmxId', 'version', 'versions', 'ladenAttributes', 'ballastAttributes'];
-        this.data = [['a', 'a', 'a', 'a', 'a'], ['b', 'b', 'b', 'b', 'b']];
-        this.options = {
-            rowHeaders: [1, 2, 3, 4, 5],
-        };
+        this.factoryResolver = factoryResolver;
+        this.ignoreKeyList = ['mmxId', 'ladenAttributes', 'ballastAttributes'];
+        this.routes = [{ 'name': 'Panama canal' }, { 'name': 'Suez canal' }];
+        this.ports = ['PortA', 'PortB'];
         this.tableOrientationToggle = true;
+        this.cellTemplateComponents = {};
+        this.columns = [
+            { data: 'name', title: 'Name', renderer: this.rendererLinkCell.bind(this) },
+            { data: "imo", title: 'IMO' },
+            { data: "inaccessiblePorts", title: 'Inaccessible Ports' },
+            { data: "inaccessibleRoutes", title: 'InaccessibleRoutes' },
+            { data: "baseFuel", title: 'Base Fuel' },
+            { data: "capacity", title: 'Capacity' },
+            { data: "fillCapacity", title: 'Fill Capacity' },
+            { data: "minSpeed", title: 'Min Speed' },
+            { data: "maxSpeed", title: 'Max Speed' },
+            { data: "minHeel", title: 'Min Heel' },
+            { data: "warmingTime", title: 'Warming Time' },
+            { data: "coolingVolume", title: 'Cooling Volume' },
+            { data: "pilotLightRate", title: 'Pilot Light Rate' },
+            { data: "minBaseFuelConsumption", title: 'Min Base Fuel Consumption' },
+            { data: "hasReliqCapacity", title: 'Has Reliq Capacity' },
+            { data: "scnt", title: 'Scnt' },
+            { data: "nboRate", title: 'NBO Rate' },
+            { data: "ladenAttributes.fuelConsumption", title: 'Laden Fuel Consumption' },
+            { data: "ladenAttributes.idleNBORate", title: 'Laden Idle NBO Rate' },
+            { data: "ladenAttributes.idleBaseRate", title: 'Laden Idle Base Rate' },
+            { data: "ladenAttributes.inPortBaseRate", title: 'Laden In Port Base Rate' },
+            { data: "ladenAttributes.serviceSped", title: 'Laden service Speed ' },
+            { data: "ladenAttributes.inPortNBORate", title: 'Laden In Port NBO Rate' },
+            { data: "ballastAttributes.fuelConsumption", title: 'Ballast Fuel Consumption' },
+            { data: "ballastAttributes.idleNBORate", title: 'Ballast Idle NBO Rate' },
+            { data: "ballastAttributes.idleBaseRate", title: 'Ballast Idle Base Rate' },
+            { data: "ballastAttributes.inPortBaseRate", title: 'Ballast In Port Base Rate' },
+            { data: "ballastAttributes.serviceSped", title: 'Ballast service Speed' },
+            { data: "ballastAttributes.inPortNBORate", title: 'Ballast In Port NBO Rate' },
+        ];
         this.specificFormatters = { "mmxId": { "format": "", "type": "", "Unit": "" },
             "name": { "format": "", "type": "", "Unit": "" },
             "imo": { "format": "", "type": "", "Unit": "" },
@@ -4090,17 +5051,9 @@ var VesselsComponent = (function () {
             "inPortBaseRate": { "format": "", "type": "", "Unit": "MT/day" },
             "serviceSped": { "format": "", "type": "", "Unit": "kts" },
             "inPortNBORate": { "format": "", "type": "", "Unit": "m3/day" } };
+        this.getVessels();
     }
     VesselsComponent.prototype.ngOnInit = function () {
-        this.getVessels();
-    };
-    VesselsComponent.prototype.tokenizeLabels = function (labels) {
-        return labels.map(function (k) { return k.split(/(?=[A-Z])/).map(function (token) { return token[0].toUpperCase() + token.substr(1, token.length); }).join(' '); });
-    };
-    VesselsComponent.prototype.emptyRow = function (rowHeaders, data, label) {
-        if (label === void 0) { label = ''; }
-        rowHeaders.push(label);
-        data.push('');
     };
     VesselsComponent.prototype.getVessels = function () {
         var _this = this;
@@ -4109,118 +5062,141 @@ var VesselsComponent = (function () {
             _this.vessels = vessels;
             _this.refreshTable();
         })
-            .catch(function (error) { return console.log(error); });
+            .catch(function (error) {
+            console.log(error);
+            _this.vessels = [];
+            _this.refreshTable();
+        });
     };
     VesselsComponent.prototype.refreshTable = function () {
-        if (this.tableOrientationToggle) {
-            this.createHorizontalTable(this.vessels);
-        }
-        else {
-            this.createVerticalTable(this.vessels);
-        }
+        this.createHorizontalTable(this.vessels);
+    };
+    VesselsComponent.prototype.createEmptyVessel = function () {
+        var fuelConsumptionLadenEmpty = [{
+                "consumption": 0,
+                "speed": 0
+            }];
+        var fuelConsumptionBallastEmpty = [{
+                "consumption": 0,
+                "speed": 0
+            }];
+        var ladenAttributeEmpty = {
+            "fuelConsumption": fuelConsumptionLadenEmpty,
+            "idleBaseRate": null,
+            "idleNBORate": null,
+            "inPortBaseRate": null,
+            "inPortNBORate": null,
+            "nboRate": null,
+            "serviceSped": null
+        };
+        var ballastAttributeEmpty = {
+            "fuelConsumption": fuelConsumptionBallastEmpty,
+            "idleBaseRate": null,
+            "idleNBORate": null,
+            "inPortBaseRate": null,
+            "inPortNBORate": null,
+            "nboRate": null,
+            "serviceSped": null
+        };
+        var emptyVessel = { "mmxId": "",
+            "name": "",
+            "imo": "",
+            "inaccessiblePorts": [],
+            "inaccessibleRoutes": [],
+            "baseFuel": "",
+            "capacity": null,
+            "fillCapacity": null,
+            "ladenAttributes": ladenAttributeEmpty,
+            "ballastAttributes": ballastAttributeEmpty,
+            "minSpeed": null,
+            "maxSpeed": null,
+            "minHeel": null,
+            "warmingTime": null,
+            "coolingVolume": null,
+            "pilotLightRate": null,
+            "minBaseFuelConsumption": null,
+            "hasReliqCapacity": false,
+            "scnt": null };
+        return emptyVessel;
     };
     VesselsComponent.prototype.createHorizontalTable = function (vessels) {
-        var _this = this;
         this.rowHeaders = [];
         this.colHeaders = [];
         this.data = [];
-        var formatters = [];
+        if (vessels && vessels.length === 0) {
+            vessels.push(this.createEmptyVessel());
+        }
+        ;
         this.rowHeaders = vessels.map(function (v) { return v.mmxId; });
-        console.log(Object.keys(vessels[0]));
-        var trimmedKeys = Object.keys(vessels[0])
-            .filter(function (k) { return !_this.ignoreKeyList.includes(k); });
-        this.data = vessels.map(function (vessel) { return trimmedKeys.map(function (key) { return vessel[key]; }); });
-        this.colHeaders = this.tokenizeLabels(trimmedKeys.map(function (key) {
-            return _this.specificFormatters[key]["Unit"] === "" ? "" + key : key + " (" + _this.specificFormatters[key]["Unit"] + ")";
-        }));
-        formatters.push.apply(formatters, trimmedKeys.map(function (key) {
-            if (typeof vessels[0][key] === "number") {
-                return ({ 'type': 'numeric' });
-            }
-            else {
-                return ({ 'type': 'text' });
-            }
-        }));
-        var ladenKeys = Object.keys(vessels[0].ladenAttributes);
-        console.log(ladenKeys);
-        (_a = this.colHeaders).push.apply(_a, this.tokenizeLabels(ladenKeys));
-        var _loop_1 = function (i, len) {
-            (_a = this_1.data[i]).push.apply(_a, ladenKeys.map(function (key) { return vessels[i]['ladenAttributes'][key]; }));
-            var _a;
-        };
-        var this_1 = this;
-        for (var i = 0, len = vessels.length; i < len; i++) {
-            _loop_1(i, len);
-        }
-        formatters.push.apply(formatters, ladenKeys.map(function (key) {
-            if (typeof vessels[0]['ladenAttributes'][key] === "number") {
-                return ({ 'type': 'numeric' });
-            }
-            else {
-                return ({ 'type': 'text' });
-            }
-        }));
-        var ballastKeys = Object.keys(vessels[0].ballastAttributes);
-        (_b = this.colHeaders).push.apply(_b, this.tokenizeLabels(ballastKeys));
-        var _loop_2 = function (i, len) {
-            (_a = this_2.data[i]).push.apply(_a, ballastKeys.map(function (key) { return vessels[i]['ballastAttributes'][key]; }));
-            var _a;
-        };
-        var this_2 = this;
-        for (var i = 0, len = vessels.length; i < len; i++) {
-            _loop_2(i, len);
-        }
-        formatters.push.apply(formatters, ballastKeys.map(function (key) {
-            if (typeof vessels[0]['ballastAttributes'][key] === "number") {
-                return ({ 'type': 'numeric' });
-            }
-            else {
-                return ({ 'type': 'text' });
-            }
-        }));
+        this.colHeaders = this.columns.map(function (col) { return col['colName']; });
+        console.log(this.vessels);
         this.options = {
-            colHeaders: this.colHeaders,
+            data: this.vessels,
             rowHeaders: this.rowHeaders,
-            rowHeaderWidth: 200,
-            columns: formatters,
-            minRows: this.rowHeaders.length,
-            minCols: this.colHeaders.length,
+            colHeaders: this.colHeaders,
+            columns: this.columns,
+            rowHeaderWidth: 150,
+            colHeaderWidth: 500,
+            colWidths: [500, 50, 80, 80, 80, 80, 80],
+            //autoColumnSize: true,
+            manualColumnMove: true,
+            manualRowMove: true,
             manualColumnResize: true,
+            manualRowResize: true,
+            contextMenu: true,
+            search: true,
+            columnSorting: true,
+            sortIndicator: true,
+            undo: true,
         };
-        var _a, _b;
+        this.cellComponentFactory = this.factoryResolver
+            .resolveComponentFactory(MyTableCellComponent);
     };
-    VesselsComponent.prototype.createVerticalTable = function (vessels) {
-        var _this = this;
-        this.rowHeaders = [];
-        this.colHeaders = [];
-        this.data = [];
-        this.colHeaders = vessels.map(function (v) { return v.mmxId; });
-        var trimmedKeys = Object.keys(vessels[0])
-            .filter(function (k) { return !_this.ignoreKeyList.includes(k); });
-        this.data = trimmedKeys.map(function (key) { return vessels.map(function (v) { return v[key]; }); });
-        this.rowHeaders = this.tokenizeLabels(trimmedKeys);
-        var ladenKeys = Object.keys(vessels[0].ladenAttributes);
-        (_a = this.rowHeaders).push.apply(_a, this.tokenizeLabels(ladenKeys));
-        (_b = this.data).push.apply(_b, ladenKeys.map(function (key) { return vessels.map(function (v) { return v['ladenAttributes'][key]; }); }));
-        var ballastKeys = Object.keys(vessels[0].ballastAttributes);
-        (_c = this.rowHeaders).push.apply(_c, this.tokenizeLabels(ballastKeys));
-        (_d = this.data).push.apply(_d, ballastKeys.map(function (key) { return vessels.map(function (v) { return v['ballastAttributes'][key]; }); }));
-        this.options = {
-            colHeaders: this.colHeaders,
-            rowHeaders: this.rowHeaders,
-            rowHeaderWidth: 200,
-            columns: Array.apply(null, { length: this.colHeaders.length }).map(function (i) { return ({ 'type': 'text' }); }),
-            minRows: this.rowHeaders.length,
-            minCols: this.colHeaders.length,
-            data: this.data
-        };
-        var _a, _b, _c, _d;
+    VesselsComponent.prototype.rendererLinkCell = function (instance, td, row, col, columnKey, data, cellProperties) {
+        var component = this.templateContainer
+            .createComponent(this.cellComponentFactory);
+        Object.assign(component.instance, {});
+        component.changeDetectorRef.detectChanges();
+        this.cellTemplateComponents[data.id] = component;
+        __WEBPACK_IMPORTED_MODULE_4_jquery__(td).html(component.location.nativeElement);
     };
-    VesselsComponent.prototype.stitchSpreadsheetData = function (values, keys) {
-        var dataObject = keys.map(function (k, i) { return ({ k: values[i] }); });
-        var result = Object.assign.apply(Object, [{}].concat(dataObject));
-        return result;
-    };
+    ;
+    /*
+    createVerticalTable(vessels: Vessel[]): void {
+      this.rowHeaders = [];
+      this.colHeaders = [];
+      this.data = [];
+  
+      if (vessels && vessels.length === 0) {
+        vessels.push(this.createEmptyVessel())
+      };
+  
+      this.colHeaders = vessels.map(v => v.mmxId);
+      let trimmedKeys: string[] = Object.keys(vessels[0])
+      .filter(k => !this.ignoreKeyList.includes(k))
+  
+      this.data = trimmedKeys.map(key => vessels.map(v => v[key]));
+      this.rowHeaders = this.tokenizeLabels(trimmedKeys);
+  
+      let ladenKeys: string[] = Object.keys(vessels[0].ladenAttributes);
+      this.rowHeaders.push(...this.tokenizeLabels(ladenKeys.map(key => 'Laden ' + key)));
+      this.data.push(...ladenKeys.map(key => vessels.map(v => v['ladenAttributes'][key])));
+  
+      let ballastKeys: string[] = Object.keys(vessels[0].ballastAttributes);
+      this.rowHeaders.push(...this.tokenizeLabels(ballastKeys));
+      this.data.push(...ballastKeys.map(key => vessels.map(v => v['ballastAttributes'][key])));
+  
+      this.options = {
+        colHeaders: this.colHeaders,
+        rowHeaders: this.rowHeaders,
+        rowHeaderWidth: 200,
+        columns: Array.apply(null, {length: this.colHeaders.length}).map(i => ({'type':'text'})),
+        minRows: this.rowHeaders.length,
+        minCols: this.colHeaders.length,
+        data: this.data
+      }
+    }
+     */
     VesselsComponent.prototype.gotoDetail = function (selectedVessel) {
         this.router.navigate(['../vessel', selectedVessel.mmxId, 0]);
     };
@@ -4235,11 +5211,27 @@ var VesselsComponent = (function () {
     VesselsComponent.prototype.addVessel = function () {
         this.router.navigate(['../vessel', '', '']);
     };
+    VesselsComponent.prototype.saveVessels = function () {
+        var _this = this;
+        this.vessels = this.vessels.map(function (v) {
+            return Object.assign(_this.createEmptyVessel(), v);
+        });
+        this.vesselsService.insertVesselsUsingPOST(this.vessels).toPromise()
+            .then(function (vessels) {
+            console.log("OK " + vessels);
+        })
+            .catch(function (error) { return console.log(error); });
+    };
+    ;
     return VesselsComponent;
 }());
 __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('templateContainer', { read: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"] }),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]) === "function" && _a || Object)
+], VesselsComponent.prototype, "templateContainer", void 0);
+__decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__["b" /* HotTable */]),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__["b" /* HotTable */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__["b" /* HotTable */]) === "function" && _a || Object)
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__["b" /* HotTable */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__["b" /* HotTable */]) === "function" && _b || Object)
 ], VesselsComponent.prototype, "hotTable", void 0);
 VesselsComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -4248,10 +5240,10 @@ VesselsComponent = __decorate([
         styles: [__webpack_require__("../../../../../src/app/vessels/vessels.component.css")],
         providers: [__WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"]]
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"]) === "function" && _e || Object])
 ], VesselsComponent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=vessels.component.js.map
 
 /***/ }),
