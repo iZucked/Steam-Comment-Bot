@@ -23,9 +23,6 @@ import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedDoubleFormatter;
 import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedFloatFormatter;
@@ -141,14 +138,6 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	protected CellEditor createCellEditor(final Composite c, final Object object) {
-		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
-
-		editor.setFormatter(formatter);
-		return editor;
-	}
-
-	@Override
 	protected String renderSetValue(final Object container, final Object setValue) {
 		if (setValue instanceof Number) {
 			final Number number = (Number) setValue;
@@ -167,4 +156,14 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 
 		return super.renderSetValue(container, setValue);
 	}
+	
+	@Override
+	protected CellEditor createCellEditor(final Composite c, final Object object) {
+		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
+
+		editor.setFormatter(formatter);
+		return editor;
+	}
+
+	
 }
