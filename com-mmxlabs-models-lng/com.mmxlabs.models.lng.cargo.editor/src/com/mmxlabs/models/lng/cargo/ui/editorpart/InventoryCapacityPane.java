@@ -35,7 +35,7 @@ public class InventoryCapacityPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
 		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_Date(), editingDomain));
-		addTypicalColumn("Min", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_MinVolume(), editingDomain));
+		addTypicalColumn("Min", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_MinVolume(), editingDomain));
 		addTypicalColumn("Max", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_MaxVolume(), editingDomain));
 
 		setTitle("Capacity");
