@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -86,7 +87,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 
 				final HashSet<String> badPorts = new HashSet<String>();
-				final List<String> badVessels = new LinkedList<String>();
+				final Collection<String> badVessels = new LinkedHashSet<String>();
 				for (final VesselAvailability availability : lngScenarioModel.getCargoModel().getVesselAvailabilities()) {
 					final Vessel v = availability.getVessel();
 					if (v != null && extraContext.getReplacement(vessel) == v) {
