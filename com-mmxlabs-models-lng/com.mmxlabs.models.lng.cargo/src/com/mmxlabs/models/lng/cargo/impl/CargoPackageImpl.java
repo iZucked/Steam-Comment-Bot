@@ -3033,6 +3033,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
 		createNamedObjectAnnotations();
+		// http://www.mmxlabs.com/models/featureOverride
+		createFeatureOverrideAnnotations();
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
@@ -3058,6 +3060,41 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source, 
 		   new String[] {
 			 "nonUniqueChildren", "true"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/featureOverride</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createFeatureOverrideAnnotations() {
+		String source = "http://www.mmxlabs.com/models/featureOverride";	
+		addAnnotation
+		  (slotEClass, 
+		   source, 
+		   new String[] {
+		   });	
+		addAnnotation
+		  (loadSlotEClass, 
+		   source, 
+		   new String[] {
+		   });	
+		addAnnotation
+		  (dischargeSlotEClass, 
+		   source, 
+		   new String[] {
+		   });	
+		addAnnotation
+		  (spotLoadSlotEClass, 
+		   source, 
+		   new String[] {
+		   });	
+		addAnnotation
+		  (spotDischargeSlotEClass, 
+		   source, 
+		   new String[] {
 		   });
 	}
 

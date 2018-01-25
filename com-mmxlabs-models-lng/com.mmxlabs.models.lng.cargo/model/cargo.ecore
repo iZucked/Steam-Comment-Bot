@@ -41,6 +41,7 @@
         eType="#//Slot" eOpposite="#//Slot/cargo"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
     <eOperations name="getSlotOrPortDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrContractMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrContractMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -174,6 +175,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//Slot">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
     <eOperations name="getSlotOrDelegatedCV" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getSlotOrContractDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCV" lowerBound="1"
@@ -191,6 +193,7 @@
         defaultValueLiteral="Any" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot" eSuperTypes="#//Slot">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
     <eOperations name="getSlotOrContractMinCv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getSlotOrContractMaxCv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getSlotOrContractDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"/>
@@ -217,8 +220,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SpotLoadSlot" eSuperTypes="#//LoadSlot #//SpotSlot"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SpotDischargeSlot" eSuperTypes="#//DischargeSlot #//SpotSlot"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotLoadSlot" eSuperTypes="#//LoadSlot #//SpotSlot">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotDischargeSlot" eSuperTypes="#//DischargeSlot #//SpotSlot">
+    <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="CargoType">
     <eLiterals name="FLEET" literal="Shipped"/>
     <eLiterals name="FOB" value="1"/>
