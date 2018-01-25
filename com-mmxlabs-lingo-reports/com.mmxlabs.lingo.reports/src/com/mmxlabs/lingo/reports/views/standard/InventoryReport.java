@@ -317,7 +317,7 @@ public class InventoryReport extends ViewPart {
 	}
 
 	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
-		DateFormat dateFormat = new SimpleDateFormat("d MMM yy");
+		DateFormat dateFormat = new SimpleDateFormat("d MMM");
 		final ISeriesSet seriesSet = chartViewer.getSeriesSet();
 		// Delete existing data
 		{
