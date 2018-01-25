@@ -33,6 +33,7 @@ import javax.inject.Named;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -3167,8 +3168,10 @@ public class LNGScenarioTransformer {
 			final EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
 			assert endHeel != null;
 			final IHeelOptionConsumer heelConsumer = createHeelConsumer(endHeel);
-			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, SetUtils.getObjects(eVesselAvailability.getEndAt()), heelConsumer,
-					forceHireCostOnlyEndRule);
+			Set<Port> endPorts = SetUtils.getObjects(eVesselAvailability.getEndAt());
+			// Assume validation ensures at least one valid port will remain if initial set has ports present.
+			endPorts.removeAll(SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts()));
+			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, endPorts, heelConsumer, forceHireCostOnlyEndRule);
 
 			final int minDuration = eVesselAvailability.getAvailabilityOrContractMinDuration();
 			if (minDuration != 0) {
