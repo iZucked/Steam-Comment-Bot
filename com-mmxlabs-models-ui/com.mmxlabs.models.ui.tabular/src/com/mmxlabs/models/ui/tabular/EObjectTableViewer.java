@@ -81,7 +81,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 		public void commandStackChanged(final EventObject event) {
 
 			// TODO: This is fairly coarse grained check -perhaps we should check the mostRecentCommand result and check to see if it contains the container - OR contained elements?
-			RunnerHelper.asyncExec(() -> {
+			RunnerHelper.syncExec(() -> {
 				if (!getControl().isDisposed()) {
 					doCommandStackChanged();
 				}
