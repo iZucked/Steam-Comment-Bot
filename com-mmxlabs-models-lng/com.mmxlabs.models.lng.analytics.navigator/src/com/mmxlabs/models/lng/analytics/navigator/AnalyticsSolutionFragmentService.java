@@ -250,60 +250,68 @@ public class AnalyticsSolutionFragmentService {
 
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_Optimisations()) {
 				if (notification.getEventType() == Notification.ADD) {
-					final EObject eObj = (EObject) notification.getNewValue();
-					if (eObj instanceof AbstractSolutionSet) {
-						AbstractSolutionSet plan = (AbstractSolutionSet) eObj;
-						String uuid = plan.getUuid();
 
-						final ScenarioFragment fragment;
-						if (uuidToFragmentMap.containsKey(uuid)) {
-							fragment = uuidToFragmentMap.get(uuid);
-						} else {
-							fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
-							fragment.setContentType(uuid);
-							uuidToFragmentMap.put(uuid, fragment);
+					RunnerHelper.asyncExec(() -> {
+
+						final EObject eObj = (EObject) notification.getNewValue();
+						if (eObj instanceof AbstractSolutionSet) {
+							AbstractSolutionSet plan = (AbstractSolutionSet) eObj;
+							String uuid = plan.getUuid();
+
+							final ScenarioFragment fragment;
+							if (uuidToFragmentMap.containsKey(uuid)) {
+								fragment = uuidToFragmentMap.get(uuid);
+							} else {
+								fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+								fragment.setContentType(uuid);
+								uuidToFragmentMap.put(uuid, fragment);
+							}
+
+							{
+								boolean found = false;
+								List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
+								Iterator<ModelArtifact> itr = allArtifacts.iterator();
+								while (itr.hasNext()) {
+									ModelArtifact artifact = itr.next();
+									if (uuid.equals(artifact.getKey())) {
+										found = true;
+										break;
+									}
+								}
+								if (!found) {
+									ModelArtifact artifact = ManifestFactory.eINSTANCE.createModelArtifact();
+									artifact.setKey(uuid);
+									artifact.setStorageType(StorageType.INTERNAL);
+									artifact.setType(TYPE_SOLUTION);
+									artifact.setDisplayName(plan.getName());
+									uuidToArtifactMap.put(uuid, artifact);
+									modelRecord.getManifest().getModelFragments().add(artifact);
+								}
+							}
+							createFragment(fragment, plan, modelRecord.getSharedReference());
 						}
+					});
 
-						{
-							boolean found = false;
+				} else if (notification.getEventType() == Notification.REMOVE) {
+					final EObject eObj = (EObject) notification.getOldValue();
+					if (eObj instanceof AbstractSolutionSet) {
+
+						RunnerHelper.asyncExec(() -> {
+
+							AbstractSolutionSet plan = (AbstractSolutionSet) eObj;
+							String uuid = plan.getUuid();
+							removeFragment(eObj);
+
 							List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
 							Iterator<ModelArtifact> itr = allArtifacts.iterator();
 							while (itr.hasNext()) {
 								ModelArtifact artifact = itr.next();
 								if (uuid.equals(artifact.getKey())) {
-									found = true;
-									break;
+									itr.remove();
+									uuidToArtifactMap.remove(uuid);
 								}
 							}
-							if (!found) {
-								ModelArtifact artifact = ManifestFactory.eINSTANCE.createModelArtifact();
-								artifact.setKey(uuid);
-								artifact.setStorageType(StorageType.INTERNAL);
-								artifact.setType(TYPE_SOLUTION);
-								artifact.setDisplayName(plan.getName());
-								uuidToArtifactMap.put(uuid, artifact);
-								modelRecord.getManifest().getModelFragments().add(artifact);
-							}
-						}
-						createFragment(fragment, plan, modelRecord.getSharedReference());
-					}
-
-				} else if (notification.getEventType() == Notification.REMOVE) {
-					final EObject eObj = (EObject) notification.getOldValue();
-					if (eObj instanceof AbstractSolutionSet) {
-						AbstractSolutionSet plan = (AbstractSolutionSet) eObj;
-						String uuid = plan.getUuid();
-						removeFragment(eObj);
-
-						List<ModelArtifact> allArtifacts = modelRecord.getManifest().getModelFragments();
-						Iterator<ModelArtifact> itr = allArtifacts.iterator();
-						while (itr.hasNext()) {
-							ModelArtifact artifact = itr.next();
-							if (uuid.equals(artifact.getKey())) {
-								itr.remove();
-								uuidToArtifactMap.remove(uuid);
-							}
-						}
+						});
 					}
 				}
 				// TODO: Handle ADD_/REMOVE_MANY ?
@@ -375,23 +383,43 @@ public class AnalyticsSolutionFragmentService {
 			ScenarioInstance scenarioInstance = (ScenarioInstance) c;
 			Manifest manifest = scenarioInstance.getManifest();
 			if (manifest != null) {
-				List<ScenarioFragment> fragments = new LinkedList<>();
-				for (ModelArtifact artifact : manifest.getModelFragments()) {
-					if (artifact.getStorageType() != StorageType.INTERNAL) {
-						continue;
+				Runnable r = () -> {
+					// Gather existing fragments
+					Set<String> seenIds = new HashSet<>();
+					for (ScenarioFragment f : scenarioInstance.getFragments()) {
+						if (f.getContentType() != null) {
+							seenIds.add(f.getContentType());
+						}
 					}
-					if (TYPE_SOLUTION.equals(artifact.getType())) {
-						String uuid = artifact.getKey();
-						System.out.println("Found offline artifact " + uuid);
-						final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
-						fragment.setFragment(null);
-						fragment.setName(artifact.getDisplayName());
-						fragment.setUseCommandStack(false);
-						fragment.setContentType(uuid); // Subvert the use of content type to store UUID
-						fragments.add(fragment);
+
+					List<ScenarioFragment> fragments = new LinkedList<>();
+					for (ModelArtifact artifact : manifest.getModelFragments()) {
+						if (artifact.getStorageType() != StorageType.INTERNAL) {
+							continue;
+						}
+						if (TYPE_SOLUTION.equals(artifact.getType())) {
+							String uuid = artifact.getKey();
+							if (seenIds.contains(uuid)) {
+								continue;
+							}
+							System.out.println("Found offline artifact " + uuid);
+							final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+							fragment.setFragment(null);
+							fragment.setName(artifact.getDisplayName());
+							fragment.setUseCommandStack(false);
+							fragment.setContentType(uuid); // Subvert the use of content type to store UUID
+							fragments.add(fragment);
+						}
 					}
+
+					scenarioInstance.getFragments().addAll(fragments);
+
+				};
+				// When starting LiNGO, there may not be a display thread
+				if (!RunnerHelper.asyncExec(r)) {
+					r.run();
 				}
-				RunnerHelper.asyncExec(() -> scenarioInstance.getFragments().addAll(fragments));
+
 			}
 		}
 		for (Container child : c.getElements()) {
