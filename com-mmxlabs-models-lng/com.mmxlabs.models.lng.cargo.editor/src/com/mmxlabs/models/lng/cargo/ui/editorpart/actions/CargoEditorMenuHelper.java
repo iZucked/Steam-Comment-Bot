@@ -1148,9 +1148,6 @@ public class CargoEditorMenuHelper {
 							usedIDStrings.add(slot.getName());
 						}
 
-						if (dischargeSlot.isFOBSale()) {
-							dischargeSlot.setPort(source.getPort());
-						}
 						// Set back to start of month
 						cal = cal.withDayOfMonth(1).withHour(0);
 						final LocalDate dishargeCal = cal.toLocalDate();
@@ -1170,7 +1167,9 @@ public class CargoEditorMenuHelper {
 						dischargeSlot.setName(id);
 
 					}
-
+					if (dischargeSlot.isFOBSale()) {
+						dischargeSlot.setPort(source.getPort());
+					}
 				} else {
 					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {
@@ -1199,9 +1198,6 @@ public class CargoEditorMenuHelper {
 							cal = cal.minusHours(loadSlot.getSlotOrPortDuration());
 						}
 
-						if (loadSlot.isDESPurchase()) {
-							loadSlot.setPort(source.getPort());
-						}
 						// Set back to start of month
 						cal = cal.withDayOfMonth(1).withHour(0);
 						final LocalDate loadCal = cal.toLocalDate();
@@ -1378,7 +1374,9 @@ public class CargoEditorMenuHelper {
 
 		reassignMenuManager.add(northBoundCanalBookingMenu);
 		reassignMenuManager.add(southBoundCanalBookingMenu);
-		Collections.sort(canalbookings, (a, b)->{return (int) b.getBookingDate().until(a.getBookingDate(), ChronoUnit.DAYS);});
+		Collections.sort(canalbookings, (a, b) -> {
+			return (int) b.getBookingDate().until(a.getBookingDate(), ChronoUnit.DAYS);
+		});
 
 		for (CanalBookingSlot canalbooking : canalbookings) {
 			String canalBookingHandle = String.format("%s", canalbooking.getBookingDate());
