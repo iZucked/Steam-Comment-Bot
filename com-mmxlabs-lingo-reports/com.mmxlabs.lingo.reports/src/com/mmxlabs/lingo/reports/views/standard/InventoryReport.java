@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -315,7 +317,7 @@ public class InventoryReport extends ViewPart {
 	}
 
 	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
-
+		DateFormat dateFormat = new SimpleDateFormat("d MMM yy");
 		final ISeriesSet seriesSet = chartViewer.getSeriesSet();
 		// Delete existing data
 		{
@@ -519,12 +521,12 @@ public class InventoryReport extends ViewPart {
 					}
 
 					{
-						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Portfolio cargoes");
+						
+						
+						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Cargoes");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
 						createSeries.setBarWidth(2);
-						// createSeries.setSymbolSize(2);
-
 						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
 
 					}
@@ -646,6 +648,7 @@ public class InventoryReport extends ViewPart {
 		chartViewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartViewer.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartViewer.getAxisSet().getXAxis(0).getTitle().setText("Date");
+		chartViewer.getAxisSet().getXAxis(0).getTick().setFormat(dateFormat);
 
 		chartViewer.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartViewer.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
