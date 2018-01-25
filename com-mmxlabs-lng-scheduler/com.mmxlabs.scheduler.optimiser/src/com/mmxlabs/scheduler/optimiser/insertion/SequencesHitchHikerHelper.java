@@ -53,7 +53,7 @@ public class SequencesHitchHikerHelper {
 		sourceLookup.createLookup(source);
 		
 		final ILookupManager targetLookup = lookupManagerProvider.get();
-		targetLookup.createLookup(source);
+		targetLookup.createLookup(target);
 
 		// The collection of elements to include
 		final List<ISequenceElement> queue = new LinkedList<>();
