@@ -60,28 +60,6 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 	public NumberInlineEditor(final EStructuralFeature feature) {
 		super(feature);
-		
-		isOverridable = false;
-		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (eAnnotation == null) {
-			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
-		}
-		if (eAnnotation != null) {
-			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
-					isOverridable = true;
-					this.overrideToggleFeature = f;
-				}
-			}
-			if (feature.isUnsettable()) {
-				isOverridable = true;
-			}
-		}
-		if (isOverridable) {
-			isOverridableWithButton = true;
-		}
-		
-		
 		type = (EDataType) feature.getEType();
 
 		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
