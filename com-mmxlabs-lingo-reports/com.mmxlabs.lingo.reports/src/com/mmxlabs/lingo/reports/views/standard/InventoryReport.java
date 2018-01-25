@@ -43,10 +43,13 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.swtchart.Chart;
 import org.swtchart.IAxisSet;
@@ -73,10 +76,12 @@ import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -90,7 +95,7 @@ public class InventoryReport extends ViewPart {
 
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
-
+	private Color color_Orange;
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
@@ -163,6 +168,9 @@ public class InventoryReport extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
+
+		color_Orange = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(255, 200, 15));
+
 		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 		parent.setLayout(new GridLayout(1, true));
 		{
@@ -310,7 +318,9 @@ public class InventoryReport extends ViewPart {
 
 	@Override
 	public void dispose() {
-
+		if (color_Orange != null) {
+			color_Orange.dispose();
+		}
 		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 
 		super.dispose();
@@ -347,6 +357,7 @@ public class InventoryReport extends ViewPart {
 
 				final List<Pair<LocalDate, Integer>> changes = new LinkedList<>();
 				final List<Pair<LocalDate, Integer>> cargo_changes = new LinkedList<>();
+				final List<Pair<LocalDate, Integer>> open_cargo_changes = new LinkedList<>();
 				final List<Pair<LocalDate, Integer>> other_cargo_changes = new LinkedList<>();
 				for (final InventoryEventRow r : inventory.getFeeds()) {
 					if (minDate == null || r.getStartDate().isBefore(minDate)) {
@@ -452,7 +463,47 @@ public class InventoryReport extends ViewPart {
 								changes.add(new Pair<>(date, change));
 								tableLevels.add(new InventoryLevel(date, "SCHEDULE", change));
 
-								cargo_changes.add(new Pair<>(date, change));
+								cargo_changes.add(new Pair<>(date, Math.abs(change)));
+
+								if (minDate == null || date.isBefore(minDate)) {
+									minDate = date;
+								}
+								if (maxDate == null || date.isAfter(maxDate)) {
+									maxDate = date;
+								}
+
+							}
+						}
+						for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								final LoadSlot loadSlot = (LoadSlot) slot;
+								if (loadSlot.isDESPurchase()) {
+									continue;
+								}
+							} else if (slot instanceof DischargeSlot) {
+								final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+								if (dischargeSlot.isFOBSale()) {
+									continue;
+								}
+							}
+							if (slotAllocation.getSlot().getPort() == inventory.getPort()) {
+								int change = (slotAllocation.getSlot() instanceof LoadSlot) ? -slot.getSlotOrContractMaxQuantity() : slot.getSlotOrContractMaxQuantity();
+
+								if (slot.getSlotOrContractVolumeLimitsUnit() == VolumeUnits.MMBTU) {
+									if (slot instanceof LoadSlot) {
+										double cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
+										change = (int) (change / cv);
+									} else {
+										continue;
+									}
+								}
+
+								final LocalDate date = slotAllocation.getSlot().getWindowStart();
+								changes.add(new Pair<>(date, change));
+								tableLevels.add(new InventoryLevel(date, "OPEN", change));
+
+								open_cargo_changes.add(new Pair<>(date, Math.abs(change)));
 
 								if (minDate == null || date.isBefore(minDate)) {
 									minDate = date;
@@ -471,6 +522,9 @@ public class InventoryReport extends ViewPart {
 						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
 						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
 				final Map<LocalDate, List<Integer>> m2 = cargo_changes.stream() //
+						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
+						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
+				final Map<LocalDate, List<Integer>> m2a = open_cargo_changes.stream() //
 						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
 						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
 				final Map<LocalDate, List<Integer>> m3 = other_cargo_changes.stream() //
@@ -521,13 +575,40 @@ public class InventoryReport extends ViewPart {
 					}
 
 					{
-						
-						
+
 						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Cargoes");
 						createSeries.setXDateSeries(dates);
 						createSeries.setYSeries(values);
-						createSeries.setBarWidth(2);
+						createSeries.setBarWidth(1);
 						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+
+					}
+				}
+				if (m2a.size() > 0) {
+					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m2a);
+					final Date[] dates = new Date[sorted.size() * 2];
+					final double[] values = new double[sorted.size() * 2];
+					int idx = 0;
+
+					int total = 0;
+					for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
+						final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
+						dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
+						total += sum;
+						values[idx] = (double) sum;
+						++idx;
+						dates[idx] = Date.from(e.getKey().plusDays(1).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
+						values[idx] = 0;
+						++idx;
+					}
+
+					{
+
+						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Open");
+						createSeries.setXDateSeries(dates);
+						createSeries.setYSeries(values);
+						createSeries.setBarWidth(1);
+						createSeries.setBarColor(color_Orange);
 
 					}
 				}
