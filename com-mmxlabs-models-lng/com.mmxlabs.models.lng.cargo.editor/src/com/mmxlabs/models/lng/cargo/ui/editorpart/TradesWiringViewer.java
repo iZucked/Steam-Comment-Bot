@@ -172,6 +172,7 @@ import com.mmxlabs.models.util.emfpath.EMFMultiPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
@@ -496,6 +497,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@SuppressWarnings("restriction")
 			protected GridCellRenderer createCellRenderer() {
 				return new DefaultCellRenderer();
+			}
+			
+			@Override
+			protected void doCommandStackChanged() {
+				ViewerHelper.refresh(this, true);
 			}
 		};
 
@@ -2278,5 +2284,5 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		public void mouseUp(final MouseEvent e) {
 		}
 	}
-
+	
 }
