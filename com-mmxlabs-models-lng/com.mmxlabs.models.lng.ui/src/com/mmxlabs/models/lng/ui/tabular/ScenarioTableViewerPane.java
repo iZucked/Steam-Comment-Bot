@@ -573,7 +573,8 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 	@Override
 	protected void requestActivation() {
-		super.requestActivation();
+		// This call #setFocus() in the first child. This breaks cell editing if the first child is not the control being edited.
+		// super.requestActivation();
 		scenarioEditingLocation.setCurrentViewer(scenarioViewer);
 
 		final IActionBars pActionBars = actionBars;
