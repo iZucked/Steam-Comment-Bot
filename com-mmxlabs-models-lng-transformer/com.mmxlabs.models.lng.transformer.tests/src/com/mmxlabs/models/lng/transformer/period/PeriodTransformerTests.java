@@ -2331,7 +2331,7 @@ public class PeriodTransformerTests {
 		slotAllocationMap.put(loadSlot1, loadAllocation);
 		slotAllocationMap.put(dischargeSlot1, dischargeAllocation);
 
-		transformer.lockDownCargoDates(slotAllocationMap, cargo1, new HashSet<Cargo>());
+		transformer.lockDownCargoDates(slotAllocationMap, cargo1, new HashSet<Cargo>(), true);
 
 		Assert.assertFalse(cargo1.isAllowRewiring());
 		Assert.assertTrue(cargo1.isLocked());
