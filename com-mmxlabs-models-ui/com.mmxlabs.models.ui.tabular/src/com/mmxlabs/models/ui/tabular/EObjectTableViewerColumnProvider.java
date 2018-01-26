@@ -165,7 +165,7 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider implem
 	public Image getImage(final Object element) {
 		if (renderer instanceof IImageProvider) {
 			final IImageProvider imageProvider = (IImageProvider) renderer;
-			return imageProvider.getImage(element);
+			return imageProvider.getImage(path.get((EObject) element));
 		}
 		return null;
 	}
