@@ -144,8 +144,12 @@ public class EObjectTableViewerFilterSupport {
 						}
 					}
 
-					if (fieldValue == null)
+					if (fieldValue == null) {
 						continue;
+					}
+					if (renderer == null) {
+						continue;
+					}
 
 					final Object filterValue = renderer.getFilterValue(fieldValue);
 					final Object renderValue = renderer.render(fieldValue);
