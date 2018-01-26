@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.tabular.manipulators;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EAttribute;
@@ -15,6 +16,7 @@ import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposal;
@@ -51,6 +53,7 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	final EditingDomain editingDomain;
 
 	private TextCellEditor editor;
+	private @Nullable Function<Enumerator, String> nameMapper;
 
 	protected List<Pair<String, Object>> getAllowedValues(EObject object) {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
@@ -64,6 +67,13 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	protected String getName(Enumerator literal) {
 		if (literal == null) {
 			return "";
+		}
+		if (nameMapper != null) {
+			if (literal instanceof EEnumLiteral) {
+				return nameMapper.apply(((EEnumLiteral) literal).getInstance());
+			} else {
+				return nameMapper.apply(literal);
+			}
 		}
 		return literal.getName();
 	}
@@ -86,18 +96,11 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	 * @param editingDomain
 	 *            editing domain for setting
 	 */
-	public TextualEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain) {
+	public TextualEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, @Nullable Function<Enumerator, String> nameMapper) {
 		super(field, editingDomain);
 
 		this.editingDomain = editingDomain;
-	}
-
-	protected String renderUnsetValue(final Object container, final Object unsetDefault) {
-		return super.renderUnsetValue(container, unsetDefault);
-	}
-
-	protected String renderSetValue(final Object container, final Object setValue) {
-		return super.renderSetValue(container, setValue);
+		this.nameMapper = nameMapper;
 	}
 
 	@Override
