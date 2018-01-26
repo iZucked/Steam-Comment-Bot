@@ -63,6 +63,8 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -113,7 +115,6 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuE
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -131,6 +132,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.EObjectTableViewerColumnFactory;
+import com.mmxlabs.models.util.emfpath.IEMFPath;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
@@ -974,6 +976,84 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		};
 
+		// Middle-click to replicate value
+		viewer.getGrid().addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(final MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseDown(final MouseEvent e) {
+
+				if (e.button == 2) {
+
+					final Point focusCell = viewer.getGrid().getFocusCell();
+					if (focusCell != null) {
+						final Point[] selectedCells = viewer.getGrid().getCellSelection();
+						if (selectedCells.length != 0) {
+							int minX = 0;
+							int minY = 0;
+							int maxX = 0;
+							int maxY = 0;
+							for (int i = 0; i < selectedCells.length; ++i) {
+								final Point p = selectedCells[i];
+								if (i == 0) {
+									minX = maxX = p.x;
+									minY = maxY = p.y;
+								} else {
+									if (p.x < minX) {
+										minX = p.x;
+									}
+									if (p.x > maxX) {
+										maxX = p.x;
+									}
+									if (p.y < minY) {
+										minY = p.y;
+									}
+									if (p.y > maxY) {
+										maxY = p.y;
+									}
+								}
+							}
+							// Single column!
+							if ((maxX - minX) == 0 && (maxY - minY) != 0) {
+								final GridColumn column = viewer.getGrid().getColumn(minX);
+								final ColumnHandler h = (ColumnHandler) column.getData(ColumnHandler.COLUMN_HANDLER);
+								if (h != null) {
+									final GridItem focusItm = viewer.getGrid().getFocusItem();
+									final IEMFPath path = (IEMFPath) column.getData(EObjectTableViewer.COLUMN_PATH);
+
+									final Object referenceObject = path.get((EObject) focusItm.getData());
+									if (h.getManipulator().canEdit(referenceObject)) {
+										final Object referenceValue = h.getManipulator().getValue(referenceObject);
+
+										for (final Point p : selectedCells) {
+											final GridItem itm = viewer.getGrid().getItem(p.y);
+											if (itm == focusItm) {
+												continue;
+											}
+											final Object targetObject = path.get((EObject) itm.getData());
+											if (h.getManipulator().canEdit(targetObject)) {
+												h.getManipulator().setValue(targetObject, referenceValue);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+				}
+			}
+
+			@Override
+			public void mouseDoubleClick(final MouseEvent e) {
+
+			}
+		});
+
 		// viewer.getSortingSupport().setSortOnlyOnSelect(true);
 
 		final MenuManager mgr = new MenuManager();
@@ -1132,7 +1212,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
 				@Override
 				protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-					final boolean activate = event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION //
+					final boolean activate = event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION //
 							|| event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC //
 							|| event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL;
 					if (activate) {
