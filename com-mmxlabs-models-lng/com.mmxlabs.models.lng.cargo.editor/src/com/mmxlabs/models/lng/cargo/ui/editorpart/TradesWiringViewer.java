@@ -99,7 +99,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -498,7 +497,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			protected GridCellRenderer createCellRenderer() {
 				return new DefaultCellRenderer();
 			}
-			
+
 			@Override
 			protected void doCommandStackChanged() {
 				ViewerHelper.refresh(this, true);
@@ -895,26 +894,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
 			assignmentColumn = addTradesColumn(loadColumns, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
-			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
-				@Override
-				public Image getImage(final Object element) {
-
-					if (element instanceof RowData) {
-						final RowData rowDataItem = (RowData) element;
-						final Object object = assignmentPath.get(rowDataItem);
-						if (object instanceof AssignableElement) {
-							final AssignableElement assignableElement = (AssignableElement) object;
-
-							if (assignableElement.isLocked()) {
-								return lockedImage;
-							}
-						}
-					}
-
-					return super.getImage(element);
-
-				}
-			});
 		}
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
@@ -2284,5 +2263,5 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		public void mouseUp(final MouseEvent e) {
 		}
 	}
-	
+
 }
