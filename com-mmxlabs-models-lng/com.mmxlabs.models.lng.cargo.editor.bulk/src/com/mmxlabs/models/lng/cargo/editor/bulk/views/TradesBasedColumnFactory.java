@@ -838,7 +838,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final Grid grid = viewer.getGrid();
 						diagram = new SlotTypePainter(grid, column, isLoad);
 
-						GridViewerHelper.configureLookAndFeel(column);
+						GridViewerHelper.configureLookAndFeel(column, GridViewerHelper.FLAGS_ROW_HOVER);
 						return column;
 					}
 				}) {
