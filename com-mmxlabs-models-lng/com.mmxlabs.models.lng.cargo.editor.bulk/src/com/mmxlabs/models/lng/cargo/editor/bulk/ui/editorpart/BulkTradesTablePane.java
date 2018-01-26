@@ -698,7 +698,14 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	}
 
 	public void createColumns() {
-		columnBlockManager.setColumnFactory(new EObjectTableViewerColumnFactory(scenarioViewer));
+		columnBlockManager.setColumnFactory(new EObjectTableViewerColumnFactory(scenarioViewer) {
+			@Override
+			public GridViewerColumn createColumn(ColumnHandler handler) {
+				GridViewerColumn gvc = super.createColumn(handler);
+				GridViewerHelper.configureLookAndFeel(gvc, GridViewerHelper.FLAGS_ROW_HOVER);
+				return gvc;
+			}
+		});
 		columnBlockManager.setGrid(scenarioViewer.getGrid());
 		final EClass eclass = (EClass) customRowPackage.getEClassifier("CustomisableRow");
 		// Find any shared column factories and install.
@@ -735,7 +742,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				GridViewerColumn gvcolumn = handler.column;
 				if (gvcolumn == null) {
 					gvcolumn = handler.createColumn();
-					GridViewerHelper.configureLookAndFeel(gvcolumn);
 				}
 				final GridColumn column = gvcolumn.getColumn();
 				// DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
