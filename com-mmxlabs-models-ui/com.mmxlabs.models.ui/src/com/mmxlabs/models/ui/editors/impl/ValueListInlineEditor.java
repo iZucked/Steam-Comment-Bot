@@ -51,10 +51,10 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 		return pairList;
 	}
 
-	private Combo combo;
+	protected Combo combo;
 
-	private final ArrayList<String> names;
-	private final ArrayList<Object> values;
+	protected final ArrayList<String> names;
+	protected final ArrayList<Object> values;
 
 	public ValueListInlineEditor(final EStructuralFeature feature, final List<Pair<String, Object>> values) {
 		super(feature);
