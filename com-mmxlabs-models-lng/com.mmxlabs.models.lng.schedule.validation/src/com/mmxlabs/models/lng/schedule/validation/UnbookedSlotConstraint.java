@@ -44,6 +44,7 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 		if (!LicenseFeatures.isPermitted("features:panama-canal-bookings")) {
 			return Activator.PLUGIN_ID;
 		}
+
 		if (target instanceof Schedule) {
 			Schedule schedule = (Schedule) target;
 
@@ -53,13 +54,13 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 			if (canalBookings == null) {
 				return Activator.PLUGIN_ID;
 			}
-			
+
 			// if (scenarioModel.getPromptPeriodStart() != null && canalBookings != null) {
 			// final LocalDate date = scenarioModel.getPromptPeriodStart();
 			// final LocalDate strictBound = date.plusDays(canalBookings.getStrictBoundaryOffsetDays());
 			// final LocalDate relaxedBound = date.plusDays(canalBookings.getRelaxedBoundaryOffsetDays());
 
-//			int northboundExcessRelaxedBookings = 0;
+			// int northboundExcessRelaxedBookings = 0;
 			int southboundExcessRelaxedBookings = 0;
 			for (Sequence sequence : schedule.getSequences()) {
 				if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
@@ -87,15 +88,15 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-//			if (northboundExcessRelaxedBookings > canalBookings.getFlexibleBookingAmountNorthbound()) {
-//				DetailConstraintStatusFactory f = DetailConstraintStatusFactory.makeStatus() //
-//						.withPrefix("[Evaluated State]") //
-//						.withMessage(String.format("Panama canal: There are %d flexible northbound voyages but only %d permitted.", northboundExcessRelaxedBookings,
-//								canalBookings.getFlexibleBookingAmountNorthbound())) //
-//						.withObjectAndFeature(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND) //
-//				;
-//				statuses.add(f.withSeverity(IStatus.ERROR).make(ctx));
-//			}
+			// if (northboundExcessRelaxedBookings > canalBookings.getFlexibleBookingAmountNorthbound()) {
+			// DetailConstraintStatusFactory f = DetailConstraintStatusFactory.makeStatus() //
+			// .withPrefix("[Evaluated State]") //
+			// .withMessage(String.format("Panama canal: There are %d flexible northbound voyages but only %d permitted.", northboundExcessRelaxedBookings,
+			// canalBookings.getFlexibleBookingAmountNorthbound())) //
+			// .withObjectAndFeature(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND) //
+			// ;
+			// statuses.add(f.withSeverity(IStatus.ERROR).make(ctx));
+			// }
 			if (southboundExcessRelaxedBookings > canalBookings.getFlexibleBookingAmountSouthbound()) {
 				DetailConstraintStatusFactory f = DetailConstraintStatusFactory.makeStatus() //
 						.withPrefix("[Evaluated State] ") //
@@ -151,7 +152,9 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 							f = f.withName(String.format("Journey between %s and %s", fromId, toId));
 
 							if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT) {
-								statuses.add(f.withSeverity(IStatus.ERROR).make(ctx));
+								// Northbound is only a warning
+								int severity = journey.getCanalEntrance() == CanalEntry.SOUTHSIDE ? IStatus.WARNING : IStatus.ERROR;
+								statuses.add(f.withSeverity(severity).make(ctx));
 							} else if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 								statuses.add(f.withSeverity(IStatus.WARNING).make(ctx));
 							}

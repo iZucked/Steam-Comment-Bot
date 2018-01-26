@@ -36,8 +36,9 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.ui.editors.CanalEntryAttributeManipulator;
-import com.mmxlabs.models.lng.port.ui.editors.RouteOptionAttributeManipulator;
+import com.mmxlabs.models.lng.port.ui.editors.PanamaOnlyRouteOptionAttributeManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -317,9 +318,10 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-
-		addTypicalColumn("Entry Point", new CanalEntryAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_CanalEntrance(), getEditingDomain()));
-		addTypicalColumn("Canal", new RouteOptionAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_RouteOption(), getEditingDomain()));
+		final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
+		PortModel portModel = scenarioModel.getReferenceModel().getPortModel();
+		addTypicalColumn("Entry Point", new CanalEntryAttributeManipulator(portModel, CargoPackage.eINSTANCE.getCanalBookingSlot_CanalEntrance(), getEditingDomain()));
+		addTypicalColumn("Canal", new PanamaOnlyRouteOptionAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_RouteOption(), getEditingDomain()));
 		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate(), getEditingDomain()));
 		addTypicalColumn("Slot", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Slot(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
 		addTypicalColumn("Notes", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Notes(), getEditingDomain())));

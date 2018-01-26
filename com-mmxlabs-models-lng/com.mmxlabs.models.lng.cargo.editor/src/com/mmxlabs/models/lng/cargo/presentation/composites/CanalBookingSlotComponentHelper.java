@@ -7,7 +7,7 @@
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-
+import com.mmxlabs.models.lng.port.ui.editors.RouteOptionInlineEditorFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -79,10 +79,10 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the routeOption feature on CanalBookingSlot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_routeOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__ROUTE_OPTION));
+		detailComposite.addInlineEditor(RouteOptionInlineEditorFactory.createPanamaOnlyEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__ROUTE_OPTION));
 	}
 
 	/**
