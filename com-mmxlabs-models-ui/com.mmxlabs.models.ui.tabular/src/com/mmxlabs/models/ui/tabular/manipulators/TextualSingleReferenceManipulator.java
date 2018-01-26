@@ -94,7 +94,8 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 
 	@Override
 	public void doSetValue(final Object object, final Object value) {
-		if (value.equals(-1) || value == null) {
+		if (value.equals(-1) || value == null || value.toString().isEmpty()) {
+			super.runSetCommand(object, SetCommand.UNSET_VALUE);
 			return;
 		}
 		final int idx = names.indexOf(value);
@@ -120,6 +121,9 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 
 			@Override
 			public String isValid(final Object value) {
+				if (value == null || value.toString().isEmpty()) {
+					return null;
+				}
 				if (names.contains(value)) {
 					return null;
 				}
