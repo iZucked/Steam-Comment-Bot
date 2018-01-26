@@ -65,7 +65,7 @@ public class CellRenderer extends GridCellRenderer {
 		gc.setFont(item.getFont(getColumn()));
 
 		boolean drawAsSelected = isSelected();
-		boolean drawAsHover = isColumnHover() && isRowHover();
+		boolean drawAsHover = isDrawAsHover();
 
 		boolean drawBackground = true;
 
@@ -247,6 +247,10 @@ public class CellRenderer extends GridCellRenderer {
 				gc.drawRectangle(focusRect);
 			}
 		}
+	}
+
+	protected boolean isDrawAsHover() {
+		return isColumnHover() && isRowHover();
 	}
 
 	/**

@@ -27,6 +27,9 @@ import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 
 public final class GridViewerHelper {
 
+	public static int FLAGS_NONE = 0;
+	public static int FLAGS_ROW_HOVER = 1;
+
 	public static void configureLookAndFeel(final @NonNull GridTableViewer viewer) {
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
 		viewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
@@ -46,6 +49,20 @@ public final class GridViewerHelper {
 	public static void configureLookAndFeel(final @NonNull GridViewerColumn column) {
 		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		column.getColumn().setCellRenderer(new CellRenderer());
+	}
+
+	public static void configureLookAndFeel(final @NonNull GridViewerColumn column, int flags) {
+		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+		if ((flags & FLAGS_ROW_HOVER) != 0) {
+			column.getColumn().setCellRenderer(new CellRenderer() {
+				@Override
+				public boolean isDrawAsHover() {
+					return isRowHover();
+				}
+			});
+		} else {
+			column.getColumn().setCellRenderer(new CellRenderer());
+		}
 	}
 
 	public static void configureLookAndFeel(final @NonNull GridColumnGroup group) {
