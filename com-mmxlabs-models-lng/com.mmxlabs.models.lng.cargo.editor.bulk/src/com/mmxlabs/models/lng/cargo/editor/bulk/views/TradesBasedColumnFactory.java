@@ -312,9 +312,59 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecontract": {
-			final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Buy at", null, ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+
+			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+
+				@Override
+				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+					ColumnBlock block = blockManager.getBlockByID(columnID);
+					if (block == null) {
+						block = blockManager.createBlock(columnID, "", LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+					}
+					block.setPlaceholder(true);
+					block.setExpandable(true);
+					block.setExpandByDefault(false);
+					block.setForceGroup(true);
+					{
+						final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, editingDomain);
+
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Buy at", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+
+						createColumn.column.getColumn().setSummary(true);
+						createColumn.column.getColumn().setDetail(false);
+
+						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+
+							@Override
+							public void treeExpanded(TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("Buy at");
+
+							}
+
+							@Override
+							public void treeCollapsed(TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("");
+
+							}
+						});
+					}
+
+					{
+						final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Contract(), referenceValueProvider, editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Contract", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					{
+						final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Expression", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.setTooltip("Price expression");
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					return null;
+				}
+			});
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-entity": {
@@ -561,9 +611,60 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescontract": {
-			final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, editingDomain);
-			columnManager.registerColumn("TRADES_TABLE", new SimpleEmfBlockColumnFactory(columnID, "Sell at", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			
+			
+			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+
+				@Override
+				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+					ColumnBlock block = blockManager.getBlockByID(columnID);
+					if (block == null) {
+						block = blockManager.createBlock(columnID, "", DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+					}
+					block.setPlaceholder(true);
+					block.setExpandable(true);
+					block.setExpandByDefault(false);
+					block.setForceGroup(true);
+					{
+						final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, editingDomain);
+
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Sell at", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+
+						createColumn.column.getColumn().setSummary(true);
+						createColumn.column.getColumn().setDetail(false);
+
+						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+
+							@Override
+							public void treeExpanded(TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("Sell at");
+
+							}
+
+							@Override
+							public void treeCollapsed(TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("");
+
+							}
+						});
+					}
+
+					{
+						final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Contract(), referenceValueProvider, editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Contract", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					{
+						final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Expression", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.setTooltip("Price expression");
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					return null;
+				}
+			});
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-entity": {
