@@ -137,13 +137,6 @@
       </TradesBasedRowTransformer>
    </extension>
    <extension
-         point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedMenuFilter">
-      <TradesBasedMenuFilter
-            handler="com.mmxlabs.models.lng.cargo.editor.bulk.views.DefaultTradesBasedFilterHandler"
-            id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedMenuFilter.default">
-      </TradesBasedMenuFilter>
-   </extension>
-   <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">
       <PluginXMLEnablement
             feature="bulk-editor"
