@@ -121,6 +121,15 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 			runSetCommand(object, (String) null);
 		} else {
 			final String text = (String) value;
+			{
+				final Iterable<Pair<String, EObject>> values = valueProvider.getAllowedValues((EObject) object, CargoPackage.eINSTANCE.getSlot_Contract());
+				for (final Pair<String, EObject> v : values) {
+					if (v.getFirst().toLowerCase().equals(text.toLowerCase())) {
+						runSetCommand(object, (Contract) v.getSecond());
+						return;
+					}
+				}
+			}
 			if (NONE.equals(text)) {
 				runSetCommand(object, (Contract) null);
 			} else {
