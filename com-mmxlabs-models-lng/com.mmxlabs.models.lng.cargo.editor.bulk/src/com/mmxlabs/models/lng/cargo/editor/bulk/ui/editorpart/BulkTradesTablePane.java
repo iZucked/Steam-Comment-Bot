@@ -308,10 +308,11 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 		}
 
-		final Action filterAction = new FilterMenuAction("Filter", filterActions.toArray(new Action[filterActions.size()]));
-		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
-		toolbar.appendToGroup(VIEW_GROUP, filterAction);
-
+		if (!filterActions.isEmpty()) {
+			final Action filterAction = new FilterMenuAction("Filter", filterActions.toArray(new Action[filterActions.size()]));
+			filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
+			toolbar.appendToGroup(VIEW_GROUP, filterAction);
+		}
 		deleteAction = createDeleteAction(null); // TODO: NEW check this
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
