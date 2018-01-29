@@ -3039,6 +3039,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
 		createExpressionTypeAnnotations();
+		// http://www.mmxlabs.com/models/overrideFeature
+		createOverrideFeatureAnnotations();
 	}
 
 	/**
@@ -3346,6 +3348,40 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source, 
 		   new String[] {
 			 "type", "commodity"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/overrideFeature</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createOverrideFeatureAnnotations() {
+		String source = "http://www.mmxlabs.com/models/overrideFeature";	
+		addAnnotation
+		  (getSlot_RestrictedContracts(), 
+		   source, 
+		   new String[] {
+		   },
+		   new URI[] {
+			 URI.createURI(eNS_URI).appendFragment("//Slot/overrideRestrictions")
+		   });	
+		addAnnotation
+		  (getSlot_RestrictedPorts(), 
+		   source, 
+		   new String[] {
+		   },
+		   new URI[] {
+			 URI.createURI(eNS_URI).appendFragment("//Slot/overrideRestrictions")
+		   });	
+		addAnnotation
+		  (getSlot_RestrictedListsArePermissive(), 
+		   source, 
+		   new String[] {
+		   },
+		   new URI[] {
+			 URI.createURI(eNS_URI).appendFragment("//Slot/overrideRestrictions")
 		   });
 	}
 

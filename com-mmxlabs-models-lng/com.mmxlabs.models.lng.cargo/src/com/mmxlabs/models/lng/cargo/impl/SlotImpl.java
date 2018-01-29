@@ -9,12 +9,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -30,6 +32,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Location;
@@ -42,6 +45,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -2814,7 +2818,64 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_VolumeLimitsUnit(), VolumeUnits.M3);
 		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS == feature) {
 			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultWindowSizeUnits(), TimePeriod.HOURS);
-		}
+		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (!isOverrideRestrictions() && contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE)) {
+							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE);
+						}
+					}
+					if (result == null) {
+						return false;
+					}
+					return result;
+					
+				}				
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (!isOverrideRestrictions() && contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
+							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
+						}
+					}
+					return result;
+					
+				}				
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final Contract contract = (Contract) getContract();
+					if (!isOverrideRestrictions() && contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
+							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
+						}
+					}
+					return result;
+					
+				}				
+			};
+		} 
 		
 		return super.getUnsetValueOrDelegate(feature);
 	}	

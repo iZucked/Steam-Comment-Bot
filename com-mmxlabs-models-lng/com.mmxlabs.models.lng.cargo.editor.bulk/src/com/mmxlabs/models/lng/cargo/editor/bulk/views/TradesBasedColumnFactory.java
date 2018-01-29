@@ -50,7 +50,6 @@ import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.EnumAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
