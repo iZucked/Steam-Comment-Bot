@@ -57,13 +57,16 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
@@ -373,6 +376,12 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					
 					if (element instanceof CompositeRow) {
 						final Row row = ((CompositeRow) element).getPreviousRow();
+
+						final Sequence sequence = row.getSequence();
+						if (checkVesselNameEquality(sequence, scenarioComparisonService.getSelectedElements())) {
+							return row.isVisible();
+						}
+						
 						if (!scenarioComparisonService.getSelectedElements().contains(row.getSequence())) {
 							return false;
 						}
@@ -380,6 +389,12 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 					if (element instanceof Row) {
 						final Row row = (Row) element;
+						final Sequence sequence = row.getSequence();
+						
+						if (checkVesselNameEquality(sequence, scenarioComparisonService.getSelectedElements())) {
+							return row.isVisible();
+						}
+
 						if (!scenarioComparisonService.getSelectedElements().contains(row.getSequence())) {
 							return false;
 						}
@@ -598,6 +613,35 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			previousRow.setRowGroup(rowGroup);
 			pinnedRow.setRowGroup(rowGroup);
 		}
-		
+	}
+	
+	private boolean checkVesselNameEquality(Sequence sequence, Collection<Object> selectedElement) {
+		String name1 = getVesselName(sequence);
+		if (name1 != null) {
+			for (Object object : selectedElement) {
+				if (object instanceof Sequence) {
+					Sequence selectedSequence = (Sequence) object;
+					String name2 = getVesselName(selectedSequence);
+					if (name2 != null) {
+						return name1.equals(name2);
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	private String getVesselName(Sequence sequence) {
+		if (sequence != null) {
+			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+			if (vesselAvailability != null) {
+				final com.mmxlabs.models.lng.fleet.Vessel vessel = vesselAvailability.getVessel();
+				if (vessel != null) {
+					final String vesselName = vessel.getName();
+					return vesselName;
+				}
+			}
+		}
+		return null;
 	}
 }
