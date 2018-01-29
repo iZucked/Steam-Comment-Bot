@@ -187,50 +187,34 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 				if (formatter instanceof CostFormatter) {
 					CostFormatter costFormatter = (CostFormatter) formatter;
 					CostFormatter.Type typeFormatter = costFormatter.getType();
-					if (typeFormatter == CostFormatter.Type.COST) {
-						String formattedValue = cell.getText();
-						if (formattedValue != null) {
-							List<String> nullValues = new ArrayList<>();
-							nullValues.add("0");
-							nullValues.add("$0");
-							nullValues.add("$0mmbtu");
-							nullValues.add("0mmbtu");
+					String formattedValue = cell.getText();
 
-							if (nullValues.contains(formattedValue.toLowerCase())) {
-								//cell.setImage(cellImageSteadyArrow);
-							} else {
+					if (formattedValue != null) {
+						List<String> nullValues = new ArrayList<>();
+						nullValues.add("0");
+						nullValues.add("$0");
+						nullValues.add("$0mmbtu");
+						nullValues.add("0mmbtu");
+
+						if (!nullValues.contains(formattedValue.toLowerCase())) {
+							if (typeFormatter == CostFormatter.Type.COST) {
 								if (formattedValue.contains("-")) {
 									cell.setImage(cellImageGreenArrowDown);
 								} else if (!formattedValue.contains("-")) {
 									cell.setImage(cellImageRedArrowUp);
 								}
-							}
-						}
-
-					} else if (typeFormatter == CostFormatter.Type.REVENUE) {
-						String formattedValue = cell.getText();
-						if (formattedValue != null) {
-							List<String> nullValues = new ArrayList<>();
-							nullValues.add("0");
-							nullValues.add("$0");
-							nullValues.add("$0mmbtu");
-							nullValues.add("0mmbtu");
-
-							if (nullValues.contains(formattedValue.toLowerCase())) {
-								//cell.setImage(cellImageSteadyArrow);
-							} else {
+							} else if (typeFormatter == CostFormatter.Type.REVENUE) {
 								if (formattedValue.contains("-")) {
-
-									cell.setImage(cellImageGreenArrowUp);
-								} else if (!formattedValue.contains("-")) {
 									cell.setImage(cellImageRedArrowDown);
+								} else if (!formattedValue.contains("-")) {
+									cell.setImage(cellImageGreenArrowUp);
 								}
 							}
 						}
 					}
 				}
 			}
-			
+
 			@Override
 			public void update(final ViewerCell cell) {
 
