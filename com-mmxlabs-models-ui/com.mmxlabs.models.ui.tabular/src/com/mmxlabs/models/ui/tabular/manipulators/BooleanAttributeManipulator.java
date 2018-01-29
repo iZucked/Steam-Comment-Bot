@@ -63,13 +63,23 @@ public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public String render(final Object object) {
-		Integer value = (Integer) getValue(object);
-		if (value == 0) {
-			return trueString;
-		}
-		if (value == 1) {
-			return falseString;
+	protected String renderSetValue(final Object container, final Object setValue) {
+		if (setValue instanceof Boolean) {
+			Boolean value = (Boolean) setValue;
+			if (value == Boolean.TRUE) {
+				return trueString;
+			}
+			if (value == Boolean.FALSE) {
+				return falseString;
+			}
+		} else if (setValue instanceof Integer) {
+			Integer value = (Integer) setValue;
+			if (value == 0) {
+				return trueString;
+			}
+			if (value == 1) {
+				return falseString;
+			}
 		}
 		return "";
 	}

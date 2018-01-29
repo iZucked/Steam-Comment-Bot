@@ -48,7 +48,11 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 		overrideAnnotation = field == null ? null : field.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
 		if (overrideAnnotation != null) {
-			if (field.isUnsettable()) {
+			EAnnotation overrideFeatureAnnotation = field == null ? null : field.getEAnnotation("http://www.mmxlabs.com/models/overrideFeature");
+			if (overrideFeatureAnnotation != null) {
+				isOverridable = true;
+				overrideToggleFeature = (EStructuralFeature) overrideFeatureAnnotation.getReferences().get(0);
+			} else if (field.isUnsettable()) {
 				isOverridable = true;
 			} else {
 				if (field.isMany()) {
@@ -77,6 +81,12 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 			return null;
 		}
 
+		if (overrideToggleFeature != null) {
+			if (!(Boolean) ((EObject) object).eGet(overrideToggleFeature)) {
+				return renderUnsetValue(object, (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : null);
+			}
+		}
+		
 		if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
 			if (isOverridable) {
 				EList<EObject> references = overrideAnnotation.getReferences();
@@ -171,6 +181,12 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object == null) {
 			return null;
 		}
+		if (overrideToggleFeature != null) {
+			if (!(Boolean) ((EObject) object).eGet(overrideToggleFeature)) {
+				return SetCommand.UNSET_VALUE;
+			}
+		}
+
 		if (field.isUnsettable() && ((EObject) object).eIsSet(field) == false)
 			return SetCommand.UNSET_VALUE;
 		final Object result = ((EObject) object).eGet(field);
@@ -185,6 +201,9 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	public boolean isValueUnset(final Object object) {
 		if (object == null) {
 			return false;
+		}
+		if (overrideToggleFeature != null) {
+			return !(Boolean) ((EObject) object).eGet(overrideToggleFeature);
 		}
 		if (field.isUnsettable() && ((EObject) object).eIsSet(field) == false) {
 			return true;

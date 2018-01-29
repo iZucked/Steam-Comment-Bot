@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -108,7 +109,11 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		dlg.setTitle("Value Selection");
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
-		final Collection<EObject> sel = (Collection<EObject>) getValue(object);
+		Object value = getValue(object);
+		if (value == SetCommand.UNSET_VALUE) {
+			return null;
+		}
+		final Collection<EObject> sel = (Collection<EObject>) value;
 		for (final Pair<String, EObject> p : options) {
 			if (sel.contains(p.getSecond())) {
 				selectedOptions.add(p);
