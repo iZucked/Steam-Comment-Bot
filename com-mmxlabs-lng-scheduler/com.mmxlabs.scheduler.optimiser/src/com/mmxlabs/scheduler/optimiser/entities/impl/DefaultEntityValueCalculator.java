@@ -48,9 +48,9 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.Repositioning
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelValueRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
@@ -178,8 +178,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			idx++;
 		}
 
-		// The first load entity
-		IEntity baseEntity = null;
 		// calculate load prices
 		idx = 0;
 		for (final IPortSlot slot : slots) {
@@ -193,11 +191,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				assert entity != null;
 				cargoPNLData.setSlotEntity(slot, entity);
 				seenEntities.add(entity);
-
-				// First load slot is the base entity
-				if (baseEntity == null) {
-					baseEntity = entity;
-				}
 
 				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
 				final ILoadOption loadOption = (ILoadOption) slot;
@@ -234,8 +227,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			idx++;
 		}
 
-		assert baseEntity != null;
-
 		// Calculate additional P&L
 		idx = 0;
 		for (final IPortSlot slot : slots) {
@@ -257,7 +248,19 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Calculate transfer pricing etc between entities
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
-		evaluateCargoPNL(evaluationMode, vesselAvailability, plan, cargoPNLData, baseEntity, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		evaluateCargoPNL(evaluationMode, vesselAvailability, plan, cargoPNLData,  entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+
+		// The first load entity
+		IEntity baseEntity = null;
+		for (final IPortSlot slot : slots) {
+			if (slot instanceof ILoadOption) {
+				// First load slot is the base entity
+				baseEntity = cargoPNLData.getSlotEntity(slot);
+				break;
+			}
+		}
+
+		assert baseEntity != null;
 
 		// Shipping Entity for non-cargo costings - handle any transfer pricing etc required
 		IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
@@ -381,14 +384,19 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param entityProfit
 	 */
 	protected void evaluateCargoPNL(@NonNull final EvaluationMode evaluationMode, @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan plan,
-			@NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final IEntity baseEntity, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit,
+			@NonNull final CargoValueAnnotation cargoPNLData, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit,
 			@Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
+		IEntity baseEntity = null;
+		
 		int idx = 0;
 		for (final IPortSlot slot : cargoPNLData.getSlots()) {
 			assert slot != null;
 			final IEntity entity = cargoPNLData.getSlotEntity(slot);
 			assert entity != null;
+			if (baseEntity == null) {
+				baseEntity = entity;
+			}
 
 			final long hedgeValue = hedgesProvider.getHedgeValue(slot);
 			final long miscCostsValue = miscCostsProvider.getCostsValue(slot);
