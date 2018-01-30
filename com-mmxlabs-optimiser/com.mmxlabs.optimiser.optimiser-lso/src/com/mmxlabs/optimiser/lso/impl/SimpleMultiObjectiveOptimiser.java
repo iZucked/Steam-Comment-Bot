@@ -18,8 +18,10 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -41,6 +43,7 @@ import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.optimiser.optimiser.lso.parallellso.MultiObjectiveUtils;
 
 /**
  * A sub-class of {@link DefaultLocalSearchOptimiser} implementing a multi-objective algorithm.
@@ -50,17 +53,22 @@ import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
  */
 public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 
-	private static final boolean DEBUG = false;
+	@Inject
+	Injector injector;
 
 	@Inject
 	protected IFitnessHelper fitnessHelper;
 
-	protected List<Pair<ISequences, long[]>> archive = new ArrayList<>();
+	protected List<NonDominatedSolution> archive = new ArrayList<>();
 
 	IMultiObjectiveFitnessEvaluator multiObjectiveFitnessEvaluator;
 	List<IFitnessComponent> fitnessComponents;
 
 	private final Random r;
+
+	@Inject
+	@Named(LocalSearchOptimiserModule.OPTIMISER_DEBUG_MODE)
+	protected boolean DEBUG;
 
 	@Inject
 	@Named(LocalSearchOptimiserModule.SIMILARITY_SETTING)
@@ -101,7 +109,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			initNextIteration();
 
 			// choose a solution from the archive
-			ISequences nonDominatedSolution = (ISequences) archive.get(r.nextInt(archive.size())).getFirst();
+			ISequences nonDominatedSolution = (ISequences) archive.get(r.nextInt(archive.size())).getSequences();
 			updateSequences(nonDominatedSolution, pinnedPotentialRawSequences, nonDominatedSolution.getResources());
 			updateSequencesLookup(pinnedPotentialRawSequences, nonDominatedSolution.getResources());
 
@@ -161,8 +169,8 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		}
 		if (DEBUG) {
 			System.out.println("-------------");
-			List<Pair<ISequences, long[]>> sortedValues = getSortedArchive(archive, 1);
-			sortedValues.forEach(v -> System.out.println(String.format("[%s-start,%s],", v.getSecond()[0] * -1, v.getSecond()[1])));
+			List<NonDominatedSolution> sortedValues = getSortedArchive(archive, 1);
+			sortedValues.forEach(v -> System.out.println(String.format("[%s-start,%s],", v.getFitnesses()[0] * -1, v.getFitnesses()[1])));
 		}
 		setNumberOfIterationsCompleted(numberOfMovesTried);
 
@@ -170,9 +178,9 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return iterationsThisStep;
 	}
 
-	List<Pair<ISequences, long[]>> getSortedArchive(List<Pair<ISequences, long[]>> archive, int objectiveIndex) {
-		List<Pair<ISequences, long[]>> sortedValues = archive.stream().sorted((a, b) -> Long.compare(a.getSecond()[objectiveIndex], b.getSecond()[objectiveIndex])).collect(Collectors.toList());
-		return sortedValues;
+	protected List<NonDominatedSolution> getSortedArchive(List<NonDominatedSolution> archive, int objectiveIndex) {
+		List<NonDominatedSolution> sortedValues = archive.stream().sorted((a, b) -> Long.compare(a.getFitnesses()[objectiveIndex], b.getFitnesses()[objectiveIndex])).collect(Collectors.toList());
+		return MultiObjectiveUtils.filterArchive(archive, objectiveIndex, new long[] {200_000, 0});
 	}
 
 	long[] addSequenceToArchiveIfNonDominated(final ModifiableSequences pinnedPotentialRawSequences, final IMove move, final IModifiableSequences potentialFullSequences,
@@ -180,19 +188,24 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		long[] fitnesses = getMultiObjectiveFitnessEvaluator().getCombinedFitnessAndObjectiveValuesForComponentClasses(pinnedPotentialRawSequences, potentialFullSequences, evaluationState,
 				move.getAffectedResources(), fitnessComponents);
 		if (fitnesses != null) {
-			boolean nonDominated = isDominated(archive, fitnesses);
-			if (nonDominated) {
-				archive.add(new Pair<>(new Sequences(pinnedPotentialRawSequences), fitnesses));
-			}
+			addSolutionToNonDominatedArchive(pinnedPotentialRawSequences, fitnesses);
 		}
 		return fitnesses;
 	}
 
-	private boolean isDominated(List<Pair<ISequences, long[]>> archive, long[] thisFitness) {
+	protected boolean addSolutionToNonDominatedArchive(final ISequences pinnedPotentialRawSequences, long[] fitnesses) {
+		boolean nonDominated = isDominated(archive, fitnesses);
+		if (nonDominated) {
+			archive.add(new NonDominatedSolution(new Sequences(pinnedPotentialRawSequences), fitnesses, null));
+		}
+		return nonDominated;
+	}
+
+	protected boolean isDominated(List<NonDominatedSolution> archive, long[] thisFitness) {
 		List<ISequences> dominated = new LinkedList<>();
 		boolean add = true;
-		for (Pair<ISequences, long[]> other : archive) {
-			long[] otherFitness = other.getSecond();
+		for (NonDominatedSolution other : archive) {
+			long[] otherFitness = other.getFitnesses();
 			if (!atLeastOneObjectiveLower(thisFitness, otherFitness)) {
 				// this solution is dominated
 				add = false;
@@ -200,13 +213,13 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			}
 			if (allObjectivesLower(thisFitness, otherFitness)) {
 				// new solution dominates
-				dominated.add(other.getFirst());
+				dominated.add(other.getSequences());
 			} else if (allObjectivesLowerOrEqual(thisFitness, otherFitness)) {
-				dominated.add(other.getFirst());
+				dominated.add(other.getSequences());
 			}
 		}
 		for (ISequences a : dominated) {
-			archive.removeIf(b -> b.getFirst().equals(a));
+			archive.removeIf(b -> b.getSequences().equals(a));
 		}
 		return add;
 	}
@@ -277,7 +290,9 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 
 		// add to archive
 		if (archive.size() == 0) {
-			archive.add(new Pair<>(currentRawSequences, fitnesses));
+			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
+            lookupManager.createLookup(currentRawSequences);
+			archive.add(new NonDominatedSolution(currentRawSequences, fitnesses, lookupManager));
 		}
 	}
 
@@ -291,12 +306,12 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return getBestRawSequences(archive, 4, 0);
 	}
 	
-	public List<Pair<ISequences,long[]>> getSortedArchive() {
+	public List<NonDominatedSolution> getSortedArchive() {
 		return getSortedArchive(archive, 0);
 	}
 
-	public ISequences getBestRawSequences(List<Pair<ISequences, long[]>> unsortedArchive, int noGroups, int objectiveIndex) {
-		return findSolutionWhichReachesQuartile(archive, objectiveIndex, mapSimilarityModeToQuartile(similarityFitnessMode), true).getFirst();
+	public ISequences getBestRawSequences(List<NonDominatedSolution> unsortedArchive, int noGroups, int objectiveIndex) {
+		return findSolutionWhichReachesQuartile(archive, objectiveIndex, mapSimilarityModeToQuartile(similarityFitnessMode), true).getSequences();
 	}
 
 	private eQuartile mapSimilarityModeToQuartile(SimilarityFitnessMode similarityFitnessMode) {
@@ -312,30 +327,30 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		}
 	}
 
-	private ISequences chooseSimilaritySolutionFromWholeArchive(List<Pair<ISequences, long[]>> sortedArchive, SimilarityFitnessMode similarityFitnessMode) {
+	private ISequences chooseSimilaritySolutionFromWholeArchive(List<NonDominatedSolution> sortedArchive, SimilarityFitnessMode similarityFitnessMode) {
 		switch (similarityFitnessMode) {
 		case HIGH:
 			if (sortedArchive.size() > 1) {
-				return sortedArchive.get(1).getFirst();
+				return sortedArchive.get(1).getSequences();
 			} else {
-				return sortedArchive.get(0).getFirst();
+				return sortedArchive.get(0).getSequences();
 			}
 		case MEDIUM:
 			if (sortedArchive.size() > 2) {
-				return sortedArchive.get(sortedArchive.size() - 1).getFirst();
+				return sortedArchive.get(sortedArchive.size() - 1).getSequences();
 			} else if (sortedArchive.size() > 1) {
-				return sortedArchive.get(1).getFirst();
+				return sortedArchive.get(1).getSequences();
 			} else {
-				return sortedArchive.get(0).getFirst();
+				return sortedArchive.get(0).getSequences();
 			}
 		case LOW:
 		case OFF:
 		default:
-			return sortedArchive.get(sortedArchive.size() - 1).getFirst();
+			return sortedArchive.get(sortedArchive.size() - 1).getSequences();
 		}
 	}
 
-	private ISequences chooseSimilaritySolutionFromDividedSolutions(List<List<Pair<ISequences, long[]>>> spatiallyDividedSolutions, SimilarityFitnessMode similarityFitnessMode, long base) {
+	private ISequences chooseSimilaritySolutionFromDividedSolutions(List<List<NonDominatedSolution>> spatiallyDividedSolutions, SimilarityFitnessMode similarityFitnessMode, long base) {
 		int index;
 		switch (similarityFitnessMode) {
 		case LOW:
@@ -352,7 +367,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			index = 3;
 			break;
 		}
-		List<Pair<ISequences, long[]>> solutions = spatiallyDividedSolutions.get(index);
+		List<NonDominatedSolution> solutions = spatiallyDividedSolutions.get(index);
 		ISequences bestSolution;
 		boolean movedUp = false;
 		// if no solutions in bracket move up
@@ -362,19 +377,19 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			movedUp = true;
 		}
 		if (!movedUp) {
-			bestSolution = findBestFitnessRatio(solutions, 0, 1, base).getFirst();
+			bestSolution = findBestFitnessRatio(solutions, 0, 1, base).getSequences();
 		} else {
-			bestSolution = solutions.get(0).getFirst();
+			bestSolution = solutions.get(0).getSequences();
 		}
 		return bestSolution;
 	}
 
-	private Pair<ISequences, long[]> findBestFitnessRatio(List<Pair<ISequences, long[]>> solutions, int objectiveA, int objectiveB, long base) {
+	private NonDominatedSolution findBestFitnessRatio(List<NonDominatedSolution> solutions, int objectiveA, int objectiveB, long base) {
 		long bestRatio = Long.MIN_VALUE;
 		int bestIndex = 0;
 		int index = 0;
-		for (Pair<ISequences, long[]> solution : solutions) {
-			long[] fitnesses = solution.getSecond();
+		for (NonDominatedSolution solution : solutions) {
+			long[] fitnesses = solution.getFitnesses();
 			long ratio = (fitnesses[objectiveA] - base) / fitnesses[objectiveB];
 			if (ratio > bestRatio) {
 				bestRatio = ratio;
@@ -385,21 +400,21 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return solutions.get(bestIndex);
 	}
 
-	List<List<Pair<ISequences, long[]>>> getSpatiallyDividedSolutions(List<Pair<ISequences, long[]>> sortedArchive, int noGroups, int objectiveIndex) {
-		long[] xDivisions = getXDivisions(noGroups, sortedArchive.get(0).getSecond()[objectiveIndex], sortedArchive.get(sortedArchive.size() - 1).getSecond()[objectiveIndex]);
+	List<List<NonDominatedSolution>> getSpatiallyDividedSolutions(List<NonDominatedSolution> sortedArchive, int noGroups, int objectiveIndex) {
+		long[] xDivisions = getXDivisions(noGroups, sortedArchive.get(0).getFitnesses()[objectiveIndex], sortedArchive.get(sortedArchive.size() - 1).getFitnesses()[objectiveIndex]);
 		if (xDivisions == null) {
 			return null;
 		}
-		List<List<Pair<ISequences, long[]>>> divides = new ArrayList<>(noGroups);
+		List<List<NonDominatedSolution>> divides = new ArrayList<>(noGroups);
 		int lastIndex = 0;
 		// divide
 		for (int i = 0; i < xDivisions.length - 1; i++) {
 			long exclusiveStart = xDivisions[i];
 			long inclusiveEnd = xDivisions[i + 1];
-			List<Pair<ISequences, long[]>> groupList = new ArrayList<>();
+			List<NonDominatedSolution> groupList = new ArrayList<>();
 			for (int j = lastIndex; j < sortedArchive.size(); j++) {
-				Pair<ISequences, long[]> entry = sortedArchive.get(j);
-				long[] fitnesses = entry.getSecond();
+				NonDominatedSolution entry = sortedArchive.get(j);
+				long[] fitnesses = entry.getFitnesses();
 				if (fitnesses[objectiveIndex] > exclusiveStart && fitnesses[objectiveIndex] <= inclusiveEnd) {
 					groupList.add(entry);
 				} else {
@@ -431,8 +446,8 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return divisions;
 	}
 
-	Pair<ISequences, long[]> findSolutionWhichReachesQuartile(List<Pair<ISequences, long[]>> unsortedArchive, int objectiveIndex, eQuartile quartile, boolean minimise) {
-		List<Pair<ISequences, long[]>> sortedArchive = getSortedArchive(unsortedArchive, objectiveIndex);
+	NonDominatedSolution findSolutionWhichReachesQuartile(List<NonDominatedSolution> unsortedArchive, int objectiveIndex, eQuartile quartile, boolean minimise) {
+		List<NonDominatedSolution> sortedArchive = getSortedArchive(unsortedArchive, objectiveIndex);
 		long bestFitness, worstFitness;
 		// error checks
 		if (sortedArchive.size() == 0) {
@@ -442,11 +457,11 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		}
 		// create iterator
 		if (minimise) {
-			bestFitness = sortedArchive.get(0).getSecond()[objectiveIndex];
-			worstFitness = sortedArchive.get(sortedArchive.size() - 1).getSecond()[objectiveIndex];
+			bestFitness = sortedArchive.get(0).getFitnesses()[objectiveIndex];
+			worstFitness = sortedArchive.get(sortedArchive.size() - 1).getFitnesses()[objectiveIndex];
 		} else {
-			bestFitness = sortedArchive.get(sortedArchive.size() - 1).getSecond()[objectiveIndex];
-			worstFitness = sortedArchive.get(0).getSecond()[objectiveIndex];
+			bestFitness = sortedArchive.get(sortedArchive.size() - 1).getFitnesses()[objectiveIndex];
+			worstFitness = sortedArchive.get(0).getFitnesses()[objectiveIndex];
 		}
 		long oneQuartile = (worstFitness - bestFitness) / 4;
 		if (minimise) {
@@ -467,8 +482,8 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			desiredQuartile = worstFitness + 3 * oneQuartile;
 			break;
 		}
-		ListIterator<Pair<ISequences, long[]>> iterator = getIterator(minimise, sortedArchive);
-		Pair<ISequences, long[]> solution = chooseSolution(objectiveIndex, minimise, desiredQuartile, desiredQuartile + oneQuartile, iterator);
+		ListIterator<NonDominatedSolution> iterator = getIterator(minimise, sortedArchive);
+		NonDominatedSolution solution = chooseSolution(objectiveIndex, minimise, desiredQuartile, desiredQuartile + oneQuartile, iterator);
 		if (solution == null && sortedArchive.size() > 0) {
 			iterator = getIterator(minimise, sortedArchive);
 			solution = chooseClosestToDesiredQuartile(objectiveIndex, minimise, desiredQuartile, desiredQuartile + oneQuartile, iterator);
@@ -481,8 +496,8 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		}
 	}
 
-	private ListIterator<Pair<ISequences, long[]>> getIterator(boolean minimise, List<Pair<ISequences, long[]>> sortedArchive) {
-		ListIterator<Pair<ISequences, long[]>> iterator;
+	private ListIterator<NonDominatedSolution> getIterator(boolean minimise, List<NonDominatedSolution> sortedArchive) {
+		ListIterator<NonDominatedSolution> iterator;
 		if (minimise) {
 			iterator = sortedArchive.listIterator(sortedArchive.size());
 		} else {
@@ -491,14 +506,14 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return iterator;
 	}
 
-	private Pair<ISequences, long[]> chooseSolution(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<Pair<ISequences, long[]>> iterator) {
+	private NonDominatedSolution chooseSolution(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<NonDominatedSolution> iterator) {
 		return chooseMiddleInQuartile(objectiveIndex, minimise, desiredQuartile, endOfDesiredQuarter, iterator);
 	}
 
-	private Pair<ISequences, long[]> chooseFirstInQuartile(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<Pair<ISequences, long[]>> iterator) {
+	private NonDominatedSolution chooseFirstInQuartile(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<NonDominatedSolution> iterator) {
 		while (quartileIteratorHasNext(iterator, minimise)) {
-			Pair<ISequences, long[]> entry = iterateQuartileIterator(iterator, minimise);
-			long[] fitnesses = entry.getSecond();
+			NonDominatedSolution entry = iterateQuartileIterator(iterator, minimise);
+			long[] fitnesses = entry.getFitnesses();
 			if (minimise) {
 				if (fitnesses[objectiveIndex] < desiredQuartile) {
 					return entry;
@@ -512,11 +527,11 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return null;
 	}
 
-	private Pair<ISequences, long[]> chooseMiddleInQuartile(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<Pair<ISequences, long[]>> iterator) {
-		List<Pair<ISequences, long[]>> candidates = new ArrayList<Pair<ISequences, long[]>>();
+	private NonDominatedSolution chooseMiddleInQuartile(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<NonDominatedSolution> iterator) {
+		List<NonDominatedSolution> candidates = new ArrayList<>();
 		while (quartileIteratorHasNext(iterator, minimise)) {
-			Pair<ISequences, long[]> entry = iterateQuartileIterator(iterator, minimise);
-			long[] fitnesses = entry.getSecond();
+			NonDominatedSolution entry = iterateQuartileIterator(iterator, minimise);
+			long[] fitnesses = entry.getFitnesses();
 			if (minimise) {
 				if (fitnesses[objectiveIndex] < desiredQuartile && fitnesses[objectiveIndex] > endOfDesiredQuarter) {
 					candidates.add(entry);
@@ -529,7 +544,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		}
 		if (candidates.size() > 0) {
 			if (DEBUG) {
-				System.out.println("choosing:" + Arrays.toString(candidates.get(((candidates.size() + 1) / 2) - 1).getSecond()));
+				System.out.println("choosing:" + Arrays.toString(candidates.get(((candidates.size() + 1) / 2) - 1).getFitnesses()));
 			}
 			return candidates.get(((candidates.size() + 1) / 2) - 1);
 		} else {
@@ -537,10 +552,10 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		}
 	}
 	
-	private Pair<ISequences, long[]> chooseClosestToDesiredQuartile(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<Pair<ISequences, long[]>> iterator) {
+	private NonDominatedSolution chooseClosestToDesiredQuartile(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<NonDominatedSolution> iterator) {
 		while (quartileIteratorHasNext(iterator, minimise)) {
-			Pair<ISequences, long[]> entry = iterateQuartileIterator(iterator, minimise);
-			long[] fitnesses = entry.getSecond();
+			NonDominatedSolution entry = iterateQuartileIterator(iterator, minimise);
+			long[] fitnesses = entry.getFitnesses();
 			if (minimise) {
 				if (fitnesses[objectiveIndex] < desiredQuartile) {
 					return entry;
@@ -554,7 +569,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return null;
 	}
 
-	private Pair<ISequences, long[]> iterateQuartileIterator(ListIterator<Pair<ISequences, long[]>> iterator, boolean minimise) {
+	private NonDominatedSolution iterateQuartileIterator(ListIterator<NonDominatedSolution> iterator, boolean minimise) {
 		if (minimise) {
 			return iterator.previous();
 		} else {
@@ -562,7 +577,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		}
 	}
 
-	private boolean quartileIteratorHasNext(ListIterator<Pair<ISequences, long[]>> iterator, boolean minimise) {
+	private boolean quartileIteratorHasNext(ListIterator<NonDominatedSolution> iterator, boolean minimise) {
 		if (minimise) {
 			return iterator.hasPrevious();
 		} else {

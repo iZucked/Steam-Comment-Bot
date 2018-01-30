@@ -34,6 +34,7 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.SimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
+import com.mmxlabs.optimiser.optimiser.lso.parallellso.ProcessorAgnosticParallelLSO;
 
 /**
  * A {@link Guice} module to provide a Local Search optimiser
@@ -52,6 +53,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	public static final String SIMILARITY_SETTING = "LSO_MODULE_SIMILARITY_SETTING";
 	public static final String NEW_SIMILARITY_OPTIMISER = "LSO_MODULE_SIMILARITY_OPTIMISER";
 	public static final String MULTIOBJECTIVE_OBJECTIVE_FITNESS_COMPONENTS = "MULTIOBJECTIVE_FITNESS_COMPONENTS";
+	public static final String OPTIMISER_DEBUG_MODE = "OPTIMISER_DEBUG_MODE";
 
 	@Override
 	protected void configure() {
@@ -119,6 +121,38 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 		return lso;
 	}
 
+	@Provides
+	@Singleton
+	ArbitraryStateLocalSearchOptimiser buildSolutionImprovingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+			@NonNull final IMoveGenerator moveGenerator, @Named(SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS) final int numberOfIterations,
+			@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
+			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
+			@NonNull final List<@NonNull IFitnessComponent> fitnessComponents) {
+	
+		final ArbitraryStateLocalSearchOptimiser lso = new ArbitraryStateLocalSearchOptimiser();
+	
+		// TODO: Put in the LinearFitnessEvaluatorModule as named provider
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(new GreedyThresholder(), fitnessComponents, evaluationProcesses);
+		injector.injectMembers(fitnessEvaluator);
+	
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, randomSeed);
+	
+		return lso;
+	}
+
+	@Provides
+	@Singleton
+	ProcessorAgnosticParallelLSO buildParallelLSOOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
+			@NonNull final List<IConstraintChecker> constraintCheckers, @NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
+			@NonNull final List<IEvaluationProcess> evaluationProcesses, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
+
+		final ProcessorAgnosticParallelLSO lso = new ProcessorAgnosticParallelLSO();
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, seed);
+
+		return lso;
+	}
+
 	private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator, @NonNull final IMoveGenerator moveGenerator,
 			@NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
 			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
@@ -138,25 +172,6 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 
 		lso.setRandom(new Random(seed));
 
-	}
-
-	@Provides
-	@Singleton
-	ArbitraryStateLocalSearchOptimiser buildSolutionImprovingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-			@NonNull final IMoveGenerator moveGenerator, @Named(SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS) final int numberOfIterations,
-			@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
-			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
-			@NonNull final List<@NonNull IFitnessComponent> fitnessComponents) {
-
-		final ArbitraryStateLocalSearchOptimiser lso = new ArbitraryStateLocalSearchOptimiser();
-
-		// TODO: Put in the LinearFitnessEvaluatorModule as named provider
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(new GreedyThresholder(), fitnessComponents, evaluationProcesses);
-		injector.injectMembers(fitnessEvaluator);
-
-		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, randomSeed);
-
-		return lso;
 	}
 
 }

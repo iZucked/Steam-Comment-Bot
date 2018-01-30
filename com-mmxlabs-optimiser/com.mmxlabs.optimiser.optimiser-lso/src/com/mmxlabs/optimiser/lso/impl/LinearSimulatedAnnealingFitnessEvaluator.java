@@ -296,6 +296,12 @@ public class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessEvaluat
 	public Map<String, Long> getBestFitnesses() {
 		return bestFitnesses;
 	}
+	
+	@Override
+	public void setBestFitnesses(Map<String, Long> fitnesses) {
+		bestFitnesses.clear();
+		bestFitnesses.putAll(fitnesses);
+	}
 
 	@Override
 	public IAnnotatedSolution getBestAnnotatedSolution() {

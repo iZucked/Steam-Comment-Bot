@@ -6,6 +6,7 @@ package com.mmxlabs.optimiser.core.fitness;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -126,5 +127,7 @@ public interface IFitnessEvaluator {
 	void step();
 
 	void restart();
+
+	void setBestFitnesses(Map<String, Long> fitnesses);
 
 }
