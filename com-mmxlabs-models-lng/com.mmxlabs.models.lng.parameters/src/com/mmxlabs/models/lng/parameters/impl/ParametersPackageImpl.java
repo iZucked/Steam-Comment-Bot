@@ -26,10 +26,15 @@ import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.MultiobjectiveSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -195,6 +200,41 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	private EClass multipleSolutionSimilarityOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass parallelMultipleSolutionSimilarityOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass parallelHillClimbOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass parallelLocalSearchOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass multiobjectiveSimilarityOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass parallelMultiobjectiveSimilarityOptimisationStageEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -960,6 +1000,51 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getParallelMultipleSolutionSimilarityOptimisationStage() {
+		return parallelMultipleSolutionSimilarityOptimisationStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getParallelHillClimbOptimisationStage() {
+		return parallelHillClimbOptimisationStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getParallelLocalSearchOptimisationStage() {
+		return parallelLocalSearchOptimisationStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getMultiobjectiveSimilarityOptimisationStage() {
+		return multiobjectiveSimilarityOptimisationStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getParallelMultiobjectiveSimilarityOptimisationStage() {
+		return parallelMultiobjectiveSimilarityOptimisationStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EEnum getSimilarityMode() {
 		return similarityModeEEnum;
@@ -1084,6 +1169,16 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		multipleSolutionSimilarityOptimisationStageEClass = createEClass(MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE);
 
+		parallelMultipleSolutionSimilarityOptimisationStageEClass = createEClass(PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE);
+
+		parallelHillClimbOptimisationStageEClass = createEClass(PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE);
+
+		parallelLocalSearchOptimisationStageEClass = createEClass(PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE);
+
+		multiobjectiveSimilarityOptimisationStageEClass = createEClass(MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE);
+
+		parallelMultiobjectiveSimilarityOptimisationStageEClass = createEClass(PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE);
+
 		// Create enums
 		similarityModeEEnum = createEEnum(SIMILARITY_MODE);
 	}
@@ -1139,6 +1234,11 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		insertionOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		breakEvenOptimisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
 		multipleSolutionSimilarityOptimisationStageEClass.getESuperTypes().add(this.getLocalSearchOptimisationStage());
+		parallelMultipleSolutionSimilarityOptimisationStageEClass.getESuperTypes().add(this.getMultipleSolutionSimilarityOptimisationStage());
+		parallelHillClimbOptimisationStageEClass.getESuperTypes().add(this.getHillClimbOptimisationStage());
+		parallelLocalSearchOptimisationStageEClass.getESuperTypes().add(this.getLocalSearchOptimisationStage());
+		multiobjectiveSimilarityOptimisationStageEClass.getESuperTypes().add(this.getMultipleSolutionSimilarityOptimisationStage());
+		parallelMultiobjectiveSimilarityOptimisationStageEClass.getESuperTypes().add(this.getMultiobjectiveSimilarityOptimisationStage());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(userSettingsEClass, UserSettings.class, "UserSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1231,6 +1331,16 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEReference(getSolutionBuilderSettings_ConstraintAndFitnessSettings(), this.getConstraintAndFitnessSettings(), null, "constraintAndFitnessSettings", null, 0, 1, SolutionBuilderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(multipleSolutionSimilarityOptimisationStageEClass, MultipleSolutionSimilarityOptimisationStage.class, "MultipleSolutionSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(parallelMultipleSolutionSimilarityOptimisationStageEClass, ParallelMultipleSolutionSimilarityOptimisationStage.class, "ParallelMultipleSolutionSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(parallelHillClimbOptimisationStageEClass, ParallelHillClimbOptimisationStage.class, "ParallelHillClimbOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(parallelLocalSearchOptimisationStageEClass, ParallelLocalSearchOptimisationStage.class, "ParallelLocalSearchOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(multiobjectiveSimilarityOptimisationStageEClass, MultiobjectiveSimilarityOptimisationStage.class, "MultiobjectiveSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(parallelMultiobjectiveSimilarityOptimisationStageEClass, ParallelMultiobjectiveSimilarityOptimisationStage.class, "ParallelMultiobjectiveSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(similarityModeEEnum, SimilarityMode.class, "SimilarityMode");

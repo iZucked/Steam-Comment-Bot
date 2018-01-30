@@ -261,6 +261,31 @@ public class OptimisationPlanItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createParallelMultipleSolutionSimilarityOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createParallelHillClimbOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createParallelLocalSearchOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createMultiobjectiveSimilarityOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createParallelMultiobjectiveSimilarityOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS,
 				 ParametersFactory.eINSTANCE.createSolutionBuilderSettings()));
 	}

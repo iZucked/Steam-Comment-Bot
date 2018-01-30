@@ -230,6 +230,60 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ParametersPackage.PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: {
+				ParallelMultipleSolutionSimilarityOptimisationStage parallelMultipleSolutionSimilarityOptimisationStage = (ParallelMultipleSolutionSimilarityOptimisationStage)theEObject;
+				T1 result = caseParallelMultipleSolutionSimilarityOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseMultipleSolutionSimilarityOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseLocalSearchOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(parallelMultipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = caseOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE: {
+				ParallelHillClimbOptimisationStage parallelHillClimbOptimisationStage = (ParallelHillClimbOptimisationStage)theEObject;
+				T1 result = caseParallelHillClimbOptimisationStage(parallelHillClimbOptimisationStage);
+				if (result == null) result = caseHillClimbOptimisationStage(parallelHillClimbOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(parallelHillClimbOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(parallelHillClimbOptimisationStage);
+				if (result == null) result = caseOptimisationStage(parallelHillClimbOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE: {
+				ParallelLocalSearchOptimisationStage parallelLocalSearchOptimisationStage = (ParallelLocalSearchOptimisationStage)theEObject;
+				T1 result = caseParallelLocalSearchOptimisationStage(parallelLocalSearchOptimisationStage);
+				if (result == null) result = caseLocalSearchOptimisationStage(parallelLocalSearchOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(parallelLocalSearchOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(parallelLocalSearchOptimisationStage);
+				if (result == null) result = caseOptimisationStage(parallelLocalSearchOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: {
+				MultiobjectiveSimilarityOptimisationStage multiobjectiveSimilarityOptimisationStage = (MultiobjectiveSimilarityOptimisationStage)theEObject;
+				T1 result = caseMultiobjectiveSimilarityOptimisationStage(multiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseMultipleSolutionSimilarityOptimisationStage(multiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseLocalSearchOptimisationStage(multiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(multiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(multiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseOptimisationStage(multiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: {
+				ParallelMultiobjectiveSimilarityOptimisationStage parallelMultiobjectiveSimilarityOptimisationStage = (ParallelMultiobjectiveSimilarityOptimisationStage)theEObject;
+				T1 result = caseParallelMultiobjectiveSimilarityOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseMultiobjectiveSimilarityOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseMultipleSolutionSimilarityOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseLocalSearchOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(parallelMultiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = caseOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -546,6 +600,81 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseMultipleSolutionSimilarityOptimisationStage(MultipleSolutionSimilarityOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Parallel Multiple Solution Similarity Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Parallel Multiple Solution Similarity Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseParallelMultipleSolutionSimilarityOptimisationStage(ParallelMultipleSolutionSimilarityOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Parallel Hill Climb Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Parallel Hill Climb Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseParallelHillClimbOptimisationStage(ParallelHillClimbOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Parallel Local Search Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Parallel Local Search Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseParallelLocalSearchOptimisationStage(ParallelLocalSearchOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Multiobjective Similarity Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Multiobjective Similarity Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseMultiobjectiveSimilarityOptimisationStage(MultiobjectiveSimilarityOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Parallel Multiobjective Similarity Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Parallel Multiobjective Similarity Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseParallelMultiobjectiveSimilarityOptimisationStage(ParallelMultiobjectiveSimilarityOptimisationStage object) {
 		return null;
 	}
 
