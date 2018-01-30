@@ -26,20 +26,27 @@ import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.MultiobjectiveSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.actionplan.LNGActionSetTransformerUnit;
 import com.mmxlabs.models.lng.transformer.breakeven.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
-import com.mmxlabs.models.lng.transformer.chain.impl.LNGCleanStateOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.ResetInitialSequencesUnit;
 import com.mmxlabs.models.lng.transformer.longterm.LightWeightSchedulerOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
+import com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser.LNGParallelHillClimbingOptimiserTransformerUnit;
+import com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser.LNGParallelMultiObjectiveOptimiserTransformerUnit;
+import com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser.LNGParallelOptimiserTransformerUnit;
 
 public class LNGScenarioChainUnitFactory {
 
@@ -67,30 +74,62 @@ public class LNGScenarioChainUnitFactory {
 				LightWeightSchedulerOptimiserUnit.chainPool(builder, scenarioToOptimiserBridge, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, seeds);
 			}
 			return null;
-		} else if (template instanceof MultipleSolutionSimilarityOptimisationStage) {
-			final MultipleSolutionSimilarityOptimisationStage stage = (MultipleSolutionSimilarityOptimisationStage) template;
+		} else if (template instanceof MultiobjectiveSimilarityOptimisationStage) {
+			final MultiobjectiveSimilarityOptimisationStage stage = (MultiobjectiveSimilarityOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
+				final boolean doSecondRun = doSecondLSORun(userSettings);
 				final int[] seeds = new int[jobCount];
 				for (int i = 0; i < jobCount; ++i) {
 					seeds[i] = stage.getSeed() + i;
 				}
-				final boolean doSecondRun = doSecondLSORun(userSettings);
-				if (doSecondRun) {
-					LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
-					LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+				if (template instanceof ParallelMultiobjectiveSimilarityOptimisationStage) {
+					if (doSecondRun) {
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
+						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION, true);
+					} else {
+						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION, true);
+					}
 				} else {
-					LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+					if (doSecondRun) {
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+					} else {
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+					}
 				}
 			}
-			return (bridge, name) -> {
-				SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
-					OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
-					options.setName(name);
-					options.setUserSettings(EcoreUtil.copy(userSettings));
-					return options;
-				}, OptionalLong.empty());
-			};
-			
+		} else if (template instanceof MultipleSolutionSimilarityOptimisationStage) {
+			final MultipleSolutionSimilarityOptimisationStage stage = (MultipleSolutionSimilarityOptimisationStage) template;
+			if (stage.getAnnealingSettings().getIterations() > 0) {
+				final boolean doSecondRun = doSecondLSORun(userSettings);
+				final int[] seeds = new int[jobCount];
+				for (int i = 0; i < jobCount; ++i) {
+					seeds[i] = stage.getSeed() + i;
+				}
+				if (template instanceof ParallelMultipleSolutionSimilarityOptimisationStage) {
+					if (doSecondRun) {
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
+						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION, false);
+					} else {
+						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION, false);
+					}
+				} else {
+					if (doSecondRun) {
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+					} else {
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+					}
+				}
+				return (bridge, name) -> {
+					SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
+						OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+						options.setName(name);
+						options.setUserSettings(EcoreUtil.copy(userSettings));
+						return options;
+					}, OptionalLong.empty());
+				};
+			}
 		} else if (template instanceof LocalSearchOptimisationStage) {
 			final LocalSearchOptimisationStage stage = (LocalSearchOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
@@ -99,11 +138,20 @@ public class LNGScenarioChainUnitFactory {
 					seeds[i] = stage.getSeed() + i;
 				}
 				final boolean doSecondRun = doSecondLSORun(userSettings);
-				if (doSecondRun) {
-					LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
-					LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+				if (template instanceof ParallelLocalSearchOptimisationStage) {
+					if (doSecondRun) {
+						LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
+						LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION);
+					} else {
+						LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION);
+					}
 				} else {
-					LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+					if (doSecondRun) {
+						LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
+						LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+					} else {
+						LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+					}
 				}
 			}
 			return null;
@@ -116,10 +164,14 @@ public class LNGScenarioChainUnitFactory {
 			if (SecurityUtils.getSubject().isPermitted("features:optimisation-hillclimb")) {
 				final HillClimbOptimisationStage stage = (HillClimbOptimisationStage) template;
 				if (stage.getAnnealingSettings().getIterations() > 0) {
-					if (jobCount > 1) {
-						LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, true);
+					if (template instanceof ParallelHillClimbOptimisationStage) {
+						LNGParallelHillClimbingOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION);
 					} else {
-						LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, false);
+						if (jobCount > 1) {
+							LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, true);
+						} else {
+							LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, false);
+						}
 					}
 				}
 			}
