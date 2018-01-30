@@ -818,55 +818,60 @@ public class LNGScenarioTransformer {
 			loadPriceCalculatorProvider.setPortfolioCalculator(calculator);
 		}
 
-		final Map<Port, PortCost> portToPortCostMap = new HashMap<>();
-
-		// Register specific costs first (these override groups)
+		Map<Pair<Port, PortCapability>, PortCostEntry> portToPortCostMap = new HashMap<>();
+		// Register group based ports first
 		for (final PortCost portCost : costModel.getPortCosts()) {
-			for (final APortSet<Port> portSet : portCost.getPorts()) {
-				if (portSet instanceof Port) {
-					portToPortCostMap.put((Port) portSet, portCost);
+			for (final Port port : SetUtils.getObjects(portCost.getPorts())) {
+				for (PortCostEntry pce : portCost.getEntries()) {
+					if (pce.getCost() != 0) {
+						portToPortCostMap.put(new Pair<>(port, pce.getActivity()), pce);
+					}
 				}
 			}
 		}
-
-		// Register groups next, ignoring already registered items.
+		// Override with specific costs
 		for (final PortCost portCost : costModel.getPortCosts()) {
+			for (final APortSet<Port> portSet : portCost.getPorts()) {
+				if (portSet instanceof Port) {
 
-			for (final Port port : SetUtils.getObjects(portCost.getPorts())) {
-				if (!portToPortCostMap.containsKey(port)) {
-					portToPortCostMap.put(port, portCost);
+					Port port = (Port) portSet;
+					for (PortCostEntry pce : portCost.getEntries()) {
+						if (pce.getCost() != 0) {
+							portToPortCostMap.put(new Pair<>(port, pce.getActivity()), pce);
+						}
+					}
 				}
 			}
 		}
 
 		// process port costs
-		for (final Map.Entry<Port, PortCost> e : portToPortCostMap.entrySet()) {
-			final PortCost cost = e.getValue();
-			for (final PortCostEntry entry : cost.getEntries()) {
-				PortType type = null;
-				switch (entry.getActivity()) {
-				case LOAD:
-					type = PortType.Load;
-					break;
-				case DISCHARGE:
-					type = PortType.Discharge;
-					break;
-				case DRYDOCK:
-					type = PortType.DryDock;
-					break;
-				case MAINTENANCE:
-					type = PortType.Maintenance;
-					break;
-				}
+		for (final Map.Entry<Pair<Port, PortCapability>, PortCostEntry> e : portToPortCostMap.entrySet()) {
+			final PortCostEntry entry = e.getValue();
+			final PortCost cost = (PortCost) entry.eContainer();
+			Pair<Port, PortCapability> key = e.getKey();
+			PortType type = null;
+			switch (key.getSecond()) {
+			case LOAD:
+				type = PortType.Load;
+				break;
+			case DISCHARGE:
+				type = PortType.Discharge;
+				break;
+			case DRYDOCK:
+				type = PortType.DryDock;
+				break;
+			case MAINTENANCE:
+				type = PortType.Maintenance;
+				break;
+			}
 
-				if (type != null) {
-					// Now create port costs for all the vessel instances.
-					for (final IVessel oVessel : allVessels.values()) {
-						// TODO should the builder handle the application of costs to vessel classes?
-						final Vessel eVessel = vesselAssociation.reverseLookup(oVessel);
-						final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(eVessel, entry.getActivity()));
-						builder.setPortCost(portAssociation.lookupNullChecked(e.getKey()), oVessel, type, activityCost);
-					}
+			if (type != null) {
+				// Now create port costs for all the vessel instances.
+				for (final IVessel oVessel : allVessels.values()) {
+					// TODO should the builder handle the application of costs to vessel classes?
+					final Vessel eVessel = vesselAssociation.reverseLookup(oVessel);
+					final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(eVessel, entry.getActivity()));
+					builder.setPortCost(portAssociation.lookupNullChecked(key.getFirst()), oVessel, type, activityCost);
 				}
 			}
 		}
