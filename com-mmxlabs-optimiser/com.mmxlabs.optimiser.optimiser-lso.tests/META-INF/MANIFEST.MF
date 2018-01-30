@@ -14,4 +14,6 @@ Require-Bundle: org.junit;bundle-version="4.8.2",
  ch.qos.logback.classic;bundle-version="1.0.0",
  ch.qos.logback.core;bundle-version="1.0.0",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.optimiser.optimiser-common
+ com.mmxlabs.optimiser.optimiser-common,
+ net.bytebuddy.byte-buddy;bundle-version="1.7.8",
+ org.objenesis;bundle-version="2.6.0"
