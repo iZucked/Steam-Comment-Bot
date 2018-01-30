@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.optimiser.optimiser.lso.parallellso.ParallelLSOConstants;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 
 public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
@@ -87,5 +88,25 @@ public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
 	private boolean isUsingNewSimilarityModule() {
 		return false;
 	}
+
+	@Provides
+	@Named(ParallelLSOConstants.PARALLEL_LSO_BATCH_SIZE)
+	private int getParallelLSOBatchSize() {
+		return 100;
+	}
+	
+	@Provides
+	@Named(ParallelLSOConstants.PARALLEL_MOO_BATCH_SIZE)
+	private int getParallelMOOBatchSize() {
+		return 100;
+	}
+	
+	@Provides
+	@Named(LocalSearchOptimiserModule.OPTIMISER_DEBUG_MODE)
+	private boolean getDebugMode() {
+		return false;
+	}
+
+
 
 }

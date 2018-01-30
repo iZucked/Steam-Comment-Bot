@@ -70,6 +70,7 @@ import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.NonDominatedSolution;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.SimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
@@ -523,11 +524,11 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 				final IAnnotatedSolution bestSolution = optimiser.getBestSolution();
 				final ISequences bestRawSequences = optimiser.getBestRawSequences();
 
-				List<Pair<ISequences, long[]>> sortedArchive = optimiser.getSortedArchive();
+				List<NonDominatedSolution> sortedArchive = optimiser.getSortedArchive();
 
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = sortedArchive.stream() //
 						.distinct() //
-						.map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
+						.map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getSequences(), new HashMap<>())) //
 						.collect(Collectors.toList());
 
 				if (bestRawSequences != null && bestSolution != null) {
