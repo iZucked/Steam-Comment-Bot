@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
@@ -337,6 +338,20 @@ public class ScheduleModelKPIUtils {
 			}
 		}
 		return addnPNL;
+	}
+
+	public static long getEntityProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer, BaseLegalEntity targetEntity) {
+		long pnl = 0L;
+		if (profitAndLossContainer != null) {
+			GroupProfitAndLoss groupPnL = profitAndLossContainer.getGroupProfitAndLoss();
+			for (final EntityProfitAndLoss entityPnL : groupPnL.getEntityProfitAndLosses()) {
+				final BaseLegalEntity entity = entityPnL.getEntity();
+				if (entity == targetEntity) {
+					pnl += entityPnL.getProfitAndLoss();
+				}
+			}
+		}
+		return pnl;
 	}
 
 	public static long getAdditionalUpsideProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
