@@ -63,7 +63,7 @@ public abstract class AbstractMicroTestCase {
 	protected SpotMarketsModelBuilder spotMarketsModelBuilder;
 	protected SpotMarketsModelFinder spotMarketsModelFinder;
 	protected PricingModelBuilder pricingModelBuilder;
-	
+
 	protected DistanceModelBuilder distanceModelBuilder;
 
 	protected BaseLegalEntity entity;
@@ -166,11 +166,10 @@ public abstract class AbstractMicroTestCase {
 	public void optimiseWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker) {
 		evaluateWithLSOTest(true, null, null, checker, null);
 	}
-	
+
 	public void optimiseWithLSOTest(@Nullable final Consumer<OptimisationPlan> tweaker, final @NonNull Consumer<LNGScenarioRunner> checker) {
 		evaluateWithLSOTest(true, tweaker, null, checker, null);
 	}
-
 
 	public void optimiseWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker, IOptimiserInjectorService overrides) {
 		evaluateWithLSOTest(true, null, null, checker, overrides);
@@ -222,6 +221,11 @@ public abstract class AbstractMicroTestCase {
 
 	protected @NonNull ExecutorService createExecutorService() {
 		return Executors.newSingleThreadExecutor();
+	}
+
+	public void evaluateTest() {
+		evaluateTest(null, null, runner -> {
+		});
 	}
 
 	public void evaluateTest(@Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
@@ -277,8 +281,8 @@ public abstract class AbstractMicroTestCase {
 		// Generate internal data
 		final ExecutorService executorService = createExecutorService();
 		try {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimiserPlan, scenarioDataProvider.getEditingDomain(), null,
-					localOverrides, null, true);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimiserPlan, scenarioDataProvider.getEditingDomain(), null, localOverrides,
+					null, true);
 
 			// final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, null, localOverrides, true);
 			//
