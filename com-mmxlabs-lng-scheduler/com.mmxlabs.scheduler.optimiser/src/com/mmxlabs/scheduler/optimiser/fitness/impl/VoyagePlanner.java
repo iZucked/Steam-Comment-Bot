@@ -265,22 +265,39 @@ public class VoyagePlanner implements IVoyagePlanner {
 					vpoChoices.add(new ReliqVoyagePlanChoice(previousOptions, options));
 				}
 			} else {
+				boolean forceFBO = forceFBO(prevPortSlot, thisPortSlot, vesselState, availableTime);
 				if (vesselState == VesselState.Laden) {
-					vpoChoices.add(new TravelVoyagePlanChoice(previousOptions, options));
+					if (forceFBO) {
+						options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+					} else {
+						vpoChoices.add(new TravelVoyagePlanChoice(previousOptions, options));
+					}
 				} else {
 					boolean forceBallastNBO = forceBallastNBO(prevPortSlot, thisPortSlot, availableTime);
 					if (forceBallastNBO) {
-						options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
 						options.setIdleFuelChoice(IdleFuelChoice.NBO);
-						vpoChoices.add(new TravelSupplementVoyagePlanChoice(previousOptions, options));
-					} else {
-						if (!forceNBO) {
-							vpoChoices.add(new TravelVoyagePlanChoice(previousOptions, options));
+						if (forceFBO) {
+							options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 						} else {
-							// Set an NBO based choice so that the useNBO value in the next call is correct
-							// TODO: This probably does not cover all possible cases...
 							options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
 							vpoChoices.add(new TravelSupplementVoyagePlanChoice(previousOptions, options));
+						}
+					} else {
+						if (!forceNBO) {
+							if (forceFBO) {
+								options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+							} else {
+								vpoChoices.add(new TravelVoyagePlanChoice(previousOptions, options));
+							}
+						} else {
+							if (forceFBO) {
+								options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+							} else {
+								// Set an NBO based choice so that the useNBO value in the next call is correct
+								// TODO: This probably does not cover all possible cases...
+								options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+								vpoChoices.add(new TravelSupplementVoyagePlanChoice(previousOptions, options));
+							}
 						}
 						if (!forceNBO) {
 							vpoChoices.add(new IdleNBOVoyagePlanChoice(options));
@@ -370,7 +387,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	/**
-	 * Should this ballast voyage be forced to use NBO for travel and idle?
+	 * Should this ballast voyage be forced to use NBO for travel and idle? (Laden is always NBO);
 	 * 
 	 * @param prevPortSlot
 	 * @param toPortSlot
@@ -378,6 +395,19 @@ public class VoyagePlanner implements IVoyagePlanner {
 	 * @return
 	 */
 	protected boolean forceBallastNBO(final @NonNull IPortSlot prevPortSlot, final @NonNull IPortSlot toPortSlot, final int availableTime) {
+		return false;
+	}
+
+	/**
+	 * Force FBO?
+	 * 
+	 * @param prevPortSlot
+	 * @param toPortSlot
+	 * @param vesselState
+	 * @param availableTime
+	 * @return
+	 */
+	protected boolean forceFBO(final @NonNull IPortSlot prevPortSlot, final @NonNull IPortSlot toPortSlot, VesselState vesselState, final int availableTime) {
 		return false;
 	}
 
