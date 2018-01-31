@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.editor.bulk.rowmodel.extmodule;
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
