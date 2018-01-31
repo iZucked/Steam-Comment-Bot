@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
 package com.mmxlabs.optimiser.optimiser.lso.parallellso;
 
 import com.mmxlabs.optimiser.core.ISequences;
