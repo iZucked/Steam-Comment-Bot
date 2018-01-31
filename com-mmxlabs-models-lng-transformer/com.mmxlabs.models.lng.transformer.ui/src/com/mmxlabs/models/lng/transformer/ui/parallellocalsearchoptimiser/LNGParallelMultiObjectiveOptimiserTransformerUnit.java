@@ -261,6 +261,8 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 				if (runnerHook != null) {
 					runnerHook.endStageJob(stage, 1, injector);
 				}
+				// Clean up thread-locals created in the scope object
+				threadCleanup(scope);
 				monitor.done();
 			}
 		}

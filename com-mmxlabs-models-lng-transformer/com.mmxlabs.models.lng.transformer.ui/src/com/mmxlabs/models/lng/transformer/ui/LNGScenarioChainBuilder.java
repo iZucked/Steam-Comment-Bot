@@ -84,10 +84,10 @@ public class LNGScenarioChainBuilder {
 						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
 						final OptimisationStage template = parallelOptimisationStage.getTemplate();
 						assert template != null;
-						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, createExecutorService(), template, parallelOptimisationStage.getJobCount(), userSettings);
+						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
 
 					} else {
-						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, createExecutorService(), stage, 1, userSettings);
+						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, stage, 1, userSettings);
 					}
 					if (callback != null) {
 						exportCallback = callback;
