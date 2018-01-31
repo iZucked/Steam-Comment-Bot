@@ -424,14 +424,30 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 
 					{
-						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedListsArePermissive(), editingDomain);
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedListsArePermissive(), editingDomain) {
+							public boolean canEdit(Object object) {
+								if (object instanceof Slot) {
+									Slot slot = (Slot) object;
+									return slot.isOverrideRestrictions() && super.canEdit(object);
+								}
+								return false;
+							}
+						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), referenceValueProvider, editingDomain,
-								MMXCorePackage.eINSTANCE.getNamedObject_Name());
+								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+							public boolean canEdit(Object object) {
+								if (object instanceof Slot) {
+									Slot slot = (Slot) object;
+									return slot.isOverrideRestrictions() && super.canEdit(object);
+								}
+								return false;
+							}
+						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, " Ports", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
@@ -439,7 +455,15 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), referenceValueProvider, editingDomain,
-								MMXCorePackage.eINSTANCE.getNamedObject_Name());
+								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+							public boolean canEdit(Object object) {
+								if (object instanceof Slot) {
+									Slot slot = (Slot) object;
+									return slot.isOverrideRestrictions() && super.canEdit(object);
+								}
+								return false;
+							}
+						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Contracts", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
@@ -721,14 +745,30 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 
 					{
-						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedListsArePermissive(), editingDomain);
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedListsArePermissive(), editingDomain) {
+							public boolean canEdit(Object object) {
+								if (object instanceof Slot) {
+									Slot slot = (Slot) object;
+									return slot.isOverrideRestrictions() && super.canEdit(object);
+								}
+								return false;
+							}
+						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), referenceValueProvider, editingDomain,
-								MMXCorePackage.eINSTANCE.getNamedObject_Name());
+								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+							public boolean canEdit(Object object) {
+								if (object instanceof Slot) {
+									Slot slot = (Slot) object;
+									return slot.isOverrideRestrictions() && super.canEdit(object);
+								}
+								return false;
+							}
+						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, " Ports", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
@@ -736,7 +776,16 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), referenceValueProvider, editingDomain,
-								MMXCorePackage.eINSTANCE.getNamedObject_Name());
+								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+							public boolean canEdit(Object object) {
+								if (object instanceof Slot) {
+									Slot slot = (Slot) object;
+									return slot.isOverrideRestrictions() && super.canEdit(object);
+								}
+								return false;
+							}
+
+						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Contracts", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
