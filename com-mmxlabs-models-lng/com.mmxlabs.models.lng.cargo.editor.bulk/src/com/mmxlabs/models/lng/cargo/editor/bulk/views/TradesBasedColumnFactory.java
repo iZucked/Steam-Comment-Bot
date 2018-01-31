@@ -63,7 +63,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 	private final class TextualPortSingleReferenceManipulatorExtension extends TextualSingleReferenceManipulator {
-		private TextualPortSingleReferenceManipulatorExtension(EReference field, IReferenceValueProviderProvider valueProviderProvider, EditingDomain editingDomain) {
+		private TextualPortSingleReferenceManipulatorExtension(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
 			super(field, valueProviderProvider, editingDomain);
 		}
 
@@ -82,10 +82,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 							final String c = proposal.substring(contents.length());
 							String description = "";
-							EObject eObject = valueList.get(i);
+							final EObject eObject = valueList.get(i);
 							if (eObject instanceof Port) {
-								Port port = (Port) eObject;
-								Location l = port.getLocation();
+								final Port port = (Port) eObject;
+								final Location l = port.getLocation();
 								if (l != null) {
 									description = " - " + l.getCountry();
 								}
@@ -104,33 +104,34 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 	}
 
 	private final class HasRestrictionsFormatter extends BaseFormatter {
-		public String render(Object object) {
+		private static final String yesSymbol = "\u2713";
 
+		public String render(final Object object) {
 			if (object instanceof Slot) {
-				Slot slot = (Slot) object;
+				final Slot slot = (Slot) object;
 				if (!slot.getAllowedVessels().isEmpty()) {
-					return "Y";
+					return yesSymbol;
 				}
 				if (slot.isLocked()) {
-					return "Y";
+					return yesSymbol;
 				}
 				if (slot.isOverrideRestrictions()) {
 					if (!slot.getRestrictedContracts().isEmpty()) {
-						return "Y";
+						return yesSymbol;
 					}
 					if (!slot.getRestrictedPorts().isEmpty()) {
-						return "Y";
+						return yesSymbol;
 					}
 				} else if (slot.getContract() != null) {
-					Contract c = slot.getContract();
+					final Contract c = slot.getContract();
 					if (!c.getRestrictedContracts().isEmpty()) {
-						return "Y";
+						return yesSymbol;
 					}
 					if (!c.getRestrictedPorts().isEmpty()) {
-						return "Y";
+						return yesSymbol;
 					}
 				}
-				return "N";
+				return "";
 			}
 			return "";
 		}
@@ -182,12 +183,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
 							@Override
-							public void treeExpanded(TreeEvent e) {
+							public void treeExpanded(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("Volume");
 							}
 
 							@Override
-							public void treeCollapsed(TreeEvent e) {
+							public void treeCollapsed(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("");
 
 							}
@@ -247,7 +248,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Window", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 
-						EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
+						final EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
 								new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 						createColumn.column.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, path);
 						createColumn.column.getColumn().setSummary(true);
@@ -256,13 +257,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
 							@Override
-							public void treeExpanded(TreeEvent e) {
+							public void treeExpanded(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("Window");
 
 							}
 
 							@Override
-							public void treeCollapsed(TreeEvent e) {
+							public void treeCollapsed(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("");
 
 							}
@@ -272,7 +273,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final LocalDateAttributeManipulator rendMan = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editingDomain);
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Date", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 
-						EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
+						final EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
 								new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 						createColumn.column.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, path);
 						createColumn.column.getColumn().setSummary(false);
@@ -335,13 +336,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
 							@Override
-							public void treeExpanded(TreeEvent e) {
+							public void treeExpanded(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("Buy at");
 
 							}
 
 							@Override
-							public void treeCollapsed(TreeEvent e) {
+							public void treeCollapsed(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("");
 
 							}
@@ -394,7 +395,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setForceGroup(true);
 
 					{
-						ICellRenderer rendMan = new HasRestrictionsFormatter();
+						final ICellRenderer rendMan = new HasRestrictionsFormatter();
 						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
@@ -486,12 +487,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
 							@Override
-							public void treeExpanded(TreeEvent e) {
+							public void treeExpanded(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("Volume");
 							}
 
 							@Override
-							public void treeCollapsed(TreeEvent e) {
+							public void treeCollapsed(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("");
 
 							}
@@ -558,13 +559,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
 							@Override
-							public void treeExpanded(TreeEvent e) {
+							public void treeExpanded(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("Window");
 
 							}
 
 							@Override
-							public void treeCollapsed(TreeEvent e) {
+							public void treeCollapsed(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("");
 
 							}
@@ -610,8 +611,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescontract": {
-			
-			
+
 			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
 
 				@Override
@@ -635,13 +635,13 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
 							@Override
-							public void treeExpanded(TreeEvent e) {
+							public void treeExpanded(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("Sell at");
 
 							}
 
 							@Override
-							public void treeCollapsed(TreeEvent e) {
+							public void treeCollapsed(final TreeEvent e) {
 								createColumn.column.getColumn().getColumnGroup().setText("");
 
 							}
@@ -693,7 +693,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setExpandByDefault(false);
 					block.setForceGroup(true);
 					{
-						ICellRenderer rendMan = new HasRestrictionsFormatter();
+						final ICellRenderer rendMan = new HasRestrictionsFormatter();
 						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
@@ -880,7 +880,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		return "";
 	}
 
-	private static String mapName(VolumeUnits units) {
+	private static String mapName(final VolumeUnits units) {
 
 		switch (units) {
 		case M3:
@@ -891,7 +891,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		return units.getName();
 	}
 
-	private static String mapName(TimePeriod units) {
+	private static String mapName(final TimePeriod units) {
 
 		switch (units) {
 		case DAYS:
