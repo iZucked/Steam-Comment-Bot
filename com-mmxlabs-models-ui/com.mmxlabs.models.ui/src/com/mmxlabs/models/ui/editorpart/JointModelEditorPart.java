@@ -829,15 +829,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			if (selectionChangedListener == null) {
 				// Create the listener on demand.
 				//
-				selectionChangedListener = new ISelectionChangedListener() {
-					// This just notifies those things that are affected by the
-					// selection.
-					//
-					@Override
-					public void selectionChanged(final SelectionChangedEvent selectionChangedEvent) {
-						setSelection(selectionChangedEvent.getSelection());
-					}
-				};
+				selectionChangedListener = new JointModelEditorPartSelectionChangedListener(this);
 			}
 
 			// Stop listening to the old one.
