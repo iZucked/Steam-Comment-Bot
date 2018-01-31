@@ -401,6 +401,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setSummary(true);
 					}
 					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Keep open", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.column.getColumn().setDetail(true);
+						createColumn.column.getColumn().setSummary(false);
+					}
+					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_AllowedVessels(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name());
 
@@ -438,12 +444,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 					}
-					{
-						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), editingDomain);
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Keep open", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
-					}
+
 					return null;
 				}
 
@@ -699,6 +700,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						createColumn.column.getColumn().setSummary(true);
 					}
 					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Keep open", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setDetail(true);
+						createColumn.column.getColumn().setSummary(false);
+					}
+					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_AllowedVessels(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name());
 
@@ -731,12 +738,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name());
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Contracts", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
-					}
-					{
-						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), editingDomain);
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Keep open", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 					}
