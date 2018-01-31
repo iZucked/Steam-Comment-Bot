@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -33,7 +34,7 @@ public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	protected CellEditor createCellEditor(final Composite parent, final Object object) {
-		return new ComboBoxCellEditor(parent, new String[] { trueString, falseString, "" });
+		return new ComboBoxCellEditor(parent, new String[] { trueString, falseString, "" }, SWT.READ_ONLY | SWT.FLAT | SWT.BORDER);
 	}
 
 	@Override
