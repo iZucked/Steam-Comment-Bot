@@ -48,6 +48,7 @@ import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -123,6 +124,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editorpart.JointModelEditorPartSelectionChangedListener;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -858,6 +860,14 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		final ScenarioTableViewer viewer = new ScenarioTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
 
+			
+			@Override
+			public void addSelectionChangedListener(ISelectionChangedListener listener) {
+				if (listener instanceof JointModelEditorPartSelectionChangedListener) {
+					return;
+				}
+				super.addSelectionChangedListener(listener);
+			}
 			@Override
 			public void refresh() {
 				// TODO Auto-generated method stub
