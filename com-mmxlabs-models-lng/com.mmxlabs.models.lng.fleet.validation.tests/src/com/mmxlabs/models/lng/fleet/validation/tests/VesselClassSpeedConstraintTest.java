@@ -18,6 +18,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
@@ -177,7 +178,7 @@ public class VesselClassSpeedConstraintTest {
 		when(vessel.getVesselOrDelegateMinSpeed()).thenReturn(minSpeed);
 		// one call for testing, another call for producing the error.
 		when(vessel.getVesselOrDelegateMaxSpeed()).thenReturn(maxSpeed);
-		when(validationContext.createFailureStatus(anyString(), anyFloat(), anyFloat())).thenReturn(failureStatus);
+		when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(failureStatus);
 
 		constraint.validate(validationContext);
 
