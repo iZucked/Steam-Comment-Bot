@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -28,7 +27,6 @@ import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.util.CostModelBuilder;
 import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -46,19 +44,19 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 	private static List<String> addedFeatures = new LinkedList<>();
 
 	final int ROUNDING_EPSILON = 100;
-	Vessel vessel;
-	VesselAvailability vesselAvailability1;
-	Cargo cargo1;
-	Port portA;
-	Port portB;
-	VesselStateAttributes attrLaden;
-	VesselStateAttributes attrBal;
-	BaseFuel baseFuel;
-	BaseFuel idleBaseFuel;
-	BaseFuel pilotLightBaseFuel;
-	BaseFuel inPortBaseFuel;
-	PricingModelBuilder pricingModelBuilder;
-	CostModelBuilder costModelBuilder;
+	private Vessel vessel;
+	private VesselAvailability vesselAvailability1;
+	private Cargo cargo1;
+	private Port portA;
+	private Port portB;
+	private VesselStateAttributes attrLaden;
+	private VesselStateAttributes attrBal;
+	private BaseFuel baseFuel;
+	private BaseFuel idleBaseFuel;
+	private BaseFuel pilotLightBaseFuel;
+	private BaseFuel inPortBaseFuel;
+	private PricingModelBuilder pricingModelBuilder;
+	private CostModelBuilder costModelBuilder;
 
 	private final boolean writeScenario = false;
 
@@ -202,17 +200,17 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 			FuelAmount ladenJourneyFuel_MT = null;
 			FuelQuantity ladenJourneyNBO = null;
 			FuelAmount ladenJourneyNBO_M3 = null;
-			for (FuelQuantity entry : ladenJourneyFuels) {
+			for (final FuelQuantity entry : ladenJourneyFuels) {
 				if (entry.getBaseFuel() != null) {
 					ladenJourneyFuel = entry;
-					for (FuelAmount fa : entry.getAmounts()) {
+					for (final FuelAmount fa : entry.getAmounts()) {
 						if (fa.getUnit() == FuelUnit.MT) {
 							ladenJourneyFuel_MT = fa;
 						}
 					}
 				} else {
 					ladenJourneyNBO = entry;
-					for (FuelAmount fa : entry.getAmounts()) {
+					for (final FuelAmount fa : entry.getAmounts()) {
 						if (fa.getUnit() == FuelUnit.M3) {
 							ladenJourneyNBO_M3 = fa;
 						}
@@ -227,9 +225,12 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 
 			// Laden Idle Event
 			final EList<FuelQuantity> ladenIdleFuels = SCA.getLadenIdle().getFuels();
-			Assert.assertEquals(1, ladenIdleFuels.size());
-			final FuelQuantity ladenIdleFuel = ladenIdleFuels.get(0);
-			Assert.assertEquals(null, ladenIdleFuel.getBaseFuel());
+			Assert.assertEquals(2, ladenIdleFuels.size());
+			final BaseFuel ladenIdleFuel_0 = ladenIdleFuels.get(0).getBaseFuel();
+			final BaseFuel ladenIdleFuel_1 = ladenIdleFuels.get(1).getBaseFuel();
+			Assert.assertNotEquals(ladenIdleFuel_0, ladenIdleFuel_1);
+			Assert.assertTrue(pilotLightBaseFuel == ladenIdleFuel_0 || null == ladenIdleFuel_0);
+			Assert.assertTrue(pilotLightBaseFuel == ladenIdleFuel_1 || null == ladenIdleFuel_1);
 
 			// Discharge Event
 			final EList<FuelQuantity> dischargeFuels = SCA.getDischargeAllocation().getSlotVisit().getFuels();
