@@ -7,7 +7,6 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -22,14 +21,13 @@ import org.junit.runner.RunWith;
 
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -45,9 +43,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
@@ -612,13 +607,16 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES4), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
-			Assert.assertEquals(2, result1.getSolutions().size());
-			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
+			final IMultiStateResult results = slotInserter.run(Collections.singletonList(discharge_DES4), Collections.emptyList(), 10, new NullProgressMonitor());
 
-			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Sale2"));
+			Assert.assertTrue(results.getSolutions().size() > 1);
+			// Next validate solution types exist
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
+					.withCargo("FOB_Purchase2", "DES_Sale4").any() //
+					.withUnusedSlot("DES_Sale2") // Main sure we have a solution with this slot unused.
+			;
 
+			verifier.verifyInsertionResults(results, msg -> Assert.fail(msg));
 		}, null);
 
 	}

@@ -568,29 +568,37 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				final IPortSlot ps = portSlotProvider.getPortSlot(e);
 				return modelEntityMap.getModelObjectNullChecked(ps, Slot.class);
 			};
+			boolean appliedMove = false;
+			for (int i = 0; i < 5; ++i) {
+				@Nullable
+				final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
+				Assert.assertNotNull(movePair);
+				
+				// Inserting may produce a problem, so retry until we get a valid move as expected below.
+				if (!movePair.getSecond().getProblemElements().isEmpty()) {
+					continue;
+				}
 
-			@Nullable
-			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
+				final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
+				movePair.getFirst().apply(result);
 
-			Assert.assertNotNull(movePair);
+				final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
 
-			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
-			movePair.getFirst().apply(result);
+				final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+				// Check expectations
+				Assert.assertEquals(8, result.getSequence(resource1).size());
+				Assert.assertEquals(0, result.getUnusedElements().size());
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
-
-			// Check expectations
-			Assert.assertEquals(8, result.getSequence(resource1).size());
-			Assert.assertEquals(0, result.getUnusedElements().size());
-
-			Assert.assertSame(cargo2.getSlots().get(0), slotMapper.apply(result.getSequence(resource1).get(1)));
-			Assert.assertSame(cargo2.getSlots().get(1), slotMapper.apply(result.getSequence(resource1).get(2)));
-			Assert.assertSame(load1, slotMapper.apply(result.getSequence(resource1).get(3)));
-			Assert.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(4)));
-			Assert.assertSame(cargo3.getSlots().get(0), slotMapper.apply(result.getSequence(resource1).get(5)));
-			Assert.assertSame(cargo3.getSlots().get(1), slotMapper.apply(result.getSequence(resource1).get(6)));
+				Assert.assertSame(cargo2.getSlots().get(0), slotMapper.apply(result.getSequence(resource1).get(1)));
+				Assert.assertSame(cargo2.getSlots().get(1), slotMapper.apply(result.getSequence(resource1).get(2)));
+				Assert.assertSame(load1, slotMapper.apply(result.getSequence(resource1).get(3)));
+				Assert.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(4)));
+				Assert.assertSame(cargo3.getSlots().get(0), slotMapper.apply(result.getSequence(resource1).get(5)));
+				Assert.assertSame(cargo3.getSlots().get(1), slotMapper.apply(result.getSequence(resource1).get(6)));
+				appliedMove = true;
+			}
+			Assert.assertTrue(appliedMove);
 		});
 	}
 

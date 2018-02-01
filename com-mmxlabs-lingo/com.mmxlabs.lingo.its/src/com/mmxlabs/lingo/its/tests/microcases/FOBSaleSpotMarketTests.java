@@ -18,6 +18,7 @@ import com.mmxlabs.lingo.its.tests.category.RegressionTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -281,9 +282,8 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testUnrestrictedOptimisation_GeneratedSlot() throws Exception {
 
-		
-		lngScenarioModel.setPromptPeriodStart( LocalDate.of(2015, 6, 1));
-		
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2015, 6, 1));
+
 		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Idku LNG")), entity, "5") //
 				.withAvailabilityConstant(1)//
 				.build();
@@ -307,25 +307,10 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 			final IMultiStateResult result = scenarioRunner.runAndApplyBest();
 			Assert.assertNotNull(result);
 
-			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(2, lngScenarioModel.getCargoModel().getDischargeSlots().size());
-
-			// Cargo two should still be present
+			// Cargo should have been created
 			Assert.assertNotNull(cargo2.eContainer());
-
-			// Check the spot market slot has been removed and cargo re-wired
-			Assert.assertSame(cargo2, lngScenarioModel.getCargoModel().getCargoes().get(0));
-			Assert.assertTrue(lngScenarioModel.getCargoModel().getLoadSlots().contains(load2));
-			Assert.assertTrue(lngScenarioModel.getCargoModel().getDischargeSlots().contains(discharge2));
-
-			Assert.assertTrue(cargo2.getSlots().contains(load2));
-			Assert.assertFalse(cargo2.getSlots().contains(discharge2));
-
-			// TODO: Check for new spot slot
-
-			// Assert.fail("Should not pass *new* constraint checker");
-
+			Assert.assertSame(load2, cargo2.getSortedSlots().get(0));
+			Assert.assertSame(market, ((SpotSlot) cargo2.getSortedSlots().get(1)).getMarket());
 		});
 	}
 

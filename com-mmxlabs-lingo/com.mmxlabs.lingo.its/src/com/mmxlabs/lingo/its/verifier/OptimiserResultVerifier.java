@@ -15,6 +15,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
@@ -38,7 +39,7 @@ public class OptimiserResultVerifier {
 	private final ScenarioModelFinder scenarioModelFinder;
 
 	private final List<Function<SolutionData, Boolean>> checks = new LinkedList<>();
-	private OptimiserDataMapper mapper;
+	private final OptimiserDataMapper mapper;
 
 	public static OptimiserResultVerifier begin(final LNGScenarioRunner scenarioRunner) {
 		return new OptimiserResultVerifier(scenarioRunner);
@@ -74,6 +75,28 @@ public class OptimiserResultVerifier {
 			return null;
 		};
 		return new VesselVerifier(this, p);
+	}
+
+	public OptimiserResultVerifier withUnusedSlot(final String name) {
+
+		final CargoModelFinder finder = scenarioModelFinder.getCargoModelFinder();
+		final Slot slot = finder.findSlot(name);
+
+		final Function<SolutionData, Boolean> p = (s) -> {
+
+			final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(slot);
+			final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
+
+			if (a != null) {
+				if (a.getFirst() == null) {
+					return true;
+				}
+
+			}
+			return false;
+		};
+		this.checks.add(p);
+		return this;
 	}
 
 	public static class VesselVerifier {
@@ -148,21 +171,21 @@ public class OptimiserResultVerifier {
 		}
 	}
 
-	public void verifyInsertionResults(IMultiStateResult results, Consumer<String> errorHandler) {
+	public void verifyInsertionResults(final IMultiStateResult results, final Consumer<String> errorHandler) {
 
-		List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
+		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
 		if (solutions.size() < 2) {
 			errorHandler.accept("No solutions found");
 		}
 
-		List<SolutionData> data = new ArrayList<SolutionData>(solutions.size() - 1);
+		final List<SolutionData> data = new ArrayList<SolutionData>(solutions.size() - 1);
 		for (int i = 1; i < solutions.size(); ++i) {
 			data.add(new SolutionData(mapper, solutions.get(i).getFirst()));
 		}
 
-		for (Function<SolutionData, Boolean> checker : checks) {
+		for (final Function<SolutionData, Boolean> checker : checks) {
 			boolean foundMatch = false;
-			for (SolutionData d : data) {
+			for (final SolutionData d : data) {
 				if (checker.apply(d)) {
 					foundMatch = true;
 					break;

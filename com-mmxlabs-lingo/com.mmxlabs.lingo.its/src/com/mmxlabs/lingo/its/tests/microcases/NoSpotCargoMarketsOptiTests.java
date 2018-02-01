@@ -12,9 +12,10 @@ import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 /**
- * Test cases to make sure "shipping only" mode does not cause wiring changes.
  * 
  * @author Simon Goodall
  *
@@ -29,16 +30,16 @@ public class NoSpotCargoMarketsOptiTests extends AbstractMicroTestCase {
 				.withOptional(true) //
 				.build();
 
-		spotMarketsModelBuilder.makeDESSaleMarket("IoGMarket", portFinder.findPort("Isle of Grain"), entity, "5") //
+		final SpotMarket market = spotMarketsModelBuilder.makeDESSaleMarket("IoGMarket", portFinder.findPort("Isle of Grain"), entity, "5") //
 				.withAvailabilityConstant(1) //
 				.build();
 
 		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setWithSpotCargoMarkets(true), null, scenarioRunner -> {
 
+			Assert.assertNotNull(load2.getCargo());
 			// Cargo should have been created
-			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getDischargeSlots().size());
-			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getLoadSlots().size());
+			Assert.assertNotNull(load2.getCargo());
+			Assert.assertSame(market, ((SpotSlot) load2.getCargo().getSortedSlots().get(1)).getMarket());
 		}, null);
 	}
 
@@ -55,9 +56,8 @@ public class NoSpotCargoMarketsOptiTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setWithSpotCargoMarkets(false), null, scenarioRunner -> {
-			Assert.assertTrue(lngScenarioModel.getCargoModel().getCargoes().isEmpty());
-			Assert.assertTrue(lngScenarioModel.getCargoModel().getDischargeSlots().isEmpty());
-			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getLoadSlots().size());
+			// Cargo should not have been created
+			Assert.assertNull(load1.getCargo());
 		}, null);
 	}
 }
