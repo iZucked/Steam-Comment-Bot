@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="20">
+<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="21">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.annotation" version="2.1.100.v20170511-1408"/>
@@ -134,9 +134,11 @@
 <unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse.source" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.source" version="1.3.0"/>
+<unit id="de.flapdoodle.embed.mongo" version="0.0.0"/>
+<unit id="de.flapdoodle.embed.process" version="0.0.0"/>
 <unit id="org.swtchart" version="0.0.0"/>
 <unit id="org.swtchart.ext" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.14/mmxlabs-external-1.0.14-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.16/mmxlabs-external-1.0.16-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 </locations>
 </target>
