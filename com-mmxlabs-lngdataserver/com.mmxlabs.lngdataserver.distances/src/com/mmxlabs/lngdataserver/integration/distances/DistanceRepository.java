@@ -30,6 +30,11 @@ import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.integration.distances.internal.Activator;
 import com.mmxlabs.lngdataserver.integration.distances.preferences.PreferenceConstants;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 import io.swagger.client.model.PublishRequest;
 import io.swagger.client.model.Version;
@@ -40,20 +45,21 @@ import io.swagger.client.model.Version;
  * @author Robert Erdin
  */
 public class DistanceRepository {
-	
+
 	private static final String SYNC_ENDPOINT = "/distances/sync/publish";
-	
-	private DistancesApi distancesApi = new DistancesApi(new ApiClient());
+	private static final String SYNC_VERSION_ENDPOINT = "/distances/sync/versions/";
+
+	private final DistancesApi distancesApi = new DistancesApi(new ApiClient());
 	// used for long polling... timeout set to infinite
 	// Infinite timeout means listening for version can't effectively be cancelled
-	private DistancesApi waitingDistancesApi = new DistancesApi(new ApiClient());
-	
-	private DistancesApi upstreamDistancesApi = new DistancesApi(new ApiClient());
+	private final DistancesApi waitingDistancesApi = new DistancesApi(new ApiClient());
+
+	private final DistancesApi upstreamDistancesApi = new DistancesApi(new ApiClient());
 
 	private static final Logger LOG = LoggerFactory.getLogger(DistanceRepository.class);
-	private Triple<String, String, String> auth;
+	private final Triple<String, String, String> auth;
 	private String backendUrl;
-	private String upstreamUrl;
+	private final String upstreamUrl;
 	private boolean listenForNewVersions;
 	private final List<Consumer<String>> newVersionCallbacks = new LinkedList<Consumer<String>>();
 
@@ -63,7 +69,7 @@ public class DistanceRepository {
 		upstreamDistancesApi.getApiClient().setBasePath(upstreamUrl);
 	}
 
-	public DistanceRepository(String url) {
+	public DistanceRepository(final String url) {
 		auth = new Triple<>(url, "", "");
 		upstreamUrl = getUpstreamUrl();
 		upstreamDistancesApi.getApiClient().setBasePath(upstreamUrl);
@@ -77,7 +83,7 @@ public class DistanceRepository {
 
 		return new Triple<>(url, username, password);
 	}
-	
+
 	private String getUpstreamUrl() {
 		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
 		final String url = prefs.getString(PreferenceConstants.P_URL_KEY);
@@ -90,87 +96,103 @@ public class DistanceRepository {
 	public List<DataVersion> getVersions() {
 		try {
 			return distancesApi.getVersionsUsingGET().stream().map(v -> {
-				LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getMillis()), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getMillis()), ZoneId.of("UTC"));
 				return new DataVersion(v.getIdentifier(), createdAt, v.getPublished());
 			}).collect(Collectors.toList());
-		} catch (ApiException e) {
+		} catch (final ApiException e) {
 			LOG.error("Error fetchinng distances versions" + e.getMessage());
 			throw new RuntimeException("Error fetching distances versions", e);
 		}
 	}
-	
+
 	public void listenForNewVersions() {
 		listenForNewVersions = true;
-		
-		new Thread(() ->  {
-			while(listenForNewVersions) {
-				CompletableFuture<String> newVersion = waitForNewVersion();
+
+		new Thread(() -> {
+			while (listenForNewVersions) {
+				final CompletableFuture<String> newVersion = waitForNewVersion();
 				try {
-					String version = newVersion.get();
+					final String version = newVersion.get();
 					newVersionCallbacks.forEach(c -> c.accept(version));
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					LOG.error(e.getMessage());
-				} catch (ExecutionException e) {
+				} catch (final ExecutionException e) {
 					LOG.error(e.getMessage());
 				}
-				
+
 				// make sure not everything is blocked in case of consecutive failure
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					throw new RuntimeException(e);
 				}
 			}
 		}).start();
 	}
-	
+
 	public void stopListeningForNewVersions() {
 		listenForNewVersions = false;
 	}
-	
-	public void registerVersionListener(Consumer<String> versionConsumer) {
+
+	public void registerVersionListener(final Consumer<String> versionConsumer) {
 		newVersionCallbacks.add(versionConsumer);
 	}
-	
-	private CompletableFuture<String> waitForNewVersion(){
 
-		CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+	private CompletableFuture<String> waitForNewVersion() {
+
+		final CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
 			Version futureVersion;
 			try {
 				futureVersion = distancesApi.getDistanceUpdateUsingGET();
-			} catch (ApiException e) {
+			} catch (final ApiException e) {
 				throw new RuntimeException(e);
 			}
 			return futureVersion.getIdentifier();
 		});
 		return completableFuture;
 	}
-	
+
 	public boolean isReady() {
 		if (backendUrl != null) {
 			return true;
-		}else if(BackEndUrlProvider.INSTANCE.isAvailable()) {
+		} else if (BackEndUrlProvider.INSTANCE.isAvailable()) {
 			backendUrl = BackEndUrlProvider.INSTANCE.getUrl();
 			distancesApi.getApiClient().setBasePath(backendUrl);
 			waitingDistancesApi.getApiClient().setBasePath(backendUrl);
 			waitingDistancesApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	private void ensureReady() {
 		if (!isReady()) {
 			throw new IllegalStateException("Distances back-end not ready yet");
 		}
 	}
-	
-	public void publishVersion(String version) throws ApiException {
-		PublishRequest publishRequest = new PublishRequest();
+
+	public void publishVersion(final String version) throws ApiException {
+		final PublishRequest publishRequest = new PublishRequest();
 		publishRequest.setVersion(version);
 		publishRequest.setUpstreamUrl(upstreamUrl + SYNC_ENDPOINT);
 		distancesApi.postSyncRequestUsingPOST(publishRequest);
+	}
+
+	public void syncUpstreamVersion(final String version) throws Exception {
+
+		final OkHttpClient httpclient = upstreamDistancesApi.getApiClient().getHttpClient();
+		
+		// Pull down the version data
+		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
+		final Response pullResponse = httpclient.newCall(pullRequest).execute();
+		final String json = pullResponse.body().string();
+		
+		// Post the data to local repo
+		final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+		final Request postRequest = new Request.Builder().url(backendUrl + SYNC_VERSION_ENDPOINT).post(body).build();
+		final Response postResponse = httpclient.newCall(postRequest).execute();
+		// TODO: Check return code etc
 	}
 
 	public IDistanceProvider getDistances(final String version) {
@@ -188,14 +210,12 @@ public class DistanceRepository {
 	private Triple<String, String, String> getServiceAuth() {
 		return auth;
 	}
-	
-	public List<DataVersion> updateAvailable() throws ApiException{
-		List<Version> upstreamVersions = upstreamDistancesApi.getVersionsUsingGET();
-		Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
+
+	public List<DataVersion> updateAvailable() throws ApiException {
+		final List<Version> upstreamVersions = upstreamDistancesApi.getVersionsUsingGET();
+		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
 		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
-		return upstreamVersions.stream()
-				.map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.getPublished()))
-				.collect(Collectors.toList());
+		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.getPublished())).collect(Collectors.toList());
 	}
 
 	public @Nullable IDistanceProvider getLatestDistances() {
@@ -215,8 +235,8 @@ public class DistanceRepository {
 			throw new RuntimeException("Error fetching versions from upstream service", e);
 		}
 	}
-	
-	private static LocalDateTime fromDateTimeAtUTC(DateTime dateTime) {
+
+	private static LocalDateTime fromDateTimeAtUTC(final DateTime dateTime) {
 		return LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime.getMillis()), ZoneId.of("UTC"));
 	}
 }
