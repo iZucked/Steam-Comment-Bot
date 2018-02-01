@@ -97,11 +97,13 @@ public class UpstreamPortFetcher {
 			p.setName((String) currentMap.get("name"));
 			l.setName((String) currentMap.get("name"));
 			l.setMmxId((String) currentMap.get("mmxId"));
-			l.setCountry((String) ((Map) currentMap.get("geographicPoint")).get("country"));
-			l.setLat((Double) ((Map) currentMap.get("geographicPoint")).get("lat"));
-			l.setLon((Double) ((Map) currentMap.get("geographicPoint")).get("lon"));
-			l.setTimeZone((String) ((Map) currentMap.get("geographicPoint")).get("timeZone"));
-
+			Object geographicPoint = currentMap.get("geographicPoint");
+			if (geographicPoint instanceof Map) {
+				l.setCountry((String) ((Map) geographicPoint).get("country"));
+				l.setLat((Double) ((Map) geographicPoint).get("lat"));
+				l.setLon((Double) ((Map) geographicPoint).get("lon"));
+				l.setTimeZone((String) ((Map) geographicPoint).get("timeZone"));
+			}
 			if (currentMap.containsKey("aliases") && currentMap.get("aliases") instanceof JSONArray) {
 				((JSONArray) currentMap.get("aliases")).forEach(a -> l.getOtherNames().add((String) a));
 			}
