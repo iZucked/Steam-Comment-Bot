@@ -5,6 +5,9 @@
 package com.mmxlabs.scenario.service.model.impl;
 
 import com.mmxlabs.scenario.service.manifest.Manifest;
+
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.impl.BasicNotifierImpl.EAdapterList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
@@ -254,5 +257,19 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 */
 	public int getContainedInstanceCount() {
 		return super.getContainedInstanceCount() + 1;
+	}
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Adapter> eAdapters() {
+		// This is the same as the super class except we have the additional #grow call to try and reduce concurrency issues
+		if (eAdapters == null) {
+			eAdapters = new EAdapterList<Adapter>(this);
+			eAdapters.grow(20);
+		}
+		return eAdapters;
 	}
 } //ScenarioInstanceImpl
