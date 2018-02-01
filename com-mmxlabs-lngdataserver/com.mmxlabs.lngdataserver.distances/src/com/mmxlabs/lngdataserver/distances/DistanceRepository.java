@@ -1,4 +1,4 @@
-package com.mmxlabs.lngdataserver.integration.distances;
+package com.mmxlabs.lngdataserver.distances;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -27,8 +27,8 @@ import com.mmxlabs.ApiException;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.DistancesApi;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
-import com.mmxlabs.lngdataserver.integration.distances.internal.Activator;
-import com.mmxlabs.lngdataserver.integration.distances.preferences.PreferenceConstants;
+import com.mmxlabs.lngdataserver.distances.internal.Activator;
+import com.mmxlabs.lngdataserver.distances.preferences.PreferenceConstants;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 
 import io.swagger.client.model.PublishRequest;
