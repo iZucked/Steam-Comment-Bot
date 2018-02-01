@@ -245,7 +245,8 @@ public class ScheduleCalculatorTest {
 		when(portSlot5.getTimeWindow()).thenReturn(timeWindow);
 
 		Pair<CargoValueAnnotation, Long> p = Mockito.mock(Pair.class);
-		when(entityValueCalculator.evaluate(ArgumentMatchers.eq(EvaluationMode.FullPNL), ArgumentMatchers.any(), ArgumentMatchers.any(),ArgumentMatchers.any(), ArgumentMatchers.anyInt(), ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(p);
+		when(entityValueCalculator.evaluate(ArgumentMatchers.eq(EvaluationMode.FullPNL), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.anyInt(),
+				ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(p);
 		final ProfitAndLossCalculator profitAndLossCalculator = new ProfitAndLossCalculator();
 		injector.injectMembers(profitAndLossCalculator);
 
@@ -330,7 +331,9 @@ public class ScheduleCalculatorTest {
 
 		@Override
 		public boolean matches(final VoyagePlan voyagePlan) {
-
+			if (voyagePlan == null) {
+				return false;
+			}
 			final Object[] sequence = voyagePlan.getSequence();
 			if (sequence != null) {
 				if (sequence.length == 2) {
