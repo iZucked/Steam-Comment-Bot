@@ -681,8 +681,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// If load or discharge has been set, then the other must be too.
 		assert ((loadIdx == -1) == (dischargeIdx == -1));
 
+		boolean isCargo = false;
 		// Load/Discharge sequence
 		if ((loadIdx != -1) && (dischargeIdx != -1)) {
+			isCargo = true;
+
 			final PortDetails loadDetails = (PortDetails) sequence[loadIdx];
 			final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
 			// Cargo should have fixed input heel range
@@ -742,7 +745,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final int[] pricesPerMMBTu = getLngEffectivePrices(loadIndices, dischargeIndices, voyageRecord, voyagePlan.getStartingHeelInM3(), sequence);
 
 		// set the LNG values for the voyages
-		// final int numVoyages = sequence.length / 2;
 		IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = null;
 		final int offset = sequence.length > 1 ? 1 : 0;
 		for (int i = 0; i < sequence.length - offset; ++i) {
@@ -764,20 +766,19 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final int unitPrice = pricesPerMMBTu[i];
 						details.setFuelUnitPrice(fkp[1].getFuelComponent(), unitPrice);
 						// Sum up the voyage costs
-						final long currentTotal = voyagePlan.getLngFuelCost();
-						voyagePlan.setLngFuelCost(currentTotal + Calculator.costFromConsumption(consumptionInMMBTu + additionalConsumptionInMMBTu, unitPrice));
+						if (isCargo) {
+							// Non-cargoes boil-off should be covered by heel payment.
+							final long currentTotal = voyagePlan.getLngFuelCost();
+							voyagePlan.setLngFuelCost(currentTotal + Calculator.costFromConsumption(consumptionInMMBTu + additionalConsumptionInMMBTu, unitPrice));
+						}
 					}
 				}
 				for (FuelKey fk : vessel.getVoyageFuelKeys()) {
 
-					// for (final FuelKey fk : details.getBasicFuelConsumptionKeys()) {
 					final IBaseFuel bf = fk.getBaseFuel();
 					if (bf != IBaseFuel.LNG) {
-						// for (IBaseFuel bf : baseFuelPricePerMT.keySet()) {
 						final int unitPrice = baseFuelPricesPerMT[bf.getIndex()];
 						details.setFuelUnitPrice(fk.getFuelComponent(), unitPrice);
-
-						// for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
 
 						// Existing consumption data is in M3, also store the MMBtu values
 						final long consumptionInMT = details.getFuelConsumption(fk);
@@ -790,14 +791,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				}
 
 				for (FuelKey fk : vessel.getTravelFuelKeys()) {
-					// for (final FuelKey fk : details.getRouteAdditionalFuelConsumptionKeys()) {
 					final IBaseFuel bf = fk.getBaseFuel();
-					// if (bf != IBaseFuel.LNG) {
-					// for (IBaseFuel bf : baseFuelPricePerMT.keySet()) {
 					final int unitPrice = baseFuelPricesPerMT[bf.getIndex()];
 					details.setFuelUnitPrice(fk.getFuelComponent(), unitPrice);
-
-					// for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
 
 					// Existing consumption data is in M3, also store the MMBtu values
 					final long consumptionInMT = details.getRouteAdditionalConsumption(fk);
@@ -806,15 +802,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final long currentTotal = voyagePlan.getBaseFuelCost();
 						voyagePlan.setBaseFuelCost(currentTotal + Calculator.costFromConsumption(consumptionInMT, unitPrice));
 					}
-					// }
 				}
-
-				// details.setFuelUnitPrices(baseFuelPricePerMT);
-				// // Sum up the voyage costs - breaks ITS
-				// final long consumptionInMT = details.getFuelConsumption(fc, fc.getDefaultFuelUnit()) + details.getRouteAdditionalConsumption(fc, fc.getDefaultFuelUnit());
-				// final long currentTotal = voyagePlan.getTotalFuelCost(fc);
-				// voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMT, baseFuelPricePerMT));
-
 			} else {
 				assert element instanceof PortDetails;
 				final PortDetails details = (PortDetails) element;
@@ -830,8 +818,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				}
 
-				// NO LNG Consumption in Port
-				// details.setFuelUnitPrices(baseFuelPricePerMT);
 				final int cargoCVValue = details.getOptions().getCargoCVValue();
 				{
 					// Existing consumption data is in M3, also store the MMBtu values
@@ -844,8 +830,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final int unitPrice = pricesPerMMBTu[i];
 						details.setFuelUnitPrice(FuelComponent.NBO, unitPrice);
 						// Sum up the voyage costs
-						final long currentTotal = voyagePlan.getLngFuelCost();
-						voyagePlan.setLngFuelCost(currentTotal + Calculator.costFromConsumption(consumptionInMMBTu, unitPrice));
+						if (isCargo) {
+							// Non-cargoes (currently) have no in-port boil-off, but if they did, it should be covered by heel payment.
+							final long currentTotal = voyagePlan.getLngFuelCost();
+							voyagePlan.setLngFuelCost(currentTotal + Calculator.costFromConsumption(consumptionInMMBTu, unitPrice));
+						}
 					}
 				}
 
