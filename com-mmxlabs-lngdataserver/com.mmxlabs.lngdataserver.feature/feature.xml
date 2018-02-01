@@ -271,4 +271,18 @@ All rights reserved.
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="de.flapdoodle.embed.mongo"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.flapdoodle.embed.process"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
