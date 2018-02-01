@@ -22,6 +22,7 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.ApiClient;
 import com.mmxlabs.ApiException;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.DistancesApi;
@@ -42,12 +43,12 @@ public class DistanceRepository {
 	
 	private static final String SYNC_ENDPOINT = "/distances/sync/publish";
 	
-	private DistancesApi distancesApi = new DistancesApi();
+	private DistancesApi distancesApi = new DistancesApi(new ApiClient());
 	// used for long polling... timeout set to infinite
 	// Infinite timeout means listening for version can't effectively be cancelled
-	private DistancesApi waitingDistancesApi = new DistancesApi();
+	private DistancesApi waitingDistancesApi = new DistancesApi(new ApiClient());
 	
-	private DistancesApi upstreamDistancesApi = new DistancesApi();
+	private DistancesApi upstreamDistancesApi = new DistancesApi(new ApiClient());
 
 	private static final Logger LOG = LoggerFactory.getLogger(DistanceRepository.class);
 	private Triple<String, String, String> auth;
