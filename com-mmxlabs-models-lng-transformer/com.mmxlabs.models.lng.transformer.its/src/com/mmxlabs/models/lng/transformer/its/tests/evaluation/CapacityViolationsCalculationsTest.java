@@ -342,7 +342,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		// 5 = 1 { journey duration } * 15 { base fuel consumption } - 10 { LNG consumption }
 		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
 		// 15 = 1 { journey duration } * 15 { base fuel consumption }
-		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 5, 10, 15 });
+		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 0, 10, 15 });
+		checker.setExpectedValuesIfMatching(Expectations.FBO_USAGE, Journey.class, new Integer[] { 5, 0, 0 });
 
 		// expected NBO consumptions of journeys
 		// 10 = 1 { voyage duration } * 5 { NBO rate }
@@ -354,9 +355,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		// 260 = 10 { base fuel unit cost } * 5 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 10 { LNG consumption }
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
-		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 260, 520, 150 });
+		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 315, 520, 150 });
 
-		int expectedInitialVoyageBoilOffInM3 = 10;
+		int expectedInitialVoyageBoilOffInM3 = 10 + 5;
 		int expectedCargoBoilOffInM3 = 30;
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 1000, -(1500 - expectedCargoBoilOffInM3 - expectedInitialVoyageBoilOffInM3) });
 
@@ -438,21 +439,23 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		// 5 = 1 { journey duration } * 15 { base fuel consumption } - 10 { LNG consumption }
 		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
 		// 15 = 1 { journey duration } * 15 { base fuel consumption }
-		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 5, 10, 15 });
+		checker.setExpectedValuesIfMatching(Expectations.FBO_USAGE, Journey.class, new Integer[] { 5, 0, 0 });
+		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 0, 10, 15 });
 
 		// expected NBO consumptions of journeys
 		// 10 = 1 { voyage duration } * 5 { NBO rate }
 		// 20 = 2 { duration in hours } * 10 { NBO rate }
 		// 0 = (vessel empty)
 		checker.setExpectedValuesIfMatching(Expectations.NBO_USAGE, Journey.class, new Integer[] { 10, 20, 0 });
+//		checker.setExpectedValuesIfMatching(Expectations.NBO_USAGE, Journey.class, new Integer[] { 5, 20, 0 });
 
 		// expected costs of journeys
 		// 260 = 10 { base fuel unit cost } * 5 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 10 { LNG consumption }
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
-		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 260, 520, 150 });
+		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 315, 520, 150 });
 
-		int expectedInitialVoyageBoilOffInM3 = 10;
+		int expectedInitialVoyageBoilOffInM3 = 10 + 5;
 		int expectedCargoBoilOffInM3 = 30;
 		// Should be 540m3
 		int expectedLoadVolumeInM3 = maxDischargeVolumeInM3 - (startHeelInM3 - expectedInitialVoyageBoilOffInM3) + expectedCargoBoilOffInM3;
@@ -507,7 +510,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		// 5 = 1 { journey duration } * 15 { base fuel consumption } - 10 { LNG consumption }
 		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
 		// 15 = 1 { journey duration } * 15 { base fuel consumption }
-		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 5, 10, 5 });
+		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 0, 10, 5 });
+		checker.setExpectedValuesIfMatching(Expectations.FBO_USAGE, Journey.class, new Integer[] { 5, 0,0 });
 
 		// expected NBO consumptions of journeys
 		// 10 = 1 { voyage duration } * 5 { NBO rate }
@@ -519,9 +523,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		// 260 = 10 { base fuel unit cost } * 5 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 10 { LNG consumption }
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
-		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 260, 520, 260 });
+		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 315, 520, 260 });
 
-		int expectedInitialVoyageBoilOffInM3 = 10;
+		int expectedInitialVoyageBoilOffInM3 = 10 + 5;
 		int expectedCargoBoilOffInM3 = 30;
 		int expectedLoadVolumeInM3 = 0;
 		int expectedCargoStartingHeelInM3 = startHeelInM3 - expectedInitialVoyageBoilOffInM3;
@@ -529,7 +533,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// load will be short by 520m3
 		checker.setExpectedValue(1060 - expectedLoadVolumeInM3, Expectations.MIN_LOAD_VIOLATIONS, SlotVisit.class, 0);
-		checker.setExpectedValue(50, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+		checker.setExpectedValue(45, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		checker.setExpectedValue(1 * 21 * 500, Expectations.HEEL_COST, StartEvent.class, 0);
 

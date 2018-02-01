@@ -293,7 +293,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final SequenceTester checker = getDefaultTester();
 
 		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setMinVolumeAvailable(500);
+		vesselAvailability.getStartHeel().setMinVolumeAvailable(0);
 		vesselAvailability.getStartHeel().setMaxVolumeAvailable(500);
 		// FIXME: These need to match the cargo defaults....
 		vesselAvailability.getStartHeel().setCvValue(21);
@@ -360,7 +360,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 			}
 		}
 
-		final int expectedHeelRolledOver = (int) vesselAvailability.getStartHeel().getMinVolumeAvailable() - legLNG[0];
+		final int expectedHeelRolledOver = 0;//(int) vesselAvailability.getStartHeel().getMinVolumeAvailable() - legLNG[0];
 		final int totalLNGUsed = legLNG[1] + legLNG[2];
 
 		final int vesselCapacity = (int) (msc.vessel.getVesselOrDelegateCapacity() * msc.vessel.getVesselOrDelegateFillCapacity());
@@ -670,13 +670,14 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 0, 2, 0 });
 		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 0, 10, 0 });
 
-		// first journey runs on NBO and BF
+		// first journey runs on NBO and FBO
 		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
+		checker.setExpectedValue(0, Expectations.BF_USAGE, Journey.class, 0);
+		checker.setExpectedValue(5, Expectations.FBO_USAGE, Journey.class, 0);
 
 		// expected load volume reduced due to roll over from LNG left at end of charter out
-		// 5010 = 10000 [vessel capacity] - (5000 [leftover heel] - 10 [journey boiloff])
-		checker.setExpectedValue(5010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
+		// 5015 = 10000 [vessel capacity] - (5000 [leftover heel] - 15 [journey boiloff])
+		checker.setExpectedValue(5015, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
 
 		checker.setExpectedValue(1 * 21 * 5000, Expectations.HEEL_COST, VesselEventVisit.class, 0);
 
@@ -731,7 +732,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		event.getAvailableHeel().setCvValue(21);
 		event.getAvailableHeel().setPriceExpression("1");
-		event.getAvailableHeel().setMinVolumeAvailable(40);
+		event.getAvailableHeel().setMinVolumeAvailable(10);
 		event.getAvailableHeel().setMaxVolumeAvailable(40);
 
 		final SequenceTester checker = getTesterForVesselEventPostDischarge();

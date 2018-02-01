@@ -329,7 +329,7 @@ public class ScenarioTools {
 				.makeCharterOutEvent("Charter Out", startCharterOut, startCharterOut, A) //
 				.withRelocatePort(A) //
 				.withDurationInDays(charterOutTimeDays) //
-				.withAvailableHeelOptions(heelLimit, heelLimit, cvValue, Double.toString(dischargePrice))//
+				.withAvailableHeelOptions(0, heelLimit, cvValue, Double.toString(dischargePrice))//
 				.withRepositioningFee(0) //
 				.build();
 
@@ -515,6 +515,7 @@ public class ScenarioTools {
 				System.err.println("Journey:");
 				System.err.println("\tDuration: " + j.getDuration() + ", distance: " + j.getDistance() + ", ports: " + j.getPort().getName() + " -> " + j.getDestination().getName());
 				System.err.println("\tDepart: " + j.getStart() + ", Arrive: " + j.getEnd());
+				System.err.println("\tFuel Cost: " + j.getFuelCost());
 
 				ScenarioTools.printFuel(j.getFuels());
 

@@ -119,7 +119,7 @@ public class HeelOutOfCharterOutTest {
 	 */
 	private Journey testHeelWithCheaperLNG(final int heelLimit) {
 
-		final float baseFuelUnitPrice = 1f;
+		final float baseFuelUnitPrice = 1.0f;
 
 		// discharge price makes LNG slightly cheaper than BF.
 		final float dischargePrice = 0.99f;
@@ -146,6 +146,7 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * Heel is only available for NBO, BF used to supplement.
 	 */
+	@Ignore("Mixed mode means we can now use FBO then run dry")
 	@Test
 	public void heelNBOAvailableCheaper() {
 
