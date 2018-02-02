@@ -53,7 +53,7 @@ public abstract class AllowedFieldFilteredReferenceValueProvider<FieldType> exte
 				return true;
 			}
 			// permit a value which is included in a selection from the allowed values list
-			// e.g. a vessel class
+			// e.g. a vessel
 			if (fieldValueIncludesObject(fieldValue, queryValue)) {
 				return true;
 			}
