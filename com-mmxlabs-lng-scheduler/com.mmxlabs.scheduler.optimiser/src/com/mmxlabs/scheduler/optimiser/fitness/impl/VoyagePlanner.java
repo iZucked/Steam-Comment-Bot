@@ -682,7 +682,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 					if (idx < voyageOrPortOptions.size() - 1) {
 						final long baseFuelConsumptionInMt = actualsDataProvider.getPortBaseFuelConsumptionInMT(portOptions.getPortSlot());
 						fuelConsumptions[FuelComponent.Base.ordinal()] += baseFuelConsumptionInMt;
-						fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricesPerMT[vessel.getTravelBaseFuel().getIndex()]);
+						fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricesPerMT[vessel.getInPortBaseFuel().getIndex()]);
 						portDetails.setFuelConsumption(vessel.getInPortBaseFuelInMT(), baseFuelConsumptionInMt);
 					}
 					detailedSequence[idx] = portDetails;
