@@ -39,7 +39,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
- * A dialog for editing the canal costs associated with a vessel class
+ * A dialog for editing the canal costs associated with a vessel
  * 
  * Displays a table in which there is a row for each canal, and a column for each attribute.
  * 

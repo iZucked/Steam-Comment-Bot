@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint;
  * (b) the min and max speeds lie within the bounds of the laden and ballast fuel consumption curves. These curves are lists of speed/ consumption pairs provided by
  * VesselStateAttributes.getFuelConsumptionCurve(), where the VesselStateAttributes are found by VesselClass.getLadenAttributes() and .getBallastAttributes().
  * 
- * The bounds that the speed of the vessel class should lie between are the largest minimum and smallest maximum speeds of both the ballast and laden FCLs
+ * The bounds that the speed of the vessel should lie between are the largest minimum and smallest maximum speeds of both the ballast and laden FCLs
  * 
  */
 public class VesselClassSpeedConstraintTest {
@@ -83,7 +83,7 @@ public class VesselClassSpeedConstraintTest {
 	}
 
 	/**
-	 * Test for a failure if minimum speed of the vessel class is greater than the maximum speed.
+	 * Test for a failure if minimum speed of the vessel is greater than the maximum speed.
 	 */
 	@Test
 	public void testVesselClassSpeedConstraintMinGreaterThanMax() {
@@ -96,7 +96,7 @@ public class VesselClassSpeedConstraintTest {
 	}
 
 	/**
-	 * Test for a success if the min and max speeds of a vessel class are the same.
+	 * Test for a success if the min and max speeds of a vessel are the same.
 	 */
 	@Test
 	public void testVesselClassSpeedConstraintMinEqualMax() {
@@ -120,7 +120,7 @@ public class VesselClassSpeedConstraintTest {
 	 */
 	private void testVesselClassSpeedConstraintSuccess(final VesselStateAttributes laden, final VesselStateAttributes ballast) {
 
-		// mock a vessel class
+		// mock a vessel
 		final Vessel vessel = mock(Vessel.class);
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus resultStatus = mock(IConstraintStatus.class);
@@ -147,14 +147,14 @@ public class VesselClassSpeedConstraintTest {
 	}
 
 	/**
-	 * Test the VesselClassSpeedConstraint Order condition. This tests whether the min and max speed of a vessel class are sensible (i.e. max >= min). This method expects that this will fail, however.
+	 * Test the VesselClassSpeedConstraint Order condition. This tests whether the min and max speed of a vessel are sensible (i.e. max >= min). This method expects that this will fail, however.
 	 * 
 	 * @param minSpeed
 	 * @param maxSpeed
 	 */
 	private void testVesselClassSpeedConstraintOrderFailure(final double minSpeed, final double maxSpeed) {
 
-		// mock a vessel class
+		// mock a vessel
 		final Vessel vessel = mock(Vessel.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
@@ -197,14 +197,14 @@ public class VesselClassSpeedConstraintTest {
 	}
 
 	/**
-	 * Test the VesselClassSpeedConstraint Order condition. This tests whether the min and max speed of a vessel class are sensible (i.e. max >= min). This method expects that this test will succeed.
+	 * Test the VesselClassSpeedConstraint Order condition. This tests whether the min and max speed of a vessel are sensible (i.e. max >= min). This method expects that this test will succeed.
 	 * 
 	 * @param minSpeed
 	 * @param maxSpeed
 	 */
 	private void testVesselClassSpeedConstraintOrderSuccess(final double minSpeed, final double maxSpeed) {
 
-		// mock a vessel class
+		// mock a vessel
 		final Vessel vessel = mock(Vessel.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
@@ -289,11 +289,11 @@ public class VesselClassSpeedConstraintTest {
 	}
 
 	/**
-	 * If the largest FCL minimum speed is greater than the miniumum vessel class speed then the constraint should fail.
+	 * If the largest FCL minimum speed is greater than the miniumum vessel speed then the constraint should fail.
 	 */
 	private void testVesselClassSpeedConstraintIDFCLsMinGreaterThanVCMin(final String ID) {
 
-		// The max and min speeds for the vessel class.
+		// The max and min speeds for the vessel .
 		final float minSpeed = 10;
 		final float maxSpeed = 11;
 		// the max and min speeds allowed for the fuel consumption line.
@@ -315,11 +315,11 @@ public class VesselClassSpeedConstraintTest {
 	}
 
 	/**
-	 * If the smallest FCL maximum speed is greater than the maximum vessel class speed then the constraint should fail.
+	 * If the smallest FCL maximum speed is greater than the maximum vessel speed then the constraint should fail.
 	 */
 	private void testVesselClassSpeedConstraintIDFCLsMaxGreaterThanVCMax(final String ID) {
 
-		// The max and min speeds for the vessel class.
+		// The max and min speeds for the vessel .
 		final float minSpeed = 9;
 		final float maxSpeed = 10;
 		// the max and min speeds allowed for the fuel consumption line.
@@ -337,9 +337,9 @@ public class VesselClassSpeedConstraintTest {
 	 * @param ID
 	 *            Should either be MAX_ID or MIN_ID.
 	 * @param minVCSpeed
-	 *            The minimum speed of the vessel class.
+	 *            The minimum speed of the vessel .
 	 * @param maxVCSpeed
-	 *            The maximum speed of the vessel class.
+	 *            The maximum speed of the vessel .
 	 * @param minFCLSpeed
 	 *            The minimum speed of fuel consumption line for both laden and ballast.
 	 * @param maxFCLSpeed
@@ -347,7 +347,7 @@ public class VesselClassSpeedConstraintTest {
 	 */
 	private void testVesselClassSpeedConstraintID(final boolean expectSuccess, final String ID, final double minVCSpeed, final double maxVCSpeed, final double minFCLSpeed, final double maxFCLSpeed) {
 
-		// mock a vessel class
+		// mock a vessel
 		final Vessel vessel = mock(Vessel.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
@@ -372,12 +372,12 @@ public class VesselClassSpeedConstraintTest {
 
 		// what's the target?
 		when(validationContext.getTarget()).thenReturn(vessel);
-		// Make sure the vessel class returns the ballast and laden attribs.
+		// Make sure the vessel returns the ballast and laden attribs.
 		when(vessel.getBallastAttributes()).thenReturn(ballast);
 		when(vessel.getLadenAttributes()).thenReturn(laden);
 		// The ID that we are testing for.
 		when(validationContext.getCurrentConstraintId()).thenReturn(ID);
-		// The vessel class has a min and max speed as specified by the method arguments.
+		// The vessel has a min and max speed as specified by the method arguments.
 		when(vessel.getVesselOrDelegateMinSpeed()).thenReturn(minVCSpeed);
 		when(vessel.getVesselOrDelegateMaxSpeed()).thenReturn(maxVCSpeed);
 		// Set the fuel consump. lines to return a speed as specified by the method arguments.
@@ -405,12 +405,12 @@ public class VesselClassSpeedConstraintTest {
 
 		// what's the target?
 		verify(validationContext).getTarget();
-		// Make sure the vessel class returns the ballast and laden attribs.
+		// Make sure the vessel returns the ballast and laden attribs.
 		verify(vessel).getBallastAttributes();
 		verify(vessel).getLadenAttributes();
 		// The ID that we are testing for.
 		verify(validationContext, atLeast(2)).getCurrentConstraintId();
-		// The vessel class has a min and max speed as specified by the method arguments.
+		// The vessel has a min and max speed as specified by the method arguments.
 		verify(vessel, atLeast(0)).getVesselOrDelegateMinSpeed();
 		verify(vessel, atLeast(0)).getVesselOrDelegateMaxSpeed();
 		// Set the fuel consump. lines to return a speed as specified by the method arguments.

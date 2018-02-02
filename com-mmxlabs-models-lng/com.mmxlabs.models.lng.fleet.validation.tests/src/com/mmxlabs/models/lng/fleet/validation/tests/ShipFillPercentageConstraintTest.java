@@ -23,14 +23,14 @@ import com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint;
  * 
  * Write a test for the ShipFillPercentageConstraint.
  * 
- * The ship fill percentage is the percentage of a vessel class' tanks that can actually be used. In the model, percentages are held as floating point numbers from 0 to 1 (i.e. proportions). The
+ * The ship fill percentage is the percentage of a vessel's tanks that can actually be used. In the model, percentages are held as floating point numbers from 0 to 1 (i.e. proportions). The
  * ShipFillPercentageConstraint is supposed to check that this value is (a) valid and (b) reasonable.
  * 
  * A valid ship fill percentage is strictly greater than zero and less than or equal to 100%
  * 
  * A reasonable ship fill percentage is more than 80% (0.8).
  * 
- * The constraint expects its IValidationContext to provide a VesselClass as the target, and one of "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_validity" or
+ * The constraint expects its IValidationContext to provide a Vessel as the target, and one of "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_validity" or
  * "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_sanity" from IValidationContext.getCurrentConstraintID(), indicating whether it's checking validity or reasonableness.
  * 
  */
@@ -132,7 +132,7 @@ public class ShipFillPercentageConstraintTest {
 		// This is the constraint we will be testing
 		final ShipFillPercentageConstraint constraint = new ShipFillPercentageConstraint();
 
-		// mock a vessel class
+		// mock a vessel
 		final Vessel vessel = mock(Vessel.class);
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus resultStatus = mock(IConstraintStatus.class);

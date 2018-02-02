@@ -26,7 +26,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
- * Vessel class importer; adds support for canal time fields.
+ * Vessel importer; adds support for canal time fields.
  * 
  * @author hinton
  * 

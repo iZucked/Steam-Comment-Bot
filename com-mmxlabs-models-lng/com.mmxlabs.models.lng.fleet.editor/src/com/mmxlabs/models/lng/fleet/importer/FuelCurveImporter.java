@@ -51,7 +51,7 @@ public class FuelCurveImporter {
 		try {
 			context.pushReader(reader);
 			while (null != (row = reader.readRow(true))) {
-				final String className = row.get("class");
+				final String vesselName = row.get("class");
 				final String stateName = row.get("state");
 
 				final List<FuelConsumption> consumptions = new LinkedList<FuelConsumption>();
@@ -79,12 +79,12 @@ public class FuelCurveImporter {
 					}
 				}
 
-				Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>> p = result.get(className);
+				Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>> p = result.get(vesselName);
 				if (p == null) {
 
-					p = new Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>(context.createProblem("Unknown vessel class: " + className, true, true, false),
+					p = new Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>(context.createProblem("Unknown vessel: " + vesselName, true, true, false),
 							new Pair<List<FuelConsumption>, List<FuelConsumption>>());
-					result.put(className, p);
+					result.put(vesselName, p);
 				}
 				if (stateName != null) {
 					if (stateName.equalsIgnoreCase("laden")) {

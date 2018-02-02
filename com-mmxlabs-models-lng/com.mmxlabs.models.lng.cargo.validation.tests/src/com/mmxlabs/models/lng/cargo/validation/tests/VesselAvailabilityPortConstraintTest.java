@@ -130,10 +130,6 @@ public class VesselAvailabilityPortConstraintTest {
 		@SuppressWarnings("unchecked")
 		final EList<Port> inaccessiblePorts = mock(EList.class);
 
-		// The constraint will need to be able to get vessel class' eContainer (the vessel owning it, in this case)
-		// when(vc.eContainer()).thenReturn(vessel);
-		// It will also need to know which feature in the vessel is containing vessel class (the start requirement)
-		// when(vc.eContainingFeature()).thenReturn(FleetPackage.eINSTANCE.getVessel_Availability());
 		// the inaccessible port list will be queried whether it contains port A
 		when(inaccessiblePorts.contains(portA)).thenReturn(true);
 		// It will ask for the port's name

@@ -29,7 +29,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * Validation constraint to check the type of vessel assigned. FOB/DES cargoes are either unassigned or a vessel not part of the "scenario" data - that is vessels in the FleetModel but do not have a
- * VesselAvailability. Fleet cargoes can be only scenario vessels or vessel class assignments. Vessel Events can only use scenario vessels.
+ * VesselAvailability. Fleet cargoes can be only scenario vessel assignments. Vessel Events can only use scenario vessels.
  * 
  */
 public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {

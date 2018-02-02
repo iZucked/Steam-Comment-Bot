@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * Command provider to automatically clear the Spot Index field for non-vessel class assignments.
+ * Command provider to automatically clear the Spot Index field for non-spot vessel assignments.
  * 
  * @author Simon Goodall
  * 

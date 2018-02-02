@@ -84,7 +84,7 @@ public class InaccessiblePortsConstraintTest {
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
-		// Test restriction on vessel class
+		// Test restriction on vessel
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
@@ -107,7 +107,7 @@ public class InaccessiblePortsConstraintTest {
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
-		// Test restriction on vessel class
+		// Test restriction on vessel
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Test market as assignment
@@ -163,7 +163,7 @@ public class InaccessiblePortsConstraintTest {
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
-		// Test restriction on vessel class
+		// Test restriction on vessel
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
@@ -184,10 +184,10 @@ public class InaccessiblePortsConstraintTest {
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
-		// Test restriction on vessel class
+		// Test restriction on vessel
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
-		// Test vessel class as assignment
+		// Test vessel as assignment
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterInMarket.setVessel(vessel1);
 		event.setVesselAssignmentType(charterInMarket);
@@ -241,7 +241,7 @@ public class InaccessiblePortsConstraintTest {
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		// Test restriction on vessel class
+		// Test restriction on vessel
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
@@ -262,10 +262,10 @@ public class InaccessiblePortsConstraintTest {
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		// Test restriction on vessel class
+		// Test restriction on vessel
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
-		// Test vessel class as assignment
+		// Test vessel as assignment
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterInMarket.setVessel(vessel1);
 		event.setVesselAssignmentType(charterInMarket);
