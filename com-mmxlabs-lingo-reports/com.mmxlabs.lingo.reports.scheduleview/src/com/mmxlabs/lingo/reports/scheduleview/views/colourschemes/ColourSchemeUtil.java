@@ -50,7 +50,7 @@ public class ColourSchemeUtil {
 		}
 		Vessel vessel = null;
 
-		// get vessel class directly from the sequence if it is a spot charter
+		// get vessel directly from the sequence if it is a spot charter
 		final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 		if (charterInMarket != null) {
 			vessel = charterInMarket.getVessel();
