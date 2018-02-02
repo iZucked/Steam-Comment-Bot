@@ -926,7 +926,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				// Forbid vessel class
+				// Forbid vessel
 				.withAllowedVessels(vessel1) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
