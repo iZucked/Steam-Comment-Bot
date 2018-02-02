@@ -27,13 +27,16 @@ public class TransformerHelper {
 	/**
 	 */
 	@NonNull
-	public static IVessel buildIVessel(@NonNull final ISchedulerBuilder builder, Vessel eVessel, @NonNull final IBaseFuel baseFuel, @NonNull final IBaseFuel idleBaseFuel, @NonNull final IBaseFuel inPortBaseFuel, @NonNull final IBaseFuel pilotLightBaseFuel) {
+	public static IVessel buildIVessel(@NonNull final ISchedulerBuilder builder, Vessel eVessel, @NonNull final IBaseFuel baseFuel, @NonNull final IBaseFuel idleBaseFuel,
+			@NonNull final IBaseFuel inPortBaseFuel, @NonNull final IBaseFuel pilotLightBaseFuel) {
 
 		@NonNull
 		final IVessel vc = builder.createVessel(eVessel.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMinSpeed()),
-				OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity())),
-				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateSafetyHeel()), baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegatePilotLightRate()),
-				eVessel.getVesselOrDelegateWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateCoolingVolume()),
+				OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMaxSpeed()),
+				OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity())),
+				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateSafetyHeel()), baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel,
+				OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegatePilotLightRate()), eVessel.getVesselOrDelegateWarmingTime(),
+				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateCoolingVolume()),
 				OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegateMinBaseFuelConsumption()), eVessel.getVesselOrDelegateHasReliqCapability());
 
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVessel.getLadenAttributes());
@@ -41,7 +44,7 @@ public class TransformerHelper {
 
 		//
 		// TODO: we don't have port type attributes in the model yet
-		// so we kludge them by pulling VesselState-dependent out of the vessel class
+		// so we kludge them by pulling VesselState-dependent out of the vessel
 		//
 
 		builder.setVesselPortTypeParameters(vc, PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getLadenAttributes().getVesselOrDelegateInPortBaseRate()));
@@ -89,8 +92,9 @@ public class TransformerHelper {
 
 		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(minSpeed, maxSpeed, consumptionCalculator);
 
-		builder.setVesselStateParameters(vc, state, OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateNBORate()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateIdleNBORate()),
-				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateIdleBaseRate()), cc, OptimiserUnitConvertor.convertToInternalSpeed(attrs.getVesselOrDelegateServiceSpeed()),
+		builder.setVesselStateParameters(vc, state, OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateNBORate()),
+				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateIdleNBORate()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateIdleBaseRate()),
+				cc, OptimiserUnitConvertor.convertToInternalSpeed(attrs.getVesselOrDelegateServiceSpeed()),
 				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateInPortNBORate()));
 	}
 }

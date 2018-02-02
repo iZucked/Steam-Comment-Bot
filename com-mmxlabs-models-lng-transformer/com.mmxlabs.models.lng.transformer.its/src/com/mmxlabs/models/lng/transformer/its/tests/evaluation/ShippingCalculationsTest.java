@@ -1190,7 +1190,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		int ballastBaseConsumption = 48;
 		Integer[] portDurations = new Integer[] { 24, 48 };
 
-		// set the in-port laden fuel consumption for the vessel class
+		// set the in-port laden fuel consumption for the vessel
 		msc.vessel.getLadenAttributes().setInPortBaseRate(ladenBaseConsumption);
 		msc.vessel.getBallastAttributes().setInPortBaseRate(ballastBaseConsumption);
 		// set the durations of the load visit & discharge visit

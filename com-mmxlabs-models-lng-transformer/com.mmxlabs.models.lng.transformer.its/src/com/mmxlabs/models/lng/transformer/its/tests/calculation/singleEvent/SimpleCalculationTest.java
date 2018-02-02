@@ -99,7 +99,7 @@ public class SimpleCalculationTest {
 	}
 
 	/**
-	 * Create a simple scenario which contains a vessel + vessel class a couple of ports and a canal, etc.
+	 * Create a simple scenario which contains a vessel, a couple of ports and a canal, etc.
 	 * 
 	 * Most tests will call this, and then change some price parameters in the result
 	 * 
@@ -110,7 +110,7 @@ public class SimpleCalculationTest {
 	private @NonNull IScenarioDataProvider createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
 
 		// 'magic' numbers that could be set in the arguments.
-		// vessel class
+		// vessel
 		final float equivalenceFactor = 0.5f;
 		final int minSpeed = 12;
 		final int maxSpeed = 20;

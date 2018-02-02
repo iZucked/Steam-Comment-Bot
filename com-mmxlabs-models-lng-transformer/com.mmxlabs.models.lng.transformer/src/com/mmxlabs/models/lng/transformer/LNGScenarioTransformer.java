@@ -868,7 +868,7 @@ public class LNGScenarioTransformer {
 			if (type != null) {
 				// Now create port costs for all the vessel instances.
 				for (final IVessel oVessel : allVessels.values()) {
-					// TODO should the builder handle the application of costs to vessel classes?
+					// TODO should the builder handle the application of costs to vessels?
 					final Vessel eVessel = vesselAssociation.reverseLookup(oVessel);
 					final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(eVessel, entry.getActivity()));
 					builder.setPortCost(portAssociation.lookupNullChecked(key.getFirst()), oVessel, type, activityCost);
@@ -3067,7 +3067,7 @@ public class LNGScenarioTransformer {
 			@NonNull final ModelEntityMap modelEntityMap) {
 
 		/*
-		 * Build the fleet model - first we must create the vessel classes from the model
+		 * Build the fleet model - first we must create the vessels from the model
 		 */
 		final Association<Vessel, IVessel> vesselAssociation = new Association<>();
 		final Association<VesselAvailability, IVesselAvailability> vesselAvailabilityAssociation = new Association<>();
@@ -3118,7 +3118,7 @@ public class LNGScenarioTransformer {
 			}
 
 			/*
-			 * set up inaccessible routes for vessel class
+			 * set up inaccessible routes for vessel
 			 */
 			getAndSetInaccessibleRoutesForVessel(builder, eVessel, oVessel);
 

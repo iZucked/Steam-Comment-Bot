@@ -225,7 +225,7 @@ public class ScenarioTools {
 			csc.getScenarioModelBuilder().getDistanceModelBuilder().setPortToPortDistance(A, B, RouteOption.DIRECT, distance, true);
 		}
 		// 'magic' numbers that could be set in the arguments.
-		// vessel class
+		// vessel
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		final double fillCapacity = 1.0;
@@ -306,7 +306,7 @@ public class ScenarioTools {
 		csc.getScenarioModelBuilder().getDistanceModelBuilder().setPortToPortDistance(A, B, RouteOption.DIRECT, distanceBetweenPorts, true);
 
 		// 'magic' numbers that could be set in the arguments.
-		// vessel class
+		// vessel
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		final double fillCapacity = 1.0;

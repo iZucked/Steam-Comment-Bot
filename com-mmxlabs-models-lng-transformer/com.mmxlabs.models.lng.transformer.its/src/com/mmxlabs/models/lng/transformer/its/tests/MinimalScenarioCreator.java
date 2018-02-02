@@ -41,9 +41,9 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public final Cargo cargo;
 
 	/**
-	 * Initialises a minimal complete scenario, creating: - contract and shipping legal entities - one vessel class and one vessel - one (default) route - one fixed-price sales contract and one
-	 * fixed-price purchase contract - three ports (one origin port, one load port and one discharge port) - one cargo The vessel starts at the origin port, must travel to the load port, pick up the
-	 * cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
+	 * Initialises a minimal complete scenario, creating: - contract and shipping legal entities - one vessel - one (default) route - one fixed-price sales contract and one fixed-price purchase
+	 * contract - three ports (one origin port, one load port and one discharge port) - one cargo The vessel starts at the origin port, must travel to the load port, pick up the cargo, travel to the
+	 * discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
 	 */
 	public MinimalScenarioCreator() {
 		super();
