@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+z * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
 package com.mmxlabs.models.util.importer.impl;
@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EPackage.Registry;
@@ -219,7 +220,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				}
 
 				if (!row.containsKey(lcrn)) {
-					if (reference.getLowerBound() > 0) {
+					if (!reference.isUnsettable() && reference.getLowerBound() > 0) {
 						notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
 					}
 					continue;
@@ -277,11 +278,11 @@ public class DefaultClassImporter extends AbstractClassImporter {
 						if (reference.isContainment()) {
 
 							populateWithBlank(instance, reference);
-							if (reference.getLowerBound() > 0) {
+							if (!reference.isUnsettable() && reference.getLowerBound() > 0) {
 								notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
 							}
 						}
-						if (reference.getLowerBound() > 0) {
+						if (!reference.isUnsettable() &&reference.getLowerBound() > 0) {
 							context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 						}
 					} else {
@@ -422,7 +423,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				}
 
 				if (shouldWarn) {
-					if (attribute.getLowerBound() > 0) {
+					if (!attribute.isUnsettable() && attribute.getLowerBound() > 0 && !(attribute.getEType() instanceof EEnum) ) {
 						context.addProblem(context.createProblem("Field not present", true, false, true));
 					}
 				}
