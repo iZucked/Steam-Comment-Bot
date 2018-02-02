@@ -3372,6 +3372,7 @@ var PortsComponent = (function () {
             columns: this.columns,
             rowHeaderWidth: 150,
             autoColumnSize: true,
+            minSpareRows: 1,
             manualColumnMove: true,
             manualRowMove: true,
             manualColumnResize: true,
