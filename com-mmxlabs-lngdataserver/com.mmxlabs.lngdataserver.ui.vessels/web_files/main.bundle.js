@@ -2619,7 +2619,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "h1 {\n  font-size: 1.2em;\n  color: #999;\n  margin-bottom: 0;\n}\nh2 {\n  font-size: 2em;\n  margin-top: 0;\n  padding-top: 0;\n}\nnav a {\n  padding: 5px 10px;\n  text-decoration: none;\n  margin-top: 10px;\n  display: inline-block;\n  background-color: #eee;\n  border-radius: 4px;\n}\nnav a:visited, a:link {\n  color: #607D8B;\n}\nnav a:hover {\n  color: #039be5;\n  background-color: #CFD8DC;\n}\nnav a.active {\n  color: #039be5;\n}", ""]);
+exports.push([module.i, "h1 {\n  font-size: 1.2em;\n  color: #999;\n  margin-bottom: 0;\n}\nh2 {\n  font-size: 2em;\n  margin-top: 0;\n  padding-top: 0;\n}\nnav a {\n  padding: 5px 10px;\n  text-decoration: none;\n  margin-top: 10px;\n  display: inline-block;\n  background-color: #eee;\n  border-radius: 4px;\n}\nnav a:visited, a:link {\n  color: #607D8B;\n}\nnav a:hover {\n  color: #039be5;\n  background-color: #CFD8DC;\n}\nnav a.active {\n  color: #039be5;\n}\n\n", ""]);
 
 // exports
 
@@ -2692,34 +2692,38 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__location_location_detail_component__ = __webpack_require__("../../../../../src/app/location/location-detail.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__generated_ports_locations_variables__ = __webpack_require__("../../../../../generated/ports-locations/variables.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__generated_vessels_variables__ = __webpack_require__("../../../../../generated/vessels/variables.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pricing_pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_primeng_components_chart_chart__ = __webpack_require__("../../../../primeng/components/chart/chart.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_primeng_components_chart_chart___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_19_primeng_components_chart_chart__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pricing_commodities_commodities_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pricing_currencies_currencies_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pricing_basefuel_basefuel_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_primeng_components_tabmenu_tabmenu__ = __webpack_require__("../../../../primeng/components/tabmenu/tabmenu.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_primeng_components_tabmenu_tabmenu___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_25_primeng_components_tabmenu_tabmenu__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_primeng_components_dropdown_dropdown__ = __webpack_require__("../../../../primeng/components/dropdown/dropdown.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_primeng_components_dropdown_dropdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_26_primeng_components_dropdown_dropdown__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_primeng_components_button_button__ = __webpack_require__("../../../../primeng/components/button/button.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_primeng_components_button_button___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_27_primeng_components_button_button__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_multiselect_multiselect__ = __webpack_require__("../../../../primeng/components/multiselect/multiselect.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_multiselect_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_28_primeng_components_multiselect_multiselect__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pricing_curve_editor_curve_editor_component__ = __webpack_require__("../../../../../src/app/pricing/curve-editor/curve-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pricing_charter_charter_editor_charter_editor_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__pricing_charter_charter_chart_charter_chart_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__vessels_vessels_component__ = __webpack_require__("../../../../../src/app/vessels/vessels.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__vessel_vessel_component__ = __webpack_require__("../../../../../src/app/vessel/vessel.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__vessel_vessel_state_attributes_vessel_state_attributes_component__ = __webpack_require__("../../../../../src/app/vessel/vessel-state-attributes/vessel-state-attributes.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__generated_ports_variables__ = __webpack_require__("../../../../../generated/ports/variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pricing_pricing_component__ = __webpack_require__("../../../../../src/app/pricing/pricing.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_primeng_components_chart_chart__ = __webpack_require__("../../../../primeng/components/chart/chart.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_primeng_components_chart_chart___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_20_primeng_components_chart_chart__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pricing_commodities_commodities_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pricing_currencies_currencies_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pricing_charter_charter_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pricing_basefuel_basefuel_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/basefuel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_primeng_components_tabmenu_tabmenu__ = __webpack_require__("../../../../primeng/components/tabmenu/tabmenu.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26_primeng_components_tabmenu_tabmenu___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_26_primeng_components_tabmenu_tabmenu__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_primeng_components_dropdown_dropdown__ = __webpack_require__("../../../../primeng/components/dropdown/dropdown.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_primeng_components_dropdown_dropdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_27_primeng_components_dropdown_dropdown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_button_button__ = __webpack_require__("../../../../primeng/components/button/button.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_button_button___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_28_primeng_components_button_button__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29_primeng_components_multiselect_multiselect__ = __webpack_require__("../../../../primeng/components/multiselect/multiselect.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29_primeng_components_multiselect_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_29_primeng_components_multiselect_multiselect__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pricing_commodities_commodities_editor_commodities_editor_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-editor/commodities-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pricing_curve_editor_curve_editor_component__ = __webpack_require__("../../../../../src/app/pricing/curve-editor/curve-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__pricing_commodities_commodities_chart_commodities_chart_component__ = __webpack_require__("../../../../../src/app/pricing/commodities/commodities-chart/commodities-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__pricing_currencies_currencies_chart_currencies_chart_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-chart/currencies-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pricing_currencies_currencies_editor_currencies_editor_component__ = __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__ = __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__pricing_charter_charter_editor_charter_editor_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__pricing_charter_charter_chart_charter_chart_component__ = __webpack_require__("../../../../../src/app/pricing/charter/charter-chart/charter-chart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__vessels_vessels_component__ = __webpack_require__("../../../../../src/app/vessels/vessels.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__vessel_vessel_component__ = __webpack_require__("../../../../../src/app/vessel/vessel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__vessels_customCells_customCells_component__ = __webpack_require__("../../../../../src/app/vessels/customCells/customCells.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__vessel_vessel_state_attributes_vessel_state_attributes_component__ = __webpack_require__("../../../../../src/app/vessel/vessel-state-attributes/vessel-state-attributes.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43_primeng_components_messages_messages__ = __webpack_require__("../../../../primeng/components/messages/messages.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43_primeng_components_messages_messages___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_43_primeng_components_messages_messages__);
 /* unused harmony export getParameterByName */
 /* unused harmony export ApiBaseUrlFactory */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
@@ -2729,6 +2733,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
 
 
 
@@ -2795,50 +2802,53 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_13__ports_ports_component__["a" /* PortsComponent */],
             __WEBPACK_IMPORTED_MODULE_14__locations_locations_component__["a" /* LocationsComponent */],
             __WEBPACK_IMPORTED_MODULE_15__location_location_detail_component__["a" /* LocationDetailComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__pricing_pricing_component__["a" /* PricingComponent */],
-            __WEBPACK_IMPORTED_MODULE_21__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */],
-            __WEBPACK_IMPORTED_MODULE_22__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */],
-            __WEBPACK_IMPORTED_MODULE_23__pricing_charter_charter_component__["a" /* CharterComponent */],
-            __WEBPACK_IMPORTED_MODULE_24__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */],
-            __WEBPACK_IMPORTED_MODULE_29__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_30__pricing_curve_editor_curve_editor_component__["a" /* CurveEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_31__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_32__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_33__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_36__pricing_charter_charter_editor_charter_editor_component__["a" /* CharterEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_37__pricing_charter_charter_chart_charter_chart_component__["a" /* CharterChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_34__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__["a" /* BaseFuelChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_35__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__["a" /* BaseFuelEditorComponent */],
-            __WEBPACK_IMPORTED_MODULE_38__vessels_vessels_component__["a" /* VesselsComponent */],
-            __WEBPACK_IMPORTED_MODULE_39__vessel_vessel_component__["a" /* VesselComponent */],
-            __WEBPACK_IMPORTED_MODULE_38__vessels_vessels_component__["b" /* MyTableCellComponent */],
-            __WEBPACK_IMPORTED_MODULE_40__vessel_vessel_state_attributes_vessel_state_attributes_component__["a" /* VesselStateAttributesComponent */]
+            __WEBPACK_IMPORTED_MODULE_19__pricing_pricing_component__["a" /* PricingComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__pricing_commodities_commodities_component__["a" /* CommoditiesComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__pricing_currencies_currencies_component__["a" /* CurrenciesComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__pricing_charter_charter_component__["a" /* CharterComponent */],
+            __WEBPACK_IMPORTED_MODULE_25__pricing_basefuel_basefuel_component__["a" /* BaseFuelComponent */],
+            __WEBPACK_IMPORTED_MODULE_30__pricing_commodities_commodities_editor_commodities_editor_component__["a" /* CommoditiesEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_31__pricing_curve_editor_curve_editor_component__["a" /* CurveEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_32__pricing_commodities_commodities_chart_commodities_chart_component__["a" /* CommoditiesChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_33__pricing_currencies_currencies_chart_currencies_chart_component__["a" /* CurrenciesChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_34__pricing_currencies_currencies_editor_currencies_editor_component__["a" /* CurrenciesEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_37__pricing_charter_charter_editor_charter_editor_component__["a" /* CharterEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_38__pricing_charter_charter_chart_charter_chart_component__["a" /* CharterChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_35__pricing_basefuel_base_fuel_chart_base_fuel_chart_component__["a" /* BaseFuelChartComponent */],
+            __WEBPACK_IMPORTED_MODULE_36__pricing_basefuel_base_fuel_editor_base_fuel_editor_component__["a" /* BaseFuelEditorComponent */],
+            __WEBPACK_IMPORTED_MODULE_39__vessels_vessels_component__["a" /* VesselsComponent */],
+            __WEBPACK_IMPORTED_MODULE_40__vessel_vessel_component__["a" /* VesselComponent */],
+            __WEBPACK_IMPORTED_MODULE_41__vessels_customCells_customCells_component__["a" /* MyTableCellComponent */],
+            __WEBPACK_IMPORTED_MODULE_41__vessels_customCells_customCells_component__["b" /* MyTableCellComponentTest */],
+            __WEBPACK_IMPORTED_MODULE_42__vessel_vessel_state_attributes_vessel_state_attributes_component__["a" /* VesselStateAttributesComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-            __WEBPACK_IMPORTED_MODULE_19_primeng_components_chart_chart__["ChartModule"],
+            __WEBPACK_IMPORTED_MODULE_20_primeng_components_chart_chart__["ChartModule"],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormsModule"],
             __WEBPACK_IMPORTED_MODULE_7__app_routing_module__["a" /* AppRoutingModule */],
             __WEBPACK_IMPORTED_MODULE_8__angular_http__["a" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_9_ng2_handsontable__["a" /* HotTableModule */],
             __WEBPACK_IMPORTED_MODULE_10__generated_ports_locations_api_module__["a" /* ApiModule */],
             __WEBPACK_IMPORTED_MODULE_11__generated_vessels_api_module__["a" /* ApiModule */],
-            __WEBPACK_IMPORTED_MODULE_25_primeng_components_tabmenu_tabmenu__["TabMenuModule"],
-            __WEBPACK_IMPORTED_MODULE_26_primeng_components_dropdown_dropdown__["DropdownModule"],
-            __WEBPACK_IMPORTED_MODULE_27_primeng_components_button_button__["ButtonModule"],
+            __WEBPACK_IMPORTED_MODULE_26_primeng_components_tabmenu_tabmenu__["TabMenuModule"],
+            __WEBPACK_IMPORTED_MODULE_27_primeng_components_dropdown_dropdown__["DropdownModule"],
+            __WEBPACK_IMPORTED_MODULE_28_primeng_components_button_button__["ButtonModule"],
             __WEBPACK_IMPORTED_MODULE_4_primeng_components_inputtext_inputtext__["InputTextModule"],
             __WEBPACK_IMPORTED_MODULE_5_primeng_primeng__["SpinnerModule"],
-            __WEBPACK_IMPORTED_MODULE_20__angular_common_http__["a" /* HttpClientModule */],
+            __WEBPACK_IMPORTED_MODULE_21__angular_common_http__["a" /* HttpClientModule */],
             __WEBPACK_IMPORTED_MODULE_5_primeng_primeng__["FieldsetModule"],
-            __WEBPACK_IMPORTED_MODULE_28_primeng_components_multiselect_multiselect__["MultiSelectModule"],
+            __WEBPACK_IMPORTED_MODULE_29_primeng_components_multiselect_multiselect__["MultiSelectModule"],
+            __WEBPACK_IMPORTED_MODULE_43_primeng_components_messages_messages__["MessagesModule"],
         ],
-        entryComponents: [__WEBPACK_IMPORTED_MODULE_38__vessels_vessels_component__["b" /* MyTableCellComponent */]],
+        entryComponents: [__WEBPACK_IMPORTED_MODULE_41__vessels_customCells_customCells_component__["a" /* MyTableCellComponent */], __WEBPACK_IMPORTED_MODULE_41__vessels_customCells_customCells_component__["b" /* MyTableCellComponentTest */]],
         providers: [
             [
                 { provide: __WEBPACK_IMPORTED_MODULE_16__generated_ports_locations_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory },
-                { provide: __WEBPACK_IMPORTED_MODULE_17__generated_vessels_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory }
-            ]
+                { provide: __WEBPACK_IMPORTED_MODULE_17__generated_vessels_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory },
+                { provide: __WEBPACK_IMPORTED_MODULE_18__generated_ports_variables__["a" /* BASE_PATH */], useFactory: ApiBaseUrlFactory },
+            ], __WEBPACK_IMPORTED_MODULE_41__vessels_customCells_customCells_component__["c" /* RouteCellRendererService */], __WEBPACK_IMPORTED_MODULE_41__vessels_customCells_customCells_component__["d" /* PortCellRendererService */], __WEBPACK_IMPORTED_MODULE_41__vessels_customCells_customCells_component__["e" /* FuelCellRendererService */],
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */]]
     })
@@ -2856,7 +2866,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".handsontable td, th {\r\n  font-size: 0.7em;\r\n}\r\n\r\n.ui-button{\r\n\r\n\tpadding: 0px !important;\r\n\tborder: 0px !important;\r\n\tmargin: 3px !important;\r\n}\r\n\r\ninput {\r\n\r\n\tborder-top-width: 0px !important;\r\n\tborder-left-width: 0px !important;\r\n\tborder-right-width: 0px !important;\r\n\tborder-bottom-width: 2px !important;\r\n\tmargin-bottom: 12px !important;\r\n}", ""]);
 
 // exports
 
@@ -2896,6 +2906,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DistanceMatrixComponent = (function () {
     function DistanceMatrixComponent(router, route, locationsService, distancesService) {
         var _this = this;
@@ -2916,6 +2927,7 @@ var DistanceMatrixComponent = (function () {
             rowHeaders: new Array(),
             rowHeaderWidth: 180,
             stretchH: 'all',
+            autoColumnSize: true,
             columnSorting: true,
             contextMenu: true,
             className: 'htCenter htMiddle',
@@ -3015,7 +3027,8 @@ DistanceMatrixComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-distance-matrix',
         template: __webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.css")]
+        styles: [__webpack_require__("../../../../../src/app/distance-matrix/distance-matrix.component.css")],
+        encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["ActivatedRoute"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["LocationsService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["DistancesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_locations_index__["DistancesService"]) === "function" && _d || Object])
 ], DistanceMatrixComponent);
@@ -3200,7 +3213,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "selected {\n    background-color: #CFD8DC !important;\n    color: white;\n  }\n  .ports {\n    margin: 0 0 2em 0;\n    list-style-type: none;\n    padding: 0;\n    width: 20em;\n  }\n  .ports li {\n    cursor: pointer;\n    position: relative;\n    left: 0;\n    background-color: #EEE;\n    margin: .5em;\n    padding: .3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n  }\n  .ports li:hover {\n    color: #607D8B;\n    background-color: #DDD;\n    left: .1em;\n  }\n  .ports li.selected:hover {\n    background-color: #BBD8DC !important;\n    color: white;\n  }\n  .ports .text {\n    position: relative;\n    top: -3px;\n  }\n  .ports .badge {\n    display: inline-block;\n    font-size: small;\n    color: white;\n    padding: 0.8em 0.7em 0 0.7em;\n    background-color: #607D8B;\n    line-height: 1em;\n    position: relative;\n    left: -1px;\n    top: -4px;\n    height: 1.8em;\n    width: 8em;\n    margin-right: .8em;\n    border-radius: 4px 0 0 4px;\n  }\n  button {\n    font-family: Arial;\n    background-color: #eee;\n    border: none;\n    padding: 5px 10px;\n    border-radius: 4px;\n    cursor: pointer;\n    cursor: hand;\n  }\n  button:hover {\n    background-color: #cfd8dc;\n  }\n\n  button.delete {\n    float:right;\n    margin-top: 2px;\n    margin-right: .8em;\n    background-color: gray !important;\n    color:white;\n  }", ""]);
+exports.push([module.i, "\n.handsontable td {\n  white-space: normal;\n  overflow:visible !important;\n}\n\n\n.handsontable td, th {\n  font-size: 0.7em;\n}\nbutton {\n  font-family: Arial;\n  background-color: #eee;\n  border: none;\n  padding: 5px 10px;\n  border-radius: 4px;\n  cursor: pointer;\n  cursor: hand;\n}\n\nbutton:hover {\n  background-color: #cfd8dc;\n}\n\nbutton.delete {\n  float:right;\n  margin-top: 2px;\n  margin-right: .8em;\n  background-color: gray !important;\n  color:white;\n}\n\np-multiSelect {\n  width: 100%;\n}\n\nmy-table-cell {\n  white-space: normal;\n  overflow-y: visible !important;\n  overflow-x: visible !important;\n}\n", ""]);
 
 // exports
 
@@ -3213,7 +3226,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/ports/ports.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Ports</h2>\n<hotTable [colHeaders]=\"colHeaders\"\n[columns]=\"columns\"\n[options]=\"options\">\n</hotTable>\n<br />\n<button pButton (click)=\"savePorts()\" class=\"ui-button-secondary\" icon=\"fa-save\" type=\"submit\" label=\"Save\"></button>\n<div #templateContainer\n    [hidden]=\"true\">\n</div>\n"
+module.exports = "<p-messages  [(value)]=\"msgs\"></p-messages>\n\n<hotTable [colHeaders]=\"colHeaders\"\n  [columns]=\"columns\"\n  [options]=\"options\">\n</hotTable>\n\n<br />\n\n<button pButton (click)=\"savePorts()\" class=\"ui-button-secondary\" icon=\"fa-save\" type=\"submit\" label=\"Save\"></button>\n\n<div #templateContainer\n    [hidden]=\"true\">\n</div>\n"
 
 /***/ }),
 
@@ -3225,6 +3238,11 @@ module.exports = "<h2>Ports</h2>\n<hotTable [colHeaders]=\"colHeaders\"\n[column
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_ports_index__ = __webpack_require__("../../../../../generated/ports/index.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__ = __webpack_require__("../../../../../generated/ports-locations/index.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_primeng_components_common_messageservice__ = __webpack_require__("../../../../primeng/components/common/messageservice.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_primeng_components_common_messageservice___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_primeng_components_common_messageservice__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vessels_customCells_customCells_component__ = __webpack_require__("../../../../../src/app/vessels/customCells/customCells.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery__ = __webpack_require__("../../../../jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_jquery__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PortsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3239,13 +3257,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
+
+
+
+
 var PortsComponent = (function () {
-    function PortsComponent(router, portService, locationsService, distancesService) {
+    function PortsComponent(router, portService, locationsService, distancesService, messageService, factoryResolver, portCellRendererService) {
+        var _this = this;
         this.router = router;
         this.portService = portService;
         this.locationsService = locationsService;
         this.distancesService = distancesService;
+        this.messageService = messageService;
+        this.factoryResolver = factoryResolver;
+        this.portCellRendererService = portCellRendererService;
+        this.isValid = true;
+        this.msgs = [];
         this.locations = new Array();
+        this.capabilities = ['LOAD', 'DISCHARGE', 'DRYDOCK', 'MAINTENANCE'];
+        this.cellCapabilitiesTemplateComponents = {};
+        this.portCellRendererService.portCellRendererEvent.subscribe(function (data) {
+            console.log(data);
+            _this.ports[data.index]['capabilities'] = data.data;
+        });
     }
     PortsComponent.prototype.ngOnInit = function () {
         this.getPorts();
@@ -3264,15 +3301,21 @@ var PortsComponent = (function () {
                         _this.createSpreadsheet();
                     })
                         .catch(function (error) {
+                        _this.msgs = [];
+                        _this.msgs.push({ severity: 'error', summary: 'Can\'t get location for the latest version', detail: versions[0] + ": " + error });
                         console.log(error);
                     });
                 }
             })
                 .catch(function (error) {
+                _this.msgs = [];
+                _this.msgs.push({ severity: 'error', summary: 'Error accessing the Distance service\'s versions', detail: error });
                 console.log(error);
             });
         })
             .catch(function (error) {
+            _this.msgs = [];
+            _this.msgs.push({ severity: 'error', summary: 'Error fetching the port', detail: error });
             console.log(error);
             _this.ports = [];
             _this.createSpreadsheet();
@@ -3294,6 +3337,7 @@ var PortsComponent = (function () {
         return port;
     };
     PortsComponent.prototype.createSpreadsheet = function () {
+        var _this = this;
         var source = this.locations
             .filter(function (l) { return l.virtual == false; })
             .map(function (l) {
@@ -3313,11 +3357,11 @@ var PortsComponent = (function () {
             { data: 'dischargeDuration', title: 'Discharge duration (hrs)', type: 'numeric' },
             { data: 'loadDuration', title: 'Load duration (hrs)', type: 'numeric' },
             { data: 'cvValue', title: 'CV (mmBTU)', type: 'numeric' },
-            { data: 'maxCvValue', title: 'Max CV (mmBTU)', type: 'numeric' },
+            { data: 'maxCvValue', title: 'Max CV (calorie)', type: 'numeric' },
             { data: 'minCvValue', title: 'Min CV (mmBTU)', type: 'numeric' },
             { data: 'allowCooldown', title: 'Allow Cooldown', type: 'checkbox' },
             { data: 'berths', title: 'Berths', type: 'numeric' },
-            { data: 'capabilities', title: 'Capabilities', type: 'dropdown', source: ['LOAD', 'DISCHARGE', 'DRYDOCK', 'MAINTENANCE'] },
+            { data: 'capabilities', title: 'Capabilities', renderer: this.rendererInaccessiblePortLinkCell.bind(this), readOnly: true, },
         ];
         this.rowHeaders = [];
         this.rowHeaders = this.ports.map(function (p) { return p.mmxId; });
@@ -3333,19 +3377,51 @@ var PortsComponent = (function () {
             manualColumnResize: true,
             bindRowsWithHeaders: true,
             manualRowResize: true,
-            minSpareRows: 1,
             contextMenu: true,
             search: true,
             columnSorting: true,
             sortIndicator: true,
             undo: true,
+            afterValidate: function (isValid, value, row, prop, source) {
+                _this.isValid = isValid;
+            },
         };
+        this.cellComponentFactory = this.factoryResolver
+            .resolveComponentFactory(__WEBPACK_IMPORTED_MODULE_5__vessels_customCells_customCells_component__["a" /* MyTableCellComponent */]);
     };
+    PortsComponent.prototype.rendererInaccessiblePortLinkCell = function (instance, td, row, col, columnKey, data, cellProperties) {
+        var component = this.cellCapabilitiesTemplateComponents[row];
+        if (!component) {
+            console.log(this.templateContainer);
+            console.log(this.cellComponentFactory);
+            component = this.templateContainer
+                .createComponent(this.cellComponentFactory);
+            var port = this.ports[row];
+            if (port['capabilities'] == null || port['capabilities'] == undefined) {
+                port['capabilities'] = [];
+            }
+            component.instance.selected = port['capabilities'];
+            Object.assign(component.instance, { index: row, componentType: 'port' });
+            component.instance.setSelection(this.capabilities);
+            component.changeDetectorRef.detectChanges();
+            this.cellCapabilitiesTemplateComponents[row] = component;
+        }
+        __WEBPACK_IMPORTED_MODULE_6_jquery__(td).html(component.location.nativeElement);
+    };
+    ;
     PortsComponent.prototype.isEmpty = function (obj) {
         return Object.values(obj).every(function (x) { return (x == false || x === "" || x == null); });
     };
     PortsComponent.prototype.savePorts = function () {
         var _this = this;
+        if (!this.isValid) {
+            this.msgs = [];
+            this.msgs.push({ severity: 'warn', summary: 'Can\'t save, invalid data in spreadsheet !', detail: '' });
+            return;
+        }
+        else {
+            this.msgs = [];
+        }
         var ports = this.ports.map(function (p) {
             return Object.assign(_this.createEmptyPort(), p);
         });
@@ -3355,21 +3431,30 @@ var PortsComponent = (function () {
         console.log(ports);
         this.portService.bulkInsertUsingPOST(ports).toPromise()
             .then(function () { console.log('Ok !'); })
-            .catch(function () { console.log('Not Ok!'); });
+            .catch(function () {
+            _this.msgs = [];
+            _this.msgs.push({ severity: 'error', summary: 'Can\'t save version !', detail: '' });
+            console.log('Not Ok!');
+        });
     };
     return PortsComponent;
 }());
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('templateContainer', { read: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"] }),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]) === "function" && _a || Object)
+], PortsComponent.prototype, "templateContainer", void 0);
 PortsComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-ports',
         template: __webpack_require__("../../../../../src/app/ports/ports.component.html"),
         styles: [__webpack_require__("../../../../../src/app/ports/ports.component.css")],
-        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"]]
+        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"], __WEBPACK_IMPORTED_MODULE_4_primeng_components_common_messageservice__["MessageService"]],
+        encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["LocationsService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["DistancesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["DistancesService"]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["Router"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_ports_index__["PortService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["LocationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["LocationsService"]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["DistancesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__generated_ports_locations_index__["DistancesService"]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4_primeng_components_common_messageservice__["MessageService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_primeng_components_common_messageservice__["MessageService"]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_5__vessels_customCells_customCells_component__["d" /* PortCellRendererService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__vessels_customCells_customCells_component__["d" /* PortCellRendererService */]) === "function" && _h || Object])
 ], PortsComponent);
 
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 //# sourceMappingURL=ports.component.js.map
 
 /***/ }),
@@ -3424,6 +3509,9 @@ var PricingService = (function () {
             urlParams = urlParams.append('v', version);
         }
         return this.http.get(endPoint, { params: urlParams }).toPromise().then(function (response) {
+            if (response === undefined || response === null || response.length === 0) {
+                return [];
+            }
             return _this.getCurves(response.map(function (e) { return e.name; }), version);
         });
     };
@@ -3474,7 +3562,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pricing/basefuel/base-fuel-chart/base-fuel-chart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p-dropdown [options]=\"currencies\" [(ngModel)]=\"selectedCurrency\" (onChange)=\"currencyChange()\"></p-dropdown>\n<p-chart type=\"line\" [data]=\"data\"></p-chart>"
+module.exports = "<p-dropdown [options]=\"currencies\" [(ngModel)]=\"selectedCurrency\" (onChange)=\"currencyChange()\"></p-dropdown>\n<p-chart type=\"line\" [data]=\"data\"></p-chart>\n"
 
 /***/ }),
 
@@ -3604,7 +3692,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  base-fuel-editor works!\n</p>\n"
+module.exports = "<curve-editor [curves]=\"curves\" (afterChange)=\"afterChange($event)\"></curve-editor>\n"
 
 /***/ }),
 
@@ -3613,6 +3701,7 @@ module.exports = "<p>\n  base-fuel-editor works!\n</p>\n"
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseFuelEditorComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3624,10 +3713,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var BaseFuelEditorComponent = (function () {
-    function BaseFuelEditorComponent() {
+    function BaseFuelEditorComponent(pricingService) {
+        this.pricingService = pricingService;
+        this.options = { dragData: true };
     }
     BaseFuelEditorComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.pricingService.getBaseFuel().then(function (basefuels) {
+            _this.curves = basefuels.curves;
+        });
+    };
+    BaseFuelEditorComponent.prototype.afterChange = function (changes) {
+        console.log("afterChange called!");
     };
     return BaseFuelEditorComponent;
 }());
@@ -3635,11 +3734,13 @@ BaseFuelEditorComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-base-fuel-editor',
         template: __webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.css")]
+        styles: [__webpack_require__("../../../../../src/app/pricing/basefuel/base-fuel-editor/base-fuel-editor.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]) === "function" && _a || Object])
 ], BaseFuelEditorComponent);
 
+var _a;
 //# sourceMappingURL=base-fuel-editor.component.js.map
 
 /***/ }),
@@ -3782,21 +3883,24 @@ var CharterChartComponent = (function () {
         var _this = this;
         this.pricingService.getCharter(this.version)
             .then(function (result) {
-            _this.data.labels = result.curves[0].curve.map(function (e) { return e.date; });
-            result.curves.forEach(function (element) {
-                // TODO: expression curves are ignored for now. Need to be handled on the server
-                if (element['@class'] === ".ExpressionCurve") {
-                    return;
-                }
-                _this.unfilteredDataSets.push({
-                    currency: element.currency,
-                    label: element.name,
-                    data: element.curve.map(function (e) { return e.value; }),
-                    fill: false,
-                    borderColor: _this.colorStack.pop()
+            console.log(result);
+            if (result.length > 0) {
+                _this.data.labels = result.curves[0].curve.map(function (e) { return e.date; });
+                result.curves.forEach(function (element) {
+                    // TODO: expression curves are ignored for now. Need to be handled on the server
+                    if (element['@name'] === "ExpressionCurve") {
+                        return;
+                    }
+                    _this.unfilteredDataSets.push({
+                        currency: element.currency,
+                        label: element.name,
+                        data: element.curve.map(function (e) { return e.value; }),
+                        fill: false,
+                        borderColor: _this.colorStack.pop()
+                    });
                 });
-            });
-            _this.getCurrencies(result.curves);
+                _this.getCurrencies(result.curves);
+            }
         });
     };
     CharterChartComponent.prototype.currencyChange = function () {
@@ -3859,7 +3963,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  charter-editor works!\n</p>\n"
+module.exports = "<curve-editor [curves]=\"curves\" (afterChange)=\"afterChange($event)\"></curve-editor>\n"
 
 /***/ }),
 
@@ -3868,6 +3972,7 @@ module.exports = "<p>\n  charter-editor works!\n</p>\n"
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CharterEditorComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3879,10 +3984,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var CharterEditorComponent = (function () {
-    function CharterEditorComponent() {
+    function CharterEditorComponent(pricingService) {
+        this.pricingService = pricingService;
     }
     CharterEditorComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.pricingService.getCharter().then(function (chartersRate) {
+            _this.curves = chartersRate.curves;
+        });
+    };
+    CharterEditorComponent.prototype.afterChange = function (changes) {
+        console.log("afterChange called!");
     };
     return CharterEditorComponent;
 }());
@@ -3890,11 +4004,13 @@ CharterEditorComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-charter-editor',
         template: __webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.css")]
+        styles: [__webpack_require__("../../../../../src/app/pricing/charter/charter-editor/charter-editor.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]) === "function" && _a || Object])
 ], CharterEditorComponent);
 
+var _a;
 //# sourceMappingURL=charter-editor.component.js.map
 
 /***/ }),
@@ -4042,7 +4158,7 @@ var CommoditiesChartComponent = (function () {
             _this.data.labels = result.curves[0].curve.map(function (e) { return e.date; });
             result.curves.forEach(function (element) {
                 // TODO: expression curves are ignored for now. Need to be handled on the server
-                if (element['@class'] === ".ExpressionCurve") {
+                if (element['@name'] === "ExpressionCurve") {
                     return;
                 }
                 _this.unfilteredDataSets.push({
@@ -4381,7 +4497,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  currencies-editor works!\n</p>\n"
+module.exports = "<curve-editor [curves]=\"curves\" (afterChange)=\"afterChange($event)\"></curve-editor>\n"
 
 /***/ }),
 
@@ -4390,6 +4506,7 @@ module.exports = "<p>\n  currencies-editor works!\n</p>\n"
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pricing_service__ = __webpack_require__("../../../../../src/app/pricing.service.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CurrenciesEditorComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4401,10 +4518,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var CurrenciesEditorComponent = (function () {
-    function CurrenciesEditorComponent() {
+    function CurrenciesEditorComponent(pricingService) {
+        this.pricingService = pricingService;
     }
     CurrenciesEditorComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.pricingService.getCurrencies().then(function (currencies) {
+            _this.curves = currencies.curves;
+        });
+    };
+    CurrenciesEditorComponent.prototype.afterChange = function (changes) {
+        console.log("afterChange called!");
     };
     return CurrenciesEditorComponent;
 }());
@@ -4412,11 +4538,13 @@ CurrenciesEditorComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-currencies-editor',
         template: __webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.css")]
+        styles: [__webpack_require__("../../../../../src/app/pricing/currencies/currencies-editor/currencies-editor.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__pricing_service__["a" /* PricingService */]) === "function" && _a || Object])
 ], CurrenciesEditorComponent);
 
+var _a;
 //# sourceMappingURL=currencies-editor.component.js.map
 
 /***/ }),
@@ -4539,7 +4667,7 @@ var CurveEditorComponent = (function () {
         this.options = {
             // height: 400,
             rowHeaders: new Array(),
-            rowHeaderWidth: 80,
+            rowHeaderWidth: 100,
             stretchH: 'all',
             columnSorting: true,
             contextMenu: false,
@@ -4585,18 +4713,18 @@ var CurveEditorComponent = (function () {
         var _this = this;
         // create headers based on first curve
         // TODO: check for missmatch
-        curves.find(function (e) { return e['@class'] === '.DataCurve'; }).curve.forEach(function (e) {
+        curves.find(function (e) { return e['@name'] === 'DataCurve'; }).curve.forEach(function (e) {
             _this.colHeaders.push(e.date);
         });
         var data = new Array();
         curves.forEach(function (curve) {
             _this.options.rowHeaders.push(curve.name);
-            if (curve['@class'] === ".ExpressionCurve")
+            if (curve['@name'] === "ExpressionCurve")
                 return;
             data.push(curve.curve.map(function (e) { return e.value; }));
         });
         this.data = data;
-        this.expressionCurves = curves.filter(function (e) { return e['@class'] === ".ExpressionCurve"; });
+        this.expressionCurves = curves.filter(function (e) { return e['@name'] === "ExpressionCurve"; });
     };
     return CurveEditorComponent;
 }());
@@ -4631,7 +4759,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".ui-widget-header { \t\r\n\tborder-top-width: 0px !important;\r\n\tborder-left-width: 0px !important;\r\n\tborder-right-width: 0px !important;\r\n\tmargin-top: 12px !important;\r\n\tmargin-bottom: 12px !important;\r\n}\r\n\r\n.ui-widget span.ui-menuitem-text { \t\r\n  font-size: 75%;\r\n}\r\n\r\n.handsontable td, th {\r\n  padding-bottom: 0px !important;\r\n  color: #555555 !important;\r\n  font-family: Arial, Helvetica, sans-serif; \r\n/** font-size: 0.7em; */\r\n  font-size: 12px !important;\r\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -4644,7 +4772,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pricing/pricing.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2> Pricing </h2>\n<p-tabMenu [model]=\"items\"></p-tabMenu>\n<!-- <nav>\n    <a [routerLink]=\"['commodities']\" routerLinkActive=\"active\">Commodities</a>\n    <a [routerLink]=\"['currencies']\" routerLinkActive=\"active\">Currencies</a>\n    <a [routerLink]=\"['basefuel']\" routerLinkActive=\"active\">Base Fuel</a>\n    <a [routerLink]=\"['charter']\" routerLinkActive=\"active\">Charter</a>\n</nav> -->\n<router-outlet></router-outlet>"
+module.exports = "<p-tabMenu [model]=\"items\"></p-tabMenu>\n<!-- <nav>\n    <a [routerLink]=\"['commodities']\" routerLinkActive=\"active\">Commodities</a>\n    <a [routerLink]=\"['currencies']\" routerLinkActive=\"active\">Currencies</a>\n    <a [routerLink]=\"['basefuel']\" routerLinkActive=\"active\">Base Fuel</a>\n    <a [routerLink]=\"['charter']\" routerLinkActive=\"active\">Charter</a>\n</nav> -->\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -4689,6 +4817,7 @@ PricingComponent = __decorate([
         selector: 'app-pricing',
         template: __webpack_require__("../../../../../src/app/pricing/pricing.component.html"),
         styles: [__webpack_require__("../../../../../src/app/pricing/pricing.component.css")],
+        encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None,
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["ActivatedRoute"]) === "function" && _a || Object])
 ], PricingComponent);
@@ -4906,6 +5035,204 @@ var _a, _b;
 
 /***/ }),
 
+/***/ "../../../../../src/app/vessels/customCells/customCells.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "p-multiSelect {\n  width: 100%;\n}\n\nmy-table-cell {\n  white-space: normal;\n  overflow-y: visible !important;\n  overflow-x: visible !important;\n}\n\nmy-table-cell-test {\n  white-space: normal;\n  overflow-y: visible !important;\n  overflow-x: visible !important;\n}\n", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/vessels/customCells/customCells.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return FuelCellRendererService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return RouteCellRendererService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return PortCellRendererService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyTableCellComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MyTableCellComponentTest; });
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var FuelCellRendererService = (function () {
+    function FuelCellRendererService() {
+        this.fuelCellRendererEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    FuelCellRendererService.prototype.update = function (data) {
+        this.fuelCellRendererEvent.emit(data);
+    };
+    return FuelCellRendererService;
+}());
+FuelCellRendererService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+], FuelCellRendererService);
+
+var RouteCellRendererService = (function () {
+    function RouteCellRendererService() {
+        this.routeCellRendererEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    RouteCellRendererService.prototype.update = function (data) {
+        this.routeCellRendererEvent.emit(data);
+    };
+    return RouteCellRendererService;
+}());
+RouteCellRendererService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+], RouteCellRendererService);
+
+var PortCellRendererService = (function () {
+    function PortCellRendererService() {
+        this.portCellRendererEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    PortCellRendererService.prototype.update = function (data) {
+        this.portCellRendererEvent.emit(data);
+    };
+    return PortCellRendererService;
+}());
+PortCellRendererService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+], PortCellRendererService);
+
+var MyTableCellComponent = (function () {
+    function MyTableCellComponent(routeCellRendererService, portCellRendererService) {
+        this.routeCellRendererService = routeCellRendererService;
+        this.portCellRendererService = portCellRendererService;
+        this.selected = [];
+    }
+    MyTableCellComponent.prototype.setSelection = function (data) {
+        this.selectionData = data.map(function (x) { return ({ label: x, value: x }); });
+    };
+    MyTableCellComponent.prototype.change = function (event) {
+        if (this.componentType == 'route') {
+            this.routeCellRendererService.update({ index: this.index, data: event });
+        }
+        else if (this.componentType == 'port') {
+            this.portCellRendererService.update({ index: this.index, data: event });
+        }
+    };
+    return MyTableCellComponent;
+}());
+MyTableCellComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'my-table-cell',
+        template: __webpack_require__("../../../../../src/app/vessels/customCells/templates/myTableCell.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/vessels/customCells/customCells.component.css")],
+        providers: [],
+        encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None,
+    }),
+    __metadata("design:paramtypes", [RouteCellRendererService, PortCellRendererService])
+], MyTableCellComponent);
+
+var MyTableCellComponentTest = (function (_super) {
+    __extends(MyTableCellComponentTest, _super);
+    function MyTableCellComponentTest(routeCellRendererService, portCellRendererService, fuelCellRendererService) {
+        var _this = _super.call(this, routeCellRendererService, portCellRendererService) || this;
+        _this.routeCellRendererService = routeCellRendererService;
+        _this.portCellRendererService = portCellRendererService;
+        _this.fuelCellRendererService = fuelCellRendererService;
+        _this.showTable = false;
+        _this.options = {};
+        _this.chartOptions = { 'legend': { 'display': false } };
+        return _this;
+    }
+    MyTableCellComponentTest.prototype.setSelection = function (data) {
+        this.data = data.map(function (x) { return ([x.speed, x.consumption]); });
+        this.chartData = this.generateChartData();
+        this.options = {
+            data: this.data,
+            manualRowMove: true,
+            columns: [{ title: 'Speed', type: 'numeric', allowInvalid: false }, { title: 'Consumption', type: 'numeric' }],
+        };
+    };
+    MyTableCellComponentTest.prototype.ngOnInit = function () {
+        this.options = {
+            data: this.data,
+            manualRowMove: true,
+            columns: [{ title: 'Speed', type: 'numeric', allowInvalid: false }, { title: 'Consumption', type: 'numeric' }],
+        };
+    };
+    MyTableCellComponentTest.prototype.toggleTable = function () {
+        this.showTable = !this.showTable;
+    };
+    MyTableCellComponentTest.prototype.change = function (event) {
+        this.chartData = this.generateChartData();
+        this.fuelCellRendererService.update({ index: this.index, dest: this.dest, data: this.data });
+    };
+    MyTableCellComponentTest.prototype.generateChartData = function () {
+        return { 'labels': this.data.map(function (x) { return x[0]; }),
+            'datasets': [
+                {
+                    'label': 'Fuel cost',
+                    'data': this.data.map(function (x) { return x[1]; }),
+                    'fill': false,
+                    'borderColor': '#4bc0c0'
+                }
+            ],
+        };
+    };
+    return MyTableCellComponentTest;
+}(MyTableCellComponent));
+MyTableCellComponentTest = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'my-table-cell-test',
+        template: __webpack_require__("../../../../../src/app/vessels/customCells/templates/myTableCellTest.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/vessels/customCells/customCells.component.css")],
+        providers: [],
+        encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None,
+    }),
+    __metadata("design:paramtypes", [RouteCellRendererService,
+        PortCellRendererService,
+        FuelCellRendererService])
+], MyTableCellComponentTest);
+
+//# sourceMappingURL=customCells.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/vessels/customCells/templates/myTableCell.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<p-multiSelect (onChange)=\"change($event.value)\" [style]=\"{'width':'100%'}\" [options]=\"selectionData\" [(ngModel)]=\"selected\" optionLabel=\"name\"></p-multiSelect>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/vessels/customCells/templates/myTableCellTest.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<button pButton (click)=\"toggleTable()\" class=\"ui-button-secondary\" icon=\"fa-edit\" type=\"submit\"></button>\n <hotTable *ngIf=\"showTable\"\n  (afterChange)=\"change($event)\"\n  [options]=\"options\">\n </hotTable>\n<p-chart type=\"line\" [data]=\"chartData\" [options]=\"chartOptions\"></p-chart>\n"
+
+/***/ }),
+
 /***/ "../../../../../src/app/vessels/vessels.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4914,7 +5241,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".handsontable th {\n  white-space: normal !important;\n  word-wrap: break-word;\n}\n  .selected {\n    background-color: #CFD8DC !important;\n    color: white;\n  }\n  .vessels {\n    margin: 0 0 2em 0;\n    list-style-type: none;\n    padding: 0;\n    width: 20em;\n  }\n  .vessels li {\n    cursor: pointer;\n    position: relative;\n    left: 0;\n    background-color: #EEE;\n    margin: .5em;\n    padding: .3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n  }\n  .vessels li:hover {\n    color: #607D8B;\n    background-color: #DDD;\n    left: .1em;\n  }\n  .vessels li.selected:hover {\n    background-color: #BBD8DC !important;\n    color: white;\n  }\n  .vessels .text {\n    position: relative;\n    top: -3px;\n  }\n  .vessels .badge {\n    display: inline-block;\n    font-size: small;\n    color: white;\n    padding: 0.8em 0.7em 0 0.7em;\n    background-color: #607D8B;\n    line-height: 1em;\n    position: relative;\n    left: -1px;\n    top: -4px;\n    height: 1.8em;\n    width: 8em;\n    margin-right: .8em;\n    border-radius: 4px 0 0 4px;\n  }\n\n  button {\n    font-family: Arial;\n    background-color: #eee;\n    border: none;\n    padding: 5px 10px;\n    border-radius: 4px;\n    cursor: pointer;\n    cursor: hand;\n  }\n  button:hover {\n    background-color: #cfd8dc;\n  }\n\n  button.delete {\n    float:right;\n    margin-top: 2px;\n    margin-right: .8em;\n    background-color: gray !important;\n    color:white;\n  }\n\n\n", ""]);
+exports.push([module.i, ".handsontable td {\n  white-space: normal;\n  overflow:visible !important;\n}\n\n.handsontable td, th {\n  padding-bottom: 0px !important;\n  color: #555555 !important;\n  font-family: Arial, Helvetica, sans-serif; \n/** font-size: 0.7em; */\n  font-size: 12px !important;\n}\n\n.handsontable th {\n  background-color: #e0f0ff !important; \n}\n\nbody{\n  margin: 1;\n}\n\nbutton {\n  font-family: Cambria, Georgia;\n  background-color: #eee;\n  border: none;\n  border-width: 0px !important;\n  padding: 5px 10px;\n  margin-bottom: 6px;\n  border-radius: 4px;\n  cursor: pointer;\n  cursor: hand;\n}\n\nbutton:hover {\n  background-color: #cfd8dc;\n}\n\nbutton.delete {\n  float:right;\n  margin-top: 2px;\n  margin-right: .8em;\n  background-color: gray !important;\n  color:white;\n}", ""]);
 
 // exports
 
@@ -4927,7 +5254,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/vessels/vessels.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<br />\n<button pButton (click)=\"toggleTableOrientation()\" class=\"ui-button-info\" icon=\"fa-rotate-right\" type=\"submit\" label=\"transpose\"></button>\n<button pButton (click)=\"saveVessels()\" class=\"ui-button-secondary\" icon=\"fa-save\" type=\"submit\"></button>\n<hotTable \n           [colHeaders]=\"colHeaders\"\n           [columns]=\"columns\"\n           [options]=\"options\"></hotTable>\n\n    <div #templateContainer\n        [hidden]=\"true\">\n    </div>\n"
+module.exports = "<br />\n<button pButton (click)=\"saveVessels()\" class=\"ui-button-secondary\" icon=\"fa-save\" type=\"submit\"></button>\n\n<hotTable \n[options]=\"options\">\n</hotTable>\n\n<div #templateContainer\n  [hidden]=\"true\">\n</div>\n"
 
 /***/ }),
 
@@ -4937,11 +5264,12 @@ module.exports = "<br />\n<button pButton (click)=\"toggleTableOrientation()\" c
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__ = __webpack_require__("../../../../../generated/vessels/index.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__ = __webpack_require__("../../../../ng2-handsontable/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_handsontable__ = __webpack_require__("../../../../ng2-handsontable/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_handsontable__ = __webpack_require__("../../../../handsontable/dist/handsontable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_handsontable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_handsontable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__("../../../../jquery/dist/jquery.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MyTableCellComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__ = __webpack_require__("../../../../../src/app/vessels/customCells/customCells.component.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return VesselsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4958,48 +5286,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var MyTableCellComponent = (function () {
-    function MyTableCellComponent() {
-        this.counter = 0;
-        //An array of cities
-        this.cities2 = [
-            { name: 'New York', code: 'NY' },
-            { name: 'Rome', code: 'RM' },
-            { name: 'London', code: 'LDN' },
-            { name: 'Istanbul', code: 'IST' },
-            { name: 'Paris', code: 'PRS' }
-        ];
-    }
-    MyTableCellComponent.prototype.incrTest = function (counter) {
-        console.log("" + counter);
-        this.counter++;
-    };
-    return MyTableCellComponent;
-}());
-MyTableCellComponent = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'my-table-cell',
-        //template: '<b (click)="incrTest(counter)">Counter: {{counter}}, data: {{data.id}}<b>'
-        template: '<div style="width:500;"> <p-multiSelect  [options]="cities2" [(ngModel)]="selectedCities2" optionLabel="name"></p-multiSelect><div>'
-    }),
-    __metadata("design:paramtypes", [])
-], MyTableCellComponent);
+
 
 var VesselsComponent = (function () {
-    function VesselsComponent(router, vesselsService, factoryResolver) {
-        this.router = router;
+    function VesselsComponent(vesselsService, factoryResolver, routeCellRendererService, portCellRendererService, fuelCellRendererService) {
+        var _this = this;
         this.vesselsService = vesselsService;
         this.factoryResolver = factoryResolver;
+        this.routeCellRendererService = routeCellRendererService;
+        this.portCellRendererService = portCellRendererService;
+        this.fuelCellRendererService = fuelCellRendererService;
         this.ignoreKeyList = ['mmxId', 'ladenAttributes', 'ballastAttributes'];
-        this.routes = [{ 'name': 'Panama canal' }, { 'name': 'Suez canal' }];
+        this.routes = ['Panama canal', 'Suez canal'];
         this.ports = ['PortA', 'PortB'];
-        this.tableOrientationToggle = true;
-        this.cellTemplateComponents = {};
+        this.cellPortTemplateComponents = {};
+        this.cellRouteTemplateComponents = {};
+        this.cellTestTemplateComponents = {};
+        this.cellTest2TemplateComponents = {};
         this.columns = [
-            { data: 'name', title: 'Name', renderer: this.rendererLinkCell.bind(this) },
+            { data: 'name', title: 'Name', },
             { data: "imo", title: 'IMO' },
-            { data: "inaccessiblePorts", title: 'Inaccessible Ports' },
-            { data: "inaccessibleRoutes", title: 'InaccessibleRoutes' },
+            { data: "inaccessiblePorts", title: 'Disallowed Ports', renderer: this.rendererInaccessiblePortLinkCell.bind(this), readOnly: true, },
+            { data: "inaccessibleRoutes", title: 'Disallowed Canals', renderer: this.rendererInacessibleRouteLinkCell.bind(this), readOnly: true, },
             { data: "baseFuel", title: 'Base Fuel' },
             { data: "capacity", title: 'Capacity' },
             { data: "fillCapacity", title: 'Fill Capacity' },
@@ -5010,51 +5318,40 @@ var VesselsComponent = (function () {
             { data: "coolingVolume", title: 'Cooling Volume' },
             { data: "pilotLightRate", title: 'Pilot Light Rate' },
             { data: "minBaseFuelConsumption", title: 'Min Base Fuel Consumption' },
-            { data: "hasReliqCapacity", title: 'Has Reliq Capacity' },
-            { data: "scnt", title: 'Scnt' },
+            { data: "hasReliqCapacity", title: 'Reliq', type: 'checkbox' },
+            { data: "scnt", title: 'SCNT' },
             { data: "nboRate", title: 'NBO Rate' },
-            { data: "ladenAttributes.fuelConsumption", title: 'Laden Fuel Consumption' },
-            { data: "ladenAttributes.idleNBORate", title: 'Laden Idle NBO Rate' },
+            { data: "ladenAttributes.fuelConsumption", title: 'Laden Fuel Curve', renderer: this.rendererFuelConsumptionLinkCell.bind(this), readOnly: true, editor: __WEBPACK_IMPORTED_MODULE_3_handsontable__["editors"].TextEditor },
+            { data: "ladenAttributes.idleNBORate", title: 'Laden Idle NBO Rate', },
             { data: "ladenAttributes.idleBaseRate", title: 'Laden Idle Base Rate' },
             { data: "ladenAttributes.inPortBaseRate", title: 'Laden In Port Base Rate' },
-            { data: "ladenAttributes.serviceSped", title: 'Laden service Speed ' },
+            { data: "ladenAttributes.serviceSped", title: 'Laden Service Speed ' },
             { data: "ladenAttributes.inPortNBORate", title: 'Laden In Port NBO Rate' },
-            { data: "ballastAttributes.fuelConsumption", title: 'Ballast Fuel Consumption' },
+            { data: "ballastAttributes.fuelConsumption", title: 'Ballast Fuel Curve', renderer: this.rendererFuelConsumption2LinkCell.bind(this), readOnly: true, editor: __WEBPACK_IMPORTED_MODULE_3_handsontable__["editors"].TextEditor },
             { data: "ballastAttributes.idleNBORate", title: 'Ballast Idle NBO Rate' },
             { data: "ballastAttributes.idleBaseRate", title: 'Ballast Idle Base Rate' },
             { data: "ballastAttributes.inPortBaseRate", title: 'Ballast In Port Base Rate' },
-            { data: "ballastAttributes.serviceSped", title: 'Ballast service Speed' },
+            { data: "ballastAttributes.serviceSped", title: 'Ballast Service Speed' },
             { data: "ballastAttributes.inPortNBORate", title: 'Ballast In Port NBO Rate' },
         ];
-        this.specificFormatters = { "mmxId": { "format": "", "type": "", "Unit": "" },
-            "name": { "format": "", "type": "", "Unit": "" },
-            "imo": { "format": "", "type": "", "Unit": "" },
-            "inaccessiblePorts": { "format": "", "type": "", "Unit": "" },
-            "inaccessibleRoutes": { "format": "", "type": "", "Unit": "" },
-            "baseFuel": { "format": "", "type": "", "Unit": "" },
-            "capacity": { "format": "", "type": "", "Unit": "m3" },
-            "fillCapacity": { "format": "", "type": "", "Unit": "%" },
-            "ladenAttributes": { "format": "", "type": "", "Unit": "" },
-            "ballastAttributes": { "format": "", "type": "", "Unit": "" },
-            "minSpeed": { "format": "", "type": "", "Unit": "kts" },
-            "maxSpeed": { "format": "", "type": "", "Unit": "kts" },
-            "minHeel": { "format": "", "type": "", "Unit": "m3" },
-            "warmingTime": { "format": "", "type": "", "Unit": "hrs" },
-            "coolingVolume": { "format": "", "type": "", "Unit": "m3" },
-            "pilotLightRate": { "format": "", "type": "", "Unit": "MT/day" },
-            "minBaseFuelConsumption": { "format": "", "type": "", "Unit": "" },
-            "hasReliqCapacity": { "format": "", "type": "", "Unit": "" },
-            "scnt": { "format": "", "type": "", "Unit": "" },
-            "nboRate": { "format": "", "type": "", "Unit": "m3/day" },
-            "idleNBORate": { "format": "", "type": "", "Unit": "m3/day" },
-            "idleBaseRate": { "format": "", "type": "", "Unit": "MT/day" },
-            "inPortBaseRate": { "format": "", "type": "", "Unit": "MT/day" },
-            "serviceSped": { "format": "", "type": "", "Unit": "kts" },
-            "inPortNBORate": { "format": "", "type": "", "Unit": "m3/day" } };
+        this.routeCellRendererService.routeCellRendererEvent.subscribe(function (data) {
+            _this.vessels[data.index]['inaccessibleRoutes'] = data.data;
+        });
+        this.portCellRendererService.portCellRendererEvent.subscribe(function (data) {
+            _this.vessels[data.index]['inaccessiblePorts'] = data.data;
+        });
+        this.fuelCellRendererService.fuelCellRendererEvent.subscribe(function (data) {
+            if (data.dest === "laden") {
+                console.log("updated laden consumption");
+                _this.vessels[data.index]['ladenAttributes']['fuelConsumption'] = data.data.map(function (x) { return ({ speed: x[1], consumption: x[0] }); });
+            }
+            else if (data.dest === "ballast") {
+                console.log("updated laden consumption");
+                _this.vessels[data.index]['ballastAttributes']['fuelConsumption'] = data.data.map(function (x) { return ({ speed: x[1], consumption: x[0] }); });
+            }
+        });
         this.getVessels();
     }
-    VesselsComponent.prototype.ngOnInit = function () {
-    };
     VesselsComponent.prototype.getVessels = function () {
         var _this = this;
         this.vesselsService.getVesselsUsingGET().toPromise()
@@ -5072,14 +5369,8 @@ var VesselsComponent = (function () {
         this.createHorizontalTable(this.vessels);
     };
     VesselsComponent.prototype.createEmptyVessel = function () {
-        var fuelConsumptionLadenEmpty = [{
-                "consumption": 0,
-                "speed": 0
-            }];
-        var fuelConsumptionBallastEmpty = [{
-                "consumption": 0,
-                "speed": 0
-            }];
+        var fuelConsumptionLadenEmpty = [];
+        var fuelConsumptionBallastEmpty = [];
         var ladenAttributeEmpty = {
             "fuelConsumption": fuelConsumptionLadenEmpty,
             "idleBaseRate": null,
@@ -5120,25 +5411,28 @@ var VesselsComponent = (function () {
         return emptyVessel;
     };
     VesselsComponent.prototype.createHorizontalTable = function (vessels) {
-        this.rowHeaders = [];
+        var rowHeaders = [];
         this.colHeaders = [];
-        this.data = [];
         if (vessels && vessels.length === 0) {
             vessels.push(this.createEmptyVessel());
         }
         ;
-        this.rowHeaders = vessels.map(function (v) { return v.mmxId; });
-        this.colHeaders = this.columns.map(function (col) { return col['colName']; });
-        console.log(this.vessels);
+        rowHeaders = vessels.map(function (v) { return v.mmxId; });
+        this.colHeaders = this.columns.map(function (col) { return col['title']; });
         this.options = {
             data: this.vessels,
-            rowHeaders: this.rowHeaders,
+            rowHeaders: rowHeaders,
+            hiddenColumns: true,
+            //colHeaders: true,
+            //nestedHeaders: [
+            //  [{label:'test', colspan:17}, {label:'LadenAttributes', colspan:6}, {label:'Ballast attributes', colspan:6}],
+            //  this.colHeaders
+            //],
+            //collapsibleColumns: [{row: -2, col: 1, collapsible: true}],
             colHeaders: this.colHeaders,
             columns: this.columns,
-            rowHeaderWidth: 150,
-            colHeaderWidth: 500,
-            colWidths: [500, 50, 80, 80, 80, 80, 80],
-            //autoColumnSize: true,
+            rowHeaderWidth: 100,
+            autoColumnSize: true,
             manualColumnMove: true,
             manualRowMove: true,
             manualColumnResize: true,
@@ -5150,67 +5444,80 @@ var VesselsComponent = (function () {
             undo: true,
         };
         this.cellComponentFactory = this.factoryResolver
-            .resolveComponentFactory(MyTableCellComponent);
+            .resolveComponentFactory(__WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__["a" /* MyTableCellComponent */]);
+        this.cellComponentTestFactory = this.factoryResolver
+            .resolveComponentFactory(__WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__["b" /* MyTableCellComponentTest */]);
     };
-    VesselsComponent.prototype.rendererLinkCell = function (instance, td, row, col, columnKey, data, cellProperties) {
-        var component = this.templateContainer
-            .createComponent(this.cellComponentFactory);
-        Object.assign(component.instance, {});
-        component.changeDetectorRef.detectChanges();
-        this.cellTemplateComponents[data.id] = component;
+    VesselsComponent.prototype.rendererInaccessiblePortLinkCell = function (instance, td, row, col, columnKey, data, cellProperties) {
+        var component = this.cellPortTemplateComponents[row];
+        if (!component) {
+            component = this.templateContainer
+                .createComponent(this.cellComponentFactory);
+            var vessel = this.vessels[row];
+            if (vessel['inaccessiblePorts'] == null || vessel['inaccessiblePorts'] == undefined) {
+                vessel['inaccessiblePorts'] = [];
+            }
+            component.instance.selected = vessel['inaccessiblePorts'];
+            Object.assign(component.instance, { index: row, componentType: 'port' });
+            component.instance.setSelection(this.ports);
+            component.changeDetectorRef.detectChanges();
+            this.cellPortTemplateComponents[row] = component;
+        }
         __WEBPACK_IMPORTED_MODULE_4_jquery__(td).html(component.location.nativeElement);
     };
     ;
-    /*
-    createVerticalTable(vessels: Vessel[]): void {
-      this.rowHeaders = [];
-      this.colHeaders = [];
-      this.data = [];
-  
-      if (vessels && vessels.length === 0) {
-        vessels.push(this.createEmptyVessel())
-      };
-  
-      this.colHeaders = vessels.map(v => v.mmxId);
-      let trimmedKeys: string[] = Object.keys(vessels[0])
-      .filter(k => !this.ignoreKeyList.includes(k))
-  
-      this.data = trimmedKeys.map(key => vessels.map(v => v[key]));
-      this.rowHeaders = this.tokenizeLabels(trimmedKeys);
-  
-      let ladenKeys: string[] = Object.keys(vessels[0].ladenAttributes);
-      this.rowHeaders.push(...this.tokenizeLabels(ladenKeys.map(key => 'Laden ' + key)));
-      this.data.push(...ladenKeys.map(key => vessels.map(v => v['ladenAttributes'][key])));
-  
-      let ballastKeys: string[] = Object.keys(vessels[0].ballastAttributes);
-      this.rowHeaders.push(...this.tokenizeLabels(ballastKeys));
-      this.data.push(...ballastKeys.map(key => vessels.map(v => v['ballastAttributes'][key])));
-  
-      this.options = {
-        colHeaders: this.colHeaders,
-        rowHeaders: this.rowHeaders,
-        rowHeaderWidth: 200,
-        columns: Array.apply(null, {length: this.colHeaders.length}).map(i => ({'type':'text'})),
-        minRows: this.rowHeaders.length,
-        minCols: this.colHeaders.length,
-        data: this.data
-      }
-    }
-     */
-    VesselsComponent.prototype.gotoDetail = function (selectedVessel) {
-        this.router.navigate(['../vessel', selectedVessel.mmxId, 0]);
+    VesselsComponent.prototype.rendererFuelConsumptionLinkCell = function (instance, td, row, col, columnKey, data, cellProperties) {
+        var component = this.cellTestTemplateComponents[row];
+        if (!component) {
+            component = this.templateContainer
+                .createComponent(this.cellComponentTestFactory);
+            var vessel = this.vessels[row];
+            if (vessel['ladenAttributes'] == null || vessel['ladenAttributes'] == undefined) {
+                vessel['ladenAttributes'] = this.createEmptyVessel()['ladenAttributes'];
+            }
+            Object.assign(component.instance, { index: row, dest: 'laden' });
+            component.changeDetectorRef.detectChanges();
+            component.instance.setSelection(this.vessels[row]['ladenAttributes']['fuelConsumption']);
+            this.cellTestTemplateComponents[row] = component;
+        }
+        __WEBPACK_IMPORTED_MODULE_4_jquery__(td).html(component.location.nativeElement);
     };
-    VesselsComponent.prototype.deleteVessel = function (selectedVessel) {
-        console.log("Deleted: " + selectedVessel.mmxId);
-        this.router.navigate(['../remove', selectedVessel.mmxId]);
+    ;
+    VesselsComponent.prototype.rendererFuelConsumption2LinkCell = function (instance, td, row, col, columnKey, data, cellProperties) {
+        var component = this.cellTest2TemplateComponents[row];
+        if (!component) {
+            component = this.templateContainer
+                .createComponent(this.cellComponentTestFactory);
+            var vessel = this.vessels[row];
+            if (vessel['ballastAttributes'] == null || vessel['ballastAttributes'] == undefined) {
+                vessel['ballastAttributes'] = this.createEmptyVessel()['ballastAttributes'];
+            }
+            Object.assign(component.instance, { index: row, dest: 'ballast' });
+            component.instance.setSelection(this.vessels[row]['ballastAttributes']['fuelConsumption']);
+            component.changeDetectorRef.detectChanges();
+            this.cellTest2TemplateComponents[row] = component;
+        }
+        __WEBPACK_IMPORTED_MODULE_4_jquery__(td).html(component.location.nativeElement);
     };
-    VesselsComponent.prototype.toggleTableOrientation = function () {
-        this.tableOrientationToggle = !this.tableOrientationToggle;
-        this.refreshTable();
+    ;
+    VesselsComponent.prototype.rendererInacessibleRouteLinkCell = function (instance, td, row, col, columnKey, data, cellProperties) {
+        var component = this.cellRouteTemplateComponents[row];
+        if (!component) {
+            component = this.templateContainer
+                .createComponent(this.cellComponentFactory);
+            var vessel = this.vessels[row];
+            if (vessel['inaccessibleRoutes'] == null || vessel['inaccessibleRoutes'] == undefined) {
+                vessel['inaccessibleRoutes'] = [];
+            }
+            component.instance.selected = vessel['inaccessibleRoutes'];
+            Object.assign(component.instance, { index: row, componentType: 'route' });
+            component.instance.setSelection(this.routes);
+            component.changeDetectorRef.detectChanges();
+            this.cellRouteTemplateComponents[row] = component;
+        }
+        __WEBPACK_IMPORTED_MODULE_4_jquery__(td).html(component.location.nativeElement);
     };
-    VesselsComponent.prototype.addVessel = function () {
-        this.router.navigate(['../vessel', '', '']);
-    };
+    ;
     VesselsComponent.prototype.saveVessels = function () {
         var _this = this;
         this.vessels = this.vessels.map(function (v) {
@@ -5230,20 +5537,21 @@ __decorate([
     __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]) === "function" && _a || Object)
 ], VesselsComponent.prototype, "templateContainer", void 0);
 __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__["b" /* HotTable */]),
-    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__["b" /* HotTable */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_handsontable__["b" /* HotTable */]) === "function" && _b || Object)
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_2_ng2_handsontable__["b" /* HotTable */]),
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_handsontable__["b" /* HotTable */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ng2_handsontable__["b" /* HotTable */]) === "function" && _b || Object)
 ], VesselsComponent.prototype, "hotTable", void 0);
 VesselsComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-vessels',
         template: __webpack_require__("../../../../../src/app/vessels/vessels.component.html"),
         styles: [__webpack_require__("../../../../../src/app/vessels/vessels.component.css")],
-        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"]]
+        providers: [__WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"]],
+        encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None
     }),
-    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["Router"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"]) === "function" && _e || Object])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__generated_vessels_index__["VesselsService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__["c" /* RouteCellRendererService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__["c" /* RouteCellRendererService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__["d" /* PortCellRendererService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__["d" /* PortCellRendererService */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__["e" /* FuelCellRendererService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__customCells_customCells_component__["e" /* FuelCellRendererService */]) === "function" && _g || Object])
 ], VesselsComponent);
 
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=vessels.component.js.map
 
 /***/ }),

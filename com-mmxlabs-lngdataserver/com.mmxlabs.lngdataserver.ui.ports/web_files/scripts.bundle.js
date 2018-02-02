@@ -15,26 +15,16 @@ module.exports = "/*!\n * Chart.js\n * http://chartjs.org/\n * Version: 2.7.0\n 
 	Author Tobias Koppers @sokra
 */
 module.exports = function(src) {
-	function log(error) {
-		(typeof console !== "undefined")
-		&& (console.error || console.log)("[Script Loader]", error);
-	}
-
-	// Check for IE =< 8
-	function isIE() {
-		return typeof attachEvent !== "undefined" && typeof addEventListener === "undefined";
-	}
-
 	try {
-		if (typeof execScript !== "undefined" && isIE()) {
-			execScript(src);
-		} else if (typeof eval !== "undefined") {
+		if (typeof eval !== "undefined") {
 			eval.call(null, src);
+		} else if (typeof execScript !== "undefined") {
+			execScript(src);
 		} else {
-			log("EvalError: No eval function available");
+			console.error("[Script Loader] EvalError: No eval function available");
 		}
 	} catch (error) {
-		log(error);
+		console.error("[Script Loader] ", error.message);
 	}
 }
 
