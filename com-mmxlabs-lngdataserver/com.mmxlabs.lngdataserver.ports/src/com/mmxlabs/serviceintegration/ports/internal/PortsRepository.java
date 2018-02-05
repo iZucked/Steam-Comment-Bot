@@ -35,6 +35,7 @@ public class PortsRepository {
 				return vv;
 			}).collect(Collectors.toList());
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
@@ -45,6 +46,7 @@ public class PortsRepository {
 			return new DefaultPortsProvider(versionTag, portsApi.fetchAllUsingGET());
 		} catch (Exception e) {
 			// Pass
+			System.out.println(e.getMessage());
 		}
 		return null;
 	}

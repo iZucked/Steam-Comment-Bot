@@ -33,7 +33,7 @@ public class PricingEditorView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
 		browser = new Browser(parent, SWT.NONE);
-		System.out.println("Browser: " + browser.getBrowserType());
+		System.out.println("Browser pricing: " + browser.getBrowserType());
 
 		browser.setBounds(0, 0, 600, 800);
 

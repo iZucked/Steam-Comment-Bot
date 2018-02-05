@@ -85,7 +85,7 @@ public class PortsEditorView extends ViewPart {
 		}
 		String url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/ports" + "?apiBaseUrl=" + encodedBackend;
 		if (version != "") {
-			url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/ports" + "/" + version + "?apiBaseUrl=" + encodedBackend;
+			url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/ports" + "/version/" + version + "?apiBaseUrl=" + encodedBackend;
 		}
 		System.out.println("PORT calling: " + url);
 		return url;
