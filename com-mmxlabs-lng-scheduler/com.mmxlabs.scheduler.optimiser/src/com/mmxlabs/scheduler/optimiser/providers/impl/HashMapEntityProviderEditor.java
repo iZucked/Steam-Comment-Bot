@@ -37,6 +37,7 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 		return entitiesBySlot.get(slot);
 	}
 
+	@Override
 	public Collection<@NonNull IEntity> getEntities() {
 		return entities;
 	}
@@ -66,7 +67,7 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 	}
 
 	public void setEntityBook(final @NonNull IEntity entity, final @NonNull EntityBookType bookType, final @NonNull IEntityBook entityBook) {
-
+		entities.add(entity);
 		final Map<@NonNull EntityBookType, @NonNull IEntityBook> map;
 		if (entitiesBooksMap.containsKey(entity)) {
 			map = entitiesBooksMap.get(entity);

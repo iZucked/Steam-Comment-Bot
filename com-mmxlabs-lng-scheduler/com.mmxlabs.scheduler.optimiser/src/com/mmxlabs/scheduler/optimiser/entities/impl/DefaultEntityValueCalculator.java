@@ -248,7 +248,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Calculate transfer pricing etc between entities
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
-		evaluateCargoPNL(evaluationMode, vesselAvailability, plan, cargoPNLData,  entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		evaluateCargoPNL(evaluationMode, vesselAvailability, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
 
 		// The first load entity
 		IEntity baseEntity = null;
@@ -294,17 +294,19 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null && exportElement != null && entityBookDetailTreeMap != null && portSlotDetailTreeMap != null) {
+			// Add remaining entities as we may use some outside of this method.
+			seenEntities.addAll(entityProvider.getEntities());
 			{
 				final List<IProfitAndLossEntry> entries = new LinkedList<>();
 				for (final IEntity entity : seenEntities) {
 					{
 						final Long postTaxProfit = entityPostTaxProfit.get(entity.getShippingBook());
 						final Long preTaxProfit = entityPreTaxProfit.get(entity.getShippingBook());
-						if (preTaxProfit != null || postTaxProfit != null) {
+						final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getShippingBook());
 
+						if (preTaxProfit != null || postTaxProfit != null || (entityDetails != null && !entityDetails.getChildren().isEmpty())) {
 							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
 							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
-							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getShippingBook());
 							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), postTaxValue, preTaxValue, entityDetails);
 							entries.add(entry);
 						}
@@ -312,10 +314,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					{
 						final Long postTaxProfit = entityPostTaxProfit.get(entity.getTradingBook());
 						final Long preTaxProfit = entityPreTaxProfit.get(entity.getTradingBook());
-						if (preTaxProfit != null || postTaxProfit != null) {
+						final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getTradingBook());
+						if (preTaxProfit != null || postTaxProfit != null || (entityDetails != null && !entityDetails.getChildren().isEmpty())) {
 							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
 							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
-							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getTradingBook());
 							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
 							entries.add(entry);
 						}
@@ -323,10 +325,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					{
 						final Long postTaxProfit = entityPostTaxProfit.get(entity.getUpstreamBook());
 						final Long preTaxProfit = entityPreTaxProfit.get(entity.getUpstreamBook());
-						if (preTaxProfit != null || postTaxProfit != null) {
+						final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getUpstreamBook());
+						if (preTaxProfit != null || postTaxProfit != null || (entityDetails != null && !entityDetails.getChildren().isEmpty())) {
+
 							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
 							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
-							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getUpstreamBook());
 							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getUpstreamBook(), postTaxValue, preTaxValue, entityDetails);
 							entries.add(entry);
 						}
@@ -384,11 +387,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param entityProfit
 	 */
 	protected void evaluateCargoPNL(@NonNull final EvaluationMode evaluationMode, @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan plan,
-			@NonNull final CargoValueAnnotation cargoPNLData, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit,
-			@Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+			@NonNull final CargoValueAnnotation cargoPNLData, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution,
+			@Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		IEntity baseEntity = null;
-		
+
 		int idx = 0;
 		for (final IPortSlot slot : cargoPNLData.getSlots()) {
 			assert slot != null;

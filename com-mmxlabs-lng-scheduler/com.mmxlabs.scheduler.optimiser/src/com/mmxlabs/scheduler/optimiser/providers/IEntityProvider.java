@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import java.util.Collection;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -37,4 +39,7 @@ public interface IEntityProvider extends IDataComponentProvider {
 
 	@NonNull
 	IEntityBook getEntityBook(@NonNull IEntity entity, @NonNull EntityBookType bookType);
+
+	@NonNull
+	Collection<@NonNull IEntity> getEntities();
 }
