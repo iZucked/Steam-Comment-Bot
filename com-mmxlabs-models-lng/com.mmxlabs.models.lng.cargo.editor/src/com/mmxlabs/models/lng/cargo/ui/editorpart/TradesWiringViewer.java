@@ -1676,11 +1676,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			case LONG:
 				if (c != null && cargo == null && c.getLoadSlot() != null) {
 					return true;
+				} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() instanceof SpotSlot) {
+					return true;
 				} else {
 					return false;
 				}
 			case SHORT:
 				if (c != null && cargo == null && c.getDischargeSlot() != null) {
+					return true;
+				} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() instanceof SpotSlot) {
 					return true;
 				} else {
 					return false;
