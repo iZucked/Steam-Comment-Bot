@@ -1432,6 +1432,9 @@ public class LNGScenarioTransformer {
 
 		final TimePeriod p = slot.getWindowFlexUnits();
 		LocalDateTime startTime = wStart;
+		// Probably considering too much here, maybe a days/2 would be better estimate?
+		// Should probably try to update the matching windows code instead to compute travel time...
+		startTime = startTime.minusDays(slot.getShippingDaysRestriction());
 		{
 			if (slotFlex < 0) {
 				switch (p) {
@@ -1505,6 +1508,15 @@ public class LNGScenarioTransformer {
 				}
 
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
+				
+				final List<ERouteOption> allowedRoutes = new LinkedList<>();
+				if (shippingDaysRestrictionSpeedProvider != null) {
+					for (final Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(ScenarioModelUtil.getPortModel(rootObject), dischargeSlot)) {
+						allowedRoutes.add(mapRouteOption(route));
+					}
+				}
+				builder.setDivertableFOBAllowedRoute(discharge, allowedRoutes);
+				
 			} else {
 				// Bind to current port only
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
@@ -1512,6 +1524,7 @@ public class LNGScenarioTransformer {
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
 			}
 		}
+		
 	}
 
 	public void configureLoadSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Set<IPort> allDischargePorts,
@@ -1726,7 +1739,7 @@ public class LNGScenarioTransformer {
 						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
 
 				if (dischargeSlot.isDivertible()) {
-					// builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
+					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,

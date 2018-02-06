@@ -41,15 +41,17 @@ import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
@@ -115,7 +117,7 @@ public class LNGTransformerModule extends AbstractModule {
 	 */
 	public static final String Parser_Currency = "Currency";
 
-	private final LNGScenarioModel scenario;
+	private final @NonNull LNGScenarioModel scenario;
 
 	public final static String MONTH_ALIGNED_INTEGER_INTERVAL_CURVE = "MonthAlignedIntegerCurve";
 
@@ -205,6 +207,9 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IDivertableDESShippingTimesCalculator.class).to(DefaultDivertableDESShippingTimesCalculator.class);
 		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
 
+		bind(IDivertableFOBShippingTimesCalculator.class).to(DefaultDivertableFOBShippingTimesCalculator.class);
+		bind(DefaultDivertableFOBShippingTimesCalculator.class).in(Singleton.class);
+
 		// Register default implementations
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
 
@@ -245,7 +250,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@PerChainUnitScope
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate, @Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate, @Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
 
 		if (cacheMode == CacheMode.Off || !hintEnableCache) {
 			return delegate;
@@ -262,7 +267,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@PerChainUnitScope
-	private IVolumeAllocator provideVolumeAllocator(@NonNull final Injector injector, final @NotCaching IVolumeAllocator reference,
+	private IVolumeAllocator provideVolumeAllocator(@NonNull final Injector injector, final @NonNull @NotCaching IVolumeAllocator reference,
 			@Named(SchedulerConstants.Key_VolumeAllocationCache) final CacheMode cacheMode) {
 		if (cacheMode != CacheMode.Off && hintEnableCache) {
 			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
@@ -279,7 +284,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@PerChainUnitScope
-	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, final @NotCaching IEntityValueCalculator reference,
+	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, final @NonNull @NotCaching IEntityValueCalculator reference,
 			@Named(SchedulerConstants.Key_ProfitandLossCache) final CacheMode cacheMode) {
 
 		if (cacheMode != CacheMode.Off && hintEnableCache) {
@@ -389,12 +394,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 				int m = Months.between(startOfYear, plusMonths);
 
-				int a = startOfYear.getMonthValue();
-				int b = plusMonths.getMonthValue();
-
 				return m;
 			}
-
 		};
 	}
 
@@ -446,6 +447,7 @@ public class LNGTransformerModule extends AbstractModule {
 	private List<CharterInMarket> provideCharterInMarkets() {
 		return Collections.emptyList();
 	}
+
 	@Provides
 	@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKET_OVERRIDES)
 	private List<CharterInMarketOverride> provideCharterInMarketOverrides() {
