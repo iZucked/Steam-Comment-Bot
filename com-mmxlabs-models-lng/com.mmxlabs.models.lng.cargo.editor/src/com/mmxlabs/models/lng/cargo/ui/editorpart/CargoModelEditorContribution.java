@@ -4,14 +4,18 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.time.LocalDate;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -30,8 +34,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -41,28 +49,30 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.Inventory;
-import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
-import com.mmxlabs.models.lng.cargo.InventoryEventRow;
-import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.IAlternativeEditorProvider;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.TradesTableEditorExtension;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.TradesTableEditorProviderModule;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 /**
  */
 public class CargoModelEditorContribution extends BaseJointModelEditorContribution<CargoModel> {
+	private int currentEditorIndex = 0;
 	private int tradesViewerPageNumber = -1;
-	private TradesWiringViewer tradesViewer;
+	private ScenarioTableViewerPane tradesViewer;
 	private VesselViewerPane_Editor vesselViewerPane;
 	// private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
@@ -74,16 +84,75 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private InventoryOfftakePane inventoryOfftakePane;
 	private InventoryCapacityPane inventoryCapacityPane;
 	int inventoryPage;
+	private String lastFacility = null;
+	private List<IAlternativeEditorProvider> extensions = new LinkedList<>();
+
+	private Adapter inventoryListener = new AdapterImpl() {
+		public void notifyChanged(Notification msg) {
+			if (msg.isTouch()) {
+				return;
+			}
+
+			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS) {
+				if (inventorySelectionViewer != null) {
+
+					List<Inventory> models = modelObject.getInventoryModels().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
+					inventorySelectionViewer.setInput(models);
+					Inventory selectedInventory = null;
+					if (!models.isEmpty()) {
+						if (lastFacility != null) {
+							for (Inventory inventory : modelObject.getInventoryModels()) {
+								if (lastFacility.equals(inventory.getName())) {
+									selectedInventory = inventory;
+									break;
+								}
+							}
+						}
+						if (selectedInventory == null) {
+							selectedInventory = modelObject.getInventoryModels().get(0);
+						}
+						lastFacility = selectedInventory.getName();
+						inventorySelectionViewer.setSelection(new StructuredSelection(selectedInventory));
+					}
+				}
+			}
+		}
+	};
 
 	@Override
 	public void addPages(final Composite parent) {
+		initialiseExtensions();
+		if (!extensions.isEmpty()) {
+			{
+				IAlternativeEditorProvider provider = extensions.get(0);
+				this.tradesViewer = provider.init(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), parent, modelObject);
+			}
+			tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
+			editorPart.setPageText(tradesViewerPageNumber, "Trades");
+			currentEditorIndex = 0;
+			if (extensions.size() > 1) {
+				toggleAction = new RunnableAction("Toggle editor mode", () -> {
+					editorPart.setControl(tradesViewerPageNumber, null);
 
-		this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		tradesViewer.createControl(parent);
-		tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory(), editorPart.getModelReference());
-		tradesViewer.getViewer().setInput(modelObject);
-		tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
-		editorPart.setPageText(tradesViewerPageNumber, "Trades");
+					tradesViewer.getControl().dispose();
+					++currentEditorIndex;
+					if (currentEditorIndex >= extensions.size()) {
+						currentEditorIndex = 0;
+					}
+					IAlternativeEditorProvider provider = extensions.get(currentEditorIndex);
+					this.tradesViewer = provider.init(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), parent, modelObject);
+
+					editorPart.setControl(tradesViewerPageNumber, tradesViewer.getControl());
+
+					tradesViewer.getToolBarManager().add(toggleAction);
+					tradesViewer.getToolBarManager().update(true);
+
+				});
+				toggleAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/editormode.gif"));
+				tradesViewer.getToolBarManager().add(toggleAction);
+				tradesViewer.getToolBarManager().update(true);
+			}
+		}
 		{
 
 			final SashForm sash = new SashForm(parent, SWT.VERTICAL);
@@ -133,8 +202,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			final Label label = new Label(selector, SWT.NONE);
 			label.setText("Facility: ");
 			selector.setLayout(new GridLayout(4, false));
-			final ComboViewer comboViewer = new ComboViewer(selector);
-			comboViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().hint(70, SWT.DEFAULT).create());
+			inventorySelectionViewer = new ComboViewer(selector);
+			inventorySelectionViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().hint(70, SWT.DEFAULT).create());
 
 			{
 				Button btn = new Button(selector, SWT.PUSH);
@@ -144,9 +213,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						// TODO Auto-generated method stub
-						IStructuredSelection selection = comboViewer.getStructuredSelection();
+						IStructuredSelection selection = inventorySelectionViewer.getStructuredSelection();
 						DetailCompositeDialogUtil.editSelection(editorPart, selection);
-						comboViewer.refresh();
+						inventorySelectionViewer.refresh();
 					}
 
 					@Override
@@ -171,61 +240,25 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			inventoryCapacityPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Capacities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			inventoryCapacityPane.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-			if (false && modelObject.getInventoryModels().isEmpty()) {
-				// Demo data - note! outside of commands!
-				final Inventory bin = CargoFactory.eINSTANCE.createInventory();
-				bin.setName("Bintulu");
-
-				makeCapacity(bin, LocalDate.of(2017, 1, 1), 6_000, 460_000);
-				makeCapacity(bin, LocalDate.of(2017, 6, 1), 6_000, 540_000);
-				makeCapacity(bin, LocalDate.of(2017, 8, 1), 6_000, 480_000);
-
-				makeFeed(bin, LocalDate.of(2017, 1, 1), LocalDate.of(2017, 1, 1), "Upstream", InventoryFrequency.LEVEL, 400_000);
-				makeFeed(bin, LocalDate.of(2017, 1, 1), LocalDate.of(2017, 5, 31), "Upstream", InventoryFrequency.DAILY, 20_000);
-				makeFeed(bin, LocalDate.of(2017, 5, 1), LocalDate.of(2017, 5, 31), "Upstream", InventoryFrequency.DAILY, 15_000);
-
-				makeOfftake(bin, LocalDate.of(2017, 1, 15), LocalDate.of(2017, 1, 15), InventoryFrequency.CARGO, "Tepco", 150_000);
-
-				final Inventory sing = CargoFactory.eINSTANCE.createInventory();
-				sing.setName("Singapore");
-				makeCapacity(sing, LocalDate.of(2017, 1, 1), 1_000, 300_000);
-
-				for (final LoadSlot slot : modelObject.getLoadSlots()) {
-					if (slot.getPort().getName().equals("Bintulu")) {
-						int volume = slot.getSlotOrContractMaxQuantity();
-						if (volume != Integer.MAX_VALUE && slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU) {
-							volume = (int) ((double) volume / slot.getSlotOrDelegatedCV());
-						}
-						makeOfftake(bin, slot.getWindowStart(), slot.getWindowStart(), InventoryFrequency.CARGO, slot.getName(), volume);
-					}
-				}
-
-				final Inventory dragon = CargoFactory.eINSTANCE.createInventory();
-				dragon.setName("Dragon");
-
-				modelObject.getInventoryModels().add(bin);
-				modelObject.getInventoryModels().add(sing);
-				modelObject.getInventoryModels().add(dragon);
-			}
 			inventoryPage = editorPart.addPage(sash);
 			editorPart.setPageText(inventoryPage, "Inventory");
 
-			comboViewer.setContentProvider(new ArrayContentProvider());
-			comboViewer.setLabelProvider(new LabelProvider() {
+			inventorySelectionViewer.setContentProvider(new ArrayContentProvider());
+			inventorySelectionViewer.setLabelProvider(new LabelProvider() {
 				@Override
 				public String getText(final Object element) {
 					return ((Inventory) element).getName();
 				}
 			});
-			comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			inventorySelectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 				@Override
 				public void selectionChanged(final SelectionChangedEvent event) {
-					// TODO Auto-generated method stub
-					final Inventory inventory = (Inventory) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
+					final Inventory inventory = (Inventory) ((IStructuredSelection) inventorySelectionViewer.getSelection()).getFirstElement();
 					inventoryFeedPane.getViewer().setInput(inventory);
 					inventoryOfftakePane.getViewer().setInput(inventory);
 					inventoryCapacityPane.getViewer().setInput(inventory);
+					lastFacility = inventory.getName();
 
 				}
 			});
@@ -245,7 +278,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 						commandStack.execute(cmd);
 						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorPart, inventory, commandStack.getMostRecentCommand());
 					});
-					comboViewer.setInput(modelObject.getInventoryModels());
+					inventorySelectionViewer.setInput(modelObject.getInventoryModels());
 				}
 
 				@Override
@@ -254,19 +287,39 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				}
 			});
 
-			comboViewer.setInput(modelObject.getInventoryModels());
+			inventorySelectionViewer.setInput(modelObject.getInventoryModels());
 			if (!modelObject.getInventoryModels().isEmpty()) {
 				// Pick first model.
 				final Inventory inventory = modelObject.getInventoryModels().get(0);
 				inventoryFeedPane.getViewer().setInput(inventory);
 				inventoryOfftakePane.getViewer().setInput(inventory);
 				inventoryCapacityPane.getViewer().setInput(inventory);
-				comboViewer.setSelection(new StructuredSelection(inventory));
+				inventorySelectionViewer.setSelection(new StructuredSelection(inventory));
 			}
+
+			modelObject.eAdapters().add(inventoryListener);
+
 		}
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(tradesViewer.getControl(), "com.mmxlabs.lingo.doc.Editor_Trades");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(vesselViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(eventViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
+
+	}
+
+	private void initialiseExtensions() {
+		class Temp {
+			@Inject(optional = true)
+			public Iterable<TradesTableEditorExtension> extensions;
+		}
+		final Injector injector = Guice.createInjector(new TradesTableEditorProviderModule());
+		Temp t = new Temp();
+		injector.injectMembers(t);
+		for (TradesTableEditorExtension e : t.extensions) {
+			extensions.add(e.getInstance());
+		}
+		if (extensions.size() > 1) {
+			Collections.sort(extensions, (a, b) -> Integer.compare(a.getPriority(), b.getPriority()));
+		}
 
 	}
 
@@ -294,6 +347,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 	private static final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, StartHeelOptions.class, EndHeelOptions.class, Cargo.class, LoadSlot.class,
 			DischargeSlot.class, SlotContractParams.class, SlotVisit.class, EndEvent.class };
+	private RunnableAction toggleAction;
+	private ComboViewer inventorySelectionViewer;
 
 	@Override
 	public boolean canHandle(final IStatus status) {
@@ -432,34 +487,13 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		}
 	}
 
-	private void makeFeed(final Inventory inventory, final LocalDate start, final LocalDate end, final String counterParty, final InventoryFrequency freq, final int volume) {
-		final InventoryEventRow row = CargoFactory.eINSTANCE.createInventoryEventRow();
-		row.setStartDate(start);
-		row.setEndDate(end);
-		row.setCounterParty(counterParty);
-		row.setPeriod(freq);
-		row.setVolume(volume);
+	@Override
+	public void dispose() {
 
-		inventory.getFeeds().add(row);
-	}
+		if (modelObject != null) {
+			modelObject.eAdapters().remove(inventoryListener);
+		}
 
-	private void makeOfftake(final Inventory inventory, final LocalDate start, final LocalDate end, final InventoryFrequency freq, final String counterParty, final int volume) {
-		final InventoryEventRow row = CargoFactory.eINSTANCE.createInventoryEventRow();
-		row.setStartDate(start);
-		row.setEndDate(end);
-		row.setPeriod(freq);
-		row.setCounterParty(counterParty);
-		row.setVolume(volume);
-
-		inventory.getOfftakes().add(row);
-	}
-
-	private void makeCapacity(final Inventory inventory, final LocalDate start, final int minVolume, final int maxVolume) {
-		final InventoryCapacityRow row = CargoFactory.eINSTANCE.createInventoryCapacityRow();
-		row.setDate(start);
-		row.setMinVolume(minVolume);
-		row.setMaxVolume(maxVolume);
-
-		inventory.getCapacities().add(row);
+		super.dispose();
 	}
 }

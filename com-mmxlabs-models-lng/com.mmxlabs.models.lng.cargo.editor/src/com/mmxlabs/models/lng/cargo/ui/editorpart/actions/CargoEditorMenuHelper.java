@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.cargo.ui.editorpart;
+package com.mmxlabs.models.lng.cargo.ui.editorpart.actions;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -236,7 +236,7 @@ public class CargoEditorMenuHelper {
 
 	}
 
-	IMenuListener createDischargeSlotMenuListener(final List<DischargeSlot> dischargeSlots, final int index) {
+	public IMenuListener createDischargeSlotMenuListener(final List<DischargeSlot> dischargeSlots, final int index) {
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		return new IMenuListener() {
 
@@ -295,8 +295,9 @@ public class CargoEditorMenuHelper {
 				if (LicenseFeatures.isPermitted("features:complex-cargo")) {
 					newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
 				}
+			} else {
+				newMenuManager.add(new EditAction("Edit Cargo", cargo));
 			}
-			// newMenuManager.add(new EditAction("Edit Cargo", cargo));
 		}
 	}
 
@@ -1147,9 +1148,6 @@ public class CargoEditorMenuHelper {
 							usedIDStrings.add(slot.getName());
 						}
 
-						if (dischargeSlot.isFOBSale()) {
-							dischargeSlot.setPort(source.getPort());
-						}
 						// Set back to start of month
 						cal = cal.withDayOfMonth(1).withHour(0);
 						final LocalDate dishargeCal = cal.toLocalDate();
@@ -1169,7 +1167,9 @@ public class CargoEditorMenuHelper {
 						dischargeSlot.setName(id);
 
 					}
-
+					if (dischargeSlot.isFOBSale()) {
+						dischargeSlot.setPort(source.getPort());
+					}
 				} else {
 					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {
@@ -1198,9 +1198,6 @@ public class CargoEditorMenuHelper {
 							cal = cal.minusHours(loadSlot.getSlotOrPortDuration());
 						}
 
-						if (loadSlot.isDESPurchase()) {
-							loadSlot.setPort(source.getPort());
-						}
 						// Set back to start of month
 						cal = cal.withDayOfMonth(1).withHour(0);
 						final LocalDate loadCal = cal.toLocalDate();
@@ -1312,6 +1309,9 @@ public class CargoEditorMenuHelper {
 		final Contract contract = slot.getContract();
 		assert (contract == null || contract.getContractType() == ContractType.BOTH);
 
+		if (slot instanceof SpotSlot) {
+			return;
+		}
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
 			if (SlotClassifier.classify(loadSlot) == SlotType.FOB_Buy) {
@@ -1374,7 +1374,9 @@ public class CargoEditorMenuHelper {
 
 		reassignMenuManager.add(northBoundCanalBookingMenu);
 		reassignMenuManager.add(southBoundCanalBookingMenu);
-		Collections.sort(canalbookings, (a, b)->{return (int) b.getBookingDate().until(a.getBookingDate(), ChronoUnit.DAYS);});
+		Collections.sort(canalbookings, (a, b) -> {
+			return (int) b.getBookingDate().until(a.getBookingDate(), ChronoUnit.DAYS);
+		});
 
 		for (CanalBookingSlot canalbooking : canalbookings) {
 			String canalBookingHandle = String.format("%s", canalbooking.getBookingDate());

@@ -96,6 +96,11 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: return createBreakEvenOptimisationStage();
 			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: return createSolutionBuilderSettings();
 			case ParametersPackage.MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: return createMultipleSolutionSimilarityOptimisationStage();
+			case ParametersPackage.PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: return createParallelMultipleSolutionSimilarityOptimisationStage();
+			case ParametersPackage.PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE: return createParallelHillClimbOptimisationStage();
+			case ParametersPackage.PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE: return createParallelLocalSearchOptimisationStage();
+			case ParametersPackage.MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: return createMultiobjectiveSimilarityOptimisationStage();
+			case ParametersPackage.PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: return createParallelMultiobjectiveSimilarityOptimisationStage();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -335,6 +340,56 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public MultipleSolutionSimilarityOptimisationStage createMultipleSolutionSimilarityOptimisationStage() {
 		MultipleSolutionSimilarityOptimisationStageImpl multipleSolutionSimilarityOptimisationStage = new MultipleSolutionSimilarityOptimisationStageImpl();
 		return multipleSolutionSimilarityOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ParallelMultipleSolutionSimilarityOptimisationStage createParallelMultipleSolutionSimilarityOptimisationStage() {
+		ParallelMultipleSolutionSimilarityOptimisationStageImpl parallelMultipleSolutionSimilarityOptimisationStage = new ParallelMultipleSolutionSimilarityOptimisationStageImpl();
+		return parallelMultipleSolutionSimilarityOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ParallelHillClimbOptimisationStage createParallelHillClimbOptimisationStage() {
+		ParallelHillClimbOptimisationStageImpl parallelHillClimbOptimisationStage = new ParallelHillClimbOptimisationStageImpl();
+		return parallelHillClimbOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ParallelLocalSearchOptimisationStage createParallelLocalSearchOptimisationStage() {
+		ParallelLocalSearchOptimisationStageImpl parallelLocalSearchOptimisationStage = new ParallelLocalSearchOptimisationStageImpl();
+		return parallelLocalSearchOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MultiobjectiveSimilarityOptimisationStage createMultiobjectiveSimilarityOptimisationStage() {
+		MultiobjectiveSimilarityOptimisationStageImpl multiobjectiveSimilarityOptimisationStage = new MultiobjectiveSimilarityOptimisationStageImpl();
+		return multiobjectiveSimilarityOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ParallelMultiobjectiveSimilarityOptimisationStage createParallelMultiobjectiveSimilarityOptimisationStage() {
+		ParallelMultiobjectiveSimilarityOptimisationStageImpl parallelMultiobjectiveSimilarityOptimisationStage = new ParallelMultiobjectiveSimilarityOptimisationStageImpl();
+		return parallelMultiobjectiveSimilarityOptimisationStage;
 	}
 
 	/**

@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -54,6 +55,21 @@ public class CargoModelFinder {
 			}
 		}
 		throw new IllegalArgumentException("Unknown discharge slot");
+	}
+
+	@NonNull
+	public Slot findSlot(@NonNull final String name) {
+		for (final LoadSlot cargo : getCargoModel().getLoadSlots()) {
+			if (name.equals(cargo.getName())) {
+				return cargo;
+			}
+		}
+		for (final DischargeSlot cargo : getCargoModel().getDischargeSlots()) {
+			if (name.equals(cargo.getName())) {
+				return cargo;
+			}
+		}
+		throw new IllegalArgumentException("Unknown slot");
 	}
 
 	@NonNull

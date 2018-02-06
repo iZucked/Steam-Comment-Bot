@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,7 +26,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -100,12 +97,9 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -113,7 +107,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
@@ -121,6 +114,10 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CreateStripDialog.StripType;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.ComplexCargoAction;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
@@ -174,6 +171,7 @@ import com.mmxlabs.models.util.emfpath.EMFMultiPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
@@ -217,7 +215,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private boolean locked;
 
-	private CargoEditingCommands cec;
+	CargoEditingCommands cec;
 	private CargoEditorMenuHelper menuHelper;
 
 	private final Image lockedImage;
@@ -498,6 +496,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@SuppressWarnings("restriction")
 			protected GridCellRenderer createCellRenderer() {
 				return new DefaultCellRenderer();
+			}
+
+			@Override
+			protected void doCommandStackChanged() {
+				ViewerHelper.refresh(this, true);
 			}
 		};
 
@@ -891,26 +894,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
 			assignmentColumn = addTradesColumn(loadColumns, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
-			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
-				@Override
-				public Image getImage(final Object element) {
-
-					if (element instanceof RowData) {
-						final RowData rowDataItem = (RowData) element;
-						final Object object = assignmentPath.get(rowDataItem);
-						if (object instanceof AssignableElement) {
-							final AssignableElement assignableElement = (AssignableElement) object;
-
-							if (assignableElement.isLocked()) {
-								return lockedImage;
-							}
-						}
-					}
-
-					return super.getImage(element);
-
-				}
-			});
 		}
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
@@ -1047,7 +1030,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			});
 		}
-
 
 		// Trigger sorting on the load date column to make this the initial sort column.
 		{
@@ -1628,59 +1610,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram.setLocked(locked);
 	}
 
-	private abstract class DefaultMenuCreatorAction extends LockableAction implements IMenuCreator {
-		private Menu lastMenu;
-
-		public DefaultMenuCreatorAction(final String label) {
-			super(label, IAction.AS_DROP_DOWN_MENU);
-		}
-
-		@Override
-		public void dispose() {
-			if ((lastMenu != null) && (lastMenu.isDisposed() == false)) {
-				lastMenu.dispose();
-			}
-			lastMenu = null;
-		}
-
-		@Override
-		public IMenuCreator getMenuCreator() {
-			return this;
-		}
-
-		@Override
-		public Menu getMenu(final Control parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			populate(lastMenu);
-
-			return lastMenu;
-		}
-
-		protected abstract void populate(Menu menu);
-
-		@Override
-		public Menu getMenu(final Menu parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			populate(lastMenu);
-
-			return lastMenu;
-		}
-
-		protected void addActionToMenu(final Action a, final Menu m) {
-			final ActionContributionItem aci = new ActionContributionItem(a);
-			aci.fill(m, -1);
-		}
-
-	}
-
 	private class TradesFilter extends ViewerFilter {
 		final private Map<IEMFPath, EObject> filterValues = new HashMap<>();
 
@@ -2046,7 +1975,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			if (LicenseFeatures.isPermitted("features:complex-cargo")) {
-				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo");
+				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo", scenarioEditingLocation, viewer.getControl().getShell());
 				addActionToMenu(newComplexCargo, menu);
 			}
 		}
@@ -2068,73 +1997,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}
 
-	}
-
-	private final class ComplexCargoAction extends LockableAction {
-
-		private ComplexCargoAction(final String text) {
-			super(text);
-		}
-
-		@Override
-		public void run() {
-
-			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-			editorLock.lock();
-			try {
-				scenarioEditingLocation.setDisableUpdates(true);
-
-				final ComplexCargoEditor editor = new ComplexCargoEditor(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation, true);
-				// editor.setBlockOnOpen(true);
-
-				final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-
-				final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
-				final DischargeSlot discharge1 = CargoFactory.eINSTANCE.createDischargeSlot();
-				final DischargeSlot discharge2 = CargoFactory.eINSTANCE.createDischargeSlot();
-
-				discharge1.setWindowStart(LocalDate.now());
-				discharge2.setWindowStart(LocalDate.now());
-
-				cargo.getSlots().addAll(Lists.newArrayList(load, discharge1, discharge2));
-				final int ret = editor.open(cargo);
-				final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
-				if (ret == Window.OK) {
-
-					final CargoModel cargomodel = getScenarioModel().getCargoModel();
-
-					final CompoundCommand cmd = new CompoundCommand("New LDD Cargo");
-					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
-					for (final Slot s : cargo.getSlots()) {
-
-						if (s.eContainer() == null) {
-
-							if (s instanceof LoadSlot) {
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), Collections.singleton(s)));
-							} else {
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), Collections.singleton(s)));
-							}
-						}
-					}
-
-					commandStack.execute(cmd);
-				} else {
-					final Iterator<Command> itr = new LinkedList<Command>(editor.getExecutedCommands()).descendingIterator();
-					while (itr.hasNext()) {
-						final Command cmd = itr.next();
-						if (commandStack.getUndoCommand() == cmd) {
-							commandStack.undo();
-						} else {
-							throw new IllegalStateException("Unable to cancel edit - command stack history is corrupt");
-						}
-					}
-
-				}
-			} finally {
-				scenarioEditingLocation.setDisableUpdates(false);
-				editorLock.unlock();
-			}
-		}
 	}
 
 	/**

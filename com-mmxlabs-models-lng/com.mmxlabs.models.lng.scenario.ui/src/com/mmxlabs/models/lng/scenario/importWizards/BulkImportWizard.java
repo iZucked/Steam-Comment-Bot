@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.csv.IImportProblem;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoImportAction;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoImportAction;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;

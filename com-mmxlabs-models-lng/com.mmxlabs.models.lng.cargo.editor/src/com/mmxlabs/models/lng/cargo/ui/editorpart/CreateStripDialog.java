@@ -73,6 +73,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
@@ -161,7 +162,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 
 		@Override
-		public void rebuild(boolean pack) {
+		public void rebuild(final boolean pack) {
 
 		}
 
@@ -742,7 +743,6 @@ public class CreateStripDialog extends FormDialog {
 				} else {
 					// Copy from template
 					if (sample.eIsSet(feature)) {
-
 						// Skip containment references -- again how should we handle this?
 						if (feature instanceof EReference && ((EReference) feature).isContainment()) {
 							final EReference reference = (EReference) feature;
@@ -756,6 +756,13 @@ public class CreateStripDialog extends FormDialog {
 						}
 					} else {
 						eObj.eUnset(feature);
+					}
+					if (sample instanceof MMXObject) {
+						final MMXObject mmxObject = (MMXObject) sample;
+						final MMXObject clone  = (MMXObject) eObj;
+						for (final EObject ext : mmxObject.getExtensions()) {
+							clone.getExtensions().add(EcoreUtil.copy(ext));
+						}
 					}
 				}
 			}

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.util.function.Supplier;
+
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -22,6 +24,10 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedDoubleFormatter;
+import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedFloatFormatter;
+import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedIntegerFormatter;
+import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedLongFormatter;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 
 /**
@@ -31,8 +37,10 @@ import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 
 	private final EDataType type;
+	private Object defaultValue;
 
 	private NumberFormatter formatter;
+	private Object input;
 
 	public VolumeAttributeManipulator(final EStructuralFeature feature, final EditingDomain editingDomain) {
 		super(feature, editingDomain);
@@ -40,26 +48,79 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 
 		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
 		String format = null;
+		String defaultValueString = "0";
 
 		if (annotation != null) {
+			if (annotation.getDetails().containsKey("defaultValue")) {
+				defaultValueString = annotation.getDetails().get("defaultValue");
+			}
+
 			if (annotation.getDetails().containsKey("formatString")) {
 				format = annotation.getDetails().get("formatString");
 			}
 		}
 
 		if (type == EcorePackage.eINSTANCE.getELong()) {
-			formatter = format == null ? new LongFormatter() : new LongFormatter(format);
+			defaultValue = Long.parseLong(defaultValueString);
+			final LongFormatter inner = format == null ? new LongFormatter() : new LongFormatter(format);
+			final Supplier<String> overrideStringSupplier = () -> {
+				if (input instanceof MMXObject) {
+					final Object v = ((MMXObject) input).getUnsetValue(field);
+					inner.setValue(v);
+					return inner.getDisplayString();
+				}
+				return null;
+			};
+			formatter = format == null ? new ExtendedLongFormatter(overrideStringSupplier) : new ExtendedLongFormatter(format, overrideStringSupplier);
+
 		} else if (type == EcorePackage.eINSTANCE.getEInt()) {
-			formatter = format == null ? new IntegerFormatter() : new IntegerFormatter(format);
+			defaultValue = Integer.parseInt(defaultValueString);
+			final IntegerFormatter inner = format == null ? new IntegerFormatter() : new IntegerFormatter(format);
+			final Supplier<String> overrideStringSupplier = () -> {
+				if (input instanceof MMXObject) {
+					final Object v = ((MMXObject) input).getUnsetValue(field);
+					inner.setValue(v);
+					return inner.getDisplayString();
+				}
+				return null;
+			};
+			formatter = format == null ? new ExtendedIntegerFormatter(overrideStringSupplier) : new ExtendedIntegerFormatter(format, overrideStringSupplier);
+
 		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
-			formatter = format == null ? new FloatFormatter() : new FloatFormatter(format);
+			defaultValue = Float.parseFloat(defaultValueString);
+			final FloatFormatter inner = format == null ? new FloatFormatter() : new FloatFormatter(format);
+			final Supplier<String> overrideStringSupplier = () -> {
+				if (input instanceof MMXObject) {
+					final Object v = ((MMXObject) input).getUnsetValue(field);
+					inner.setValue(v);
+					return inner.getDisplayString();
+				}
+				return null;
+			};
+			formatter = format == null ? new ExtendedFloatFormatter(overrideStringSupplier) : new ExtendedFloatFormatter(format, overrideStringSupplier);
 		} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
-			formatter = format == null ? new DoubleFormatter() : new DoubleFormatter(format);
+			defaultValue = Double.parseDouble(defaultValueString);
+			final DoubleFormatter inner = format == null ? new DoubleFormatter() : new DoubleFormatter(format);
+			final Supplier<String> overrideStringSupplier = () -> {
+				if (input instanceof MMXObject) {
+					final Object v = ((MMXObject) input).getUnsetValue(field);
+					inner.setValue(v);
+					return inner.getDisplayString();
+				}
+				return null;
+			};
+			formatter = format == null ? new ExtendedDoubleFormatter(overrideStringSupplier) : new ExtendedDoubleFormatter(format, overrideStringSupplier);
 		}
 		if (format == null) {
 			formatter.setFixedLengths(false, false);
 		}
 
+	}
+
+	@Override
+	public Object getValue(Object object) {
+		this.input = object;
+		return super.getValue(object);
 	}
 
 	@Override
@@ -77,14 +138,6 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	protected CellEditor createCellEditor(final Composite c, final Object object) {
-		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
-
-		editor.setFormatter(formatter);
-		return editor;
-	}
-
-	@Override
 	protected String renderSetValue(final Object container, final Object setValue) {
 		if (setValue instanceof Number) {
 			final Number number = (Number) setValue;
@@ -92,9 +145,25 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 				return "-";
 			}
 			final double n = number.doubleValue();
-			return String.format("%sk", super.renderSetValue(container, (int) Math.round(n / 1000.0)));
+			String unit = "k";
+//			if (container instanceof Slot) {
+//				unit = ((Slot)container).getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
+//			} else if (container instanceof Contract) {
+//				unit = ((Contract)container).getVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
+//			}
+			return String.format("%s%s", super.renderSetValue(container, (int) Math.round(n / 1000.0)), unit);
 		}
 
 		return super.renderSetValue(container, setValue);
 	}
+	
+	@Override
+	protected CellEditor createCellEditor(final Composite c, final Object object) {
+		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
+
+		editor.setFormatter(formatter);
+		return editor;
+	}
+
+	
 }

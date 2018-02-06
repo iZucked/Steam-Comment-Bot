@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityMinMaxConstraint;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -37,17 +38,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 5, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(15);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void maxDurationOutsideEndRangeLeftWindow() {
 
@@ -59,17 +60,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(8);
 
 		checkConstraint(vesselAvailability, false);
 	}
-	
+
 	@Test
 	public void maxDurationBeforeEndBy() {
 
@@ -81,16 +82,16 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(17);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void maxDurationAfterEndBy() {
 
@@ -102,16 +103,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(25);
 
-		checkConstraint(vesselAvailability, false);
+		// Success as range is less than max
+		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void maxDurationAfterEndAfter() {
 
@@ -123,16 +125,16 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(25);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void maxDurationBeforeEndAfter() {
 
@@ -144,16 +146,16 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(17);
 
 		checkConstraint(vesselAvailability, false);
 	}
-	
+
 	@Test
 	public void maxDurationOutsideEndRangeRightWindow() {
 
@@ -165,17 +167,18 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(25);
 
-		checkConstraint(vesselAvailability, false);
+		// Success as range is less than max
+		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void maxDurationOnLeftEdgeEndWindow() {
 
@@ -187,17 +190,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(10);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void maxDurationOnRightEdgeEndWindow() {
 
@@ -209,17 +212,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMaxDuration(19);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void minIsLesserThanMaxDurationTest() {
 
@@ -228,13 +231,13 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		vesselAvailability.setVessel(vessel);
 
-		//Duration constraints 
+		// Duration constraints
 		vesselAvailability.setMinDuration(15);
 		vesselAvailability.setMaxDuration(20);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void minIsGreaterThanMaxDurationTest() {
 
@@ -243,13 +246,13 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		vesselAvailability.setVessel(vessel);
 
-		//Duration constraints 
+		// Duration constraints
 		vesselAvailability.setMinDuration(25);
 		vesselAvailability.setMaxDuration(20);
 
 		checkConstraint(vesselAvailability, false);
 	}
-	
+
 	@Test
 	public void minIsEqualsToMaxDurationTest() {
 
@@ -258,14 +261,18 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		vesselAvailability.setVessel(vessel);
 
-		//Duration constraints 
+		// Duration constraints
 		vesselAvailability.setMinDuration(20);
 		vesselAvailability.setMaxDuration(20);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	private void checkConstraint(final VesselAvailability target, final boolean expectSuccess) {
+
+		CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		cargoModel.getVesselAvailabilities().add(target);
+
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 		when(successStatus.isOK()).thenReturn(Boolean.TRUE);
 
@@ -289,7 +296,7 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 
 		}
 	}
-	
+
 	@Test
 	public void minDurationInStartRangeWindow() {
 
@@ -301,17 +308,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 5, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 25, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMinDuration(15);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void minDurationOutsideStartRangeLeftWindow() {
 
@@ -323,17 +330,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 5, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 15, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 15, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMinDuration(20);
 
 		checkConstraint(vesselAvailability, false);
 	}
-	
+
 	@Test
 	public void minDurationBeforeStartBy() {
 
@@ -344,16 +351,16 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 
 		// Start
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMinDuration(9);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void minDurationAfterStartBy() {
 
@@ -364,16 +371,16 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 
 		// Start
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints (no startAfter so can extend range as needed)
 		vesselAvailability.setMinDuration(15);
 
-		checkConstraint(vesselAvailability, false);
+		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void minDurationAfterStartAfter() {
 
@@ -384,16 +391,16 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMinDuration(25);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void minDurationBeforeStartAfter() {
 
@@ -404,17 +411,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 20, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMinDuration(15);
 
 		checkConstraint(vesselAvailability, false);
 	}
-	
+
 	@Test
 	public void minDurationOnRightEdgeEndWindow() {
 
@@ -426,17 +433,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMinDuration(9);
 
 		checkConstraint(vesselAvailability, true);
 	}
-	
+
 	@Test
 	public void minMaxWithinStartEndWindow() {
 
@@ -448,12 +455,12 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		// Start
 		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JANUARY, 1, 0, 0));
 		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
-		
+
 		// End
 		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JANUARY, 10, 0, 0));
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JANUARY, 15, 0, 0));
-		
-		//Duration constraints 
+
+		// Duration constraints
 		vesselAvailability.setMinDuration(5);
 		vesselAvailability.setMaxDuration(14);
 

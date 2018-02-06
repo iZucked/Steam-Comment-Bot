@@ -111,6 +111,31 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
+	/**
+	 * Use the safety heel as the start level, 22.6 CV and 0 price
+	 * 
+	 * @param minVolumeInM3
+	 * @param maxVolumeInM3
+	 * @param cvValue
+	 * @param pricePerMMBTu
+	 * @return
+	 */
+	public VesselAvailabilityMaker withSafeyStartHeel() {
+		return withStartHeel(vesselAvailability.getVessel().getSafetyHeel(), vesselAvailability.getVessel().getSafetyHeel(), 22.6, "0");
+	}
+	/**
+	 * Use the safety heel as the end heel, 0 price
+	 * 
+	 * @param minVolumeInM3
+	 * @param maxVolumeInM3
+	 * @param cvValue
+	 * @param pricePerMMBTu
+	 * @return
+	 */
+	public VesselAvailabilityMaker withSafeyEndHeel() {
+		return withEndHeel(vesselAvailability.getVessel().getSafetyHeel(), vesselAvailability.getVessel().getSafetyHeel(), EVesselTankState.MUST_BE_COLD, "0");
+	}
+
 	public VesselAvailabilityMaker withStartHeel(final double minVolumeInM3, final double maxVolumeInM3, final double cvValue, final String pricePerMMBTu) {
 		if (minVolumeInM3 < 0) {
 			throw new IllegalArgumentException();

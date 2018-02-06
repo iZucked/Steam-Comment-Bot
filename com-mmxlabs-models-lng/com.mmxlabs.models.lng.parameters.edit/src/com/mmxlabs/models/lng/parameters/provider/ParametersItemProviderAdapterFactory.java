@@ -527,6 +527,121 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ParallelMultipleSolutionSimilarityOptimisationStageItemProvider parallelMultipleSolutionSimilarityOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createParallelMultipleSolutionSimilarityOptimisationStageAdapter() {
+		if (parallelMultipleSolutionSimilarityOptimisationStageItemProvider == null) {
+			parallelMultipleSolutionSimilarityOptimisationStageItemProvider = new ParallelMultipleSolutionSimilarityOptimisationStageItemProvider(this);
+		}
+
+		return parallelMultipleSolutionSimilarityOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ParallelHillClimbOptimisationStageItemProvider parallelHillClimbOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createParallelHillClimbOptimisationStageAdapter() {
+		if (parallelHillClimbOptimisationStageItemProvider == null) {
+			parallelHillClimbOptimisationStageItemProvider = new ParallelHillClimbOptimisationStageItemProvider(this);
+		}
+
+		return parallelHillClimbOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ParallelLocalSearchOptimisationStageItemProvider parallelLocalSearchOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createParallelLocalSearchOptimisationStageAdapter() {
+		if (parallelLocalSearchOptimisationStageItemProvider == null) {
+			parallelLocalSearchOptimisationStageItemProvider = new ParallelLocalSearchOptimisationStageItemProvider(this);
+		}
+
+		return parallelLocalSearchOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.MultiobjectiveSimilarityOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MultiobjectiveSimilarityOptimisationStageItemProvider multiobjectiveSimilarityOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.MultiobjectiveSimilarityOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMultiobjectiveSimilarityOptimisationStageAdapter() {
+		if (multiobjectiveSimilarityOptimisationStageItemProvider == null) {
+			multiobjectiveSimilarityOptimisationStageItemProvider = new MultiobjectiveSimilarityOptimisationStageItemProvider(this);
+		}
+
+		return multiobjectiveSimilarityOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ParallelMultiobjectiveSimilarityOptimisationStageItemProvider parallelMultiobjectiveSimilarityOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createParallelMultiobjectiveSimilarityOptimisationStageAdapter() {
+		if (parallelMultiobjectiveSimilarityOptimisationStageItemProvider == null) {
+			parallelMultiobjectiveSimilarityOptimisationStageItemProvider = new ParallelMultiobjectiveSimilarityOptimisationStageItemProvider(this);
+		}
+
+		return parallelMultiobjectiveSimilarityOptimisationStageItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -679,6 +794,11 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		if (breakEvenOptimisationStageItemProvider != null) breakEvenOptimisationStageItemProvider.dispose();
 		if (solutionBuilderSettingsItemProvider != null) solutionBuilderSettingsItemProvider.dispose();
 		if (multipleSolutionSimilarityOptimisationStageItemProvider != null) multipleSolutionSimilarityOptimisationStageItemProvider.dispose();
+		if (parallelMultipleSolutionSimilarityOptimisationStageItemProvider != null) parallelMultipleSolutionSimilarityOptimisationStageItemProvider.dispose();
+		if (parallelHillClimbOptimisationStageItemProvider != null) parallelHillClimbOptimisationStageItemProvider.dispose();
+		if (parallelLocalSearchOptimisationStageItemProvider != null) parallelLocalSearchOptimisationStageItemProvider.dispose();
+		if (multiobjectiveSimilarityOptimisationStageItemProvider != null) multiobjectiveSimilarityOptimisationStageItemProvider.dispose();
+		if (parallelMultiobjectiveSimilarityOptimisationStageItemProvider != null) parallelMultiobjectiveSimilarityOptimisationStageItemProvider.dispose();
 	}
 
 }

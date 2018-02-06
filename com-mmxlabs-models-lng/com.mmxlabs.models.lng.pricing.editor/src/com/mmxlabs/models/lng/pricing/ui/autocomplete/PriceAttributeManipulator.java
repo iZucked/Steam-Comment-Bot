@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -43,6 +44,8 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	private final EAnnotation overrideAnnotation;
 	private IMMXContentProposalProvider proposalHelper;
 	private String expressionType;
+	private IExtraCommandsHook extraCommandsHook;
+	private Object parent;
 
 	public PriceAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain, String expressionType) {
 		super();
@@ -126,9 +129,12 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		}
 
 		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
-		// command.setLabel("Set " + field.getName() + " to " + (value == null ? "null"
-		// : value.toString()));
-		editingDomain.getCommandStack().execute(command);
+		CompoundCommand cmd = new CompoundCommand();
+		cmd.append(command);
+		if (extraCommandsHook != null) {
+			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
+		}
+		editingDomain.getCommandStack().execute(cmd);
 	}
 
 	public void doSetValue(final Object object, final Object value) {
@@ -215,5 +221,17 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+		this.parent = parent;
+
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+		this.extraCommandsHook = extraCommandsHook;
+
 	}
 }

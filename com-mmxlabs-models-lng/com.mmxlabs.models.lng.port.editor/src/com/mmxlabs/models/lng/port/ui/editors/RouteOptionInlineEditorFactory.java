@@ -30,4 +30,13 @@ public class RouteOptionInlineEditorFactory implements IInlineEditorFactory {
 		return new EENumInlineEditor((EAttribute) feature, objectsList.toArray());
 	}
 
+	public static IInlineEditor createPanamaOnlyEditor(final EClass owner, final EStructuralFeature feature) {
+
+		ArrayList<Object> objectsList = new ArrayList<>();
+		final String name = PortModelLabeller.getName(RouteOption.PANAMA);
+		objectsList.add(name);
+		objectsList.add(RouteOption.PANAMA);
+		return new EENumInlineEditor((EAttribute) feature, objectsList.toArray());
+	}
+
 }

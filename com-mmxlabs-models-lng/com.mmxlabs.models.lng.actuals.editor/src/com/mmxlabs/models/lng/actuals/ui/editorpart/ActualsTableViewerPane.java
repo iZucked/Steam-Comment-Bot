@@ -629,34 +629,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 							}
 						}
 						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
-							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
-
-							final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-							try {
-								editorLock.lock();
-								try {
-									scenarioEditingLocation.setDisableUpdates(true);
-									if (editorTargets.size() > 1) {
-										final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
-												scenarioEditingLocation.getDefaultCommandHandler());
-										mdd.open(scenarioEditingLocation, editorTargets);
-									} else {
-										final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(),
-												~SWT.MAX) {
-											@Override
-											protected void configureShell(final Shell newShell) {
-												newShell.setMinimumSize(SWT.DEFAULT, 630);
-												super.configureShell(newShell);
-											}
-										};
-										dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), editorTargets, scenarioViewer.isLocked());
-									}
-								} finally {
-									scenarioEditingLocation.setDisableUpdates(false);
-								}
-							} finally {
-								editorLock.unlock();
-							}
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(editorTargets));
 						}
 					}
 				}

@@ -14,6 +14,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Equality;
@@ -24,14 +25,16 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
-class AssignmentManipulator implements ICellRenderer, ICellManipulator {
+public class AssignmentManipulator implements ICellRenderer, ICellManipulator, IImageProvider {
 	/**
 	 * 
 	 */
@@ -40,6 +43,10 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	private final IReferenceValueProvider cargoValueProvider;
 	private List<Pair<String, EObject>> allowedValues;
 	private EReference reference;
+	private IExtraCommandsHook extraCommandsHook;
+	private Object parent;
+
+	private Image lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
 
 	public AssignmentManipulator(final IScenarioEditingLocation location) {
 		this.location = location;
@@ -187,6 +194,30 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+		return null;
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+		this.parent = parent;
+
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+		this.extraCommandsHook = extraCommandsHook;
+	}
+
+	@Override
+	public Image getImage(Object element) {
+
+		if (element instanceof AssignableElement) {
+			final AssignableElement assignableElement = (AssignableElement) element;
+
+			if (assignableElement.isLocked()) {
+				return lockedImage;
+			}
+		}
 		return null;
 	}
 }

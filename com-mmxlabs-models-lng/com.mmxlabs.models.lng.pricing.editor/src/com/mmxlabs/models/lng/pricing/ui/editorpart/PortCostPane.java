@@ -144,5 +144,17 @@ public class PortCostPane extends ScenarioTableViewerPane {
 			return Collections.emptyList();
 		}
 
+		@Override
+		public void setParent(Object parent, Object object) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+			// TODO Auto-generated method stub
+			
+		}
+
 	}
 }

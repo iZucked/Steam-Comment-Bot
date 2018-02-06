@@ -195,6 +195,51 @@ public interface ParametersFactory extends EFactory {
 	MultipleSolutionSimilarityOptimisationStage createMultipleSolutionSimilarityOptimisationStage();
 
 	/**
+	 * Returns a new object of class '<em>Parallel Multiple Solution Similarity Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Parallel Multiple Solution Similarity Optimisation Stage</em>'.
+	 * @generated
+	 */
+	ParallelMultipleSolutionSimilarityOptimisationStage createParallelMultipleSolutionSimilarityOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Parallel Hill Climb Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Parallel Hill Climb Optimisation Stage</em>'.
+	 * @generated
+	 */
+	ParallelHillClimbOptimisationStage createParallelHillClimbOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Parallel Local Search Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Parallel Local Search Optimisation Stage</em>'.
+	 * @generated
+	 */
+	ParallelLocalSearchOptimisationStage createParallelLocalSearchOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Multiobjective Similarity Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Multiobjective Similarity Optimisation Stage</em>'.
+	 * @generated
+	 */
+	MultiobjectiveSimilarityOptimisationStage createMultiobjectiveSimilarityOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Parallel Multiobjective Similarity Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Parallel Multiobjective Similarity Optimisation Stage</em>'.
+	 * @generated
+	 */
+	ParallelMultiobjectiveSimilarityOptimisationStage createParallelMultiobjectiveSimilarityOptimisationStage();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

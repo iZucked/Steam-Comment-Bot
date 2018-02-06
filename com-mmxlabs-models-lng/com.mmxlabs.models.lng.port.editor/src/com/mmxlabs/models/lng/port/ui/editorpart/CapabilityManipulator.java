@@ -30,6 +30,8 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 class CapabilityManipulator implements ICellRenderer, ICellManipulator {
 	private final PortCapability capability;
 	private final EditingDomain editingDomain;
+	private IExtraCommandsHook extraCommandsHook;
+	private Object parent;
 
 	public CapabilityManipulator(final PortCapability capability, final EditingDomain editingDomain) {
 		this.capability = capability;
@@ -90,5 +92,16 @@ class CapabilityManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public void setParent(Object parent, Object object) {
+		this.parent = parent;
+		
+	}
+
+	@Override
+	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+		this.extraCommandsHook = extraCommandsHook;
 	}
 }

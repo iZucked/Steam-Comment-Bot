@@ -245,6 +245,25 @@ public class ModelDistanceProvider extends EContentAdapter {
 		}
 		return "";
 	}
+	
+	public static String getCanalEntranceName(PortModel portModel, RouteOption routeOption, CanalEntry canalEntry) {
+		for (Route r : portModel.getRoutes()) {
+			if (r.getRouteOption() == routeOption) {
+				if (canalEntry == CanalEntry.NORTHSIDE) {
+					EntryPoint northEntrance = r.getNorthEntrance();
+					if (northEntrance != null) {
+						return northEntrance.getName();
+					}
+				} else if (canalEntry == CanalEntry.SOUTHSIDE) {
+					EntryPoint southEntrance = r.getSouthEntrance();
+					if (southEntrance != null) {
+						return southEntrance.getName();
+					}
+				}
+			}
+		}
+		return "";
+	}
 
 	public @Nullable Port getCanalPort(RouteOption routeOption, CanalEntry canalEntry) {
 

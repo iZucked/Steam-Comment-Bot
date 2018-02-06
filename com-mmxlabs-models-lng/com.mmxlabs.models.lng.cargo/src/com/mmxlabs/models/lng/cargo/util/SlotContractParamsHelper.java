@@ -63,7 +63,7 @@ public final class SlotContractParamsHelper {
 		}
 		final EClass priceInfoClass = priceInfo.eClass();
 		final EClass paramsObjectEClass = getSlotContractParamsEClass(priceInfoClass);
-		if (paramsObjectEClass == null ) {
+		if (paramsObjectEClass == null) {
 			return null;
 		}
 		Class<?> cls = paramsObjectEClass.getInstanceClass();
@@ -79,6 +79,37 @@ public final class SlotContractParamsHelper {
 			}
 		}
 		return null;
+	}
+
+	@Nullable
+	public static SlotContractParams findOrCreateSlotContractParams(@NonNull final Slot slot) {
+		final Contract contract = slot.getContract();
+		if (contract == null) {
+			return null;
+		}
+		final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
+		if (priceInfo == null) {
+			return null;
+		}
+		final EClass priceInfoClass = priceInfo.eClass();
+		final EClass paramsObjectEClass = getSlotContractParamsEClass(priceInfoClass);
+		if (paramsObjectEClass == null) {
+			return null;
+		}
+		Class<?> cls = paramsObjectEClass.getInstanceClass();
+
+		if (!SlotContractParams.class.isAssignableFrom(cls)) {
+			return null;
+		}
+		if (paramsObjectEClass != null) {
+			for (final EObject ext : slot.getExtensions()) {
+				if (paramsObjectEClass.isInstance(ext)) {
+					return (SlotContractParams) ext;
+				}
+			}
+		}
+		EObject instance = paramsObjectEClass.getEPackage().getEFactoryInstance().create(paramsObjectEClass);
+		return (SlotContractParams) instance;
 	}
 
 	@Nullable

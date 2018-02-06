@@ -26,6 +26,10 @@ public class VesselClassMinHeelConstraintTest {
 	public void testMinHeel_Ok() {
 
 		final Vessel target = FleetFactory.eINSTANCE.createVessel();
+		target.setBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setIdleBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setPilotLightBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setInPortBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
 
 		target.setSafetyHeel(500);
 		target.setCapacity(1000);
@@ -38,6 +42,10 @@ public class VesselClassMinHeelConstraintTest {
 	public void testMinHeel_CapacityTooLow() {
 
 		final Vessel target = FleetFactory.eINSTANCE.createVessel();
+		target.setBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setIdleBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setPilotLightBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setInPortBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
 
 		target.setSafetyHeel(500);
 		target.setCapacity(100);
@@ -50,6 +58,10 @@ public class VesselClassMinHeelConstraintTest {
 	public void testMinHeel_FillPercentTooLow() {
 
 		final Vessel target = FleetFactory.eINSTANCE.createVessel();
+		target.setBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setIdleBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setPilotLightBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		target.setInPortBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
 
 		target.setSafetyHeel(500);
 		target.setCapacity(1000);
@@ -74,7 +86,7 @@ public class VesselClassMinHeelConstraintTest {
 		final IStatus status = constraint.validate(ctx);
 
 		if (expectSuccess) {
-			Assert.assertTrue("Sucess expected", status.isOK());
+			Assert.assertTrue("Success expected", status.isOK());
 		} else {
 			Assert.assertFalse("Failure expected", status.isOK());
 

@@ -25,7 +25,7 @@ public class AnalyticsSolutionHelper {
 			names.add(s.getName());
 		}
 
-		return "Inserting: " + Joiner.on(", ").join(names);
+		return "Insert: " + Joiner.on(", ").join(names);
 	}
 
 	public static String generateInsertionName(final List<? extends NamedObject> objects) {
@@ -34,8 +34,9 @@ public class AnalyticsSolutionHelper {
 		for (final NamedObject s : objects) {
 			names.add(s.getName());
 		}
-
-		return "Inserting: " + Joiner.on(", ").join(names);
+		while (names.remove(null))
+			;
+		return "Insert: \"" + Joiner.on(", ").join(names) + "\"";
 	}
 
 	public static String generateName(final ActionableSetPlan plan) {

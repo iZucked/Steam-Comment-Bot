@@ -878,31 +878,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATED_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
+	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
@@ -911,7 +893,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
+	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -920,7 +902,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
+	int SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
@@ -929,7 +911,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
+	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
 
 	/**
 	 * The operation id for the '<em>Get Slot Contract Params</em>' operation.
@@ -938,7 +920,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
+	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Counterparty</em>' operation.
@@ -947,7 +929,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
+	int SLOT___GET_SLOT_OR_CONTRACT_COUNTERPARTY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -956,7 +938,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1470,24 +1452,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
@@ -2082,24 +2046,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
@@ -2797,24 +2743,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3427,24 +3355,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS;
-
-	/**
-	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
@@ -6634,26 +6544,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegatedEntity();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedContracts() <em>Get Slot Or Contract Restricted Contracts</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedContracts()
-	 * @generated
-	 */
-	EOperation getSlot__GetSlotOrContractRestrictedContracts();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedPorts() <em>Get Slot Or Contract Restricted Ports</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedPorts()
-	 * @generated
-	 */
-	EOperation getSlot__GetSlotOrContractRestrictedPorts();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedListsArePermissive() <em>Get Slot Or Contract Restricted Lists Are Permissive</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8876,22 +8766,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATED_ENTITY = eINSTANCE.getSlot__GetSlotOrDelegatedEntity();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Contracts</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = eINSTANCE.getSlot__GetSlotOrContractRestrictedContracts();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Ports</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = eINSTANCE.getSlot__GetSlotOrContractRestrictedPorts();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Lists Are Permissive</b></em>' operation.
