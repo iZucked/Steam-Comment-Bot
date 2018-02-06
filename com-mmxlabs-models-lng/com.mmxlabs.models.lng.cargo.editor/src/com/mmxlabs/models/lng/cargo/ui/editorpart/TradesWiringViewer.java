@@ -38,7 +38,10 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IOpenListener;
@@ -107,6 +110,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.editor.PreferenceConstants;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
@@ -123,6 +127,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuE
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -232,6 +237,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private PromptToolbarEditor promptToolbarEditor;
 
 	private GridViewerColumn assignmentColumn;
+
+	private IPropertyChangeListener propertyChangeListener;
+	private final Set<String> filters_openContracts = new HashSet<>();
 
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
 		super(page, part, scenarioEditingLocation, actionBars);
@@ -731,6 +739,43 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return aSet;
 			}
 		});
+
+		final IPreferenceStore preferenceStore = CargoEditorPlugin.getPlugin().getPreferenceStore();
+		propertyChangeListener = new IPropertyChangeListener() {
+			@Override
+			public void propertyChange(final PropertyChangeEvent event) {
+				final String property = event.getProperty();
+				if (PreferenceConstants.P_CONTACTS_TO_CONSIDER_OPEN.equals(property)) {
+					final String value = preferenceStore.getString(property);
+					filters_openContracts.clear();
+					if (value != null) {
+						if (value.contains(",")) {
+							final String[] split = value.split(",");
+							for (final String str : split) {
+								filters_openContracts.add(str.trim().toLowerCase());
+							}
+						} else {
+							filters_openContracts.add(value.trim().toLowerCase());
+						}
+						filters_openContracts.remove("");
+					}
+					viewer.refresh();
+				}
+			}
+		};
+		preferenceStore.addPropertyChangeListener(propertyChangeListener);
+		final String value = preferenceStore.getString(PreferenceConstants.P_CONTACTS_TO_CONSIDER_OPEN);
+		if (value != null) {
+			if (value.contains(",")) {
+				final String[] split = value.split(",");
+				for (final String str : split) {
+					filters_openContracts.add(str.trim().toLowerCase());
+				}
+			} else {
+				filters_openContracts.add(value.trim().toLowerCase());
+			}
+			filters_openContracts.remove("");
+		}
 
 		return scenarioViewer;
 	}
@@ -1678,17 +1723,27 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return true;
 				} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() instanceof SpotSlot) {
 					return true;
-				} else {
-					return false;
+				} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() != null) {
+					final DischargeSlot s = c.getDischargeSlot();
+					final Contract contract = s.getContract();
+					if (contract != null && contract.getName() != null) {
+						return filters_openContracts.contains(contract.getName().toLowerCase());
+					}
 				}
+				return false;
 			case SHORT:
 				if (c != null && cargo == null && c.getDischargeSlot() != null) {
 					return true;
 				} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() instanceof SpotSlot) {
 					return true;
-				} else {
-					return false;
+				} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() != null) {
+					final LoadSlot s = c.getLoadSlot();
+					final Contract contract = s.getContract();
+					if (contract != null && contract.getName() != null) {
+						return filters_openContracts.contains(contract.getName().toLowerCase());
+					}
 				}
+				return false;
 			}
 			return false;
 		}

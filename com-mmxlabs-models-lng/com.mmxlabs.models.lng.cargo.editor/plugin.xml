@@ -556,5 +556,19 @@
             class="com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.DefaultTradesTableProvider">
       </TradesTableEditor>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.mmxlabs.models.lng.cargo.editor.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
+            id="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
+            name="Filtering">
+      </page>
+   </extension>
 
 </plugin>
