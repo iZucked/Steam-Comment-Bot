@@ -18,7 +18,7 @@
 	 <extension
 	   point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserExtension">
 		<DataBrowserExtension
-		      class="com.mmxlabs.lngdataserver.pricing.PricingDataExtension">
+		      class="com.mmxlabs.lngdataserver.integration.pricing.PricingDataExtension">
 		</DataBrowserExtension>
 	 </extension>
 </plugin>

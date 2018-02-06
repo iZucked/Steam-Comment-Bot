@@ -12,9 +12,10 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
+import com.mmxlabs.lngdataserver.integration.pricing.IPricingProvider;
+import com.mmxlabs.lngdataserver.integration.vessels.internal.IVesselsProvider;
 import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.VesselsToScenarioCopier;
-import com.mmxlabs.lngdataserver.pricing.IPricingProvider;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -23,7 +24,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.serviceintegration.vessels.internal.IVesselsProvider;
 
 public class VesselsToScenarioImportWizard extends Wizard implements IImportWizard {
 	

@@ -18,7 +18,7 @@
 	<extension point="org.eclipse.ui.views">
 		<view
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lngdataserver.ui.distances.DistancesEditorView"
+            class="com.mmxlabs.lngdataserver.integration.ui.distances.DistancesEditorView"
             id="com.mmxlabs.lngdataserver.ui.distances.DistancesEditorView"
             name="Distances View"
             restorable="true">
@@ -27,7 +27,7 @@
  <extension
        point="com.mmxlabs.lngdataserver.ui.server.EndpointExtension">
     <EndpointExtension
-          class="com.mmxlabs.lngdataserver.ui.distances.DistancesUiEndpointExtension">
+          class="com.mmxlabs.lngdataserver.integration.ui.distances.DistancesUiEndpointExtension">
     </EndpointExtension>
  </extension>
 
@@ -40,7 +40,7 @@
    <extension
        point="com.mmxlabs.models.ui.componenthelpers">
     <componentHelper
-          helperClass="com.mmxlabs.lngdataserver.ui.distances.composites.MMXIDLookupInjector"
+          helperClass="com.mmxlabs.lngdataserver.integration.ui.distances.composites.MMXIDLookupInjector"
           id="com.mmxlabs.lngdataserver.ui.distances.composites.MMXIDLookupInjector"
           inheritable="false"
           modelClass="com.mmxlabs.models.lng.port.Location">

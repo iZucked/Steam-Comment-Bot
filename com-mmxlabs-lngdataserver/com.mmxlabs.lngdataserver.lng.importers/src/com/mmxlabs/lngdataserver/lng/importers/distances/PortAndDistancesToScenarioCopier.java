@@ -19,10 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.lngdataserver.distances.IDistanceProvider;
-import com.mmxlabs.lngdataserver.distances.IPortProvider;
-import com.mmxlabs.lngdataserver.distances.UpstreamRoutingPointFetcher;
-import com.mmxlabs.lngdataserver.distances.exceptions.LocationNotFoundException;
+import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
+import com.mmxlabs.lngdataserver.integration.distances.IPortProvider;
+import com.mmxlabs.lngdataserver.integration.distances.UpstreamRoutingPointFetcher;
+import com.mmxlabs.lngdataserver.integration.distances.exceptions.LocationNotFoundException;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;

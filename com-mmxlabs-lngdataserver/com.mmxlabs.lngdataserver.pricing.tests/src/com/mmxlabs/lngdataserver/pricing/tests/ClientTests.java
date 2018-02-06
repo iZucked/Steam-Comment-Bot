@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.mmxlabs.lngdataserver.pricing.PricingClient;
-import com.mmxlabs.lngdataserver.pricing.PricingVersion;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingVersion;
 import com.mmxlabs.lngdataserver.pricing.model.Curve;
 import com.mmxlabs.lngdataserver.pricing.model.DataCurve;
 import com.mmxlabs.lngdataserver.pricing.model.ExpressionCurve;

@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.mmxlabs.lngdataserver.pricing.PricingRepository;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.pricing.IPricingProvider;
+import com.mmxlabs.lngdataserver.integration.pricing.IPricingProvider;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 
 public class PricingRepositoryTests {
 	

@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lngdataserver.integration.ports.internal.IPortsProvider;
+import com.mmxlabs.lngdataserver.integration.ports.internal.PortsRepository;
 import com.mmxlabs.lngdataserver.port.ApiException;
-import com.mmxlabs.serviceintegration.ports.internal.IPortsProvider;
-import com.mmxlabs.serviceintegration.ports.internal.PortsRepository;
 
 public class PortsSelectionPage extends WizardPage{
 	

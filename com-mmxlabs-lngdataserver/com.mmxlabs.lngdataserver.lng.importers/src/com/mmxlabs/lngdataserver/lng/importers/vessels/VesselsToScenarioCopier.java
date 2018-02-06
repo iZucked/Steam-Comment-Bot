@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.serviceintegration.vessels.internal.IVesselsProvider;
+import com.mmxlabs.lngdataserver.integration.vessels.internal.IVesselsProvider;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;

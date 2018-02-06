@@ -8,11 +8,11 @@ import java.util.Map;
 
 import org.junit.Test;
 import com.mmxlabs.common.csv.CSVReader;
-import com.mmxlabs.lngdataserver.distances.CsvDistancesImporter;
-import com.mmxlabs.lngdataserver.distances.DefaultDistanceProvider;
-import com.mmxlabs.lngdataserver.distances.DistanceRepository;
-import com.mmxlabs.lngdataserver.distances.IDistanceProvider;
-import com.mmxlabs.lngdataserver.distances.Via;
+import com.mmxlabs.lngdataserver.integration.distances.CsvDistancesImporter;
+import com.mmxlabs.lngdataserver.integration.distances.DefaultDistanceProvider;
+import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
+import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
+import com.mmxlabs.lngdataserver.integration.distances.Via;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 public class DefaultDistanceProviderTests {

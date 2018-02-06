@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>com.mmxlabs.lngdataserver.pricing.tests</name>
+	<name>com.mmxlabs.lngdataserver.integration.pricing.tests</name>
 	<comment></comment>
 	<projects>
 	</projects>

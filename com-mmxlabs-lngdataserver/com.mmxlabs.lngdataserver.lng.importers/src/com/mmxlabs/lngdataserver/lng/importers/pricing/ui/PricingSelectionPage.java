@@ -14,8 +14,8 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.pricing.IPricingProvider;
-import com.mmxlabs.lngdataserver.pricing.PricingRepository;
+import com.mmxlabs.lngdataserver.integration.pricing.IPricingProvider;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 
 public class PricingSelectionPage extends WizardPage{
 	

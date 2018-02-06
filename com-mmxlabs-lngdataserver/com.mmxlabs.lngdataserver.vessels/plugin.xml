@@ -18,7 +18,7 @@
 	 <extension
 	   point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserExtension">
 		<DataBrowserExtension
-		      class="com.mmxlabs.serviceintegration.vessels.internal.VesselsDataExtension">
+		      class="com.mmxlabs.lngdataserver.integration.vessels.internal.VesselsDataExtension">
 		</DataBrowserExtension>
 	 </extension>
 </plugin>

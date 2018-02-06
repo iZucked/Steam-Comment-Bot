@@ -13,7 +13,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.mmxlabs.lngdataserver.distances.DefaultPortProvider;
+import com.mmxlabs.lngdataserver.integration.distances.DefaultPortProvider;
 import com.mmxlabs.models.lng.port.Port;
 
 public class DefaultPortProviderTests {

@@ -25,7 +25,7 @@ All rights reserved.
    </license>
 
    <plugin
-         id="com.mmxlabs.lngdataserver.distances"
+         id="com.mmxlabs.lngdataserver.integration.distances"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -104,27 +104,6 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.lngdataserver.pricing"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataserver.ui.pricing"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.dataserver.vessels"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.mmxlabs.lngdataserver.browser"
          download-size="0"
          install-size="0"
@@ -140,13 +119,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.lngdataserver.browser.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataserver.ui.distances"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -231,6 +203,69 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.lngdataserver.data.distances"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.integration.pricing"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.integration.ui.distances"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.integration.ui.ports"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.integration.ui.pricing"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.integration.ui.vessels"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.integration.ports"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.integration.vessels"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.dataserver.ports"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.vessels"
          download-size="0"
          install-size="0"
          version="0.0.0"

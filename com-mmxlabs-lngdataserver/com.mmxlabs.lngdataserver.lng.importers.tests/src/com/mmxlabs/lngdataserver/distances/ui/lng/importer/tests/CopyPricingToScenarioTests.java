@@ -24,9 +24,9 @@ import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngdataserver.integration.pricing.CurveType;
+import com.mmxlabs.lngdataserver.integration.pricing.IPricingProvider;
 import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
-import com.mmxlabs.lngdataserver.pricing.CurveType;
-import com.mmxlabs.lngdataserver.pricing.IPricingProvider;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;

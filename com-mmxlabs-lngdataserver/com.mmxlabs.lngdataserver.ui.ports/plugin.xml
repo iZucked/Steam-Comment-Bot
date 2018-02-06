@@ -18,7 +18,7 @@
 	<extension point="org.eclipse.ui.views">
     <view
           category="com.mmxlabs.shiplingo.platform.reports"
-          class="com.mmxlabs.lngdataserver.ui.ports.PortsEditorView"
+          class="com.mmxlabs.lngdataserver.integration.ui.ports.PortsEditorView"
           id="com.mmxlabs.lngdataserver.ui.vessels.PortsEditorView"
           name="Ports View"
           restorable="true">
@@ -27,7 +27,7 @@
  <extension
        point="com.mmxlabs.lngdataserver.ui.server.EndpointExtension">
     <EndpointExtension
-          class="com.mmxlabs.lngdataserver.ui.ports.PortsUiEndpointExtension">
+          class="com.mmxlabs.lngdataserver.integration.ui.ports.PortsUiEndpointExtension">
     </EndpointExtension>
  </extension>
 

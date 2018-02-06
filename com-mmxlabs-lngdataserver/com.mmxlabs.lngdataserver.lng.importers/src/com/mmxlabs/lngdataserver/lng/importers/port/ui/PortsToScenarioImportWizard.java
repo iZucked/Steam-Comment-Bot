@@ -12,6 +12,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
+import com.mmxlabs.lngdataserver.integration.ports.internal.IPortsProvider;
 import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
@@ -21,7 +22,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.serviceintegration.ports.internal.IPortsProvider;
 
 public class PortsToScenarioImportWizard extends Wizard implements IImportWizard {
 	

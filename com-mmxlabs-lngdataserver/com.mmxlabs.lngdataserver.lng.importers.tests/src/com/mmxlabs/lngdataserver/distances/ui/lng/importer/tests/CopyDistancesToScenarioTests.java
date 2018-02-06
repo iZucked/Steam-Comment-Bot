@@ -24,8 +24,8 @@ import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngdataserver.distances.IDistanceProvider;
-import com.mmxlabs.lngdataserver.distances.Via;
+import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
+import com.mmxlabs.lngdataserver.integration.distances.Via;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;

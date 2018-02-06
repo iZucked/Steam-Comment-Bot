@@ -17,9 +17,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.mmxlabs.lngdataserver.distances.UpstreamDistancesFetcher;
-import com.mmxlabs.lngdataserver.distances.UpstreamPortFetcher;
-import com.mmxlabs.lngdataserver.distances.Via;
+import com.mmxlabs.lngdataserver.integration.distances.UpstreamDistancesFetcher;
+import com.mmxlabs.lngdataserver.integration.distances.UpstreamPortFetcher;
+import com.mmxlabs.lngdataserver.integration.distances.Via;
 import com.mmxlabs.models.lng.port.Port;
 
 public class FetchUpstreamTests {

@@ -10,7 +10,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.mmxlabs.common.csv.CSVReader;
-import com.mmxlabs.lngdataserver.distances.CsvDistancesImporter;
+import com.mmxlabs.lngdataserver.integration.distances.CsvDistancesImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 public class CsvDistancesImporterTests {

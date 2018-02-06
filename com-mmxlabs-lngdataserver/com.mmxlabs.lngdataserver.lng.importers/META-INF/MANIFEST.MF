@@ -24,17 +24,17 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.apache.httpcomponents.httpclient,
  org.apache.httpcomponents.httpcore,
  com.mmxlabs.common.common-util,
- com.mmxlabs.lngdataserver.distances,
+ com.mmxlabs.lngdataserver.integration.distances,
+ com.mmxlabs.lngdataserver.integration.ports,
  com.mmxlabs.dataserver.pricing,
- com.mmxlabs.lngdataserver.pricing,
+ com.mmxlabs.lngdataserver.integration.ui.pricing,
  com.google.guava,
- com.mmxlabs.lngdataserver.pricing,
+ com.mmxlabs.lngdataserver.integration.pricing,
+ com.mmxlabs.lngdataserver.integration.vessels,
  com.mmxlabs.lngdataserver.server,
  com.mmxlabs.scenario.service.ui,
  com.mmxlabs.lngdataserver.commons;bundle-version="4.4.5",
- com.mmxlabs.models.lng.port.editor,
- com.mmxlabs.serviceintegration.vessels,
- com.mmxlabs.serviceintegration.ports
+ com.mmxlabs.models.lng.port.editor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.slf4j
 Bundle-ActivationPolicy: lazy

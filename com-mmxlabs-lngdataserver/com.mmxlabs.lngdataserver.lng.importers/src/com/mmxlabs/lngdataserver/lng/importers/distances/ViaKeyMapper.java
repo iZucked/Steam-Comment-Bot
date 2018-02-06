@@ -2,7 +2,7 @@ package com.mmxlabs.lngdataserver.lng.importers.distances;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.lngdataserver.distances.Via;
+import com.mmxlabs.lngdataserver.integration.distances.Via;
 import com.mmxlabs.models.lng.port.Route;
 
 @NonNullByDefault

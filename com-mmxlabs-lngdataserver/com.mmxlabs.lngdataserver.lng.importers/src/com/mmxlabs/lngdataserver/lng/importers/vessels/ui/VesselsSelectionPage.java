@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lngdataserver.integration.vessels.internal.IVesselsProvider;
+import com.mmxlabs.lngdataserver.integration.vessels.internal.VesselsRepository;
 import com.mmxlabs.lngdataserver.vessel.ApiException;
-import com.mmxlabs.serviceintegration.vessels.internal.IVesselsProvider;
-import com.mmxlabs.serviceintegration.vessels.internal.VesselsRepository;
 
 public class VesselsSelectionPage extends WizardPage{
 	

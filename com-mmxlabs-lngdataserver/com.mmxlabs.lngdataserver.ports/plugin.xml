@@ -18,7 +18,7 @@
 	 <extension
 	   point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserExtension">
 		<DataBrowserExtension
-		      class="com.mmxlabs.serviceintegration.ports.internal.PortsDataExtension">
+		      class="com.mmxlabs.lngdataserver.integration.ports.internal.PortsDataExtension">
 		</DataBrowserExtension>
 	 </extension>
 </plugin>

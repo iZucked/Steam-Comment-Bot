@@ -14,11 +14,11 @@ import org.eclipse.ui.IWorkbench;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.distances.DefaultPortProvider;
-import com.mmxlabs.lngdataserver.distances.DistanceRepository;
-import com.mmxlabs.lngdataserver.distances.IDistanceProvider;
-import com.mmxlabs.lngdataserver.distances.IPortProvider;
-import com.mmxlabs.lngdataserver.distances.PortRepository;
+import com.mmxlabs.lngdataserver.integration.distances.DefaultPortProvider;
+import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
+import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
+import com.mmxlabs.lngdataserver.integration.distances.IPortProvider;
+import com.mmxlabs.lngdataserver.integration.distances.PortRepository;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.port.PortModel;

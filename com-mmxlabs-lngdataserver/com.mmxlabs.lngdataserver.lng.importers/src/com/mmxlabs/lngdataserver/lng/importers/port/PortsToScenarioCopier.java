@@ -15,10 +15,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.serviceintegration.ports.internal.IPortsProvider;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.lngdataserver.integration.ports.internal.IPortsProvider;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 
