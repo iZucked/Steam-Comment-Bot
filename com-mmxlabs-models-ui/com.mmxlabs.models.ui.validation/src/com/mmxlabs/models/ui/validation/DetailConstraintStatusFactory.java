@@ -99,9 +99,9 @@ public class DetailConstraintStatusFactory {
 		return this;
 	}
 
-	public DetailConstraintStatusDecorator make(final IValidationContext ctx, final Collection<IStatus> statues) {
+	public DetailConstraintStatusDecorator make(final IValidationContext ctx, final Collection<IStatus> statuses) {
 		final DetailConstraintStatusDecorator status = make(ctx);
-		statues.add(status);
+		statuses.add(status);
 		return status;
 	}
 
