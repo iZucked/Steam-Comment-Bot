@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lngdataserver</groupId>
 	<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
-	<version>4.3.15-SNAPSHOT</version>
+	<version>4.4.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -24,20 +24,28 @@
 	<modules>
 		<module>com.mmxlabs.lngdataserver.lib</module>
 		<module>com.mmxlabs.lngdataserver.lib.test</module>
+		<module>com.mmxlabs.lngdataserver.commons</module>
 		<module>com.mmxlabs.lngdataserver.server</module>
+		<module>com.mmxlabs.lngdataserver.vessels</module>
+		<module>com.mmxlabs.lngdataserver.ports</module>
 		<module>com.mmxlabs.lngdataserver.distances</module>
 		<module>com.mmxlabs.lngdataserver.distances.tests</module>
 		<module>com.mmxlabs.lngdataserver.lng.importers</module>
 		<module>com.mmxlabs.lngdataserver.lng.importers.tests</module>
 
 		<module>com.mmxlabs.lngdataserver.pricing</module>
+		<module>com.mmxlabs.lngdataserver.pricing.tests</module>
 
 		<module>com.mmxlabs.lngdataserver.ui.server</module>
 		<module>com.mmxlabs.lngdataserver.ui.pricing</module>
+		<module>com.mmxlabs.lngdataserver.ui.ports</module>
+		<module>com.mmxlabs.lngdataserver.ui.vessels</module>
 		<module>com.mmxlabs.lngdataserver.ui.distances</module>
 		<module>com.mmxlabs.lngdataserver.browser</module>
 		<module>com.mmxlabs.lngdataserver.browser.edit</module>
 		<module>com.mmxlabs.lngdataserver.browser.ui</module>
+
+		<module>com.mmxlabs.lngdataserver.data.distances</module>
 
 		<module>com.mmxlabs.lngdataserver.feature</module>
 		<module>com.mmxlabs.lngdataserver.p2</module>
