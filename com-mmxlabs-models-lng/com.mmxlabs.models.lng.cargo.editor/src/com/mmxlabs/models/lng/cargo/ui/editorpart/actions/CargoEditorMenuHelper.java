@@ -748,6 +748,11 @@ public class CargoEditorMenuHelper {
 		else {
 			// FOB sale - windows should overlap
 			if (discharge.isFOBSale()) {
+				if (discharge.isDivertible()) {
+					final int restriction = discharge.getShippingDaysRestriction();
+					return (daysDifference <= restriction);
+				}
+				
 				return overlap;
 			}
 			// shipped cargo
