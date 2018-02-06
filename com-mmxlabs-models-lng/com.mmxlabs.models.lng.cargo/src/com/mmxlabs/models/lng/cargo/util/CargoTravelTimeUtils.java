@@ -52,6 +52,20 @@ public class CargoTravelTimeUtils {
 		return minDuration;
 	}
 
+	public static int getDivertableFOBMinRouteTimeInHours(final DischargeSlot fobSale, final Slot from, final Slot to, final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider,
+			final PortModel portModel, final Vessel vessel, final double referenceSpeed, final ModelDistanceProvider modelDistanceProvider) {
+
+		Collection<Route> allowedRoutes = null;
+		if (shippingDaysSpeedProvider != null) {
+			allowedRoutes = shippingDaysSpeedProvider.getValidRoutes(portModel, fobSale);
+		}
+		if (allowedRoutes == null || allowedRoutes.isEmpty()) {
+			allowedRoutes = portModel.getRoutes();
+		}
+		final int minDuration = getMinTimeFromAllowedRoutes(from, to, vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
+		return minDuration;
+	}
+
 	public static int getFobMinTimeInHours(final Slot from, final Slot to, final LocalDate date, final VesselAssignmentType vesselAssignmentType, final PortModel portModel, final CostModel costModel,
 			final double referenceSpeed, final ModelDistanceProvider modelDistanceProvider) {
 		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, date, portModel, costModel);
@@ -150,12 +164,24 @@ public class CargoTravelTimeUtils {
 		return referenceSpeed;
 	}
 
-	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LoadSlot loadSlot, final Vessel vessel, final boolean isLaden) {
+	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LoadSlot desPurchase, final Vessel vessel, final boolean isLaden) {
 		double referenceSpeed;
 
 		// catch error in case no service registered
 		if (shippingDaysSpeedProvider != null) {
-			referenceSpeed = shippingDaysSpeedProvider.getSpeed(loadSlot, vessel, isLaden);
+			referenceSpeed = shippingDaysSpeedProvider.getSpeed(desPurchase, vessel, isLaden);
+		} else {
+			referenceSpeed = vessel.getVesselOrDelegateMaxSpeed();
+		}
+		return referenceSpeed;
+	}
+
+	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final DischargeSlot fobSale, final Vessel vessel, final boolean isLaden) {
+		double referenceSpeed;
+
+		// catch error in case no service registered
+		if (shippingDaysSpeedProvider != null) {
+			referenceSpeed = shippingDaysSpeedProvider.getSpeed(fobSale, vessel, isLaden);
 		} else {
 			referenceSpeed = vessel.getVesselOrDelegateMaxSpeed();
 		}

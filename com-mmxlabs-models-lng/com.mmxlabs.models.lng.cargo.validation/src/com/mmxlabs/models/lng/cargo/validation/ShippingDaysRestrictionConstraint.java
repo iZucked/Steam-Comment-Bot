@@ -224,10 +224,102 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 							}
 							return Activator.PLUGIN_ID;
 						});
-					} else {
+					} else if (cargo.getCargoType() == CargoType.FOB) {
 
 						// FOB?
+						return ServiceHelper.withOptionalService(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
+							LoadSlot fobPurchase = null;
+							DischargeSlot fobSale = null;
+							for (final Slot s : cargo.getSlots()) {
+								if (s instanceof LoadSlot) {
+									final LoadSlot loadSlot = (LoadSlot) s;
+									if (SlotClassifier.classify(loadSlot) == SlotType.FOB_Buy) {
+										fobPurchase = loadSlot;
+									}
+								} else if (s instanceof DischargeSlot) {
+									if (SlotClassifier.classify(s) == SlotType.FOB_Sale_AnyLoadPort) {
+										fobSale = (DischargeSlot) s;
+									}
+								}
+							}
+							// Found a slot to validate
+							if (fobPurchase != null && fobSale != null) {
+
+								{
+									final Vessel vessel = fobSale.getNominatedVessel();
+
+									if (vessel == null) {
+										return Activator.PLUGIN_ID;
+									}
+
+									final int loadDurationInHours = fobPurchase.getSlotOrPortDuration();
+									final int dischargeDurationInHours = fobSale.getSlotOrPortDuration();
+
+									@NonNull
+									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+									final int ladenTravelTimeInHours = CargoTravelTimeUtils.getDivertableFOBMinRouteTimeInHours(fobSale, fobPurchase, fobSale, shippingDaysSpeedProvider, portModel,
+											vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, fobSale, vessel, true), modelDistanceProvider);
+
+									final int ballastTravelTimeInHours = CargoTravelTimeUtils.getDivertableFOBMinRouteTimeInHours(fobSale, fobSale, fobPurchase, shippingDaysSpeedProvider, portModel,
+											vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, fobSale, vessel, false), modelDistanceProvider);
+
+									// Calculate minimum time due to slot windows
+									final int ladenMaxWindowInHours;
+									final int ladenMinWindowInHours;
+									{
+										// TODO: check overlaps
+										final ZonedDateTime loadDateStart = fobPurchase.getWindowStartWithSlotOrPortTime();
+										final ZonedDateTime loadDateEnd = fobPurchase.getWindowEndWithSlotOrPortTime();
+										final ZonedDateTime dischargeDateStart = fobSale.getWindowStartWithSlotOrPortTime();
+										final ZonedDateTime dischargeDateEnd = fobSale.getWindowEndWithSlotOrPortTime();
+
+										if (loadDateStart != null && dischargeDateEnd != null) {
+											ladenMaxWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateEnd) - (loadDurationInHours));
+										} else {
+											return Activator.PLUGIN_ID;
+										}
+
+										if (loadDateEnd != null && dischargeDateStart != null) {
+											// There could be an overlap
+											// Note: loadDateStart is the value used in the ShippingHoursRestrictionChecker
+											ladenMinWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateStart) - (loadDurationInHours));
+										} else {
+											return Activator.PLUGIN_ID;
+										}
+									}
+
+									if (ladenMaxWindowInHours < 0) {
+										final String message = String.format("FOB Sale|%s available laden travel time is negative!", fobSale.getName());
+										final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+										dsd.addEObjectAndFeature(fobSale, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+										failures.add(dsd);
+										// No point going further!
+										return Activator.PLUGIN_ID;
+									}
+
+									// Smallest amount of time permitted between slots
+									final int ladenTimeInHours = Math.max(ladenTravelTimeInHours, ladenMinWindowInHours);
+
+									// Total min travel time.
+									final int totalRoundTripTimeInHours = loadDurationInHours + ladenTimeInHours + dischargeDurationInHours + ballastTravelTimeInHours;
+
+									if (totalRoundTripTimeInHours > fobSale.getShippingDaysRestriction() * 24) {
+										final String message = String.format(
+												"DES Purchase|%s is paired with a sale at %s. However the round trip time (%s) is greater than the permitted restriction (%s) by (%s).",
+												fobPurchase.getName(), fobSale.getPort().getName(), TravelTimeUtils.formatHours(totalRoundTripTimeInHours),
+												TravelTimeUtils.formatHours(fobSale.getShippingDaysRestriction() * 24),
+												TravelTimeUtils.formatHours(totalRoundTripTimeInHours - fobSale.getShippingDaysRestriction() * 24));
+										final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+										dsd.addEObjectAndFeature(fobSale, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+										failures.add(dsd);
+									}
+								}
+							}
+							return Activator.PLUGIN_ID;
+						});
 					}
 				}
 			}
