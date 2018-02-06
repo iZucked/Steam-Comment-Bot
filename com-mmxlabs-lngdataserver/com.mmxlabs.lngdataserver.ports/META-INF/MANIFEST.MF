@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.fasterxml.jackson.core.jackson-core,
  com.fasterxml.jackson.core.jackson-databind
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: com.mmxlabs.lngdataserver.ports.model,
+Import-Package: com.mmxlabs.lngdataservice.ports.model,
  org.slf4j
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.integration.ports.internal.Activator

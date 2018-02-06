@@ -10,8 +10,8 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.pricing.model.Curve;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.lngdataservice.pricing.model.Curve;
 
 public class PricingRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(PricingRepository.class);

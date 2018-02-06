@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lngdataserver.pricing.model.Curve;
-import com.mmxlabs.lngdataserver.pricing.model.PublishRequest;
+import com.mmxlabs.lngdataservice.pricing.model.Curve;
+import com.mmxlabs.lngdataservice.pricing.model.PublishRequest;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -30,8 +30,8 @@ public class PricingClient {
 		Request pricingRequest = new Request.Builder().url(baseUrl + "/pricing/versions").build();
 		Response pricingResponse = CLIENT.newCall(pricingRequest).execute();
 
-		List<com.mmxlabs.lngdataserver.pricing.model.Version> pricingVersions = new ObjectMapper().readValue(pricingResponse.body().byteStream(),
-				new TypeReference<List<com.mmxlabs.lngdataserver.pricing.model.Version>>() {
+		List<com.mmxlabs.lngdataservice.pricing.model.Version> pricingVersions = new ObjectMapper().readValue(pricingResponse.body().byteStream(),
+				new TypeReference<List<com.mmxlabs.lngdataservice.pricing.model.Version>>() {
 				});
 
 		return pricingVersions.stream().sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt())).map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished()))
@@ -64,7 +64,7 @@ public class PricingClient {
 			Response response;
 			try {
 				response = longPollingClient.newCall(request).execute();
-				com.mmxlabs.lngdataserver.pricing.model.Version newVersion = new ObjectMapper().readValue(response.body().byteStream(), com.mmxlabs.lngdataserver.pricing.model.Version.class);
+				com.mmxlabs.lngdataservice.pricing.model.Version newVersion = new ObjectMapper().readValue(response.body().byteStream(), com.mmxlabs.lngdataservice.pricing.model.Version.class);
 				return newVersion.getIdentifier();
 			} catch (IOException e) {
 				LOGGER.error("Error waiting for new version");
