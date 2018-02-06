@@ -155,7 +155,6 @@ public class AnalyticsSolutionFragmentService {
 				if (TYPE_SOLUTION.equals(fragment.getType())) {
 					String uuid = fragment.getKey();
 					uuidToArtifactMap.put(uuid, fragment);
-					System.out.println("Found artifact " + uuid);
 				}
 			}
 
@@ -402,7 +401,6 @@ public class AnalyticsSolutionFragmentService {
 							if (seenIds.contains(uuid)) {
 								continue;
 							}
-							System.out.println("Found offline artifact " + uuid);
 							final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
 							fragment.setFragment(null);
 							fragment.setName(artifact.getDisplayName());
