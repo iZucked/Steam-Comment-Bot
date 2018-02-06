@@ -890,7 +890,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	public IEndRequirement createEndRequirement() {
-		return createEndRequirement(Collections.singletonList(ANYWHERE), false, new MutableTimeWindow(0, Integer.MAX_VALUE), createHeelConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0)), false);
+		return createEndRequirement(Collections.singletonList(ANYWHERE), false, new MutableTimeWindow(0, Integer.MAX_VALUE),
+				createHeelConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0)), false);
 	}
 
 	@Override
@@ -1175,8 +1176,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVessel createVessel(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel, final IBaseFuel idleBaseFuel, final IBaseFuel inPortBaseFuel, final IBaseFuel pilotLightBaseFuel,
-			final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay, final boolean hasReliqCapability) {
+	public IVessel createVessel(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel, final IBaseFuel idleBaseFuel,
+			final IBaseFuel inPortBaseFuel, final IBaseFuel pilotLightBaseFuel, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3,
+			final int minBaseFuelConsumptionPerDay, final boolean hasReliqCapability) {
 
 		final Vessel vessel = new Vessel(name, capacityInM3);
 
@@ -1865,6 +1867,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final ERouteOption route : allowedRoutes) {
 			assert route != null;
 			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(loadOption, route);
+		}
+	}
+
+	@Override
+	public void setDivertableFOBAllowedRoute(@NonNull final IDischargeOption fobSale, @NonNull final List<ERouteOption> allowedRoutes) {
+		for (final ERouteOption route : allowedRoutes) {
+			assert route != null;
+			shippingHoursRestrictionProviderEditor.setDivertableFOBAllowedRoute(fobSale, route);
 		}
 	}
 

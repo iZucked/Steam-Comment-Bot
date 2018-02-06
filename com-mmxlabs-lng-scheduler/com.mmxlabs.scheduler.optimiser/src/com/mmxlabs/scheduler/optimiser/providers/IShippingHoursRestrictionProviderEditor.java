@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -38,5 +39,12 @@ public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursR
 	 * 
 	 * @param route
 	 */
-	void setDivertableDESAllowedRoute(@NonNull ILoadOption loadOption, @NonNull ERouteOption route);
+	void setDivertableDESAllowedRoute(@NonNull ILoadOption desPurchase, @NonNull ERouteOption route);
+
+	/**
+	 * Add an allowed route that a FOB sale cargo can follow
+	 * 
+	 * @param route
+	 */
+	void setDivertableFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull ERouteOption route);
 }

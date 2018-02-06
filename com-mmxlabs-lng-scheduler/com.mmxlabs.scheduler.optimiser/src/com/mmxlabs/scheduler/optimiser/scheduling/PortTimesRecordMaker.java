@@ -117,9 +117,11 @@ public class PortTimesRecordMaker {
 						startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 					} else {
 						// Divertible FOB has sales time window
-						// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-						final int windowStart = timeWindow.getInclusiveStart();
-						startTime = Math.max(windowStart, startTime);
+						// TODO: Consider ship days restriction...
+						if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+							final int windowStart = timeWindow.getInclusiveStart();
+							startTime = Math.max(windowStart, startTime);
+						}
 					}
 				}
 			}

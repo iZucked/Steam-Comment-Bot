@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.common.collect.Lists;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -31,7 +32,8 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	private final Map<ISequenceElement, ITimeWindow> baseTimeMap = new HashMap<>();
 	private final Map<IVessel, Integer> ballastReferenceSpeeds = new HashMap<>();
 	private final Map<IVessel, Integer> ladenReferenceSpeeds = new HashMap<>();
-	private final Map<ILoadOption, List<ERouteOption>> allowedRoutes = new HashMap<>();
+	private final Map<ILoadOption, List<ERouteOption>> allowedDESRoutes = new HashMap<>();
+	private final Map<IDischargeOption, List<ERouteOption>> allowedFOBRoutes = new HashMap<>();
 
 	@Override
 	public int getShippingHoursRestriction(@NonNull final ISequenceElement element) {
@@ -81,14 +83,27 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 
 	@Override
 	public Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull final ILoadOption loadOption) {
-		return allowedRoutes.getOrDefault(loadOption, defaultAllowedRoutes);
+		return allowedDESRoutes.getOrDefault(loadOption, defaultAllowedRoutes);
+	}
+
+	@Override
+	public Collection<ERouteOption> getDivertableFOBAllowedRoutes(@NonNull final IDischargeOption fobSale) {
+		return allowedFOBRoutes.getOrDefault(fobSale, defaultAllowedRoutes);
 	}
 
 	@Override
 	public void setDivertableDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final ERouteOption route) {
-		if (!allowedRoutes.containsKey(loadOption)) {
-			allowedRoutes.put(loadOption, new LinkedList<>());
+		if (!allowedDESRoutes.containsKey(loadOption)) {
+			allowedDESRoutes.put(loadOption, new LinkedList<>());
 		}
-		allowedRoutes.get(loadOption).add(route);
+		allowedDESRoutes.get(loadOption).add(route);
+	}
+
+	@Override
+	public void setDivertableFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull final ERouteOption route) {
+		if (!allowedFOBRoutes.containsKey(fobSale)) {
+			allowedFOBRoutes.put(fobSale, new LinkedList<>());
+		}
+		allowedFOBRoutes.get(fobSale).add(route);
 	}
 }

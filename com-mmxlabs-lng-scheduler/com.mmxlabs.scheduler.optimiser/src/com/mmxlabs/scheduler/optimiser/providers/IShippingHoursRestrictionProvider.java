@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -51,5 +52,8 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	int getReferenceSpeed(@NonNull IVessel vessel, @NonNull VesselState vesselState);
 
 	@NonNull
-	Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull ILoadOption loadOption);
+	Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull ILoadOption desPurchase);
+	
+	@NonNull
+	Collection<ERouteOption> getDivertableFOBAllowedRoutes(@NonNull IDischargeOption fobSale);
 }

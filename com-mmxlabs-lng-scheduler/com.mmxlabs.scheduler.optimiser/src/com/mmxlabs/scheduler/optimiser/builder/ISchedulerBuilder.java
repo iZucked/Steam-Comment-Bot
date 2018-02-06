@@ -670,7 +670,8 @@ public interface ISchedulerBuilder {
 	@NonNull
 	SequenceElement createSequenceElement(@NonNull String name);
 
-	void setDivertableDESAllowedRoute(@NonNull ILoadOption loadOption, @NonNull List<ERouteOption> allowedRoutes);
+	void setDivertableDESAllowedRoute(@NonNull ILoadOption desPurchase, @NonNull List<ERouteOption> allowedRoutes);
+	void setDivertableFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull List<ERouteOption> allowedRoutes);
 
 	@NonNull
 	IVesselAvailability createRoundTripCargoVessel(@NonNull String name, @NonNull ISpotCharterInMarket market);
@@ -697,4 +698,6 @@ public interface ISchedulerBuilder {
 	 * @param inaccessibleRoutes
 	 */
 	void setVesselInaccessibleRoutes(@NonNull IVessel vessel, Set<ERouteOption> inaccessibleRoutes);
+
+	
 }

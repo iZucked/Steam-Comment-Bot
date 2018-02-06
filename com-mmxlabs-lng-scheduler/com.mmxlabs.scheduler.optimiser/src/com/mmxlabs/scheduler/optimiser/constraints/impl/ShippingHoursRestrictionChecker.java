@@ -20,8 +20,11 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -59,6 +62,10 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	@Inject
 	@NonNull
 	private IDivertableDESShippingTimesCalculator dischargeTimeCalculator;
+
+	@Inject
+	@NonNull
+	private IDivertableFOBShippingTimesCalculator fobSaleTimeCalculator;
 
 	@Override
 	@NonNull
@@ -156,10 +163,44 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					}
 					return true;
 				}
+
+			} else if (firstSlot instanceof ILoadSlot && secondSlot instanceof IDischargeOption) {
+				// FOB Sale
+				final ILoadSlot fobPurchase = (ILoadSlot) firstSlot;
+				final IDischargeOption fobSale = (IDischargeOption) secondSlot;
+
+				if (shippingHoursRestrictionProvider.isDivertable(second)) {
+					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(second);
+					if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
+						// No
+						return false;
+					}
+					final ITimeWindow fobSaleWindow = shippingHoursRestrictionProvider.getBaseTime(second);
+					if (fobSaleWindow == null) {
+						// Should have a date!
+						return false;
+					}
+
+					@Nullable
+					final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(second);
+					if (nominatedVessel == null) {
+						return false;
+					}
+					final Pair<Integer, Integer> desTimes = fobSaleTimeCalculator.getDivertableFOBTimes(fobPurchase, fobSale, nominatedVessel, resource);
+					if (desTimes == null) {
+						return false;
+					}
+					final int returnTime = desTimes.getSecond();
+					if (returnTime - desTimes.getFirst() > shippingHours) {
+						return false;
+					}
+					return true;
+				}
 				// TODO: FOB Sale
 			}
 		}
 		return true;
+
 	}
 
 	@Override
