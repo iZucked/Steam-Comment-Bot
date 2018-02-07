@@ -9,7 +9,6 @@ Require-Bundle: org.junit,
  com.mmxlabs.models.lng.port,
  org.apache.httpcomponents.httpclient,
  org.apache.httpcomponents.httpcore,
- com.mmxlabs.dataserver.pricing,
  com.google.guava;bundle-version="21.0.0",
  com.mmxlabs.lngdataserver.lib.test
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
