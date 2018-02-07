@@ -77,6 +77,7 @@ public class VesselItemProvider
 			addHasReliqCapabilityOverridePropertyDescriptor(object);
 			addHasReliqCapabilityPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
+			addMmxIdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -522,6 +523,28 @@ public class VesselItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Mmx Id feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMmxIdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_mmxId_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_mmxId_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__MMX_ID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Scnt feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -764,6 +787,7 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE:
 			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY:
 			case FleetPackage.VESSEL__NOTES:
+			case FleetPackage.VESSEL__MMX_ID:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:

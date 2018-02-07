@@ -87,6 +87,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_defaultWindowSizeUnitsEditor(detailComposite, topClass);
 		add_minCvValueEditor(detailComposite, topClass);
 		add_maxCvValueEditor(detailComposite, topClass);
+		add_mmxIdEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -217,6 +218,15 @@ public class PortComponentHelper extends BaseComponentHelper {
 	protected void add_maxCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MAX_CV_VALUE);
 		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.DISCHARGE, editor));
+	}
+
+	/**
+	 * Create the editor for the mmxId feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_mmxIdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MMX_ID));
 	}
 
 	/**
