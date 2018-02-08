@@ -27,8 +27,12 @@ import com.mmxlabs.ApiException;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.DistancesApi;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
-import com.mmxlabs.lngdataserver.distances.internal.Activator;
-import com.mmxlabs.lngdataserver.distances.preferences.PreferenceConstants;
+import com.mmxlabs.lngdataserver.integration.distances.DefaultDistanceProvider;
+import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
+import com.mmxlabs.lngdataserver.integration.distances.UpstreamDistancesFetcher;
+import com.mmxlabs.lngdataserver.integration.distances.Via;
+import com.mmxlabs.lngdataserver.integration.distances.internal.Activator;
+import com.mmxlabs.lngdataserver.integration.distances.preferences.PreferenceConstants;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 
 import io.swagger.client.model.PublishRequest;
