@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Distances Data
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.data.distances;singleton:=true
-Bundle-Version: 4.4.5.qualifier
+Bundle-Version: 4.4.6.qualifier
 Import-Package: okhttp3
 Require-Bundle: org.eclipse.osgi,
  com.google.guava,

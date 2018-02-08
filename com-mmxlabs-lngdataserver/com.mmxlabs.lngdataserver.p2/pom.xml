@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>4.4.5-SNAPSHOT</version>
+		<version>4.4.6-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
