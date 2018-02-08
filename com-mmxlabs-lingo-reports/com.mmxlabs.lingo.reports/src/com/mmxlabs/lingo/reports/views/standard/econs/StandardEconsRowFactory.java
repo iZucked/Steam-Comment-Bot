@@ -67,11 +67,12 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###");
 	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("###.###");
 	public static final DecimalFormat DaysFormat = new DecimalFormat("##");
-//
-//	public static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
-//	public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
-//	public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
-//	public static final DecimalFormat DaysFormat = new DecimalFormat("##");
+
+	//
+	// public static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
+	// public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
+	// public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
+	// public static final DecimalFormat DaysFormat = new DecimalFormat("##");
 	public Collection<CargoEconsReportRow> createRows(@NonNull final EconsOptions options, @Nullable final Collection<Object> targets) {
 
 		boolean containsCargo = false;
@@ -191,12 +192,13 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, boolean includeUnits, final @NonNull String prefixUnit, String suffixUnit, boolean isCost, final @NonNull ICellRenderer renderer) {
+	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, boolean includeUnits, final @NonNull String prefixUnit, String suffixUnit, boolean isCost,
+			final @NonNull ICellRenderer renderer) {
 		return createRow(order, name, true, prefixUnit, suffixUnit, isCost, renderer, null);
 	}
 
-	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, boolean includeUnits, final @NonNull String prefixUnit, String suffixUnit,
-			boolean isCost, final @NonNull ICellRenderer formatter, @Nullable final IColorProvider colourProvider) {
+	public static CargoEconsReportRow createRow(final int order, final @NonNull String name, boolean includeUnits, final @NonNull String prefixUnit, String suffixUnit, boolean isCost,
+			final @NonNull ICellRenderer formatter, @Nullable final IColorProvider colourProvider) {
 		final CargoEconsReportRow row = new CargoEconsReportRow();
 		row.order = order;
 		row.name = name;
@@ -206,31 +208,32 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		row.formatter = formatter;
 		row.colourProvider = colourProvider;
 		row.isCost = isCost;
-		
+
 		return row;
 	}
+
 	public <T, U, W> T getFromCargoAllocationPairListBi(Class<T> type, BiFunction<U, W, T> f, Object object, W options) {
 		final List<DeltaPair> cargoAllocations = (List<DeltaPair>) object;
 
 		if (type.getName().equals("java.lang.Integer")) {
 			int acc = 0;
-			for (DeltaPair cargoAllocation: cargoAllocations) {
+			for (DeltaPair cargoAllocation : cargoAllocations) {
 				acc += (int) getFromCargoAllocationPairBi(type, f, cargoAllocation, options);
 			}
 			return type.cast(acc);
 		} else if (type.getName().equals("java.lang.Double")) {
 			double acc = 0;
-			for (DeltaPair cargoAllocation: cargoAllocations) {
+			for (DeltaPair cargoAllocation : cargoAllocations) {
 				acc += (double) getFromCargoAllocationPairBi(type, f, cargoAllocation, options);
 			}
 			return type.cast(acc);
 		} else if (type.getName().equals("java.lang.Long")) {
 			long acc = 0;
-			for (DeltaPair cargoAllocation: cargoAllocations) {
+			for (DeltaPair cargoAllocation : cargoAllocations) {
 				acc += (long) getFromCargoAllocationPairBi(type, f, cargoAllocation, options);
 			}
 			return type.cast(acc);
-		}	
+		}
 
 		return null;
 	}
@@ -238,7 +241,6 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 	public <T, U, W> T getFromCargoAllocationPairBi(Class<T> type, BiFunction<U, W, T> f, Object object, W options) {
 		Object first = null;
 		Object second = null;
-		
 
 		if (object instanceof DeltaPair) {
 			final DeltaPair deltaPair = (DeltaPair) object;
@@ -262,31 +264,29 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 		return valueFirst;
 	}
-	
-	
-	
-	public <T,U> T getFromCargoAllocationPairList(Class<T> type, Function<U, T> f, Object object) {
+
+	public <T, U> T getFromCargoAllocationPairList(Class<T> type, Function<U, T> f, Object object) {
 		final List<DeltaPair> cargoAllocations = (List<DeltaPair>) object;
-		
+
 		if (type.getName().equals("java.lang.Integer")) {
 			int acc = 0;
-			for (DeltaPair cargoAllocation: cargoAllocations) {
+			for (DeltaPair cargoAllocation : cargoAllocations) {
 				acc += (int) getFromCargoAllocationPair(type, f, cargoAllocation);
 			}
 			return type.cast(acc);
 		} else if (type.getName().equals("java.lang.Double")) {
 			double acc = 0;
-			for (DeltaPair cargoAllocation: cargoAllocations) {
+			for (DeltaPair cargoAllocation : cargoAllocations) {
 				acc += (double) getFromCargoAllocationPair(type, f, cargoAllocation);
 			}
 			return type.cast(acc);
 		} else if (type.getName().equals("java.lang.Long")) {
 			long acc = 0;
-			for (DeltaPair cargoAllocation: cargoAllocations) {
+			for (DeltaPair cargoAllocation : cargoAllocations) {
 				acc += (long) getFromCargoAllocationPair(type, f, cargoAllocation);
 			}
 			return type.cast(acc);
-		}	
+		}
 
 		return null;
 	}
@@ -294,24 +294,25 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 	public <T, U> T getFromCargoAllocationPair(Class<T> type, Function<U, T> f, Object object) {
 		Object first = null;
 		Object second = null;
-		
+
 		if (object instanceof DeltaPair) {
 			final DeltaPair deltaPair = (DeltaPair) object;
 			first = deltaPair.first();
 			second = deltaPair.second();
 		}
-		
+
 		T valueFirst = f.apply((U) first);
 
 		if (second != null) {
 			T valueSecond = f.apply((U) second);
-
-			if (valueFirst instanceof Integer) {
-				return type.cast(((int) valueSecond - (int) valueFirst));
-			} else if (valueFirst instanceof Double) {
-				return type.cast(((double) valueSecond - (double) valueFirst));
-			} else if (valueFirst instanceof Long) {
-				return type.cast(((long) valueSecond - (long) valueFirst));
+			if (valueSecond != null) {
+				if (valueFirst instanceof Integer) {
+					return type.cast(((int) valueSecond - (int) valueFirst));
+				} else if (valueFirst instanceof Double) {
+					return type.cast(((double) valueSecond - (double) valueFirst));
+				} else if (valueFirst instanceof Long) {
+					return type.cast(((long) valueSecond - (long) valueFirst));
+				}
 			}
 		}
 
@@ -321,16 +322,16 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 	public static double cargoAllocationBuyPriceHelper(Object object) {
 		if (object instanceof CargoAllocation) {
 			CargoAllocation cargoAllocation = (CargoAllocation) object;
-		
-		for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-			if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-				return allocation.getPrice();
+
+			for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+				if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
+					return allocation.getPrice();
+				}
 			}
-		}
 		}
 		return 0.0f;
 	}
-	
+
 	public @NonNull ICellRenderer createBuyPrice(final EconsOptions options) {
 		return new BaseFormatter() {
 			@Override
@@ -341,10 +342,10 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 					return DollarsPerMMBtuFormat.format(price);
 				} else if (object instanceof CargoAllocationPair) {
 					double value = getFromCargoAllocationPair(Double.class, StandardEconsRowFactory::cargoAllocationBuyPriceHelper, object);
-					return DollarsPerMMBtuFormat.format(value); 
+					return DollarsPerMMBtuFormat.format(value);
 				} else if (object instanceof List<?>) {
 					double value = getFromCargoAllocationPairList(Double.class, StandardEconsRowFactory::cargoAllocationBuyPriceHelper, object);
-					return DollarsPerMMBtuFormat.format(value); 
+					return DollarsPerMMBtuFormat.format(value);
 				}
 
 				return null;
@@ -403,7 +404,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		}
 		return cost;
 	}
-	
+
 	public @NonNull ICellRenderer createBuyValuePrice(final EconsOptions options) {
 		return new BaseFormatter() {
 			@Override
@@ -1201,7 +1202,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 	}
 
 	private static Integer getShippingCost(Object object) {
-		
+
 		if (object == null) {
 			return null;
 		}
@@ -1216,7 +1217,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 			sequence = ((VesselEventVisit) object).getSequence();
 			events = ((VesselEventVisit) object).getEvents();
 		}
-		
+
 		if (sequence == null || events == null) {
 			return null;
 		}
