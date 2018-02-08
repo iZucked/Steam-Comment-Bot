@@ -1,17 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>com.mmxlabs.scheduler</groupId>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
 		<version>4.4.6-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>com.mmxlabs.scheduler.optimiser.tests</artifactId>
-	<version>4.4.6-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>
 	<build>
 
 		<plugins>
@@ -20,7 +23,7 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
 
-							
+
 					<dependency-resolution>
 						<extraRequirements>
 							<requirement>
@@ -30,7 +33,7 @@
 							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
-					
+
 				</configuration>
 			</plugin>
 		</plugins>
