@@ -10,6 +10,11 @@
 	</parent>
 
 	<artifactId>com.mmxlabs.rcp.common</artifactId>
-	<version>4.4.6-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+
+	<properties>
+		<sonar.junit.reportPaths>
+			../${project.artifactId}.tests/target/surefire-reports
+		</sonar.junit.reportPaths>
+	</properties>
 </project>

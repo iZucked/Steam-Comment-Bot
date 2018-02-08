@@ -10,7 +10,12 @@
 	</parent>
 	<artifactId>com.mmxlabs.rcp.common.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>4.4.6-SNAPSHOT</version>
+
+	<properties>
+		<sonar.sources></sonar.sources>
+		<sonar.tests>src</sonar.tests>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -22,7 +27,7 @@
 
 					<product>org.eclipse.sdk.ide</product>
 					<application>org.eclipse.ui.ide.workbench</application>
-					
+
 
 				</configuration>
 			</plugin>
