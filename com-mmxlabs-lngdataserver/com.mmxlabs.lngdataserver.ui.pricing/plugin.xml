@@ -20,7 +20,7 @@
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lngdataserver.integration.ui.pricing.PricingEditorView"
             id="com.mmxlabs.lngdataserver.ui.pricing.PricingEditorView"
-            name="Pricing View"
+            name="Pricing"
             restorable="true">
       	</view>
     </extension>

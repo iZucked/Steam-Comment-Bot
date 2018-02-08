@@ -20,7 +20,7 @@
           category="com.mmxlabs.shiplingo.platform.reports"
           class="com.mmxlabs.lngdataserver.integration.ui.vessels.VesselsEditorView"
           id="com.mmxlabs.lngdataserver.ui.vessels.VesselsEditorView"
-          name="Vessel View"
+          name="Vessels"
           restorable="true">
     </view>
     </extension>

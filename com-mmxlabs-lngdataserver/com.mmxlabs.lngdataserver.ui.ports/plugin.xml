@@ -20,7 +20,7 @@
           category="com.mmxlabs.shiplingo.platform.reports"
           class="com.mmxlabs.lngdataserver.integration.ui.ports.PortsEditorView"
           id="com.mmxlabs.lngdataserver.ui.vessels.PortsEditorView"
-          name="Ports View"
+          name="Ports"
           restorable="true">
     </view>
     </extension>
