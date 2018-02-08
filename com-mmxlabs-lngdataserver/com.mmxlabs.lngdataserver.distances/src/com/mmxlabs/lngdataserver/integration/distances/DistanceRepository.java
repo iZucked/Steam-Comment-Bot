@@ -95,7 +95,7 @@ public class DistanceRepository {
 			}).collect(Collectors.toList());
 		} catch (ApiException e) {
 			LOG.error("Error fetchinng distances versions" + e.getMessage());
-			throw new RuntimeException("Error fetching distances versionns", e);
+			throw new RuntimeException("Error fetching distances versions", e);
 		}
 	}
 	
