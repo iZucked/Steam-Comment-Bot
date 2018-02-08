@@ -8,7 +8,11 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.common.common-recorder</artifactId>
-	<version>4.4.6-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
+	<properties>
+		<sonar.junit.reportPaths>
+			../${project.artifactId}.tests/target/surefire-reports
+		</sonar.junit.reportPaths>
+	</properties>
 </project>
