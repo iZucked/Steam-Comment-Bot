@@ -172,7 +172,19 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 				if (shippingHoursRestrictionProvider.isDivertable(second)) {
 					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(second);
 					if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
-						// No
+						// Assume that we have a windows overlap case
+						ITimeWindow tw1 = fobPurchase.getTimeWindow();
+						ITimeWindow tw2 = fobSale.getTimeWindow();
+						if (tw1 != null && tw2 != null) {
+							// End is within
+							if (tw1.getExclusiveEnd() > tw2.getInclusiveStart() && tw1.getExclusiveEnd() - 1 < tw2.getExclusiveEnd()) {
+								return true;
+							}
+							// Start is within
+							if (tw1.getInclusiveStart() >= tw2.getInclusiveStart() && tw1.getInclusiveStart() < tw2.getExclusiveEnd()) {
+								return true;
+							}
+						}
 						return false;
 					}
 					final ITimeWindow fobSaleWindow = shippingHoursRestrictionProvider.getBaseTime(second);
