@@ -21,7 +21,7 @@ public class Activator extends AbstractUIPlugin {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.distances"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.integration.distances"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
