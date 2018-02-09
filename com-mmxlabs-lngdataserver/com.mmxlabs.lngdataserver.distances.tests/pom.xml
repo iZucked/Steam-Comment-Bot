@@ -9,6 +9,6 @@
 		<version>4.4.6-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.mmxlabs.lngdataserver.distances.tests</artifactId>
+	<artifactId>com.mmxlabs.lngdataserver.integration.distances.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 </project>
