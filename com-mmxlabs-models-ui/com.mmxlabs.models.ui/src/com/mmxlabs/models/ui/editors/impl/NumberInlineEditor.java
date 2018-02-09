@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -108,6 +109,11 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			final Supplier<String> overrideStringSupplier = () -> {
 				if (input instanceof MMXObject) {
 					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+
+					if (Objects.equals(Integer.MAX_VALUE, v)) {
+						return "-";
+					}
+
 					inner.setValue(scale(v));
 					return inner.getDisplayString();
 				}
