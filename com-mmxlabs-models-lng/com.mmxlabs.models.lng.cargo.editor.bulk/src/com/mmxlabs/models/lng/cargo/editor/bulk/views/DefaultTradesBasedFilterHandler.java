@@ -51,6 +51,11 @@ public class DefaultTradesBasedFilterHandler implements ITradesBasedFilterHandle
 	}
 
 	@Override
+	public void activate(ColumnFilters columnFilters, Set<ITradesBasedFilterHandler> activeFilters) {
+
+	}
+
+	@Override
 	public void deactivate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters) {
 	}
 

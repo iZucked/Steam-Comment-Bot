@@ -178,6 +178,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private final String[] orderedColumnGroupNames = new String[] { //
 			TradesBasedColumnFactory.LOAD_START_GROUP, //
 			TradesBasedColumnFactory.LOAD_PORT_GROUP, //
+			TradesBasedColumnFactory.LOAD_DIVERSION_GROUP, //
 			TradesBasedColumnFactory.LOAD_PRICING_GROUP, //
 			TradesBasedColumnFactory.LOAD_PRICING_EXTRA_GROUP, //
 			TradesBasedColumnFactory.LOAD_VOLUME_GROUP, //
@@ -186,6 +187,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			TradesBasedColumnFactory.LOAD_END_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_START_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_PORT_GROUP, //
+			TradesBasedColumnFactory.DISCHARGE_DIVERSION_GROUP, //			
 			TradesBasedColumnFactory.DISCHARGE_PRICING_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_VOLUME_GROUP, //
@@ -759,6 +761,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				}
 				if (columnFilters.isColumnVisible(handler.block)) {
 					column.setVisible(true);
+				} else {
+					column.setVisible(false);
 				}
 				columnOrderList.add(scenarioViewer.getGrid().indexOf(column));
 			}
@@ -791,6 +795,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				if (handler.isDefaultFilter()) {
 					// default filters are always active
 					activeColumnFilterHandlers.add(handler);
+					handler.activate(columnFilters, activeColumnFilterHandlers);
 				}
 			}
 		}
@@ -860,7 +865,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		final ScenarioTableViewer viewer = new ScenarioTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
 
-			
 			@Override
 			public void addSelectionChangedListener(ISelectionChangedListener listener) {
 				if (listener instanceof JointModelEditorPartSelectionChangedListener) {
@@ -868,6 +872,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				}
 				super.addSelectionChangedListener(listener);
 			}
+
 			@Override
 			public void refresh() {
 				// TODO Auto-generated method stub

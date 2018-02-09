@@ -16,11 +16,11 @@ import com.mmxlabs.models.lng.port.Port;
 public class PortTradesBasedFilterHandler implements ITradesBasedFilterHandler {
 
 	private Port referencePort;
-	
+
 	public PortTradesBasedFilterHandler(Port p) {
 		this.referencePort = p;
 	}
-	
+
 	@Override
 	public Action activateAction(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters, final BulkTradesTablePane viewer) {
 		return null;
@@ -32,10 +32,15 @@ public class PortTradesBasedFilterHandler implements ITradesBasedFilterHandler {
 	}
 
 	@Override
+	public void activate(ColumnFilters columnFilters, Set<ITradesBasedFilterHandler> activeFilters) {
+
+	}
+
+	@Override
 	public void deactivate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters) {
 		activeFilters.remove(this); // TODO - how about isActive?
-//		columnFilters.removeGroupFilter(TradesBasedColumnFactory.LOAD_START_GROUP, TradesBasedColumnFactory.LOAD_START_GROUP);
-//		columnFilters.removeGroupFilter(TradesBasedColumnFactory.DISCHARGE_START_GROUP, TradesBasedColumnFactory.DISCHARGE_START_GROUP);
+		// columnFilters.removeGroupFilter(TradesBasedColumnFactory.LOAD_START_GROUP, TradesBasedColumnFactory.LOAD_START_GROUP);
+		// columnFilters.removeGroupFilter(TradesBasedColumnFactory.DISCHARGE_START_GROUP, TradesBasedColumnFactory.DISCHARGE_START_GROUP);
 	}
 
 	@Override

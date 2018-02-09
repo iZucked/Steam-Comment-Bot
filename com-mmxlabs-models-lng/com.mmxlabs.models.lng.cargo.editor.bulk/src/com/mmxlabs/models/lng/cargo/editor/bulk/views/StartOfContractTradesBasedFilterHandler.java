@@ -36,12 +36,17 @@ public class StartOfContractTradesBasedFilterHandler implements ITradesBasedFilt
 	}
 
 	@Override
+	public void activate(ColumnFilters columnFilters, Set<ITradesBasedFilterHandler> activeFilters) {
+
+	}
+
+	@Override
 	public void deactivate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters) {
 		activeFilters.remove(this); // TODO - how about isActive?
 		columnFilters.removeGroupFilter(TradesBasedColumnFactory.LOAD_START_GROUP, TradesBasedColumnFactory.LOAD_START_GROUP);
 		columnFilters.removeGroupFilter(TradesBasedColumnFactory.DISCHARGE_START_GROUP, TradesBasedColumnFactory.DISCHARGE_START_GROUP);
 	}
-	
+
 	@Override
 	public boolean isRowVisible(Row row) {
 		if (row.getLoadSlot() != null) {

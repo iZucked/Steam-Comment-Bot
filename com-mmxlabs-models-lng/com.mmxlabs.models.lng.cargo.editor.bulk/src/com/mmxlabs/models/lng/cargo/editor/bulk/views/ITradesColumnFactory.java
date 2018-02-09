@@ -16,6 +16,7 @@ public interface ITradesColumnFactory {
 
 	public static final String LOAD_START_GROUP = "TradesBasedColumnFactory.LOAD_START_GROUP";
 	public static final String LOAD_PORT_GROUP = "TradesBasedColumnFactory.LOAD_PORT_GROUP";
+	public static final String LOAD_DIVERSION_GROUP = "TradesBasedColumnFactory.LOAD_DIVERSION_GROUP";
 	public static final String LOAD_PRICING_GROUP = "TradesBasedColumnFactory.LOAD_PRICING_GROUP";
 	public static final String LOAD_PRICING_EXTRA_GROUP = "TradesBasedColumnFactory.LOAD_PRICING_EXTRA_GROUP";
 	public static final String LOAD_VOLUME_GROUP = "TradesBasedColumnFactory.LOAD_VOLUME_GROUP";
@@ -24,6 +25,7 @@ public interface ITradesColumnFactory {
 	public static final String LOAD_END_GROUP = "TradesBasedColumnFactory.LOAD_END_GROUP";
 	public static final String DISCHARGE_START_GROUP = "TradesBasedColumnFactory.DISCHARGE_START_GROUP";
 	public static final String DISCHARGE_PORT_GROUP = "TradesBasedColumnFactory.DISCHARGE_PORT_GROUP";
+	public static final String DISCHARGE_DIVERSION_GROUP = "TradesBasedColumnFactory.DISCHARGE_DIVERSION_GROUP";
 	public static final String DISCHARGE_PRICING_GROUP = "TradesBasedColumnFactory.DISCHARGE_PRICING_GROUP";
 	public static final String DISCHARGE_PRICING_EXTRA_GROUP = "TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP";
 	public static final String DISCHARGE_VOLUME_GROUP = "TradesBasedColumnFactory.DISCHARGE_VOLUME_GROUP";

@@ -89,6 +89,12 @@ public class LoadPortTradesBasedFilterHandler implements ITradesBasedFilterHandl
 	}
 
 	@Override
+	public void activate(ColumnFilters columnFilters, Set<ITradesBasedFilterHandler> activeFilters) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void deactivate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters) {
 	}
 

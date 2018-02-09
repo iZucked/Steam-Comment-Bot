@@ -888,7 +888,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, LOAD_PORT_GROUP + "_0", ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", LOAD_DIVERSION_GROUP, DEFAULT_BLOCK_TYPE, LOAD_DIVERSION_GROUP + "_0", ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -991,7 +991,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", DISCHARGE_PORT_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_PORT_GROUP + "_0", ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", DISCHARGE_DIVERSION_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_DIVERSION_GROUP + "_0", ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
