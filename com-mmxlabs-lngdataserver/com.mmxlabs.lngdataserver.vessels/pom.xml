@@ -9,6 +9,6 @@
 		<version>4.4.6-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ccom.mmxlabs.lngdataserver.integration.vessels</artifactId>
+	<artifactId>com.mmxlabs.lngdataserver.integration.vessels</artifactId>
 	<packaging>eclipse-plugin</packaging>
 </project>
