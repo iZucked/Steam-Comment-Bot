@@ -841,7 +841,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-terminal": {
-			columnManager.registerColumn("TRADES_TABLE", createWiringColumn(columnID, "L-Type", report, true, LOAD_END_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY));
+			columnManager.registerColumn("TRADES_TABLE", createWiringColumn(columnID, "L-Type", report, true, LOAD_END_GROUP, DEFAULT_BLOCK_TYPE, LOAD_END_GROUP + "_1"));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-terminal": {
@@ -849,88 +849,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			columnManager.registerColumn("TRADES_TABLE", createWiringColumn(columnID, "D-Type", report, false, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_START_GROUP + "_0"));
 			break;
 		}
-		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-divertible": {
-
-			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
-
-				@Override
-				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
-					ColumnBlock block = blockManager.getBlockByID(columnID);
-					if (block == null) {
-						block = blockManager.createBlock(columnID, "Divertible", DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
-					}
-					block.setPlaceholder(true);
-					block.setExpandable(true);
-					block.setExpandByDefault(false);
-					block.setForceGroup(true);
-					{
-						final ICellRenderer rendMan = new DivertibleFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(false);
-						createColumn.column.getColumn().setSummary(true);
-					}
-					{
-						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
-							public boolean canEdit(Object object) {
-
-								if (object instanceof DischargeSlot) {
-									DischargeSlot dischargeSlot = (DischargeSlot) object;
-									return dischargeSlot.isFOBSale();
-
-								}
-								return false;
-							}
-
-							public String render(Object object) {
-								if (object instanceof DischargeSlot) {
-									DischargeSlot dischargeSlot = (DischargeSlot) object;
-									if (dischargeSlot.isFOBSale()) {
-										return super.render(object);
-									}
-
-								}
-								return "";
-							};
-						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
-					}
-					{
-						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
-							public boolean canEdit(Object object) {
-
-								if (object instanceof DischargeSlot) {
-									DischargeSlot dischargeSlot = (DischargeSlot) object;
-									return dischargeSlot.isFOBSale() && dischargeSlot.isDivertible();
-
-								}
-								return false;
-							}
-
-							public String render(Object object) {
-								if (object instanceof DischargeSlot) {
-									DischargeSlot dischargeSlot = (DischargeSlot) object;
-									if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
-										return super.render(object);
-									}
-
-								}
-								return "";
-							};
-						};
-
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Shipping days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
-					}
-
-					return null;
-				}
-
-			});
-		}
-			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-divertible": {
 
 			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
@@ -939,7 +857,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "Divertible", LOAD_START_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "Divertible", LOAD_END_GROUP, DEFAULT_BLOCK_TYPE, LOAD_END_GROUP + "_0", ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -1015,6 +933,89 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			});
 		}
 			break;
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-divertible": {
+
+			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+
+				@Override
+				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+					ColumnBlock block = blockManager.getBlockByID(columnID);
+					if (block == null) {
+						block = blockManager.createBlock(columnID, "Divertible", DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_START_GROUP + "_1", ColumnType.NORMAL);
+					}
+					block.setPlaceholder(true);
+					block.setExpandable(true);
+					block.setExpandByDefault(false);
+					block.setForceGroup(true);
+					{
+						final ICellRenderer rendMan = new DivertibleFormatter();
+						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setDetail(false);
+						createColumn.column.getColumn().setSummary(true);
+					}
+					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
+							public boolean canEdit(Object object) {
+
+								if (object instanceof DischargeSlot) {
+									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									return dischargeSlot.isFOBSale();
+
+								}
+								return false;
+							}
+
+							public String render(Object object) {
+								if (object instanceof DischargeSlot) {
+									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									if (dischargeSlot.isFOBSale()) {
+										return super.render(object);
+									}
+
+								}
+								return "";
+							};
+						};
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setDetail(true);
+						createColumn.column.getColumn().setSummary(false);
+					}
+					{
+						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
+							public boolean canEdit(Object object) {
+
+								if (object instanceof DischargeSlot) {
+									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									return dischargeSlot.isFOBSale() && dischargeSlot.isDivertible();
+
+								}
+								return false;
+							}
+
+							public String render(Object object) {
+								if (object instanceof DischargeSlot) {
+									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
+										return super.render(object);
+									}
+
+								}
+								return "";
+							};
+						};
+
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Shipping days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setDetail(true);
+						createColumn.column.getColumn().setSummary(false);
+					}
+
+					return null;
+				}
+
+			});
+		}
+			break;
+
 		}
 	}
 
