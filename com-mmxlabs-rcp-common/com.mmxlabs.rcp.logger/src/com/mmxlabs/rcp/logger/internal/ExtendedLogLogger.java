@@ -5,9 +5,11 @@
 package com.mmxlabs.rcp.logger.internal;
 
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.osgi.framework.Bundle;
 import org.slf4j.helpers.MarkerIgnoringBase;
 
 public class ExtendedLogLogger extends MarkerIgnoringBase {
@@ -203,6 +205,34 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	}
 
 	private ILog getLogger() {
+		try {
 		return Platform.getLog(Platform.getBundle("org.slf4j.api"));
+		} catch (NullPointerException e) {
+			// This can happen during workbench shutdown.
+			return new ILog() {
+				
+				@Override
+				public void removeLogListener(ILogListener listener) {
+					
+				}
+				
+				@Override
+				public void log(IStatus status) {
+					System.err.printf("[Fallback logger]%s", status.getMessage());
+				}
+				
+				@Override
+				public Bundle getBundle() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public void addLogListener(ILogListener listener) {
+					// TODO Auto-generated method stub
+					
+				}
+			};
+		}
 	}
 }
