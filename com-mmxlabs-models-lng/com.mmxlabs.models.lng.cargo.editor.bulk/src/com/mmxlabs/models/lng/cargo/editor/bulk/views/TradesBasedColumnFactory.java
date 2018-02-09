@@ -24,6 +24,8 @@ import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
@@ -134,6 +136,36 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					if (!c.getRestrictedPorts().isEmpty()) {
 						return yesSymbol;
 					}
+				}
+				return "";
+			}
+			return "";
+		}
+	}
+
+	private final class DivertibleFormatter extends BaseFormatter {
+		private static final String yesSymbol = "\u2713";
+
+		public String render(final Object object) {
+			if (object instanceof Slot) {
+				final Slot slot = (Slot) object;
+				if (slot instanceof LoadSlot) {
+					LoadSlot loadSlot = (LoadSlot) slot;
+					if (loadSlot.isDESPurchase()) {
+						if (slot.isDivertible()) {
+							return yesSymbol;
+						}
+					}
+
+				}
+				if (slot instanceof DischargeSlot) {
+					DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					if (dischargeSlot.isFOBSale()) {
+						if (slot.isDivertible()) {
+							return yesSymbol;
+						}
+					}
+
 				}
 				return "";
 			}
@@ -815,6 +847,172 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-terminal": {
 
 			columnManager.registerColumn("TRADES_TABLE", createWiringColumn(columnID, "D-Type", report, false, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_START_GROUP + "_0"));
+			break;
+		}
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-divertible": {
+
+			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+
+				@Override
+				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+					ColumnBlock block = blockManager.getBlockByID(columnID);
+					if (block == null) {
+						block = blockManager.createBlock(columnID, "Divertible", DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+					}
+					block.setPlaceholder(true);
+					block.setExpandable(true);
+					block.setExpandByDefault(false);
+					block.setForceGroup(true);
+					{
+						final ICellRenderer rendMan = new DivertibleFormatter();
+						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setDetail(false);
+						createColumn.column.getColumn().setSummary(true);
+					}
+					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
+							public boolean canEdit(Object object) {
+
+								if (object instanceof DischargeSlot) {
+									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									return dischargeSlot.isFOBSale();
+
+								}
+								return false;
+							}
+
+							public String render(Object object) {
+								if (object instanceof DischargeSlot) {
+									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									if (dischargeSlot.isFOBSale()) {
+										return super.render(object);
+									}
+
+								}
+								return "";
+							};
+						};
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setDetail(true);
+						createColumn.column.getColumn().setSummary(false);
+					}
+					{
+						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
+							public boolean canEdit(Object object) {
+
+								if (object instanceof DischargeSlot) {
+									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									return dischargeSlot.isFOBSale() && dischargeSlot.isDivertible();
+
+								}
+								return false;
+							}
+
+							public String render(Object object) {
+								if (object instanceof DischargeSlot) {
+									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
+										return super.render(object);
+									}
+
+								}
+								return "";
+							};
+						};
+
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Shipping days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setDetail(true);
+						createColumn.column.getColumn().setSummary(false);
+					}
+
+					return null;
+				}
+
+			});
+		}
+			break;
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-divertible": {
+
+			columnManager.registerColumn("TRADES_TABLE", new EmfBlockColumnFactory() {
+
+				@Override
+				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+					ColumnBlock block = blockManager.getBlockByID(columnID);
+					if (block == null) {
+						block = blockManager.createBlock(columnID, "Divertible", LOAD_START_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+					}
+					block.setPlaceholder(true);
+					block.setExpandable(true);
+					block.setExpandByDefault(false);
+					block.setForceGroup(true);
+					{
+						final ICellRenderer rendMan = new DivertibleFormatter();
+						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.column.getColumn().setDetail(false);
+						createColumn.column.getColumn().setSummary(true);
+					}
+					{
+						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
+							public boolean canEdit(Object object) {
+
+								if (object instanceof LoadSlot) {
+									LoadSlot loadSlot = (LoadSlot) object;
+									return loadSlot.isDESPurchase();
+
+								}
+								return false;
+							}
+
+							public String render(Object object) {
+								if (object instanceof LoadSlot) {
+									LoadSlot loadSlot = (LoadSlot) object;
+									if (loadSlot.isDESPurchase()) {
+										return super.render(object);
+
+									}
+
+								}
+								return "";
+							};
+						};
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.column.getColumn().setDetail(true);
+						createColumn.column.getColumn().setSummary(false);
+					}
+					{
+						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
+							public boolean canEdit(Object object) {
+
+								if (object instanceof LoadSlot) {
+									LoadSlot loadSlot = (LoadSlot) object;
+									return loadSlot.isDESPurchase() && loadSlot.isDivertible();
+
+								}
+								return false;
+							}
+
+							public String render(Object object) {
+								if (object instanceof LoadSlot) {
+									LoadSlot loadSlot = (LoadSlot) object;
+									if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
+										return super.render(object);
+
+									}
+
+								}
+								return "";
+							};
+						};
+
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Shipping days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.column.getColumn().setDetail(true);
+						createColumn.column.getColumn().setSummary(false);
+					}
+
+					return null;
+				}
+
+			});
 		}
 			break;
 		}

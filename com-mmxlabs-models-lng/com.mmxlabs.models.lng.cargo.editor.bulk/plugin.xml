@@ -60,6 +60,14 @@
       </TradesBasedColumn>
       <TradesBasedColumn
             handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
+            id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-divertible">
+      </TradesBasedColumn>
+      <TradesBasedColumn
+            handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
+            id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-divertible">
+      </TradesBasedColumn>
+      <TradesBasedColumn
+            handlerID="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
             id="com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-restrictions">
       </TradesBasedColumn>
       <TradesBasedColumn
