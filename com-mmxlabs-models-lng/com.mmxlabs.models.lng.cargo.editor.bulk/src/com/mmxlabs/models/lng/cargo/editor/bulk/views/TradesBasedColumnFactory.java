@@ -423,7 +423,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "Restrictions", LOAD_EXTRA_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", LOAD_EXTRA_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -432,9 +432,24 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					{
 						final ICellRenderer rendMan = new HasRestrictionsFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Restrictions", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
+						
+						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+
+							@Override
+							public void treeExpanded(final TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("Restrictions");
+							}
+
+							@Override
+							public void treeCollapsed(final TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("");
+
+							}
+						});
+						
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), editingDomain);
@@ -747,7 +762,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "Restrictions", DISCHARGE_EXTRA_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", DISCHARGE_EXTRA_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -755,9 +770,25 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setForceGroup(true);
 					{
 						final ICellRenderer rendMan = new HasRestrictionsFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Restrictions", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
+						
+
+						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+
+							@Override
+							public void treeExpanded(final TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("Restrictions");
+
+							}
+
+							@Override
+							public void treeCollapsed(final TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("");
+
+							}
+						});
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), editingDomain);
@@ -857,7 +888,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "Divertible", LOAD_END_GROUP, DEFAULT_BLOCK_TYPE, LOAD_END_GROUP + "_0", ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, LOAD_PORT_GROUP + "_0", ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -865,9 +896,26 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setForceGroup(true);
 					{
 						final ICellRenderer rendMan = new DivertibleFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Diversion", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
+						
+
+						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+
+							@Override
+							public void treeExpanded(final TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("Diversion");
+
+							}
+
+							@Override
+							public void treeCollapsed(final TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("");
+
+							}
+						});
+						
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
@@ -896,6 +944,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
+						
+						
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
@@ -922,7 +972,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							};
 						};
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Shipping days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Ship days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 					}
@@ -941,7 +991,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "Divertible", DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_START_GROUP + "_1", ColumnType.NORMAL);
+						block = blockManager.createBlock(columnID, "", DISCHARGE_PORT_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_PORT_GROUP + "_0", ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -949,9 +999,26 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setForceGroup(true);
 					{
 						final ICellRenderer rendMan = new DivertibleFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Diversion", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
+						
+
+						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+
+							@Override
+							public void treeExpanded(final TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("Diversion");
+
+							}
+
+							@Override
+							public void treeCollapsed(final TreeEvent e) {
+								createColumn.column.getColumn().getColumnGroup().setText("");
+
+							}
+						});
+						
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
@@ -1004,7 +1071,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							};
 						};
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Shipping days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Ship days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 					}
