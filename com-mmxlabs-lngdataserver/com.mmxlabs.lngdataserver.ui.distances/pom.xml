@@ -8,6 +8,6 @@
 		<groupId>com.mmxlabs.lngdataserver</groupId>
 		<version>4.4.6-SNAPSHOT</version>
 	</parent>
-	<artifactId>com.mmxlabs.lngdataserver.ui.distances</artifactId>
+	<artifactId>com.mmxlabs.lngdataserver.integration.ui.distances</artifactId>
 	<packaging>eclipse-plugin</packaging>
 </project>
