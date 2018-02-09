@@ -105,4 +105,5 @@ Export-Package: com.github.tomakehurst.wiremock,
  org.xmlunit.validation,
  org.xmlunit.xpath
 Eclipse-RegisterBuddy: com.mmxlabs.lngdataserver.lib
+Bundle-Vendor: Minimax Labs Ltd.
  

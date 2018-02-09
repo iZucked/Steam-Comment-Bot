@@ -914,3 +914,4 @@ Import-Package: org.slf4j,
  org.slf4j.helpers,
  org.slf4j.spi
 Eclipse-BuddyPolicy: registered
+Bundle-Vendor: Minimax Labs Ltd.

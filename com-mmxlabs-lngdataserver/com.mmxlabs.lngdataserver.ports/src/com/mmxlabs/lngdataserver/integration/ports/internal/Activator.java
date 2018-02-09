@@ -20,7 +20,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.serviceintegration.ports"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.integration.ports"; //$NON-NLS-1$
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 

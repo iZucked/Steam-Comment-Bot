@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Models Value Curves UI
+Bundle-Name: Dataserver Browser UI
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.browser.ui;singleton:=true
 Bundle-Version: 4.4.6.qualifier
 Bundle-Vendor: Minimax Labs Ltd.

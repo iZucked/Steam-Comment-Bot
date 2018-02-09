@@ -16,7 +16,7 @@ import com.mmxlabs.lngdataserver.ui.server.ServerUrlProvider;
 
 public class Activator extends AbstractUIPlugin {
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.ui.distances"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.integration.ui.distances"; //$NON-NLS-1$
 	
 	static final String URL_PREFIX = "/distances"; 
 	

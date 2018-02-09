@@ -15,7 +15,7 @@ import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 
 public class Activator extends AbstractUIPlugin {
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.ui.vessels"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.integration.ui.vessels"; //$NON-NLS-1$
 	
 	static final String URL_PREFIX = "/vessels"; 
 	

@@ -27,3 +27,4 @@ Import-Package: org.slf4j,
 Eclipse-RegisterBuddy: com.mmxlabs.lngdataserver.lib
 Bundle-Activator: com.mmxlabs.lngdataserver.server.Activator
 Export-Package: com.mmxlabs.lngdataserver.server
+Bundle-Vendor: Minimax Labs Ltd.

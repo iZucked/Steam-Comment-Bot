@@ -29,3 +29,4 @@ Bundle-ClassPath: lib/vessels-client-1.0.0.jar,
 Export-Package: com.mmxlabs.lngdataserver.integration.vessels.internal,
  com.mmxlabs.lngdataserver.vessel,
  com.mmxlabs.lngdataserver.vessel.model
+Bundle-Vendor: Minimax Labs Ltd.

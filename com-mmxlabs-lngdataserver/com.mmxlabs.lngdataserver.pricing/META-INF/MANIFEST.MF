@@ -27,3 +27,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.integration.pricing.internal.Activator
 Export-Package: com.mmxlabs.lngdataserver.integration.pricing,
  com.mmxlabs.lngdataserver.integration.pricing.exceptions
+Bundle-Vendor: Minimax Labs Ltd.

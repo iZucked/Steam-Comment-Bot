@@ -34,3 +34,4 @@ Bundle-Activator: com.mmxlabs.lngdataserver.integration.ui.distances.Activator
 Export-Package: com.mmxlabs.lngdataserver.integration.ui.distances
 Bundle-ClassPath: .,
  web_files/
+Bundle-Vendor: Minimax Labs Ltd.

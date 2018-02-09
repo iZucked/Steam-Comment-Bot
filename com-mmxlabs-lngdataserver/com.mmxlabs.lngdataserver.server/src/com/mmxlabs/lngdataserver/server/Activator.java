@@ -25,7 +25,7 @@ import com.mmxlabs.lngdataserver.server.endpoint.impl.DataServerEndPointExtensio
 
 public class Activator implements BundleActivator {
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.distances.server"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.server"; //$NON-NLS-1$
 	// The shared instance
 	private static Activator plugin;
 

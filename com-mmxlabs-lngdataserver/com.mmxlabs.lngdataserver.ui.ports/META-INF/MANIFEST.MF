@@ -31,3 +31,4 @@ Bundle-Activator: com.mmxlabs.lngdataserver.integration.ui.ports.Activator
 Export-Package: com.mmxlabs.lngdataserver.integration.ui.ports
 Bundle-ClassPath: .,
  web_files/
+Bundle-Vendor: Minimax Labs Ltd.

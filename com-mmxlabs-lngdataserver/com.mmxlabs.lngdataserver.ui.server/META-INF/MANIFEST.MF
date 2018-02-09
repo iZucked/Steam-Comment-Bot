@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Distances Repository
+Bundle-Name: Dataserver: UI Server
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.ui.server;singleton:=true
 Bundle-Version: 4.4.6.qualifier
 Require-Bundle: org.eclipse.core.runtime,
@@ -28,3 +28,4 @@ Import-Package: com.google.common.collect,
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.ui.server.Activator
 Export-Package: com.mmxlabs.lngdataserver.ui.server
+Bundle-Vendor: Minimax Labs Ltd.

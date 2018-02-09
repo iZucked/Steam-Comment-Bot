@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Distances Repository
+Bundle-Name: Dataserver: Pricing UI
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.ui.pricing;singleton:=true
 Bundle-Version: 4.4.6.qualifier
 Require-Bundle: org.eclipse.core.runtime,
@@ -31,3 +31,4 @@ Bundle-Activator: com.mmxlabs.lngdataserver.integration.ui.pricing.Activator
 Export-Package: com.mmxlabs.lngdataserver.integration.ui.pricing
 Bundle-ClassPath: .,
  web_files/
+Bundle-Vendor: Minimax Labs Ltd.
