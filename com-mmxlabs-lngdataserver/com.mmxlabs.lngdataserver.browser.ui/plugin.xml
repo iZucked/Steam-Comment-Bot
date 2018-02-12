@@ -11,10 +11,23 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="com.mmxlabs.lngdataserver.views.dataserver"
             class="com.mmxlabs.lngdataserver.browser.ui.DataBrowser"
             id="com.mmxlabs.lngdataserver.browser.ui.DataBrowser"
-            name="DataBrowser"
+            name="Data Browser"
             restorable="true">
       </view>
+      <category
+            id="com.mmxlabs.lngdataserver.views.dataserver"
+            name="Data">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
+            id="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
+            name="Ref Data">
+      </perspective>
    </extension>
 </plugin>

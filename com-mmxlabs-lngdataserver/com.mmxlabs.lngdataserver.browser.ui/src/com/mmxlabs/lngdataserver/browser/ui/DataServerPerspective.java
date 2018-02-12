@@ -1,0 +1,38 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
+package com.mmxlabs.lngdataserver.browser.ui;
+
+import org.eclipse.ui.IFolderLayout;
+import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.IPerspectiveFactory;
+
+public class DataServerPerspective implements IPerspectiveFactory {
+
+	@Override
+	public void createInitialLayout(final IPageLayout layout) {
+		layout.setEditorAreaVisible(false);
+
+		final IFolderLayout browserArea = layout.createFolder("browserArea", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout editorsArea = layout.createFolder("editorsArea", IPageLayout.RIGHT, 0.8f, IPageLayout.ID_EDITOR_AREA);
+
+		browserArea.addView(DataBrowser.ID);
+
+		editorsArea.addView("com.mmxlabs.lngdataserver.ui.pricing.PricingEditorView");
+		editorsArea.addView("com.mmxlabs.lngdataserver.ui.vessels.VesselsEditorView");
+		editorsArea.addView("com.mmxlabs.lngdataserver.ui.vessels.PortsEditorView");
+		editorsArea.addView("com.mmxlabs.lngdataserver.ui.distances.DistancesEditorView");
+
+		layout.addShowViewShortcut(DataBrowser.ID);
+		layout.addShowViewShortcut("com.mmxlabs.lngdataserver.ui.vessels.VesselsEditorView");
+		layout.addShowViewShortcut("com.mmxlabs.lngdataserver.ui.pricing.PricingEditorView");
+		layout.addShowViewShortcut("com.mmxlabs.lngdataserver.ui.vessels.PortsEditorView");
+		layout.addShowViewShortcut("com.mmxlabs.lngdataserver.ui.distances.DistancesEditorView");
+
+		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.editing");
+		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
+
+	}
+
+}

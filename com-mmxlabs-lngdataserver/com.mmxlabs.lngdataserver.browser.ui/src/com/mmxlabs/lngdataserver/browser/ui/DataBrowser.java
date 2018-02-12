@@ -45,6 +45,8 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 
 public class DataBrowser extends ViewPart {
 
+	public static final String ID = "com.mmxlabs.lngdataserver.browser.ui.DataBrowser";
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataBrowser.class);
 
 	private TreeViewer viewer;

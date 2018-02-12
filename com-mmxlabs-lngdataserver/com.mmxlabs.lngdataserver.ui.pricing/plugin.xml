@@ -17,7 +17,7 @@
 
 	<extension point="org.eclipse.ui.views">
 		<view
-            category="com.mmxlabs.shiplingo.platform.reports"
+            category="com.mmxlabs.lngdataserver.views.dataserver"
             class="com.mmxlabs.lngdataserver.integration.ui.pricing.PricingEditorView"
             id="com.mmxlabs.lngdataserver.ui.pricing.PricingEditorView"
             name="Pricing"
