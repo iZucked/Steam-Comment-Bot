@@ -1,6 +1,7 @@
 package com.mmxlabs.lngdataserver.integration.ports.internal;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -102,12 +103,15 @@ public class Activator extends AbstractUIPlugin {
 			try {
 				portsDataRoot.getChildren().clear();
 				try {
-					for (PortsVersion v : portsRepository.getVersions()) {
-						Node version = BrowserFactory.eINSTANCE.createNode();
-						version.setParent(portsDataRoot);
-						version.setDisplayName(v.getIdentifier());
-						version.setPublished(v.isPublished());
-						RunnerHelper.asyncExec(c -> portsDataRoot.getChildren().add(version));
+					List<PortsVersion> versions = portsRepository.getVersions();
+					if (versions != null) {
+						for (PortsVersion v : versions) {
+							Node version = BrowserFactory.eINSTANCE.createNode();
+							version.setParent(portsDataRoot);
+							version.setDisplayName(v.getIdentifier());
+							version.setPublished(v.isPublished());
+							RunnerHelper.asyncExec(c -> portsDataRoot.getChildren().add(version));
+						}
 					}
 				} catch (ApiException e) {
 					// TODO Auto-generated catch block
