@@ -38,4 +38,9 @@ public class PricingDataExtension implements DataExtension {
 			}
 		};
 	}
+	
+	@Override
+	public Consumer<String> getRefreshUpstreamCallback() {
+		return null;
+	}
 }

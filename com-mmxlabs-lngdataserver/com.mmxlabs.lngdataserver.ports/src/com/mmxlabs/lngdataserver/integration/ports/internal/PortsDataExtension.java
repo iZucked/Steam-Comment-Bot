@@ -38,4 +38,9 @@ public class PortsDataExtension implements DataExtension {
 //			}
 		};
 	}
+	
+	@Override
+	public Consumer<String> getRefreshUpstreamCallback() {
+		return null;
+	}
 }
