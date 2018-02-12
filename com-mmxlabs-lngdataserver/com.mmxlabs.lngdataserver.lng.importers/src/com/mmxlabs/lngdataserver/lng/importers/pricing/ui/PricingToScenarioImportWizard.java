@@ -24,16 +24,15 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class PricingToScenarioImportWizard extends Wizard implements IImportWizard {
-	
+
 	private ScenarioSelectionPage scenarioSelectionPage;
 	private PricingSelectionPage pricingSelectionPage;
 
-	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", null);
 		pricingSelectionPage = new PricingSelectionPage("Pricing");
-		
+
 	}
 
 	@Override
@@ -41,20 +40,21 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 		IPricingProvider pricingProvider = pricingSelectionPage.getPricingVersion();
 		try {
 			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
-			
-			getContainer().run(true, true, new IRunnableWithProgress() {
+
+			// Do not fork otherwise this causes a dead lock for me (SG 2018/02/12)
+			getContainer().run(false, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask("copy into scenario", selectedScenarios.size());
-					
-					for(ScenarioInstance scenario : selectedScenarios) {
+
+					for (ScenarioInstance scenario : selectedScenarios) {
 						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 						try (ModelReference modelReference = modelRecord.aquireReference(PricingToScenarioImportWizard.class.getSimpleName())) {
 							modelReference.getLock().lock();
 							LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
-							
+
 							EditingDomain editingDomain = modelReference.getEditingDomain();
-							
+
 							Command updatePricingCommand = PricingToScenarioCopier.getUpdatePricingCommand(editingDomain, pricingProvider, scenarioModel.getReferenceModel().getPricingModel());
 
 							if (!updatePricingCommand.canExecute()) {
@@ -81,14 +81,14 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void addPages() {
 		super.addPages();
 		addPage(scenarioSelectionPage);
 		addPage(pricingSelectionPage);
 	}
-	
+
 	@Override
 	public boolean canFinish() {
 		return pricingSelectionPage.isPageComplete();

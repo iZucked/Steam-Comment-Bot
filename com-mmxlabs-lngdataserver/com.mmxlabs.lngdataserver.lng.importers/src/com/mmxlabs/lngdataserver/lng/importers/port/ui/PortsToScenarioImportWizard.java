@@ -24,16 +24,15 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class PortsToScenarioImportWizard extends Wizard implements IImportWizard {
-	
+
 	private ScenarioSelectionPage scenarioSelectionPage;
 	private PortsSelectionPage portsSelectionPage;
 
-	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", null);
 		portsSelectionPage = new PortsSelectionPage("Ports");
-		
+
 	}
 
 	@Override
@@ -41,20 +40,21 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 		IPortsProvider pricingProvider = portsSelectionPage.getPortsVersion();
 		try {
 			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
-			
-			getContainer().run(true, true, new IRunnableWithProgress() {
+
+			// Do not fork otherwise this causes a dead lock for me (SG 2018/02/12)
+			getContainer().run(false, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask("copy into scenario", selectedScenarios.size());
-					
-					for(ScenarioInstance scenario : selectedScenarios) {
+
+					for (ScenarioInstance scenario : selectedScenarios) {
 						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 						try (ModelReference modelReference = modelRecord.aquireReference(PortsToScenarioImportWizard.class.getSimpleName())) {
 							modelReference.getLock().lock();
 							LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
-							
+
 							EditingDomain editingDomain = modelReference.getEditingDomain();
-							
+
 							Command updatePricingCommand = PortsToScenarioCopier.getUpdatePortsCommand(editingDomain, pricingProvider, scenarioModel.getReferenceModel().getPortModel());
 
 							if (!updatePricingCommand.canExecute()) {
@@ -81,14 +81,14 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void addPages() {
 		super.addPages();
 		addPage(scenarioSelectionPage);
 		addPage(portsSelectionPage);
 	}
-	
+
 	@Override
 	public boolean canFinish() {
 		return portsSelectionPage.isPageComplete();

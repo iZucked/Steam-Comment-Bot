@@ -73,7 +73,8 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 		if (canFinish) {
 			try {
-				getContainer().run(true, true, new IRunnableWithProgress() {
+				// Do not fork otherwise this causes a dead lock for me (SG 2018/02/12)
+				getContainer().run(false, true, new IRunnableWithProgress() {
 
 					@Override
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
