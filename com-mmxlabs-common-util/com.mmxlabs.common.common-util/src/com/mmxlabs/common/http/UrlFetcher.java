@@ -14,9 +14,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 public class UrlFetcher {
@@ -46,24 +46,27 @@ public class UrlFetcher {
 	 * @throws AuthenticationException
 	 */
 	public static String fetchURLContent(final String url, final String username, final String password) throws ClientProtocolException, IOException, AuthenticationException {
-		final HttpClient client = HttpClients.createDefault();
-		final HttpGet request = new HttpGet(url);
+		try (final CloseableHttpClient client = HttpClients.createDefault()) {
 
-		if (url != null) {
-			final Header auth = new BasicScheme(StandardCharsets.UTF_8).authenticate(new UsernamePasswordCredentials(username, password), request, null);
-			request.addHeader(auth);
-		}
+			final HttpGet request = new HttpGet(url);
 
-		final HttpResponse response = client.execute(request);
-
-		try (BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-
-			final StringBuffer result = new StringBuffer();
-			String line = "";
-			while ((line = rd.readLine()) != null) {
-				result.append(line);
+			if (url != null) {
+				final Header auth = new BasicScheme(StandardCharsets.UTF_8).authenticate(new UsernamePasswordCredentials(username, password), request, null);
+				request.addHeader(auth);
 			}
-			return result.toString();
+
+			final HttpResponse response = client.execute(request);
+
+			try (BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+
+				final StringBuffer result = new StringBuffer();
+				String line = "";
+				while ((line = rd.readLine()) != null) {
+					result.append(line);
+				}
+				return result.toString();
+			}
+
 		}
 	}
 }
