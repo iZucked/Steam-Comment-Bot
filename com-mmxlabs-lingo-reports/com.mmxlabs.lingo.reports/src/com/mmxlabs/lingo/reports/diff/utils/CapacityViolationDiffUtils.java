@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -21,9 +23,9 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 public class CapacityViolationDiffUtils {
 
 	public static class CapacityViolationDifferences {
-		public Map<CapacityViolationType, Long> additionSet = new HashMap<>();
-		public Map<CapacityViolationType, Long> intersectSet = new HashMap<>();
-		public Map<CapacityViolationType, Long> subtractionSet = new HashMap<>();
+		public final @NonNull Map<CapacityViolationType, Long> additionSet = new HashMap<>();
+		public final @NonNull Map<CapacityViolationType, Long> intersectSet = new HashMap<>();
+		public final @NonNull Map<CapacityViolationType, Long> subtractionSet = new HashMap<>();
 	}
 
 	public static String checkSlotAllocationForCapacityViolations(final SlotAllocation nonReference, final SlotAllocation reference) {
@@ -73,7 +75,7 @@ public class CapacityViolationDiffUtils {
 		return text;
 	}
 
-	private static String createModifiedViolationTextFromSet(final Map<CapacityViolationType, Long> map) {
+	private static String createModifiedViolationTextFromSet(final @NonNull Map<CapacityViolationType, Long> map) {
 		String text = "";
 		if (!map.isEmpty()) {
 			final List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
@@ -89,7 +91,7 @@ public class CapacityViolationDiffUtils {
 		return text;
 	}
 
-	private static EMap<CapacityViolationType, Long> getViolationMap(final SlotAllocation slotAllocation) {
+	private static @Nullable EMap<CapacityViolationType, Long> getViolationMap(final SlotAllocation slotAllocation) {
 		final SlotVisit visit = slotAllocation.getSlotVisit();
 		if (visit instanceof CapacityViolationsHolder) {
 			final CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder) visit;
@@ -100,7 +102,7 @@ public class CapacityViolationDiffUtils {
 		}
 	}
 
-	private static CapacityViolationDifferences getDifferenceInViolations(final EMap<CapacityViolationType, Long> setA, final EMap<CapacityViolationType, Long> setB) {
+	private static CapacityViolationDifferences getDifferenceInViolations(final @Nullable EMap<CapacityViolationType, Long> setA, final @Nullable EMap<CapacityViolationType, Long> setB) {
 		final CapacityViolationDifferences differences = new CapacityViolationDifferences();
 		if (setA != null && setB != null) {
 			for (final CapacityViolationType violation : setA.keySet()) {
