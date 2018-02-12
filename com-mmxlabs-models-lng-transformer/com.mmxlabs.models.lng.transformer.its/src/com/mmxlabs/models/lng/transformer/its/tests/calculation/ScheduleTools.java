@@ -75,8 +75,10 @@ public final class ScheduleTools {
 		return 0;
 	}
 
-	public static double getFuelConsumption(@NonNull final List<FuelConsumption> consumptions, final double speed) {
+	public static double getFuelConsumption(final List<FuelConsumption> consumptions, final double speed) {
 
+		assert consumptions != null;
+		
 		double lowerBound = 0.0;
 		double upperBound = Double.MAX_VALUE;
 		FuelConsumption lowerConsumption = null;
