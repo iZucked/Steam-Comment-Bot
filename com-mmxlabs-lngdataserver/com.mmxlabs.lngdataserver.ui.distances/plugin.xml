@@ -24,18 +24,6 @@
             restorable="true">
       	</view>
     </extension>
- <extension
-       point="com.mmxlabs.lngdataserver.ui.server.EndpointExtension">
-    <EndpointExtension
-          class="com.mmxlabs.lngdataserver.integration.ui.distances.DistancesUiEndpointExtension">
-    </EndpointExtension>
- </extension>
-
-   <!--extension point="org.eclipse.equinox.http.registry.servlets">
-    <servlet
-      alias="/test"
-      class="com.mmxlabs.lngdataserver.distances.server.ExampleServlet"/>
-  </extension-->
   
    <extension
        point="com.mmxlabs.models.ui.componenthelpers">

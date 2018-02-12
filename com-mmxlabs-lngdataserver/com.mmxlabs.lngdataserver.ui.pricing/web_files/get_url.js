@@ -1,1 +1,0 @@
-function getBackendUrl() {return "http://localhost:50161/distances";}

@@ -1,16 +1,8 @@
 package com.mmxlabs.lngdataserver.integration.ui.pricing;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 
 
 public class Activator extends AbstractUIPlugin {
@@ -39,19 +31,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-
-//		// TODO: should we move this logic to the front-end?
-//		while (!BackEndUrlProvider.INSTANCE.isAvailable()) {
-//			Thread.sleep(5000);
-//			System.out.println("waiting for back-end...");
-//		}
 	}
-	
-    static String getWebFilesPath() throws URISyntaxException, IOException {
-		final Bundle bundle = FrameworkUtil.getBundle(Activator.class);
-		String result = new File(FileLocator.toFileURL(bundle.getResource("/web_files")).toURI()).getAbsolutePath();
-		return result;
-    }
 
 	/*
 	 * (non-Javadoc)

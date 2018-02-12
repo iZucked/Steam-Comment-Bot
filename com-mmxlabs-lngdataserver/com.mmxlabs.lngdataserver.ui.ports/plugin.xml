@@ -16,24 +16,12 @@
 <plugin>
 
 	<extension point="org.eclipse.ui.views">
-    <view
-          category="com.mmxlabs.shiplingo.platform.reports"
-          class="com.mmxlabs.lngdataserver.integration.ui.ports.PortsEditorView"
-          id="com.mmxlabs.lngdataserver.ui.vessels.PortsEditorView"
-          name="Ports"
-          restorable="true">
-    </view>
+	    <view
+	          category="com.mmxlabs.shiplingo.platform.reports"
+	          class="com.mmxlabs.lngdataserver.integration.ui.ports.PortsEditorView"
+	          id="com.mmxlabs.lngdataserver.ui.vessels.PortsEditorView"
+	          name="Ports"
+	          restorable="true">
+	    </view>
     </extension>
- <extension
-       point="com.mmxlabs.lngdataserver.ui.server.EndpointExtension">
-    <EndpointExtension
-          class="com.mmxlabs.lngdataserver.integration.ui.ports.PortsUiEndpointExtension">
-    </EndpointExtension>
- </extension>
-
-   <!--extension point="org.eclipse.equinox.http.registry.servlets">
-    <servlet
-      alias="/test"
-      class="com.mmxlabs.lngdataserver.distances.server.ExampleServlet"/>
-  </extension-->
 </plugin>

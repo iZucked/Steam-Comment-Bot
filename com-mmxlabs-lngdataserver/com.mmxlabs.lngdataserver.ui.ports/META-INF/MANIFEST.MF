@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Distances Repository
+Bundle-Name: Ports UI integration
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.ui.ports;singleton:=true
 Bundle-Version: 4.4.6.qualifier
 Require-Bundle: org.eclipse.core.runtime,

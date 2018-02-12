@@ -40,24 +40,9 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-
-//		while (!ServerUrlProvider.INSTANCE.isAvailable()) {
-//			Thread.sleep(5000);
-//			System.out.println("waiting for server...");
-//		}
-		
-//		// TODO: should we move this logic to the front-end?
-//		while (!BackEndUrlProvider.INSTANCE.isAvailable()) {
-//			Thread.sleep(5000);
-//			System.out.println("waiting for back-end...");
-//		}
+ 
 	}
-	
-    static String getWebFilesPath() throws URISyntaxException, IOException {
-		final Bundle bundle = FrameworkUtil.getBundle(Activator.class);
-		String result = new File(FileLocator.toFileURL(bundle.getResource("/web_files")).toURI()).getAbsolutePath();
-		return result;
-    }
+	 
 
 	/*
 	 * (non-Javadoc)
