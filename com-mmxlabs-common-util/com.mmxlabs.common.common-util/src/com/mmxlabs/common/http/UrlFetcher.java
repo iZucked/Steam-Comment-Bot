@@ -59,7 +59,7 @@ public class UrlFetcher {
 
 			try (BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
 
-				final StringBuffer result = new StringBuffer();
+				final StringBuilder result = new StringBuilder();
 				String line = "";
 				while ((line = rd.readLine()) != null) {
 					result.append(line);
