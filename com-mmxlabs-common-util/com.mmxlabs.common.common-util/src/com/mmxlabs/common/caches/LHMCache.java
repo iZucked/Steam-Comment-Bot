@@ -14,7 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 
 public final class LHMCache<K, V> extends AbstractCache<K, V> {
-	final private LinkedHashMap<K, Reference<V>> map;
+	private final LinkedHashMap<K, Reference<V>> map;
 
 	@SuppressWarnings("serial")
 	public LHMCache(final @NonNull String name, final @NonNull IKeyEvaluator<K, V> evaluator, final int intendedSize) {
@@ -34,8 +34,7 @@ public final class LHMCache<K, V> extends AbstractCache<K, V> {
 	public final V get(final K key) {
 		query();
 		final Reference<V> ref = map.get(key);
-		@SuppressWarnings("null")
-		V value = (V) null;
+		V value;
 		if ((ref == null) || ((value = ref.get()) == null)) {
 			final Pair<K, V> pair = evaluate(key);
 			map.put(pair.getFirst(), new SoftReference<>(pair.getSecond()));

@@ -183,7 +183,7 @@ public final class CollectionsUtil {
 
 	@NonNull
 	public static <T> LinkedList<T> makeLinkedList(final @NonNull T... elements) {
-	    LinkedList<T> newList = new LinkedList<T>();
+	    LinkedList<T> newList = new LinkedList<>();
 	    for (T el : elements) {
 	        newList.add(el);
 	    }

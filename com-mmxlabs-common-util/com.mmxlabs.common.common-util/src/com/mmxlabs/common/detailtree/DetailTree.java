@@ -65,7 +65,7 @@ public class DetailTree implements IDetailTree {
 
 	@Override
 	public String toString() {
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 
 		sb.append(key + (value == null ? "" : ": " + value));
 

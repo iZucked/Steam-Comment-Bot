@@ -18,10 +18,6 @@ public class StepwiseIntegerCurve implements ICurve {
 	private int defaultValue;
 	private final TreeMap<Integer, Integer> intervals = new TreeMap<>();
 
-	public StepwiseIntegerCurve() {
-
-	}
-
 	/**
 	 * Set the default value - this is what will be returned for any queries to points in the curve's specified range
 	 * 

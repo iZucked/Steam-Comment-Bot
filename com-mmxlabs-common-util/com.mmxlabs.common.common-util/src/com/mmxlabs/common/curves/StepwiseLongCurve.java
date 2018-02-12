@@ -18,10 +18,6 @@ public class StepwiseLongCurve implements ILongCurve {
 	private long defaultValue;
 	private final TreeMap<Integer, Long> intervals = new TreeMap<>();
 
-	public StepwiseLongCurve() {
-
-	}
-
 	/**
 	 * Set the default value - this is what will be returned for any queries to points in the curve's specified range
 	 * 

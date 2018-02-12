@@ -15,11 +15,11 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 	final int evictionThreshold;
 
 	class Entry {
-		SoftReference<Pair<K, V>> reference = new SoftReference<Pair<K, V>>(null);
+		SoftReference<Pair<K, V>> reference = new SoftReference<>(null);
 		int misses;
 
 		public void clear() {
-			reference = new SoftReference<Pair<K, V>>(null);
+			reference = new SoftReference<>(null);
 		}
 
 		public final V getAndUpdate(final @NonNull IKeyEvaluator<K, V> evaluator, final @NonNull K key) {
