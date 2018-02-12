@@ -82,8 +82,8 @@ public class UpstreamRoutingPointFetcher {
 
 			final Map<String, Object> currentMap = (Map<String, Object>) current;
 			final String rpName = (String) currentMap.get("identifier");
-			final String north = (String) ((Map) currentMap.get("northernEntry")).get("mmxId");
-			final String south = (String) ((Map) currentMap.get("southernEntry")).get("mmxId");
+			final String north = (String) currentMap.get("northernEntry");
+			final String south = (String) currentMap.get("southernEntry");
 
 			result.add(new Triple<>(rpName, north, south));
 		}
