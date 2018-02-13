@@ -35,8 +35,8 @@ public class PricingClient {
 				new TypeReference<List<com.mmxlabs.lngdataservice.pricing.model.Version>>() {
 				});
 
-		return pricingVersions.stream().sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt())).map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished()))
-				.collect(Collectors.toList());
+		return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
+				.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished())).collect(Collectors.toList());
 	}
 
 	public static void publishVersion(String version, String baseUrl, String upstreamUrl) throws IOException {
