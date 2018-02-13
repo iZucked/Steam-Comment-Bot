@@ -17,7 +17,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
 	// The plug-in ID
@@ -25,12 +25,12 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
-	
+
 	private final CompositeNode distancesDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
 	private DistanceRepository distanceRepository;
 	private Thread versionLoader;
 	private boolean active;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -43,6 +43,7 @@ public class Activator extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
@@ -52,12 +53,13 @@ public class Activator extends AbstractUIPlugin {
 		distanceRepository = new DistanceRepository();
 		active = true;
 		distanceRepository.listenToPreferenceChanges();
-		
+
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
@@ -68,9 +70,9 @@ public class Activator extends AbstractUIPlugin {
 		distanceRepository.stopListenToPreferenceChanges();
 		active = false;
 	}
-	
+
 	private void loadVersions() {
-		while(!distanceRepository.isReady() && active) {
+		while (!distanceRepository.isReady() && active) {
 			try {
 				LOGGER.debug("Distances back-end not ready yet...");
 				Thread.sleep(1000);
@@ -90,22 +92,31 @@ public class Activator extends AbstractUIPlugin {
 				RunnerHelper.asyncExec(c -> distancesDataRoot.getChildren().add(version));
 			}
 			distancesDataRoot.setDisplayName("Distances");
-			
+
 			// register consumer to update on new version
 			distanceRepository.registerVersionListener(versionString -> {
-				Node newVersion = BrowserFactory.eINSTANCE.createNode();
-				newVersion.setDisplayName(versionString);
-				newVersion.setParent(distancesDataRoot);
-				RunnerHelper.asyncExec(c -> distancesDataRoot.getChildren().add(0, newVersion));
+				RunnerHelper.asyncExec(c -> {
+					// Check for existing versions
+					for (final Node n : distancesDataRoot.getChildren()) {
+						if (versionString.contentEquals(n.getDisplayName())) {
+							return;
+						}
+					}
+
+					Node newVersion = BrowserFactory.eINSTANCE.createNode();
+					newVersion.setDisplayName(versionString);
+					newVersion.setParent(distancesDataRoot);
+					distancesDataRoot.getChildren().add(0, newVersion);
+				});
 			});
 			distanceRepository.listenForNewVersions();
 		}
 	}
-	
+
 	public CompositeNode getDistancesDataRoot() {
 		return distancesDataRoot;
 	}
-	
+
 	public DistanceRepository getDistanceRepository() {
 		return distanceRepository;
 	}
