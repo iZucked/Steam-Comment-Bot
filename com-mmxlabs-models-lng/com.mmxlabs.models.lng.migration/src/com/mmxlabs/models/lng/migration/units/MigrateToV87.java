@@ -19,7 +19,7 @@ public class MigrateToV87 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 856;
+		return 86;
 	}
 
 	@Override
