@@ -6,7 +6,11 @@ import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -14,7 +18,9 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -25,6 +31,8 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
@@ -42,17 +50,72 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.provider.BrowserItemProviderAdapterFactory;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.manifest.ModelArtifact;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class DataBrowser extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.lngdataserver.browser.ui.DataBrowser";
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataBrowser.class);
 
 	private TreeViewer viewer;
 	private CompositeNode root;
 	private Map<Node, Consumer<String>> publishCallbacks = new HashMap<Node, Consumer<String>>();
 	private Map<Node, Consumer<String>> checkUpstreamCallbacks = new HashMap<Node, Consumer<String>>();
+
+	ISelectionListener scenarioSelectionListener = new ISelectionListener() {
+
+		@Override
+		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+
+			if (selection instanceof IStructuredSelection) {
+				IStructuredSelection ss = (IStructuredSelection) selection;
+				Iterator<?> itr = ss.iterator();
+				if (ss.size() == 1) {
+					while (itr.hasNext()) {
+						Object o = itr.next();
+						if (o instanceof ScenarioInstance) {
+							ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+							Manifest mf = scenarioInstance.getManifest();
+							if (mf != null) {
+								List<Object> selectedNodes = new LinkedList<>();
+								for (ModelArtifact modelArtifact : mf.getModelDependencies()) {
+									// switch (modelArtifact.getKey()) {
+									// case LNGScenarioSharedModelTypes.FLEET.getID():
+									// case LNGScenarioSharedModelTypes.LOCATIONS.getID():
+									// case LNGScenarioSharedModelTypes.MARKET_CURVES.getID():
+									// case LNGScenarioSharedModelTypes.DISTANCES.getID():
+									String v = modelArtifact.getDataVersion();
+									for (Node n : root.getChildren()) {
+										// TODO: look in correct data tree
+										if (n instanceof CompositeNode) {
+											CompositeNode compositeNode = (CompositeNode) n;
+											for (Node n2 : compositeNode.getChildren()) {
+												if (Objects.equals(n2.getDisplayName(), v)) {
+													selectedNodes.add(n2);
+												}
+											}
+										}
+									}
+
+									// break;
+									// default:
+									// break;
+									//
+									// }
+								}
+								// FIXME: This does not work as expected as the view is SINGLE selection, but needs to be MULTI for this to work.
+								// FIXME: However the view links require SINGLE selection....
+								viewer.setSelection(new StructuredSelection(selectedNodes), false);
+							}
+						}
+					}
+				}
+			}
+		}
+	};
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -170,6 +233,14 @@ public class DataBrowser extends ViewPart {
 				}
 			}
 		}
+
+		getViewSite().getWorkbenchWindow().getSelectionService().addSelectionListener("com.mmxlabs.scenario.service.ui.navigator", scenarioSelectionListener);
+	}
+
+	@Override
+	public void dispose() {
+		getViewSite().getWorkbenchWindow().getSelectionService().removeSelectionListener("com.mmxlabs.scenario.service.ui.navigator", scenarioSelectionListener);
+		super.dispose();
 	}
 
 	@Override
