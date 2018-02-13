@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataservice.pricing.model.Curve;
 import com.mmxlabs.lngdataservice.pricing.model.PublishRequest;
+import com.mmxlabs.lngdataservice.pricing.model.Version;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -38,21 +39,36 @@ public class PricingClient {
 				.collect(Collectors.toList());
 	}
 
-	public static void publishVersion(String version, String baseUrl) throws IOException {
-		
+	public static void publishVersion(String version, String baseUrl, String upstreamUrl) throws IOException {
+
 		PublishRequest publishRequest = new PublishRequest();
 		publishRequest.setVersion(version);
-		publishRequest.setUpstreamUrl("http://localhost:8096/pricing/sync/versions");
-		
+		publishRequest.setUpstreamUrl(upstreamUrl + " /pricing/sync/versions");
+
 		String json = new ObjectMapper().writeValueAsString(publishRequest);
 
 		RequestBody body = RequestBody.create(JSON, json);
 		Request request = new Request.Builder().url(baseUrl + "/pricing/sync/publish").post(body).build();
 		Response response = CLIENT.newCall(request).execute();
-		
-		if(!response.isSuccessful()) {
+
+		if (!response.isSuccessful()) {
 			LOGGER.error("Error publishing version: " + response.message());
 		}
+	}
+
+	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
+
+		String json = new ObjectMapper().writeValueAsString(version);
+
+		RequestBody body = RequestBody.create(JSON, json);
+		Request request = new Request.Builder().url(baseUrl + "/pricing/sync/versions").post(body).build();
+		Response response = CLIENT.newCall(request).execute();
+
+		if (!response.isSuccessful()) {
+			LOGGER.error("Error publishing version: " + response.message());
+			return false;
+		}
+		return true;
 	}
 
 	public static CompletableFuture<String> notifyOnNewVersion(String baseUrl) {

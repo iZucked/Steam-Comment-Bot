@@ -29,7 +29,7 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private final CompositeNode pricingDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private final PricingRepository pricingRepository = new PricingRepository();
+	private PricingRepository pricingRepository = null;
 
 	private boolean active;
 
@@ -37,7 +37,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
-		Node loading = BrowserFactory.eINSTANCE.createNode();
+		final Node loading = BrowserFactory.eINSTANCE.createNode();
 		loading.setDisplayName("loading...");
 		pricingDataRoot.setDisplayName("Pricing (loading...)");
 		pricingDataRoot.getChildren().add(loading);
@@ -50,11 +50,13 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 		active = true;
 
+		pricingRepository = new PricingRepository();
+		pricingRepository.listenToPreferenceChanges();
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
 	}
 
@@ -64,10 +66,15 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
 		active = false;
+		if (pricingRepository != null) {
+			pricingRepository.stopListenToPreferenceChanges();
+			pricingRepository.stopListenForNewVersion();
+		}
+		pricingRepository = null;
 	}
 
 	/**
@@ -92,7 +99,7 @@ public class Activator extends AbstractUIPlugin {
 			try {
 				LOGGER.debug("Pricing back-end not ready yet...");
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				LOGGER.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
@@ -101,23 +108,32 @@ public class Activator extends AbstractUIPlugin {
 			LOGGER.debug("Pricing back-end ready, retrieving versions...");
 			try {
 				pricingDataRoot.getChildren().clear();
-				for (PricingVersion v : pricingRepository.getVersions()) {
-					Node version = BrowserFactory.eINSTANCE.createNode();
+				for (final PricingVersion v : pricingRepository.getVersions()) {
+					final Node version = BrowserFactory.eINSTANCE.createNode();
 					version.setParent(pricingDataRoot);
 					version.setDisplayName(v.getIdentifier());
 					version.setPublished(v.isPublished());
 					RunnerHelper.asyncExec(c -> pricingDataRoot.getChildren().add(version));
 				}
 				pricingDataRoot.setDisplayName("Pricing");
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				LOGGER.error("Error retrieving pricing versions");
 			}
 
 			// register consumer to update on new version
 			pricingRepository.registerVersionListener(versionString -> {
-				Node newVersion = BrowserFactory.eINSTANCE.createNode();
-				newVersion.setDisplayName(versionString);
-				RunnerHelper.asyncExec(c -> pricingDataRoot.getChildren().add(newVersion));
+
+				RunnerHelper.asyncExec(c -> {
+					// Check for existing versions
+					for (final Node n : pricingDataRoot.getChildren()) {
+						if (versionString.contentEquals(n.getDisplayName())) {
+							return;
+						}
+					}
+					final Node newVersion = BrowserFactory.eINSTANCE.createNode();
+					newVersion.setDisplayName(versionString);
+					pricingDataRoot.getChildren().add(newVersion);
+				});
 			});
 			pricingRepository.listenForNewVersions();
 		}

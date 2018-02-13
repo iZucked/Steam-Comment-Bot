@@ -25,7 +25,7 @@
                locationURI="menu:data?after=dataStart">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.distances"
-                  label="Import ports and distances"
+                  label="Import distances"
                   style="push">
             </command>
          </menuContribution>
@@ -51,6 +51,11 @@
                   label="Import prices"
                   style="push">
             </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.export.wizards.prices"
+                  label="Export prices"
+                  style="push">
+            </command>
          </menuContribution>
      </extension>
       <extension
@@ -59,6 +64,11 @@
                defaultHandler="com.mmxlabs.lngdataserver.lng.importers.pricing.ui.ImportPricingWizardHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.prices"
                name="Copy prices to scenario">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.lngdataserver.lng.exporters.pricing.ui.ExportPricingWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.export.wizards.prices"
+               name="Copy prices from scenario">
          </command>
       </extension>
       <extension
