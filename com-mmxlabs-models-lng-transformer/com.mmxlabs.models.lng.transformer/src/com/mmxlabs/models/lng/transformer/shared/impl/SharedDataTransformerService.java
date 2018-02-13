@@ -33,13 +33,12 @@ public class SharedDataTransformerService implements ISharedDataTransformerServi
 		ModelDistanceProvider modelDistanceProvder = dataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		if (true) {
 			String distanceModelVersion = modelDistanceProvder.getVersion();
-			String portModelVersion = portModel.getPortDataVersion();
 
-			if (distanceModelVersion == null || portModelVersion == null) {
+			if (distanceModelVersion == null) {
 				// Cannot create valid key, so avoid cache.
 				return createData(portModel, modelDistanceProvder);
 			}
-			final String cacheKey = String.format("%s-%s", portModelVersion, distanceModelVersion);
+			final String cacheKey = distanceModelVersion;
 
 			// Caching code path - assumes long running service
 			final SoftReference<IPortAndDistanceData> ref = cache.get(cacheKey);
