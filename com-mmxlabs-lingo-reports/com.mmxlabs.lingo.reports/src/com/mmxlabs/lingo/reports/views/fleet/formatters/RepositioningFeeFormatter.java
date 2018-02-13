@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
@@ -41,7 +42,7 @@ public class RepositioningFeeFormatter extends CostFormatter {
 			if (objects.size() > 0) {
 				for (Object o : objects) {
 					if (o instanceof Sequence) {
-					repositioningFee += getRepositioningFee((Sequence) o);
+						repositioningFee += getRepositioningFee((Sequence) o);
 					}
 				}
 			}
@@ -53,14 +54,17 @@ public class RepositioningFeeFormatter extends CostFormatter {
 	private int getRepositioningFee(Sequence sequence) {
 		int repositioningFee = 0;
 		for (Event evt : sequence.getEvents()) {
-			if (evt instanceof VesselEventVisit) {
-
-				VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
-				if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
-					final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEventVisit.getVesselEvent();
-					repositioningFee = charterOutEvent.getRepositioningFee();
+			if (evt instanceof StartEvent) {
+				StartEvent startEvent = (StartEvent) evt;
+				repositioningFee += startEvent.getRepositioningFee();
+			} else {
+				if (evt instanceof VesselEventVisit) {
+					VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+					if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
+						final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEventVisit.getVesselEvent();
+						repositioningFee -= charterOutEvent.getRepositioningFee();
+					}
 				}
-
 			}
 		}
 		return repositioningFee;
