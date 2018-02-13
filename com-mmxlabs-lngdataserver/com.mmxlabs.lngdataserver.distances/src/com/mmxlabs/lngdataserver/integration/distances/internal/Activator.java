@@ -51,6 +51,7 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		distanceRepository = new DistanceRepository();
 		active = true;
+		distanceRepository.listenToPreferenceChanges();
 		
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
 	}
@@ -64,6 +65,7 @@ public class Activator extends AbstractUIPlugin {
 		plugin = null;
 		super.stop(context);
 		distanceRepository.stopListeningForNewVersions();
+		distanceRepository.stopListenToPreferenceChanges();
 		active = false;
 	}
 	

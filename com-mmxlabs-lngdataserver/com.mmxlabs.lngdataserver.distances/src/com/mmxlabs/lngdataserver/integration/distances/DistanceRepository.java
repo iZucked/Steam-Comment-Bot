@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 import org.apache.http.auth.AuthenticationException;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.joda.time.DateTime;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
@@ -59,9 +61,23 @@ public class DistanceRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(DistanceRepository.class);
 	private final Triple<String, String, String> auth;
 	private String backendUrl;
-	private final String upstreamUrl;
+	private String upstreamUrl;
 	private boolean listenForNewVersions;
 	private final List<Consumer<String>> newVersionCallbacks = new LinkedList<Consumer<String>>();
+	private final IPropertyChangeListener listener = new IPropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			switch (event.getProperty()) {
+			case PreferenceConstants.P_URL_KEY:
+			case PreferenceConstants.P_USERNAME_KEY:
+			case PreferenceConstants.P_PASSWORD_KEY:
+				upstreamUrl = getUpstreamUrl();
+				upstreamDistancesApi.getApiClient().setBasePath(upstreamUrl);
+				break;
+			default:
+			}
+		}
+	};
 
 	public DistanceRepository() {
 		auth = getUserServiceAuth();
@@ -73,6 +89,16 @@ public class DistanceRepository {
 		auth = new Triple<>(url, "", "");
 		upstreamUrl = getUpstreamUrl();
 		upstreamDistancesApi.getApiClient().setBasePath(upstreamUrl);
+	}
+
+	public void listenToPreferenceChanges() {
+		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+		prefs.addPropertyChangeListener(listener);
+	}
+
+	public void stopListenToPreferenceChanges() {
+		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+		prefs.removePropertyChangeListener(listener);
 	}
 
 	private Triple<String, String, String> getUserServiceAuth() {
@@ -182,12 +208,12 @@ public class DistanceRepository {
 	public void syncUpstreamVersion(final String version) throws Exception {
 
 		final OkHttpClient httpclient = upstreamDistancesApi.getApiClient().getHttpClient();
-		
+
 		// Pull down the version data
 		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
 		final Response pullResponse = httpclient.newCall(pullRequest).execute();
 		final String json = pullResponse.body().string();
-		
+
 		// Post the data to local repo
 		final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
 		final Request postRequest = new Request.Builder().url(backendUrl + SYNC_VERSION_ENDPOINT).post(body).build();
