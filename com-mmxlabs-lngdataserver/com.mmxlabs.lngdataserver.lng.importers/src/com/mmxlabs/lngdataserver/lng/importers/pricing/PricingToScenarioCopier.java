@@ -80,6 +80,9 @@ public class PricingToScenarioCopier {
 				editingDomain,
 				cc,
 				false);
+		
+		cc.append(SetCommand.create(editingDomain, pricingModel, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION, pricingProvider.getVersion()));
+		
 		return cc;
 	}
 
