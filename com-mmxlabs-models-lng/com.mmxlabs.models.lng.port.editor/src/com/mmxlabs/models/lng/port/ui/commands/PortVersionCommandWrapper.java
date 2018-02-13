@@ -22,7 +22,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -91,10 +90,7 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				if (notification.getNotifier() instanceof Location) {
-					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Port) {
-					// Strictly port__location + port__name
+				if (notification.getNotifier() instanceof Port) {
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
 					changedRef[0] = true;

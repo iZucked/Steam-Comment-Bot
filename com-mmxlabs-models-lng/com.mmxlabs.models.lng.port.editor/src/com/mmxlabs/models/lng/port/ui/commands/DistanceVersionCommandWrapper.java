@@ -22,6 +22,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
@@ -97,7 +99,12 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__ROUTES) {
 					changedRef[0] = true;
-				}
+				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
+					// Add or remove is a change.
+					changedRef[0] = true;
+				} else if (notification.getNotifier() instanceof Location) {
+					changedRef[0] = true;
+				} 
 
 				// Reset!
 				if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION) {
@@ -121,6 +128,9 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 						final Notifier notifier = i.next();
 						if (notifier instanceof Route) {
 							addAdapter(notifier);
+						} else if (notifier instanceof Port) {
+							Port port = (Port) notifier;
+							addAdapter(port.getLocation());
 						}
 					}
 				} else if (target instanceof Route) {
@@ -142,6 +152,9 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 						final Notifier notifier = i.next();
 						if (notifier instanceof Route) {
 							removeAdapter(notifier, false, true);
+						} else if (notifier instanceof Port) {
+							Port port = (Port) notifier;
+							removeAdapter(port.getLocation(), false, true);
 						}
 					}
 				} else if (target instanceof Route) {
