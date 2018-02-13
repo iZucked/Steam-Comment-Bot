@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class SlotDateConstraint extends AbstractModelMultiConstraint {
@@ -28,13 +29,24 @@ public class SlotDateConstraint extends AbstractModelMultiConstraint {
 		if (object instanceof Slot) {
 			final Slot slot = (Slot) object;
 			LocalDate windowStart = slot.getWindowStart();
-			if (windowStart == null) {
-				final String message;
-				message = String.format("[Slot|'%s'] needs an arrival window set", slot.getName() == null ? "(no ID)" : slot.getName());
+			DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
+					.withTypedName("Slot", slot.getName() == null ? "(no ID)" : slot.getName());
 
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-				statuses.add(dsd);
+			if (windowStart == null) {
+				factory.copyName() //
+						.withMessage("An arrival window must be set") //
+						.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart()) //
+						.make(ctx, statuses);
+			} else if (windowStart.getYear() < 2000) {
+				factory.copyName() //
+						.withMessage(String.format("%d is not a valid year", windowStart.getYear())) //
+						.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart()) //
+						.make(ctx, statuses);
+			} else if (windowStart.getYear() > 2100) {
+				factory.copyName() //
+						.withMessage(String.format("%d is not a valid year", windowStart.getYear())) //
+						.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart()) //
+						.make(ctx, statuses);
 			}
 		}
 
