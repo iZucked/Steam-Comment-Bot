@@ -18,6 +18,7 @@
 <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
             class="com.mmxlabs.lngdataserver.integration.distances.preferences.DistancesRepositoryPreferencesPage"
             id="com.mmxlabs.lngdataserver.repository.csv.preference.DistancesRepositoryPreferencesPage"
             name="Distances Service">

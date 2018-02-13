@@ -8,5 +8,13 @@
             class="com.mmxlabs.lngdataserver.server.internal.PluginStartup">
       </startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
+            id="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
+            name="Data Server">
+      </page>
+   </extension>
 
 </plugin>
