@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
@@ -103,6 +104,8 @@ public class PricingModelImporter implements ISubmodelImporter {
 			importConversionFactors(pricingModel, inputs.get(CONVERSION_FACTORS_KEY), context);
 		}
 
+		pricingModel.setMarketCurveDataVersion(EcoreUtil.generateUUID());
+		
 		return pricingModel;
 	}
 

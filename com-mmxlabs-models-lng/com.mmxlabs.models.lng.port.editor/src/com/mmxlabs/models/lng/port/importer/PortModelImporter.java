@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
@@ -93,7 +94,7 @@ public class PortModelImporter implements ISubmodelImporter {
 			}
 			if (feature == PortPackage.Literals.ROUTE__LINES) {
 				return false;
-			}			
+			}
 			return super.shouldExportFeature(feature);
 		}
 	};
@@ -163,9 +164,9 @@ public class PortModelImporter implements ISubmodelImporter {
 					location = PortFactory.eINSTANCE.createLocation();
 					port.setLocation(location);
 				}
-//				if (location.getMmxId() == null || location.getMmxId().isEmpty()) {
-//					location.setMmxId(port.getName());
-//				}
+				// if (location.getMmxId() == null || location.getMmxId().isEmpty()) {
+				// location.setMmxId(port.getName());
+				// }
 			}
 		}
 		if (inputs.containsKey(PORT_GROUP_KEY)) {
@@ -250,7 +251,7 @@ public class PortModelImporter implements ISubmodelImporter {
 							}
 						}
 					}
-				});	
+				});
 			}
 
 			for (final Route route : portModel.getRoutes()) {
@@ -280,6 +281,10 @@ public class PortModelImporter implements ISubmodelImporter {
 				}
 			}
 		}
+
+		result.setDistanceDataVersion(EcoreUtil.generateUUID());
+		result.setPortDataVersion(EcoreUtil.generateUUID());
+
 		return result;
 	}
 
