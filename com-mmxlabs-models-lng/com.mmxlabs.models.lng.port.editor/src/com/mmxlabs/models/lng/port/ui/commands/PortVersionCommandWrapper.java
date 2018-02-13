@@ -204,7 +204,7 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 	@Override
 	public void deregisterEditingDomain(final Manifest manifest, final EditingDomain editingDomain) {
 		if (this.editingDomain != editingDomain) {
-			throw new IllegalStateException("A different editigin domain has been registered");
+			throw new IllegalStateException("A different editing domain has been registered");
 		}
 
 		if (portModel != null) {
