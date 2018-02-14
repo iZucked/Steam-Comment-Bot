@@ -70,7 +70,7 @@ public class Activator implements BundleActivator {
 					monitor.subTask("Starting internal webserver");
 
 					// this is a bit dangerous, should probably let the server choose it's own port with server.port=0
-					final int randomPort = randomPort();
+					final int randomPort = 0;/// randomPort();
 					final String[] args = {
 							// "--db.embeddedBinaries=" + binariesPath,
 							"--server.port=" + randomPort, //
@@ -79,18 +79,24 @@ public class Activator implements BundleActivator {
 							"--db.diagnosticDataCollectionEnabled=false", //
 							"--server.cors=true", //
 							"--spring.mvc.async.request-timeout=-1", //
-							"--debug" //
+//							"--debug" //
 					};
 					monitor.subTask("Gathering end points");
 
+					// Grab plugin contributed endpoints
 					final Object[] endPoints = DataServerEndPointExtensionUtil.getEndPoints();
+					// Extend endpoints array and add in out port discovery hook
+					Object[] fullEndPoints = new Object[endPoints.length + 1];
+					System.arraycopy(endPoints,0, fullEndPoints, 0, endPoints.length);
+					fullEndPoints[endPoints.length] = EmbdeddedWebServerPortDiscoveryProvider.class;
 					monitor.worked(1);
 					monitor.subTask("Starting webserver");
-					servletContext = SpringApplication.run(endPoints, args);
-					monitor.worked(1);
-					BackEndUrlProvider.INSTANCE.setPort(randomPort);
-					monitor.worked(1);
-					BackEndUrlProvider.INSTANCE.setAvailable(true);
+					servletContext = SpringApplication.run(fullEndPoints, args);
+					
+					monitor.subTask("Waiting....");
+					while (!BackEndUrlProvider.INSTANCE.isAvailable()) {
+						Thread.sleep(300);
+					}
 					monitor.worked(1);
 				} catch (final Exception e) {
 					setProperty(IProgressConstants2.KEEP_PROPERTY, Boolean.TRUE);
