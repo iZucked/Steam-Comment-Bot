@@ -132,7 +132,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 		if (port != null && port.isSetMaxCvValue()) {
 			final Double maxCvValue = port.getMaxCvValue();
 			if (maxCvValue != null && loadCV > maxCvValue) {
-				addPortBoundsError(true, port, failures, dischargeSlot, loadSlot, cargo, loadCV, maxCvValue, format, ctx);
+				addPortBoundsError(false, port, failures, dischargeSlot, loadSlot, cargo, loadCV, maxCvValue, format, ctx);
 			}
 		}
 	}
