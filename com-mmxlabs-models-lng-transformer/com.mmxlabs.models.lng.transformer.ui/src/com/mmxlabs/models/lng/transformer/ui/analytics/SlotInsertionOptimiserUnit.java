@@ -334,7 +334,6 @@ public class SlotInsertionOptimiserUnit {
 					final Map<Record, List<Pair<ISequences, Long>>> m = results.parallelStream().distinct() //
 							.collect(Collectors.groupingBy(p -> {
 								final Record record = new Record();
-								record.pnl = p.getSecond();
 
 								final SimilarityState thisSimilarityState = injector.getInstance(SimilarityState.class);
 								thisSimilarityState.init(p.getFirst());
@@ -431,13 +430,12 @@ public class SlotInsertionOptimiserUnit {
 	}
 
 	private static class Record {
-		long pnl;
 		int complexity;
 		List<ISequenceElement> linkedTo = new LinkedList<>();
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(pnl, complexity, linkedTo);
+			return Objects.hash(complexity, linkedTo);
 		}
 
 		@Override
@@ -447,8 +445,7 @@ public class SlotInsertionOptimiserUnit {
 			}
 			if (obj instanceof Record) {
 				final Record other = (Record) obj;
-				return pnl == other.pnl //
-						&& complexity == other.complexity //
+				return complexity == other.complexity //
 						&& linkedTo.equals(other.linkedTo) //
 				;
 			}
