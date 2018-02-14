@@ -27,7 +27,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class ChangeSetToTableTransformer {
 
 	public enum SortMode {
-		BY_GROUP, BY_PNL
+		BY_GROUP, BY_PNL, BY_PNL_PER_CHANGE
 	}
 
 	public void bindModels(ChangeSetTableRoot base, ChangeSetTableRoot alt) {
@@ -97,6 +97,8 @@ public class ChangeSetToTableTransformer {
 				if (sortMode == SortMode.BY_PNL) {
 					// Lower is better for default sort
 					changeSetTableGroup.setSortValue(-changeSetTableGroup.getDeltaMetrics().getPnlDelta());
+				} else if (sortMode == SortMode.BY_PNL_PER_CHANGE) {
+					changeSetTableGroup.setSortValue((double) -changeSetTableGroup.getDeltaMetrics().getPnlDelta() / (double) (structuralChanges == 0 ? 1 : structuralChanges));
 				} else if (sortMode == SortMode.BY_GROUP) {
 					changeSetTableGroup.setSortValue(groupIdx);
 				} else {

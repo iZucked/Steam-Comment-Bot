@@ -115,9 +115,16 @@ public class UserFilter {
 			return !lhsNegate == (row.isLhsSlot() && row.getLhsAfter().getLoadSlot() != null && row.getLhsAfter().getLoadSlot().getContract() != null
 					&& lhsKey.equalsIgnoreCase(row.getLhsAfter().getLoadSlot().getContract().getName()));
 		}
+		try {
 		if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
-			return !lhsNegate == (row.isLhsSpot() && (lhsKey == null
+			return !lhsNegate == (row.isLhsSpot() && row.getLhsAfter().getLoadSlot() != null && (lhsKey == null
 					|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
+		}
+		} catch (Exception e) {
+			if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
+				return !lhsNegate == (row.isLhsSpot() && (lhsKey == null
+						|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
+			}
 		}
 
 		return true;

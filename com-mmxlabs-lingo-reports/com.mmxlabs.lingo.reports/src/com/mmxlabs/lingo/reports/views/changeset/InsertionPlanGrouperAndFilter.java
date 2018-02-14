@@ -332,7 +332,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					}
 					g.setGroupAlternative(!first);
 					if (first) {
-						sortValue = g.getDeltaMetrics().getPnlDelta();
+						sortValue = g.getDeltaMetrics().getPnlDelta() / (double) (g.getComplexity() == 0 ? 1 : g.getComplexity());
 						first = false;
 					}
 					g.setGroupSortValue(sortValue);

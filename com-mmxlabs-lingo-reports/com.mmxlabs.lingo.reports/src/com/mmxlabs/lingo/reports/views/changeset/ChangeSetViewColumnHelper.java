@@ -72,6 +72,7 @@ import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRendere
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class ChangeSetViewColumnHelper {
 
@@ -116,6 +117,16 @@ public class ChangeSetViewColumnHelper {
 	private boolean textualVesselMarkers = false;
 
 	private @NonNull BiFunction<ChangeSetTableGroup, Integer, String> changeSetColumnLabelProvider = getDefaultLabelProvider();
+
+	private GridViewerColumn column_LoadPrice;
+
+	private GridViewerColumn column_LoadVolume;
+
+	private GridViewerColumn column_DischargePrice;
+
+	private GridViewerColumn column_DischargeVolume;
+	
+	private boolean showCompareColumns = true;
 
 	public BiFunction<ChangeSetTableGroup, Integer, String> getChangeSetColumnLabelProvider() {
 		return changeSetColumnLabelProvider;
@@ -361,6 +372,8 @@ public class ChangeSetViewColumnHelper {
 			column_Lateness.getColumn().setCellRenderer(createCellRenderer());
 
 			this.latenessColumn = column_Lateness;
+			
+			this.latenessColumn.getColumn().setVisible(showCompareColumns);
 		}
 		{
 			column_Violations = new GridViewerColumn(viewer, SWT.CENTER);
@@ -373,6 +386,8 @@ public class ChangeSetViewColumnHelper {
 			column_Violations.getColumn().setCellRenderer(createCellRenderer());
 
 			this.violationColumn = column_Violations;
+			
+			this.violationColumn.getColumn().setVisible(showCompareColumns);
 
 		}
 
@@ -403,21 +418,26 @@ public class ChangeSetViewColumnHelper {
 		}
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Price");
-			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createPriceLabelProvider(true));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			this.column_LoadPrice = new GridViewerColumn(viewer, gc);
+			column_LoadPrice.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			column_LoadPrice.getColumn().setText("Price");
+			column_LoadPrice.getColumn().setWidth(50);
+			column_LoadPrice.setLabelProvider(createPriceLabelProvider(true));
+			column_LoadPrice.getColumn().setCellRenderer(createCellRenderer());
+			
+			this.column_LoadPrice.getColumn().setVisible(showCompareColumns);
+
 		}
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("tBtu");
-			gvc.getColumn().setWidth(55);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			this.column_LoadVolume = new GridViewerColumn(viewer, gc);
+			this.column_LoadVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			this.column_LoadVolume.getColumn().setText("tBtu");
+			this.column_LoadVolume.getColumn().setWidth(55);
+			this.column_LoadVolume.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+			this.column_LoadVolume.getColumn().setCellRenderer(createCellRenderer());
+			
+			this.column_LoadVolume.getColumn().setVisible(showCompareColumns);
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
@@ -455,23 +475,25 @@ public class ChangeSetViewColumnHelper {
 		{
 
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Price");
-			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createPriceLabelProvider(false));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			this.column_DischargePrice = new GridViewerColumn(viewer, gc);
+			this.column_DischargePrice.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			this.column_DischargePrice.getColumn().setText("Price");
+			this.column_DischargePrice.getColumn().setWidth(50);
+			this.column_DischargePrice.setLabelProvider(createPriceLabelProvider(false));
+			this.column_DischargePrice.getColumn().setCellRenderer(createCellRenderer());
+			this.column_DischargePrice.getColumn().setVisible(showCompareColumns);
 		}
 		{
 
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("tBtu");
-			gvc.getColumn().setWidth(55);
-			gvc.setLabelProvider(
+			this.column_DischargeVolume = new GridViewerColumn(viewer, gc);
+			this.column_DischargeVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			this.column_DischargeVolume.getColumn().setText("tBtu");
+			this.column_DischargeVolume.getColumn().setWidth(55);
+			this.column_DischargeVolume.setLabelProvider(
 					createDeltaLabelProvider(true, false, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			this.column_DischargeVolume.getColumn().setCellRenderer(createCellRenderer());
+			this.column_DischargeVolume.getColumn().setVisible(showCompareColumns);
 		}
 
 		// Space col
@@ -1904,6 +1926,18 @@ public class ChangeSetViewColumnHelper {
 		return (changeSet, index) -> {
 			return String.format("Solution %s", index + 1);
 		};
+	}
+	
+	public void showCompareColumns(boolean showCompareColumns) {
+		this.showCompareColumns = showCompareColumns;
+		RunnerHelper.asyncExec(() -> {
+			latenessColumn.getColumn().setVisible(this.showCompareColumns);
+			violationColumn.getColumn().setVisible(this.showCompareColumns);
+			column_LoadPrice.getColumn().setVisible(this.showCompareColumns);
+			column_LoadVolume.getColumn().setVisible(this.showCompareColumns);
+			column_DischargePrice.getColumn().setVisible(this.showCompareColumns);
+			column_DischargeVolume.getColumn().setVisible(this.showCompareColumns);
+		});
 	}
 
 }

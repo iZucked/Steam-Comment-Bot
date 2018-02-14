@@ -1189,6 +1189,14 @@ public final class ChangeSetTransformerUtil {
 				if (beforeGroup.getMembers().size() != afterGroup.getMembers().size()) {
 					row.setWiringChange(true);
 				} else {
+					if (beforeGroup.getMembers().size() == 1) {
+						final ChangeSetRowData beforeData = beforeGroup.getMembers().get(0);
+						final ChangeSetRowData afterData = afterGroup.getMembers().get(0);
+						if ((beforeData.getLhsEvent() instanceof StartEvent || beforeData.getLhsEvent() instanceof EndEvent)
+								|| (afterData.getLhsEvent() instanceof StartEvent || afterData.getLhsEvent() instanceof EndEvent)) {
+							continue;
+						}
+					}
 					int beforePrimaryCount = 0;
 					int afterPrimaryCount = 0;
 					for (int i = 0; i < beforeGroup.getMembers().size(); ++i) {

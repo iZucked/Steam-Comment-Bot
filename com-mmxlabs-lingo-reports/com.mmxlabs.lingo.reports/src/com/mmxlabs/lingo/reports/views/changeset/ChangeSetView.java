@@ -1326,7 +1326,7 @@ public class ChangeSetView extends ViewPart {
 					}
 					pTargetSlot = targetSlot;
 				}
-				final ViewState viewState = new ViewState(null, SortMode.BY_PNL);
+				final ViewState viewState = new ViewState(null, SortMode.BY_PNL_PER_CHANGE);
 				viewState.lastSolution = solution;
 				viewState.lastTargetSlot = pTargetSlot;
 				viewState.allTargetSlots.clear();
@@ -1460,6 +1460,12 @@ public class ChangeSetView extends ViewPart {
 				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleDiffToBaseActionItem);
 			}
 			getViewSite().getActionBars().getToolBarManager().update(true);
+		}
+		
+		if (viewMode == ViewMode.INSERTIONS) {
+			columnHelper.showCompareColumns(false);
+		} else {
+			columnHelper.showCompareColumns(true);
 		}
 	}
 }
