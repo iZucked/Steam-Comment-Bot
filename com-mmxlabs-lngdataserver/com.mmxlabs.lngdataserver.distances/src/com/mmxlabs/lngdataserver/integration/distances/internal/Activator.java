@@ -64,10 +64,12 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		if (distanceRepository != null) {
+			distanceRepository.stopListeningForNewLocalVersions();
+			distanceRepository.stopListenToPreferenceChanges();
+		}
 		plugin = null;
 		super.stop(context);
-		distanceRepository.stopListeningForNewVersions();
-		distanceRepository.stopListenToPreferenceChanges();
 		active = false;
 	}
 
@@ -94,7 +96,7 @@ public class Activator extends AbstractUIPlugin {
 			distancesDataRoot.setDisplayName("Distances");
 
 			// register consumer to update on new version
-			distanceRepository.registerVersionListener(versionString -> {
+			distanceRepository.registerLocalVersionListener(versionString -> {
 				RunnerHelper.asyncExec(c -> {
 					// Check for existing versions
 					for (final Node n : distancesDataRoot.getChildren()) {
@@ -109,7 +111,18 @@ public class Activator extends AbstractUIPlugin {
 					distancesDataRoot.getChildren().add(0, newVersion);
 				});
 			});
-			distanceRepository.listenForNewVersions();
+			distanceRepository.listenForNewLocalVersions();
+
+			distanceRepository.registerUpstreamVersionListener(versionString -> {
+				RunnerHelper.asyncExec(c -> {
+					try {
+						distanceRepository.syncUpstreamVersion(versionString);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+			});
+			distanceRepository.listenForNewUpstreamVersions();
 		}
 	}
 

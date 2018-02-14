@@ -67,14 +67,14 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-		active = false;
 		if (pricingRepository != null) {
 			pricingRepository.stopListenToPreferenceChanges();
 			pricingRepository.stopListenForNewVersion();
 		}
 		pricingRepository = null;
+		plugin = null;
+		super.stop(context);
+		active = false;
 	}
 
 	/**
