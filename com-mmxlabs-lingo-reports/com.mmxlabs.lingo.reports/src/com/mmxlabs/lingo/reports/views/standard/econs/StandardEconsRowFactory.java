@@ -611,7 +611,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 						return DollarsPerMMBtuFormat.format((double) pnl / volume);
 					}
 				} else if (object instanceof CargoAllocationPair) {
-					double value = getFromCargoAllocationPairBi(Double.class, (data, options) -> {
+					double value = -getFromCargoAllocationPairBi(Double.class, (data, options) -> {
 						return cargoAllocationPNLPerMMBTUHelper(data, options);
 					}, object, options);
 					return DollarsPerMMBtuFormat.format(value);
