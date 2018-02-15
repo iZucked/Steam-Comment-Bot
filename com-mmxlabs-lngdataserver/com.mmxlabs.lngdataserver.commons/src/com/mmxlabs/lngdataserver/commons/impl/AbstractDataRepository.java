@@ -1,8 +1,5 @@
 package com.mmxlabs.lngdataserver.commons.impl;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -52,7 +49,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 				newUpstreamURL(upstreamUrl);
 
 				if (listen) {
-					listenForNewUpstreamVersions();
+					startListenForNewUpstreamVersions();
 				}
 
 				break;
@@ -66,18 +63,10 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	protected Thread localVersionThread;
 	protected Thread upstreamVersionThread;
 
-	public AbstractDataRepository(@Nullable IPreferenceStore preferenceStore) {
-		this.preferenceStore = preferenceStore;
-		auth = getUserServiceAuth();
-		upstreamUrl = getUpstreamUrl();
-		newUpstreamURL(upstreamUrl);
-	}
-
 	public AbstractDataRepository(@Nullable IPreferenceStore preferenceStore, final String localUrl) {
 		this.preferenceStore = preferenceStore;
-		auth = new Triple<>(localUrl, "", "");
+		auth = localUrl == null ? getUserServiceAuth() : new Triple<>(localUrl, "", "");
 		upstreamUrl = getUpstreamUrl();
-		newUpstreamURL(upstreamUrl);
 	}
 
 	@Override
@@ -115,15 +104,19 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	@Override
-	public void listenForNewLocalVersions() {
+	public void startListenForNewLocalVersions() {
 		listenForNewLocalVersions = true;
-
+		if (!canWaitForNewLocalVersion()) {
+			return;
+		}
 		localVersionThread = new Thread(() -> {
 			while (listenForNewLocalVersions) {
-				final CompletableFuture<String> newVersion = waitForNewVersion();
+				final CompletableFuture<String> newVersion = waitForNewLocalVersion();
 				try {
-					final String version = newVersion.get();
-					newLocalVersionCallbacks.forEach(c -> c.accept(version));
+					if (newVersion != null) {
+						final String version = newVersion.get();
+						newLocalVersionCallbacks.forEach(c -> c.accept(version));
+					}
 				} catch (final InterruptedException e) {
 					LOG.error(e.getMessage());
 				} catch (final ExecutionException e) {
@@ -142,8 +135,11 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	@Override
-	public void listenForNewUpstreamVersions() {
+	public void startListenForNewUpstreamVersions() {
 		listenForNewUpstreamVersions = true;
+		if (!canWaitForNewUpstreamVersion()) {
+			return;
+		}
 		if (upstreamUrl == null || upstreamUrl.trim().isEmpty()) {
 			// No URL, do not try and connect
 			return;
@@ -153,8 +149,10 @@ public abstract class AbstractDataRepository implements IDataRepository {
 				final CompletableFuture<String> newVersion = waitForNewUpstreamVersion();
 				try {
 					final String version = newVersion.get();
-					System.out.println("New version " + version);
-					newUpstreamVersionCallbacks.forEach(c -> c.accept(version));
+					if (version != null) {
+						System.out.println("New version " + version);
+						newUpstreamVersionCallbacks.forEach(c -> c.accept(version));
+					}
 				} catch (final InterruptedException e) {
 					if (!listenForNewUpstreamVersions) {
 						return;
@@ -171,7 +169,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 				}
 			}
 		});
-		upstreamVersionThread.setName("DataServer: Distances upstream listener");
+		upstreamVersionThread.setName("DataServer Upstream listener: " + getClass().getName());
 		upstreamVersionThread.start();
 	}
 
@@ -207,9 +205,21 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		return auth;
 	}
 
-	protected abstract CompletableFuture<String> waitForNewVersion();
+	protected boolean canWaitForNewLocalVersion() {
+		return false;
+	}
+
+	protected boolean canWaitForNewUpstreamVersion() {
+		return false;
+	}
+
+	protected abstract CompletableFuture<String> waitForNewLocalVersion();
 
 	protected abstract CompletableFuture<String> waitForNewUpstreamVersion();
 
 	protected abstract void newUpstreamURL(String upstreamURL);
+
+	public boolean hasUpstream() {
+		return upstreamUrl != null && !upstreamUrl.isEmpty();
+	}
 }

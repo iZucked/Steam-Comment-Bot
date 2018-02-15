@@ -19,9 +19,9 @@ public interface IDataRepository {
 
 	void stopListenToPreferenceChanges();
 
-	void listenForNewLocalVersions();
+	void startListenForNewLocalVersions();
 
-	void listenForNewUpstreamVersions();
+	void startListenForNewUpstreamVersions();
 
 	void stopListeningForNewLocalVersions();
 

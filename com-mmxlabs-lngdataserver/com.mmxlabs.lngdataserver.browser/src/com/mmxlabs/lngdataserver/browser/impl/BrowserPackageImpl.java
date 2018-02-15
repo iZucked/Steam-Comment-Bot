@@ -9,8 +9,10 @@ import com.mmxlabs.lngdataserver.browser.Leaf;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.RootNode;
 
+import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.EReference;
@@ -48,6 +50,13 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 	 * @generated
 	 */
 	private EClass nodeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType iDataBrowserActionsHandlerEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -161,6 +170,15 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCompositeNode_ActionHandler() {
+		return (EAttribute) compositeNodeEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getLeaf() {
 		return leafEClass;
 	}
@@ -206,6 +224,15 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getIDataBrowserActionsHandler() {
+		return iDataBrowserActionsHandlerEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public BrowserFactory getBrowserFactory() {
 		return (BrowserFactory) getEFactoryInstance();
 	}
@@ -236,6 +263,7 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 		createEReference(compositeNodeEClass, COMPOSITE_NODE__CHILDREN);
 		createEAttribute(compositeNodeEClass, COMPOSITE_NODE__TYPE);
 		createEReference(compositeNodeEClass, COMPOSITE_NODE__LATEST);
+		createEAttribute(compositeNodeEClass, COMPOSITE_NODE__ACTION_HANDLER);
 
 		leafEClass = createEClass(LEAF);
 
@@ -243,6 +271,9 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 		createEAttribute(nodeEClass, NODE__DISPLAY_NAME);
 		createEReference(nodeEClass, NODE__PARENT);
 		createEAttribute(nodeEClass, NODE__PUBLISHED);
+
+		// Create data types
+		iDataBrowserActionsHandlerEDataType = createEDataType(IDATA_BROWSER_ACTIONS_HANDLER);
 	}
 
 	/**
@@ -287,6 +318,8 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 				!IS_DERIVED, IS_ORDERED);
 		initEReference(getCompositeNode_Latest(), this.getNode(), null, "latest", null, 0, 1, CompositeNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCompositeNode_ActionHandler(), this.getIDataBrowserActionsHandler(), "actionHandler", null, 0, 1, CompositeNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(leafEClass, Leaf.class, "Leaf", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -297,6 +330,9 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_Published(), ecorePackage.getEBoolean(), "published", null, 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
+
+		// Initialize data types
+		initEDataType(iDataBrowserActionsHandlerEDataType, IDataBrowserActionsHandler.class, "IDataBrowserActionsHandler", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

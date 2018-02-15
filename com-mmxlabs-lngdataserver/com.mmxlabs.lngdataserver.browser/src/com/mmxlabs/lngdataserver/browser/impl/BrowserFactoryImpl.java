@@ -4,7 +4,9 @@ package com.mmxlabs.lngdataserver.browser.impl;
 
 import com.mmxlabs.lngdataserver.browser.*;
 
+import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -73,6 +75,36 @@ public class BrowserFactoryImpl extends EFactoryImpl implements BrowserFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+		case BrowserPackage.IDATA_BROWSER_ACTIONS_HANDLER:
+			return createIDataBrowserActionsHandlerFromString(eDataType, initialValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+		case BrowserPackage.IDATA_BROWSER_ACTIONS_HANDLER:
+			return convertIDataBrowserActionsHandlerToString(eDataType, instanceValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public RootNode createRootNode() {
 		RootNodeImpl rootNode = new RootNodeImpl();
 		return rootNode;
@@ -106,6 +138,24 @@ public class BrowserFactoryImpl extends EFactoryImpl implements BrowserFactory {
 	public Node createNode() {
 		NodeImpl node = new NodeImpl();
 		return node;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IDataBrowserActionsHandler createIDataBrowserActionsHandlerFromString(EDataType eDataType, String initialValue) {
+		return (IDataBrowserActionsHandler) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertIDataBrowserActionsHandlerToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

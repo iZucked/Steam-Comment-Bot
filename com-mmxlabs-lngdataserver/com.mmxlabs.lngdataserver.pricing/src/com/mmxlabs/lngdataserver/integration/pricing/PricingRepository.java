@@ -25,7 +25,7 @@ public class PricingRepository extends AbstractDataRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(PricingRepository.class);
 
 	public PricingRepository(@Nullable IPreferenceStore preferenceStore) {
-		super(preferenceStore);
+		super(preferenceStore, null);
 		// try to get ready
 		isReady();
 		this.upstreamUrl = getUpstreamUrl();
@@ -108,7 +108,7 @@ public class PricingRepository extends AbstractDataRepository {
 	}
 
 	@Override
-	protected CompletableFuture<String> waitForNewVersion() {
+	protected CompletableFuture<String> waitForNewLocalVersion() {
 		// final CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
 		// Version futureVersion;
 		// try {
@@ -144,4 +144,6 @@ public class PricingRepository extends AbstractDataRepository {
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 }

@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.strings.StringDistance;
 import com.mmxlabs.models.lng.port.Port;
 
-public class DefaultPortProvider implements IPortProvider {
+public class DefaultPortProvider implements ILocationProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPortProvider.class);
 

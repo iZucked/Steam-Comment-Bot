@@ -1,6 +1,8 @@
 package com.mmxlabs.lngdataserver.integration.vessels.internal;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -10,8 +12,9 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.lngdataserver.commons.DataVersion;
+import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataserver.vessel.ApiException;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
@@ -29,7 +32,7 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private final CompositeNode vesselsDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private final VesselsRepository vesselsRepository = new VesselsRepository();
+	private VesselsRepository vesselsRepository;
 	private boolean active;
 
 	/**
@@ -53,6 +56,11 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+
+		vesselsRepository = new VesselsRepository(getPreferenceStore(), null);
+		vesselsRepository.listenToPreferenceChanges();
+		vesselsDataRoot.setActionHandler(new VesselsRepositoryActionHandler(vesselsRepository, vesselsDataRoot));
+
 		active = true;
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
 	}
@@ -64,6 +72,15 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		if (vesselsRepository != null) {
+			vesselsRepository.stopListeningForNewLocalVersions();
+			vesselsRepository.stopListenToPreferenceChanges();
+			vesselsRepository = null;
+		}
+		vesselsDataRoot.setActionHandler(null);
+		vesselsDataRoot.getChildren().clear();
+		vesselsDataRoot.setLatest(null);
+
 		plugin = null;
 		super.stop(context);
 		active = false;
@@ -100,25 +117,61 @@ public class Activator extends AbstractUIPlugin {
 		}
 
 		if (active) {
-			LOGGER.debug("Pricing back-end ready, retrieving versions...");
+			LOGGER.debug("Vessel back-end ready, retrieving versions...");
 			try {
 				vesselsDataRoot.getChildren().clear();
 				try {
-					for (VesselsVersion v : vesselsRepository.getVersions()) {
-						Node version = BrowserFactory.eINSTANCE.createNode();
-						version.setParent(vesselsDataRoot);
-						version.setDisplayName(v.getIdentifier());
-						version.setPublished(v.isPublished());
-						RunnerHelper.asyncExec(c -> vesselsDataRoot.getChildren().add(version));
+					List<DataVersion> versions = vesselsRepository.getVersions();
+					if (versions != null) {
+						boolean first = true;
+						for (DataVersion v : versions) {
+							Node version = BrowserFactory.eINSTANCE.createNode();
+							version.setParent(vesselsDataRoot);
+							version.setDisplayName(v.getIdentifier());
+							version.setPublished(v.isPublished());
+							if (first) {
+								RunnerHelper.asyncExec(c -> vesselsDataRoot.setLatest(version));
+							}
+							first = false;
+							RunnerHelper.asyncExec(c -> vesselsDataRoot.getChildren().add(version));
+						}
 					}
-				} catch (ApiException e) {
-					// TODO Auto-generated catch block
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				vesselsDataRoot.setDisplayName("Vessels");
-			} catch (IOException e) {
+			} catch (Exception e) {
 				LOGGER.error("Error retrieving vessels versions");
 			}
+
+			// register consumer to update on new version
+			vesselsRepository.registerLocalVersionListener(versionString -> {
+				RunnerHelper.asyncExec(c -> {
+					// Check for existing versions
+					for (final Node n : vesselsDataRoot.getChildren()) {
+						if (Objects.equals(versionString, n.getDisplayName())) {
+							return;
+						}
+					}
+
+					final Node newVersion = BrowserFactory.eINSTANCE.createNode();
+					newVersion.setDisplayName(versionString);
+					newVersion.setParent(vesselsDataRoot);
+					vesselsDataRoot.getChildren().add(0, newVersion);
+				});
+			});
+			vesselsRepository.startListenForNewLocalVersions();
+
+			vesselsRepository.registerUpstreamVersionListener(versionString -> {
+				RunnerHelper.asyncExec(c -> {
+					try {
+						vesselsRepository.syncUpstreamVersion(versionString);
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
+				});
+			});
+			vesselsRepository.startListenForNewUpstreamVersions();
 		}
 	}
 }

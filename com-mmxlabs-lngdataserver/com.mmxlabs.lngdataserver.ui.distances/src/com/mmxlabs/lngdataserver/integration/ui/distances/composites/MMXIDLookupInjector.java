@@ -34,7 +34,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.lngdataserver.integration.distances.DefaultPortProvider;
-import com.mmxlabs.lngdataserver.integration.distances.PortRepository;
+import com.mmxlabs.lngdataserver.integration.distances.LocationRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.server.IBackEndAvailableListener;
 import com.mmxlabs.models.lng.port.Location;
@@ -107,7 +107,7 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 								composite.setLayout(layout);
 								// Composite composite = new Composite(container, SWT.NONE);
 								try {
-									final PortRepository repo = new PortRepository(BackEndUrlProvider.INSTANCE.getUrl());
+									final LocationRepository repo = new LocationRepository(BackEndUrlProvider.INSTANCE.getUrl());
 									final String version = "<not specified>";
 									final List<Port> ports = repo.getPorts(version);
 									final DefaultPortProvider portProvider = new DefaultPortProvider(version, ports);

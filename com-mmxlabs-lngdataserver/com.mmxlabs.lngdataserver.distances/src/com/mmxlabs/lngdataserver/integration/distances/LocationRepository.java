@@ -15,9 +15,9 @@ import com.mmxlabs.lngdataserver.commons.impl.StandardDateRepositoryPreferenceCo
 import com.mmxlabs.lngdataserver.integration.distances.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 
-public class PortRepository {
+public class LocationRepository {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PortRepository.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LocationRepository.class);
 
 	private Triple<String, String, String> auth;
 
@@ -33,11 +33,11 @@ public class PortRepository {
 		return new Triple<>(url, username, password);
 	}
 
-	public PortRepository() {
+	public LocationRepository() {
 		auth = getUserServiceAuth();
 	}
 
-	public PortRepository(String url) {
+	public LocationRepository(String url) {
 		auth = new Triple<>(url, "", "");
 	}
 

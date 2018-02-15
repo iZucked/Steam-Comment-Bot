@@ -11,7 +11,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.ports.internal.PortsClient;
+import com.mmxlabs.lngdataserver.integration.ports.PortsClient;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.port.ApiException;
 import com.mmxlabs.lngdataserver.port.api.PortApi;

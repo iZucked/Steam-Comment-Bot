@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
-import com.mmxlabs.lngdataserver.integration.distances.IPortProvider;
+import com.mmxlabs.lngdataserver.integration.distances.ILocationProvider;
 import com.mmxlabs.lngdataserver.integration.distances.UpstreamRoutingPointFetcher;
 import com.mmxlabs.lngdataserver.integration.distances.exceptions.LocationNotFoundException;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
@@ -42,7 +42,7 @@ public class PortAndDistancesToScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortAndDistancesToScenarioCopier.class);
 
-	public static Command getUpdateCommand(@NonNull final EditingDomain editingDomain, @NonNull final IPortProvider portProvider, @NonNull final IDistanceProvider distanceProvider,
+	public static Command getUpdateCommand(@NonNull final EditingDomain editingDomain, @NonNull final ILocationProvider portProvider, @NonNull final IDistanceProvider distanceProvider,
 			@NonNull final PortModel portModel) {
 
 		final CompoundCommand cmd = new CompoundCommand("Update ports");

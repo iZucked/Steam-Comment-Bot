@@ -5,6 +5,7 @@ package com.mmxlabs.lngdataserver.browser.impl;
 import com.mmxlabs.lngdataserver.browser.BrowserPackage;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -29,6 +30,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getChildren <em>Children</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getType <em>Type</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getLatest <em>Latest</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getActionHandler <em>Action Handler</em>}</li>
  * </ul>
  *
  * @generated
@@ -72,6 +74,26 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 	 * @ordered
 	 */
 	protected Node latest;
+
+	/**
+	 * The default value of the '{@link #getActionHandler() <em>Action Handler</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getActionHandler()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final IDataBrowserActionsHandler ACTION_HANDLER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getActionHandler() <em>Action Handler</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getActionHandler()
+	 * @generated
+	 * @ordered
+	 */
+	protected IDataBrowserActionsHandler actionHandler = ACTION_HANDLER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -168,6 +190,27 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public IDataBrowserActionsHandler getActionHandler() {
+		return actionHandler;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setActionHandler(IDataBrowserActionsHandler newActionHandler) {
+		IDataBrowserActionsHandler oldActionHandler = actionHandler;
+		actionHandler = newActionHandler;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER, oldActionHandler, actionHandler));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -193,6 +236,8 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 			if (resolve)
 				return getLatest();
 			return basicGetLatest();
+		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
+			return getActionHandler();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -216,6 +261,9 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 		case BrowserPackage.COMPOSITE_NODE__LATEST:
 			setLatest((Node) newValue);
 			return;
+		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
+			setActionHandler((IDataBrowserActionsHandler) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -237,6 +285,9 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 		case BrowserPackage.COMPOSITE_NODE__LATEST:
 			setLatest((Node) null);
 			return;
+		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
+			setActionHandler(ACTION_HANDLER_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -255,6 +306,8 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 			return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 		case BrowserPackage.COMPOSITE_NODE__LATEST:
 			return latest != null;
+		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
+			return ACTION_HANDLER_EDEFAULT == null ? actionHandler != null : !ACTION_HANDLER_EDEFAULT.equals(actionHandler);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -272,6 +325,8 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (type: ");
 		result.append(type);
+		result.append(", actionHandler: ");
+		result.append(actionHandler);
 		result.append(')');
 		return result.toString();
 	}

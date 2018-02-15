@@ -47,22 +47,29 @@ public class DistanceRepository extends AbstractDataRepository {
 	private static final String SYNC_ENDPOINT = "/distances/sync/publish";
 	private static final String SYNC_VERSION_ENDPOINT = "/distances/sync/versions/";
 
-	private final DistancesApi distancesApi = new DistancesApi(new ApiClient());
-	private final DistancesApi upstreamDistancesApi = new DistancesApi(new ApiClient());
+	private final DistancesApi distancesApi;
+	private final DistancesApi upstreamDistancesApi;
 	// used for long polling... timeout set to infinite
 	// Infinite timeout means listening for version can't effectively be cancelled
-	private final DistancesApi waitingDistancesApi = new DistancesApi(new ApiClient());
-	private final DistancesApi upstreamWaitingDistancesApi = new DistancesApi(new ApiClient());
+	private final DistancesApi waitingDistancesApi;
+	private final DistancesApi upstreamWaitingDistancesApi;
 
 	public DistanceRepository(@Nullable IPreferenceStore preferenceStore) {
-		super(preferenceStore);
+		this(preferenceStore, null);
 	}
 
 	public DistanceRepository(@Nullable IPreferenceStore preferenceStore, final String localURL) {
 		super(preferenceStore, localURL);
-		distancesApi.getApiClient().setBasePath(localURL);
-		waitingDistancesApi.getApiClient().setBasePath(localURL);
-		waitingDistancesApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
+		distancesApi = new DistancesApi(new ApiClient());
+		upstreamDistancesApi = new DistancesApi(new ApiClient());
+		waitingDistancesApi = new DistancesApi(new ApiClient());
+		upstreamWaitingDistancesApi = new DistancesApi(new ApiClient());
+		if (localURL != null) {
+			distancesApi.getApiClient().setBasePath(localURL);
+			waitingDistancesApi.getApiClient().setBasePath(localURL);
+			waitingDistancesApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
+		}
+		newUpstreamURL(upstreamUrl);
 	}
 
 	@Override
@@ -79,7 +86,7 @@ public class DistanceRepository extends AbstractDataRepository {
 	}
 
 	@Override
-	protected CompletableFuture<String> waitForNewVersion() {
+	protected CompletableFuture<String> waitForNewLocalVersion() {
 
 		final CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
 			Version futureVersion;
@@ -199,6 +206,8 @@ public class DistanceRepository extends AbstractDataRepository {
 
 	@Override
 	protected void newUpstreamURL(String upstreamURL) {
+		if (upstreamURL == null)
+			upstreamURL = "";
 		upstreamDistancesApi.getApiClient().setBasePath(upstreamURL);
 		upstreamWaitingDistancesApi.getApiClient().setBasePath(upstreamURL);
 		upstreamWaitingDistancesApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
@@ -207,4 +216,15 @@ public class DistanceRepository extends AbstractDataRepository {
 	protected static LocalDateTime fromDateTimeAtUTC(final DateTime dateTime) {
 		return LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime.getMillis()), ZoneId.of("UTC"));
 	}
+
+	@Override
+	protected boolean canWaitForNewLocalVersion() {
+		return true;
+	}
+
+	@Override
+	protected boolean canWaitForNewUpstreamVersion() {
+		return true;
+	}
+
 }

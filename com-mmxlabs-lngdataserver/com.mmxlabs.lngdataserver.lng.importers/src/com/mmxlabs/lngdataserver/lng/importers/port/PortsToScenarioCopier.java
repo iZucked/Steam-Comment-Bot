@@ -15,7 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.ports.internal.IPortsProvider;
+import com.mmxlabs.lngdataserver.integration.ports.IPortsProvider;
 import com.mmxlabs.lngdataserver.port.model.Port.CapabilitiesEnum;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;

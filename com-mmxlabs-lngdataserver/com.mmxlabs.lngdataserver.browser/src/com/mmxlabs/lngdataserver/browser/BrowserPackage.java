@@ -4,6 +4,7 @@ package com.mmxlabs.lngdataserver.browser;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -204,13 +205,22 @@ public interface BrowserPackage extends EPackage {
 	int COMPOSITE_NODE__LATEST = NODE_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Action Handler</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_NODE__ACTION_HANDLER = NODE_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Composite Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_NODE_FEATURE_COUNT = NODE_FEATURE_COUNT + 3;
+	int COMPOSITE_NODE_FEATURE_COUNT = NODE_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Composite Node</em>' class.
@@ -277,6 +287,16 @@ public interface BrowserPackage extends EPackage {
 	int LEAF_OPERATION_COUNT = NODE_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '<em>IData Browser Actions Handler</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler
+	 * @see com.mmxlabs.lngdataserver.browser.impl.BrowserPackageImpl#getIDataBrowserActionsHandler()
+	 * @generated
+	 */
+	int IDATA_BROWSER_ACTIONS_HANDLER = 4;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lngdataserver.browser.RootNode <em>Root Node</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -330,6 +350,17 @@ public interface BrowserPackage extends EPackage {
 	EReference getCompositeNode_Latest();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getActionHandler <em>Action Handler</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Action Handler</em>'.
+	 * @see com.mmxlabs.lngdataserver.browser.CompositeNode#getActionHandler()
+	 * @see #getCompositeNode()
+	 * @generated
+	 */
+	EAttribute getCompositeNode_ActionHandler();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lngdataserver.browser.Leaf <em>Leaf</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -381,6 +412,17 @@ public interface BrowserPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getNode_Published();
+
+	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler <em>IData Browser Actions Handler</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>IData Browser Actions Handler</em>'.
+	 * @see com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler
+	 * @model instanceClass="com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler"
+	 * @generated
+	 */
+	EDataType getIDataBrowserActionsHandler();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -445,6 +487,13 @@ public interface BrowserPackage extends EPackage {
 		 */
 		EReference COMPOSITE_NODE__LATEST = eINSTANCE.getCompositeNode_Latest();
 		/**
+		 * The meta object literal for the '<em><b>Action Handler</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMPOSITE_NODE__ACTION_HANDLER = eINSTANCE.getCompositeNode_ActionHandler();
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lngdataserver.browser.impl.LeafImpl <em>Leaf</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -483,6 +532,15 @@ public interface BrowserPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NODE__PUBLISHED = eINSTANCE.getNode_Published();
+		/**
+		 * The meta object literal for the '<em>IData Browser Actions Handler</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler
+		 * @see com.mmxlabs.lngdataserver.browser.impl.BrowserPackageImpl#getIDataBrowserActionsHandler()
+		 * @generated
+		 */
+		EDataType IDATA_BROWSER_ACTIONS_HANDLER = eINSTANCE.getIDataBrowserActionsHandler();
 
 	}
 

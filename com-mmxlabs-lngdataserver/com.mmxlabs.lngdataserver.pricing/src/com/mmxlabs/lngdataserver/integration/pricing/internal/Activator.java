@@ -1,5 +1,8 @@
 package com.mmxlabs.lngdataserver.integration.pricing.internal;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -53,10 +56,12 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		active = true;
 
 		pricingRepository = new PricingRepository(getPreferenceStore());
 		pricingRepository.listenToPreferenceChanges();
+		pricingDataRoot.setActionHandler(new PricingRepositoryActionHandler(pricingRepository, pricingDataRoot));
+
+		active = true;
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
 	}
 
@@ -70,8 +75,12 @@ public class Activator extends AbstractUIPlugin {
 		if (pricingRepository != null) {
 			pricingRepository.stopListenToPreferenceChanges();
 			pricingRepository.stopListeningForNewLocalVersions();
+			pricingRepository = null;
 		}
-		pricingRepository = null;
+		pricingDataRoot.setActionHandler(null);
+		pricingDataRoot.getChildren().clear();
+		pricingDataRoot.setLatest(null);
+
 		plugin = null;
 		super.stop(context);
 		active = false;
@@ -108,12 +117,20 @@ public class Activator extends AbstractUIPlugin {
 			LOGGER.debug("Pricing back-end ready, retrieving versions...");
 			try {
 				pricingDataRoot.getChildren().clear();
-				for (final DataVersion v : pricingRepository.getVersions()) {
-					final Node version = BrowserFactory.eINSTANCE.createNode();
-					version.setParent(pricingDataRoot);
-					version.setDisplayName(v.getIdentifier());
-					version.setPublished(v.isPublished());
-					RunnerHelper.asyncExec(c -> pricingDataRoot.getChildren().add(version));
+				boolean first = true;
+				List<DataVersion> versions = pricingRepository.getVersions();
+				if (versions != null) {
+					for (final DataVersion v : versions) {
+						final Node version = BrowserFactory.eINSTANCE.createNode();
+						version.setParent(pricingDataRoot);
+						version.setDisplayName(v.getIdentifier());
+						version.setPublished(v.isPublished());
+						if (first) {
+							RunnerHelper.asyncExec(c -> pricingDataRoot.setLatest(version));
+						}
+						first = false;
+						RunnerHelper.asyncExec(c -> pricingDataRoot.getChildren().add(version));
+					}
 				}
 				pricingDataRoot.setDisplayName("Pricing");
 			} catch (final Exception e) {
@@ -126,7 +143,7 @@ public class Activator extends AbstractUIPlugin {
 				RunnerHelper.asyncExec(c -> {
 					// Check for existing versions
 					for (final Node n : pricingDataRoot.getChildren()) {
-						if (versionString.contentEquals(n.getDisplayName())) {
+						if (Objects.equals(versionString, n.getDisplayName())) {
 							return;
 						}
 					}
@@ -135,7 +152,18 @@ public class Activator extends AbstractUIPlugin {
 					pricingDataRoot.getChildren().add(newVersion);
 				});
 			});
-			pricingRepository.listenForNewLocalVersions();
+			pricingRepository.startListenForNewLocalVersions();
+
+			pricingRepository.registerUpstreamVersionListener(versionString -> {
+				RunnerHelper.asyncExec(c -> {
+					try {
+						pricingRepository.syncUpstreamVersion(versionString);
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
+				});
+			});
+			pricingRepository.startListenForNewUpstreamVersions();
 		}
 	}
 }

@@ -12,31 +12,30 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
-public class ImportDistancesWizardHandler extends AbstractHandler{
-	
+public class ImportDistancesWizardHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+
 		IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
 		if (activeWorkbenchWindow == null) {
 			// action has been disposed
 			return null;
 		}
-		
+
 		final IEditorInput activeEditorInput = HandlerUtil.getActiveEditorInput(event);
 		ScenarioInstance currentInstance = null;
 		if (activeEditorInput instanceof IScenarioServiceEditorInput) {
-			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
+			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) activeEditorInput;
 			currentInstance = editorInput.getScenarioInstance();
 		}
-		
-		DistancesToScenarioImportWizard wizard = new DistancesToScenarioImportWizard(currentInstance);
-		
+
+		DistancesToScenarioImportWizard wizard = new DistancesToScenarioImportWizard(null, currentInstance);
+
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		Shell parent = activeWorkbenchWindow.getShell();
-		
+
 		final WizardDialog dialog = new WizardDialog(parent, wizard);
 		dialog.create();
 		dialog.open();

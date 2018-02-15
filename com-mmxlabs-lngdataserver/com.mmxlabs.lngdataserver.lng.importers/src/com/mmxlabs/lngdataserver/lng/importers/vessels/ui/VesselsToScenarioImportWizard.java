@@ -1,9 +1,8 @@
 package com.mmxlabs.lngdataserver.lng.importers.vessels.ui;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
-import javax.crypto.spec.DHGenParameterSpec;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
@@ -14,9 +13,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.pricing.IPricingProvider;
-import com.mmxlabs.lngdataserver.integration.vessels.internal.IVesselsProvider;
-import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
+import com.mmxlabs.lngdataserver.integration.vessels.IVesselsProvider;
+import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.VesselsToScenarioCopier;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
@@ -31,17 +29,37 @@ public class VesselsToScenarioImportWizard extends Wizard implements IImportWiza
 
 	private ScenarioSelectionPage scenarioSelectionPage;
 	private VesselsSelectionPage vesselsSelectionPage;
+	private String versionIdentifier;
+	private ScenarioInstance currentInstance;
+
+	public VesselsToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance) {
+		this.versionIdentifier = versionIdentifier;
+		this.currentInstance = currentInstance;
+	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", null);
-		vesselsSelectionPage = new VesselsSelectionPage("Vessels");
+		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", currentInstance);
+		if (versionIdentifier == null) {
+			vesselsSelectionPage = new VesselsSelectionPage("Vessels");
+		}
 
 	}
 
 	@Override
 	public boolean performFinish() {
-		IVesselsProvider pricingProvider = vesselsSelectionPage.getVesselsVersion();
+		IVesselsProvider vesselsProvider;
+		if (versionIdentifier != null) {
+			try {
+				vesselsProvider = new VesselsRepository(null, null).getVesselsProvider(versionIdentifier);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		} else {
+			vesselsProvider = vesselsSelectionPage.getVesselsVersion();
+		}
+
 		try {
 			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
 
@@ -59,7 +77,7 @@ public class VesselsToScenarioImportWizard extends Wizard implements IImportWiza
 
 							EditingDomain editingDomain = modelReference.getEditingDomain();
 
-							Command updateCommand = VesselsToScenarioCopier.getUpdateVesselsCommand(editingDomain, pricingProvider, scenarioModel.getReferenceModel().getFleetModel());
+							Command updateCommand = VesselsToScenarioCopier.getUpdateVesselsCommand(editingDomain, vesselsProvider, scenarioModel.getReferenceModel().getFleetModel());
 
 							if (!updateCommand.canExecute()) {
 								throw new RuntimeException("Unable to copy vessel information to scenario");
@@ -90,11 +108,13 @@ public class VesselsToScenarioImportWizard extends Wizard implements IImportWiza
 	public void addPages() {
 		super.addPages();
 		addPage(scenarioSelectionPage);
-		addPage(vesselsSelectionPage);
+		if (vesselsSelectionPage != null) {
+			addPage(vesselsSelectionPage);
+		}
 	}
 
 	@Override
 	public boolean canFinish() {
-		return vesselsSelectionPage.isPageComplete();
+		return vesselsSelectionPage == null || vesselsSelectionPage.isPageComplete();
 	}
 }

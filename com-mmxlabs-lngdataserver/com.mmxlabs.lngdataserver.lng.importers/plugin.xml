@@ -121,4 +121,9 @@
             </command>
          </menuContribution>
       </extension>
+      <extension point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserContextMenuExtension">
+         <DataBrowserContextMenuExtension
+               class="com.mmxlabs.lngdataserver.lng.importers.menus.DataBrowserContentMenuContribution">
+         </DataBrowserContextMenuExtension>
+      </extension>
 </plugin>

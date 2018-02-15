@@ -1,4 +1,4 @@
-package com.mmxlabs.lngdataserver.integration.vessels.internal;
+package com.mmxlabs.lngdataserver.integration.vessels;
 
 import java.util.Collection;
 

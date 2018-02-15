@@ -5,10 +5,15 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class ImportPortsWizardHandler extends AbstractHandler{
+import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImportWizard;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
+
+public class ImportPortsWizardHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -17,13 +22,20 @@ public class ImportPortsWizardHandler extends AbstractHandler{
 			// action has been disposed
 			return null;
 		}
-		
-		PortsToScenarioImportWizard wizard = new PortsToScenarioImportWizard();
-		
+
+		final IEditorInput activeEditorInput = HandlerUtil.getActiveEditorInput(event);
+		ScenarioInstance currentInstance = null;
+		if (activeEditorInput instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) activeEditorInput;
+			currentInstance = editorInput.getScenarioInstance();
+		}
+
+		PortsToScenarioImportWizard wizard = new PortsToScenarioImportWizard(null, currentInstance);
+
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		Shell parent = activeWorkbenchWindow.getShell();
-		
+
 		final WizardDialog dialog = new WizardDialog(parent, wizard);
 		dialog.create();
 		dialog.open();

@@ -5,13 +5,10 @@ import static org.ops4j.peaberry.Peaberry.service;
 import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -20,7 +17,6 @@ import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -46,7 +42,9 @@ import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.provider.BrowserItemProviderAdapterFactory;
-import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.lngdataserver.browser.ui.context.DataBrowserContextMenuExtensionUtil;
+import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
+import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -61,9 +59,9 @@ public class DataBrowser extends ViewPart {
 
 	private TreeViewer viewer;
 	private CompositeNode root;
-	private final Map<Node, Consumer<String>> publishCallbacks = new HashMap<>();
-	private final Map<Node, Runnable> checkUpstreamCallbacks = new HashMap<>();
-	private Set<Object> selectedNodes = new HashSet<>();
+	private final Set<Object> selectedNodes = new HashSet<>();
+
+	private Iterable<IDataBrowserContextMenuExtension> contextMenuExtensions;
 
 	private final ISelectionListener scenarioSelectionListener = new ISelectionListener() {
 
@@ -117,6 +115,8 @@ public class DataBrowser extends ViewPart {
 
 		getSite().setSelectionProvider(viewer);
 		final MenuManager mgr = new MenuManager();
+		contextMenuExtensions = DataBrowserContextMenuExtensionUtil.getContextMenuExtensions();
+
 		viewer.getControl().addMenuDetectListener(new MenuDetectListener() {
 
 			private Menu menu;
@@ -153,17 +153,44 @@ public class DataBrowser extends ViewPart {
 				if (treeSelection.getFirstElement() instanceof Node) {
 					final Node selectedNode = (Node) treeSelection.getFirstElement();
 					if (!(selectedNode instanceof CompositeNode)) {
-						if (!publishCallbacks.isEmpty()) {
-							mgr.add(new RunnableAction("Publish", () -> {
-								LOGGER.debug("publishing {}", selectedNode.getDisplayName());
-								RunnerHelper.asyncExec(() -> {
-									publishCallbacks.get(selectedNode.getParent()).accept(selectedNode.getDisplayName());
-									LOGGER.debug("published {}", selectedNode.getDisplayName());
-								});
+						CompositeNode parentNode = (CompositeNode) selectedNode.getParent();
+						final IDataBrowserActionsHandler actionHandler = parentNode.getActionHandler();
+						if (actionHandler != null) {
+							if (actionHandler.supportsRename()) {
+								mgr.add(new RunnableAction("Rename", () -> {
+									// FIXME: Implement! Dialog for user entry then call handler
+								}));
+								itemsAdded = true;
+							}
+							if (!selectedNode.isPublished() && actionHandler.supportsPublish()) {
+								mgr.add(new RunnableAction("Publish", () -> {
 
-							}));
-							itemsAdded = true;
+									if (actionHandler.publish(selectedNode.getDisplayName())) {
+										selectedNode.setPublished(true);
+									}
+								}));
+								itemsAdded = true;
+							}
+							if (actionHandler.supportsDelete()) {
+								mgr.add(new RunnableAction("Delete", () -> {
+									if (actionHandler.delete(selectedNode.getDisplayName())) {
+										parentNode.getChildren().remove(selectedNode);
+									}
+								}));
+								itemsAdded = true;
+							}
 						}
+						// if (!publishCallbacks.isEmpty()) {
+						// mgr.add(new RunnableAction("Publish", () -> {
+						// LOGGER.debug("publishing {}", selectedNode.getDisplayName());
+						// RunnerHelper.asyncExec(() -> {
+						// publishCallbacks.get(selectedNode.getParent()).accept(selectedNode.getDisplayName());
+						// LOGGER.debug("published {}", selectedNode.getDisplayName());
+						// });
+						//
+						// }));
+						// itemsAdded = true;
+						// }
 						// if (selectedNode.isPublished()) {
 						// // grey out for already published versions
 						// newItem.setText("(already published)");
@@ -171,28 +198,28 @@ public class DataBrowser extends ViewPart {
 						// }
 					}
 					if (selectedNode instanceof CompositeNode) {
-						if (!checkUpstreamCallbacks.isEmpty()) {
-							if (false && checkUpstreamCallbacks.get(selectedNode) != null) {
-
-								mgr.add(new RunnableAction("Check upstream", () -> {
-
-									LOGGER.debug("Checking upstream {}", selectedNode.getDisplayName());
-									RunnerHelper.asyncExec(() -> {
-										final Runnable runnable = checkUpstreamCallbacks.get(selectedNode);
-										if (runnable != null) {
-											runnable.run();
-											LOGGER.debug("Checking for updates {}", selectedNode.getDisplayName());
-										}
-									});
-
-								}));
+						final CompositeNode compositeNode = (CompositeNode) selectedNode;
+						final IDataBrowserActionsHandler actionHandler = compositeNode.getActionHandler();
+						if (actionHandler != null) {
+							if (actionHandler.supportsSyncUpstream()) {
+								mgr.add(new RunnableAction("Check upstream", () -> actionHandler.supportsSyncUpstream()));
+								itemsAdded = true;
+							}
+							if (actionHandler.supportsRefreshLocal()) {
+								mgr.add(new RunnableAction("Check local", () -> actionHandler.refreshLocal()));
 								itemsAdded = true;
 							}
 						}
 					}
-					if (itemsAdded) {
-						menu.setVisible(true);
+				}
+
+				if (contextMenuExtensions != null) {
+					for (final IDataBrowserContextMenuExtension ext : contextMenuExtensions) {
+						itemsAdded |= ext.contributeToMenu(treeSelection, mgr);
 					}
+				}
+				if (itemsAdded) {
+					menu.setVisible(true);
 				}
 			}
 		});
@@ -206,11 +233,6 @@ public class DataBrowser extends ViewPart {
 			if (dataExtension != null) {
 				try {
 					root.getChildren().add(dataExtension.getDataRoot());
-					publishCallbacks.put(extensionPoint.getDataExtension().getDataRoot(), extensionPoint.getDataExtension().getPublishCallback());
-					final Runnable refreshUpstreamCallback = extensionPoint.getDataExtension().getRefreshUpstreamCallback();
-					if (refreshUpstreamCallback != null) {
-						checkUpstreamCallbacks.put(extensionPoint.getDataExtension().getDataRoot(), refreshUpstreamCallback);
-					}
 				} catch (final Exception e) {
 					LOGGER.error(e.getMessage(), e);
 				}

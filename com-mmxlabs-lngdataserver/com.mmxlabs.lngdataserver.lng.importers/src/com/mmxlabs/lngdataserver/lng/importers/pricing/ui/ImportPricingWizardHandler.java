@@ -5,10 +5,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class ImportPricingWizardHandler extends AbstractHandler{
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
+
+public class ImportPricingWizardHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -17,13 +21,19 @@ public class ImportPricingWizardHandler extends AbstractHandler{
 			// action has been disposed
 			return null;
 		}
-		
-		PricingToScenarioImportWizard wizard = new PricingToScenarioImportWizard();
-		
+
+		final IEditorInput activeEditorInput = HandlerUtil.getActiveEditorInput(event);
+		ScenarioInstance currentInstance = null;
+		if (activeEditorInput instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) activeEditorInput;
+			currentInstance = editorInput.getScenarioInstance();
+		}
+		PricingToScenarioImportWizard wizard = new PricingToScenarioImportWizard(null, currentInstance);
+
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		Shell parent = activeWorkbenchWindow.getShell();
-		
+
 		final WizardDialog dialog = new WizardDialog(parent, wizard);
 		dialog.create();
 		dialog.open();

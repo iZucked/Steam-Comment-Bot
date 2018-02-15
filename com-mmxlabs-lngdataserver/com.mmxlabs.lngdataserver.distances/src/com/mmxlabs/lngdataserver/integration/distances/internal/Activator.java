@@ -53,11 +53,14 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		distanceRepository = new DistanceRepository(getPreferenceStore());
-		active = true;
-		distanceRepository.listenToPreferenceChanges();
 
+		distanceRepository = new DistanceRepository(getPreferenceStore());
+		distanceRepository.listenToPreferenceChanges();
+		distancesDataRoot.setActionHandler(new DistanceRepositoryActionHandler(distanceRepository, distancesDataRoot));
+
+		active = true;
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
+
 	}
 
 	/*
@@ -70,13 +73,32 @@ public class Activator extends AbstractUIPlugin {
 		if (distanceRepository != null) {
 			distanceRepository.stopListeningForNewLocalVersions();
 			distanceRepository.stopListenToPreferenceChanges();
+			distanceRepository = null;
 		}
+		distancesDataRoot.setActionHandler(null);
 		distancesDataRoot.getChildren().clear();
 		distancesDataRoot.setLatest(null);
 
 		plugin = null;
 		super.stop(context);
 		active = false;
+	}
+
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static Activator getDefault() {
+		return plugin;
+	}
+
+	public CompositeNode getDistancesDataRoot() {
+		return distancesDataRoot;
+	}
+
+	public DistanceRepository getDistanceRepository() {
+		return distanceRepository;
 	}
 
 	private void loadVersions() {
@@ -125,7 +147,7 @@ public class Activator extends AbstractUIPlugin {
 					distancesDataRoot.getChildren().add(0, newVersion);
 				});
 			});
-			distanceRepository.listenForNewLocalVersions();
+			distanceRepository.startListenForNewLocalVersions();
 
 			distanceRepository.registerUpstreamVersionListener(versionString -> {
 				RunnerHelper.asyncExec(c -> {
@@ -136,24 +158,8 @@ public class Activator extends AbstractUIPlugin {
 					}
 				});
 			});
-			distanceRepository.listenForNewUpstreamVersions();
+			distanceRepository.startListenForNewUpstreamVersions();
 		}
 	}
 
-	public CompositeNode getDistancesDataRoot() {
-		return distancesDataRoot;
-	}
-
-	public DistanceRepository getDistanceRepository() {
-		return distanceRepository;
-	}
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static Activator getDefault() {
-		return plugin;
-	}
 }

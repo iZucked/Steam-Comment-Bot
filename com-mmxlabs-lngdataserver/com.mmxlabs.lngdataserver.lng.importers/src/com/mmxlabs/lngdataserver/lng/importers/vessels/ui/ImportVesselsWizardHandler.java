@@ -5,8 +5,13 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
+
+import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImportWizard;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class ImportVesselsWizardHandler extends AbstractHandler{
 
@@ -18,7 +23,13 @@ public class ImportVesselsWizardHandler extends AbstractHandler{
 			return null;
 		}
 		
-		VesselsToScenarioImportWizard wizard = new VesselsToScenarioImportWizard();
+		final IEditorInput activeEditorInput = HandlerUtil.getActiveEditorInput(event);
+		ScenarioInstance currentInstance = null;
+		if (activeEditorInput instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) activeEditorInput;
+			currentInstance = editorInput.getScenarioInstance();
+		}
+		VesselsToScenarioImportWizard wizard = new VesselsToScenarioImportWizard(null, currentInstance);
 		
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 

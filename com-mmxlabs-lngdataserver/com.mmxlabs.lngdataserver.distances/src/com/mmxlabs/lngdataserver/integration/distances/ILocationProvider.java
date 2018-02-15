@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-public interface IPortProvider {
+public interface ILocationProvider {
 
 	List<Port> getPorts();
 

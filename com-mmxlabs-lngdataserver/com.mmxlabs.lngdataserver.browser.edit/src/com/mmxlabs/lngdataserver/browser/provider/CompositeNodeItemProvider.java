@@ -48,6 +48,7 @@ public class CompositeNodeItemProvider extends NodeItemProvider {
 
 			addTypePropertyDescriptor(object);
 			addLatestPropertyDescriptor(object);
+			addActionHandlerPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -74,6 +75,18 @@ public class CompositeNodeItemProvider extends NodeItemProvider {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_CompositeNode_latest_feature"), getString("_UI_PropertyDescriptor_description", "_UI_CompositeNode_latest_feature", "_UI_CompositeNode_type"),
 				BrowserPackage.Literals.COMPOSITE_NODE__LATEST, true, false, true, null, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Action Handler feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addActionHandlerPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_CompositeNode_actionHandler_feature"), getString("_UI_PropertyDescriptor_description", "_UI_CompositeNode_actionHandler_feature", "_UI_CompositeNode_type"),
+				BrowserPackage.Literals.COMPOSITE_NODE__ACTION_HANDLER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -142,6 +155,7 @@ public class CompositeNodeItemProvider extends NodeItemProvider {
 
 		switch (notification.getFeatureID(CompositeNode.class)) {
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
+		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case BrowserPackage.COMPOSITE_NODE__CHILDREN:

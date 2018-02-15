@@ -1,5 +1,6 @@
 package com.mmxlabs.lngdataserver.lng.importers.pricing.ui;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.lngdataserver.integration.pricing.IPricingProvider;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
@@ -27,17 +29,36 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 
 	private ScenarioSelectionPage scenarioSelectionPage;
 	private PricingSelectionPage pricingSelectionPage;
+	private String versionIdentifier;
+	private ScenarioInstance currentInstance;
+
+	public PricingToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance) {
+		this.versionIdentifier = versionIdentifier;
+		this.currentInstance = currentInstance;
+	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", null);
-		pricingSelectionPage = new PricingSelectionPage("Pricing");
+		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", currentInstance);
+		if (versionIdentifier == null) {
+			pricingSelectionPage = new PricingSelectionPage("Pricing");
+		}
 
 	}
 
 	@Override
 	public boolean performFinish() {
-		IPricingProvider pricingProvider = pricingSelectionPage.getPricingVersion();
+		IPricingProvider pricingProvider;
+		if (versionIdentifier != null) {
+			try {
+				pricingProvider = new PricingRepository(null).getPricingProvider(versionIdentifier);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		} else {
+			pricingProvider = pricingSelectionPage.getPricingVersion();
+		}
 		try {
 			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
 
@@ -86,11 +107,13 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 	public void addPages() {
 		super.addPages();
 		addPage(scenarioSelectionPage);
-		addPage(pricingSelectionPage);
+		if (pricingSelectionPage != null) {
+			addPage(pricingSelectionPage);
+		}
 	}
 
 	@Override
 	public boolean canFinish() {
-		return pricingSelectionPage.isPageComplete();
+		return pricingSelectionPage == null || pricingSelectionPage.isPageComplete();
 	}
 }

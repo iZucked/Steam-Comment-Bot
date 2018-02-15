@@ -12,7 +12,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.ports.internal.IPortsProvider;
+import com.mmxlabs.lngdataserver.integration.ports.IPortsProvider;
+import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
@@ -27,17 +28,37 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 
 	private ScenarioSelectionPage scenarioSelectionPage;
 	private PortsSelectionPage portsSelectionPage;
+	private String versionIdentifier;
+	private ScenarioInstance currentInstance;
+
+	public PortsToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance) {
+		this.versionIdentifier = versionIdentifier;
+		this.currentInstance = currentInstance;
+	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", null);
-		portsSelectionPage = new PortsSelectionPage("Ports");
+		scenarioSelectionPage = new ScenarioSelectionPage("Scenario", currentInstance);
+		if (versionIdentifier == null) {
+			portsSelectionPage = new PortsSelectionPage("Ports");
+		}
 
 	}
 
 	@Override
 	public boolean performFinish() {
-		IPortsProvider pricingProvider = portsSelectionPage.getPortsVersion();
+
+		IPortsProvider portsProvider;
+		if (versionIdentifier != null) {
+			try {
+				portsProvider = new PortsRepository(null, null).getPortsProvider(versionIdentifier);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		} else {
+			portsProvider = portsSelectionPage.getPortsVersion();
+		}
 		try {
 			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
 
@@ -55,7 +76,7 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 
 							EditingDomain editingDomain = modelReference.getEditingDomain();
 
-							Command updatePricingCommand = PortsToScenarioCopier.getUpdatePortsCommand(editingDomain, pricingProvider, scenarioModel.getReferenceModel().getPortModel());
+							Command updatePricingCommand = PortsToScenarioCopier.getUpdatePortsCommand(editingDomain, portsProvider, scenarioModel.getReferenceModel().getPortModel());
 
 							if (!updatePricingCommand.canExecute()) {
 								throw new RuntimeException("Unable to copy pricing information to scenario");
@@ -86,11 +107,13 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 	public void addPages() {
 		super.addPages();
 		addPage(scenarioSelectionPage);
-		addPage(portsSelectionPage);
+		if (portsSelectionPage != null) {
+			addPage(portsSelectionPage);
+		}
 	}
 
 	@Override
 	public boolean canFinish() {
-		return portsSelectionPage.isPageComplete();
+		return portsSelectionPage == null || portsSelectionPage.isPageComplete();
 	}
 }

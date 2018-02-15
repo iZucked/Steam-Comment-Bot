@@ -1,4 +1,4 @@
-package com.mmxlabs.lngdataserver.integration.ports.internal;
+package com.mmxlabs.lngdataserver.integration.ports;
 
 import java.time.LocalDateTime;
 
