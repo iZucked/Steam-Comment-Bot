@@ -90,6 +90,10 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
+				if (notification.isTouch()) {
+					return;
+				}
+				
 				if (notification.getNotifier() instanceof Port) {
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
