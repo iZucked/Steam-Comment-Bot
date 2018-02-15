@@ -202,7 +202,7 @@ public class DataBrowser extends ViewPart {
 						final IDataBrowserActionsHandler actionHandler = compositeNode.getActionHandler();
 						if (actionHandler != null) {
 							if (actionHandler.supportsSyncUpstream()) {
-								mgr.add(new RunnableAction("Check upstream", () -> actionHandler.supportsSyncUpstream()));
+								mgr.add(new RunnableAction("Check upstream", () -> actionHandler.syncUpstream()));
 								itemsAdded = true;
 							}
 							if (actionHandler.supportsRefreshLocal()) {
