@@ -137,9 +137,6 @@ public class DistanceRepository {
 	private String getUpstreamUrl() {
 		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
 		final String url = prefs.getString(PreferenceConstants.P_URL_KEY);
-		if ("".equals(url)) {
-			throw new RuntimeException("No URL found for upstream distance repository");
-		}
 		return url;
 	}
 
@@ -183,7 +180,7 @@ public class DistanceRepository {
 
 	public void listenForNewUpstreamVersions() {
 		listenForNewUpstreamVersions = true;
-		if (upstreamUrl == null && upstreamUrl.trim().isEmpty()) {
+		if (upstreamUrl == null || upstreamUrl.trim().isEmpty()) {
 			// No URL, do not try and connect
 			return;
 		}
