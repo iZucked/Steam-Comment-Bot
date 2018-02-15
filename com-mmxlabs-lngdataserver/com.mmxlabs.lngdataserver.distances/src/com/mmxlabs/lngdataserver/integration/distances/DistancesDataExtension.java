@@ -37,7 +37,7 @@ public class DistancesDataExtension implements DataExtension {
 					Activator.getDefault().getDistanceRepository().publishVersion(version);
 					potential.get().setPublished(true);
 				}
-			} catch (ApiException e1) {
+			} catch (Exception e1) {
 				// TODO: what to do in this case?
 				throw new RuntimeException(e1);
 			}

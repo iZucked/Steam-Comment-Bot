@@ -152,6 +152,15 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCompositeNode_Latest() {
+		return (EReference) compositeNodeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getLeaf() {
 		return leafEClass;
 	}
@@ -226,6 +235,7 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 		compositeNodeEClass = createEClass(COMPOSITE_NODE);
 		createEReference(compositeNodeEClass, COMPOSITE_NODE__CHILDREN);
 		createEAttribute(compositeNodeEClass, COMPOSITE_NODE__TYPE);
+		createEReference(compositeNodeEClass, COMPOSITE_NODE__LATEST);
 
 		leafEClass = createEClass(LEAF);
 
@@ -275,6 +285,8 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCompositeNode_Type(), ecorePackage.getEString(), "type", null, 0, 1, CompositeNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
+		initEReference(getCompositeNode_Latest(), this.getNode(), null, "latest", null, 0, 1, CompositeNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(leafEClass, Leaf.class, "Leaf", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

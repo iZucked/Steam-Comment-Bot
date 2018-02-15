@@ -42,8 +42,6 @@ public class Activator extends AbstractUIPlugin {
 		portsDataRoot.setDisplayName("Ports (loading...)");
 		portsDataRoot.setType(LNGScenarioSharedModelTypes.LOCATIONS.getID());
 		portsDataRoot.getChildren().add(loading);
-
-
 	}
 
 	/*
@@ -66,6 +64,10 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
+
+		portsDataRoot.getChildren().clear();
+		portsDataRoot.setLatest(null);
+
 		plugin = null;
 		super.stop(context);
 		active = false;
@@ -84,7 +86,6 @@ public class Activator extends AbstractUIPlugin {
 		return portsDataRoot;
 	}
 
-	//
 	private void loadVersions() {
 
 		while (!portsRepository.isReady() && active) {
@@ -98,26 +99,26 @@ public class Activator extends AbstractUIPlugin {
 		}
 
 		if (active) {
-
-		}
-
-		if (active) {
 			LOGGER.debug("Ports back-end ready, retrieving versions...");
 			try {
 				portsDataRoot.getChildren().clear();
 				try {
 					List<PortsVersion> versions = portsRepository.getVersions();
 					if (versions != null) {
+						boolean first = true;
 						for (PortsVersion v : versions) {
 							Node version = BrowserFactory.eINSTANCE.createNode();
 							version.setParent(portsDataRoot);
 							version.setDisplayName(v.getIdentifier());
 							version.setPublished(v.isPublished());
+							if (first) {
+								RunnerHelper.asyncExec(c -> portsDataRoot.setLatest(version));
+							}
+							first = false;
 							RunnerHelper.asyncExec(c -> portsDataRoot.getChildren().add(version));
 						}
 					}
 				} catch (ApiException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				portsDataRoot.setDisplayName("Ports");

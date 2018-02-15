@@ -1,16 +1,8 @@
 package com.mmxlabs.lngdataserver.integration.ui.ports;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 
 
 public class Activator extends AbstractUIPlugin {

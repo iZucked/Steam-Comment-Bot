@@ -195,13 +195,22 @@ public interface BrowserPackage extends EPackage {
 	int COMPOSITE_NODE__TYPE = NODE_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Latest</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_NODE__LATEST = NODE_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Composite Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_NODE_FEATURE_COUNT = NODE_FEATURE_COUNT + 2;
+	int COMPOSITE_NODE_FEATURE_COUNT = NODE_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Composite Node</em>' class.
@@ -308,6 +317,17 @@ public interface BrowserPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCompositeNode_Type();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getLatest <em>Latest</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Latest</em>'.
+	 * @see com.mmxlabs.lngdataserver.browser.CompositeNode#getLatest()
+	 * @see #getCompositeNode()
+	 * @generated
+	 */
+	EReference getCompositeNode_Latest();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lngdataserver.browser.Leaf <em>Leaf</em>}'.
@@ -417,6 +437,13 @@ public interface BrowserPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute COMPOSITE_NODE__TYPE = eINSTANCE.getCompositeNode_Type();
+		/**
+		 * The meta object literal for the '<em><b>Latest</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPOSITE_NODE__LATEST = eINSTANCE.getCompositeNode_Latest();
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lngdataserver.browser.impl.LeafImpl <em>Leaf</em>}' class.
 		 * <!-- begin-user-doc -->

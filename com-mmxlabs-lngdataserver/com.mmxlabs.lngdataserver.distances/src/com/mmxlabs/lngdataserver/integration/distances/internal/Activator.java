@@ -1,5 +1,7 @@
 package com.mmxlabs.lngdataserver.integration.distances.internal;
 
+import java.util.List;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -35,7 +37,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
-		Node loading = BrowserFactory.eINSTANCE.createNode();
+		final Node loading = BrowserFactory.eINSTANCE.createNode();
 		loading.setDisplayName("loading...");
 		distancesDataRoot.setDisplayName("Distances (loading...)");
 		distancesDataRoot.setType(LNGScenarioSharedModelTypes.DISTANCES.getID());
@@ -48,10 +50,10 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		distanceRepository = new DistanceRepository();
+		distanceRepository = new DistanceRepository(getPreferenceStore());
 		active = true;
 		distanceRepository.listenToPreferenceChanges();
 
@@ -64,11 +66,14 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		if (distanceRepository != null) {
 			distanceRepository.stopListeningForNewLocalVersions();
 			distanceRepository.stopListenToPreferenceChanges();
 		}
+		distancesDataRoot.getChildren().clear();
+		distancesDataRoot.setLatest(null);
+
 		plugin = null;
 		super.stop(context);
 		active = false;
@@ -79,7 +84,7 @@ public class Activator extends AbstractUIPlugin {
 			try {
 				LOGGER.debug("Distances back-end not ready yet...");
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				LOGGER.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
@@ -87,12 +92,20 @@ public class Activator extends AbstractUIPlugin {
 		if (active) {
 			LOGGER.debug("Distances back-end ready, retrieving versions...");
 			distancesDataRoot.getChildren().clear();
-			for (DataVersion v : distanceRepository.getVersions()) {
-				Node version = BrowserFactory.eINSTANCE.createNode();
-				version.setParent(distancesDataRoot);
-				version.setDisplayName(v.getIdentifier());
-				version.setPublished(v.isPublished());
-				RunnerHelper.asyncExec(c -> distancesDataRoot.getChildren().add(version));
+			boolean first = true;
+			List<DataVersion> versions = distanceRepository.getVersions();
+			if (versions != null) {
+				for (final DataVersion v : versions) {
+					final Node version = BrowserFactory.eINSTANCE.createNode();
+					version.setParent(distancesDataRoot);
+					version.setDisplayName(v.getIdentifier());
+					version.setPublished(v.isPublished());
+					if (first) {
+						RunnerHelper.asyncExec(c -> distancesDataRoot.setLatest(version));
+					}
+					first = false;
+					RunnerHelper.asyncExec(c -> distancesDataRoot.getChildren().add(version));
+				}
 			}
 			distancesDataRoot.setDisplayName("Distances");
 
@@ -106,7 +119,7 @@ public class Activator extends AbstractUIPlugin {
 						}
 					}
 
-					Node newVersion = BrowserFactory.eINSTANCE.createNode();
+					final Node newVersion = BrowserFactory.eINSTANCE.createNode();
 					newVersion.setDisplayName(versionString);
 					newVersion.setParent(distancesDataRoot);
 					distancesDataRoot.getChildren().add(0, newVersion);
@@ -118,7 +131,7 @@ public class Activator extends AbstractUIPlugin {
 				RunnerHelper.asyncExec(c -> {
 					try {
 						distanceRepository.syncUpstreamVersion(versionString);
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 					}
 				});

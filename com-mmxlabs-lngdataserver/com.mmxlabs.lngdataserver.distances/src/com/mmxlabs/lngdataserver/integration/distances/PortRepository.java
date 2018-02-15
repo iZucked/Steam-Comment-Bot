@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.lngdataserver.commons.impl.StandardDateRepositoryPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.distances.internal.Activator;
-import com.mmxlabs.lngdataserver.integration.distances.preferences.PreferenceConstants;
 import com.mmxlabs.models.lng.port.Port;
 
 public class PortRepository {
@@ -23,12 +23,12 @@ public class PortRepository {
 
 	private Triple<String, String, String> getUserServiceAuth() {
 		final IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
-		final String url = prefs.getString(PreferenceConstants.P_URL_KEY);
+		final String url = prefs.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
 		if ("".equals(url)) {
 			throw new RuntimeException("No URL found for upstream distance repository");
 		}
-		final String username = prefs.getString(PreferenceConstants.P_USERNAME_KEY);
-		final String password = prefs.getString(PreferenceConstants.P_PASSWORD_KEY);
+		final String username = prefs.getString(StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY);
+		final String password = prefs.getString(StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY);
 
 		return new Triple<>(url, username, password);
 	}

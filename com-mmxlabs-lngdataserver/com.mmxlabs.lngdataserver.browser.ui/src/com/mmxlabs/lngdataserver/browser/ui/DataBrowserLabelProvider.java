@@ -19,22 +19,21 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
-import com.mmxlabs.lngdataserver.browser.Leaf;
 import com.mmxlabs.lngdataserver.browser.Node;
 
 public class DataBrowserLabelProvider extends AdapterFactoryLabelProvider implements IColorProvider {
 
-	private Set<Object> selectedNodes;
-	private Color background;
+	private final Set<Object> selectedNodes;
+	private final Color background;
 
-	public DataBrowserLabelProvider(AdapterFactory adapterFactory, Set<Object> selectedNodes) {
+	public DataBrowserLabelProvider(final AdapterFactory adapterFactory, final Set<Object> selectedNodes) {
 		super(adapterFactory);
 		this.selectedNodes = selectedNodes;
 		this.background = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
 	}
 
 	@Override
-	public Image getImage(Object element) {
+	public Image getImage(final Object element) {
 
 		if (element instanceof CompositeNode) {
 			// TODO: add icons for all data types?
@@ -53,7 +52,7 @@ public class DataBrowserLabelProvider extends AdapterFactoryLabelProvider implem
 			final Bundle bundle = FrameworkUtil.getBundle(Activator.class);
 			ImageDataProvider imageDataProvider;
 			try {
-				String basePath = new File(FileLocator.toFileURL(bundle.getResource("/icons/")).toURI()).getAbsolutePath();
+				final String basePath = new File(FileLocator.toFileURL(bundle.getResource("/icons/")).toURI()).getAbsolutePath();
 
 				imageDataProvider = zoom -> {
 					switch (zoom) {
@@ -76,15 +75,23 @@ public class DataBrowserLabelProvider extends AdapterFactoryLabelProvider implem
 	}
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		if (element instanceof Node) {
-			return ((Node) element).getDisplayName();
+			final Node node = (Node) element;
+			String prefix = "";
+			if (node.eContainer() instanceof CompositeNode) {
+				final CompositeNode compositeNode = (CompositeNode) node.eContainer();
+				if (compositeNode.getLatest() == node) {
+					prefix = "** ";
+				}
+			}
+			return prefix + node.getDisplayName();
 		}
 		return "Error displaying label";
 	}
 
 	@Override
-	public Color getBackground(Object object) {
+	public Color getBackground(final Object object) {
 
 		if (selectedNodes.contains(object)) {
 			return background;

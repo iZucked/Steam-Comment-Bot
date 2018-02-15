@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getChildren <em>Children</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getType <em>Type</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getLatest <em>Latest</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getCompositeNode()
@@ -63,5 +64,31 @@ public interface CompositeNode extends Node {
 	 * @generated
 	 */
 	void setType(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Latest</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Latest</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Latest</em>' reference.
+	 * @see #setLatest(Node)
+	 * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getCompositeNode_Latest()
+	 * @model
+	 * @generated
+	 */
+	Node getLatest();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getLatest <em>Latest</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Latest</em>' reference.
+	 * @see #getLatest()
+	 * @generated
+	 */
+	void setLatest(Node value);
 
 } // CompositeNode

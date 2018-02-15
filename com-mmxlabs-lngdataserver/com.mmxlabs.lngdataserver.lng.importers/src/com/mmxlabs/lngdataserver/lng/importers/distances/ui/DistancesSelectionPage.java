@@ -36,7 +36,7 @@ public class DistancesSelectionPage extends WizardPage {
 
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
-		DistanceRepository dr = new DistanceRepository(BackEndUrlProvider.INSTANCE.getUrl());
+		DistanceRepository dr = new DistanceRepository(null, BackEndUrlProvider.INSTANCE.getUrl());
 		dr.isReady();
 		dr.getVersions().forEach(v -> combo.add(v.getIdentifier()));
 

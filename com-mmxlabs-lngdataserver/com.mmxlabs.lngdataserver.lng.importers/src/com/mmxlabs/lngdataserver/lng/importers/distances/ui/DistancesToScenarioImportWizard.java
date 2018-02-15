@@ -81,7 +81,7 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 						monitor.beginTask("Copy distances", scenarioSelectionPage.getSelectedScenarios().size() * 3);
 
 						try {
-							final DistanceRepository distanceRepository = new DistanceRepository(BackEndUrlProvider.INSTANCE.getUrl());
+							final DistanceRepository distanceRepository = new DistanceRepository(null, BackEndUrlProvider.INSTANCE.getUrl());
 							final String versionTag = distancesSelectionPage.getVersionTag();
 							final IDistanceProvider distanceProvider = distanceRepository.getDistances(versionTag);
 

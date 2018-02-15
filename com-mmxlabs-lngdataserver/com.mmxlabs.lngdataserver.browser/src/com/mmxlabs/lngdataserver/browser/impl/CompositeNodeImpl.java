@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getChildren <em>Children</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getType <em>Type</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getLatest <em>Latest</em>}</li>
  * </ul>
  *
  * @generated
@@ -61,6 +62,16 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 	 * @ordered
 	 */
 	protected String type = TYPE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getLatest() <em>Latest</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLatest()
+	 * @generated
+	 * @ordered
+	 */
+	protected Node latest;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -119,6 +130,44 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Node getLatest() {
+		if (latest != null && latest.eIsProxy()) {
+			InternalEObject oldLatest = (InternalEObject) latest;
+			latest = (Node) eResolveProxy(oldLatest);
+			if (latest != oldLatest) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, BrowserPackage.COMPOSITE_NODE__LATEST, oldLatest, latest));
+			}
+		}
+		return latest;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Node basicGetLatest() {
+		return latest;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLatest(Node newLatest) {
+		Node oldLatest = latest;
+		latest = newLatest;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BrowserPackage.COMPOSITE_NODE__LATEST, oldLatest, latest));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -140,6 +189,10 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 			return getChildren();
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
 			return getType();
+		case BrowserPackage.COMPOSITE_NODE__LATEST:
+			if (resolve)
+				return getLatest();
+			return basicGetLatest();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -160,6 +213,9 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
 			setType((String) newValue);
 			return;
+		case BrowserPackage.COMPOSITE_NODE__LATEST:
+			setLatest((Node) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -178,6 +234,9 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
 			setType(TYPE_EDEFAULT);
 			return;
+		case BrowserPackage.COMPOSITE_NODE__LATEST:
+			setLatest((Node) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -194,6 +253,8 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 			return children != null && !children.isEmpty();
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
 			return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+		case BrowserPackage.COMPOSITE_NODE__LATEST:
+			return latest != null;
 		}
 		return super.eIsSet(featureID);
 	}
