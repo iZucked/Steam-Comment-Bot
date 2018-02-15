@@ -23,6 +23,8 @@ import okhttp3.Response;
 
 public class PricingClient {
 
+	private static final String SYNC_VERSION_ENDPOINT = "/pricing/sync/versions/";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(PricingClient.class);
 	private static final OkHttpClient CLIENT = new OkHttpClient();
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -43,7 +45,7 @@ public class PricingClient {
 
 		PublishRequest publishRequest = new PublishRequest();
 		publishRequest.setVersion(version);
-		publishRequest.setUpstreamUrl(upstreamUrl + " /pricing/sync/versions");
+		publishRequest.setUpstreamUrl(upstreamUrl + SYNC_VERSION_ENDPOINT);
 
 		String json = new ObjectMapper().writeValueAsString(publishRequest);
 
@@ -56,12 +58,25 @@ public class PricingClient {
 		}
 	}
 
+	public static void getUpstreamVersion(String baseUrl, String upstreamUrl, String version) throws IOException {
+
+		// Pull down the version data
+		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
+		final Response pullResponse = CLIENT.newCall(pullRequest).execute();
+		final String json = pullResponse.body().string();
+
+		// Post the data to local repo
+		final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+		final Request postRequest = new Request.Builder().url(baseUrl + SYNC_VERSION_ENDPOINT).post(body).build();
+		final Response postResponse = CLIENT.newCall(postRequest).execute();
+	}
+
 	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
 
 		String json = new ObjectMapper().writeValueAsString(version);
 
 		RequestBody body = RequestBody.create(JSON, json);
-		Request request = new Request.Builder().url(baseUrl + "/pricing/sync/versions").post(body).build();
+		Request request = new Request.Builder().url(baseUrl + SYNC_VERSION_ENDPOINT).post(body).build();
 		Response response = CLIENT.newCall(request).execute();
 
 		if (!response.isSuccessful()) {

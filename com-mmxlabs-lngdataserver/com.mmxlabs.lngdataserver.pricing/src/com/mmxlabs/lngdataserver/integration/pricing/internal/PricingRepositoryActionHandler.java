@@ -126,5 +126,4 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 		});
 		return true;
 	}
-
 }

@@ -24,6 +24,8 @@ public class PricingRepository extends AbstractDataRepository {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PricingRepository.class);
 
+	private static final String SYNC_VERSION_ENDPOINT = "/pricing/sync/versions/";
+
 	public PricingRepository(@Nullable IPreferenceStore preferenceStore) {
 		super(preferenceStore, null);
 		// try to get ready
@@ -67,7 +69,7 @@ public class PricingRepository extends AbstractDataRepository {
 	}
 
 	public void publishVersion(String version) throws IOException {
-		PricingClient.publishVersion(backendUrl, upstreamUrl, version);
+		PricingClient.publishVersion(version, backendUrl, upstreamUrl);
 	}
 
 	public void saveVersion(Version version) throws IOException {
@@ -95,8 +97,7 @@ public class PricingRepository extends AbstractDataRepository {
 
 	@Override
 	public void syncUpstreamVersion(String version) throws Exception {
-		// TODO Auto-generated method stub
-
+		PricingClient.getUpstreamVersion(backendUrl, upstreamUrl, version);
 	}
 
 	@Override
@@ -109,41 +110,26 @@ public class PricingRepository extends AbstractDataRepository {
 
 	@Override
 	protected CompletableFuture<String> waitForNewLocalVersion() {
-		// final CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
-		// Version futureVersion;
-		// try {
-		// futureVersion = waitingPricingApi.getPricingUpdateUsingGET();
-		// } catch (final ApiException e) {
-		// throw new RuntimeException(e);
-		// }
-		// return futureVersion.getIdentifier();
-		// });
-		// return completableFuture;
-		return CompletableFuture.completedFuture(null);
+		return PricingClient.notifyOnNewVersion(backendUrl);
 	}
 
 	@Override
 	protected CompletableFuture<String> waitForNewUpstreamVersion() {
-
-		// final CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
-		// Version futureVersion;
-		// try {
-		// futureVersion = upstreamWaitingPricingApi.getPricingUpdateUsingGET();
-		// } catch (final ApiException e) {
-		// throw new RuntimeException(e);
-		// }
-		// return futureVersion.getIdentifier();
-		// });
-		// return completableFuture;
-		return CompletableFuture.completedFuture(null);
-
+		return PricingClient.notifyOnNewVersion(upstreamUrl);
 	}
 
 	@Override
 	protected void newUpstreamURL(String upstreamURL) {
-		// TODO Auto-generated method stub
 
 	}
-	
-	
+
+	@Override
+	protected boolean canWaitForNewLocalVersion() {
+		return true;
+	}
+
+	@Override
+	protected boolean canWaitForNewUpstreamVersion() {
+		return true;
+	}
 }
