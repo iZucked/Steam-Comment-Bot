@@ -98,6 +98,11 @@
                id="com.mmxlabs.models.lng.scenario.import.wizards.port"
                name="Copy ports to scenario">
          </command>
+         <command
+               defaultHandler="com.mmxlabs.lngdataserver.lng.exporters.port.ui.ExportPortWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.export.wizards.port"
+               name="Copy ports from scenario">
+         </command>
       </extension>
       <extension
             point="org.eclipse.ui.menus">
@@ -107,6 +112,11 @@
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.port"
                   label="Import ports"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.export.wizards.port"
+                  label="Export ports"
                   style="push">
             </command>
          </menuContribution>

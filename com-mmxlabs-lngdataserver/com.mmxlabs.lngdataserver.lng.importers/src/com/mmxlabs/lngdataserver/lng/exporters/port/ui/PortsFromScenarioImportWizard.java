@@ -11,7 +11,11 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
+import com.mmxlabs.lngdataserver.integration.ports.internal.PortsClient;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
+import com.mmxlabs.lngdataserver.port.ApiException;
+import com.mmxlabs.lngdataserver.port.api.PortApi;
+import com.mmxlabs.lngdataserver.port.model.Port;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataservice.ports.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -53,12 +57,13 @@ public class PortsFromScenarioImportWizard extends Wizard implements IImportWiza
 								LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 
 								PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-								Version version = PortFromScenarioCopier.generateVersion(portModel);
+								  List<Port> ports = PortFromScenarioCopier.generateVersion(portModel);
 								try {
-									// TODO: Implement me!
-									throw new IOException();
-//									PortClient.saveVersion(url, version);
-								} catch (IOException e) {
+									
+									PortApi portApi = new PortApi();
+									portApi.getApiClient().setBasePath(BackEndUrlProvider.INSTANCE.getUrl());
+									portApi.bulkInsertUsingPOST(ports);
+								} catch (ApiException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
