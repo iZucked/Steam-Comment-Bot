@@ -40,7 +40,7 @@ public class VesselsDataExtension implements DataExtension {
 	}
 	
 	@Override
-	public Consumer<String> getRefreshUpstreamCallback() {
+	public Runnable getRefreshUpstreamCallback() {
 		return null;
 	}
 }

@@ -11,6 +11,7 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
@@ -28,7 +29,6 @@ public class Activator extends AbstractUIPlugin {
 
 	private final CompositeNode distancesDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
 	private DistanceRepository distanceRepository;
-	private Thread versionLoader;
 	private boolean active;
 
 	/**
@@ -38,6 +38,7 @@ public class Activator extends AbstractUIPlugin {
 		Node loading = BrowserFactory.eINSTANCE.createNode();
 		loading.setDisplayName("loading...");
 		distancesDataRoot.setDisplayName("Distances (loading...)");
+		distancesDataRoot.setType(LNGScenarioSharedModelTypes.DISTANCES.getID());
 		distancesDataRoot.getChildren().add(loading);
 	}
 

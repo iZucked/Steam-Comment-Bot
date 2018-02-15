@@ -13,6 +13,7 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingVersion;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
@@ -40,6 +41,7 @@ public class Activator extends AbstractUIPlugin {
 		final Node loading = BrowserFactory.eINSTANCE.createNode();
 		loading.setDisplayName("loading...");
 		pricingDataRoot.setDisplayName("Pricing (loading...)");
+		pricingDataRoot.setType(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
 		pricingDataRoot.getChildren().add(loading);
 
 	}

@@ -7,11 +7,12 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.vessel.ApiException;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.lngdataserver.vessel.ApiException;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
@@ -38,6 +39,7 @@ public class Activator extends AbstractUIPlugin {
 		Node loading = BrowserFactory.eINSTANCE.createNode();
 		loading.setDisplayName("loading...");
 		vesselsDataRoot.setDisplayName("Vessels (loading...)");
+		vesselsDataRoot.setType(LNGScenarioSharedModelTypes.FLEET.getID());
 		vesselsDataRoot.getChildren().add(loading);
 
 	}

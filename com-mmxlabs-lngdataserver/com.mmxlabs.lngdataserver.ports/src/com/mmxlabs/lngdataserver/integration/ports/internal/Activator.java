@@ -13,6 +13,7 @@ import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
@@ -39,7 +40,9 @@ public class Activator extends AbstractUIPlugin {
 		Node loading = BrowserFactory.eINSTANCE.createNode();
 		loading.setDisplayName("loading...");
 		portsDataRoot.setDisplayName("Ports (loading...)");
+		portsDataRoot.setType(LNGScenarioSharedModelTypes.LOCATIONS.getID());
 		portsDataRoot.getChildren().add(loading);
+
 
 	}
 

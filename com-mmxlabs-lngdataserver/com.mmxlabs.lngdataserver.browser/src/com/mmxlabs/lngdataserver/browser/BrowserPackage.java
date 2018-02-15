@@ -186,13 +186,22 @@ public interface BrowserPackage extends EPackage {
 	int COMPOSITE_NODE__CHILDREN = NODE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_NODE__TYPE = NODE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Composite Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_NODE_FEATURE_COUNT = NODE_FEATURE_COUNT + 1;
+	int COMPOSITE_NODE_FEATURE_COUNT = NODE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Composite Node</em>' class.
@@ -288,6 +297,17 @@ public interface BrowserPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCompositeNode_Children();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see com.mmxlabs.lngdataserver.browser.CompositeNode#getType()
+	 * @see #getCompositeNode()
+	 * @generated
+	 */
+	EAttribute getCompositeNode_Type();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lngdataserver.browser.Leaf <em>Leaf</em>}'.
@@ -390,6 +410,13 @@ public interface BrowserPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMPOSITE_NODE__CHILDREN = eINSTANCE.getCompositeNode_Children();
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMPOSITE_NODE__TYPE = eINSTANCE.getCompositeNode_Type();
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lngdataserver.browser.impl.LeafImpl <em>Leaf</em>}' class.
 		 * <!-- begin-user-doc -->

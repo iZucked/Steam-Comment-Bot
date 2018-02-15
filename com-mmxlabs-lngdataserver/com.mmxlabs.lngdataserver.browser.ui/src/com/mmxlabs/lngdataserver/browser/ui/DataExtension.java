@@ -9,5 +9,5 @@ public interface DataExtension {
 
 	Consumer<String> getPublishCallback();
 	
-	Consumer<String> getRefreshUpstreamCallback();
+	Runnable getRefreshUpstreamCallback();
 }

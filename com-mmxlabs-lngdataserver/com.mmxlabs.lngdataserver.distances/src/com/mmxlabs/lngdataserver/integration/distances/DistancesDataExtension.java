@@ -17,15 +17,14 @@ import com.mmxlabs.lngdataserver.browser.ui.DataExtension;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.integration.distances.internal.Activator;
 
-
 public class DistancesDataExtension implements DataExtension {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DistancesDataExtension.class);
 
 	@Override
 	public CompositeNode getDataRoot() {
 		LOGGER.debug("Distances versions for Data Browser requested");
-		
+
 		return Activator.getDefault().getDistancesDataRoot();
 	}
 
@@ -46,8 +45,8 @@ public class DistancesDataExtension implements DataExtension {
 	}
 
 	@Override
-	public Consumer<String> getRefreshUpstreamCallback() {
-		return unused -> {
+	public Runnable getRefreshUpstreamCallback() {
+		return () -> {
 
 			IRunnableWithProgress r = (monitor) -> {
 				DistanceRepository local = Activator.getDefault().getDistanceRepository();
@@ -58,6 +57,7 @@ public class DistancesDataExtension implements DataExtension {
 					e1.printStackTrace();
 					return;
 				}
+
 				monitor.beginTask("Checking for distance updates", newVersions.size());
 				try {
 					for (DataVersion version : newVersions) {
