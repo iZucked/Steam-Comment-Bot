@@ -69,17 +69,15 @@ public class Activator implements BundleActivator {
 					final int port = mongoService.start();
 					monitor.subTask("Starting internal webserver");
 
-					// this is a bit dangerous, should probably let the server choose it's own port with server.port=0
-					final int randomPort = 0;/// randomPort();
 					final String[] args = {
 							// "--db.embeddedBinaries=" + binariesPath,
-							"--server.port=" + randomPort, //
+							"--server.port=0", //
 							"--db.embedded=false", //
 							"--db.port=" + port, //
 							"--db.diagnosticDataCollectionEnabled=false", //
 							"--server.cors=true", //
 							"--spring.mvc.async.request-timeout=-1", //
-//							"--debug" //
+							// "--debug" //
 					};
 					monitor.subTask("Gathering end points");
 
@@ -87,15 +85,15 @@ public class Activator implements BundleActivator {
 					final Object[] endPoints = DataServerEndPointExtensionUtil.getEndPoints();
 					// Extend endpoints array and add in out port discovery hook
 					Object[] fullEndPoints = new Object[endPoints.length + 1];
-					System.arraycopy(endPoints,0, fullEndPoints, 0, endPoints.length);
+					System.arraycopy(endPoints, 0, fullEndPoints, 0, endPoints.length);
 					fullEndPoints[endPoints.length] = EmbdeddedWebServerPortDiscoveryProvider.class;
 					monitor.worked(1);
 					monitor.subTask("Starting webserver");
 					servletContext = SpringApplication.run(fullEndPoints, args);
-					
+
 					monitor.subTask("Waiting....");
 					while (!BackEndUrlProvider.INSTANCE.isAvailable()) {
-						Thread.sleep(300);
+						Thread.sleep(500);
 					}
 					monitor.worked(1);
 				} catch (final Exception e) {
@@ -118,48 +116,6 @@ public class Activator implements BundleActivator {
 
 		background.schedule();
 		System.out.println("starting in background...");
-	}
-
-	private int randomPort() throws IOException {
-		for (int i = 65534; i > 49152; i--) {
-			if (portAvailable(i)) {
-				return i;
-			}
-		}
-		LOGGER.error("No free port available 49152-65534");
-		throw new IOException("No free port available 49152-65534");
-	}
-
-	private static boolean portAvailable(final int port) {
-		LOGGER.info("--------------Testing port " + port);
-		Socket s = null;
-		try {
-			s = new Socket("localhost", port);
-
-			// If the code makes it this far without an exception it means
-			// something is using the port and has responded.
-			LOGGER.info("--------------Port " + port + " is not available");
-			return false;
-		} catch (final IOException e) {
-			LOGGER.info("--------------Port " + port + " is available");
-			return true;
-		} finally {
-			if (s != null) {
-				try {
-					s.close();
-				} catch (final IOException e) {
-					LOGGER.error("Error closing probing socket", e);
-					throw new RuntimeException("Error closing probing socket", e);
-				}
-			}
-		}
-	}
-
-	private String getMongoDataPath() throws URISyntaxException, IOException {
-		final Bundle bundle = FrameworkUtil.getBundle(Activator.class);
-		final String result = new File(FileLocator.toFileURL(bundle.getResource("/mongo_data")).toURI()).getAbsolutePath();
-		LOGGER.info("MongoDB directory: " + result);
-		return result;
 	}
 
 	/*
