@@ -37,7 +37,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
-		final Node loading = BrowserFactory.eINSTANCE.createNode();
+		final Node loading = BrowserFactory.eINSTANCE.createLeaf();
 		loading.setDisplayName("loading...");
 		distancesDataRoot.setDisplayName("Distances (loading...)");
 		distancesDataRoot.setType(LNGScenarioSharedModelTypes.DISTANCES.getID());
@@ -118,7 +118,7 @@ public class Activator extends AbstractUIPlugin {
 			List<DataVersion> versions = distanceRepository.getVersions();
 			if (versions != null) {
 				for (final DataVersion v : versions) {
-					final Node version = BrowserFactory.eINSTANCE.createNode();
+					final Node version = BrowserFactory.eINSTANCE.createLeaf();
 					version.setParent(distancesDataRoot);
 					version.setDisplayName(v.getIdentifier());
 					version.setPublished(v.isPublished());
@@ -141,7 +141,7 @@ public class Activator extends AbstractUIPlugin {
 						}
 					}
 
-					final Node newVersion = BrowserFactory.eINSTANCE.createNode();
+					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
 					newVersion.setDisplayName(versionString);
 					newVersion.setParent(distancesDataRoot);
 					distancesDataRoot.getChildren().add(0, newVersion);

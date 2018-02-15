@@ -176,8 +176,6 @@ public class CompositeNodeItemProvider extends NodeItemProvider {
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(BrowserPackage.Literals.COMPOSITE_NODE__CHILDREN, BrowserFactory.eINSTANCE.createNode()));
-
 		newChildDescriptors.add(createChildParameter(BrowserPackage.Literals.COMPOSITE_NODE__CHILDREN, BrowserFactory.eINSTANCE.createCompositeNode()));
 
 		newChildDescriptors.add(createChildParameter(BrowserPackage.Literals.COMPOSITE_NODE__CHILDREN, BrowserFactory.eINSTANCE.createLeaf()));

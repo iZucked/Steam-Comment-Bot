@@ -3,6 +3,7 @@
 package com.mmxlabs.lngdataserver.browser.impl;
 
 import com.mmxlabs.lngdataserver.browser.BrowserPackage;
+import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -28,7 +29,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
+public abstract class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	/**
 	 * The default value of the '{@link #getDisplayName() <em>Display Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -57,7 +58,7 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	 * @generated
 	 * @ordered
 	 */
-	protected Node parent;
+	protected CompositeNode parent;
 
 	/**
 	 * The default value of the '{@link #isPublished() <em>Published</em>}' attribute.
@@ -124,10 +125,10 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Node getParent() {
+	public CompositeNode getParent() {
 		if (parent != null && parent.eIsProxy()) {
 			InternalEObject oldParent = (InternalEObject) parent;
-			parent = (Node) eResolveProxy(oldParent);
+			parent = (CompositeNode) eResolveProxy(oldParent);
 			if (parent != oldParent) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, BrowserPackage.NODE__PARENT, oldParent, parent));
@@ -141,7 +142,7 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Node basicGetParent() {
+	public CompositeNode basicGetParent() {
 		return parent;
 	}
 
@@ -150,8 +151,8 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParent(Node newParent) {
-		Node oldParent = parent;
+	public void setParent(CompositeNode newParent) {
+		CompositeNode oldParent = parent;
 		parent = newParent;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, BrowserPackage.NODE__PARENT, oldParent, parent));
@@ -210,7 +211,7 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 			setDisplayName((String) newValue);
 			return;
 		case BrowserPackage.NODE__PARENT:
-			setParent((Node) newValue);
+			setParent((CompositeNode) newValue);
 			return;
 		case BrowserPackage.NODE__PUBLISHED:
 			setPublished((Boolean) newValue);
@@ -231,7 +232,7 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 			setDisplayName(DISPLAY_NAME_EDEFAULT);
 			return;
 		case BrowserPackage.NODE__PARENT:
-			setParent((Node) null);
+			setParent((CompositeNode) null);
 			return;
 		case BrowserPackage.NODE__PUBLISHED:
 			setPublished(PUBLISHED_EDEFAULT);

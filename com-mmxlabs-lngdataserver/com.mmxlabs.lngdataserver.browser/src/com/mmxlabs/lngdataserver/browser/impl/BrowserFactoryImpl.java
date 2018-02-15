@@ -63,8 +63,6 @@ public class BrowserFactoryImpl extends EFactoryImpl implements BrowserFactory {
 			return createCompositeNode();
 		case BrowserPackage.LEAF:
 			return createLeaf();
-		case BrowserPackage.NODE:
-			return createNode();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -128,16 +126,6 @@ public class BrowserFactoryImpl extends EFactoryImpl implements BrowserFactory {
 	public Leaf createLeaf() {
 		LeafImpl leaf = new LeafImpl();
 		return leaf;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Node createNode() {
-		NodeImpl node = new NodeImpl();
-		return node;
 	}
 
 	/**

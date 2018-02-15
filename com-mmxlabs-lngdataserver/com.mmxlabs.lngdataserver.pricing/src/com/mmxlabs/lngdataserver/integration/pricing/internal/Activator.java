@@ -39,7 +39,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
-		final Node loading = BrowserFactory.eINSTANCE.createNode();
+		final Node loading = BrowserFactory.eINSTANCE.createLeaf();
 		loading.setDisplayName("loading...");
 		pricingDataRoot.setDisplayName("Pricing (loading...)");
 		pricingDataRoot.setType(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
@@ -121,7 +121,7 @@ public class Activator extends AbstractUIPlugin {
 				List<DataVersion> versions = pricingRepository.getVersions();
 				if (versions != null) {
 					for (final DataVersion v : versions) {
-						final Node version = BrowserFactory.eINSTANCE.createNode();
+						final Node version = BrowserFactory.eINSTANCE.createLeaf();
 						version.setParent(pricingDataRoot);
 						version.setDisplayName(v.getIdentifier());
 						version.setPublished(v.isPublished());
@@ -147,7 +147,7 @@ public class Activator extends AbstractUIPlugin {
 							return;
 						}
 					}
-					final Node newVersion = BrowserFactory.eINSTANCE.createNode();
+					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
 					newVersion.setDisplayName(versionString);
 					pricingDataRoot.getChildren().add(newVersion);
 				});

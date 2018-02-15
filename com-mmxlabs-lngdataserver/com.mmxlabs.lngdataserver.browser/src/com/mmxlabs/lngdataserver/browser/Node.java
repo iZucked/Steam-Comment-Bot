@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getNode()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface Node extends EObject {
@@ -59,12 +59,12 @@ public interface Node extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent</em>' reference.
-	 * @see #setParent(Node)
+	 * @see #setParent(CompositeNode)
 	 * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getNode_Parent()
 	 * @model
 	 * @generated
 	 */
-	Node getParent();
+	CompositeNode getParent();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lngdataserver.browser.Node#getParent <em>Parent</em>}' reference.
@@ -74,7 +74,7 @@ public interface Node extends EObject {
 	 * @see #getParent()
 	 * @generated
 	 */
-	void setParent(Node value);
+	void setParent(CompositeNode value);
 
 	/**
 	 * Returns the value of the '<em><b>Published</b></em>' attribute.

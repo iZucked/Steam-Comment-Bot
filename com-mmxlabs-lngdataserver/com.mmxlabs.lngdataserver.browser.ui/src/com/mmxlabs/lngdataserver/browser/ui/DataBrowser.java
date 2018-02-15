@@ -7,28 +7,40 @@ import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +52,7 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
+import com.mmxlabs.lngdataserver.browser.Leaf;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.provider.BrowserItemProviderAdapterFactory;
 import com.mmxlabs.lngdataserver.browser.ui.context.DataBrowserContextMenuExtensionUtil;
@@ -47,9 +60,13 @@ import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExten
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ModelArtifact;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceAdapterFactory;
 
 public class DataBrowser extends ViewPart {
 
@@ -57,16 +74,19 @@ public class DataBrowser extends ViewPart {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataBrowser.class);
 
-	private TreeViewer viewer;
+	private TreeViewer dataViewer;
+	private TreeViewer scenarioViewer;
 	private CompositeNode root;
-	private final Set<Object> selectedNodes = new HashSet<>();
+	private final Set<Node> selectedNodes = new HashSet<>();
+	private Predicate<ScenarioInstance> selectedScenarioChecker = null;
 
+	ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> scenarioTracker;
 	private Iterable<IDataBrowserContextMenuExtension> contextMenuExtensions;
 
-	private final ISelectionListener scenarioSelectionListener = new ISelectionListener() {
-
+	private final ISelectionChangedListener scenarioSelectionListener = new ISelectionChangedListener() {
 		@Override
-		public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		public void selectionChanged(SelectionChangedEvent event) {
+			final ISelection selection = scenarioViewer.getSelection();
 
 			selectedNodes.clear();
 			if (selection instanceof IStructuredSelection) {
@@ -99,32 +119,78 @@ public class DataBrowser extends ViewPart {
 					}
 				}
 			}
-			viewer.refresh(true);
+			dataViewer.refresh(true);
+		}
+	};
+	private final ISelectionChangedListener nodeSelectionListener = new ISelectionChangedListener() {
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			final ISelection selection = dataViewer.getSelection();
+
+			selectedScenarioChecker = null;
+			if (selection instanceof IStructuredSelection) {
+				final IStructuredSelection ss = (IStructuredSelection) selection;
+				final Iterator<?> itr = ss.iterator();
+				if (ss.size() == 1) {
+					while (itr.hasNext()) {
+						final Object o = itr.next();
+						if (o instanceof Leaf) {
+							Leaf leaf = (Leaf) o;
+							CompositeNode compositeNode = leaf.getParent();
+							selectedScenarioChecker = (scenarioInstance) -> {
+								final Manifest mf = scenarioInstance.getManifest();
+								if (mf != null) {
+									for (final ModelArtifact modelArtifact : mf.getModelDependencies()) {
+										final String v = modelArtifact.getDataVersion();
+										if (Objects.equals(modelArtifact.getKey(), compositeNode.getType())) {
+											if (Objects.equals(leaf.getDisplayName(), v)) {
+												return true;
+											}
+										}
+									}
+								}
+								return false;
+							};
+						}
+					}
+				}
+			}
+			scenarioViewer.refresh(true);
 		}
 	};
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new TreeViewer(parent, SWT.SINGLE);
-		viewer.setContentProvider(new DataBrowserContentProvider(createNewAdapterFactory()));
-		viewer.setLabelProvider(new DataBrowserLabelProvider(createNewAdapterFactory(), selectedNodes));
+		Bundle bundle = FrameworkUtil.getBundle(DataBrowser.class);
+		ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> scenarioTracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(bundle.getBundleContext(),
+				ScenarioServiceRegistry.class, null);
+		scenarioTracker.open();
+
+		SashForm sash = new SashForm(parent, SWT.SMOOTH | SWT.VERTICAL);
+		sash.setSashWidth(3);
+
+		// Change the color used to paint the sashes
+		sash.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_GRAY));
+
+		dataViewer = new TreeViewer(sash, SWT.SINGLE);
+		dataViewer.setContentProvider(new DataBrowserContentProvider(createNewAdapterFactory()));
+		dataViewer.setLabelProvider(new DataBrowserLabelProvider(createNewAdapterFactory(), selectedNodes));
 
 		root = BrowserFactory.eINSTANCE.createCompositeNode();
 		root.setDisplayName("Versions");
-		viewer.setInput(root);
+		dataViewer.setInput(root);
 
-		getSite().setSelectionProvider(viewer);
-		final MenuManager mgr = new MenuManager();
+		getSite().setSelectionProvider(dataViewer);
 		contextMenuExtensions = DataBrowserContextMenuExtensionUtil.getContextMenuExtensions();
-
-		viewer.getControl().addMenuDetectListener(new MenuDetectListener() {
+		final MenuManager data_mgr = new MenuManager();
+		dataViewer.getControl().addMenuDetectListener(new MenuDetectListener() {
 
 			private Menu menu;
 
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
 
-				final ISelection selection = viewer.getSelection();
+				final ISelection selection = dataViewer.getSelection();
 
 				if (selection.isEmpty()) {
 					return;
@@ -137,10 +203,10 @@ public class DataBrowser extends ViewPart {
 				final TreeSelection treeSelection = (TreeSelection) selection;
 
 				if (menu == null) {
-					menu = mgr.createContextMenu(viewer.getControl());
+					menu = data_mgr.createContextMenu(dataViewer.getControl());
 				}
-				final IContributionItem[] l = mgr.getItems();
-				mgr.removeAll();
+				final IContributionItem[] l = data_mgr.getItems();
+				data_mgr.removeAll();
 				for (final IContributionItem itm : l) {
 					itm.dispose();
 				}
@@ -157,13 +223,13 @@ public class DataBrowser extends ViewPart {
 						final IDataBrowserActionsHandler actionHandler = parentNode.getActionHandler();
 						if (actionHandler != null) {
 							if (actionHandler.supportsRename()) {
-								mgr.add(new RunnableAction("Rename", () -> {
+								data_mgr.add(new RunnableAction("Rename", () -> {
 									// FIXME: Implement! Dialog for user entry then call handler
 								}));
 								itemsAdded = true;
 							}
 							if (!selectedNode.isPublished() && actionHandler.supportsPublish()) {
-								mgr.add(new RunnableAction("Publish", () -> {
+								data_mgr.add(new RunnableAction("Publish", () -> {
 
 									if (actionHandler.publish(selectedNode.getDisplayName())) {
 										selectedNode.setPublished(true);
@@ -172,7 +238,7 @@ public class DataBrowser extends ViewPart {
 								itemsAdded = true;
 							}
 							if (actionHandler.supportsDelete()) {
-								mgr.add(new RunnableAction("Delete", () -> {
+								data_mgr.add(new RunnableAction("Delete", () -> {
 									if (actionHandler.delete(selectedNode.getDisplayName())) {
 										parentNode.getChildren().remove(selectedNode);
 									}
@@ -180,33 +246,17 @@ public class DataBrowser extends ViewPart {
 								itemsAdded = true;
 							}
 						}
-						// if (!publishCallbacks.isEmpty()) {
-						// mgr.add(new RunnableAction("Publish", () -> {
-						// LOGGER.debug("publishing {}", selectedNode.getDisplayName());
-						// RunnerHelper.asyncExec(() -> {
-						// publishCallbacks.get(selectedNode.getParent()).accept(selectedNode.getDisplayName());
-						// LOGGER.debug("published {}", selectedNode.getDisplayName());
-						// });
-						//
-						// }));
-						// itemsAdded = true;
-						// }
-						// if (selectedNode.isPublished()) {
-						// // grey out for already published versions
-						// newItem.setText("(already published)");
-						// newItem.setEnabled(false);
-						// }
 					}
 					if (selectedNode instanceof CompositeNode) {
 						final CompositeNode compositeNode = (CompositeNode) selectedNode;
 						final IDataBrowserActionsHandler actionHandler = compositeNode.getActionHandler();
 						if (actionHandler != null) {
 							if (actionHandler.supportsSyncUpstream()) {
-								mgr.add(new RunnableAction("Check upstream", () -> actionHandler.syncUpstream()));
+								data_mgr.add(new RunnableAction("Check upstream", () -> actionHandler.syncUpstream()));
 								itemsAdded = true;
 							}
 							if (actionHandler.supportsRefreshLocal()) {
-								mgr.add(new RunnableAction("Check local", () -> actionHandler.refreshLocal()));
+								data_mgr.add(new RunnableAction("Check local", () -> actionHandler.refreshLocal()));
 								itemsAdded = true;
 							}
 						}
@@ -215,7 +265,7 @@ public class DataBrowser extends ViewPart {
 
 				if (contextMenuExtensions != null) {
 					for (final IDataBrowserContextMenuExtension ext : contextMenuExtensions) {
-						itemsAdded |= ext.contributeToMenu(treeSelection, mgr);
+						itemsAdded |= ext.contributeToDataMenu(treeSelection, data_mgr);
 					}
 				}
 				if (itemsAdded) {
@@ -239,18 +289,73 @@ public class DataBrowser extends ViewPart {
 			}
 		}
 
-		getViewSite().getWorkbenchWindow().getSelectionService().addSelectionListener("com.mmxlabs.scenario.service.ui.navigator", scenarioSelectionListener);
+		scenarioViewer = new TreeViewer(sash, SWT.NONE);
+		scenarioViewer.setContentProvider(new ScenarioContentProvider());
+		scenarioViewer.setLabelProvider(new ScenarioLabelProvider());
+		scenarioViewer.setInput(scenarioTracker);
+		final MenuManager scenario_mgr = new MenuManager();
+		scenarioViewer.getControl().addMenuDetectListener(new MenuDetectListener() {
+
+			private Menu menu;
+
+			@Override
+			public void menuDetected(final MenuDetectEvent e) {
+
+				final ISelection selection = scenarioViewer.getSelection();
+
+				if (selection.isEmpty()) {
+					return;
+				}
+
+				if (!(selection instanceof TreeSelection)) {
+					return;
+				}
+
+				final TreeSelection treeSelection = (TreeSelection) selection;
+
+				if (menu == null) {
+					menu = scenario_mgr.createContextMenu(scenarioViewer.getControl());
+				}
+				final IContributionItem[] l = scenario_mgr.getItems();
+				scenario_mgr.removeAll();
+				for (final IContributionItem itm : l) {
+					itm.dispose();
+				}
+
+				final MenuItem[] items = menu.getItems();
+				for (int i = 0; i < items.length; i++) {
+					items[i].dispose();
+				}
+				boolean itemsAdded = false;
+
+				if (contextMenuExtensions != null) {
+					for (final IDataBrowserContextMenuExtension ext : contextMenuExtensions) {
+						itemsAdded |= ext.contributeToScenarioMenu(treeSelection, scenario_mgr);
+					}
+				}
+				if (itemsAdded) {
+					menu.setVisible(true);
+				}
+			}
+		});
+		sash.setWeights(new int[] { 60, 40 });
+
+		scenarioViewer.addSelectionChangedListener(scenarioSelectionListener);
+		dataViewer.addSelectionChangedListener(nodeSelectionListener);
 	}
 
 	@Override
 	public void dispose() {
-		getViewSite().getWorkbenchWindow().getSelectionService().removeSelectionListener("com.mmxlabs.scenario.service.ui.navigator", scenarioSelectionListener);
+		if (scenarioTracker != null) {
+			scenarioTracker.close();
+		}
+
 		super.dispose();
 	}
 
 	@Override
 	public void setFocus() {
-		ViewerHelper.setFocus(viewer);
+		ViewerHelper.setFocus(dataViewer);
 	}
 
 	private static ComposedAdapterFactory createNewAdapterFactory() {
@@ -263,11 +368,113 @@ public class DataBrowser extends ViewPart {
 		return factory;
 	}
 
+	private static ComposedAdapterFactory createNewScenarioModelAdapterFactory() {
+		// Hook in the global registry to get other adapter factories
+		final ComposedAdapterFactory factory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		factory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+		factory.addAdapterFactory(new ScenarioServiceAdapterFactory());
+		factory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+
+		return factory;
+	}
+
 	private static class DataExtensionsModule extends AbstractModule {
 		@Override
 		protected void configure() {
 			install(osgiModule(FrameworkUtil.getBundle(Activator.class).getBundleContext(), eclipseRegistry()));
 			bind(iterable(DataExtensionPoint.class)).toProvider(service(DataExtensionPoint.class).multiple());
+		}
+	}
+
+	class ScenarioLabelProvider extends AdapterFactoryLabelProvider implements IColorProvider {
+
+		public ScenarioLabelProvider() {
+			super(createNewScenarioModelAdapterFactory());
+		}
+
+		@Override
+		public Color getBackground(Object element) {
+
+			if (element instanceof ScenarioInstance) {
+				ScenarioInstance scenarioInstance = (ScenarioInstance) element;
+				Predicate<ScenarioInstance> checker = selectedScenarioChecker;
+				if (checker != null) {
+					if (checker.test(scenarioInstance)) {
+						return PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
+					}
+				}
+			}
+
+			return super.getBackground(element);
+		}
+
+	}
+
+	class ScenarioContentProvider implements ITreeContentProvider {
+
+		public ScenarioContentProvider() {
+		}
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+
+		}
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+
+			if (inputElement instanceof ServiceTracker<?, ?>) {
+				Object service = ((ServiceTracker) inputElement).getService();
+				if (service instanceof ScenarioServiceRegistry) {
+					ScenarioServiceRegistry registry = (ScenarioServiceRegistry) service;
+					List<ScenarioService> localServices = new LinkedList<>();
+					for (ScenarioService ss : registry.getScenarioModel().getScenarioServices()) {
+						if (ss.isLocal()) {
+							localServices.add(ss);
+						}
+					}
+					return localServices.toArray();
+				}
+			}
+			return new Object[0];
+		}
+
+		@Override
+		public Object[] getChildren(Object parentElement) {
+			LinkedList<Object> result = new LinkedList<Object>();
+
+			if (parentElement instanceof Container) {
+				for (Object element : ((Container) parentElement).getElements()) {
+					if (element instanceof ScenarioInstance) {
+						result.add(element);
+					} else if (element instanceof Container) {
+						if (!((Container) element).getElements().isEmpty()) {
+							result.add(element);
+						}
+					}
+
+				}
+			}
+
+			return result.toArray();
+		}
+
+		@Override
+		public boolean hasChildren(Object element) {
+			if (!(element instanceof Container)) {
+				return false;
+			}
+			Container container = (Container) element;
+			return !(container.getElements().isEmpty());
+		}
+
+		@Override
+		public Object getParent(Object element) {
+			return null;
 		}
 	}
 }

@@ -141,29 +141,6 @@ public class BrowserItemProviderAdapterFactory extends BrowserAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.lngdataserver.browser.Node} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NodeItemProvider nodeItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.lngdataserver.browser.Node}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNodeAdapter() {
-		if (nodeItemProvider == null) {
-			nodeItemProvider = new NodeItemProvider(this);
-		}
-
-		return nodeItemProvider;
-	}
-
-	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -268,8 +245,6 @@ public class BrowserItemProviderAdapterFactory extends BrowserAdapterFactory imp
 			compositeNodeItemProvider.dispose();
 		if (leafItemProvider != null)
 			leafItemProvider.dispose();
-		if (nodeItemProvider != null)
-			nodeItemProvider.dispose();
 	}
 
 }

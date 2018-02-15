@@ -113,7 +113,7 @@ public class DistanceRepositoryActionHandler implements IDataBrowserActionsHandl
 			if (versions != null) {
 				boolean first = true;
 				for (final DataVersion v : versions) {
-					final Node version = BrowserFactory.eINSTANCE.createNode();
+					final Node version = BrowserFactory.eINSTANCE.createLeaf();
 					version.setParent(dataRoot);
 					version.setDisplayName(v.getIdentifier());
 					version.setPublished(v.isPublished());

@@ -38,7 +38,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
-		Node loading = BrowserFactory.eINSTANCE.createNode();
+		Node loading = BrowserFactory.eINSTANCE.createLeaf();
 		loading.setDisplayName("loading...");
 		portsDataRoot.setDisplayName("Ports (loading...)");
 		portsDataRoot.setType(LNGScenarioSharedModelTypes.LOCATIONS.getID());
@@ -118,7 +118,7 @@ public class Activator extends AbstractUIPlugin {
 					if (versions != null) {
 						boolean first = true;
 						for (DataVersion v : versions) {
-							Node version = BrowserFactory.eINSTANCE.createNode();
+							Node version = BrowserFactory.eINSTANCE.createLeaf();
 							version.setParent(portsDataRoot);
 							version.setDisplayName(v.getIdentifier());
 							version.setPublished(v.isPublished());
@@ -147,7 +147,7 @@ public class Activator extends AbstractUIPlugin {
 						}
 					}
 
-					final Node newVersion = BrowserFactory.eINSTANCE.createNode();
+					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
 					newVersion.setDisplayName(versionString);
 					newVersion.setParent(portsDataRoot);
 					portsDataRoot.getChildren().add(0, newVersion);

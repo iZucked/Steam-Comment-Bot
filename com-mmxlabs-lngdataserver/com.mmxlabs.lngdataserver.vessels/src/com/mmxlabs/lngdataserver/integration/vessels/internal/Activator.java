@@ -39,7 +39,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
-		Node loading = BrowserFactory.eINSTANCE.createNode();
+		Node loading = BrowserFactory.eINSTANCE.createLeaf();
 		loading.setDisplayName("loading...");
 		vesselsDataRoot.setDisplayName("Vessels (loading...)");
 		vesselsDataRoot.setType(LNGScenarioSharedModelTypes.FLEET.getID());
@@ -125,7 +125,7 @@ public class Activator extends AbstractUIPlugin {
 					if (versions != null) {
 						boolean first = true;
 						for (DataVersion v : versions) {
-							Node version = BrowserFactory.eINSTANCE.createNode();
+							Node version = BrowserFactory.eINSTANCE.createLeaf();
 							version.setParent(vesselsDataRoot);
 							version.setDisplayName(v.getIdentifier());
 							version.setPublished(v.isPublished());
@@ -154,7 +154,7 @@ public class Activator extends AbstractUIPlugin {
 						}
 					}
 
-					final Node newVersion = BrowserFactory.eINSTANCE.createNode();
+					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
 					newVersion.setDisplayName(versionString);
 					newVersion.setParent(vesselsDataRoot);
 					vesselsDataRoot.getChildren().add(0, newVersion);

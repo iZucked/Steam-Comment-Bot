@@ -23,10 +23,10 @@ import com.mmxlabs.lngdataserver.browser.Node;
 
 public class DataBrowserLabelProvider extends AdapterFactoryLabelProvider implements IColorProvider {
 
-	private final Set<Object> selectedNodes;
+	private final Set<Node> selectedNodes;
 	private final Color background;
 
-	public DataBrowserLabelProvider(final AdapterFactory adapterFactory, final Set<Object> selectedNodes) {
+	public DataBrowserLabelProvider(final AdapterFactory adapterFactory, final Set<Node> selectedNodes) {
 		super(adapterFactory);
 		this.selectedNodes = selectedNodes;
 		this.background = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
