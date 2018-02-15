@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class EmbdeddedWebServerPortDiscoveryProvider {
 
 	@Autowired
-	EmbeddedWebApplicationContext server;
+	private EmbeddedWebApplicationContext server;
 
 	@PostConstruct
 	public void createDiscoveryThread() {
