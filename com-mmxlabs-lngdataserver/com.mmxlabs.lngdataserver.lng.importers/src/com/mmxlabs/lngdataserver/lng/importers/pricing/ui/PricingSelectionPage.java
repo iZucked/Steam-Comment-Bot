@@ -17,12 +17,12 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lngdataserver.integration.pricing.IPricingProvider;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 
-public class PricingSelectionPage extends WizardPage{
-	
+public class PricingSelectionPage extends WizardPage {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(PricingSelectionPage.class);
-	
-	private final PricingRepository pricingRepository = new PricingRepository();
-	
+
+	private final PricingRepository pricingRepository = new PricingRepository(null);
+
 	private String versionTag;
 	private boolean isSelected = false;
 
@@ -37,34 +37,36 @@ public class PricingSelectionPage extends WizardPage{
 		// set the layout for the whole functional region
 		GridLayout layout = GridLayoutFactory.createFrom(new GridLayout(2, false)).extendedMargins(0, 0, 0, 0).spacing(5, 0).create();
 		container.setLayout(layout);
-		
+
 		(new Label(container, SWT.NULL)).setText("Select the version of the prices to be imported: ");
-		
+
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
-		
+
 		try {
 			pricingRepository.isReady();
 			pricingRepository.getVersions().forEach(v -> combo.add(v.getIdentifier()));
-		} catch (IOException e1) {
+		} catch (Exception e1) {
 			LOGGER.error("Error retrieving pricing versions", e1);
 		}
-		
-	    combo.addSelectionListener(new SelectionListener() {
-	        public void widgetSelected(SelectionEvent e) {
-	        	versionTag = combo.getText();
-	        	isSelected = true;
-	        	getWizard().getContainer().updateButtons();
-	        }
 
-	        public void widgetDefaultSelected(SelectionEvent e) {
-	        	versionTag = combo.getText();
-	        	getWizard().getContainer().updateButtons();
-	        	isSelected = false;
-	        }
-	      });
-	    setControl(container);
+		combo.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				versionTag = combo.getText();
+				isSelected = true;
+				getWizard().getContainer().updateButtons();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				versionTag = combo.getText();
+				getWizard().getContainer().updateButtons();
+				isSelected = false;
+			}
+		});
+		setControl(container);
 	}
-	
+
 	public IPricingProvider getPricingVersion() {
 		if (isSelected) {
 			try {
@@ -74,18 +76,18 @@ public class PricingSelectionPage extends WizardPage{
 				LOGGER.error(e.getMessage());
 				throw new RuntimeException("Error retrieving pricing for version " + versionTag);
 			}
-		}else {
+		} else {
 			throw new IllegalStateException("No version selected");
 		}
 	}
-	
+
 	@Override
-	public boolean canFlipToNextPage(){
+	public boolean canFlipToNextPage() {
 		return isPageComplete();
 	}
-	
+
 	@Override
-	public boolean isPageComplete(){
+	public boolean isPageComplete() {
 		return isSelected;
 	}
 }

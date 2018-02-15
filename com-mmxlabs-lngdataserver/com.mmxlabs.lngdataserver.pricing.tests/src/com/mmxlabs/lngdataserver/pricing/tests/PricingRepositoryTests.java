@@ -18,13 +18,13 @@ public class PricingRepositoryTests {
 	
 	@Test
 	public void getCurvesTest() throws IOException {
-		IPricingProvider provider = new PricingRepository(BASE_URL).getLatestPrices();
+		IPricingProvider provider = new PricingRepository(null, BASE_URL).getLatestPrices();
 		assertEquals(8, provider.getAvailableCurves().size());
 	}
 	
 	@Test
 	public void getCurveDataTest() throws IOException {
-		IPricingProvider provider = new PricingRepository(BASE_URL).getLatestPrices();
+		IPricingProvider provider = new PricingRepository(null, BASE_URL).getLatestPrices();
 		List<Pair<LocalDate, Double>> data = provider.getData("HH");
 		
 		assertEquals(6, data.size());
@@ -34,7 +34,7 @@ public class PricingRepositoryTests {
 	
 	@Test
 	public void getExpressionTest() throws IOException {
-		IPricingProvider provider = new PricingRepository(BASE_URL).getLatestPrices();
+		IPricingProvider provider = new PricingRepository(null, BASE_URL).getLatestPrices();
 		assertEquals("95%HH", provider.getExpression("REL_HH"));
 	}
 }

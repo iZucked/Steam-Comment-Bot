@@ -1,7 +1,5 @@
 package com.mmxlabs.lngdataserver.integration.pricing.internal;
 
-import java.io.IOException;
-
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -10,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingVersion;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -57,7 +55,7 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		active = true;
 
-		pricingRepository = new PricingRepository();
+		pricingRepository = new PricingRepository(getPreferenceStore());
 		pricingRepository.listenToPreferenceChanges();
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
 	}
@@ -71,7 +69,7 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(final BundleContext context) throws Exception {
 		if (pricingRepository != null) {
 			pricingRepository.stopListenToPreferenceChanges();
-			pricingRepository.stopListenForNewVersion();
+			pricingRepository.stopListeningForNewLocalVersions();
 		}
 		pricingRepository = null;
 		plugin = null;
@@ -110,7 +108,7 @@ public class Activator extends AbstractUIPlugin {
 			LOGGER.debug("Pricing back-end ready, retrieving versions...");
 			try {
 				pricingDataRoot.getChildren().clear();
-				for (final PricingVersion v : pricingRepository.getVersions()) {
+				for (final DataVersion v : pricingRepository.getVersions()) {
 					final Node version = BrowserFactory.eINSTANCE.createNode();
 					version.setParent(pricingDataRoot);
 					version.setDisplayName(v.getIdentifier());
@@ -118,12 +116,12 @@ public class Activator extends AbstractUIPlugin {
 					RunnerHelper.asyncExec(c -> pricingDataRoot.getChildren().add(version));
 				}
 				pricingDataRoot.setDisplayName("Pricing");
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				LOGGER.error("Error retrieving pricing versions");
 			}
 
 			// register consumer to update on new version
-			pricingRepository.registerVersionListener(versionString -> {
+			pricingRepository.registerLocalVersionListener(versionString -> {
 
 				RunnerHelper.asyncExec(c -> {
 					// Check for existing versions
@@ -137,7 +135,7 @@ public class Activator extends AbstractUIPlugin {
 					pricingDataRoot.getChildren().add(newVersion);
 				});
 			});
-			pricingRepository.listenForNewVersions();
+			pricingRepository.listenForNewLocalVersions();
 		}
 	}
 }

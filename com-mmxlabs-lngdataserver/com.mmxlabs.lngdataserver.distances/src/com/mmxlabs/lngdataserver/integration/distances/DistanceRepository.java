@@ -73,7 +73,7 @@ public class DistanceRepository extends AbstractDataRepository {
 				return new DataVersion(v.getIdentifier(), createdAt, v.getPublished());
 			}).collect(Collectors.toList());
 		} catch (final ApiException e) {
-			LOG.error("Error fetchinng distances versions" + e.getMessage());
+			LOG.error("Error fetching distances versions" + e.getMessage());
 			throw new RuntimeException("Error fetching distances versions", e);
 		}
 	}
@@ -197,14 +197,14 @@ public class DistanceRepository extends AbstractDataRepository {
 		}
 	}
 
-	private static LocalDateTime fromDateTimeAtUTC(final DateTime dateTime) {
-		return LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime.getMillis()), ZoneId.of("UTC"));
-	}
-
 	@Override
 	protected void newUpstreamURL(String upstreamURL) {
 		upstreamDistancesApi.getApiClient().setBasePath(upstreamURL);
 		upstreamWaitingDistancesApi.getApiClient().setBasePath(upstreamURL);
 		upstreamWaitingDistancesApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
+	}
+
+	protected static LocalDateTime fromDateTimeAtUTC(final DateTime dateTime) {
+		return LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime.getMillis()), ZoneId.of("UTC"));
 	}
 }
