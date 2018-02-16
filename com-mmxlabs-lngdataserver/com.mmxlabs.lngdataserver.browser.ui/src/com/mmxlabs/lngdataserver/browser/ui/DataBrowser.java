@@ -249,6 +249,11 @@ public class DataBrowser extends ViewPart {
 									// FIXME: Implement! Dialog for user entry then call handler
 								}));
 								itemsAdded = true;
+							} else {
+								data_mgr.add(new RunnableAction("Rename (Not suppported)", () -> {
+
+								}));
+								itemsAdded = true;
 							}
 							if (!selectedNode.isPublished() && actionHandler.supportsPublish()) {
 								data_mgr.add(new RunnableAction("Publish", () -> {
@@ -264,6 +269,17 @@ public class DataBrowser extends ViewPart {
 									if (actionHandler.delete(selectedNode.getDisplayName())) {
 										parentNode.getChildren().remove(selectedNode);
 									}
+								}));
+								itemsAdded = true;
+							} else {
+								data_mgr.add(new RunnableAction("Delete (Not suppported)", () -> {
+
+								}));
+								itemsAdded = true;
+							}
+							{
+								data_mgr.add(new RunnableAction("Set as latest (Not suppported)", () -> {
+
 								}));
 								itemsAdded = true;
 							}
