@@ -1,9 +1,11 @@
 package com.mmxlabs.lngdataserver.integration.ports;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -14,21 +16,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.port.api.PortApi;
+import com.mmxlabs.lngdataserver.port.model.Version;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataservice.ports.model.PublishRequest;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
- 
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class PortsRepository extends AbstractDataRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(PortsRepository.class);
 
+	private static final OkHttpClient CLIENT = new OkHttpClient();
 	private static final String SYNC_VERSION_ENDPOINT = "/ports/sync/versions/";
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-	
 	private PortApi portsApi = new PortApi();
 	private String backendUrl;
 
@@ -52,7 +56,7 @@ public class PortsRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return portsApi.fetchVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt =  LocalDateTime.now();//LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
 				return new DataVersion(v.getIdentifier(), createdAt, /* v.isPublished() */ false);
 			}).collect(Collectors.toList());
 		} catch (final Exception e) {
@@ -81,13 +85,13 @@ public class PortsRepository extends AbstractDataRepository {
 	public void syncUpstreamVersion(String version) throws Exception {
 		// Pull down the version data
 		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
-		final Response pullResponse = portsApi.getApiClient().getHttpClient().newCall(pullRequest).execute();
+		final Response pullResponse = CLIENT.newCall(pullRequest).execute();
 		final String json = pullResponse.body().string();
 
 		// Post the data to local repo
 		final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
 		final Request postRequest = new Request.Builder().url(backendUrl + SYNC_VERSION_ENDPOINT).post(body).build();
-		final Response postResponse = portsApi.getApiClient().getHttpClient().newCall(postRequest).execute();
+		final Response postResponse = CLIENT.newCall(postRequest).execute();
 	}
 
 	@Override
@@ -100,7 +104,7 @@ public class PortsRepository extends AbstractDataRepository {
 
 		RequestBody body = RequestBody.create(JSON, json);
 		Request request = new Request.Builder().url(backendUrl + "/ports/sync/publish").post(body).build();
-		Response response = portsApi.getApiClient().getHttpClient().newCall(request).execute();
+		Response response = CLIENT.newCall(request).execute();
 
 		if (!response.isSuccessful()) {
 			LOG.error("Error publishing version: " + response.message());
@@ -114,16 +118,46 @@ public class PortsRepository extends AbstractDataRepository {
 
 	@Override
 	protected CompletableFuture<String> waitForNewLocalVersion() {
-		return CompletableFuture.completedFuture(null);
+		return notifyOnNewVersion(backendUrl);
+	}
+
+	@Override
+	protected boolean canWaitForNewLocalVersion() {
+		return true;
+	}
+
+	@Override
+	protected boolean canWaitForNewUpstreamVersion() {
+		return true;
 	}
 
 	@Override
 	protected CompletableFuture<String> waitForNewUpstreamVersion() {
-		return CompletableFuture.completedFuture(null);
+		return notifyOnNewVersion(upstreamUrl);
 	}
 
 	@Override
 	protected void newUpstreamURL(String upstreamURL) {
 
+	}
+
+	public static CompletableFuture<String> notifyOnNewVersion(String baseUrl) {
+
+		OkHttpClient longPollingClient = CLIENT.newBuilder().readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS).build();
+		String url = baseUrl + "/vessels/version_notification";
+		LOG.debug("Calling url {}", url);
+		CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+			Request request = new Request.Builder().url(url).build();
+			Response response;
+			try {
+				response = longPollingClient.newCall(request).execute();
+				Version newVersion = new ObjectMapper().readValue(response.body().byteStream(), Version.class);
+				return newVersion.getIdentifier();
+			} catch (IOException e) {
+				LOG.error("Error waiting for new version");
+				throw new RuntimeException("Error waiting for new version");
+			}
+		});
+		return completableFuture;
 	}
 }
