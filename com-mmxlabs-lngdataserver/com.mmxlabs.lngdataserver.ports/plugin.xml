@@ -21,4 +21,19 @@
 		      class="com.mmxlabs.lngdataserver.integration.ports.internal.PortsDataExtension">
 		</DataBrowserExtension>
 	 </extension>
+  <extension
+        point="org.eclipse.core.runtime.preferences">
+     <initializer
+           class="com.mmxlabs.lngdataserver.integration.ports.preferences.PreferenceInitializer">
+     </initializer>
+  </extension>
+  <extension
+        point="org.eclipse.ui.preferencePages">
+     <page
+           category="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
+           class="com.mmxlabs.lngdataserver.integration.ports.preferences.PortsRepositoryPreferencesPage"
+           id="com.mmxlabs.lngdataserver.integration.ports.preferences.PortsRepositoryPreferencesPage"
+           name="Ports service">
+     </page>
+  </extension>
 </plugin>
