@@ -8,6 +8,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -21,15 +22,16 @@ import org.osgi.framework.FrameworkUtil;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 
-public class DataBrowserLabelProvider extends AdapterFactoryLabelProvider implements IColorProvider {
+public class DataBrowserLabelProvider extends ColumnLabelProvider implements IColorProvider {
 
 	private final Set<Node> selectedNodes;
 	private final Color background;
+	private final AdapterFactoryLabelProvider lp;
 
 	public DataBrowserLabelProvider(final AdapterFactory adapterFactory, final Set<Node> selectedNodes) {
-		super(adapterFactory);
+		lp = new AdapterFactoryLabelProvider(adapterFactory);
 		this.selectedNodes = selectedNodes;
-		this.background = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
+		this.background = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
 	}
 
 	@Override

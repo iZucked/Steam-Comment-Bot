@@ -13,26 +13,31 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -51,6 +56,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
+import com.mmxlabs.lngdataserver.browser.BrowserPackage;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Leaf;
 import com.mmxlabs.lngdataserver.browser.Node;
@@ -58,6 +64,7 @@ import com.mmxlabs.lngdataserver.browser.provider.BrowserItemProviderAdapterFact
 import com.mmxlabs.lngdataserver.browser.ui.context.DataBrowserContextMenuExtensionUtil;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
@@ -74,8 +81,8 @@ public class DataBrowser extends ViewPart {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataBrowser.class);
 
-	private TreeViewer dataViewer;
-	private TreeViewer scenarioViewer;
+	private GridTreeViewer dataViewer;
+	private GridTreeViewer scenarioViewer;
 	private CompositeNode root;
 	private final Set<Node> selectedNodes = new HashSet<>();
 	private Predicate<ScenarioInstance> selectedScenarioChecker = null;
@@ -137,20 +144,23 @@ public class DataBrowser extends ViewPart {
 						if (o instanceof Leaf) {
 							Leaf leaf = (Leaf) o;
 							CompositeNode compositeNode = leaf.getParent();
-							selectedScenarioChecker = (scenarioInstance) -> {
-								final Manifest mf = scenarioInstance.getManifest();
-								if (mf != null) {
-									for (final ModelArtifact modelArtifact : mf.getModelDependencies()) {
-										final String v = modelArtifact.getDataVersion();
-										if (Objects.equals(modelArtifact.getKey(), compositeNode.getType())) {
-											if (Objects.equals(leaf.getDisplayName(), v)) {
-												return true;
+							if (compositeNode != null) {
+
+								selectedScenarioChecker = (scenarioInstance) -> {
+									final Manifest mf = scenarioInstance.getManifest();
+									if (mf != null) {
+										for (final ModelArtifact modelArtifact : mf.getModelDependencies()) {
+											final String v = modelArtifact.getDataVersion();
+											if (Objects.equals(modelArtifact.getKey(), compositeNode.getType())) {
+												if (Objects.equals(leaf.getDisplayName(), v)) {
+													return true;
+												}
 											}
 										}
 									}
-								}
-								return false;
-							};
+									return false;
+								};
+							}
 						}
 					}
 				}
@@ -171,10 +181,22 @@ public class DataBrowser extends ViewPart {
 
 		// Change the color used to paint the sashes
 		sash.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_GRAY));
-
-		dataViewer = new TreeViewer(sash, SWT.SINGLE);
+		Composite dv = new Composite(sash, SWT.NONE);
+		dv.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		dv.setLayout(GridLayoutFactory.fillDefaults().create());
+		dv.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		dataViewer = new GridTreeViewer(dv, SWT.NONE | SWT.SINGLE | SWT.V_SCROLL);
 		dataViewer.setContentProvider(new DataBrowserContentProvider(createNewAdapterFactory()));
-		dataViewer.setLabelProvider(new DataBrowserLabelProvider(createNewAdapterFactory(), selectedNodes));
+		dataViewer.setAutoExpandLevel(GridTreeViewer.ALL_LEVELS);
+		dataViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		GridViewerColumn data_col1 = new GridViewerColumn(dataViewer, SWT.NONE);
+		data_col1.getColumn().setTree(true);
+		data_col1.getColumn().setWidth(300);
+
+		data_col1.setLabelProvider(new DataBrowserLabelProvider(createNewAdapterFactory(), selectedNodes));
+		GridViewerHelper.configureLookAndFeel(data_col1);
+
+		GridViewerHelper.configureLookAndFeel(dataViewer);
 
 		root = BrowserFactory.eINSTANCE.createCompositeNode();
 		root.setDisplayName("Versions");
@@ -274,25 +296,52 @@ public class DataBrowser extends ViewPart {
 			}
 		});
 
+		Composite sv = new Composite(sash, SWT.NONE);
+		sv.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		sv.setLayout(GridLayoutFactory.fillDefaults().create());
+		sv.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		scenarioViewer = new GridTreeViewer(sv, SWT.SINGLE | SWT.V_SCROLL);
+		scenarioViewer.getGrid().setBackgroundMode(SWT.INHERIT_NONE);
+		scenarioViewer.getGrid().setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		GridViewerHelper.configureLookAndFeel(scenarioViewer);
+		scenarioViewer.getGrid().setLinesVisible(true);
+		scenarioViewer.getGrid().setHeaderVisible(true);
+		scenarioViewer.setContentProvider(new ScenarioContentProvider());
+		scenarioViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		GridViewerColumn c1 = new GridViewerColumn(scenarioViewer, SWT.NONE);
+		c1.setLabelProvider(new ScenarioLabelProvider(0, null));
+		c1.getColumn().setTree(true);
+		c1.getColumn().setWidth(200);
+		GridViewerHelper.configureLookAndFeel(c1);
+
 		final Injector injector = Guice.createInjector(new DataExtensionsModule());
 		final Iterable<DataExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<DataExtensionPoint>>() {
 		}));
 		LOGGER.debug("Found " + Iterables.size(extensions) + " extensions");
+
 		for (final DataExtensionPoint extensionPoint : extensions) {
 			final DataExtension dataExtension = extensionPoint.getDataExtension();
 			if (dataExtension != null) {
 				try {
-					root.getChildren().add(dataExtension.getDataRoot());
+					CompositeNode dataRoot = dataExtension.getDataRoot();
+					root.getChildren().add(dataRoot);
+
+					GridViewerColumn c2 = new GridViewerColumn(scenarioViewer, SWT.NONE);
+					c2.setLabelProvider(new ScenarioLabelProvider(1, dataRoot));
+					c2.getColumn().setWidth(30);
+					GridViewerHelper.configureLookAndFeel(c2);
+
+					// Hacky renaming...
+					String lbl = dataRoot.getDisplayName().replaceAll(" (loading...)", "");
+					c2.getColumn().setText(lbl);
 				} catch (final Exception e) {
 					LOGGER.error(e.getMessage(), e);
 				}
 			}
 		}
-
-		scenarioViewer = new TreeViewer(sash, SWT.NONE);
-		scenarioViewer.setContentProvider(new ScenarioContentProvider());
-		scenarioViewer.setLabelProvider(new ScenarioLabelProvider());
+		scenarioViewer.setAutoExpandLevel(GridTreeViewer.ALL_LEVELS);
 		scenarioViewer.setInput(scenarioTracker);
+		scenarioViewer.expandAll();
 		final MenuManager scenario_mgr = new MenuManager();
 		scenarioViewer.getControl().addMenuDetectListener(new MenuDetectListener() {
 
@@ -342,6 +391,23 @@ public class DataBrowser extends ViewPart {
 
 		scenarioViewer.addSelectionChangedListener(scenarioSelectionListener);
 		dataViewer.addSelectionChangedListener(nodeSelectionListener);
+
+		root.eAdapters().add(new EContentAdapter() {
+			public void notifyChanged(org.eclipse.emf.common.notify.Notification notification) {
+				super.notifyChanged(notification);
+				if (notification.isTouch()) {
+					return;
+				}
+				if (notification.getFeature() == BrowserPackage.Literals.COMPOSITE_NODE__LATEST) {
+					ViewerHelper.refresh(scenarioViewer, false);
+				}
+				if (notification.getFeature() == BrowserPackage.Literals.COMPOSITE_NODE__CHILDREN) {
+					ViewerHelper.runIfViewerValid(dataViewer, false, (v) -> v.expandAll());
+				}
+			};
+		});
+		dataViewer.expandAll();
+
 	}
 
 	@Override
@@ -386,10 +452,52 @@ public class DataBrowser extends ViewPart {
 		}
 	}
 
-	class ScenarioLabelProvider extends AdapterFactoryLabelProvider implements IColorProvider {
+	class ScenarioLabelProvider extends ColumnLabelProvider {
 
-		public ScenarioLabelProvider() {
-			super(createNewScenarioModelAdapterFactory());
+		private AdapterFactoryLabelProvider lp;
+		private int columnIdx;
+		private CompositeNode compositeNode;
+
+		public ScenarioLabelProvider(int columnIdx, CompositeNode compositeNode) {
+			this.columnIdx = columnIdx;
+			this.compositeNode = compositeNode;
+			lp = new AdapterFactoryLabelProvider(createNewScenarioModelAdapterFactory());
+		}
+
+		@Override
+		public String getText(Object object) {
+			if (columnIdx > 0) {
+
+				if (object instanceof ScenarioInstance) {
+					ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+					Manifest mf = scenarioInstance.getManifest();
+					if (mf != null) {
+
+						Node latest = compositeNode.getLatest();
+						if (latest == null) {
+							return "";
+						}
+						String versionId = latest.getDisplayName();
+						if (versionId == null || versionId.toLowerCase().contains("loading")) {
+							return "";
+						}
+						for (ModelArtifact modelArtifact : mf.getModelDependencies()) {
+							if (Objects.equals(modelArtifact.getKey(), compositeNode.getType())) {
+								if (versionId.equals(modelArtifact.getDataVersion())) {
+									return "";
+								} else {
+									return "X";
+								}
+							}
+						}
+					}
+					return "X";
+
+				}
+
+				return "";
+			}
+			return lp.getText(object);
 		}
 
 		@Override
@@ -400,14 +508,21 @@ public class DataBrowser extends ViewPart {
 				Predicate<ScenarioInstance> checker = selectedScenarioChecker;
 				if (checker != null) {
 					if (checker.test(scenarioInstance)) {
-						return PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
+						return PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
 					}
 				}
 			}
 
-			return super.getBackground(element);
+			return null;
 		}
 
+		@Override
+		public Image getImage(Object element) {
+			if (columnIdx == 0) {
+				return lp.getImage(element);
+			}
+			return null;
+		}
 	}
 
 	class ScenarioContentProvider implements ITreeContentProvider {
