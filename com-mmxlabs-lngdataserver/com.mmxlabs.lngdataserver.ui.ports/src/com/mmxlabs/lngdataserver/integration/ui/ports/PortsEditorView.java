@@ -56,7 +56,7 @@ public class PortsEditorView extends ViewPart {
 				// check if distances node
 				if (node.getParent() != null && node.getParent().getDisplayName().equals("Ports")) {
 					System.out.println("update received: " + node.getDisplayName());
-					browser.setUrl(getUrl(node.getDisplayName()));
+					RunnerHelper.asyncExec(() -> browser.setUrl(getUrl(node.getDisplayName())));
 				}
 			}
 		};

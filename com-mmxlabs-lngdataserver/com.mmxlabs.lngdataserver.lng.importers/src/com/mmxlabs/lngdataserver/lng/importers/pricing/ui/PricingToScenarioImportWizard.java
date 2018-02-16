@@ -31,10 +31,12 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 	private PricingSelectionPage pricingSelectionPage;
 	private String versionIdentifier;
 	private ScenarioInstance currentInstance;
+	private boolean autoSave;
 
-	public PricingToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance) {
+	public PricingToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance, boolean autoSave) {
 		this.versionIdentifier = versionIdentifier;
 		this.currentInstance = currentInstance;
+		this.autoSave = autoSave;
 	}
 
 	@Override
@@ -84,7 +86,11 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 							try {
 								RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(updatePricingCommand));
 								monitor.worked(1);
-
+								if (autoSave) {
+									modelReference.save();
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
 							} finally {
 								((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
 								modelReference.getLock().unlock();

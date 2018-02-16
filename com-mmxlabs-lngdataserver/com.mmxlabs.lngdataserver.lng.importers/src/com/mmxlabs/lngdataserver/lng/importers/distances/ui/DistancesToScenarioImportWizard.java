@@ -1,5 +1,6 @@
 package com.mmxlabs.lngdataserver.lng.importers.distances.ui;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,9 +44,12 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 	private @Nullable String versionIdentifier;
 
-	public DistancesToScenarioImportWizard(@Nullable String versionIdentifier, final ScenarioInstance currentInstance) {
+	private boolean autoSave;
+
+	public DistancesToScenarioImportWizard(@Nullable String versionIdentifier, final ScenarioInstance currentInstance, boolean autoSave) {
 		this.versionIdentifier = versionIdentifier;
 		this.currentInstance = currentInstance;
+		this.autoSave = autoSave;
 	}
 
 	@Override
@@ -94,9 +98,16 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 										if (!command.canExecute()) {
 											throw new RuntimeException("Unable to execute command");
 										}
-
 										RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(command));
 										monitor.worked(1);
+										if (autoSave) {
+											try {
+												modelReference.save();
+											} catch (IOException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+										}
 									});
 								}
 							}

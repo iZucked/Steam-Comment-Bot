@@ -30,10 +30,12 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 	private PortsSelectionPage portsSelectionPage;
 	private String versionIdentifier;
 	private ScenarioInstance currentInstance;
+	private boolean autoSave;
 
-	public PortsToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance) {
+	public PortsToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance, boolean autoSave) {
 		this.versionIdentifier = versionIdentifier;
 		this.currentInstance = currentInstance;
+		this.autoSave = autoSave;
 	}
 
 	@Override
@@ -85,6 +87,11 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 								RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(updatePricingCommand));
 								monitor.worked(1);
 
+								if (autoSave) {
+									modelReference.save();
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
 							} finally {
 								((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
 								modelReference.getLock().unlock();

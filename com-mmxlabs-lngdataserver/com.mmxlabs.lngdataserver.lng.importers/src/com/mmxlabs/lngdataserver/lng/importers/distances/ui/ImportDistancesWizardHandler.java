@@ -30,7 +30,7 @@ public class ImportDistancesWizardHandler extends AbstractHandler {
 			currentInstance = editorInput.getScenarioInstance();
 		}
 
-		DistancesToScenarioImportWizard wizard = new DistancesToScenarioImportWizard(null, currentInstance);
+		DistancesToScenarioImportWizard wizard = new DistancesToScenarioImportWizard(null, currentInstance, false);
 
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 

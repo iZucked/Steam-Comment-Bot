@@ -58,25 +58,25 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 					if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), parentNode.getType())) {
 						String versionIdentifier = node.getDisplayName();
 						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-							openWizard((currentInstance) -> new DistancesToScenarioImportWizard(versionIdentifier, currentInstance));
+							openWizard((currentInstance) -> new DistancesToScenarioImportWizard(versionIdentifier, currentInstance, true));
 						}));
 						itemsAdded = true;
 					} else if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), parentNode.getType())) {
 						String versionIdentifier = node.getDisplayName();
 						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-							openWizard((currentInstance) -> new PricingToScenarioImportWizard(versionIdentifier, currentInstance));
+							openWizard((currentInstance) -> new PricingToScenarioImportWizard(versionIdentifier, currentInstance, true));
 						}));
 						itemsAdded = true;
 					} else if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), parentNode.getType())) {
 						String versionIdentifier = node.getDisplayName();
 						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-							openWizard((currentInstance) -> new VesselsToScenarioImportWizard(versionIdentifier, currentInstance));
+							openWizard((currentInstance) -> new VesselsToScenarioImportWizard(versionIdentifier, currentInstance, true));
 						}));
 						itemsAdded = true;
 					} else if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), parentNode.getType())) {
 						String versionIdentifier = node.getDisplayName();
 						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
-							openWizard((currentInstance) -> new PortsToScenarioImportWizard(versionIdentifier, currentInstance));
+							openWizard((currentInstance) -> new PortsToScenarioImportWizard(versionIdentifier, currentInstance, true));
 						}));
 						itemsAdded = true;
 					}

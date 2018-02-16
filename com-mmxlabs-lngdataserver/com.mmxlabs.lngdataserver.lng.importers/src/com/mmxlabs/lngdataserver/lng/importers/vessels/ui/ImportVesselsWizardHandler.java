@@ -13,7 +13,7 @@ import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImpor
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
-public class ImportVesselsWizardHandler extends AbstractHandler{
+public class ImportVesselsWizardHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -22,19 +22,19 @@ public class ImportVesselsWizardHandler extends AbstractHandler{
 			// action has been disposed
 			return null;
 		}
-		
+
 		final IEditorInput activeEditorInput = HandlerUtil.getActiveEditorInput(event);
 		ScenarioInstance currentInstance = null;
 		if (activeEditorInput instanceof IScenarioServiceEditorInput) {
 			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) activeEditorInput;
 			currentInstance = editorInput.getScenarioInstance();
 		}
-		VesselsToScenarioImportWizard wizard = new VesselsToScenarioImportWizard(null, currentInstance);
-		
+		VesselsToScenarioImportWizard wizard = new VesselsToScenarioImportWizard(null, currentInstance, false);
+
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		Shell parent = activeWorkbenchWindow.getShell();
-		
+
 		final WizardDialog dialog = new WizardDialog(parent, wizard);
 		dialog.create();
 		dialog.open();

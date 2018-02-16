@@ -31,10 +31,12 @@ public class VesselsToScenarioImportWizard extends Wizard implements IImportWiza
 	private VesselsSelectionPage vesselsSelectionPage;
 	private String versionIdentifier;
 	private ScenarioInstance currentInstance;
+	private boolean autoSave;
 
-	public VesselsToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance) {
+	public VesselsToScenarioImportWizard(String versionIdentifier, ScenarioInstance currentInstance, boolean autoSave) {
 		this.versionIdentifier = versionIdentifier;
 		this.currentInstance = currentInstance;
+		this.autoSave = autoSave;
 	}
 
 	@Override
@@ -86,6 +88,12 @@ public class VesselsToScenarioImportWizard extends Wizard implements IImportWiza
 								RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(updateCommand));
 								monitor.worked(1);
 
+								if (autoSave) {
+									modelReference.save();
+								}
+
+							} catch (Exception e) {
+								e.printStackTrace();
 							} finally {
 								((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
 								modelReference.getLock().unlock();

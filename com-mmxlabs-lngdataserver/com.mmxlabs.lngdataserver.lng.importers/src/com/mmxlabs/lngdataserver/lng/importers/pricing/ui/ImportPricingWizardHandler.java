@@ -28,7 +28,7 @@ public class ImportPricingWizardHandler extends AbstractHandler {
 			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) activeEditorInput;
 			currentInstance = editorInput.getScenarioInstance();
 		}
-		PricingToScenarioImportWizard wizard = new PricingToScenarioImportWizard(null, currentInstance);
+		PricingToScenarioImportWizard wizard = new PricingToScenarioImportWizard(null, currentInstance, false);
 
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
