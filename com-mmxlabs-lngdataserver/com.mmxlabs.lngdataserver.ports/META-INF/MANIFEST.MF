@@ -32,7 +32,9 @@ Bundle-ClassPath: .,
  lib/ports-client-1.0.0.jar
 Export-Package: com.mmxlabs.lngdataserver.integration.ports,
  com.mmxlabs.lngdataserver.integration.ports.internal,
- com.mmxlabs.lngdataserver.port,
- com.mmxlabs.lngdataserver.port.api,
- com.mmxlabs.lngdataserver.port.model
+ com.mmxlabs.lngdataserver.integration.ports.preferences,
+ com.mmxlabs.lngdataservice.client.ports,
+ com.mmxlabs.lngdataservice.client.ports.api,
+ com.mmxlabs.lngdataservice.client.ports.auth,
+ com.mmxlabs.lngdataservice.client.ports.model
 Bundle-Vendor: Minimax Labs Ltd.

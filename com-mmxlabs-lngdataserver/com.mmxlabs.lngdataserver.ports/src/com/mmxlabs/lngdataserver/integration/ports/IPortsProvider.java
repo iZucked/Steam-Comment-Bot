@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.lngdataserver.port.model.Port;
+import com.mmxlabs.lngdataservice.client.ports.model.Port;
 
 @NonNullByDefault
 public interface IPortsProvider {

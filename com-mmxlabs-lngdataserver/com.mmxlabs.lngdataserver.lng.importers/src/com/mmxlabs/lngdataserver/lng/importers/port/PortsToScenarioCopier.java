@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.ports.IPortsProvider;
-import com.mmxlabs.lngdataserver.port.model.Port.CapabilitiesEnum;
+import com.mmxlabs.lngdataservice.client.ports.model.Port.CapabilitiesEnum;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -72,7 +72,7 @@ public class PortsToScenarioCopier {
 		// }
 		//
 		// Create all port update
-		for (com.mmxlabs.lngdataserver.port.model.@NonNull Port port : portsProvider.getPorts()) {
+		for (com.mmxlabs.lngdataservice.client.ports.model.@NonNull Port port : portsProvider.getPorts()) {
 
 			String mmxID = port.getLocationMmxId();
 			List<Port> lingo_ports = locationToPort.get(mmxID);

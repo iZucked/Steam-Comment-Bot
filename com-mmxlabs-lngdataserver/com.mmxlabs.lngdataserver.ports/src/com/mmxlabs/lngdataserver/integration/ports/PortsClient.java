@@ -21,7 +21,6 @@ public class PortsClient {
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
-
 		String json = new ObjectMapper().writeValueAsString(version.getPorts());
 
 		RequestBody body = RequestBody.create(JSON, json);

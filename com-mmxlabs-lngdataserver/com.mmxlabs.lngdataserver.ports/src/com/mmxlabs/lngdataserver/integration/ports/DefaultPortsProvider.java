@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.strings.StringDistance;
-import com.mmxlabs.lngdataserver.port.model.Port;
+import com.mmxlabs.lngdataservice.client.ports.model.Port;
 
 public class DefaultPortsProvider implements IPortsProvider {
 

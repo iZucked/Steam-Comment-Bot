@@ -9,8 +9,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.port.model.Port.CapabilitiesEnum;
-import com.mmxlabs.lngdataservice.ports.model.Port;
+import com.mmxlabs.lngdataservice.client.ports.model.Port.CapabilitiesEnum;
+import com.mmxlabs.lngdataservice.client.ports.model.Port;
 import com.mmxlabs.lngdataservice.ports.model.PortCapability;
 import com.mmxlabs.lngdataservice.ports.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
