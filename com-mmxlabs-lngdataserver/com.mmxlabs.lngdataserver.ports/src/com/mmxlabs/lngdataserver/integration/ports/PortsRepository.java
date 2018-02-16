@@ -2,8 +2,8 @@ package com.mmxlabs.lngdataserver.integration.ports;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -15,10 +15,11 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
+import com.mmxlabs.lngdataserver.port.ApiClient;
 import com.mmxlabs.lngdataserver.port.api.PortApi;
-import com.mmxlabs.lngdataserver.port.model.Version;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataservice.ports.model.PublishRequest;
+import com.mmxlabs.lngdataservice.ports.model.Version;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -33,7 +34,8 @@ public class PortsRepository extends AbstractDataRepository {
 	private static final String SYNC_VERSION_ENDPOINT = "/ports/sync/versions/";
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-	private PortApi portsApi = new PortApi();
+	private PortApi portsApi = new PortApi(new ApiClient());
+	private PortApi upstreamApi = new PortApi(new ApiClient());
 	private String backendUrl;
 
 	public PortsRepository(IPreferenceStore preferenceStore, String localUrl) {
@@ -113,7 +115,12 @@ public class PortsRepository extends AbstractDataRepository {
 
 	@Override
 	public List<DataVersion> updateAvailable() throws Exception {
-		return Collections.emptyList();
+		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
+		final List<DataVersion> upstreamVersions = upstreamApi.fetchVersionsUsingGET().stream() //
+				.filter(v -> !localVersions.contains(v.getIdentifier())) //
+				.map(v -> new DataVersion(v.getIdentifier(), LocalDateTime.now() /* v.getCreatedAt() */, true /* v.isPublished() */))//
+				.collect(Collectors.toList());
+		return upstreamVersions;
 	}
 
 	@Override
@@ -138,13 +145,13 @@ public class PortsRepository extends AbstractDataRepository {
 
 	@Override
 	protected void newUpstreamURL(String upstreamURL) {
-
+		upstreamApi.getApiClient().setBasePath(upstreamURL);
 	}
 
 	public static CompletableFuture<String> notifyOnNewVersion(String baseUrl) {
 
 		OkHttpClient longPollingClient = CLIENT.newBuilder().readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS).build();
-		String url = baseUrl + "/vessels/version_notification";
+		String url = baseUrl + "/ports/version_notification";
 		LOG.debug("Calling url {}", url);
 		CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
 			Request request = new Request.Builder().url(url).build();
@@ -159,5 +166,18 @@ public class PortsRepository extends AbstractDataRepository {
 			}
 		});
 		return completableFuture;
+	}
+
+	public void saveVersion(Version version) throws Exception {
+		String json = new ObjectMapper().writeValueAsString(version);
+
+		RequestBody body = RequestBody.create(JSON, json);
+		Request request = new Request.Builder().url(backendUrl + SYNC_VERSION_ENDPOINT).post(body).build();
+		Response response = CLIENT.newCall(request).execute();
+
+		if (!response.isSuccessful()) {
+			LOG.error("Error publishing version: " + response.message());
+		}
+
 	}
 }

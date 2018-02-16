@@ -17,14 +17,14 @@ import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.vessel.api.VesselsApi;
-import com.mmxlabs.lngdataserver.vessel.model.Version;
+import com.mmxlabs.lngdataservice.vessels.model.Version;
 
+import io.swagger.client.model.PublishRequest;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import io.swagger.client.model.PublishRequest;
 
 public class VesselsRepository extends AbstractDataRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(VesselsRepository.class);

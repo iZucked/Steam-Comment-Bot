@@ -19,7 +19,9 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
+import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.ui.PricingFromScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.importers.distances.ui.DistancesToScenarioImportWizard;
@@ -28,6 +30,7 @@ import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImpor
 import com.mmxlabs.lngdataserver.lng.importers.vessels.ui.VesselsToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataservice.pricing.model.Version;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -108,6 +111,18 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 							}));
 							itemsAdded = true;
 						}
+						if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
+							menuManager.add(new RunnableAction("Export ports data", () -> {
+								exportPorts(scenarioInstance);
+							}));
+							itemsAdded = true;
+						}
+						// if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), modelArtifact.getKey())) {
+						// menuManager.add(new RunnableAction("Export pricing data", () -> {
+						// exportVessels(scenarioInstance);
+						// }));
+						// itemsAdded = true;
+						// }
 					}
 				}
 
@@ -129,6 +144,27 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				try {
 					PricingClient.saveVersion(url, version);
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+		}
+	}
+
+	private void exportPorts(ScenarioInstance scenario) {
+		String url = BackEndUrlProvider.INSTANCE.getUrl();
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
+		try (ModelReference modelReference = modelRecord.aquireReference(PricingFromScenarioImportWizard.class.getSimpleName())) {
+			modelReference.executeWithLock(false, () -> {
+				LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
+
+				PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+				com.mmxlabs.lngdataservice.ports.model.Version version = PortFromScenarioCopier.generateVersion(portModel);
+				try {
+					PortsRepository repo = new PortsRepository(null, null);
+					repo.isReady();
+					repo.saveVersion(version);
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

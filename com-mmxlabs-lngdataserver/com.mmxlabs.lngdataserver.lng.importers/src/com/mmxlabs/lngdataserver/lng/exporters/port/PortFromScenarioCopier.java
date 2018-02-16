@@ -1,6 +1,7 @@
 package com.mmxlabs.lngdataserver.lng.exporters.port;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.port.model.Port.CapabilitiesEnum;
 import com.mmxlabs.lngdataservice.ports.model.Port;
+import com.mmxlabs.lngdataservice.ports.model.PortCapability;
 import com.mmxlabs.lngdataservice.ports.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
 
@@ -17,13 +19,13 @@ public class PortFromScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortFromScenarioCopier.class);
 
-	public static List<com.mmxlabs.lngdataserver.port.model. Port> generateVersion(PortModel portModel) {
+	public static Version generateVersion(PortModel portModel) {
 
 		Version version = new Version();
 
-		 List<com.mmxlabs.lngdataserver.port.model. Port>  ports = new LinkedList<>();
+		List<com.mmxlabs.lngdataservice.ports.model.Port> ports = new LinkedList<>();
 		for (com.mmxlabs.models.lng.port.Port lingo_port : portModel.getPorts()) {
-			com.mmxlabs.lngdataserver.port.model.  Port port = new  com.mmxlabs.lngdataserver.port.model.  Port();
+			com.mmxlabs.lngdataservice.ports.model.Port port = new com.mmxlabs.lngdataservice.ports.model.Port();
 			port.setLocationMmxId(lingo_port.getLocation().getMmxId());
 			port.setAllowCooldown(lingo_port.isAllowCooldown());
 			port.setBerths(lingo_port.getBerths());
@@ -37,20 +39,20 @@ public class PortFromScenarioCopier {
 				port.setMaxCvValue(lingo_port.getMaxCvValue());
 			}
 
-			port.setCapabilities(new LinkedList<>());
+			port.setCapabilities(new HashSet<>());
 			for (com.mmxlabs.models.lng.types.PortCapability lingo_pc : lingo_port.getCapabilities()) {
 				switch (lingo_pc) {
 				case DISCHARGE:
-					port.getCapabilities().add(CapabilitiesEnum.DISCHARGE);
+					port.getCapabilities().add(PortCapability.DISCHARGE);
 					break;
 				case DRYDOCK:
-					port.getCapabilities().add(CapabilitiesEnum.DRYDOCK);
+					port.getCapabilities().add(PortCapability.DRYDOCK);
 					break;
 				case LOAD:
-					port.getCapabilities().add(CapabilitiesEnum.LOAD);
+					port.getCapabilities().add(PortCapability.LOAD);
 					break;
 				case MAINTENANCE:
-					port.getCapabilities().add(CapabilitiesEnum.MAINTENANCE);
+					port.getCapabilities().add(PortCapability.MAINTENANCE);
 					break;
 				case TRANSFER:
 					break;
@@ -65,12 +67,14 @@ public class PortFromScenarioCopier {
 
 		String portDataVersion = portModel.getPortDataVersion();
 		if (portDataVersion == null) {
-			portDataVersion = EcoreUtil.generateUUID();
+			portDataVersion = "private-" + EcoreUtil.generateUUID();
 			portModel.setPortDataVersion(portDataVersion);
 		}
 		version.setIdentifier(portDataVersion);
-		version.setCreatedAt(LocalDateTime.now());
+		version.setLocationVersion(portModel.getDistanceDataVersion());
+//		version.setCreatedAt(LocalDateTime.now());
+		version.setPorts(ports);
 
-		return ports;
+		return version;
 	}
 }
