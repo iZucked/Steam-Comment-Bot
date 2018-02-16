@@ -1,11 +1,15 @@
 package com.mmxlabs.lngdataserver.integration.vessels.internal;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.PlatformUI;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
@@ -13,6 +17,9 @@ import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 public class VesselsRepositoryActionHandler implements IDataBrowserActionsHandler {
 
@@ -26,7 +33,7 @@ public class VesselsRepositoryActionHandler implements IDataBrowserActionsHandle
 
 	@Override
 	public boolean supportsPublish() {
-		return false && repository.hasUpstream();
+		return repository.hasUpstream();
 	}
 
 	@Override
@@ -52,7 +59,7 @@ public class VesselsRepositoryActionHandler implements IDataBrowserActionsHandle
 
 	@Override
 	public boolean supportsSyncUpstream() {
-		return false && repository.hasUpstream();
+		return repository.hasUpstream();
 	}
 
 	@Override
@@ -126,5 +133,4 @@ public class VesselsRepositoryActionHandler implements IDataBrowserActionsHandle
 		});
 		return true;
 	}
-
 }
