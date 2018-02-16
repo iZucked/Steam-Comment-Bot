@@ -59,6 +59,14 @@ public class PricingFromScenarioCopier {
 		curve.setName(idx.getName());
 		curve.setCurrency(idx.getCurrencyUnit());
 		curve.setUnit(idx.getVolumeUnit());
+
+		// The service needs a non-null value (actually null is fine, but jackson removes the parameter from the JSON and that is the problem);
+		if (curve.getUnit() == null) {
+			curve.setUnit("");
+		}
+		if (curve.getCurrency() == null) {
+			curve.setCurrency("");
+		}
 		curve.setType(type);
 
 		return curve;
@@ -89,7 +97,7 @@ public class PricingFromScenarioCopier {
 		});
 
 		String marketCurveDataVersion = pricingModel.getMarketCurveDataVersion();
-		if (marketCurveDataVersion ==null) {
+		if (marketCurveDataVersion == null) {
 			marketCurveDataVersion = EcoreUtil.generateUUID();
 			pricingModel.setMarketCurveDataVersion(marketCurveDataVersion);
 		}
