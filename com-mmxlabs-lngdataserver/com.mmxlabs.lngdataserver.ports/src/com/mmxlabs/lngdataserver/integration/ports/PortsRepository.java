@@ -1,8 +1,6 @@
 package com.mmxlabs.lngdataserver.integration.ports;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -12,14 +10,25 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.port.api.PortApi;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.lngdataservice.ports.model.PublishRequest;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+ 
 
 public class PortsRepository extends AbstractDataRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(PortsRepository.class);
 
+	private static final String SYNC_VERSION_ENDPOINT = "/ports/sync/versions/";
+	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+	
 	private PortApi portsApi = new PortApi();
 	private String backendUrl;
 
@@ -70,12 +79,32 @@ public class PortsRepository extends AbstractDataRepository {
 
 	@Override
 	public void syncUpstreamVersion(String version) throws Exception {
+		// Pull down the version data
+		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
+		final Response pullResponse = portsApi.getApiClient().getHttpClient().newCall(pullRequest).execute();
+		final String json = pullResponse.body().string();
 
+		// Post the data to local repo
+		final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+		final Request postRequest = new Request.Builder().url(backendUrl + SYNC_VERSION_ENDPOINT).post(body).build();
+		final Response postResponse = portsApi.getApiClient().getHttpClient().newCall(postRequest).execute();
 	}
 
 	@Override
 	public void publishVersion(String version) throws Exception {
+		PublishRequest publishRequest = new PublishRequest();
+		publishRequest.setVersion(version);
+		publishRequest.setUpstreamUrl(upstreamUrl + SYNC_VERSION_ENDPOINT);
 
+		String json = new ObjectMapper().writeValueAsString(publishRequest);
+
+		RequestBody body = RequestBody.create(JSON, json);
+		Request request = new Request.Builder().url(backendUrl + "/ports/sync/publish").post(body).build();
+		Response response = portsApi.getApiClient().getHttpClient().newCall(request).execute();
+
+		if (!response.isSuccessful()) {
+			LOG.error("Error publishing version: " + response.message());
+		}
 	}
 
 	@Override

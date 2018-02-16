@@ -26,7 +26,7 @@ public class PortsRepositoryActionHandler implements IDataBrowserActionsHandler 
 
 	@Override
 	public boolean supportsPublish() {
-		return false && repository.hasUpstream();
+		return repository.hasUpstream();
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class PortsRepositoryActionHandler implements IDataBrowserActionsHandler 
 
 	@Override
 	public boolean supportsSyncUpstream() {
-		return false && repository.hasUpstream();
+		return repository.hasUpstream();
 	}
 
 	@Override
