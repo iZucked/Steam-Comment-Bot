@@ -123,6 +123,7 @@ public class PortsToScenarioCopier {
 			}
 
 		}
+		 cc.append(SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION, portsProvider.getVersion()));
 
 		return cc;
 	}
