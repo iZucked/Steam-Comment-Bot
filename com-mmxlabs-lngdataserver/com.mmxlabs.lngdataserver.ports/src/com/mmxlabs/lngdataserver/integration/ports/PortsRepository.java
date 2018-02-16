@@ -68,6 +68,7 @@ public class PortsRepository extends AbstractDataRepository {
 	}
 
 	public IPortsProvider getPortsProvider(String versionTag) {
+		ensureReady();
 		try {
 			return new DefaultPortsProvider(versionTag, portsApi.fetchAllUsingGET());
 		} catch (Exception e) {
