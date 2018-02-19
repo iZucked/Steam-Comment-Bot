@@ -7,7 +7,7 @@ Bundle-Name: common-recorder
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.common.common-recorder
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.4.6.qualifier
+Bundle-Version: 4.4.6.RELEASE
 Export-Package: com.mmxlabs.common.recorder,
  com.mmxlabs.common.recorder.conversion,
  com.mmxlabs.common.recorder.conversion.impl
