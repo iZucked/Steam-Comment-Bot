@@ -28,52 +28,47 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 	private final Color background;
 	private final AdapterFactoryLabelProvider lp;
 
+	private Image img_published;
+	private Image img_local;
+
 	public DataBrowserLabelProvider(final AdapterFactory adapterFactory, final Set<Node> selectedNodes) {
 		lp = new AdapterFactoryLabelProvider(adapterFactory);
 		this.selectedNodes = selectedNodes;
 		this.background = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
+
+		img_published = Activator.createScaledImage("published");
+		img_local = Activator.createScaledImage("local");
+	}
+
+	@Override
+	public void dispose() {
+		if (img_local != null) {
+			img_local.dispose();
+			img_local = null;
+		}
+		if (img_published != null) {
+			img_published.dispose();
+			img_published = null;
+		}
+		super.dispose();
 	}
 
 	@Override
 	public Image getImage(final Object element) {
 
 		if (element instanceof CompositeNode) {
-			// TODO: add icons for all data types?
-			return new Image(PlatformUI.getWorkbench().getDisplay(), 16, 16);
+			// TODO: Select an image!
 		} else if (element instanceof Node) {
-
 			// figure out if published
-
-			String imageType;
-			if (((Node) element).isPublished()) {
-				imageType = "published";
+			final Node node = (Node) element;
+			if (node.isPublished()) {
+				return img_published;
 			} else {
-				imageType = "local";
+				return img_local;
 			}
-
-			final Bundle bundle = FrameworkUtil.getBundle(Activator.class);
-			ImageDataProvider imageDataProvider;
-			try {
-				final String basePath = new File(FileLocator.toFileURL(bundle.getResource("/icons/")).toURI()).getAbsolutePath();
-
-				imageDataProvider = zoom -> {
-					switch (zoom) {
-					case 150:
-						return new ImageData(basePath + "/" + imageType + "_24.png");
-					case 200:
-						return new ImageData(basePath + "/" + imageType + "_32.png");
-					default:
-						return new ImageData(basePath + "/" + imageType + "_16.png");
-					}
-				};
-			} catch (URISyntaxException | IOException e) {
-				throw new RuntimeException(e);
-			}
-
-			return new Image(PlatformUI.getWorkbench().getDisplay(), imageDataProvider);
-		} else {
-			throw new RuntimeException("Unknown data element");
 		}
+		return null;
+
 	}
 
 	@Override
