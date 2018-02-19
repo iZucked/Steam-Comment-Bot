@@ -77,7 +77,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			long countA = cargoModel.getCargoes().stream().count();
 			long countB = cargoModel.getLoadSlots().stream().count();
 			long countC = cargoModel.getDischargeSlots().stream().count();
-			long max = 10;
+			long max = 15;
 			if (countA > max || countB > max || countC > max) {
 				throw new RuntimeException("Full optimisation is disabled during the P&L testing phase.");
 			}
