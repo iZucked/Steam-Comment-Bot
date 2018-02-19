@@ -50,7 +50,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 		 */
 		{
 			// Disable optimisation in P&L testing phase
-			if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
+			if (LicenseFeatures.isPermitted("features:phase-pnl-testing") || LicenseFeatures.isPermitted("features:phase-limited-testing")) {
 				throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
 			}
 			// if (!OptimisationHelper.isAllowedGCO(this.originalScenario)) {

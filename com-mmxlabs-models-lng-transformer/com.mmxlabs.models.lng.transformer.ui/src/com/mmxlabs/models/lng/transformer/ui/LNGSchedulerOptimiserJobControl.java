@@ -23,6 +23,8 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
@@ -67,6 +69,19 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		this.originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGSchedulerOptimiserJobControl");
 		final EditingDomain originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
+
+		// Disable optimisation in P&L testing phase
+		if (LicenseFeatures.isPermitted("features:phase-limited-testing")) {
+			CargoModel cargoModel = ScenarioModelUtil.getCargoModel(originalScenarioDataProvider);
+
+			long countA = cargoModel.getCargoes().stream().count();
+			long countB = cargoModel.getLoadSlots().stream().count();
+			long countC = cargoModel.getDischargeSlots().stream().count();
+			long max = 10;
+			if (countA > max || countB > max || countC > max) {
+				throw new RuntimeException("Full optimisation is disabled during the P&L testing phase.");
+			}
+		}
 
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
