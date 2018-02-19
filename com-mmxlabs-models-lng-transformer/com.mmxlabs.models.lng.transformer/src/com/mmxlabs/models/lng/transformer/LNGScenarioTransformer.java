@@ -2571,14 +2571,14 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowStartTime(0);
 								// fobSlot.setContract(fobPurchaseMarket.getContract());
 								fobSlot.setOptional(true);
-								fobSlot.setArriveCold(true);
 								// fobSlot.setCargoCV(fobPurchaseMarket.getCv());
 								fobSlot.setPort((Port) notionalAPort);
+								fobSlot.setArriveCold(fobSlot.getPort() == null ? true : !fobSlot.getPort().isAllowCooldown());
 								fobSlot.setWindowSize(1);
 								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true,
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), fobSlot.isArriveCold(), true,
 										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Key piece of information
