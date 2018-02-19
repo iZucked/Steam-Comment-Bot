@@ -4,7 +4,7 @@ Bundle-Name: Optimiser - GA
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-ga
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.4.6.RELEASE
+Bundle-Version: 4.4.7.qualifier
 Require-Bundle: com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.4.6,5.0.0)",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.4.6,5.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[4.4.6,5.0.0)",
