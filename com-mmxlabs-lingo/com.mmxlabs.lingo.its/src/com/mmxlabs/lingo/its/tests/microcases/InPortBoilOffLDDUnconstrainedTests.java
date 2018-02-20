@@ -116,7 +116,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		final int actualPhysicalDischargeVolumeInM3 = result.getPhysicalDischargeVolume();
 		final int actualPhysicalDischargeVolumeBInM3 = result.getPhysicalDischargeVolumeB();
 
-		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getSlotOrContractMaxQuantity();
+		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getSlotOrDelegateMaxQuantity();
 		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
 
 		final int actualStartHeelInM3 = result.getStartHeel();

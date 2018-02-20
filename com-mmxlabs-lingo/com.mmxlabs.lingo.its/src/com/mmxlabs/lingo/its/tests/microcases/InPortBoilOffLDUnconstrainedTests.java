@@ -99,7 +99,7 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 		final int actualStartHeelInM3 = result.getStartHeel();
 		final int actualEndHeelInM3 = result.getEndHeel();
 
-		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getSlotOrContractMaxQuantity();
+		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getSlotOrDelegateMaxQuantity();
 		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
 
 		int expectedLoadVolumeInM3 = Math.min(vesselCapacity, portLoadMaxInM3);
