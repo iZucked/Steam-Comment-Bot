@@ -1,5 +1,6 @@
 package com.mmxlabs.lngdataserver.integration.pricing.internal;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -42,11 +43,16 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 
 	@Override
 	public boolean supportsDelete() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean delete(String version) {
+		try {
+			return repository.deleteVersion(version);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -91,11 +97,31 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 
 	@Override
 	public boolean supportsRename() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean rename(String oldVersion, String newVersion) {
+		try {
+			return repository.renameVersion(oldVersion, newVersion);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean supportsSetCurrent() {
+		return true;
+	}
+
+	@Override
+	public boolean setCurrent(String version) {
+		try {
+			return repository.setCurrentVersion(version);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -116,6 +142,8 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 					version.setParent(dataRoot);
 					version.setDisplayName(v.getIdentifier());
 					version.setPublished(v.isPublished());
+					version.setCurrent(v.isCurrent());
+					
 					if (first) {
 						dataRoot.setLatest(version);
 					}

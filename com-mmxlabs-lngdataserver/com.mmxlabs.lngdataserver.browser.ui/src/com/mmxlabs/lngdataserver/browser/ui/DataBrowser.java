@@ -20,6 +20,8 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -30,6 +32,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -39,6 +42,7 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.PlatformUI;
@@ -247,6 +251,15 @@ public class DataBrowser extends ViewPart {
 							if (actionHandler.supportsRename()) {
 								data_mgr.add(new RunnableAction("Rename", () -> {
 									// FIXME: Implement! Dialog for user entry then call handler
+									final IInputValidator validator = null;
+									final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Rename version " + selectedNode.getDisplayName(), "Choose new element name", "", validator);
+									if (dialog.open() == Window.OK) {
+										dialog.getValue();
+									}
+									
+									if (actionHandler.rename(selectedNode.getDisplayName(), dialog.getValue())){
+										selectedNode.setDisplayName(dialog.getValue());
+									}
 								}));
 								itemsAdded = true;
 							} else {
@@ -277,12 +290,21 @@ public class DataBrowser extends ViewPart {
 								}));
 								itemsAdded = true;
 							}
-							{
-								data_mgr.add(new RunnableAction("Set as latest (Not suppported)", () -> {
+							
+							if (actionHandler.supportsSetCurrent()) {
+								data_mgr.add(new RunnableAction("Set as Current", () -> {
+									if (actionHandler.setCurrent(selectedNode.getDisplayName())) {
+										selectedNode.setCurrent(true);
+									}
+								}));
+								itemsAdded = true;
+							} else {
+								data_mgr.add(new RunnableAction("Set as Current (Not suppported)i", () -> {
 
 								}));
 								itemsAdded = true;
 							}
+							
 						}
 					}
 					if (selectedNode instanceof CompositeNode) {

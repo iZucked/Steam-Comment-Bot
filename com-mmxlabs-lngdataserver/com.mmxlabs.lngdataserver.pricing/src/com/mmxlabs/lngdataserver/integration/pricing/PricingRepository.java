@@ -60,7 +60,7 @@ public class PricingRepository extends AbstractDataRepository {
 		try {
 			return PricingClient.getVersions(backendUrl).stream().map(v -> {
 				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
-				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished());
+				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished(), v.isCurrent());
 			}).collect(Collectors.toList());
 		} catch (final Exception e) {
 			LOG.error("Error fetching pricing versions" + e.getMessage());
@@ -75,7 +75,19 @@ public class PricingRepository extends AbstractDataRepository {
 	public void saveVersion(Version version) throws IOException {
 		PricingClient.saveVersion(backendUrl, version);
 	}
-
+	
+	public boolean deleteVersion(String version) throws IOException {
+		return PricingClient.deleteVersion(backendUrl, version);
+	}
+	
+	public boolean renameVersion(String oldVersion, String newVersion) throws IOException {
+		return PricingClient.renameVersion(backendUrl, oldVersion, newVersion);
+	}
+	
+	public boolean setCurrentVersion(String version) throws IOException {
+		return PricingClient.setCurrentVersion(backendUrl, version);
+	}
+	
 	public IPricingProvider getLatestPrices() throws IOException {
 		ensureReady();
 		return getPricingProvider(getVersions().get(0).getIdentifier());

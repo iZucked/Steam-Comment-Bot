@@ -55,6 +55,7 @@ public class NodeItemProvider extends ItemProviderAdapter implements IEditingDom
 			addDisplayNamePropertyDescriptor(object);
 			addParentPropertyDescriptor(object);
 			addPublishedPropertyDescriptor(object);
+			addCurrentPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,6 +96,18 @@ public class NodeItemProvider extends ItemProviderAdapter implements IEditingDom
 	}
 
 	/**
+	 * This adds a property descriptor for the Current feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCurrentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Node_current_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_Node_current_feature", "_UI_Node_type"), BrowserPackage.Literals.NODE__CURRENT, true, false, false,
+				ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -120,6 +133,7 @@ public class NodeItemProvider extends ItemProviderAdapter implements IEditingDom
 		switch (notification.getFeatureID(Node.class)) {
 		case BrowserPackage.NODE__DISPLAY_NAME:
 		case BrowserPackage.NODE__PUBLISHED:
+		case BrowserPackage.NODE__CURRENT:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}

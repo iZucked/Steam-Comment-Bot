@@ -20,7 +20,9 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
+import com.mmxlabs.lngdataserver.browser.Leaf;
 import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.lngdataserver.browser.impl.LeafImpl;
 
 public class DataBrowserLabelProvider extends ColumnLabelProvider implements IColorProvider {
 
@@ -76,9 +78,10 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 		if (element instanceof Node) {
 			final Node node = (Node) element;
 			String prefix = "";
-			if (node.eContainer() instanceof CompositeNode) {
-				final CompositeNode compositeNode = (CompositeNode) node.eContainer();
-				if (compositeNode.getLatest() == node) {
+			if (node instanceof Leaf) {
+				final Leaf leaf = (Leaf) node;
+
+				if (leaf.isCurrent()) {
 					prefix = "** ";
 				}
 			}

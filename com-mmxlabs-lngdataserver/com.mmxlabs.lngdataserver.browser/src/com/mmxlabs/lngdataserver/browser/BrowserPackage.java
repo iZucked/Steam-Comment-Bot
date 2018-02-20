@@ -123,13 +123,22 @@ public interface BrowserPackage extends EPackage {
 	int NODE__PUBLISHED = 2;
 
 	/**
+	 * The feature id for the '<em><b>Current</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE__CURRENT = 3;
+
+	/**
 	 * The number of structural features of the '<em>Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NODE_FEATURE_COUNT = 3;
+	int NODE_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Node</em>' class.
@@ -176,6 +185,15 @@ public interface BrowserPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE_NODE__PUBLISHED = NODE__PUBLISHED;
+
+	/**
+	 * The feature id for the '<em><b>Current</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_NODE__CURRENT = NODE__CURRENT;
 
 	/**
 	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
@@ -267,6 +285,15 @@ public interface BrowserPackage extends EPackage {
 	 * @ordered
 	 */
 	int LEAF__PUBLISHED = NODE__PUBLISHED;
+
+	/**
+	 * The feature id for the '<em><b>Current</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEAF__CURRENT = NODE__CURRENT;
 
 	/**
 	 * The number of structural features of the '<em>Leaf</em>' class.
@@ -414,6 +441,17 @@ public interface BrowserPackage extends EPackage {
 	EAttribute getNode_Published();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lngdataserver.browser.Node#isCurrent <em>Current</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Current</em>'.
+	 * @see com.mmxlabs.lngdataserver.browser.Node#isCurrent()
+	 * @see #getNode()
+	 * @generated
+	 */
+	EAttribute getNode_Current();
+
+	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler <em>IData Browser Actions Handler</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -532,6 +570,13 @@ public interface BrowserPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NODE__PUBLISHED = eINSTANCE.getNode_Published();
+		/**
+		 * The meta object literal for the '<em><b>Current</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NODE__CURRENT = eINSTANCE.getNode_Current();
 		/**
 		 * The meta object literal for the '<em>IData Browser Actions Handler</em>' data type.
 		 * <!-- begin-user-doc -->

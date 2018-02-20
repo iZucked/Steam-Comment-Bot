@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataservice.pricing.model.Curve;
 import com.mmxlabs.lngdataservice.pricing.model.PublishRequest;
+import com.mmxlabs.lngdataservice.pricing.model.RenameRequest;
 import com.mmxlabs.lngdataservice.pricing.model.Version;
 
 import okhttp3.MediaType;
@@ -38,7 +39,7 @@ public class PricingClient {
 				});
 
 		return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
-				.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished())).collect(Collectors.toList());
+				.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished(), v.isCurrent())).collect(Collectors.toList());
 	}
 
 	public static void publishVersion(String version, String baseUrl, String upstreamUrl) throws IOException {
@@ -81,6 +82,49 @@ public class PricingClient {
 
 		if (!response.isSuccessful()) {
 			LOGGER.error("Error publishing version: " + response.message());
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean deleteVersion(String baseUrl, String version) throws IOException {
+
+		Request request = new Request.Builder().url(baseUrl + "/pricing/version/" + version).delete().build();
+		Response response = CLIENT.newCall(request).execute();
+
+		if (!response.isSuccessful()) {
+			LOGGER.error("Error deleting version: " + response.message());
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean renameVersion(String baseUrl, String oldVersion, String newVersion) throws IOException {
+		RenameRequest renameRequest = new RenameRequest();
+		renameRequest.setName(newVersion);
+		renameRequest.setVersion(oldVersion);
+		
+		String json = new ObjectMapper().writeValueAsString(renameRequest);
+
+		RequestBody body = RequestBody.create(JSON, json);
+		Request request = new Request.Builder().url(baseUrl + "/pricing/version/rename/").patch(body).build();
+		Response response = CLIENT.newCall(request).execute();
+
+		if (!response.isSuccessful()) {
+			LOGGER.error("Error renaming version: " + response.message());
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean setCurrentVersion(String baseUrl, String version) throws IOException {
+
+		RequestBody body = RequestBody.create(JSON, "{}");
+		Request request = new Request.Builder().url(baseUrl + "/pricing/version/current/" + version).patch(body).build();
+		Response response = CLIENT.newCall(request).execute();
+
+		if (!response.isSuccessful()) {
+			LOGGER.error("Error setting current version: " + response.message());
 			return false;
 		}
 		return true;

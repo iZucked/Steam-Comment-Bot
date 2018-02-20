@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#getDisplayName <em>Display Name</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#isPublished <em>Published</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#isCurrent <em>Current</em>}</li>
  * </ul>
  *
  * @generated
@@ -79,6 +80,26 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 	 * @ordered
 	 */
 	protected boolean published = PUBLISHED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isCurrent() <em>Current</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCurrent()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean CURRENT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isCurrent() <em>Current</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCurrent()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean current = CURRENT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -184,6 +205,27 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isCurrent() {
+		return current;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCurrent(boolean newCurrent) {
+		boolean oldCurrent = current;
+		current = newCurrent;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BrowserPackage.NODE__CURRENT, oldCurrent, current));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -195,6 +237,8 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 			return basicGetParent();
 		case BrowserPackage.NODE__PUBLISHED:
 			return isPublished();
+		case BrowserPackage.NODE__CURRENT:
+			return isCurrent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -215,6 +259,9 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 			return;
 		case BrowserPackage.NODE__PUBLISHED:
 			setPublished((Boolean) newValue);
+			return;
+		case BrowserPackage.NODE__CURRENT:
+			setCurrent((Boolean) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -237,6 +284,9 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 		case BrowserPackage.NODE__PUBLISHED:
 			setPublished(PUBLISHED_EDEFAULT);
 			return;
+		case BrowserPackage.NODE__CURRENT:
+			setCurrent(CURRENT_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -255,6 +305,8 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 			return parent != null;
 		case BrowserPackage.NODE__PUBLISHED:
 			return published != PUBLISHED_EDEFAULT;
+		case BrowserPackage.NODE__CURRENT:
+			return current != CURRENT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -274,6 +326,8 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 		result.append(displayName);
 		result.append(", published: ");
 		result.append(published);
+		result.append(", current: ");
+		result.append(current);
 		result.append(')');
 		return result.toString();
 	}

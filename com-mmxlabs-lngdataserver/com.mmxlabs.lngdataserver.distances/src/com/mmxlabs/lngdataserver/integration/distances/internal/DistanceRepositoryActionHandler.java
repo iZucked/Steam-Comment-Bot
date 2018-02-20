@@ -50,7 +50,17 @@ public class DistanceRepositoryActionHandler implements IDataBrowserActionsHandl
 	public boolean delete(String version) {
 		return false;
 	}
+	
+	@Override
+	public boolean supportsSetCurrent() {
+		return false;
+	}
 
+	@Override
+	public boolean setCurrent(String version) {
+		return false;
+	}
+	
 	@Override
 	public boolean supportsSyncUpstream() {
 		return repository.hasUpstream();

@@ -125,6 +125,8 @@ public class Activator extends AbstractUIPlugin {
 						version.setParent(pricingDataRoot);
 						version.setDisplayName(v.getIdentifier());
 						version.setPublished(v.isPublished());
+						version.setCurrent(v.isCurrent());
+						
 						if (first) {
 							RunnerHelper.asyncExec(c -> pricingDataRoot.setLatest(version));
 						}

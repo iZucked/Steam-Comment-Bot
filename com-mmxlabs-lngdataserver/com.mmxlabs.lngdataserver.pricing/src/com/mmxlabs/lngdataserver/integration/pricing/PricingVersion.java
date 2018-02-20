@@ -6,13 +6,14 @@ public class PricingVersion {
 	private String identifier;
 	private LocalDateTime createdAt;
 	private boolean published;
+	private boolean current;
 	
 	
-	
-	public PricingVersion(String identifier, LocalDateTime createdAt, boolean published) {
+	public PricingVersion(String identifier, LocalDateTime createdAt, boolean published, boolean current) {
 		this.identifier = identifier;
 		this.createdAt = createdAt;
 		this.published = published;
+		this.current = current;
 	}
 	
 	public String getIdentifier() {
@@ -32,5 +33,13 @@ public class PricingVersion {
 	}
 	public void setPublished(boolean published) {
 		this.published = published;
+	}
+	
+	public boolean isCurrent() {
+		return current;
+	}
+
+	public void setCurrent(boolean current) {
+		this.current = current;
 	}
 }

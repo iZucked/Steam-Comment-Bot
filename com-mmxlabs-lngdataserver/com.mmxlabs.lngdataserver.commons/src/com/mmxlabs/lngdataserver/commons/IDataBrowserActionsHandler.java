@@ -1,9 +1,12 @@
 package com.mmxlabs.lngdataserver.commons;
 
 public interface IDataBrowserActionsHandler {
-
+	
 	boolean supportsPublish();
 	boolean publish(String version);
+	
+	boolean supportsSetCurrent();
+	boolean setCurrent(String version);
 	
 	boolean supportsDelete();
 	boolean delete(String version);
