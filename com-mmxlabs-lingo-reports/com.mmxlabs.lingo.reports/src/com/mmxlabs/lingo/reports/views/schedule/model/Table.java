@@ -208,4 +208,12 @@ public interface Table extends EObject {
 	 */
 	CompositeRow getCompositeRow();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<CompositeRow> getCompositeRowsWithPartials();
+
 } // Table

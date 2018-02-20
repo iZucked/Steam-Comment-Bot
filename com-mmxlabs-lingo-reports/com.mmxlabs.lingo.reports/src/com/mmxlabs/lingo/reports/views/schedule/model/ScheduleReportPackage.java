@@ -173,13 +173,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int TABLE___GET_COMPOSITE_ROW = 0;
 
 	/**
+	 * The operation id for the '<em>Get Composite Rows With Partials</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TABLE___GET_COMPOSITE_ROWS_WITH_PARTIALS = 1;
+
+	/**
 	 * The number of operations of the '<em>Table</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE_OPERATION_COUNT = 1;
+	int TABLE_OPERATION_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl <em>Row</em>}' class.
@@ -809,6 +818,16 @@ public interface ScheduleReportPackage extends EPackage {
 	EOperation getTable__GetCompositeRow();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRowsWithPartials() <em>Get Composite Rows With Partials</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Composite Rows With Partials</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRowsWithPartials()
+	 * @generated
+	 */
+	EOperation getTable__GetCompositeRowsWithPartials();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row <em>Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1387,6 +1406,14 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation TABLE___GET_COMPOSITE_ROW = eINSTANCE.getTable__GetCompositeRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Composite Rows With Partials</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TABLE___GET_COMPOSITE_ROWS_WITH_PARTIALS = eINSTANCE.getTable__GetCompositeRowsWithPartials();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl <em>Row</em>}' class.

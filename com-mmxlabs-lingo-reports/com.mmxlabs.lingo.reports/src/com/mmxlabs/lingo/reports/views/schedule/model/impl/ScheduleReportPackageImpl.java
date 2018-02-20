@@ -291,6 +291,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getTable__GetCompositeRowsWithPartials() {
+		return tableEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getRow() {
 		return rowEClass;
@@ -743,6 +752,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		createEReference(tableEClass, TABLE__SELECTED_ELEMENTS);
 		createEReference(tableEClass, TABLE__COMPOSITE_ROWS);
 		createEOperation(tableEClass, TABLE___GET_COMPOSITE_ROW);
+		createEOperation(tableEClass, TABLE___GET_COMPOSITE_ROWS_WITH_PARTIALS);
 
 		rowEClass = createEClass(ROW);
 		createEAttribute(rowEClass, ROW__SCENARIO_NAME);
@@ -843,6 +853,8 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEReference(getTable_CompositeRows(), this.getCompositeRow(), null, "compositeRows", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getTable__GetCompositeRow(), this.getCompositeRow(), "getCompositeRow", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getTable__GetCompositeRowsWithPartials(), this.getCompositeRow(), "getCompositeRowsWithPartials", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(rowEClass, Row.class, "Row", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRow_ScenarioName(), ecorePackage.getEString(), "scenarioName", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

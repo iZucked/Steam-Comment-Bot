@@ -178,17 +178,34 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						g2 = ((Row) e2).getRowGroup();
 					}
 					
+
 					if (e1 instanceof CompositeRow) {
-						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
-						e1 = ((CompositeRow) e1).getPreviousRow();
+						CompositeRow tmp = ((CompositeRow) e1);
+						
+						if (tmp.getPreviousRow() != null) {
+							g1 = tmp.getPreviousRow().getRowGroup();
+							e1 = tmp.getPreviousRow();
+						} else if (tmp.getPinnedRow() != null) {
+							g1 = tmp.getPinnedRow().getRowGroup();
+							e1 = tmp.getPinnedRow();
+						}
+
 						firstIsComposite = true;
 					}
+
 					if (e2 instanceof CompositeRow) {
-						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
-						e2 = ((CompositeRow) e2).getPreviousRow();
+						CompositeRow tmp = ((CompositeRow) e2);
+						
+						if (tmp.getPreviousRow() != null) {
+							g2 = tmp.getPreviousRow().getRowGroup();
+							e2 = tmp.getPreviousRow();
+						} else if (tmp.getPinnedRow() != null) {
+							g2 = tmp.getPinnedRow().getRowGroup();
+							e2 = tmp.getPinnedRow();
+						}
+
 						secondIsComposite = true;
 					}
-					
 					if (e1 instanceof List) {
 						return Integer.MAX_VALUE;
 					}

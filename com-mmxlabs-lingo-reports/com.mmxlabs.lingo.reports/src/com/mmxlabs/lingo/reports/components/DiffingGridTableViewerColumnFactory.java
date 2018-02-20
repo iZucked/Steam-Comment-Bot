@@ -94,67 +94,106 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 				}
 			}
 
-			if (pinnedElement != null && previousElement != null) {
-				Object valuePinned = formatter.getComparable(pinnedElement);
-				Object valuePrevious = formatter.getComparable(previousElement);
+			Object valuePinned = null;
+			Object valuePrevious = null;
 
-				// Those formatters will also return -MAX_VALUE for the reference row
-				// Bug ?
-				if (formatter instanceof GeneratedCharterDaysFormatter) {
-					valuePinned = new Double(0);
-				}
+			if (pinnedElement != null) {
+				valuePinned = formatter.getComparable(pinnedElement);
+			}
 
-				if (formatter instanceof GeneratedCharterRevenueFormatter) {
-					valuePinned = new Integer(0);
-				}
+			if (previousElement != null) {
+				valuePrevious = formatter.getComparable(previousElement);
+			}
+			// Those formatters will also return -MAX_VALUE for the reference row
+			// Bug ?
+			if (formatter instanceof GeneratedCharterDaysFormatter) {
+				valuePinned = new Double(0);
+			}
 
-				deltaValue = "";
+			if (formatter instanceof GeneratedCharterRevenueFormatter) {
+				valuePinned = new Integer(0);
+			}
+
+			deltaValue = "";
+			if (valuePrevious instanceof Integer || valuePinned instanceof Integer) {
+				int delta = 0;
+
 				if (valuePrevious != null && valuePinned != null) {
-					if (valuePrevious instanceof Integer) {
-						int delta = ((int) valuePrevious) - ((int) valuePinned);
+					delta = ((int) valuePrevious) - ((int) valuePinned);
+				} else if (valuePrevious != null) {
+					delta = (int) valuePrevious;
+				} else if (valuePinned != null) {
+					delta = -((int) valuePinned);
+				}
 
-						if (withFormatting) {
-							deltaValue = NumberFormat.getInstance().format(delta);
-						} else {
-							deltaValue = String.valueOf(delta);
-						}
-					} else if (valuePrevious instanceof Long) {
-						long delta = ((long) valuePrevious) - ((long) valuePinned);
+				if (withFormatting) {
+					deltaValue = NumberFormat.getInstance().format(delta);
+				} else {
+					deltaValue = String.valueOf(delta);
+				}
+			} else if (valuePrevious instanceof Long || valuePinned instanceof Long) {
+				long delta = 0L;
+				if (valuePrevious != null && valuePinned != null) {
+					delta = ((long) valuePrevious) - ((long) valuePinned);
+				} else if (valuePrevious != null) {
+					delta = (long) valuePrevious;
+				} else if (valuePinned != null) {
+					delta = -((long) valuePinned);
+				}
 
-						if (withFormatting) {
-							deltaValue = NumberFormat.getInstance().format(delta);
-						} else {
-							deltaValue = String.valueOf(delta);
-						}
-					} else if (valuePrevious instanceof Double) {
-						double delta = ((double) valuePrevious) - ((double) valuePinned);
-						double epsilon = 0.0001f;
+				if (withFormatting) {
+					deltaValue = NumberFormat.getInstance().format(delta);
+				} else {
+					deltaValue = String.valueOf(delta);
+				}
+			} else if (valuePrevious instanceof Double || valuePinned instanceof Double) {
+				double epsilon = 0.0001f;
+				double delta = 0.0f;
 
-						if (withFormatting) {
-							deltaValue = NumberFormat.getInstance().format(delta);
-						} else {
-							deltaValue = String.valueOf(delta);
-						}
-					} else if (valuePrevious instanceof String) {
-						if (col.getText().compareTo("Scenario") == 0) {
-							deltaValue = " ";
-						}
+				if (valuePrevious != null && valuePinned != null) {
+					delta = ((double) valuePrevious) - ((double) valuePinned);
+				} else if (valuePrevious != null) {
+					delta = (double) valuePrevious;
+				} else if (valuePinned != null) {
+					delta = -((double) valuePinned);
+				}
 
-						if (col.getText().compareTo("Vessel") == 0) {
-							deltaValue = (String) valuePinned;
-						}
+				if (withFormatting) {
+					deltaValue = NumberFormat.getInstance().format(delta);
+				} else {
+					deltaValue = String.valueOf(delta);
+				}
+			} else if (valuePrevious instanceof String || valuePinned instanceof String) {
 
-						if (col.getText().compareTo("L-ID") == 0) {
-							deltaValue = (String) valuePinned;
-						}
+				if (col.getText().compareTo("Scenario") == 0) {
+					deltaValue = " ";
+				}
 
-						if (col.getText().compareTo("D-ID") == 0) {
-							deltaValue = (String) valuePinned;
-						}
+				if (col.getText().compareTo("Vessel") == 0) {
+					if (valuePinned != null) {
+						deltaValue = (String) valuePinned;
+					} else {
+						deltaValue = (String) valuePrevious;
 					}
-					return deltaValue;
+				}
+
+				if (col.getText().compareTo("L-ID") == 0) {
+					if (valuePinned != null) {
+						deltaValue = (String) valuePinned;
+					} else {
+						deltaValue = (String) valuePrevious;
+					}
+				}
+
+				if (col.getText().compareTo("D-ID") == 0) {
+					if (valuePinned != null) {
+						deltaValue = (String) valuePinned;
+					} else {
+						deltaValue = (String) valuePrevious;
+					}
 				}
 			}
+			return deltaValue;
 		}
 		return "";
 	}

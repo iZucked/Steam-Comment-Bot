@@ -356,6 +356,48 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EList<CompositeRow> getCompositeRowsWithPartials() {
+		if (compositeRows == null) {
+			compositeRows = new EObjectContainmentEList<CompositeRow>(CompositeRow.class, this, ScheduleReportPackage.TABLE__COMPOSITE_ROWS);
+		}
+		
+		EList<Row> rows = getRows();
+		compositeRows.clear();
+		
+		for (Row row: rows) {
+			if (row.isReference()) {
+				
+				Row lhs = row.getLhsLink();
+				if (lhs != null) {
+					CompositeRow compositeRow = ScheduleReportFactory.eINSTANCE.createCompositeRow();
+					
+					compositeRow.setPinnedRow(row);
+					compositeRow.setPreviousRow(lhs);
+					
+					compositeRows.add(compositeRow);
+				} else {
+					// Case deleted from pinned 
+					CompositeRow compositeRow = ScheduleReportFactory.eINSTANCE.createCompositeRow();
+					compositeRow.setPinnedRow(row);
+					compositeRow.setPreviousRow(null);
+					compositeRows.add(compositeRow);
+				}
+			} else if (row.getLhsLink() == null && row.getRhsLink() == null) {
+				CompositeRow compositeRow = ScheduleReportFactory.eINSTANCE.createCompositeRow();
+				compositeRow.setPinnedRow(null);
+				compositeRow.setPreviousRow(row);
+				compositeRows.add(compositeRow);
+			}
+		}
+		
+		return compositeRows;
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public CompositeRow getCompositeRow() {
@@ -560,6 +602,8 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 		switch (operationID) {
 			case ScheduleReportPackage.TABLE___GET_COMPOSITE_ROW:
 				return getCompositeRow();
+			case ScheduleReportPackage.TABLE___GET_COMPOSITE_ROWS_WITH_PARTIALS:
+				return getCompositeRowsWithPartials();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

@@ -4,6 +4,7 @@
     nsPrefix="reports.schedule">
   <eClassifiers xsi:type="ecore:EClass" name="Table">
     <eOperations name="getCompositeRow" eType="#//CompositeRow"/>
+    <eOperations name="getCompositeRowsWithPartials" upperBound="-1" eType="#//CompositeRow"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//DiffOptions"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"

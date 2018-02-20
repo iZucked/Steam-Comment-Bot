@@ -80,11 +80,21 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 			object = item.getParent().getItem(i + 1).getData();
 			
 			if (object instanceof CompositeRow) {
-				object = ((CompositeRow) object).getPinnedRow();
+				Object tmp = ((CompositeRow) object).getPinnedRow();
+				if (tmp != null) {
+					object = tmp;
+				} else {
+					object = ((CompositeRow) object).getPreviousRow();
+				}
 			}
 
 			if (parent instanceof CompositeRow) {
-				parent = ((CompositeRow) parent).getPinnedRow();
+				Object tmp = ((CompositeRow) parent).getPinnedRow();
+				if (tmp != null) {
+					parent = tmp;
+				} else {
+					parent = ((CompositeRow) parent).getPreviousRow();
+				}
 			}
 			
 			if (object instanceof Row && parent instanceof Row) {

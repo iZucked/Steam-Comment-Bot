@@ -144,13 +144,30 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 
 					if (e1 instanceof CompositeRow) {
-						g1 = ((CompositeRow) e1).getPreviousRow().getRowGroup();
-						e1 = ((CompositeRow) e1).getPreviousRow();
+						CompositeRow tmp = ((CompositeRow) e1);
+						
+						if (tmp.getPreviousRow() != null) {
+							g1 = tmp.getPreviousRow().getRowGroup();
+							e1 = tmp.getPreviousRow();
+						} else if (tmp.getPinnedRow() != null) {
+							g1 = tmp.getPinnedRow().getRowGroup();
+							e1 = tmp.getPinnedRow();
+						}
+
 						firstIsComposite = true;
 					}
+
 					if (e2 instanceof CompositeRow) {
-						g2 = ((CompositeRow) e2).getPreviousRow().getRowGroup();
-						e2 = ((CompositeRow) e2).getPreviousRow();
+						CompositeRow tmp = ((CompositeRow) e2);
+						
+						if (tmp.getPreviousRow() != null) {
+							g2 = tmp.getPreviousRow().getRowGroup();
+							e2 = tmp.getPreviousRow();
+						} else if (tmp.getPinnedRow() != null) {
+							g2 = tmp.getPinnedRow().getRowGroup();
+							e2 = tmp.getPinnedRow();
+						}
+
 						secondIsComposite = true;
 					}
 
@@ -325,7 +342,9 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 					
 					if (pinned != null) {
-						List<CompositeRow> compositeRows = new ArrayList<>(table.getCompositeRows());
+						
+						//List<CompositeRow> compositeRows = new ArrayList<>(table.getCompositeRows());
+						List<CompositeRow> compositeRows = new ArrayList<>(table.getCompositeRowsWithPartials());
 						
 						createDeltaRowGroup(compositeRows);
 						
@@ -414,8 +433,14 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				}
 				
 				if (element instanceof CompositeRow) {
-					final Row row = ((CompositeRow) element).getPreviousRow();
-					return row.isVisible();
+					Row row = ((CompositeRow) element).getPreviousRow();
+					if (row == null) {
+						row = ((CompositeRow) element).getPinnedRow();
+					} 
+					
+					if (row != null) {
+						return row.isVisible();
+					}
 				}
 				
 				return true;
@@ -610,8 +635,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			Row previousRow = compositeRow.getPreviousRow();
 			Row pinnedRow = compositeRow.getPinnedRow();
 			
-			previousRow.setRowGroup(rowGroup);
-			pinnedRow.setRowGroup(rowGroup);
+			if (previousRow != null) {
+				previousRow.setRowGroup(rowGroup);
+			}
+			
+			if (pinnedRow != null) {
+				pinnedRow.setRowGroup(rowGroup);
+			}
 		}
 	}
 	
