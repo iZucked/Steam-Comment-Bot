@@ -36,7 +36,7 @@ public class LoadSlotCVConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private DetailConstraintStatusDecorator checkCVRange(LoadSlot slot, final IValidationContext ctx) {
-		double cv = slot.getSlotOrDelegatedCV();
+		double cv = slot.getSlotOrDelegateCV();
 		if (cv < 1.0) {
 			final String message = String.format("Slot|%s CV is %.2f (should be greater than 1.0)", slot.getName(), cv);
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));

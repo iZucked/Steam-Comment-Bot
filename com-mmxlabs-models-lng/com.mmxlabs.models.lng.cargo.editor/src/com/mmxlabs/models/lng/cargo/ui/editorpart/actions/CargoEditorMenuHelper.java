@@ -827,7 +827,7 @@ public class CargoEditorMenuHelper {
 	private boolean checkSourceContractConstraints(final Slot source, final Slot target) {
 		final EList<Port> restrictedPorts = source.getRestrictedPorts();
 		final EList<Contract> restrictedContracts = source.getRestrictedContracts();
-		final boolean areRestrictedListsPermissive = source.getSlotOrContractRestrictedListsArePermissive();
+		final boolean areRestrictedListsPermissive = source.getSlotOrDelegateRestrictedListsArePermissive();
 
 		if (restrictedContracts != null) {
 			if (restrictedContracts.contains(target.getContract()) != areRestrictedListsPermissive) {
@@ -1128,7 +1128,7 @@ public class CargoEditorMenuHelper {
 						if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel());
 							cal = cal.plusHours(travelTime);
-							cal = cal.plusHours(loadSlot.getSlotOrPortDuration());
+							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
 						} else if (!loadSlot.isDESPurchase()) {
 
 							Vessel assignedVessel = null;
@@ -1144,7 +1144,7 @@ public class CargoEditorMenuHelper {
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
 							cal = cal.plusHours(travelTime);
-							cal = cal.plusHours(loadSlot.getSlotOrPortDuration());
+							cal = cal.plusHours(loadSlot.getSlotOrDelegateDuration());
 						}
 
 						// Get existing names
@@ -1200,7 +1200,7 @@ public class CargoEditorMenuHelper {
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
 							cal = cal.minusHours(travelTime);
-							cal = cal.minusHours(loadSlot.getSlotOrPortDuration());
+							cal = cal.minusHours(loadSlot.getSlotOrDelegateDuration());
 						}
 
 						// Set back to start of month
@@ -1393,16 +1393,16 @@ public class CargoEditorMenuHelper {
 			LocalDate windowStart = slot.getWindowStart();
 			LocalDate windowEnd = windowStart;
 
-			switch (slot.getSlotOrPortWindowSizeUnits()) {
+			switch (slot.getSlotOrDelegateWindowSizeUnits()) {
 
 			case DAYS:
-				windowEnd = windowStart.plusDays(slot.getSlotOrPortWindowSize());
+				windowEnd = windowStart.plusDays(slot.getSlotOrDelegateWindowSize());
 				break;
 			case HOURS:
-				windowEnd = windowStart.plusDays((slot.getSlotOrPortWindowSize() + 12) / 24);
+				windowEnd = windowStart.plusDays((slot.getSlotOrDelegateWindowSize() + 12) / 24);
 				break;
 			case MONTHS:
-				windowEnd = windowStart.plusMonths(slot.getSlotOrPortWindowSize());
+				windowEnd = windowStart.plusMonths(slot.getSlotOrDelegateWindowSize());
 				break;
 			default:
 				break;

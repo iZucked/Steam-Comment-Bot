@@ -102,7 +102,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 						if (slot.isSetContract()) {
 							newSell.setContract((SalesContract) slot.getContract());
 						} else {
-							newSell.setEntity(slot.getSlotOrDelegatedEntity());
+							newSell.setEntity(slot.getSlotOrDelegateEntity());
 						}
 						if (slot.isSetPriceExpression()) {
 							newSell.setPriceExpression(slot.getPriceExpression());

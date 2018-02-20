@@ -332,7 +332,7 @@ public class WrappedAssignableElement {
 				return duration.getAsInt();
 			}
 		}
-		return slot.getSlotOrPortDuration();
+		return slot.getSlotOrDelegateDuration();
 	}
 
 	public boolean isCargo() {

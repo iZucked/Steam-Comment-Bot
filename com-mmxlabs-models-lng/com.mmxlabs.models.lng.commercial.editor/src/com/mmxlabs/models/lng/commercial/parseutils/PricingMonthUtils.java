@@ -39,7 +39,7 @@ public class PricingMonthUtils {
 			final LocalDate slotPricingDate = slot.getPricingDate();
 			pricingDate = Optional.of(slotPricingDate);
 		} else {
-			switch (slot.getSlotOrDelegatedPricingEvent()) {
+			switch (slot.getSlotOrDelegatePricingEvent()) {
 			case END_DISCHARGE:
 				pricingDate = getCompletionOf.apply(getDischargeAllocationOf.apply(slotAllocation));
 				break;

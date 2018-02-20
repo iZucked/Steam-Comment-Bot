@@ -1754,30 +1754,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MISC_COSTS, oldMiscCosts, miscCosts));
 	}
 
-	//
-//	/**
-//	 * <!-- begin-user-doc -->
-//	 * <!-- end-user-doc -->
-//	 * @generated
-//	 */
-//	public int getCancellationFee() {
-//		return cancellationFee;
-//	}
-
-//	/**
-//	 * <!-- begin-user-doc -->
-//	 * <!-- end-user-doc -->
-//	 * @generated
-//	 */
-//	public void setCancellationFee(int newCancellationFee) {
-//		int oldCancellationFee = cancellationFee;
-//		cancellationFee = newCancellationFee;
-//		boolean oldCancellationFeeESet = cancellationFeeESet;
-//		cancellationFeeESet = true;
-//		if (eNotificationRequired())
-//			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, cancellationFee, !oldCancellationFeeESet));
-//	}
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1924,7 +1900,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * 
 	 * @generated NOT
 	 */
-	public int getSlotOrPortDuration() {
+	public int getSlotOrDelegateDuration() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__DURATION);
 	}
 
@@ -1934,7 +1910,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * 
 	 * @generated NOT
 	 */
-	public int getSlotOrContractMinQuantity() {
+	public int getSlotOrDelegateMinQuantity() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__MIN_QUANTITY);
 	}
 
@@ -1944,7 +1920,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * 
 	 * @generated NOT
 	 */
-	public int getSlotOrContractMaxQuantity() {
+	public int getSlotOrDelegateMaxQuantity() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__MAX_QUANTITY);
 	}
 
@@ -1953,7 +1929,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public VolumeUnits getSlotOrContractVolumeLimitsUnit() {
+	public VolumeUnits getSlotOrDelegateVolumeLimitsUnit() {
 		return (VolumeUnits) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT);
 	}
 
@@ -2054,7 +2030,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public int getSlotOrPortWindowSize() {
+	public int getSlotOrDelegateWindowSize() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE);
 	}
 
@@ -2063,7 +2039,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public TimePeriod getSlotOrPortWindowSizeUnits() {
+	public TimePeriod getSlotOrDelegateWindowSizeUnits() {
 		return (TimePeriod) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS);
 
 	}
@@ -2076,8 +2052,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	public int getWindowSizeInHours() {
 		ZonedDateTime start = getWindowStartWithSlotOrPortTime();
 		ZonedDateTime end = start;
-		TimePeriod p  = getSlotOrPortWindowSizeUnits();
-		int windowSize = getSlotOrPortWindowSize();
+		TimePeriod p  = getSlotOrDelegateWindowSizeUnits();
+		int windowSize = getSlotOrDelegateWindowSize();
 		if (windowSize == 0) {
 			return 0;
 		}
@@ -2104,7 +2080,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public BaseLegalEntity getSlotOrDelegatedEntity() {
+	public BaseLegalEntity getSlotOrDelegateEntity() {
 		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);
 	}
 
@@ -2114,7 +2090,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated NOT
 	 */
 	@SuppressWarnings("unchecked")
-	public EList<Contract> getSlotOrContractRestrictedContracts() {
+	public EList<Contract> getSlotOrDelegateRestrictedContracts() {
 		return (EList<Contract>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS);
 	}
 
@@ -2124,7 +2100,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated NOT
 	 */
 	@SuppressWarnings("unchecked")
-	public EList<Port> getSlotOrContractRestrictedPorts() {
+	public EList<Port> getSlotOrDelegateRestrictedPorts() {
 		return (EList<Port>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_PORTS);
 	}
 
@@ -2133,7 +2109,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public boolean getSlotOrContractRestrictedListsArePermissive() {
+	public boolean getSlotOrDelegateRestrictedListsArePermissive() {
 		return (Boolean) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE);
 	}
 
@@ -2142,9 +2118,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public String getSlotOrContractCancellationExpression() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
+	public String getSlotOrDelegateCancellationExpression() {
 		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION);
 	}
 
@@ -2153,7 +2127,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public PricingEvent getSlotOrDelegatedPricingEvent() {
+	public PricingEvent getSlotOrDelegatePricingEvent() {
 		return (PricingEvent) eGetWithDefault(CargoPackage.Literals.SLOT__PRICING_EVENT);
 	}
 
@@ -2185,7 +2159,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public String getSlotOrContractCounterparty() {
+	public String getSlotOrDelegateCounterparty() {
 		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__COUNTERPARTY);
 	}
 
@@ -2690,14 +2664,14 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case CargoPackage.SLOT___GET_SLOT_OR_PORT_DURATION:
-				return getSlotOrPortDuration();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY:
-				return getSlotOrContractMinQuantity();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY:
-				return getSlotOrContractMaxQuantity();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_VOLUME_LIMITS_UNIT:
-				return getSlotOrContractVolumeLimitsUnit();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_DURATION:
+				return getSlotOrDelegateDuration();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY:
+				return getSlotOrDelegateMinQuantity();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY:
+				return getSlotOrDelegateMaxQuantity();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT:
+				return getSlotOrDelegateVolumeLimitsUnit();
 			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME:
 				return getWindowEndWithSlotOrPortTime();
 			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME:
@@ -2706,26 +2680,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowEndWithSlotOrPortTimeWithFlex();
 			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
 				return getWindowStartWithSlotOrPortTimeWithFlex();
-			case CargoPackage.SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE:
-				return getSlotOrPortWindowSize();
-			case CargoPackage.SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS:
-				return getSlotOrPortWindowSizeUnits();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE:
+				return getSlotOrDelegateWindowSize();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_WINDOW_SIZE_UNITS:
+				return getSlotOrDelegateWindowSizeUnits();
 			case CargoPackage.SLOT___GET_WINDOW_SIZE_IN_HOURS:
 				return getWindowSizeInHours();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_ENTITY:
-				return getSlotOrDelegatedEntity();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return getSlotOrContractRestrictedListsArePermissive();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION:
-				return getSlotOrContractCancellationExpression();
-			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT:
-				return getSlotOrDelegatedPricingEvent();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_ENTITY:
+				return getSlotOrDelegateEntity();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_RESTRICTED_LISTS_ARE_PERMISSIVE:
+				return getSlotOrDelegateRestrictedListsArePermissive();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CANCELLATION_EXPRESSION:
+				return getSlotOrDelegateCancellationExpression();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_PRICING_EVENT:
+				return getSlotOrDelegatePricingEvent();
 			case CargoPackage.SLOT___GET_PRICING_DATE_AS_DATE_TIME:
 				return getPricingDateAsDateTime();
 			case CargoPackage.SLOT___GET_SLOT_CONTRACT_PARAMS:
 				return getSlotContractParams();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_COUNTERPARTY:
-				return getSlotOrContractCounterparty();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY:
+				return getSlotOrDelegateCounterparty();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

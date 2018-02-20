@@ -87,15 +87,15 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 						LocalDate windowStart = slot.getWindowStart();
 						LocalDate windowEnd = windowStart;
 
-						switch (slot.getSlotOrPortWindowSizeUnits()) {
+						switch (slot.getSlotOrDelegateWindowSizeUnits()) {
 						case DAYS:
-							windowEnd = windowStart.plusDays(slot.getSlotOrPortWindowSize());
+							windowEnd = windowStart.plusDays(slot.getSlotOrDelegateWindowSize());
 							break;
 						case HOURS:
-							windowEnd = windowStart.plusDays((slot.getSlotOrPortWindowSize() + 12) / 24);
+							windowEnd = windowStart.plusDays((slot.getSlotOrDelegateWindowSize() + 12) / 24);
 							break;
 						case MONTHS:
-							windowEnd = windowStart.plusMonths(slot.getSlotOrPortWindowSize());
+							windowEnd = windowStart.plusMonths(slot.getSlotOrDelegateWindowSize());
 							break;
 						default:
 							break;

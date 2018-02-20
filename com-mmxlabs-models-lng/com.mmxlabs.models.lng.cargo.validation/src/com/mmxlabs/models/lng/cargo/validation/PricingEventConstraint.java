@@ -42,7 +42,7 @@ public class PricingEventConstraint extends AbstractModelMultiConstraint {
 			final int numberOfSlots = cargo.getSlots().size();
 			if (numberOfSlots > 2) {
 				for (final Slot slot : cargo.getSlots()) {
-					final PricingEvent pricingEvent = slot.getSlotOrDelegatedPricingEvent();
+					final PricingEvent pricingEvent = slot.getSlotOrDelegatePricingEvent();
 					if (slot instanceof LoadSlot) {
 						if (pricingEvent == PricingEvent.START_DISCHARGE || pricingEvent == PricingEvent.END_DISCHARGE) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot|" + slot.getName()

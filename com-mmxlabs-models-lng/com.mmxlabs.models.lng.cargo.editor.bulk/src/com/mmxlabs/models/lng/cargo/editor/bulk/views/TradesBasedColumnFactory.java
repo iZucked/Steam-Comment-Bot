@@ -1175,8 +1175,8 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 	protected String getTimeWindowSuffix(final Object owner) {
 		if (owner instanceof Slot) {
 			final Slot slot = (Slot) owner;
-			final int size = slot.getSlotOrPortWindowSize();
-			final TimePeriod units = slot.getSlotOrPortWindowSizeUnits();
+			final int size = slot.getSlotOrDelegateWindowSize();
+			final TimePeriod units = slot.getSlotOrDelegateWindowSizeUnits();
 			String suffix = "h";
 			switch (units) {
 			case DAYS:

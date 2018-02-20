@@ -590,7 +590,7 @@ public class AssignmentEditorHelper {
 	public static @NonNull ZonedDateTime getMinEndDate(@NonNull final Cargo c) {
 		ZonedDateTime z = null;
 		for (final Slot s : c.getSortedSlots()) {
-			final ZonedDateTime earliestFinish = s.getWindowStartWithSlotOrPortTime().plusHours(s.getSlotOrPortDuration());
+			final ZonedDateTime earliestFinish = s.getWindowStartWithSlotOrPortTime().plusHours(s.getSlotOrDelegateDuration());
 			if (z == null) {
 				z = earliestFinish;
 			} else {
@@ -686,7 +686,7 @@ public class AssignmentEditorHelper {
 			if (start == null) {
 				start = windowStartWithSlotOrPortTime;
 			}
-			final ZonedDateTime earliestFinish = windowStartWithSlotOrPortTime.plusHours(s.getSlotOrPortDuration());
+			final ZonedDateTime earliestFinish = windowStartWithSlotOrPortTime.plusHours(s.getSlotOrDelegateDuration());
 			if (z == null) {
 				z = earliestFinish;
 			} else {

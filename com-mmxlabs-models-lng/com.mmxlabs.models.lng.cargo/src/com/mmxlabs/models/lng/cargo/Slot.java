@@ -1370,7 +1370,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getSlotOrPortDuration();
+	int getSlotOrDelegateDuration();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1378,7 +1378,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getSlotOrContractMinQuantity();
+	int getSlotOrDelegateMinQuantity();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1386,7 +1386,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getSlotOrContractMaxQuantity();
+	int getSlotOrDelegateMaxQuantity();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1394,7 +1394,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	VolumeUnits getSlotOrContractVolumeLimitsUnit();
+	VolumeUnits getSlotOrDelegateVolumeLimitsUnit();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1434,7 +1434,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	int getSlotOrPortWindowSize();
+	int getSlotOrDelegateWindowSize();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1442,7 +1442,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	TimePeriod getSlotOrPortWindowSizeUnits();
+	TimePeriod getSlotOrDelegateWindowSizeUnits();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1458,7 +1458,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	BaseLegalEntity getSlotOrDelegatedEntity();
+	BaseLegalEntity getSlotOrDelegateEntity();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1466,7 +1466,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	boolean getSlotOrContractRestrictedListsArePermissive();
+	boolean getSlotOrDelegateRestrictedListsArePermissive();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1474,7 +1474,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	String getSlotOrContractCancellationExpression();
+	String getSlotOrDelegateCancellationExpression();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1483,7 +1483,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	@NonNull
-	PricingEvent getSlotOrDelegatedPricingEvent();
+	PricingEvent getSlotOrDelegatePricingEvent();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1508,7 +1508,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	String getSlotOrContractCounterparty();
+	String getSlotOrDelegateCounterparty();
 
 } // end of  Slot
 

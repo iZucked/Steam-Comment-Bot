@@ -47,19 +47,19 @@ public class CargoMMBTuVolumeConstraint extends AbstractModelMultiConstraint {
 
 			for (final Slot slot : cargo.getSlots()) {
 				if (slot instanceof LoadSlot) {
-					loadMinVolume += slot.getSlotOrContractMinQuantity();
-					loadMaxVolume += slot.getSlotOrContractMaxQuantity();
-					if (slot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+					loadMinVolume += slot.getSlotOrDelegateMinQuantity();
+					loadMaxVolume += slot.getSlotOrDelegateMaxQuantity();
+					if (slot.getSlotOrDelegateMaxQuantity() == Integer.MAX_VALUE) {
 						maxLoadValid = false;
-					} else if (slot.getSlotOrContractMaxQuantity() == 0) {
+					} else if (slot.getSlotOrDelegateMaxQuantity() == 0) {
 						maxLoadValid = false;
 					}
 				} else if (slot instanceof DischargeSlot) {
-					dischargeMinVolume += slot.getSlotOrContractMinQuantity();
-					dischargeMaxVolume += slot.getSlotOrContractMaxQuantity();
-					if (slot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+					dischargeMinVolume += slot.getSlotOrDelegateMinQuantity();
+					dischargeMaxVolume += slot.getSlotOrDelegateMaxQuantity();
+					if (slot.getSlotOrDelegateMaxQuantity() == Integer.MAX_VALUE) {
 						maxDischargeValid = false;
-					} else if (slot.getSlotOrContractMaxQuantity() == 0) {
+					} else if (slot.getSlotOrDelegateMaxQuantity() == 0) {
 						maxDischargeValid = false;
 					}
 					if (numberOfSlots > 2) {

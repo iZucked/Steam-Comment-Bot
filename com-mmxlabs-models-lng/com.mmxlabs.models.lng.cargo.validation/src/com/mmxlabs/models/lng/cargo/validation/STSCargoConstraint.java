@@ -65,8 +65,8 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				if (cargo != null) {
 					final Slot s = cargo.getSortedSlots().get(0);
 					if (s instanceof LoadSlot) {
-						final double cv = ((LoadSlot) s).getSlotOrDelegatedCV();
-						if (cv != transferTo.getSlotOrDelegatedCV()) {
+						final double cv = ((LoadSlot) s).getSlotOrDelegateCV();
+						if (cv != transferTo.getSlotOrDelegateCV()) {
 							final String failureMessage = String.format("Ship to Ship %s must be in sync", "CV");
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 							dsd.addEObjectAndFeature(transferTo, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
@@ -129,7 +129,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 
-		if (!Equality.isEqual(loadSlot.getSlotOrContractMaxQuantity(), dischargeSlot.getSlotOrContractMaxQuantity())) {
+		if (!Equality.isEqual(loadSlot.getSlotOrDelegateMaxQuantity(), dischargeSlot.getSlotOrDelegateMaxQuantity())) {
 			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Max Quantity");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
@@ -137,7 +137,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 			failures.add(dsd);
 		}
 
-		if (!Equality.isEqual(loadSlot.getSlotOrContractMinQuantity(), dischargeSlot.getSlotOrContractMinQuantity())) {
+		if (!Equality.isEqual(loadSlot.getSlotOrDelegateMinQuantity(), dischargeSlot.getSlotOrDelegateMinQuantity())) {
 			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Min Quantity");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());

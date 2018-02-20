@@ -401,7 +401,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public double getSlotOrDelegatedCV() {
+	public double getSlotOrDelegateCV() {
 		return (Double) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__CARGO_CV);
 	}
 
@@ -410,7 +410,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public CargoDeliveryType getSlotOrContractDeliveryType() {
+	public CargoDeliveryType getSlotOrDelegateDeliveryType() {
 		return (CargoDeliveryType) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE);	
 	}
 
@@ -551,10 +551,10 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV:
-				return getSlotOrDelegatedCV();
-			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE:
-				return getSlotOrContractDeliveryType();
+			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_DELEGATE_CV:
+				return getSlotOrDelegateCV();
+			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE:
+				return getSlotOrDelegateDeliveryType();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

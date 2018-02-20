@@ -101,8 +101,8 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 						if (slot.isSetContract()) {
 							newBuy.setContract((PurchaseContract) slot.getContract());
 						} else {
-							newBuy.setEntity(slot.getSlotOrDelegatedEntity());
-							newBuy.setCv(slot.getSlotOrDelegatedCV());
+							newBuy.setEntity(slot.getSlotOrDelegateEntity());
+							newBuy.setCv(slot.getSlotOrDelegateCV());
 						}
 						if (slot.isSetCargoCV()) {
 							newBuy.setCv(slot.getCargoCV());

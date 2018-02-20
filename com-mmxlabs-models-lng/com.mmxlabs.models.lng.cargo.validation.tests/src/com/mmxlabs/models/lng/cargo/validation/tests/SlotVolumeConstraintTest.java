@@ -109,8 +109,8 @@ public class SlotVolumeConstraintTest {
 		// Set up the expected return values of methods.
 		when(slot.getName()).thenReturn("Slot");
 		when(slot.eContainingFeature()).thenReturn(null);
-		when(slot.getSlotOrContractMinQuantity()).thenReturn(min);
-		when(slot.getSlotOrContractMaxQuantity()).thenReturn(max);
+		when(slot.getSlotOrDelegateMinQuantity()).thenReturn(min);
+		when(slot.getSlotOrDelegateMaxQuantity()).thenReturn(max);
 		when(slot.isSetVolumeLimitsUnit()).thenReturn(false);
 		when(validationContext.getTarget()).thenReturn(slot);
 		when(validationContext.getEventType()).thenReturn(EMFEventType.NULL);
@@ -126,10 +126,10 @@ public class SlotVolumeConstraintTest {
 
 		// verify that the mocked methods are called.
 		verify(slot, atLeast(0)).getName();
-		verify(slot, atLeast(0)).getSlotOrContractMinQuantity();
-		verify(slot, atLeast(0)).getSlotOrContractMaxQuantity();
+		verify(slot, atLeast(0)).getSlotOrDelegateMinQuantity();
+		verify(slot, atLeast(0)).getSlotOrDelegateMaxQuantity();
 		verify(slot, atLeast(0)).isSetVolumeLimitsUnit();
-		verify(slot, atLeast(0)).getSlotOrContractVolumeLimitsUnit();
+		verify(slot, atLeast(0)).getSlotOrDelegateVolumeLimitsUnit();
 		verify(validationContext).getTarget();
 		verify(validationContext).getEventType();
 		verify(validationContext, atLeast(0)).createSuccessStatus();

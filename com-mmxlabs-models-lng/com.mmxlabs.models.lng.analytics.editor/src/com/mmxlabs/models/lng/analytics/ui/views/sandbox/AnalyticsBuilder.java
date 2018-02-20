@@ -120,10 +120,10 @@ public class AnalyticsBuilder {
 				slot.setDESPurchase(originalLoadSlot.isDESPurchase());
 				slot.setDivertible(originalLoadSlot.isDivertible());
 				slot.setCounterparty(originalLoadSlot.getCounterparty());
-				slot.setDuration(originalLoadSlot.getSlotOrPortDuration());
+				slot.setDuration(originalLoadSlot.getSlotOrDelegateDuration());
 
-				if (originalLoadSlot.getSlotOrDelegatedCV() != 0.0) {
-					slot.setCargoCV(originalLoadSlot.getSlotOrDelegatedCV());
+				if (originalLoadSlot.getSlotOrDelegateCV() != 0.0) {
+					slot.setCargoCV(originalLoadSlot.getSlotOrDelegateCV());
 				}
 				if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
 					slot.setPriceExpression("??");
@@ -132,16 +132,16 @@ public class AnalyticsBuilder {
 				}
 				slot.setWindowStart(originalLoadSlot.getWindowStart());
 
-				slot.setEntity(originalLoadSlot.getSlotOrDelegatedEntity());
+				slot.setEntity(originalLoadSlot.getSlotOrDelegateEntity());
 
 				if (originalLoadSlot.getCancellationExpression() != null && !originalLoadSlot.getCancellationExpression().isEmpty()) {
 					slot.setCancellationExpression(originalLoadSlot.getCancellationExpression());
 				}
 				slot.setMiscCosts(originalLoadSlot.getMiscCosts());
 
-				slot.setVolumeLimitsUnit(originalLoadSlot.getSlotOrContractVolumeLimitsUnit());
-				slot.setMinQuantity(originalLoadSlot.getSlotOrContractMinQuantity());
-				slot.setMaxQuantity(originalLoadSlot.getSlotOrContractMaxQuantity());
+				slot.setVolumeLimitsUnit(originalLoadSlot.getSlotOrDelegateVolumeLimitsUnit());
+				slot.setMinQuantity(originalLoadSlot.getSlotOrDelegateMinQuantity());
+				slot.setMaxQuantity(originalLoadSlot.getSlotOrDelegateMaxQuantity());
 
 				return slot;
 			}
@@ -287,7 +287,7 @@ public class AnalyticsBuilder {
 				slot.setFOBSale(originalDischargeSlot.isFOBSale());
 				slot.setDivertible(originalDischargeSlot.isDivertible());
 				slot.setCounterparty(originalDischargeSlot.getCounterparty());
-				slot.setDuration(originalDischargeSlot.getSlotOrPortDuration());
+				slot.setDuration(originalDischargeSlot.getSlotOrDelegateDuration());
 				// TODO: Copy other params!
 				if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
 					slot.setPriceExpression("??");
@@ -296,16 +296,16 @@ public class AnalyticsBuilder {
 				}
 				slot.setWindowStart(originalDischargeSlot.getWindowStart());
 
-				slot.setEntity(originalDischargeSlot.getSlotOrDelegatedEntity());
+				slot.setEntity(originalDischargeSlot.getSlotOrDelegateEntity());
 
 				if (originalDischargeSlot.getCancellationExpression() != null && !originalDischargeSlot.getCancellationExpression().isEmpty()) {
 					slot.setCancellationExpression(originalDischargeSlot.getCancellationExpression());
 				}
 				slot.setMiscCosts(originalDischargeSlot.getMiscCosts());
 
-				slot.setVolumeLimitsUnit(originalDischargeSlot.getSlotOrContractVolumeLimitsUnit());
-				slot.setMinQuantity(originalDischargeSlot.getSlotOrContractMinQuantity());
-				slot.setMaxQuantity(originalDischargeSlot.getSlotOrContractMaxQuantity());
+				slot.setVolumeLimitsUnit(originalDischargeSlot.getSlotOrDelegateVolumeLimitsUnit());
+				slot.setMinQuantity(originalDischargeSlot.getSlotOrDelegateMinQuantity());
+				slot.setMaxQuantity(originalDischargeSlot.getSlotOrDelegateMaxQuantity());
 
 				return slot;
 			}
@@ -1133,7 +1133,7 @@ public class AnalyticsBuilder {
 			final SellReference sellReference = (SellReference) option;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return slot.getSlotOrPortDuration();
+				return slot.getSlotOrDelegateDuration();
 			}
 		} else if (option instanceof SellMarket) {
 
@@ -1161,7 +1161,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getSlotOrPortDuration();
+				return slot.getSlotOrDelegateDuration();
 			}
 		} else if (option instanceof BuyMarket) {
 
@@ -1216,7 +1216,7 @@ public class AnalyticsBuilder {
 			final BuyReference buyReference = (BuyReference) option;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				return slot.getSlotOrDelegatedCV();
+				return slot.getSlotOrDelegateCV();
 			}
 		} else if (option instanceof BuyMarket) {
 			final BuyMarket buyMarket = (BuyMarket) option;
@@ -1243,8 +1243,8 @@ public class AnalyticsBuilder {
 			if (slot == null) {
 				return null;
 			}
-			final int slotOrContractMinQuantity = slot.getSlotOrContractMinQuantity();
-			final int slotOrContractMaxQuantity = slot.getSlotOrContractMaxQuantity();
+			final int slotOrContractMinQuantity = slot.getSlotOrDelegateMinQuantity();
+			final int slotOrContractMaxQuantity = slot.getSlotOrDelegateMaxQuantity();
 			return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
 					slotOrContractMaxQuantity == Integer.MAX_VALUE || slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity
 							: (int) ((double) slotOrContractMaxQuantity * cargoCV) };
@@ -1275,8 +1275,8 @@ public class AnalyticsBuilder {
 		if (sell instanceof SellReference) {
 			final SellReference sellReference = (SellReference) sell;
 			final DischargeSlot slot = ((SellReference) sell).getSlot();
-			final int slotOrContractMinQuantity = slot.getSlotOrContractMinQuantity();
-			final int slotOrContractMaxQuantity = slot.getSlotOrContractMaxQuantity();
+			final int slotOrContractMinQuantity = slot.getSlotOrDelegateMinQuantity();
+			final int slotOrContractMaxQuantity = slot.getSlotOrDelegateMaxQuantity();
 			return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
 					slotOrContractMaxQuantity == Integer.MAX_VALUE || slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity
 							: (int) ((double) slotOrContractMaxQuantity * cargoCV) };

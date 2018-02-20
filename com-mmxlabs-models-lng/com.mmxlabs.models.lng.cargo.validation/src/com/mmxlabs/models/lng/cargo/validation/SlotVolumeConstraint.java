@@ -56,17 +56,17 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private void checkSensibleValues(@NonNull IValidationContext ctx, @NonNull List<IStatus> failures, Slot slot, String name) {
-		if (slot.getSlotOrContractMinQuantity() > SENSIBLE_M3 && slot.getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3) {
+		if (slot.getSlotOrDelegateMinQuantity() > SENSIBLE_M3 && slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
-					String.format("Slot|%s min volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getSlotOrContractMinQuantity()), IStatus.ERROR));
+					String.format("Slot|%s min volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getSlotOrDelegateMinQuantity()), IStatus.ERROR));
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
 			failures.add(status);
 		}
-		if (slot.getSlotOrContractMaxQuantity() != 0 && slot.getSlotOrContractMaxQuantity() != Integer.MAX_VALUE) {
-			if (slot.getSlotOrContractMaxQuantity() > SENSIBLE_M3 && slot.getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3) {
+		if (slot.getSlotOrDelegateMaxQuantity() != 0 && slot.getSlotOrDelegateMaxQuantity() != Integer.MAX_VALUE) {
+			if (slot.getSlotOrDelegateMaxQuantity() > SENSIBLE_M3 && slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
 				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
-						String.format("Slot|%s max volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getSlotOrContractMaxQuantity()), IStatus.ERROR));
+						String.format("Slot|%s max volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getSlotOrDelegateMaxQuantity()), IStatus.ERROR));
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
 				failures.add(status);
@@ -76,19 +76,19 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 
 	private void testVolumeValueConstraint(IValidationContext ctx, List<IStatus> failures, final Slot slot, String name) {
 		// TODO return some placeholders for the error message
-		if (slot.getSlotOrContractMinQuantity() < 0) {
+		if (slot.getSlotOrDelegateMinQuantity() < 0) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Negative min volume"));
 
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 			failures.add(dsd);
 		}
-		if (slot.getSlotOrContractMaxQuantity() < 0) {
+		if (slot.getSlotOrDelegateMaxQuantity() < 0) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Negative max volume"));
 
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 			failures.add(dsd);
 		}
-		if (slot.getSlotOrContractMinQuantity() > slot.getSlotOrContractMaxQuantity()) {
+		if (slot.getSlotOrDelegateMinQuantity() > slot.getSlotOrDelegateMaxQuantity()) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Min volume greater than max volume."));
 
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());

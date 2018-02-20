@@ -183,7 +183,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 							isDivertableDESPurchase = loadSlot.isDivertible();
 							cargoActuals.setVessel(slot.getNominatedVessel());
 						}
-						slotActuals.setCV(((LoadSlot) slot).getSlotOrDelegatedCV());
+						slotActuals.setCV(((LoadSlot) slot).getSlotOrDelegateCV());
 
 						((LoadActuals) slotActuals).setContractType(loadSlot.isDESPurchase() ? "DES" : "FOB");
 					} else if (slot instanceof DischargeSlot) {

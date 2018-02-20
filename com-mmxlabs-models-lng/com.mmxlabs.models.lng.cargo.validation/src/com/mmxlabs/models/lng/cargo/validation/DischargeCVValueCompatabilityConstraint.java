@@ -49,7 +49,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 
 								final LoadSlot loadSlot = (LoadSlot) slot2;
 								final SalesContract salesContract = (SalesContract) contract;
-								final double loadCV = loadSlot.getSlotOrDelegatedCV();
+								final double loadCV = loadSlot.getSlotOrDelegateCV();
 								final String format = "[Cargo|%s] Purchase CV %.2f is %s than the %s CV (%.2f) for %s '%s'.";
 
 								// Do four bounds checks
@@ -73,7 +73,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 	private void checkDischargeAndContractMin(final List<IStatus> failures, final SalesContract salesContract, final DischargeSlot dischargeSlot, final LoadSlot loadSlot, final Cargo cargo,
 			final double loadCV, final String format, final IValidationContext ctx) {
 		if (dischargeSlot.isSetMinCvValue() || (salesContract != null && salesContract.isSetMinCvValue())) {
-			final Double minCvValue = dischargeSlot.getSlotOrContractMinCv();
+			final Double minCvValue = dischargeSlot.getSlotOrDelegateMinCv();
 			if (minCvValue != null && loadCV < minCvValue) {
 				if (dischargeSlot.isSetMinCvValue()) {
 					final List<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<>();
@@ -90,7 +90,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 	private void checkDischargeAndContractMax(final List<IStatus> failures, final SalesContract salesContract, final DischargeSlot dischargeSlot, final LoadSlot loadSlot, final Cargo cargo,
 			final double loadCV, final String format, final IValidationContext ctx) {
 		if (dischargeSlot.isSetMaxCvValue() || (salesContract != null && salesContract.isSetMaxCvValue())) {
-			final Double maxCvValue = dischargeSlot.getSlotOrContractMaxCv();
+			final Double maxCvValue = dischargeSlot.getSlotOrDelegateMaxCv();
 			if (maxCvValue != null && loadCV > maxCvValue) {
 				if (dischargeSlot.isSetMaxCvValue()) {
 					final List<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<>();

@@ -226,7 +226,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 
-								final int availableTime = Hours.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime) - prevSlot.getSlotOrPortDuration();
+								final int availableTime = Hours.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime) - prevSlot.getSlotOrDelegateDuration();
 
 								if (constraintID.equals(DATE_ORDER_ID)) {
 									validateSlotOrder(ctx, cargo, prevSlot, availableTime, failures);
@@ -278,10 +278,10 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				int travelTime = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
 						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
 						extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
-				if (travelTime + from.getSlotOrPortDuration() > windowLength) {
+				if (travelTime + from.getSlotOrDelegateDuration() > windowLength) {
 					final String message = String.format("Purchase|%s] is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s",
-							from.getName(), to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()),
-							TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration()) - windowLength));
+							from.getName(), to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrDelegateDuration()),
+							TravelTimeUtils.formatHours((travelTime + from.getSlotOrDelegateDuration()) - windowLength));
 					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());

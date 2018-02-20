@@ -56,30 +56,30 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			boolean maxDischargeValid = true;
 			for (final Slot slot : cargo.getSlots()) {
 				if (slot instanceof LoadSlot) {
-					loadMinVolume += slot.getSlotOrContractMinQuantity();
-					loadMaxVolume += slot.getSlotOrContractMaxQuantity();
-					loadUnits = slot.getSlotOrContractVolumeLimitsUnit();
-					cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
+					loadMinVolume += slot.getSlotOrDelegateMinQuantity();
+					loadMaxVolume += slot.getSlotOrDelegateMaxQuantity();
+					loadUnits = slot.getSlotOrDelegateVolumeLimitsUnit();
+					cv = ((LoadSlot) slot).getSlotOrDelegateCV();
 
-					if (slot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+					if (slot.getSlotOrDelegateMaxQuantity() == Integer.MAX_VALUE) {
 						maxLoadValid = false;
-					} else if (slot.getSlotOrContractMaxQuantity() == 0) {
+					} else if (slot.getSlotOrDelegateMaxQuantity() == 0) {
 						maxLoadValid = false;
 					}
 				} else if (slot instanceof DischargeSlot) {
-					dischargeMinVolume += slot.getSlotOrContractMinQuantity();
-					dischargeMaxVolume += slot.getSlotOrContractMaxQuantity();
+					dischargeMinVolume += slot.getSlotOrDelegateMinQuantity();
+					dischargeMaxVolume += slot.getSlotOrDelegateMaxQuantity();
 					if (dischargeUnits == null) {
-						dischargeUnits = slot.getSlotOrContractVolumeLimitsUnit();
+						dischargeUnits = slot.getSlotOrDelegateVolumeLimitsUnit();
 					}
 					if (numberOfSlots > 2) {
 						checkComplexDischargeLimitsSet(ctx, failures, cargo, slot);
 						checkComplexDischargeLimitsIdentical(ctx, failures, cargo, slot);
 						checkComplexDischargeLimitUnitsIdentical(ctx, failures, cargo, dischargeUnits, slot);
 					}
-					if (slot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+					if (slot.getSlotOrDelegateMaxQuantity() == Integer.MAX_VALUE) {
 						maxDischargeValid = false;
-					} else if (slot.getSlotOrContractMaxQuantity() == 0) {
+					} else if (slot.getSlotOrDelegateMaxQuantity() == 0) {
 						maxDischargeValid = false;
 					}
 				}
@@ -225,7 +225,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private void checkComplexDischargeLimitUnitsIdentical(IValidationContext ctx, List<IStatus> failures, final Cargo cargo, VolumeUnits dischargeUnits, final Slot slot) {
-		if (slot.getSlotOrContractVolumeLimitsUnit() != dischargeUnits) {
+		if (slot.getSlotOrDelegateVolumeLimitsUnit() != dischargeUnits) {
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus("Complex Cargo|" + cargo.getLoadName() + " requires volume limit units to be identical"));
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());

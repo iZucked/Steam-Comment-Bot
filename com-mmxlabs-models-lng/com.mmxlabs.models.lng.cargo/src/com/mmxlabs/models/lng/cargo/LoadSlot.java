@@ -251,7 +251,7 @@ public interface LoadSlot extends Slot {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	double getSlotOrDelegatedCV();
+	double getSlotOrDelegateCV();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -259,7 +259,7 @@ public interface LoadSlot extends Slot {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	CargoDeliveryType getSlotOrContractDeliveryType();
+	CargoDeliveryType getSlotOrDelegateDeliveryType();
 
 } // end of  LoadSlot
 

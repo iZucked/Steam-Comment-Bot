@@ -253,7 +253,7 @@ public interface DischargeSlot extends Slot {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	double getSlotOrContractMinCv();
+	double getSlotOrDelegateMinCv();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -261,7 +261,7 @@ public interface DischargeSlot extends Slot {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	double getSlotOrContractMaxCv();
+	double getSlotOrDelegateMaxCv();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -269,7 +269,7 @@ public interface DischargeSlot extends Slot {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	CargoDeliveryType getSlotOrContractDeliveryType();
+	CargoDeliveryType getSlotOrDelegateDeliveryType();
 } // end of  DischargeSlot
 
 // finish type fixing

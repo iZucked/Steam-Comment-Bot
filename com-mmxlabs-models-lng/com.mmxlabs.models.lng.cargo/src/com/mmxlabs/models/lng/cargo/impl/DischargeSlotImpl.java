@@ -393,7 +393,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public double getSlotOrContractMinCv() {
+	public double getSlotOrDelegateMinCv() {
 		return (Double) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE);	
 	}
 
@@ -402,7 +402,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public double getSlotOrContractMaxCv() {
+	public double getSlotOrDelegateMaxCv() {
 		return (Double) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE);	
 	}
 
@@ -411,7 +411,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public CargoDeliveryType getSlotOrContractDeliveryType() {
+	public CargoDeliveryType getSlotOrDelegateDeliveryType() {
 		return (CargoDeliveryType) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE);	
 	}
 
@@ -552,12 +552,12 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MIN_CV:
-				return getSlotOrContractMinCv();
-			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MAX_CV:
-				return getSlotOrContractMaxCv();
-			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE:
-				return getSlotOrContractDeliveryType();
+			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_MIN_CV:
+				return getSlotOrDelegateMinCv();
+			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_MAX_CV:
+				return getSlotOrDelegateMaxCv();
+			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE:
+				return getSlotOrDelegateDeliveryType();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
