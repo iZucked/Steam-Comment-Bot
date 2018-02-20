@@ -157,7 +157,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							final ITimeWindow baseTimeWindow = shippingHoursRestrictionProvider.getBaseTime(elementA);
 
 							// Convert to FOB Purchase slot
-							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), baseTimeWindow, minVolume, maxVolume, priceCalculator, cargoCVValue, loadSlot.getSlotOrPortDuration(),
+							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), baseTimeWindow, minVolume, maxVolume, priceCalculator, cargoCVValue, loadSlot.getSlotOrDelegateDuration(),
 									false, true, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot, loadOption.isVolumeSetInM3());
 							generatedOptions.add(alternativeSlot);
 
@@ -196,7 +196,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(elementA);
 
 							final ITimeWindow window = TimeWindowMaker.createInclusiveExclusive(currentWindow.getInclusiveStart(), currentWindow.getExclusiveEnd() + shippingHours, 0, false);
-							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, loadSlot.getSlotOrPortDuration(),
+							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, loadSlot.getSlotOrDelegateDuration(),
 									IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot, loadOption.isVolumeSetInM3());
 
 							generatedOptions.add(alternativeSlot);
@@ -207,7 +207,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							desSlot.setName(loadOption.getId());
 							desSlot.setArriveCold(true);
 							// Always set CV
-							desSlot.setCargoCV(loadSlot.getSlotOrDelegatedCV());
+							desSlot.setCargoCV(loadSlot.getSlotOrDelegateCV());
 							desSlot.setPort(loadSlot.getPort());
 							desSlot.setWindowStart(modelEntityMap.getDateFromHours(window.getInclusiveStart(), loadSlot.getPort()).toLocalDate());
 							desSlot.setContract(loadSlot.getContract());

@@ -74,7 +74,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 			}
 
 			// Set the required match type
-			final CargoDeliveryType cargoType = loadSlot.getSlotOrContractDeliveryType();
+			final CargoDeliveryType cargoType = loadSlot.getSlotOrDelegateDeliveryType();
 			if (cargoType != CargoDeliveryType.ANY) {
 				shippingTypeProviderEditor.setPurchaseSlotRequiredDeliveryType(sequenceElement, cargoType);
 			}
@@ -91,7 +91,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
 			}
 			// Set the required match type
-			final CargoDeliveryType cargoType = dischargeSlot.getSlotOrContractDeliveryType();
+			final CargoDeliveryType cargoType = dischargeSlot.getSlotOrDelegateDeliveryType();
 			if (cargoType != CargoDeliveryType.ANY) {
 				shippingTypeProviderEditor.setSalesSlotRequiredDeliveryType(sequenceElement, cargoType);
 			}

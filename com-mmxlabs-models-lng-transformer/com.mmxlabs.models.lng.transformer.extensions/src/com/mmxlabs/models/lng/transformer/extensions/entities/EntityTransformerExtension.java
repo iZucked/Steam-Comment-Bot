@@ -102,7 +102,7 @@ public class EntityTransformerExtension implements ITransformerExtension, ISlotT
 
 	@Override
 	public void slotTransformed(@NonNull Slot modelSlot, @NonNull IPortSlot optimiserSlot) {
-		final BaseLegalEntity slotEntity = modelSlot.getSlotOrDelegatedEntity();
+		final BaseLegalEntity slotEntity = modelSlot.getSlotOrDelegateEntity();
 		final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(slotEntity, IEntity.class);
 		entityProvider.setEntityForSlot(entity, optimiserSlot);
 	}

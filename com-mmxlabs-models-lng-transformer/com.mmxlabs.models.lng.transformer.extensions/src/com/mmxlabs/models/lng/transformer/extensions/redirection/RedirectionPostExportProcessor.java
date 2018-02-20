@@ -76,9 +76,9 @@ public class RedirectionPostExportProcessor implements IPostExportProcessor {
 											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_START, discharge.getWindowStart()));
 											// TODO: We may need a getSlotOrPortWindowStartTime here
 											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, discharge.getWindowStartTime()));
-											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE, discharge.getSlotOrPortWindowSize()));
-											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, discharge.getSlotOrPortWindowSizeUnits()));
-											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__DURATION, discharge.getSlotOrPortDuration()));
+											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE, discharge.getSlotOrDelegateWindowSize()));
+											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, discharge.getSlotOrDelegateWindowSizeUnits()));
+											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__DURATION, discharge.getSlotOrDelegateDuration()));
 
 											// TODO: What about volume bounds?
 

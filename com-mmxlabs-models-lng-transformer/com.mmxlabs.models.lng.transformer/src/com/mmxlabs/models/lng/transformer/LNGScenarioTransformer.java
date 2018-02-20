@@ -1664,7 +1664,7 @@ public class LNGScenarioTransformer {
 			throw new IllegalStateException(String.format("Discharge Slot [%s] has no contract or other pricing data", dischargeSlot.getName()));
 		}
 
-		final boolean isVolumeLimitInM3 = dischargeSlot.getSlotOrContractVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+		final boolean isVolumeLimitInM3 = dischargeSlot.getSlotOrDelegateVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
 		// local scope for slot creation convenience variables
 		{
@@ -1678,11 +1678,11 @@ public class LNGScenarioTransformer {
 				minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
 			} else {
-				minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity());
-				if (dischargeSlot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+				minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrDelegateMinQuantity());
+				if (dischargeSlot.getSlotOrDelegateMaxQuantity() == Integer.MAX_VALUE) {
 					maxVolume = Long.MAX_VALUE;
 				} else {
-					maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
+					maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrDelegateMaxQuantity());
 				}
 			}
 
@@ -1691,8 +1691,8 @@ public class LNGScenarioTransformer {
 
 			final int pricingDate = getSlotPricingDate(dischargeSlot);
 
-			minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMinCv());
-			maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMaxCv());
+			minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrDelegateMinCv());
+			maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrDelegateMaxCv());
 			if (maxCv == 0) {
 				maxCv = Long.MAX_VALUE;
 			}
@@ -1735,15 +1735,15 @@ public class LNGScenarioTransformer {
 					port = portAssociation.lookup(dischargeSlot.getPort());
 				}
 
-				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
-						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
+				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrDelegateDuration(),
+						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
 
 				if (dischargeSlot.isDivertible()) {
 					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
-						dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot,
+						dischargeSlot.getSlotOrDelegateDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot,
 						isVolumeLimitInM3);
 			}
 		}
@@ -1766,7 +1766,7 @@ public class LNGScenarioTransformer {
 		// set additional misc costs in provider
 		setMiscCosts(dischargeSlot, discharge);
 
-		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getSlotOrContractCancellationExpression(), commodityIndices);
+		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getSlotOrDelegateCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
 			cancellationFeeProviderEditor.setCancellationExpression(discharge, cancellationCurve);
 		}
@@ -1860,15 +1860,15 @@ public class LNGScenarioTransformer {
 			minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 			maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
 		} else {
-			minVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity());
-			if (loadSlot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+			minVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrDelegateMinQuantity());
+			if (loadSlot.getSlotOrDelegateMaxQuantity() == Integer.MAX_VALUE) {
 				maxVolume = Long.MAX_VALUE;
 			} else {
-				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity());
+				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrDelegateMaxQuantity());
 			}
 		}
 
-		final boolean isVolumeLimitInM3 = loadSlot.getSlotOrContractVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+		final boolean isVolumeLimitInM3 = loadSlot.getSlotOrDelegateVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
 		final boolean slotLocked = loadSlot.isLocked() || shippingOnly && loadSlot.getCargo() == null;
 		if (loadSlot.isDESPurchase()) {
@@ -1891,16 +1891,16 @@ public class LNGScenarioTransformer {
 				port = portAssociation.lookup(loadSlot.getPort());
 			}
 			load = builder.createDESPurchaseLoadSlot(elementName, port, localTimeWindow, minVolume, maxVolume, loadPriceCalculator,
-					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate,
-					transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
+					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSlotOrDelegateDuration(), slotPricingDate,
+					transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
 
 			if (loadSlot.isDivertible()) {
 				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
 			}
 		} else {
 			load = builder.createLoadSlot(elementName, portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
-					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
-					slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
+					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSlotOrDelegateDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
+					slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot, isVolumeLimitInM3);
 		}
 		// Store market slots for lookup when building spot markets.
 		modelEntityMap.addModelObject(loadSlot, load);
@@ -1922,7 +1922,7 @@ public class LNGScenarioTransformer {
 		// set additional misc costs in provider
 		setMiscCosts(loadSlot, load);
 
-		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getSlotOrContractCancellationExpression(), commodityIndices);
+		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getSlotOrDelegateCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
 			cancellationFeeProviderEditor.setCancellationExpression(load, cancellationCurve);
 		}
@@ -2438,7 +2438,7 @@ public class LNGScenarioTransformer {
 								final boolean isVolumeLimitInM3 = desSalesMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
 								final IDischargeOption desSalesSlot = builder.createDischargeSlot(internalID, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator,
-										desSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
+										desSlot.getSlotOrDelegateDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
@@ -2578,7 +2578,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), fobSlot.isArriveCold(), true,
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrDelegateDuration(), fobSlot.isArriveCold(), true,
 										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Key piece of information
