@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getChildren <em>Children</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getType <em>Type</em>}</li>
- *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getLatest <em>Latest</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getCurrent <em>Current</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.CompositeNodeImpl#getActionHandler <em>Action Handler</em>}</li>
  * </ul>
  *
@@ -66,14 +66,14 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 	protected String type = TYPE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getLatest() <em>Latest</em>}' reference.
+	 * The cached value of the '{@link #getCurrent() <em>Current</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLatest()
+	 * @see #getCurrent()
 	 * @generated
 	 * @ordered
 	 */
-	protected Node latest;
+	protected Node current;
 
 	/**
 	 * The default value of the '{@link #getActionHandler() <em>Action Handler</em>}' attribute.
@@ -152,16 +152,16 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Node getLatest() {
-		if (latest != null && latest.eIsProxy()) {
-			InternalEObject oldLatest = (InternalEObject) latest;
-			latest = (Node) eResolveProxy(oldLatest);
-			if (latest != oldLatest) {
+	public Node getCurrent() {
+		if (current != null && current.eIsProxy()) {
+			InternalEObject oldCurrent = (InternalEObject) current;
+			current = (Node) eResolveProxy(oldCurrent);
+			if (current != oldCurrent) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, BrowserPackage.COMPOSITE_NODE__LATEST, oldLatest, latest));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, BrowserPackage.COMPOSITE_NODE__CURRENT, oldCurrent, current));
 			}
 		}
-		return latest;
+		return current;
 	}
 
 	/**
@@ -169,8 +169,8 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Node basicGetLatest() {
-		return latest;
+	public Node basicGetCurrent() {
+		return current;
 	}
 
 	/**
@@ -178,11 +178,11 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLatest(Node newLatest) {
-		Node oldLatest = latest;
-		latest = newLatest;
+	public void setCurrent(Node newCurrent) {
+		Node oldCurrent = current;
+		current = newCurrent;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, BrowserPackage.COMPOSITE_NODE__LATEST, oldLatest, latest));
+			eNotify(new ENotificationImpl(this, Notification.SET, BrowserPackage.COMPOSITE_NODE__CURRENT, oldCurrent, current));
 	}
 
 	/**
@@ -232,10 +232,10 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 			return getChildren();
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
 			return getType();
-		case BrowserPackage.COMPOSITE_NODE__LATEST:
+		case BrowserPackage.COMPOSITE_NODE__CURRENT:
 			if (resolve)
-				return getLatest();
-			return basicGetLatest();
+				return getCurrent();
+			return basicGetCurrent();
 		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
 			return getActionHandler();
 		}
@@ -258,8 +258,8 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
 			setType((String) newValue);
 			return;
-		case BrowserPackage.COMPOSITE_NODE__LATEST:
-			setLatest((Node) newValue);
+		case BrowserPackage.COMPOSITE_NODE__CURRENT:
+			setCurrent((Node) newValue);
 			return;
 		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
 			setActionHandler((IDataBrowserActionsHandler) newValue);
@@ -282,8 +282,8 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
 			setType(TYPE_EDEFAULT);
 			return;
-		case BrowserPackage.COMPOSITE_NODE__LATEST:
-			setLatest((Node) null);
+		case BrowserPackage.COMPOSITE_NODE__CURRENT:
+			setCurrent((Node) null);
 			return;
 		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
 			setActionHandler(ACTION_HANDLER_EDEFAULT);
@@ -304,8 +304,8 @@ public class CompositeNodeImpl extends NodeImpl implements CompositeNode {
 			return children != null && !children.isEmpty();
 		case BrowserPackage.COMPOSITE_NODE__TYPE:
 			return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
-		case BrowserPackage.COMPOSITE_NODE__LATEST:
-			return latest != null;
+		case BrowserPackage.COMPOSITE_NODE__CURRENT:
+			return current != null;
 		case BrowserPackage.COMPOSITE_NODE__ACTION_HANDLER:
 			return ACTION_HANDLER_EDEFAULT == null ? actionHandler != null : !ACTION_HANDLER_EDEFAULT.equals(actionHandler);
 		}

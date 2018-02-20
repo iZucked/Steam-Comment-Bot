@@ -294,12 +294,13 @@ public class DataBrowser extends ViewPart {
 							if (actionHandler.supportsSetCurrent()) {
 								data_mgr.add(new RunnableAction("Set as Current", () -> {
 									if (actionHandler.setCurrent(selectedNode.getDisplayName())) {
-										selectedNode.setCurrent(true);
+										parentNode.setCurrent(selectedNode);
+										selectedNode.getParent().setCurrent(selectedNode);
 									}
 								}));
 								itemsAdded = true;
 							} else {
-								data_mgr.add(new RunnableAction("Set as Current (Not suppported)i", () -> {
+								data_mgr.add(new RunnableAction("Set as Current (Not suppported)", () -> {
 
 								}));
 								itemsAdded = true;
@@ -436,8 +437,9 @@ public class DataBrowser extends ViewPart {
 				if (notification.isTouch()) {
 					return;
 				}
-				if (notification.getFeature() == BrowserPackage.Literals.COMPOSITE_NODE__LATEST) {
+				if (notification.getFeature() == BrowserPackage.Literals.COMPOSITE_NODE__CURRENT) {
 					ViewerHelper.refresh(scenarioViewer, false);
+					ViewerHelper.refresh(dataViewer, false);
 				}
 				if (notification.getFeature() == BrowserPackage.Literals.COMPOSITE_NODE__CHILDREN) {
 					ViewerHelper.runIfViewerValid(dataViewer, false, (v) -> v.expandAll());
@@ -511,7 +513,7 @@ public class DataBrowser extends ViewPart {
 					Manifest mf = scenarioInstance.getManifest();
 					if (mf != null) {
 
-						Node latest = compositeNode.getLatest();
+						Node latest = compositeNode.getCurrent();
 						if (latest == null) {
 							return "";
 						}

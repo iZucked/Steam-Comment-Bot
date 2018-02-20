@@ -79,7 +79,7 @@ public class Activator extends AbstractUIPlugin {
 		}
 		vesselsDataRoot.setActionHandler(null);
 		vesselsDataRoot.getChildren().clear();
-		vesselsDataRoot.setLatest(null);
+		vesselsDataRoot.setCurrent(null);
 
 		plugin = null;
 		super.stop(context);
@@ -130,7 +130,7 @@ public class Activator extends AbstractUIPlugin {
 							version.setDisplayName(v.getIdentifier());
 							version.setPublished(v.isPublished());
 							if (first) {
-								RunnerHelper.asyncExec(c -> vesselsDataRoot.setLatest(version));
+								RunnerHelper.asyncExec(c -> vesselsDataRoot.setCurrent(version));
 							}
 							first = false;
 							RunnerHelper.asyncExec(c -> vesselsDataRoot.getChildren().add(version));

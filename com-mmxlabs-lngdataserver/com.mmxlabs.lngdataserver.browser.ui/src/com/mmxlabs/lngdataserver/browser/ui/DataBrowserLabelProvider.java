@@ -78,10 +78,9 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 		if (element instanceof Node) {
 			final Node node = (Node) element;
 			String prefix = "";
-			if (node instanceof Leaf) {
-				final Leaf leaf = (Leaf) node;
-
-				if (leaf.isCurrent()) {
+			if (node.eContainer() instanceof CompositeNode) {
+				final CompositeNode compositeNode = (CompositeNode) node.eContainer();
+				if (compositeNode.getCurrent() == node) {
 					prefix = "** ";
 				}
 			}

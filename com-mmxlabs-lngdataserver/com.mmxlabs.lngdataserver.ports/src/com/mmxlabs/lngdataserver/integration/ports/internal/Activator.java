@@ -77,7 +77,7 @@ public class Activator extends AbstractUIPlugin {
 		}
 		portsDataRoot.setActionHandler(null);
 		portsDataRoot.getChildren().clear();
-		portsDataRoot.setLatest(null);
+		portsDataRoot.setCurrent(null);
 
 		plugin = null;
 		super.stop(context);
@@ -123,7 +123,7 @@ public class Activator extends AbstractUIPlugin {
 							version.setDisplayName(v.getIdentifier());
 							version.setPublished(v.isPublished());
 							if (first) {
-								RunnerHelper.asyncExec(c -> portsDataRoot.setLatest(version));
+								RunnerHelper.asyncExec(c -> portsDataRoot.setCurrent(version));
 							}
 							first = false;
 							RunnerHelper.asyncExec(c -> portsDataRoot.getChildren().add(version));

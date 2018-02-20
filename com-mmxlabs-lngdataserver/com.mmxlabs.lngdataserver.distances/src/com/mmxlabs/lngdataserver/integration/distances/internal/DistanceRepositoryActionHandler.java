@@ -128,7 +128,7 @@ public class DistanceRepositoryActionHandler implements IDataBrowserActionsHandl
 					version.setDisplayName(v.getIdentifier());
 					version.setPublished(v.isPublished());
 					if (first) {
-						dataRoot.setLatest(version);
+						dataRoot.setCurrent(version);
 					}
 					first = false;
 					dataRoot.getChildren().add(version);

@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#getDisplayName <em>Display Name</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#isPublished <em>Published</em>}</li>
- *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#isCurrent <em>Current</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getNode()
@@ -102,31 +101,5 @@ public interface Node extends EObject {
 	 * @generated
 	 */
 	void setPublished(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Current</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Current</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Current</em>' attribute.
-	 * @see #setCurrent(boolean)
-	 * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getNode_Current()
-	 * @model
-	 * @generated
-	 */
-	boolean isCurrent();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lngdataserver.browser.Node#isCurrent <em>Current</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Current</em>' attribute.
-	 * @see #isCurrent()
-	 * @generated
-	 */
-	void setCurrent(boolean value);
 
 } // Node

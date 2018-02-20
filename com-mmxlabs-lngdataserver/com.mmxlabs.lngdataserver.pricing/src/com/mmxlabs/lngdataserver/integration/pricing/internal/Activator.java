@@ -79,7 +79,7 @@ public class Activator extends AbstractUIPlugin {
 		}
 		pricingDataRoot.setActionHandler(null);
 		pricingDataRoot.getChildren().clear();
-		pricingDataRoot.setLatest(null);
+		pricingDataRoot.setCurrent(null);
 
 		plugin = null;
 		super.stop(context);
@@ -117,7 +117,6 @@ public class Activator extends AbstractUIPlugin {
 			LOGGER.debug("Pricing back-end ready, retrieving versions...");
 			try {
 				pricingDataRoot.getChildren().clear();
-				boolean first = true;
 				List<DataVersion> versions = pricingRepository.getVersions();
 				if (versions != null) {
 					for (final DataVersion v : versions) {
@@ -125,12 +124,11 @@ public class Activator extends AbstractUIPlugin {
 						version.setParent(pricingDataRoot);
 						version.setDisplayName(v.getIdentifier());
 						version.setPublished(v.isPublished());
-						version.setCurrent(v.isCurrent());
 						
-						if (first) {
-							RunnerHelper.asyncExec(c -> pricingDataRoot.setLatest(version));
+						if (v.isCurrent()) {
+							RunnerHelper.asyncExec(c -> pricingDataRoot.setCurrent(version));
 						}
-						first = false;
+
 						RunnerHelper.asyncExec(c -> pricingDataRoot.getChildren().add(version));
 					}
 				}

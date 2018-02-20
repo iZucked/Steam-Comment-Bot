@@ -77,7 +77,7 @@ public class Activator extends AbstractUIPlugin {
 		}
 		distancesDataRoot.setActionHandler(null);
 		distancesDataRoot.getChildren().clear();
-		distancesDataRoot.setLatest(null);
+		distancesDataRoot.setCurrent(null);
 
 		plugin = null;
 		super.stop(context);
@@ -123,7 +123,7 @@ public class Activator extends AbstractUIPlugin {
 					version.setDisplayName(v.getIdentifier());
 					version.setPublished(v.isPublished());
 					if (first) {
-						RunnerHelper.asyncExec(c -> distancesDataRoot.setLatest(version));
+						RunnerHelper.asyncExec(c -> distancesDataRoot.setCurrent(version));
 					}
 					first = false;
 					RunnerHelper.asyncExec(c -> distancesDataRoot.getChildren().add(version));

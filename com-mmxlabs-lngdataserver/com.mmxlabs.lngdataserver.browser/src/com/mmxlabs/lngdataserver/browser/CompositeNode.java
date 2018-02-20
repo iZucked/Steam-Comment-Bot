@@ -16,7 +16,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getChildren <em>Children</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getType <em>Type</em>}</li>
- *   <li>{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getLatest <em>Latest</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getCurrent <em>Current</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getActionHandler <em>Action Handler</em>}</li>
  * </ul>
  *
@@ -68,30 +68,30 @@ public interface CompositeNode extends Node {
 	void setType(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Latest</b></em>' reference.
+	 * Returns the value of the '<em><b>Current</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Latest</em>' reference isn't clear,
+	 * If the meaning of the '<em>Current</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Latest</em>' reference.
-	 * @see #setLatest(Node)
-	 * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getCompositeNode_Latest()
+	 * @return the value of the '<em>Current</em>' reference.
+	 * @see #setCurrent(Node)
+	 * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getCompositeNode_Current()
 	 * @model
 	 * @generated
 	 */
-	Node getLatest();
+	Node getCurrent();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getLatest <em>Latest</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lngdataserver.browser.CompositeNode#getCurrent <em>Current</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Latest</em>' reference.
-	 * @see #getLatest()
+	 * @param value the new value of the '<em>Current</em>' reference.
+	 * @see #getCurrent()
 	 * @generated
 	 */
-	void setLatest(Node value);
+	void setCurrent(Node value);
 
 	/**
 	 * Returns the value of the '<em><b>Action Handler</b></em>' attribute.

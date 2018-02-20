@@ -47,7 +47,7 @@ public class CompositeNodeItemProvider extends NodeItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addTypePropertyDescriptor(object);
-			addLatestPropertyDescriptor(object);
+			addCurrentPropertyDescriptor(object);
 			addActionHandlerPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -66,15 +66,15 @@ public class CompositeNodeItemProvider extends NodeItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Latest feature.
+	 * This adds a property descriptor for the Current feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLatestPropertyDescriptor(Object object) {
+	protected void addCurrentPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_CompositeNode_latest_feature"), getString("_UI_PropertyDescriptor_description", "_UI_CompositeNode_latest_feature", "_UI_CompositeNode_type"),
-				BrowserPackage.Literals.COMPOSITE_NODE__LATEST, true, false, true, null, null, null));
+				getString("_UI_CompositeNode_current_feature"), getString("_UI_PropertyDescriptor_description", "_UI_CompositeNode_current_feature", "_UI_CompositeNode_type"),
+				BrowserPackage.Literals.COMPOSITE_NODE__CURRENT, true, false, true, null, null, null));
 	}
 
 	/**
