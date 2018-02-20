@@ -488,11 +488,11 @@ public class InventoryReport extends ViewPart {
 								}
 							}
 							if (slotAllocation.getSlot().getPort() == inventory.getPort()) {
-								int change = (slotAllocation.getSlot() instanceof LoadSlot) ? -slot.getSlotOrContractMaxQuantity() : slot.getSlotOrContractMaxQuantity();
+								int change = (slotAllocation.getSlot() instanceof LoadSlot) ? -slot.getSlotOrDelegateMaxQuantity() : slot.getSlotOrDelegateMaxQuantity();
 
-								if (slot.getSlotOrContractVolumeLimitsUnit() == VolumeUnits.MMBTU) {
+								if (slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.MMBTU) {
 									if (slot instanceof LoadSlot) {
-										double cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
+										double cv = ((LoadSlot) slot).getSlotOrDelegateCV();
 										change = (int) (change / cv);
 									} else {
 										continue;

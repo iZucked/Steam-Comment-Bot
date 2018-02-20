@@ -134,8 +134,8 @@ public class TotalsTransformer {
 					final SlotAllocation slotAllocation = visit.getSlotAllocation();
 					if (slotAllocation.getSlot() != null) {
 						final Slot slot = slotAllocation.getSlot();
-						final int minQuantity = slot.getSlotOrContractMinQuantity();
-						final int maxQuantity = slot.getSlotOrContractMaxQuantity();
+						final int minQuantity = slot.getSlotOrDelegateMinQuantity();
+						final int maxQuantity = slot.getSlotOrDelegateMaxQuantity();
 						if (maxQuantity != 0 && maxQuantity < slotAllocation.getVolumeTransferred()) {
 							capacityViolations++;
 						} else if (minQuantity != 0 && minQuantity > slotAllocation.getVolumeTransferred()) {

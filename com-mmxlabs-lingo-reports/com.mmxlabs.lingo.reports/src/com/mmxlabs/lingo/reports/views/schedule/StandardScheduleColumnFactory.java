@@ -1503,7 +1503,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
 							if (slot != null) {
-								final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+								final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 								if (entity != null) {
 									return entity.getName();
 								}
@@ -1513,7 +1513,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						if (slotAllocation != null) {
 							final Slot slot = slotAllocation.getSlot();
 							if (slot instanceof LoadSlot) {
-								final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+								final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 								if (entity != null) {
 									return entity.getName();
 								}
@@ -1538,7 +1538,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (openSlotAllocation != null) {
 									final Slot slot = openSlotAllocation.getSlot();
 									if (slot != null) {
-										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+										final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 										if (entity != null) {
 											return entity.getName();
 										}
@@ -1548,7 +1548,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (slotAllocation != null) {
 									final Slot slot = slotAllocation.getSlot();
 									if (slot instanceof DischargeSlot) {
-										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+										final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 										if (entity != null) {
 											return entity.getName();
 										}
@@ -1584,7 +1584,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (loadAllocation != null) {
 									final Slot slot = loadAllocation.getSlot();
 									if (slot != null) {
-										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+										final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 										if (entity != null) {
 											return entity.getName();
 										}
@@ -1602,11 +1602,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchase_counterparty":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase Counterparty", null, ColumnType.NORMAL, new BaseFormatter(), loadAllocationRef,
-					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrContractCounterparty()));
+					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegateCounterparty()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sale_counterparty":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sale Counterparty", null, ColumnType.NORMAL, new BaseFormatter(), dischargeAllocationRef,
-					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrContractCounterparty()));
+					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegateCounterparty()));
 			break;
 		}
 	}
