@@ -317,7 +317,7 @@ public class DataBrowser extends ViewPart {
 								itemsAdded = true;
 							}
 							if (actionHandler.supportsRefreshLocal()) {
-								data_mgr.add(new RunnableAction("Check local", () -> actionHandler.refreshLocal()));
+								data_mgr.add(new RunnableAction("Refresh", () -> actionHandler.refreshLocal()));
 								itemsAdded = true;
 							}
 						}
