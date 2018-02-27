@@ -285,7 +285,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		calculatePostTaxItems(evaluationMode, vesselAvailability, plan, cargoPNLData, entityPostTaxProfit, entityBookDetailTreeMap);
 
 		// Calculate the value for the fitness function
-		processProfitAndLossBooks(entityPreTaxProfit, entityPostTaxProfit);
+		processProfitAndLossBooks(true, entityPreTaxProfit, entityPostTaxProfit);
 
 		long result = 0L;
 		for (final Map.Entry<IEntityBook, Long> e : entityPostTaxProfit.entrySet()) {
@@ -375,7 +375,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param entityPostTaxProfit
 	 */
 
-	protected void processProfitAndLossBooks(@NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @NonNull final Map<IEntityBook, Long> entityPostTaxProfit) {
+	protected void processProfitAndLossBooks(boolean isCargo, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @NonNull final Map<IEntityBook, Long> entityPostTaxProfit) {
 		// Do nothing by default.
 	}
 
@@ -456,7 +456,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final boolean isGeneratedCharterOutPlan;
 		long heelRevenue = 0;
 		long heelCost = 0;
-		long preTaxValue = 0;
 		DetailTree shippingDetails = null;
 		if (annotatedSolution != null) {
 			shippingDetails = new DetailTree();
@@ -511,17 +510,21 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// Calculate the value for the fitness function
 			final IEntityBook shippingBook = shippingEntity.getShippingBook();
 			final int utcEquivTaxTime = utcOffsetProvider.UTC(planStartTime, firstPortDetails.getOptions().getPortSlot().getPort());
-			preTaxValue = revenue + heelRevenue - shippingCost - additionalCost - heelCost;
+			long preTaxValue = revenue + heelRevenue - shippingCost - additionalCost - heelCost;
 			long postTaxValue = shippingBook.getTaxedProfit(preTaxValue, utcEquivTaxTime);
 			entityPreTaxProfit.put(shippingBook, preTaxValue);
 			entityPostTaxProfit.put(shippingBook, postTaxValue);
 		}
 
-		processProfitAndLossBooks(entityPreTaxProfit, entityPostTaxProfit);
+		processProfitAndLossBooks(false, entityPreTaxProfit, entityPostTaxProfit);
 
-		long result = 0L;
+		long preTaxValue = 0L;
+		for (final Map.Entry<IEntityBook, Long> e : entityPreTaxProfit.entrySet()) {
+			preTaxValue += e.getValue();
+		}
+		long postTaxValue = 0L;
 		for (final Map.Entry<IEntityBook, Long> e : entityPostTaxProfit.entrySet()) {
-			result += e.getValue();
+			postTaxValue += e.getValue();
 		}
 
 		// Solution Export branch - should called infrequently
@@ -533,12 +536,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// We include LNG costs here, but this may not be desirable - this depends on whether or not we consider the LNG a sunk cost...
 			// Cost is zero as shipping cost is recalculated to obtain annotation
 
-			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, result, planStartTime,
+			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, postTaxValue, planStartTime,
 					exportElement, true);
 
 		}
 
-		return result;
+		return postTaxValue;
 	}
 
 	private void generateShippingAnnotations(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
