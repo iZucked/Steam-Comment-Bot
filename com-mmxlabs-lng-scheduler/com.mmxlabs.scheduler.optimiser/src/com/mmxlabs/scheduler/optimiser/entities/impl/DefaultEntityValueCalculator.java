@@ -285,12 +285,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		calculatePostTaxItems(evaluationMode, vesselAvailability, plan, cargoPNLData, entityPostTaxProfit, entityBookDetailTreeMap);
 
 		// Calculate the value for the fitness function
+		processProfitAndLossBooks(entityPreTaxProfit, entityPostTaxProfit);
+
 		long result = 0L;
 		for (final Map.Entry<IEntityBook, Long> e : entityPostTaxProfit.entrySet()) {
 			result += e.getValue();
 		}
-
-		processProfitAndLossBooks(entityPreTaxProfit, entityPostTaxProfit);
 
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null && exportElement != null && entityBookDetailTreeMap != null && portSlotDetailTreeMap != null) {
@@ -461,6 +461,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		if (annotatedSolution != null) {
 			shippingDetails = new DetailTree();
 		}
+
+		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
+		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
+
 		{
 
 			final PortDetails firstPortDetails = (PortDetails) plan.getSequence()[0];
@@ -508,8 +512,18 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IEntityBook shippingBook = shippingEntity.getShippingBook();
 			final int utcEquivTaxTime = utcOffsetProvider.UTC(planStartTime, firstPortDetails.getOptions().getPortSlot().getPort());
 			preTaxValue = revenue + heelRevenue - shippingCost - additionalCost - heelCost;
-			value = shippingBook.getTaxedProfit(preTaxValue, utcEquivTaxTime);
+			long postTaxValue = shippingBook.getTaxedProfit(preTaxValue, utcEquivTaxTime);
+			entityPreTaxProfit.put(shippingBook, preTaxValue);
+			entityPostTaxProfit.put(shippingBook, postTaxValue);
 		}
+
+		processProfitAndLossBooks(entityPreTaxProfit, entityPostTaxProfit);
+
+		long result = 0L;
+		for (final Map.Entry<IEntityBook, Long> e : entityPostTaxProfit.entrySet()) {
+			result += e.getValue();
+		}
+
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null) {
 
@@ -519,12 +533,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// We include LNG costs here, but this may not be desirable - this depends on whether or not we consider the LNG a sunk cost...
 			// Cost is zero as shipping cost is recalculated to obtain annotation
 
-			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, value, planStartTime, exportElement,
-					true);
+			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, result, planStartTime,
+					exportElement, true);
 
 		}
 
-		return value;
+		return result;
 	}
 
 	private void generateShippingAnnotations(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
