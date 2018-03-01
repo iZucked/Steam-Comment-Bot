@@ -15,6 +15,7 @@ import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotContractRestrictionsWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
+import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -387,10 +388,10 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the maxQuantity feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__MAX_QUANTITY));
+		detailComposite.addInlineEditor(new VolumeInlineEditor(CargoPackage.Literals.SLOT__MAX_QUANTITY));
 	}
 
 	/**
