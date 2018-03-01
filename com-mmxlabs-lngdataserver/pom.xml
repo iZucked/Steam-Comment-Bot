@@ -37,10 +37,7 @@
 		<module>com.mmxlabs.lngdataserver.pricing.tests</module>
 
 		<module>com.mmxlabs.lngdataserver.ui.server</module>
-		<module>com.mmxlabs.lngdataserver.ui.pricing</module>
-		<module>com.mmxlabs.lngdataserver.ui.ports</module>
-		<module>com.mmxlabs.lngdataserver.ui.vessels</module>
-		<module>com.mmxlabs.lngdataserver.ui.distances</module>
+		<module>com.mmxlabs.lngdataserver.ui</module>
 		<module>com.mmxlabs.lngdataserver.browser</module>
 		<module>com.mmxlabs.lngdataserver.browser.edit</module>
 		<module>com.mmxlabs.lngdataserver.browser.ui</module>

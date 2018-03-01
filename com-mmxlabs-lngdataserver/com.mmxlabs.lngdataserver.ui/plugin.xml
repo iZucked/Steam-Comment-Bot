@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2017
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+<plugin>
+
+	<extension point="org.eclipse.ui.views">
+		<view
+            category="com.mmxlabs.lngdataserver.views.dataserver"
+            class="com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView"
+            id="com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView"
+            name="UI"
+            restorable="true">
+      	</view>
+    </extension>
+  
+   <extension
+       point="com.mmxlabs.models.ui.componenthelpers">
+    <componentHelper
+          helperClass="com.mmxlabs.lngdataserver.integration.ui.composites.MMXIDLookupInjector"
+          id="com.mmxlabs.lngdataserver.ui.distances.composites.MMXIDLookupInjector"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.port.Location">
+    </componentHelper>
+ </extension>
+</plugin>

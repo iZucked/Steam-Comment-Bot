@@ -202,28 +202,7 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.lngdataserver.integration.ui.distances"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataserver.integration.ui.ports"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataserver.integration.ui.pricing"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataserver.integration.ui.vessels"
+         id="com.mmxlabs.lngdataserver.integration.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -287,6 +266,13 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.lngdataserver.web.navigator"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataservice.common"
          download-size="0"
          install-size="0"
          version="0.0.0"
