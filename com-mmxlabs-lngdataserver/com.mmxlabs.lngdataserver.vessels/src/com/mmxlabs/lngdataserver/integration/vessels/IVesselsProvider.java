@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.lngdataserver.vessel.model.Vessel;
+import com.mmxlabs.lngdataservice.client.vessel.model.Vessel;
 
 @NonNullByDefault
 public interface IVesselsProvider {

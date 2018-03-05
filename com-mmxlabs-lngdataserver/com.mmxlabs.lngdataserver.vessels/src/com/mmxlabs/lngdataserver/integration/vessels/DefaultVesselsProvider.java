@@ -3,15 +3,13 @@ package com.mmxlabs.lngdataserver.integration.vessels;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.strings.StringDistance;
-import com.mmxlabs.lngdataserver.vessel.model.Vessel;
-import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.lngdataservice.client.vessel.model.Vessel;
 
 public class DefaultVesselsProvider implements IVesselsProvider {
 

@@ -41,7 +41,7 @@ public class VesselsToScenarioCopier {
 
 		// New vessel
 		// i.e no mmxId or mmxId that can't be found in the current vessels list
-		List<com.mmxlabs.lngdataserver.vessel.model.@NonNull Vessel> newVessels = vesselsProvider.getVessels().stream().filter((v) -> {
+		List<com.mmxlabs.lngdataservice.client.vessel.model.@NonNull Vessel> newVessels = vesselsProvider.getVessels().stream().filter((v) -> {
 			if (v.getMmxId() == null || v.getMmxId().isEmpty()) {
 				return true;
 			}
@@ -56,11 +56,11 @@ public class VesselsToScenarioCopier {
 		}).collect(Collectors.toList());
 
 		// Vessel to update
-		Collection<com.mmxlabs.lngdataserver.vessel.model.@NonNull Vessel> toUpdateVessels = new LinkedHashSet<>(vesselsProvider.getVessels());
+		Collection<com.mmxlabs.lngdataservice.client.vessel.model.@NonNull Vessel> toUpdateVessels = new LinkedHashSet<>(vesselsProvider.getVessels());
 		toUpdateVessels.removeAll(newVessels);
 
 		// Create new vessels commands
-		for (com.mmxlabs.lngdataserver.vessel.model.@NonNull Vessel vessel : newVessels) {
+		for (com.mmxlabs.lngdataservice.client.vessel.model.@NonNull Vessel vessel : newVessels) {
 			Vessel newVessel = FleetFactory.eINSTANCE.createVessel();
 			newVessel.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
 			newVessel.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
@@ -71,7 +71,7 @@ public class VesselsToScenarioCopier {
 		}
 
 		// Create all vessel update
-		for (com.mmxlabs.lngdataserver.vessel.model.@NonNull Vessel vessel : vesselsProvider.getVessels()) {
+		for (com.mmxlabs.lngdataservice.client.vessel.model.@NonNull Vessel vessel : vesselsProvider.getVessels()) {
 			Vessel vesselToUpdate = vesselsMap.get(vessel.getMmxId());
 
 			// Vessel Model
@@ -80,7 +80,7 @@ public class VesselsToScenarioCopier {
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MIN_SPEED, vessel.getMinSpeed()));
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__IMO, vessel.getImo()));
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__FILL_CAPACITY, vessel.getFillCapacity()));
-			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__HAS_RELIQ_CAPABILITY, vessel.getHasReliqCapacity()));
+			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__HAS_RELIQ_CAPABILITY, vessel.isHasReliqCapacity()));
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MMX_ID, vessel.getMmxId()));
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__SCNT, vessel.getScnt()));
 			cc.append(SetCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__CAPACITY, vessel.getCapacity()));
