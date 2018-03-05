@@ -78,7 +78,7 @@ public class PortsToScenarioCopier {
 			List<Port> lingo_ports = locationToPort.get(mmxID);
 			if (lingo_ports != null) {
 				for (Port lingo_port : lingo_ports) {
-					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__ALLOW_COOLDOWN, port.getAllowCooldown()));
+					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__ALLOW_COOLDOWN, port.isAllowCooldown()));
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__BERTHS, port.getBerths()));
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__CV_VALUE, port.getCvValue()));
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__LOAD_DURATION, port.getLoadDuration()));
