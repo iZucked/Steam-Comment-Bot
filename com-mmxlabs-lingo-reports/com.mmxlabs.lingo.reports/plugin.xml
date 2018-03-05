@@ -17,6 +17,7 @@
    <extension-point id="FleetBasedColumn" name="FleetBasedColumn" schema="schema/FleetBasedColumn.exsd"/>
    <extension-point id="FleetBasedColumnFactory" name="FleetBasedColumnFactory" schema="schema/FleetBasedColumnFactory.exsd"/>
    <extension-point id="FleetBasedReportInitialState" name="FleetBasedReportInitialState" schema="schema/FleetBasedReportInitialState.exsd"/>
+   <extension-point id="ChangeSetColumnValueExtender" name="ChangeSetColumnValueExtender" schema="schema/ChangeSetColumnValueExtender.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">

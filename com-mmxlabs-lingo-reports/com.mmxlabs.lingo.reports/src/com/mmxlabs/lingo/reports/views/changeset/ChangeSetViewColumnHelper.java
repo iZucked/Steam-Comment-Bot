@@ -51,9 +51,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Joiner;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.common.util.ToLongTriFunction;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView.ViewState;
+import com.mmxlabs.lingo.reports.views.changeset.extensions.ChangeSetColumnValueExtenderExtensionUtil;
+import com.mmxlabs.lingo.reports.views.changeset.extensions.IChangeSetColumnValueExtender;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
@@ -75,6 +78,8 @@ import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class ChangeSetViewColumnHelper {
+
+	private final Iterable<IChangeSetColumnValueExtender> columnExtenders;
 
 	/**
 	 * Data key to store selected vessel column
@@ -125,14 +130,14 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn column_DischargePrice;
 
 	private GridViewerColumn column_DischargeVolume;
-	
+
 	private boolean showCompareColumns = true;
 
 	public BiFunction<ChangeSetTableGroup, Integer, String> getChangeSetColumnLabelProvider() {
 		return changeSetColumnLabelProvider;
 	}
 
-	public void setChangeSetColumnLabelProvider(@NonNull BiFunction<ChangeSetTableGroup, Integer, String> changeSetColumnLabelProvider) {
+	public void setChangeSetColumnLabelProvider(@NonNull final BiFunction<ChangeSetTableGroup, Integer, String> changeSetColumnLabelProvider) {
 		this.changeSetColumnLabelProvider = changeSetColumnLabelProvider;
 	}
 
@@ -161,6 +166,8 @@ public class ChangeSetViewColumnHelper {
 		boldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 
 		colour_VesselTypeColumn = new Color(Display.getDefault(), new RGB(240, 240, 240));
+
+		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumeExtendeders();
 	}
 
 	public void makeColumns() {
@@ -372,7 +379,7 @@ public class ChangeSetViewColumnHelper {
 			column_Lateness.getColumn().setCellRenderer(createCellRenderer());
 
 			this.latenessColumn = column_Lateness;
-			
+
 			this.latenessColumn.getColumn().setVisible(showCompareColumns);
 		}
 		{
@@ -386,7 +393,7 @@ public class ChangeSetViewColumnHelper {
 			column_Violations.getColumn().setCellRenderer(createCellRenderer());
 
 			this.violationColumn = column_Violations;
-			
+
 			this.violationColumn.getColumn().setVisible(showCompareColumns);
 
 		}
@@ -424,7 +431,7 @@ public class ChangeSetViewColumnHelper {
 			column_LoadPrice.getColumn().setWidth(50);
 			column_LoadPrice.setLabelProvider(createPriceLabelProvider(true));
 			column_LoadPrice.getColumn().setCellRenderer(createCellRenderer());
-			
+
 			this.column_LoadPrice.getColumn().setVisible(showCompareColumns);
 
 		}
@@ -434,9 +441,10 @@ public class ChangeSetViewColumnHelper {
 			this.column_LoadVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			this.column_LoadVolume.getColumn().setText("tBtu");
 			this.column_LoadVolume.getColumn().setWidth(55);
-			this.column_LoadVolume.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+			this.column_LoadVolume.setLabelProvider(
+					createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 			this.column_LoadVolume.getColumn().setCellRenderer(createCellRenderer());
-			
+
 			this.column_LoadVolume.getColumn().setVisible(showCompareColumns);
 		}
 		{
@@ -703,7 +711,7 @@ public class ChangeSetViewColumnHelper {
 
 				if (value instanceof GridItem) {
 					final GridItem gridItem = (GridItem) value;
-					Object data = gridItem.getData();
+					final Object data = gridItem.getData();
 
 					if (data instanceof ChangeSetTableGroup) {
 						final int currentLineWidth = gc.getLineWidth();
@@ -1081,7 +1089,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				Object element = cell.getElement();
+				final Object element = cell.getElement();
 				cell.setText("");
 				if (element instanceof ChangeSetTableGroup) {
 
@@ -1125,9 +1133,9 @@ public class ChangeSetViewColumnHelper {
 
 	private CellLabelProvider createTaxDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, true, change -> {
-			return ChangeSetKPIUtil.getTax(change, ResultType.Before);
+			return ChangeSetKPIUtil.getTax(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalTaxEtcValue);
 		}, change -> {
-			return ChangeSetKPIUtil.getTax(change, ResultType.After);
+			return ChangeSetKPIUtil.getTax(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalTaxEtcValue);
 		});
 	}
 
@@ -1183,7 +1191,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				Object element = cell.getElement();
+				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
 				if (element instanceof ChangeSetTableGroup) {
@@ -1302,7 +1310,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				Object element = cell.getElement();
+				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
 				if (element instanceof ChangeSetTableGroup) {
@@ -1338,28 +1346,47 @@ public class ChangeSetViewColumnHelper {
 	}
 
 	private CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.Before), change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.After));
+		return createLambdaLabelProvider(true, false, change -> {
+			return ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalCargoOtherValue);
+		}, change -> {
+			return ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalCargoOtherValue);
+		});
 	}
 
 	private CellLabelProvider createUpstreamDeltaLabelProvider() {
 
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.Before), change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.After));
+		return createLambdaLabelProvider(true, true, change -> {
+			return ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalUpstreamValue);
+		}, change -> {
+			return ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalUpstreamValue);
+		});
 	}
 
 	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
 
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.Before),
-				change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.After));
+		return createLambdaLabelProvider(true, true, change -> {
+			return ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalShippingDESValue);
+		}, change -> {
+			return ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalShippingDESValue);
+		});
+
 	}
 
 	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
 
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.Before),
-				change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.After));
+		return createLambdaLabelProvider(true, true, change -> {
+			return ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalUpsideValue);
+		}, change -> {
+			return ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalUpsideValue);
+		});
 	}
 
 	private CellLabelProvider createShippingDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before), change -> ChangeSetKPIUtil.getShipping(change, ResultType.After));
+		return createLambdaLabelProvider(true, false, change -> {
+			return ChangeSetKPIUtil.getShipping(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalShippingFOBValue);
+		}, change -> {
+			return ChangeSetKPIUtil.getShipping(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalShippingFOBValue);
+		});
 	}
 
 	private CellLabelProvider createShippingDaysDeltaLabelProvider(final ShippingCostType shippingCostType) {
@@ -1394,7 +1421,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				Object element = cell.getElement();
+				final Object element = cell.getElement();
 				cell.setText("");
 				if (element instanceof ChangeSetTableGroup) {
 					// ChangeSetNode changeSetNode = (ChangeSetNode) element;
@@ -1406,7 +1433,7 @@ public class ChangeSetViewColumnHelper {
 						idx = root.getGroups().indexOf(changeSet);
 					}
 
-					String text = changeSetColumnLabelProvider.apply(changeSet, idx);
+					final String text = changeSetColumnLabelProvider.apply(changeSet, idx);
 					cell.setText(text);
 					// }
 					// if (element instanceof ChangeSetTableGroup) {
@@ -1569,7 +1596,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				Object element = cell.getElement();
+				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
 				double delta = 0;
@@ -1635,7 +1662,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				Object element = cell.getElement();
+				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
 				long delta = 0;
@@ -1698,7 +1725,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				Object element = cell.getElement();
+				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
 				double delta = 0;
@@ -1927,8 +1954,8 @@ public class ChangeSetViewColumnHelper {
 			return String.format("Solution %s", index + 1);
 		};
 	}
-	
-	public void showCompareColumns(boolean showCompareColumns) {
+
+	public void showCompareColumns(final boolean showCompareColumns) {
 		this.showCompareColumns = showCompareColumns;
 		RunnerHelper.asyncExec(() -> {
 			latenessColumn.getColumn().setVisible(this.showCompareColumns);
@@ -1940,4 +1967,14 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
+	private long getExtraValue(final ChangeSetTableRow change, final ResultType resultType, final ToLongTriFunction<IChangeSetColumnValueExtender, ChangeSetTableRow, ResultType> f) {
+
+		long sum = 0L;
+		if (columnExtenders != null) {
+			for (final IChangeSetColumnValueExtender extender : columnExtenders) {
+				sum += f.applyAsLong(extender, change, resultType);
+			}
+		}
+		return sum;
+	}
 }
