@@ -6,13 +6,13 @@ import java.util.List;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.ApiException;
 import com.mmxlabs.lngdataserver.browser.BrowserFactory;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
+import com.mmxlabs.lngdataservice.client.distances.ApiException;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class DistanceRepositoryActionHandler implements IDataBrowserActionsHandler {

@@ -16,10 +16,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.lngdataservice.client.distances.model.PublishRequest;
 import com.mmxlabs.lngdataservice.client.vessel.api.VesselsApi;
 import com.mmxlabs.lngdataservice.client.vessel.model.Version;
 
-import io.swagger.client.model.PublishRequest;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

@@ -19,10 +19,10 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.ApiClient;
-import com.mmxlabs.ApiException;
+import com.mmxlabs.lngdataservice.client.distances.ApiClient;
+import com.mmxlabs.lngdataservice.client.distances.ApiException;
+import com.mmxlabs.lngdataservice.client.distances.api.DistancesApi;
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.lngdataserver.DistancesApi;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
@@ -32,8 +32,8 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import io.swagger.client.model.PublishRequest;
-import io.swagger.client.model.Version;
+import com.mmxlabs.lngdataservice.client.distances.model.Version;
+import com.mmxlabs.lngdataservice.client.distances.model.PublishRequest;
 
 /**
  * This implementation is not thread-safe.
