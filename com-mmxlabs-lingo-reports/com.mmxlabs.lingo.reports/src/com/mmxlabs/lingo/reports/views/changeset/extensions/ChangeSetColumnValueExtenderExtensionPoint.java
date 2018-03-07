@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.views.changeset.extensions;
 
 import org.ops4j.peaberry.eclipse.ExtensionBean;
