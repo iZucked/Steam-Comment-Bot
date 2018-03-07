@@ -71,6 +71,7 @@ public class InventoryEventRowItemProvider
 			addEndDatePropertyDescriptor(object);
 			addPeriodPropertyDescriptor(object);
 			addCounterPartyPropertyDescriptor(object);
+			addReliabilityPropertyDescriptor(object);
 			addVolumePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -165,6 +166,28 @@ public class InventoryEventRowItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Reliability feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReliabilityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_InventoryEventRow_reliability_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_InventoryEventRow_reliability_feature", "_UI_InventoryEventRow_type"),
+				 CargoPackage.Literals.INVENTORY_EVENT_ROW__RELIABILITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Volume feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -229,6 +252,7 @@ public class InventoryEventRowItemProvider
 			case CargoPackage.INVENTORY_EVENT_ROW__END_DATE:
 			case CargoPackage.INVENTORY_EVENT_ROW__PERIOD:
 			case CargoPackage.INVENTORY_EVENT_ROW__COUNTER_PARTY:
+			case CargoPackage.INVENTORY_EVENT_ROW__RELIABILITY:
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

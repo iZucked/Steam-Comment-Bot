@@ -10,10 +10,12 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -31,6 +33,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getEndDate <em>End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getPeriod <em>Period</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getCounterParty <em>Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getReliability <em>Reliability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl#getVolume <em>Volume</em>}</li>
  * </ul>
  *
@@ -116,6 +119,26 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * @ordered
 	 */
 	protected String counterParty = COUNTER_PARTY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getReliability() <em>Reliability</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReliability()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double RELIABILITY_EDEFAULT = 100.0;
+
+	/**
+	 * The cached value of the '{@link #getReliability() <em>Reliability</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReliability()
+	 * @generated
+	 * @ordered
+	 */
+	protected double reliability = RELIABILITY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getVolume() <em>Volume</em>}' attribute.
@@ -245,6 +268,27 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getReliability() {
+		return reliability;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setReliability(double newReliability) {
+		double oldReliability = reliability;
+		reliability = newReliability;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY_EVENT_ROW__RELIABILITY, oldReliability, reliability));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getVolume() {
 		return volume;
 	}
@@ -264,6 +308,15 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getReliableVolume() {
+		return (int) (getVolume()*getReliability()/100.0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -277,6 +330,8 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return getPeriod();
 			case CargoPackage.INVENTORY_EVENT_ROW__COUNTER_PARTY:
 				return getCounterParty();
+			case CargoPackage.INVENTORY_EVENT_ROW__RELIABILITY:
+				return getReliability();
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				return getVolume();
 		}
@@ -302,6 +357,9 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return;
 			case CargoPackage.INVENTORY_EVENT_ROW__COUNTER_PARTY:
 				setCounterParty((String)newValue);
+				return;
+			case CargoPackage.INVENTORY_EVENT_ROW__RELIABILITY:
+				setReliability((Double)newValue);
 				return;
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				setVolume((Integer)newValue);
@@ -330,6 +388,9 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 			case CargoPackage.INVENTORY_EVENT_ROW__COUNTER_PARTY:
 				setCounterParty(COUNTER_PARTY_EDEFAULT);
 				return;
+			case CargoPackage.INVENTORY_EVENT_ROW__RELIABILITY:
+				setReliability(RELIABILITY_EDEFAULT);
+				return;
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				setVolume(VOLUME_EDEFAULT);
 				return;
@@ -353,10 +414,26 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 				return period != PERIOD_EDEFAULT;
 			case CargoPackage.INVENTORY_EVENT_ROW__COUNTER_PARTY:
 				return COUNTER_PARTY_EDEFAULT == null ? counterParty != null : !COUNTER_PARTY_EDEFAULT.equals(counterParty);
+			case CargoPackage.INVENTORY_EVENT_ROW__RELIABILITY:
+				return reliability != RELIABILITY_EDEFAULT;
 			case CargoPackage.INVENTORY_EVENT_ROW__VOLUME:
 				return volume != VOLUME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.INVENTORY_EVENT_ROW___GET_RELIABLE_VOLUME:
+				return getReliableVolume();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
@@ -377,6 +454,8 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 		result.append(period);
 		result.append(", counterParty: ");
 		result.append(counterParty);
+		result.append(", reliability: ");
+		result.append(reliability);
 		result.append(", volume: ");
 		result.append(volume);
 		result.append(')');

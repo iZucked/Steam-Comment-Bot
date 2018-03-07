@@ -71,6 +71,7 @@ public class InventoryEventRowComponentHelper extends BaseComponentHelper {
 		add_endDateEditor(detailComposite, topClass);
 		add_periodEditor(detailComposite, topClass);
 		add_counterPartyEditor(detailComposite, topClass);
+		add_reliabilityEditor(detailComposite, topClass);
 		add_volumeEditor(detailComposite, topClass);
 	}
 	/**
@@ -105,6 +106,15 @@ public class InventoryEventRowComponentHelper extends BaseComponentHelper {
 	protected void add_counterPartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY_EVENT_ROW__COUNTER_PARTY));
 	}
+	/**
+	 * Create the editor for the reliability feature on InventoryEventRow
+	 *
+	 * @generated
+	 */
+	protected void add_reliabilityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.INVENTORY_EVENT_ROW__RELIABILITY));
+	}
+
 	/**
 	 * Create the editor for the volume feature on InventoryEventRow
 	 *

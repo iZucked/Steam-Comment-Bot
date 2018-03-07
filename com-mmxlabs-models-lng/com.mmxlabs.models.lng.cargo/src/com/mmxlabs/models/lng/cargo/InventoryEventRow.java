@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getEndDate <em>End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getPeriod <em>Period</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getCounterParty <em>Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliability <em>Reliability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolume <em>Volume</em>}</li>
  * </ul>
  *
@@ -139,6 +140,33 @@ public interface InventoryEventRow extends EObject {
 	void setCounterParty(String value);
 
 	/**
+	 * Returns the value of the '<em><b>Reliability</b></em>' attribute.
+	 * The default value is <code>"100.0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Reliability</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Reliability</em>' attribute.
+	 * @see #setReliability(double)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryEventRow_Reliability()
+	 * @model default="100.0"
+	 * @generated
+	 */
+	double getReliability();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliability <em>Reliability</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Reliability</em>' attribute.
+	 * @see #getReliability()
+	 * @generated
+	 */
+	void setReliability(double value);
+
+	/**
 	 * Returns the value of the '<em><b>Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -163,5 +191,13 @@ public interface InventoryEventRow extends EObject {
 	 * @generated
 	 */
 	void setVolume(int value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getReliableVolume();
 
 } // InventoryEventRow

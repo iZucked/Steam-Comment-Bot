@@ -5051,13 +5051,22 @@ public interface CargoPackage extends EPackage {
 	int INVENTORY_EVENT_ROW__COUNTER_PARTY = 3;
 
 	/**
+	 * The feature id for the '<em><b>Reliability</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__RELIABILITY = 4;
+
+	/**
 	 * The feature id for the '<em><b>Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_EVENT_ROW__VOLUME = 4;
+	int INVENTORY_EVENT_ROW__VOLUME = 5;
 
 	/**
 	 * The number of structural features of the '<em>Inventory Event Row</em>' class.
@@ -5066,7 +5075,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_EVENT_ROW_FEATURE_COUNT = 5;
+	int INVENTORY_EVENT_ROW_FEATURE_COUNT = 6;
+
+	/**
+	 * The operation id for the '<em>Get Reliable Volume</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW___GET_RELIABLE_VOLUME = 0;
 
 	/**
 	 * The number of operations of the '<em>Inventory Event Row</em>' class.
@@ -5075,7 +5093,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_EVENT_ROW_OPERATION_COUNT = 0;
+	int INVENTORY_EVENT_ROW_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl <em>Inventory Capacity Row</em>}' class.
@@ -7705,6 +7723,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getInventoryEventRow_CounterParty();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliability <em>Reliability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Reliability</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliability()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_Reliability();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolume <em>Volume</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7714,6 +7743,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getInventoryEventRow_Volume();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliableVolume() <em>Get Reliable Volume</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Reliable Volume</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getReliableVolume()
+	 * @generated
+	 */
+	EOperation getInventoryEventRow__GetReliableVolume();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow <em>Inventory Capacity Row</em>}'.
@@ -9674,12 +9713,28 @@ public interface CargoPackage extends EPackage {
 		EAttribute INVENTORY_EVENT_ROW__COUNTER_PARTY = eINSTANCE.getInventoryEventRow_CounterParty();
 
 		/**
+		 * The meta object literal for the '<em><b>Reliability</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__RELIABILITY = eINSTANCE.getInventoryEventRow_Reliability();
+
+		/**
 		 * The meta object literal for the '<em><b>Volume</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute INVENTORY_EVENT_ROW__VOLUME = eINSTANCE.getInventoryEventRow_Volume();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Reliable Volume</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation INVENTORY_EVENT_ROW___GET_RELIABLE_VOLUME = eINSTANCE.getInventoryEventRow__GetReliableVolume();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl <em>Inventory Capacity Row</em>}' class.
