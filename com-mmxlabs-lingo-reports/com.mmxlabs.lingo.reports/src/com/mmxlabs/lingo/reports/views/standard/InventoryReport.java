@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -368,10 +369,10 @@ public class InventoryReport extends ViewPart {
 					}
 
 					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
-						changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
-						tableLevels.add(new InventoryLevel(r.getStartDate(), r.getPeriod(), r.getVolume()));
+						changes.add(new Pair<>(r.getStartDate(), r.getReliableVolume()));
+						tableLevels.add(new InventoryLevel(r.getStartDate(), r.getPeriod(), r.getReliableVolume()));
 						if (r.getPeriod() == InventoryFrequency.CARGO) {
-							other_cargo_changes.add(new Pair<>(r.getStartDate(), r.getVolume()));
+							other_cargo_changes.add(new Pair<>(r.getStartDate(), r.getReliableVolume()));
 						}
 					} else {
 
@@ -381,12 +382,12 @@ public class InventoryReport extends ViewPart {
 
 						LocalDateTime start = r.getStartDate().atStartOfDay();
 						if (r.getStartDate() == r.getEndDate()) {
-							changes.add(new Pair<>(LocalDate.from(start), r.getVolume()));
-							tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), r.getVolume()));
+							changes.add(new Pair<>(LocalDate.from(start), r.getReliableVolume()));
+							tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), r.getReliableVolume()));
 						} else {
 							while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
-								changes.add(new Pair<>(LocalDate.from(start), r.getVolume()));
-								tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), r.getVolume()));
+								changes.add(new Pair<>(LocalDate.from(start), r.getReliableVolume()));
+								tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), r.getReliableVolume()));
 
 								if (r.getPeriod() == InventoryFrequency.HOURLY) {
 									start = start.plusHours(1);
@@ -410,10 +411,10 @@ public class InventoryReport extends ViewPart {
 						maxDate = r.getStartDate();
 					}
 					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
-						changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
-						tableLevels.add(new InventoryLevel(r.getStartDate(), r.getPeriod(), -r.getVolume()));
+						changes.add(new Pair<>(r.getStartDate(), -r.getReliableVolume()));
+						tableLevels.add(new InventoryLevel(r.getStartDate(), r.getPeriod(), -r.getReliableVolume()));
 						if (r.getPeriod() == InventoryFrequency.CARGO) {
-							other_cargo_changes.add(new Pair<>(r.getStartDate(), -r.getVolume()));
+							other_cargo_changes.add(new Pair<>(r.getStartDate(), -r.getReliableVolume()));
 						}
 					} else {
 
@@ -423,8 +424,8 @@ public class InventoryReport extends ViewPart {
 
 						LocalDateTime start = r.getStartDate().atStartOfDay();
 						while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
-							changes.add(new Pair<>(LocalDate.from(start), -r.getVolume()));
-							tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), -r.getVolume()));
+							changes.add(new Pair<>(LocalDate.from(start), -r.getReliableVolume()));
+							tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), -r.getReliableVolume()));
 							if (r.getPeriod() == InventoryFrequency.HOURLY) {
 								start = start.plusHours(1);
 							} else if (r.getPeriod() == InventoryFrequency.DAILY) {
@@ -438,8 +439,15 @@ public class InventoryReport extends ViewPart {
 					}
 				}
 
+				LocalDate latestInventoryDate = null;
+				if (tableLevels.size() > 0) {
+					Optional<InventoryLevel> inventoryLevel = tableLevels.stream().sorted((a,b) -> -a.date.compareTo(b.date)).findFirst();
+					if (inventoryLevel.isPresent()) {
+						latestInventoryDate = inventoryLevel.get().date;
+					}
+				}
 				final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
-				if (scheduleModel != null) {
+				if (latestInventoryDate != null && scheduleModel != null) {
 					final Schedule schedule = scheduleModel.getSchedule();
 					if (schedule != null) {
 						for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
@@ -460,6 +468,12 @@ public class InventoryReport extends ViewPart {
 										: slotAllocation.getPhysicalVolumeTransferred();
 								ZonedDateTime start = slotAllocation.getSlotVisit().getStart();
 								final LocalDate date = start.toLocalDate();
+								
+								// don't look at slots after end of inventory
+								if (latestInventoryDate.compareTo(date) < 0) {
+									continue;
+								}
+								
 								changes.add(new Pair<>(date, change));
 								tableLevels.add(new InventoryLevel(date, "SCHEDULE", change));
 
@@ -511,7 +525,6 @@ public class InventoryReport extends ViewPart {
 								if (maxDate == null || date.isAfter(maxDate)) {
 									maxDate = date;
 								}
-
 							}
 						}
 					}
@@ -830,7 +843,6 @@ public class InventoryReport extends ViewPart {
 			this.date = date;
 			this.type = type;
 			this.changeInM3 = changeInM3;
-
 		}
 
 	}
