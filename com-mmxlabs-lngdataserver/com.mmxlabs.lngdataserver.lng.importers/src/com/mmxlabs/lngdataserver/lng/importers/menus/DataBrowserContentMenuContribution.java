@@ -29,7 +29,7 @@ import com.mmxlabs.lngdataserver.lng.importers.port.ui.PortsToScenarioImportWiza
 import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.ui.VesselsToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataservice.pricing.model.Version;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -159,7 +159,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 
 				PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-				com.mmxlabs.lngdataservice.ports.model.Version version = PortFromScenarioCopier.generateVersion(portModel);
+				com.mmxlabs.lngdataservice.client.ports.model.Version version = PortFromScenarioCopier.generateVersion(portModel);
 				try {
 					PortsRepository repo = new PortsRepository(null, null);
 					repo.isReady();

@@ -18,7 +18,7 @@ import com.mmxlabs.lngdataservice.client.ports.ApiException;
 import com.mmxlabs.lngdataservice.client.ports.api.PortApi;
 import com.mmxlabs.lngdataservice.client.ports.model.Port;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataservice.ports.model.Version;
+import com.mmxlabs.lngdataservice.client.ports.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;

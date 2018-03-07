@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lngdataservice.ports.model.Version;
+import com.mmxlabs.lngdataservice.client.ports.model.Version;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

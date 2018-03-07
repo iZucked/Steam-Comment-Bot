@@ -20,14 +20,18 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.lngdataserver.server,
  com.fasterxml.jackson.core.jackson-core,
  com.fasterxml.jackson.core.jackson-databind,
- com.mmxlabs.lngdataservice.pricing;bundle-version="1.0.0",
  org.eclipse.ui;bundle-version="3.109.0",
  com.mmxlabs.models.lng.scenario.model,
- com.mmxlabs.lngdataserver.commons
+ com.mmxlabs.lngdataserver.commons,
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2",
+ com.fasterxml.jackson.datatype.jackson-datatype-jsr310;bundle-version="2.9.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.slf4j
+Import-Package: com.mmxlabs.lngdataservice.common.model,
+ org.slf4j
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.integration.pricing.internal.Activator
-Export-Package: com.mmxlabs.lngdataserver.integration.pricing,
+Export-Package: com.mmxlabs.lngdataserver.integration.client.pricing.model,
+ com.mmxlabs.lngdataserver.integration.pricing,
  com.mmxlabs.lngdataserver.integration.pricing.exceptions
 Bundle-Vendor: Minimax Labs Ltd.
+Bundle-ClassPath: .

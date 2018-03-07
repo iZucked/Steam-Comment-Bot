@@ -12,10 +12,10 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.integration.pricing.exceptions.CurveNotFoundException;
 import com.mmxlabs.lngdataserver.integration.pricing.exceptions.DateNotFoundException;
 import com.mmxlabs.lngdataserver.integration.pricing.exceptions.InvalidCurveTypeException;
-import com.mmxlabs.lngdataservice.pricing.model.Curve;
-import com.mmxlabs.lngdataservice.pricing.model.CurvePoint;
-import com.mmxlabs.lngdataservice.pricing.model.DataCurve;
-import com.mmxlabs.lngdataservice.pricing.model.ExpressionCurve;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Curve;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.CurvePoint;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.DataCurve;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.ExpressionCurve;
 
 public class ForwardingPricingProvider implements IPricingProvider{
 	

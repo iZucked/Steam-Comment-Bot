@@ -18,7 +18,7 @@ import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataservice.pricing.model.Version;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;

@@ -1,6 +1,7 @@
 package com.mmxlabs.lngdataserver.lng.exporters.port;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataservice.client.ports.model.Port.CapabilitiesEnum;
 import com.mmxlabs.lngdataservice.client.ports.model.Port;
-import com.mmxlabs.lngdataservice.ports.model.PortCapability;
-import com.mmxlabs.lngdataservice.ports.model.Version;
+import com.mmxlabs.lngdataservice.client.ports.model.*;
+import com.mmxlabs.lngdataservice.client.ports.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
 
 public class PortFromScenarioCopier {
@@ -23,9 +24,9 @@ public class PortFromScenarioCopier {
 
 		Version version = new Version();
 
-		List<com.mmxlabs.lngdataservice.ports.model.Port> ports = new LinkedList<>();
+		List<Port> ports = new LinkedList<>();
 		for (com.mmxlabs.models.lng.port.Port lingo_port : portModel.getPorts()) {
-			com.mmxlabs.lngdataservice.ports.model.Port port = new com.mmxlabs.lngdataservice.ports.model.Port();
+			Port port = new Port();
 			port.setLocationMmxId(lingo_port.getLocation().getMmxId());
 			port.setAllowCooldown(lingo_port.isAllowCooldown());
 			port.setBerths(lingo_port.getBerths());
@@ -39,20 +40,20 @@ public class PortFromScenarioCopier {
 				port.setMaxCvValue(lingo_port.getMaxCvValue());
 			}
 
-			port.setCapabilities(new HashSet<>());
+			port.setCapabilities(new ArrayList<Port.CapabilitiesEnum>());
 			for (com.mmxlabs.models.lng.types.PortCapability lingo_pc : lingo_port.getCapabilities()) {
 				switch (lingo_pc) {
 				case DISCHARGE:
-					port.getCapabilities().add(PortCapability.DISCHARGE);
+					port.getCapabilities().add(Port.CapabilitiesEnum.DISCHARGE);
 					break;
 				case DRYDOCK:
-					port.getCapabilities().add(PortCapability.DRYDOCK);
+					port.getCapabilities().add(Port.CapabilitiesEnum.DRYDOCK);
 					break;
 				case LOAD:
-					port.getCapabilities().add(PortCapability.LOAD);
+					port.getCapabilities().add(Port.CapabilitiesEnum.LOAD);
 					break;
 				case MAINTENANCE:
-					port.getCapabilities().add(PortCapability.MAINTENANCE);
+					port.getCapabilities().add(Port.CapabilitiesEnum.MAINTENANCE);
 					break;
 				case TRANSFER:
 					break;

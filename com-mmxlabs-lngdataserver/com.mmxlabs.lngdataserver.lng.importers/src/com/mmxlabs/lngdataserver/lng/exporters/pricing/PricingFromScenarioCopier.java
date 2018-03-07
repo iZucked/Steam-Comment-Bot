@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataservice.pricing.model.Curve;
-import com.mmxlabs.lngdataservice.pricing.model.CurvePoint;
-import com.mmxlabs.lngdataservice.pricing.model.CurveType;
-import com.mmxlabs.lngdataservice.pricing.model.DataCurve;
-import com.mmxlabs.lngdataservice.pricing.model.ExpressionCurve;
-import com.mmxlabs.lngdataservice.pricing.model.Version;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Curve;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.CurvePoint;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.CurveType;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.DataCurve;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.ExpressionCurve;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -77,22 +77,22 @@ public class PricingFromScenarioCopier {
 		Version version = new Version();
 
 		pricingModel.getCurrencyIndices().forEach(idx -> {
-			Curve curve = curveTransformer.apply(idx, com.mmxlabs.lngdataservice.pricing.model.CurveType.CURRENCY);
+			Curve curve = curveTransformer.apply(idx, CurveType.CURRENCY);
 			version.getCurves().put(curve.getName(), curve);
 		});
 
 		pricingModel.getBaseFuelPrices().forEach(idx -> {
-			Curve curve = curveTransformer.apply(idx, com.mmxlabs.lngdataservice.pricing.model.CurveType.BASE_FUEL);
+			Curve curve = curveTransformer.apply(idx, CurveType.BASE_FUEL);
 			version.getCurves().put(curve.getName(), curve);
 		});
 
 		pricingModel.getCharterIndices().forEach(idx -> {
-			Curve curve = curveTransformer.apply(idx, com.mmxlabs.lngdataservice.pricing.model.CurveType.CHARTER);
+			Curve curve = curveTransformer.apply(idx, CurveType.CHARTER);
 			version.getCurves().put(curve.getName(), curve);
 		});
 
 		pricingModel.getCommodityIndices().forEach(idx -> {
-			Curve curve = curveTransformer.apply(idx, com.mmxlabs.lngdataservice.pricing.model.CurveType.COMMODITY);
+			Curve curve = curveTransformer.apply(idx, CurveType.COMMODITY);
 			version.getCurves().put(curve.getName(), curve);
 		});
 

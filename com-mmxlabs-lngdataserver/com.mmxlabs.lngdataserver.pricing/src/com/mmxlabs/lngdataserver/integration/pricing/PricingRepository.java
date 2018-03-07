@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Curve;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataservice.pricing.model.Curve;
-import com.mmxlabs.lngdataservice.pricing.model.Version;
 
 public class PricingRepository extends AbstractDataRepository {
 
