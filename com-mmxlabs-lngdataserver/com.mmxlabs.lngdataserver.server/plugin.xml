@@ -3,12 +3,6 @@
 <plugin>
    <extension-point id="DataServerEndPoint" name="DataServerEndPoint" schema="schema/DataServerEndPoint.exsd"/>
    <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="com.mmxlabs.lngdataserver.server.internal.PluginStartup">
-      </startup>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"

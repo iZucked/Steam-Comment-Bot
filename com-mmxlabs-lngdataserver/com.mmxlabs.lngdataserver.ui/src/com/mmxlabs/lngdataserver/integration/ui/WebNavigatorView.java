@@ -18,7 +18,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataserver.ui.server.ServerUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class WebNavigatorView extends ViewPart {
@@ -113,9 +112,9 @@ public class WebNavigatorView extends ViewPart {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
-		String url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/" + type + "?apiBaseUrl=" + encodedBackend;
+		String url = BackEndUrlProvider.INSTANCE.getUrl() + Activator.URL_PREFIX + "#/" + type + "?apiBaseUrl=" + encodedBackend;
 		if (version != "") {
-			url = ServerUrlProvider.INSTANCE.getBaseUrl() + Activator.URL_PREFIX + "#/" + type + "/" + version + "?apiBaseUrl=" + encodedBackend;
+			url = BackEndUrlProvider.INSTANCE.getUrl() + Activator.URL_PREFIX + "#/" + type + "/" + version + "?apiBaseUrl=" + encodedBackend;
 		}
 		System.out.println("DISTANCE calling: " + url);
 		return url;

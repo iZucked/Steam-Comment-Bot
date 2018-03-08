@@ -10,11 +10,11 @@ public enum BackEndUrlProvider {
 
 	private final Queue<IBackEndAvailableListener> listeners = new ConcurrentLinkedQueue<>();
 
-	void setPort(final int port) {
+	public void setPort(final int port) {
 		this.port = port;
 	}
 
-	void setAvailable(final boolean available) {
+	public void setAvailable(final boolean available) {
 		this.available = available;
 		if (available) {
 			while (!listeners.isEmpty()) {
@@ -30,7 +30,7 @@ public enum BackEndUrlProvider {
 		}
 	}
 
-	int getPort() {
+	public int getPort() {
 		return this.port;
 	}
 

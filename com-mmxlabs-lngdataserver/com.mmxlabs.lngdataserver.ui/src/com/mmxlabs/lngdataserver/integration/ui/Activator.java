@@ -1,22 +1,13 @@
 package com.mmxlabs.lngdataserver.integration.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataserver.ui.server.ServerUrlProvider;
 
 
 public class Activator extends AbstractUIPlugin {
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.integration.ui.distances"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.integration.ui"; //$NON-NLS-1$
 	
 	static final String URL_PREFIX = "/ui"; 
 	

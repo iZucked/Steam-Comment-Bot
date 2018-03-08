@@ -10,21 +10,15 @@ Bundle-ClassPath: config,
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.core.runtime;bundle-version="3.12.0",
  org.eclipse.equinox.registry,
- javax.servlet;bundle-version="3.1.0",
  com.google.inject,
  org.ops4j.peaberry.eclipse,
  org.ops4j.peaberry;bundle-version="1.3.0",
- com.mmxlabs.embeddedmongo;bundle-version="1.0.0",
  com.mmxlabs.lngdataserver.lib;bundle-version="1.0.0",
  org.eclipse.core.resources,
  org.eclipse.ui.workbench,
- org.eclipse.ui;bundle-version="3.109.0",
- de.flapdoodle.embed.mongo;bundle-version="2.0.0",
- de.flapdoodle.embed.process;bundle-version="2.0.1"
+ org.eclipse.ui;bundle-version="3.109.0"
 Import-Package: org.slf4j,
  org.slf4j.helpers,
  org.slf4j.spi
-Eclipse-RegisterBuddy: com.mmxlabs.lngdataserver.lib
-Bundle-Activator: com.mmxlabs.lngdataserver.server.Activator
 Export-Package: com.mmxlabs.lngdataserver.server
 Bundle-Vendor: Minimax Labs Ltd.

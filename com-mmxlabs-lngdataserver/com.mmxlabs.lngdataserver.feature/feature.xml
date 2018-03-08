@@ -53,43 +53,6 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.embeddedmongo"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.embeddedmongo.osx"
-         os="macosx"
-         ws="cocoa"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
-
-   <plugin
-         id="com.mmxlabs.embeddedmongo.win"
-         os="win32"
-         ws="win32"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
-
-   <plugin
-         id="com.mmxlabs.embeddedmongo.linux"
-         os="linux"
-         ws="gtk"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
-
-   <plugin
          id="com.mmxlabs.lngdataserver.browser"
          download-size="0"
          install-size="0"
@@ -109,14 +72,7 @@ All rights reserved.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataserver.ui.server"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
+  
    <plugin
          id="com.fasterxml.jackson.core.jackson-annotations"
          download-size="0"
@@ -217,62 +173,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.lngdataserver.integration.vessels"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.flapdoodle.embed.mongo"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.flapdoodle.embed.process"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataservice.port-distances"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataservice.ports"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataservice.pricing"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataservice.vessels"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataserver.web.navigator"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngdataservice.common"
          download-size="0"
          install-size="0"
          version="0.0.0"
