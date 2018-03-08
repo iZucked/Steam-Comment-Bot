@@ -13,8 +13,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Curve;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
-import com.mmxlabs.lngdataservice.common.model.PublishRequest;
-import com.mmxlabs.lngdataservice.common.model.RenameRequest;
+import com.mmxlabs.lngdataserver.commons.model.PublishRequest;
+import com.mmxlabs.lngdataserver.commons.model.RenameRequest;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

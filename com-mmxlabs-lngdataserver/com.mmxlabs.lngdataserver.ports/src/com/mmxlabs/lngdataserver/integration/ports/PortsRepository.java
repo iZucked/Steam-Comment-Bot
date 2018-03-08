@@ -17,8 +17,8 @@ import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataservice.client.ports.ApiClient;
 import com.mmxlabs.lngdataservice.client.ports.api.PortApi;
-import com.mmxlabs.lngdataservice.common.model.PublishRequest;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.lngdataservice.client.ports.model.PublishRequest;
 import com.mmxlabs.lngdataservice.client.ports.model.Version;
 
 import okhttp3.MediaType;
