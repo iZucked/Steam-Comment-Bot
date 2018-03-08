@@ -28,7 +28,7 @@
       <perspective
             class="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
             id="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
-            name="Ref Data">
+            name="Data Hub">
       </perspective>
    </extension>
 </plugin>
