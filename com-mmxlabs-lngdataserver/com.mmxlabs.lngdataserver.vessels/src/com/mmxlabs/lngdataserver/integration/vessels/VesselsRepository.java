@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataservice.client.distances.model.PublishRequest;
+import com.mmxlabs.lngdataservice.client.vessel.model.PublishRequest;
 import com.mmxlabs.lngdataservice.client.vessel.api.VesselsApi;
 import com.mmxlabs.lngdataservice.client.vessel.model.Version;
 
