@@ -17,11 +17,17 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	private static final long serialVersionUID = 1L;
 
 	private boolean infoEnabled = false;
+	private boolean debugEnabled = false;
 
 	public ExtendedLogLogger(final String name) {
 		this.name = name;
 		// TODO: Hack to disable excess log messages from shiro. Build some better API
 		infoEnabled = !"org.apache.shiro.session.mgt.AbstractValidatingSessionManager".equals(name);
+		debugEnabled = !(name.startsWith("org.springframework")//
+				|| name.startsWith("org.eclipse.jetty")//
+				|| name.startsWith("org.asynchttpclient.netty")//
+				
+				);
 	}
 
 	@Override
@@ -56,7 +62,7 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 
 	@Override
 	public boolean isDebugEnabled() {
-		return Platform.inDebugMode();
+		return Platform.inDebugMode() && debugEnabled;
 	}
 
 	@Override
