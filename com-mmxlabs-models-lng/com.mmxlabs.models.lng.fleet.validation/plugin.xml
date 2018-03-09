@@ -178,24 +178,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.BaseFuelPriceConstraint"
-                  id="com.mmxlabs.models.lng.fleet.validation.BaseFuelPriceConstraint"
-                  lang="Java"
-                  mode="Batch"
-                  name="Base Fuel Price Constraints"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <description>
-                  Check for valid base fuel price
-               </description>
-               <target
-                     class="BaseFuel">
-               </target>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedCurveConstraint"
                   id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedCurveConstraint"
                   isEnabledByDefault="true"
