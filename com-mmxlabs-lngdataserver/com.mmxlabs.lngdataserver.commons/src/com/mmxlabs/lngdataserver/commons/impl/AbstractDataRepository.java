@@ -1,6 +1,7 @@
 package com.mmxlabs.lngdataserver.commons.impl;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -213,7 +214,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		return auth;
 	}
 
-	public OkHttpClient buildClientWithBasicAuth() {
+	protected OkHttpClient buildClientWithBasicAuth() {
 		Triple<String, String, String> serviceAuth = getServiceAuth();
 		if (serviceAuth != null) {
 			OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
@@ -241,6 +242,20 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		return result;
 	}
 	
+	protected com.squareup.okhttp.Authenticator getAuthenticator() {
+		return new com.squareup.okhttp.Authenticator() {
+			  @Override
+			  public com.squareup.okhttp.Request authenticate(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
+			    String credential = Credentials.basic("scott", "tiger");
+			    return response.request().newBuilder().header("Authorization", credential).build();
+			  }
+			  
+			  @Override
+			  public com.squareup.okhttp.Request authenticateProxy(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
+			    return null;
+			  }	
+		};
+	}
 	protected boolean canWaitForNewLocalVersion() {
 		return false;
 	}

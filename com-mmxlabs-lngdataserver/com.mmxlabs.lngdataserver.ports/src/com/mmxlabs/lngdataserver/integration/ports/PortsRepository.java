@@ -30,7 +30,7 @@ import okhttp3.Response;
 public class PortsRepository extends AbstractDataRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(PortsRepository.class);
 
-	private static final OkHttpClient CLIENT = new OkHttpClient();
+	private static OkHttpClient CLIENT = new OkHttpClient();
 	private static final String SYNC_VERSION_ENDPOINT = "/ports/sync/versions/";
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -40,6 +40,7 @@ public class PortsRepository extends AbstractDataRepository {
 
 	public PortsRepository(IPreferenceStore preferenceStore, String localUrl) {
 		super(preferenceStore, localUrl);
+		CLIENT = buildClientWithBasicAuth();
 	}
 
 	public boolean isReady() {

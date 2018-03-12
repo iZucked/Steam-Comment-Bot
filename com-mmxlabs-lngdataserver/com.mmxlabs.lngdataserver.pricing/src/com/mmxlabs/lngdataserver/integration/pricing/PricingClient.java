@@ -27,7 +27,7 @@ public class PricingClient {
 	private static final String SYNC_VERSION_ENDPOINT = "/pricing/sync/versions/";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PricingClient.class);
-	private static final OkHttpClient CLIENT = new OkHttpClient();
+	private static OkHttpClient CLIENT = new OkHttpClient();
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	public static List<PricingVersion> getVersions(String baseUrl) throws IOException {
@@ -41,7 +41,11 @@ public class PricingClient {
 		return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
 				.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished(), v.isCurrent())).collect(Collectors.toList());
 	}
-
+	
+	public static void setHttpClient(OkHttpClient newClient) {
+		CLIENT = newClient;
+	}
+	
 	public static void publishVersion(String version, String baseUrl, String upstreamUrl) throws IOException {
 
 		PublishRequest publishRequest = new PublishRequest();

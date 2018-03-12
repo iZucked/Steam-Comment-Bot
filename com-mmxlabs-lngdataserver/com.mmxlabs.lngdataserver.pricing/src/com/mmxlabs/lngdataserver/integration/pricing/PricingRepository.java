@@ -36,6 +36,9 @@ public class PricingRepository extends AbstractDataRepository {
 	public PricingRepository(@Nullable IPreferenceStore preferenceStore, String localURL) {
 		super(preferenceStore, localURL);
 		this.upstreamUrl = getUpstreamUrl();
+		if (upstreamUrl != null) {
+			PricingClient.setHttpClient(buildClientWithBasicAuth());
+		}
 	}
 
 	public boolean isReady() {

@@ -64,7 +64,15 @@ public class DistanceRepository extends AbstractDataRepository {
 		upstreamDistancesApi = new DistancesApi(new ApiClient());
 		waitingDistancesApi = new DistancesApi(new ApiClient());
 		upstreamWaitingDistancesApi = new DistancesApi(new ApiClient());
+		
+		
 		if (localURL != null) {
+
+			distancesApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
+			upstreamDistancesApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
+			waitingDistancesApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
+			upstreamWaitingDistancesApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
+			
 			distancesApi.getApiClient().setBasePath(localURL);
 			waitingDistancesApi.getApiClient().setBasePath(localURL);
 			waitingDistancesApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
