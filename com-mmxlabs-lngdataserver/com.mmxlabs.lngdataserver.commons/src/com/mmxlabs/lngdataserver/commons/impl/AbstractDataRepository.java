@@ -1,5 +1,6 @@
 package com.mmxlabs.lngdataserver.commons.impl;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -15,6 +16,13 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
+
+import okhttp3.Authenticator;
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.Route;
 
 /**
  * This implementation is not thread-safe.
@@ -205,6 +213,34 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		return auth;
 	}
 
+	public OkHttpClient buildClientWithBasicAuth() {
+		Triple<String, String, String> serviceAuth = getServiceAuth();
+		if (serviceAuth != null) {
+			OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+			clientBuilder.authenticator(new Authenticator() {
+				@Override
+				public Request authenticate(Route route, Response response) throws IOException {
+					if (responseCount(response) >= 3) {
+						return null;
+					}
+					String credential = Credentials.basic(auth.getSecond(), auth.getThird());
+					return response.request().newBuilder().header("Authorization", credential).build();
+				}
+			});
+			return clientBuilder.build();
+		}
+
+		return new OkHttpClient();
+	}
+
+	private int responseCount(Response response) {
+		int result = 1;
+		while ((response = response.priorResponse()) != null) {
+			result++;
+		}
+		return result;
+	}
+	
 	protected boolean canWaitForNewLocalVersion() {
 		return false;
 	}

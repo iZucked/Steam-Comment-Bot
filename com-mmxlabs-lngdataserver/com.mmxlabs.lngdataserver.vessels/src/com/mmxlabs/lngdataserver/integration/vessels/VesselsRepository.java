@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
@@ -29,15 +30,16 @@ import okhttp3.Response;
 public class VesselsRepository extends AbstractDataRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(VesselsRepository.class);
 	private VesselsApi vesselsApi = new VesselsApi();
-	private static final OkHttpClient CLIENT = new OkHttpClient();
+	private static OkHttpClient CLIENT = new OkHttpClient();
 
 	private static final String SYNC_VERSION_ENDPOINT = "/vessels/sync/versions/";
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	public VesselsRepository(IPreferenceStore preferenceStore, String localUrl) {
 		super(preferenceStore, localUrl);
+		CLIENT = buildClientWithBasicAuth();
 	}
-
+	
 	public boolean isReady() {
 		if (backendUrl != null) {
 			return true;

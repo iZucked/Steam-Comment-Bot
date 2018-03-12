@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.jface,
  com.mmxlabs.common.common-util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.slf4j
+Import-Package: okhttp3,
+ org.slf4j
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lngdataserver.commons,
  com.mmxlabs.lngdataserver.commons.impl,
