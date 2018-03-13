@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.license.ssl;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +17,7 @@ import java.security.KeyStoreException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
@@ -38,8 +40,8 @@ public final class LicenseChecker {
 	/**
 	 */
 	public static enum LicenseState {
-		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid("License is not valid yet. Please contact Minimax Labs."), KeystoreNotFound(
-				"Unable to find license file");
+		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid(
+				"License is not valid yet. Please contact Minimax Labs."), KeystoreNotFound("Unable to find license file");
 
 		private final String message;
 
@@ -47,7 +49,7 @@ public final class LicenseChecker {
 			message = toString();
 		}
 
-		private LicenseState(String message) {
+		private LicenseState(final String message) {
 			this.message = message;
 		}
 
@@ -144,6 +146,9 @@ public final class LicenseChecker {
 			if (licenseCertificate instanceof X509Certificate) {
 				final X509Certificate x509Certificate = (X509Certificate) licenseCertificate;
 				x509Certificate.checkValidity();
+
+				importExtraCertsFromHome(keyStore);
+				importExtraCertsInstall(keyStore);
 
 				// Create copies of the keystores in a known place on filesystem so we can reference them
 				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
@@ -245,8 +250,7 @@ public final class LicenseChecker {
 	 * @throws FileNotFoundException
 	 * @throws KeyStoreException
 	 */
-	public static @Nullable
-	X509Certificate getClientLicense() throws CertificateException, FileNotFoundException, KeyStoreException {
+	public static @Nullable X509Certificate getClientLicense() throws CertificateException, FileNotFoundException, KeyStoreException {
 		// Load the license file
 		KeyStore licenseKeystore = null;
 		{
@@ -268,5 +272,45 @@ public final class LicenseChecker {
 		}
 		return null;
 
+	}
+
+	private static void importExtraCertsFromHome(final KeyStore keystore) {
+		final String userHome = System.getProperty("eclipse.home.location");
+		if (userHome != null) {
+			final File f = new File(userHome + "/cacerts/");
+			if (f.exists() && f.isDirectory()) {
+				for (final File certFile : f.listFiles()) {
+					if (certFile.isFile()) {
+						try (FileInputStream inStream = new FileInputStream(certFile)) {
+							final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+							final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
+							keystore.setCertificateEntry(f.getName(), cert);
+						} catch (final Exception e) {
+							log.error("Unable to import certificate " + f.getAbsolutePath(), e);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private static void importExtraCertsInstall(final KeyStore keystore) {
+		final String userHome = System.getProperty("user.home");
+		if (userHome != null) {
+			final File f = new File(userHome + "/mmxlabs/cacerts/");
+			if (f.exists() && f.isDirectory()) {
+				for (final File certFile : f.listFiles()) {
+					if (certFile.isFile()) {
+						try (FileInputStream inStream = new FileInputStream(certFile)) {
+							final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+							final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
+							keystore.setCertificateEntry(f.getName(), cert);
+						} catch (final Exception e) {
+							log.error("Unable to import certificate " + f.getAbsolutePath(), e);
+						}
+					}
+				}
+			}
+		}
 	}
 }
