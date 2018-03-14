@@ -37,6 +37,7 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentForma
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -56,6 +57,8 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
+import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -205,6 +208,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 			}
 			text = seqText;
+		} else if (element instanceof InventoryEvents) {
+			InventoryEvents inventoryEvents = (InventoryEvents) element;
+			return inventoryEvents.getFacility().getName();
+		} else if (element instanceof InventoryChangeEvent) {
+			InventoryChangeEvent event = (InventoryChangeEvent) element;
+			// return event.to String();
 		}
 		return text;
 	}
@@ -490,6 +499,17 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 			tt.append(eventText);
 			return tt.toString();
+		} else if (element instanceof InventoryChangeEvent) {
+			InventoryChangeEvent evt = (InventoryChangeEvent) element;
+			final StringBuilder tt = new StringBuilder();
+			tt.append("Date: " + dateToString(evt.getDate(), "") + "\n");
+
+			if (evt.isBreachedMax()) {
+				tt.append("Tank top\n");
+			} else if (evt.isBreachedMin()) {
+				tt.append("Breached min level\n");
+			}
+			return tt.toString();
 		}
 		return null;
 
@@ -540,8 +560,17 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof SlotVisit) {
 			final SlotVisit sv = (SlotVisit) element;
 			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)"); // + displayTypeName;
-		}
 
+		} else if (element instanceof InventoryChangeEvent) {
+			InventoryChangeEvent evt = (InventoryChangeEvent) element;
+			if (evt.eContainer() instanceof InventoryEvents) {
+				InventoryEvents inventoryEvents = (InventoryEvents) evt.eContainer();
+				Inventory facility = inventoryEvents.getFacility();
+				if (facility != null) {
+					return "Inventory at " + facility.getName();
+				}
+			}
+		}
 		return null;
 	}
 

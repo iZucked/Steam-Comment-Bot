@@ -10,23 +10,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import javax.swing.text.html.parser.DTD;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -55,7 +50,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.swtchart.Chart;
 import org.swtchart.IAxisSet;
 import org.swtchart.IBarSeries;
-import org.swtchart.ILegend;
 import org.swtchart.ILineSeries;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
@@ -63,26 +57,18 @@ import org.swtchart.ISeriesSet;
 import org.swtchart.LineStyle;
 import org.swtchart.Range;
 
-import com.mmxlabs.common.DateTreeSet;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
-import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
-import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
+import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotAllocationType;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -205,14 +191,14 @@ public class InventoryReport extends ViewPart {
 			});
 		}
 
-		CTabFolder folder = new CTabFolder(parent, SWT.BOTTOM);
+		final CTabFolder folder = new CTabFolder(parent, SWT.BOTTOM);
 		folder.setLayout(new GridLayout(1, true));
 		folder.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-		CTabItem chartItem = new CTabItem(folder, SWT.NONE);
+		final CTabItem chartItem = new CTabItem(folder, SWT.NONE);
 		chartItem.setText("Chart");
 
-		CTabItem tableItem = new CTabItem(folder, SWT.NONE);
+		final CTabItem tableItem = new CTabItem(folder, SWT.NONE);
 		tableItem.setText("Table");
 		{
 			chartViewer = new Chart(folder, SWT.NONE);
@@ -229,7 +215,7 @@ public class InventoryReport extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(tableViewer);
 			tableViewer.getGrid().setTreeLinesVisible(true);
 			tableViewer.getGrid().setHeaderVisible(true);
-			DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+			final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 			{
 				createColumn("Date", 150, o -> "" + o.date.format(formatter));
 				createColumn("Type", 150, o -> o.type);
@@ -328,7 +314,7 @@ public class InventoryReport extends ViewPart {
 	}
 
 	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
-		DateFormat dateFormat = new SimpleDateFormat("d MMM");
+		final DateFormat dateFormat = new SimpleDateFormat("d MMM");
 		final ISeriesSet seriesSet = chartViewer.getSeriesSet();
 		// Delete existing data
 		{
@@ -338,399 +324,142 @@ public class InventoryReport extends ViewPart {
 			}
 			names.forEach(s -> seriesSet.deleteSeries(s));
 		}
-		int colour = 2;
 		LocalDate minDate = null;
 		LocalDate maxDate = null;
-		List<InventoryLevel> tableLevels = new LinkedList<>();
+		final List<InventoryLevel> tableLevels = new LinkedList<>();
 
-		DateTreeSet<Pair<LocalDate, Integer>> minLevelSet = new DateTreeSet<>(l -> Date.from(l.getFirst().atStartOfDay(ZoneId.of("UTC")).toInstant()));
-		DateTreeSet<Pair<LocalDate, Integer>> maxLevelSet = new DateTreeSet<>(l -> Date.from(l.getFirst().atStartOfDay(ZoneId.of("UTC")).toInstant()));
-		for (final Inventory inventory : inventoryModels) {
-			// Used for max level
-			++colour;
-			if (colour == SWT.COLOR_RED) {
-				++colour;
-			}
-			if (inventory.getName() == null) {
-				continue;
-			}
-			{
-
-				final List<Pair<LocalDate, Integer>> changes = new LinkedList<>();
-				final List<Pair<LocalDate, Integer>> cargo_changes = new LinkedList<>();
-				final List<Pair<LocalDate, Integer>> open_cargo_changes = new LinkedList<>();
-				final List<Pair<LocalDate, Integer>> other_cargo_changes = new LinkedList<>();
-				for (final InventoryEventRow r : inventory.getFeeds()) {
-					if (minDate == null || r.getStartDate().isBefore(minDate)) {
-						minDate = r.getStartDate();
-					}
-					if (maxDate == null || r.getStartDate().isAfter(maxDate)) {
-						maxDate = r.getStartDate();
-					}
-
-					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
-						changes.add(new Pair<>(r.getStartDate(), r.getReliableVolume()));
-						tableLevels.add(new InventoryLevel(r.getStartDate(), r.getPeriod(), r.getReliableVolume()));
-						if (r.getPeriod() == InventoryFrequency.CARGO) {
-							other_cargo_changes.add(new Pair<>(r.getStartDate(), r.getReliableVolume()));
-						}
-					} else {
-
-						if (maxDate == null || r.getEndDate().isAfter(maxDate)) {
-							maxDate = r.getEndDate();
+		if (toDisplay != null) {
+			final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
+			if (scheduleModel != null) {
+				final Schedule schedule = scheduleModel.getSchedule();
+				if (schedule != null) {
+					for (final InventoryEvents inventoryEvents : schedule.getInventoryLevels()) {
+						final Inventory inventory = inventoryEvents.getFacility();
+						if (!inventoryModels.contains(inventory)) {
+							continue;
 						}
 
-						LocalDateTime start = r.getStartDate().atStartOfDay();
-						if (r.getStartDate() == r.getEndDate()) {
-							changes.add(new Pair<>(LocalDate.from(start), r.getReliableVolume()));
-							tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), r.getReliableVolume()));
-						} else {
-							while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
-								changes.add(new Pair<>(LocalDate.from(start), r.getReliableVolume()));
-								tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), r.getReliableVolume()));
-
-								if (r.getPeriod() == InventoryFrequency.HOURLY) {
-									start = start.plusHours(1);
-								} else if (r.getPeriod() == InventoryFrequency.DAILY) {
-									start = start.plusDays(1);
-								} else if (r.getPeriod() == InventoryFrequency.MONTHLY) {
-									start = start.plusMonths(1);
-								} else {
-									assert false;
-								}
-							}
+						if (inventory.getName() == null) {
+							continue;
 						}
-					}
-				}
-				for (final InventoryEventRow r : inventory.getOfftakes()) {
+						{
 
-					if (minDate == null || r.getStartDate().isBefore(minDate)) {
-						minDate = r.getStartDate();
-					}
-					if (maxDate == null || r.getStartDate().isAfter(maxDate)) {
-						maxDate = r.getStartDate();
-					}
-					if (r.getPeriod() == InventoryFrequency.CARGO || r.getPeriod() == InventoryFrequency.LEVEL) {
-						changes.add(new Pair<>(r.getStartDate(), -r.getReliableVolume()));
-						tableLevels.add(new InventoryLevel(r.getStartDate(), r.getPeriod(), -r.getReliableVolume()));
-						if (r.getPeriod() == InventoryFrequency.CARGO) {
-							other_cargo_changes.add(new Pair<>(r.getStartDate(), -r.getReliableVolume()));
-						}
-					} else {
+							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
+									.collect(Collectors.toMap( //
+											InventoryChangeEvent::getDate, //
+											InventoryChangeEvent::getCurrentLevel, //
+											(a, b) -> (b), // Take latest value
+											LinkedHashMap::new))
+									.entrySet().stream() //
+									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
+									.collect(Collectors.toList());
+							if (!inventoryLevels.isEmpty()) {
+								final ILineSeries series = createLineSeries(seriesSet, "Inventory", inventoryLevels);
+								series.setSymbolSize(1);
+								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 
-						if (maxDate == null || r.getEndDate().isAfter(maxDate)) {
-							maxDate = r.getEndDate();
-						}
+								minDate = inventoryLevels.get(0).getFirst().toLocalDate();
+								maxDate = inventoryLevels.get(inventoryLevels.size() - 1).getFirst().toLocalDate();
 
-						LocalDateTime start = r.getStartDate().atStartOfDay();
-						while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
-							changes.add(new Pair<>(LocalDate.from(start), -r.getReliableVolume()));
-							tableLevels.add(new InventoryLevel(LocalDate.from(start), r.getPeriod(), -r.getReliableVolume()));
-							if (r.getPeriod() == InventoryFrequency.HOURLY) {
-								start = start.plusHours(1);
-							} else if (r.getPeriod() == InventoryFrequency.DAILY) {
-								start = start.plusDays(1);
-							} else if (r.getPeriod() == InventoryFrequency.MONTHLY) {
-								start = start.plusMonths(1);
-							} else {
-								assert false;
-							}
-						}
-					}
-				}
+								inventoryEvents.getEvents().forEach(e -> {
+									String type = "Unknown";
+									if (e.getSlotAllocation() != null) {
+										type = "SCHEDULE";
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity());
+										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										tableLevels.add(lvl);
 
-				LocalDate latestInventoryDate = null;
-				if (tableLevels.size() > 0) {
-					Optional<InventoryLevel> inventoryLevel = tableLevels.stream().sorted((a,b) -> -a.date.compareTo(b.date)).findFirst();
-					if (inventoryLevel.isPresent()) {
-						latestInventoryDate = inventoryLevel.get().date;
-					}
-				}
-				final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
-				if (latestInventoryDate != null && scheduleModel != null) {
-					final Schedule schedule = scheduleModel.getSchedule();
-					if (schedule != null) {
-						for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
-							final Slot slot = slotAllocation.getSlot();
-							if (slot instanceof LoadSlot) {
-								final LoadSlot loadSlot = (LoadSlot) slot;
-								if (loadSlot.isDESPurchase()) {
-									continue;
-								}
-							} else if (slot instanceof DischargeSlot) {
-								final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-								if (dischargeSlot.isFOBSale()) {
-									continue;
-								}
-							}
-							if (slotAllocation.getPort() == inventory.getPort()) {
-								final int change = (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) ? -slotAllocation.getPhysicalVolumeTransferred()
-										: slotAllocation.getPhysicalVolumeTransferred();
-								ZonedDateTime start = slotAllocation.getSlotVisit().getStart();
-								final LocalDate date = start.toLocalDate();
-								
-								// don't look at slots after end of inventory
-								if (latestInventoryDate.compareTo(date) < 0) {
-									continue;
-								}
-								
-								changes.add(new Pair<>(date, change));
-								tableLevels.add(new InventoryLevel(date, "SCHEDULE", change));
-
-								cargo_changes.add(new Pair<>(date, Math.abs(change)));
-
-								if (minDate == null || date.isBefore(minDate)) {
-									minDate = date;
-								}
-								if (maxDate == null || date.isAfter(maxDate)) {
-									maxDate = date;
-								}
-
-							}
-						}
-						for (final OpenSlotAllocation slotAllocation : schedule.getOpenSlotAllocations()) {
-							final Slot slot = slotAllocation.getSlot();
-							if (slot instanceof LoadSlot) {
-								final LoadSlot loadSlot = (LoadSlot) slot;
-								if (loadSlot.isDESPurchase()) {
-									continue;
-								}
-							} else if (slot instanceof DischargeSlot) {
-								final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-								if (dischargeSlot.isFOBSale()) {
-									continue;
-								}
-							}
-							if (slotAllocation.getSlot().getPort() == inventory.getPort()) {
-								int change = (slotAllocation.getSlot() instanceof LoadSlot) ? -slot.getSlotOrDelegateMaxQuantity() : slot.getSlotOrDelegateMaxQuantity();
-
-								if (slot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.MMBTU) {
-									if (slot instanceof LoadSlot) {
-										double cv = ((LoadSlot) slot).getSlotOrDelegateCV();
-										change = (int) (change / cv);
-									} else {
-										continue;
+									} else if (e.getOpenSlotAllocation() != null) {
+										type = "OPEN";
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity());
+										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										tableLevels.add(lvl);
+									} else if (e.getEvent() != null) {
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity());
+										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										tableLevels.add(lvl);
 									}
-								}
+								});
+							}
+						}
+						{
 
-								final LocalDate date = slotAllocation.getSlot().getWindowStart();
-								changes.add(new Pair<>(date, change));
-								tableLevels.add(new InventoryLevel(date, "OPEN", change));
+							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
+									.collect(Collectors.toMap( //
+											InventoryChangeEvent::getDate, //
+											InventoryChangeEvent::getCurrentMin, //
+											(a, b) -> (b), // Take latest value
+											LinkedHashMap::new))
+									.entrySet().stream() //
+									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
+									.collect(Collectors.toList());
+							if (!inventoryLevels.isEmpty()) {
 
-								open_cargo_changes.add(new Pair<>(date, Math.abs(change)));
+								final ILineSeries series = createLineSeries(seriesSet, "Tank min", inventoryLevels);
+								series.setSymbolSize(2);
+								series.setLineStyle(LineStyle.DASH);
+								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW));
+							}
+						}
+						{
 
-								if (minDate == null || date.isBefore(minDate)) {
-									minDate = date;
-								}
-								if (maxDate == null || date.isAfter(maxDate)) {
-									maxDate = date;
+							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
+									.collect(Collectors.toMap( //
+											InventoryChangeEvent::getDate, //
+											InventoryChangeEvent::getCurrentMax, //
+											(a, b) -> (b), // Take latest value
+											LinkedHashMap::new))
+									.entrySet().stream() //
+									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
+									.collect(Collectors.toList());
+							if (!inventoryLevels.isEmpty()) {
+
+								final ILineSeries series = createLineSeries(seriesSet, "Tank max", inventoryLevels);
+								series.setSymbolSize(2);
+								series.setLineStyle(LineStyle.DASH);
+								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+							}
+						}
+						{
+
+							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
+									.filter(evt -> evt.getSlotAllocation() != null) //
+									.map((e) -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
+									.collect(Collectors.toList());
+							if (!values.isEmpty()) {
+
+								final IBarSeries series = createBarSeries(seriesSet, "Cargoes", values);
+								series.setBarWidth(1);
+								series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+							}
+						}
+						{
+							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
+									.filter(evt -> evt.getOpenSlotAllocation() != null) //
+									.map((e) -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
+									.collect(Collectors.toList());
+							if (!values.isEmpty()) {
+
+								final IBarSeries series = createBarSeries(seriesSet, "Open", values);
+								series.setBarWidth(1);
+								series.setBarColor(color_Orange);
+							}
+						}
+						{
+							{
+								final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
+										.filter(evt -> evt.getEvent() != null) //
+										.filter(evt -> evt.getEvent().getPeriod() == InventoryFrequency.CARGO) //
+										.map((e) -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
+										.collect(Collectors.toList());
+								if (!values.isEmpty()) {
+
+									final IBarSeries series = createBarSeries(seriesSet, "3rd-party", values);
+									series.setBarWidth(2);
+									series.setBarColor(color_Orange);
 								}
 							}
 						}
-					}
-				}
-
-				//
-				final Map<LocalDate, List<Integer>> m = changes.stream() //
-						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
-						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
-				final Map<LocalDate, List<Integer>> m2 = cargo_changes.stream() //
-						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
-						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
-				final Map<LocalDate, List<Integer>> m2a = open_cargo_changes.stream() //
-						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
-						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
-				final Map<LocalDate, List<Integer>> m3 = other_cargo_changes.stream() //
-						.filter(p -> p.getFirst() != null && p.getSecond() != null) //
-						.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
-
-				if (m.size() > 0) {
-					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m);
-					final Date[] dates = new Date[sorted.size()];
-					final double[] values = new double[sorted.size()];
-					int idx = 0;
-
-					int total = 0;
-					for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
-						final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
-						dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-						total += sum;
-						values[idx] = (double) total;
-						idx++;
-					}
-
-					{
-						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Inventory");
-						createSeries.setXDateSeries(dates);
-						createSeries.setYSeries(values);
-						createSeries.setSymbolSize(1);
-						//
-						createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
-
-					}
-				}
-				if (m2.size() > 0) {
-					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m2);
-					final Date[] dates = new Date[sorted.size() * 2];
-					final double[] values = new double[sorted.size() * 2];
-					int idx = 0;
-
-					int total = 0;
-					for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
-						final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
-						dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-						total += sum;
-						values[idx] = (double) sum;
-						++idx;
-						dates[idx] = Date.from(e.getKey().plusDays(1).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-						values[idx] = 0;
-						++idx;
-					}
-
-					{
-
-						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Cargoes");
-						createSeries.setXDateSeries(dates);
-						createSeries.setYSeries(values);
-						createSeries.setBarWidth(1);
-						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
-
-					}
-				}
-				if (m2a.size() > 0) {
-					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m2a);
-					final Date[] dates = new Date[sorted.size() * 2];
-					final double[] values = new double[sorted.size() * 2];
-					int idx = 0;
-
-					int total = 0;
-					for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
-						final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
-						dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-						total += sum;
-						values[idx] = (double) sum;
-						++idx;
-						dates[idx] = Date.from(e.getKey().plusDays(1).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-						values[idx] = 0;
-						++idx;
-					}
-
-					{
-
-						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "Open");
-						createSeries.setXDateSeries(dates);
-						createSeries.setYSeries(values);
-						createSeries.setBarWidth(1);
-						createSeries.setBarColor(color_Orange);
-
-					}
-				}
-				if (m3.size() > 0) {
-					final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m3);
-					final Date[] dates = new Date[sorted.size() * 2];
-					final double[] values = new double[sorted.size() * 2];
-					int idx = 0;
-
-					int total = 0;
-					for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
-						final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
-						dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-						total += sum;
-						values[idx] = (double) sum;
-						++idx;
-						dates[idx] = Date.from(e.getKey().plusDays(1).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-						values[idx] = 0;
-						++idx;
-					}
-
-					{
-						final IBarSeries createSeries = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, "3rd-party");
-						createSeries.setXDateSeries(dates);
-						createSeries.setYSeries(values);
-						createSeries.setBarWidth(2);
-						// createSeries.setSymbolSize(2);
-
-						createSeries.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-
-					}
-				}
-			}
-			{
-				final List<Pair<LocalDate, Integer>> min_level = new LinkedList<>();
-				final List<Pair<LocalDate, Integer>> max_level = new LinkedList<>();
-				for (final InventoryCapacityRow r : inventory.getCapacities()) {
-					min_level.add(new Pair<>(r.getDate(), r.getMinVolume()));
-					max_level.add(new Pair<>(r.getDate(), r.getMaxVolume()));
-					minLevelSet.add(new Pair<>(r.getDate(), r.getMinVolume()));
-					maxLevelSet.add(new Pair<>(r.getDate(), r.getMaxVolume()));
-
-				}
-				{
-					final Map<LocalDate, List<Integer>> m = min_level.stream() //
-							.filter(p -> p.getFirst() != null && p.getSecond() != null) //
-							.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
-
-					if (m.size() > 0) {
-
-						final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m);
-
-						final Date[] dates = new Date[2 * sorted.size() - 1];
-						final double[] values = new double[2 * sorted.size() - 1];
-						int idx = 0;
-						for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
-
-							if (idx != 0) {
-								dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-								values[idx] = values[idx - 1];
-								idx++;
-							}
-
-							final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
-
-							dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-							values[idx] = (double) sum;
-							idx++;
-						}
-						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Tank min");
-						createSeries.setXDateSeries(dates);
-						createSeries.setYSeries(values);
-						createSeries.setSymbolSize(2);
-						createSeries.setLineStyle(LineStyle.DASH);
-						createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW));
-					}
-				}
-				{
-					final Map<LocalDate, List<Integer>> m = max_level.stream() //
-							.filter(p -> p.getFirst() != null && p.getSecond() != null) //
-							.collect(Collectors.groupingBy(e -> e.getFirst(), Collectors.mapping(e -> e.getSecond(), Collectors.toList())));
-
-					if (m.size() > 0) {
-
-						final TreeMap<LocalDate, List<Integer>> sorted = new TreeMap<>(m);
-
-						final Date[] dates = new Date[2 * sorted.size() - 1];
-						final double[] values = new double[2 * sorted.size() - 1];
-						int idx = 0;
-						for (final Map.Entry<LocalDate, List<Integer>> e : sorted.entrySet()) {
-
-							if (idx != 0) {
-								dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-								values[idx] = values[idx - 1];
-								idx++;
-							}
-
-							final int sum = e.getValue().stream().mapToInt(Integer::intValue).sum();
-
-							dates[idx] = Date.from(e.getKey().atStartOfDay().atZone(ZoneId.of("UTC")).toInstant());
-							values[idx] = (double) sum;
-							idx++;
-						}
-						final ILineSeries createSeries = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Tank max");
-						createSeries.setXDateSeries(dates);
-						createSeries.setYSeries(values);
-						createSeries.setSymbolSize(2);
-						createSeries.setLineStyle(LineStyle.DASH);
-						createSeries.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 					}
 				}
 			}
@@ -771,36 +500,60 @@ public class InventoryReport extends ViewPart {
 
 		Collections.sort(tableLevels, (a, b) -> a.date.compareTo(b.date));
 
-		int total = 0;
-		for (InventoryLevel lvl : tableLevels) {
-			lvl.runningTotal = total + lvl.changeInM3;
-			total = lvl.runningTotal;
-
-			Date d = Date.from(lvl.date.atStartOfDay(ZoneId.of("UTC")).toInstant());
-			if (!minLevelSet.isEmpty()) {
-				Pair<LocalDate, Integer> floor = minLevelSet.floor(d);
-				if (floor != null) {
-					int min = floor.getSecond();
-					if (total < min) {
-						lvl.breach = true;
-					}
-				}
-			}
-			if (!maxLevelSet.isEmpty()) {
-				Pair<LocalDate, Integer> floor = maxLevelSet.floor(d);
-				if (floor != null) {
-					int max = floor.getSecond();
-					if (total > max) {
-						lvl.breach = true;
-					}
-				}
-			}
-		}
-
 		tableViewer.setInput(tableLevels);
 	}
 
-	private GridViewerColumn createColumn(final String title, int width, final Function<InventoryLevel, String> labelProvider) {
+	private ILineSeries createLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
+
+		final Date[] dates = new Date[2 * data.size() - 1];
+		final double[] values = new double[2 * data.size() - 1];
+		int idx = 0;
+		for (final Pair<LocalDateTime, Integer> e : data) {
+			if (idx != 0) {
+				dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
+				values[idx] = values[idx - 1];
+				idx++;
+			}
+
+			final int sum = e.getSecond();
+
+			dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
+			values[idx] = (double) sum;
+			idx++;
+		}
+
+		final ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, name);
+		series.setXDateSeries(dates);
+		series.setYSeries(values);
+		return series;
+	}
+
+	private IBarSeries createBarSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
+
+		final Date[] dates = new Date[2 * data.size() - 1];
+		final double[] values = new double[2 * data.size() - 1];
+		int idx = 0;
+		for (final Pair<LocalDateTime, Integer> e : data) {
+			if (idx != 0) {
+				dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
+				values[idx] = values[idx - 1];
+				idx++;
+			}
+
+			final int sum = e.getSecond();
+
+			dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
+			values[idx] = (double) sum;
+			idx++;
+		}
+
+		final IBarSeries series = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, name);
+		series.setXDateSeries(dates);
+		series.setYSeries(values);
+		return series;
+	}
+
+	private GridViewerColumn createColumn(final String title, final int width, final Function<InventoryLevel, String> labelProvider) {
 		final GridViewerColumn column = new GridViewerColumn(tableViewer, SWT.NONE);
 		GridViewerHelper.configureLookAndFeel(column);
 
@@ -812,7 +565,7 @@ public class InventoryReport extends ViewPart {
 
 				final Object element = cell.getElement();
 
-				InventoryLevel lvl = (InventoryLevel) element;
+				final InventoryLevel lvl = (InventoryLevel) element;
 				cell.setText(labelProvider.apply(lvl));
 				cell.setBackground(null);
 				if (lvl.breach) {
@@ -832,14 +585,14 @@ public class InventoryReport extends ViewPart {
 		public int runningTotal = 0;
 		public boolean breach = false;
 
-		public InventoryLevel(LocalDate date, InventoryFrequency type, int changeInM3) {
+		public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3) {
 			this.date = date;
 			this.type = type.toString();
 			this.changeInM3 = changeInM3;
 
 		}
 
-		public InventoryLevel(LocalDate date, String type, int changeInM3) {
+		public InventoryLevel(final LocalDate date, final String type, final int changeInM3) {
 			this.date = date;
 			this.type = type;
 			this.changeInM3 = changeInM3;

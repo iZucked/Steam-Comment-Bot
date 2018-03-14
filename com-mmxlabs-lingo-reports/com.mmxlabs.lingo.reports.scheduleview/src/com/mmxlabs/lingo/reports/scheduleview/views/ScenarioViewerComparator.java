@@ -14,6 +14,8 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
+import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 
@@ -41,7 +43,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 	};
 
 	private enum Type {
-		DES, FOB, FLEET, CHARTER
+		INVENTORY, DES, FOB, FLEET, CHARTER
 	}
 
 	private Mode mode = Mode.INTERLEAVE;
@@ -114,6 +116,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			} else if (s.getName().contains("FOB")) {
 				return Type.FOB;
 			}
+		} else if (obj instanceof InventoryEvents) {
+			return Type.INVENTORY;
 		}
 		return Type.FLEET;
 	}
@@ -205,7 +209,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		} else if (mode == Mode.INTERLEAVE) {
 
 			// Then order by element order
-			if ((e1 instanceof Sequence || e1 instanceof CombinedSequence) && (e2 instanceof Sequence || e2 instanceof CombinedSequence)) {
+			if ((e1 instanceof Sequence || e1 instanceof CombinedSequence || e1 instanceof InventoryEvents)
+					&& (e2 instanceof Sequence || e2 instanceof CombinedSequence || e2 instanceof InventoryEvents)) {
 
 				// Group by fleet/spot
 				final Type s1Type = getSequenceType(e1);

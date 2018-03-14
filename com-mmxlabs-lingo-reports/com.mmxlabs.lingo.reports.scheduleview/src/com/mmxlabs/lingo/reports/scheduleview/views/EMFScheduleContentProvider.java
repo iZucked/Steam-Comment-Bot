@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
+import javax.inject.Scope;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
@@ -32,6 +34,8 @@ import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
+import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -67,7 +71,8 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 			final List<Object> result = new ArrayList<Object>();
 			for (final Object o : collection) {
 				if (o instanceof Schedule) {
-					final EList<Sequence> sequences = ((Schedule) o).getSequences();
+					Schedule schedule = (Schedule) o;
+					final EList<Sequence> sequences = schedule.getSequences();
 					// find multiple availabilities
 					final Map<Vessel, List<Sequence>> availabilityMap = new HashMap<>();
 					final List<Sequence> unassigned = sequences.stream() //
@@ -103,18 +108,25 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 							result.add(cs);
 						}
 					}
+					for (InventoryEvents inventory : schedule.getInventoryLevels()) {
+						result.add(inventory);
+					}
 				}
 			}
 			return result.toArray();
 		} else if (parent instanceof Schedule) {
-			final EList<Sequence> sequences = ((Schedule) parent).getSequences();
-			final List<Sequence> seqs = new ArrayList<Sequence>(sequences.size());
+			Schedule schedule = (Schedule) parent;
+			final EList<Sequence> sequences = schedule.getSequences();
+			final List<Object> seqs = new ArrayList<>(sequences.size());
 			for (final Sequence seq : sequences) {
 				// Skip nominal cargoes
 				if (seq.getSequenceType() == SequenceType.ROUND_TRIP) {
 					// continue;
 				}
 				seqs.add(seq);
+			}
+			for (InventoryEvents inventory : schedule.getInventoryLevels()) {
+				seqs.add(inventory);
 			}
 			return seqs.toArray();
 		} else if (parent instanceof Sequence) {
@@ -206,6 +218,12 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				}
 			}
 			return newEvents.toArray();
+		} else if (parent instanceof InventoryEvents) {
+			InventoryEvents inventoryEvents = (InventoryEvents) parent;
+			return inventoryEvents.getEvents().stream() //
+					.filter(evt -> evt.isBreachedMin() || evt.isBreachedMax()) //
+					.toArray();
+
 		}
 		return null;
 	}
@@ -217,7 +235,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		return (element instanceof Sequence) || (element instanceof Schedule) || (element instanceof CombinedSequence);
+		return (element instanceof Sequence) || (element instanceof Schedule) || (element instanceof CombinedSequence) || (element instanceof InventoryEvents);
 	}
 
 	@Override
@@ -235,6 +253,9 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 		if (element instanceof Event) {
 			final Event event = (Event) element;
 			return GregorianCalendar.from(event.getStart());
+		} else if (element instanceof InventoryChangeEvent) {
+			InventoryChangeEvent event = (InventoryChangeEvent) element;
+			return GregorianCalendar.from(event.getDate().atZone(ZoneId.of("UTC")));
 		}
 		return null;
 	}
@@ -245,6 +266,9 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 			final Event event = (Event) element;
 
 			return GregorianCalendar.from(event.getEnd());
+		} else if (element instanceof InventoryChangeEvent) {
+			InventoryChangeEvent event = (InventoryChangeEvent) element;
+			return GregorianCalendar.from(event.getDate().plusDays(1).atZone(ZoneId.of("UTC")));
 		}
 		return null;
 	}

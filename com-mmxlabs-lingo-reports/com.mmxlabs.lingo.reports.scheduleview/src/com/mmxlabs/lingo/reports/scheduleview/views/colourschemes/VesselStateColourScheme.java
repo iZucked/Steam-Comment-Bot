@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -77,6 +78,9 @@ public class VesselStateColourScheme extends ColourScheme {
 			} else {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background);
 			}
+		} else if (element instanceof InventoryChangeEvent) {
+			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Inventory_Breach, ColourElements.Background);
+			
 		}
 
 		// else if (mode == Mode.Lateness) {
