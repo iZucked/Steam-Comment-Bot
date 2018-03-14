@@ -66,7 +66,7 @@ public class SpotMarketGroupPane extends ScenarioTableViewerPane {
 			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getDESSalesMarket_NotionalPort(), provider, getEditingDomain()));
 			break;
 		case FOB_PURCHASE:
-			addTypicalColumn("Count", new BasicAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
+			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
 			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
 			addTypicalColumn("CV", new NumericAttributeManipulator(pp.getFOBPurchasesMarket_Cv(), getEditingDomain()));
 			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getFOBPurchasesMarket_NotionalPort(), provider, getEditingDomain()));
