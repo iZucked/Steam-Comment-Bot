@@ -339,6 +339,24 @@ public interface ScheduleFactory extends EFactory {
 	CanalBookingEvent createCanalBookingEvent();
 
 	/**
+	 * Returns a new object of class '<em>Inventory Events</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Inventory Events</em>'.
+	 * @generated
+	 */
+	InventoryEvents createInventoryEvents();
+
+	/**
+	 * Returns a new object of class '<em>Inventory Change Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Inventory Change Event</em>'.
+	 * @generated
+	 */
+	InventoryChangeEvent createInventoryChangeEvent();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

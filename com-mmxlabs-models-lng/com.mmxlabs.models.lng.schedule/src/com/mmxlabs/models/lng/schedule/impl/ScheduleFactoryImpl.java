@@ -143,6 +143,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
 			case SchedulePackage.CANAL_BOOKING_EVENT: return createCanalBookingEvent();
+			case SchedulePackage.INVENTORY_EVENTS: return createInventoryEvents();
+			case SchedulePackage.INVENTORY_CHANGE_EVENT: return createInventoryChangeEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -572,6 +574,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public CanalBookingEvent createCanalBookingEvent() {
 		CanalBookingEventImpl canalBookingEvent = new CanalBookingEventImpl();
 		return canalBookingEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public InventoryEvents createInventoryEvents() {
+		InventoryEventsImpl inventoryEvents = new InventoryEventsImpl();
+		return inventoryEvents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public InventoryChangeEvent createInventoryChangeEvent() {
+		InventoryChangeEventImpl inventoryChangeEvent = new InventoryChangeEventImpl();
+		return inventoryChangeEvent;
 	}
 
 	/**

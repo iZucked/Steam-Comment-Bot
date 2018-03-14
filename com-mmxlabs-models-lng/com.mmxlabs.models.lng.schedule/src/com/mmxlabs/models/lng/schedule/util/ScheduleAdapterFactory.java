@@ -261,6 +261,14 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createCanalBookingEventAdapter();
 			}
 			@Override
+			public Adapter caseInventoryEvents(InventoryEvents object) {
+				return createInventoryEventsAdapter();
+			}
+			@Override
+			public Adapter caseInventoryChangeEvent(InventoryChangeEvent object) {
+				return createInventoryChangeEventAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -829,6 +837,34 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCanalBookingEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.InventoryEvents <em>Inventory Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryEvents
+	 * @generated
+	 */
+	public Adapter createInventoryEventsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent <em>Inventory Change Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent
+	 * @generated
+	 */
+	public Adapter createInventoryChangeEventAdapter() {
 		return null;
 	}
 

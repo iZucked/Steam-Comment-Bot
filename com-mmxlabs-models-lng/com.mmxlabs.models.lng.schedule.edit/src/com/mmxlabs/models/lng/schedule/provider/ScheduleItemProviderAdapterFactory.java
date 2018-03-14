@@ -916,6 +916,52 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.InventoryEvents} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InventoryEventsItemProvider inventoryEventsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.InventoryEvents}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInventoryEventsAdapter() {
+		if (inventoryEventsItemProvider == null) {
+			inventoryEventsItemProvider = new InventoryEventsItemProvider(this);
+		}
+
+		return inventoryEventsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InventoryChangeEventItemProvider inventoryChangeEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInventoryChangeEventAdapter() {
+		if (inventoryChangeEventItemProvider == null) {
+			inventoryChangeEventItemProvider = new InventoryChangeEventItemProvider(this);
+		}
+
+		return inventoryChangeEventItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1077,6 +1123,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (lumpSumContractDetailsItemProvider != null) lumpSumContractDetailsItemProvider.dispose();
 		if (notionalJourneyContractDetailsItemProvider != null) notionalJourneyContractDetailsItemProvider.dispose();
 		if (canalBookingEventItemProvider != null) canalBookingEventItemProvider.dispose();
+		if (inventoryEventsItemProvider != null) inventoryEventsItemProvider.dispose();
+		if (inventoryChangeEventItemProvider != null) inventoryChangeEventItemProvider.dispose();
 	}
 
 }

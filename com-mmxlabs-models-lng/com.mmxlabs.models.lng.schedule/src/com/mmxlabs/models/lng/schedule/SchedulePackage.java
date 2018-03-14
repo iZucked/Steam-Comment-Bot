@@ -236,13 +236,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Inventory Levels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__INVENTORY_LEVELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5114,6 +5123,170 @@ public interface SchedulePackage extends EPackage {
 	int CANAL_BOOKING_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.InventoryEventsImpl <em>Inventory Events</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.InventoryEventsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryEvents()
+	 * @generated
+	 */
+	int INVENTORY_EVENTS = 38;
+
+	/**
+	 * The feature id for the '<em><b>Facility</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENTS__FACILITY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENTS__EVENTS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Inventory Events</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENTS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Inventory Events</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENTS_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl <em>Inventory Change Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryChangeEvent()
+	 * @generated
+	 */
+	int INVENTORY_CHANGE_EVENT = 39;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Change Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__CHANGE_QUANTITY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Current Level</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__CURRENT_LEVEL = 2;
+
+	/**
+	 * The feature id for the '<em><b>Current Min</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__CURRENT_MIN = 3;
+
+	/**
+	 * The feature id for the '<em><b>Current Max</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__CURRENT_MAX = 4;
+
+	/**
+	 * The feature id for the '<em><b>Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__EVENT = 5;
+
+	/**
+	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__SLOT_ALLOCATION = 6;
+
+	/**
+	 * The feature id for the '<em><b>Open Slot Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__OPEN_SLOT_ALLOCATION = 7;
+
+	/**
+	 * The feature id for the '<em><b>Breached Min</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__BREACHED_MIN = 8;
+
+	/**
+	 * The feature id for the '<em><b>Breached Max</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT__BREACHED_MAX = 9;
+
+	/**
+	 * The number of structural features of the '<em>Inventory Change Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT_FEATURE_COUNT = 10;
+
+	/**
+	 * The number of operations of the '<em>Inventory Change Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CHANGE_EVENT_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5121,7 +5294,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 40;
+	int FUEL_UNIT = 42;
 
 
 	/**
@@ -5132,7 +5305,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 39;
+	int FUEL = 41;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -5142,7 +5315,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 38;
+	int SEQUENCE_TYPE = 40;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -5152,7 +5325,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 41;
+	int CAPACITY_VIOLATION_TYPE = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -5162,7 +5335,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 42;
+	int PORT_VISIT_LATENESS_TYPE = 44;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -5172,7 +5345,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 43;
+	int SLOT_ALLOCATION_TYPE = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -5182,7 +5355,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 44;
+	int PANAMA_BOOKING_PERIOD = 46;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -5192,7 +5365,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 45;
+	int CALENDAR = 47;
 
 
 	/**
@@ -5203,7 +5376,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 46;
+	int ITERABLE = 48;
 
 
 	/**
@@ -5214,7 +5387,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 47;
+	int OBJECT = 49;
 
 
 	/**
@@ -5335,6 +5508,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_UnusedElements();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getInventoryLevels <em>Inventory Levels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Inventory Levels</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Schedule#getInventoryLevels()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_InventoryLevels();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Sequence <em>Sequence</em>}'.
@@ -7205,6 +7389,158 @@ public interface SchedulePackage extends EPackage {
 	EReference getCanalBookingEvent_LinkedJourney();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.InventoryEvents <em>Inventory Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Inventory Events</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryEvents
+	 * @generated
+	 */
+	EClass getInventoryEvents();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.InventoryEvents#getFacility <em>Facility</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Facility</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryEvents#getFacility()
+	 * @see #getInventoryEvents()
+	 * @generated
+	 */
+	EReference getInventoryEvents_Facility();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.InventoryEvents#getEvents <em>Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Events</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryEvents#getEvents()
+	 * @see #getInventoryEvents()
+	 * @generated
+	 */
+	EReference getInventoryEvents_Events();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent <em>Inventory Change Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Inventory Change Event</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent
+	 * @generated
+	 */
+	EClass getInventoryChangeEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getDate()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EAttribute getInventoryChangeEvent_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getChangeQuantity <em>Change Quantity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Change Quantity</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getChangeQuantity()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EAttribute getInventoryChangeEvent_ChangeQuantity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentLevel <em>Current Level</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Current Level</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentLevel()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EAttribute getInventoryChangeEvent_CurrentLevel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentMin <em>Current Min</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Current Min</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentMin()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EAttribute getInventoryChangeEvent_CurrentMin();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentMax <em>Current Max</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Current Max</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentMax()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EAttribute getInventoryChangeEvent_CurrentMax();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getEvent <em>Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Event</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getEvent()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EReference getInventoryChangeEvent_Event();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getSlotAllocation <em>Slot Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getSlotAllocation()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EReference getInventoryChangeEvent_SlotAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getOpenSlotAllocation <em>Open Slot Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Open Slot Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getOpenSlotAllocation()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EReference getInventoryChangeEvent_OpenSlotAllocation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#isBreachedMin <em>Breached Min</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Breached Min</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#isBreachedMin()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EAttribute getInventoryChangeEvent_BreachedMin();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#isBreachedMax <em>Breached Max</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Breached Max</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#isBreachedMax()
+	 * @see #getInventoryChangeEvent()
+	 * @generated
+	 */
+	EAttribute getInventoryChangeEvent_BreachedMax();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7420,6 +7756,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__UNUSED_ELEMENTS = eINSTANCE.getSchedule_UnusedElements();
+
+		/**
+		 * The meta object literal for the '<em><b>Inventory Levels</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__INVENTORY_LEVELS = eINSTANCE.getSchedule_InventoryLevels();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -8884,6 +9228,122 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference CANAL_BOOKING_EVENT__LINKED_JOURNEY = eINSTANCE.getCanalBookingEvent_LinkedJourney();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.InventoryEventsImpl <em>Inventory Events</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.InventoryEventsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryEvents()
+		 * @generated
+		 */
+		EClass INVENTORY_EVENTS = eINSTANCE.getInventoryEvents();
+
+		/**
+		 * The meta object literal for the '<em><b>Facility</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_EVENTS__FACILITY = eINSTANCE.getInventoryEvents_Facility();
+
+		/**
+		 * The meta object literal for the '<em><b>Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_EVENTS__EVENTS = eINSTANCE.getInventoryEvents_Events();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl <em>Inventory Change Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryChangeEvent()
+		 * @generated
+		 */
+		EClass INVENTORY_CHANGE_EVENT = eINSTANCE.getInventoryChangeEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CHANGE_EVENT__DATE = eINSTANCE.getInventoryChangeEvent_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Change Quantity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CHANGE_EVENT__CHANGE_QUANTITY = eINSTANCE.getInventoryChangeEvent_ChangeQuantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Current Level</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CHANGE_EVENT__CURRENT_LEVEL = eINSTANCE.getInventoryChangeEvent_CurrentLevel();
+
+		/**
+		 * The meta object literal for the '<em><b>Current Min</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CHANGE_EVENT__CURRENT_MIN = eINSTANCE.getInventoryChangeEvent_CurrentMin();
+
+		/**
+		 * The meta object literal for the '<em><b>Current Max</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CHANGE_EVENT__CURRENT_MAX = eINSTANCE.getInventoryChangeEvent_CurrentMax();
+
+		/**
+		 * The meta object literal for the '<em><b>Event</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_CHANGE_EVENT__EVENT = eINSTANCE.getInventoryChangeEvent_Event();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_CHANGE_EVENT__SLOT_ALLOCATION = eINSTANCE.getInventoryChangeEvent_SlotAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Open Slot Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY_CHANGE_EVENT__OPEN_SLOT_ALLOCATION = eINSTANCE.getInventoryChangeEvent_OpenSlotAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Breached Min</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CHANGE_EVENT__BREACHED_MIN = eINSTANCE.getInventoryChangeEvent_BreachedMin();
+
+		/**
+		 * The meta object literal for the '<em><b>Breached Max</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CHANGE_EVENT__BREACHED_MAX = eINSTANCE.getInventoryChangeEvent_BreachedMax();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

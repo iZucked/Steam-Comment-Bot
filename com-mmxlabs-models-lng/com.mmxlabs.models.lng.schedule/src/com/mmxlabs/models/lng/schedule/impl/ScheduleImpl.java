@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -39,6 +40,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getUnusedElements <em>Unused Elements</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getInventoryLevels <em>Inventory Levels</em>}</li>
  * </ul>
  *
  * @generated
@@ -113,6 +115,16 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected EList<EObject> unusedElements;
+
+	/**
+	 * The cached value of the '{@link #getInventoryLevels() <em>Inventory Levels</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInventoryLevels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<InventoryEvents> inventoryLevels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -222,6 +234,18 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<InventoryEvents> getInventoryLevels() {
+		if (inventoryLevels == null) {
+			inventoryLevels = new EObjectContainmentEList<InventoryEvents>(InventoryEvents.class, this, SchedulePackage.SCHEDULE__INVENTORY_LEVELS);
+		}
+		return inventoryLevels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -237,6 +261,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return ((InternalEList<?>)getSlotAllocations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__FITNESSES:
 				return ((InternalEList<?>)getFitnesses()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
+				return ((InternalEList<?>)getInventoryLevels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -263,6 +289,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return getFitnesses();
 			case SchedulePackage.SCHEDULE__UNUSED_ELEMENTS:
 				return getUnusedElements();
+			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
+				return getInventoryLevels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -304,6 +332,10 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				getUnusedElements().clear();
 				getUnusedElements().addAll((Collection<? extends EObject>)newValue);
 				return;
+			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
+				getInventoryLevels().clear();
+				getInventoryLevels().addAll((Collection<? extends InventoryEvents>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -337,6 +369,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__UNUSED_ELEMENTS:
 				getUnusedElements().clear();
 				return;
+			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
+				getInventoryLevels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -363,6 +398,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return fitnesses != null && !fitnesses.isEmpty();
 			case SchedulePackage.SCHEDULE__UNUSED_ELEMENTS:
 				return unusedElements != null && !unusedElements.isEmpty();
+			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
+				return inventoryLevels != null && !inventoryLevels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
