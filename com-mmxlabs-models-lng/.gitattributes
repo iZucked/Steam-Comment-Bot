@@ -1,0 +1,3 @@
+*.MF text eol=crlf
+*.xml text eol=crlf
+*.java text eol=crlf
