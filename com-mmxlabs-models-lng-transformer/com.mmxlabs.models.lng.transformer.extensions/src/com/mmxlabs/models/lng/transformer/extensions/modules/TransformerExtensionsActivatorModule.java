@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.Ball
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresOutputScheduleProcessorFactory;
+import com.mmxlabs.models.lng.transformer.extensions.inventory.InventoryLevelsOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
@@ -46,6 +47,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		bindService(VesselAvailabilityEntityTransformerExtensionFactory.class).export();
 		
 		bindService(ExposuresOutputScheduleProcessorFactory.class).export();
+		bindService(InventoryLevelsOutputScheduleProcessorFactory.class).export();
 	}
 
 }
