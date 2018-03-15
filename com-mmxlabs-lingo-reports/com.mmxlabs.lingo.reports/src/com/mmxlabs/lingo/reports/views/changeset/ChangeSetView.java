@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -76,6 +77,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.service.event.EventHandler;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -777,6 +779,25 @@ public class ChangeSetView extends ViewPart {
 			final ContextMenuManager listener = new ContextMenuManager();
 			viewer.getGrid().addMenuDetectListener(listener);
 		}
+		
+		eventHandler = new EventHandler() {
+			
+			@Override
+			public void handleEvent(org.osgi.service.event.Event event) {
+//				event.getProperty(name)
+				Object o = event.getProperty("org.eclipse.e4.data")
+						;
+				if (o instanceof ScenarioInstance) {
+					ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+					
+				onClosingScenario(scenarioInstance);
+				}
+				int ii =0;
+			}
+		};
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE, eventHandler);
+		
 		synchronized (postCreateActions) {
 			viewCreated = true;
 			while (!postCreateActions.isEmpty()) {
@@ -973,6 +994,9 @@ public class ChangeSetView extends ViewPart {
 
 	@PreDestroy
 	public void dispose() {
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventBroker.unsubscribe(eventHandler);
+		
 		if (lastParent != null) {
 			lastParent.eAdapters().remove(adapter);
 		}
@@ -1255,7 +1279,9 @@ public class ChangeSetView extends ViewPart {
 	private Action copyAction;
 	private Action toggleDiffToBaseAction;
 
-	private AbstractMenuAction filterMenu;;
+	private AbstractMenuAction filterMenu;
+
+	private EventHandler eventHandler;;
 
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
 
