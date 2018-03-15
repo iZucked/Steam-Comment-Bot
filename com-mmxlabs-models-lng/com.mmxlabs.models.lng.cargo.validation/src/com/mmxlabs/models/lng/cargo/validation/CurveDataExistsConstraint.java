@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.parser.Node;
@@ -187,6 +188,9 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 					for (final Node n : nodes) {
 						if (indexMap.containsKey(n.token)) {
 							final CommodityIndex index = indexMap.get(n.token);
+							if (index.getData() instanceof DerivedIndex<?>) {
+								continue;
+							}
 							@Nullable
 							YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 							if (date == null || utcDate.isBefore(date)) {
