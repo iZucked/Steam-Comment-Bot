@@ -128,7 +128,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	private final EconsOptions options = new EconsOptions();
 
 	private Map<String, GridColumnGroup> gridColumnGroupsMap = new HashMap<String, GridColumnGroup>();
-	
+
 	private Image pinImage = null;
 
 	private boolean compareMode = true;
@@ -340,7 +340,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 						nullValues.add("0mmbtu");
 
 						if (nullValues.contains(formattedValue.toLowerCase())) {
-							//cell.setImage(cellImageSteadyArrow);
+							// cell.setImage(cellImageSteadyArrow);
 						} else {
 							if (row.isCost && formattedValue.contains("-")) {
 								cell.setImage(cellImageGreenArrowDown);
@@ -834,34 +834,33 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		for (final GridColumnGroup gcg : gridColumnGroupsMap.values()) {
 			gcg.dispose();
 		}
-		
+
 		gridColumnGroupsMap.clear();
-		
+
+		final List<CargoAllocation> cargoAllocations = new ArrayList<>();
+		for (final Object obj : validObjects) {
+			if (obj instanceof CargoAllocation) {
+				cargoAllocations.add((CargoAllocation) obj);
+			}
+		}
+
+		final List<VesselEventVisit> vesselEventVisits = new ArrayList<>();
+		for (final Object obj : validObjects) {
+			if (obj instanceof VesselEventVisit) {
+				vesselEventVisits.add((VesselEventVisit) obj);
+			}
+		}
+
+		// Create the row object
+		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
+		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
+			rows.addAll(factory.createRows(options, validObjects));
+			return true;
+		});
+		Collections.sort(rows, (a, b) -> a.order - b.order);
+
+		viewer.setInput(rows);
 		if (compareMode == true) {
-
-			final List<CargoAllocation> cargoAllocations = new ArrayList<>();
-			for (final Object obj : validObjects) {
-				if (obj instanceof CargoAllocation) {
-					cargoAllocations.add((CargoAllocation) obj);
-				}
-			}
-
-			final List<VesselEventVisit> vesselEventVisits = new ArrayList<>();
-			for (final Object obj : validObjects) {
-				if (obj instanceof VesselEventVisit) {
-					vesselEventVisits.add((VesselEventVisit) obj);
-				}
-			}
-
-			// Create the row object
-			final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
-			ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
-				rows.addAll(factory.createRows(options, validObjects));
-				return true;
-			});
-			Collections.sort(rows, (a, b) -> a.order - b.order);
-
-			viewer.setInput(rows);
 
 			if (onlyDiffMode == true) {
 				validObjects.clear();
