@@ -1,4 +1,4 @@
-package com.mmxlabs.lngdataserver.integration.distances.preferences;
+package com.mmxlabs.lngdataserver.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
