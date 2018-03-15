@@ -207,6 +207,7 @@ public final class ScenarioModelRecord extends ModelRecord {
 						data.getLock().removeLockListener(l);
 					}
 					for (final IScenarioDirtyListener l : dirtyListeners) {
+						l.dirtyStatusChanged(this, false);
 						data.removeDirtyListener(l);
 					}
 					SSDataManager.Instance.runPostChangeHooks(this, PostChangeType.UNLOAD);
