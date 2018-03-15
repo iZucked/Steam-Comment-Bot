@@ -37,7 +37,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		indexPane.setInput(modelObject);
 
 		indexPage = editorPart.addPage(indexPane.getControl());
-		editorPart.setPageText(indexPage, "Markets");
+		editorPart.setPageText(indexPage, "Curves");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(indexPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Markets");
 	}
 
