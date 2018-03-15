@@ -135,6 +135,11 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 			vessel = vesselAvailability.getVessel();
 		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			vessel = vesselAvailability.getVessel();
+			// Vessel events should not be moved onto spot charters
+			if (portTypeProvider.getPortType(element) == PortType.DryDock || portTypeProvider.getPortType(element) == PortType.CharterOut
+					|| portTypeProvider.getPortType(element) == PortType.CharterOut) {
+				return false;
+			}
 		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		}
