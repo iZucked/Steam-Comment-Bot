@@ -1,4 +1,4 @@
-package com.mmxlabs.lngdataserver.commons.impl;
+package com.mmxlabs.lngdataserver.server.preferences;
 
 public class StandardDateRepositoryPreferenceConstants {
 	public static final String P_URL_KEY = "URL";

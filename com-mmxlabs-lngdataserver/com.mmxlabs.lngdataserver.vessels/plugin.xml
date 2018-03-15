@@ -21,19 +21,4 @@
 		      class="com.mmxlabs.lngdataserver.integration.vessels.internal.VesselsDataExtension">
 		</DataBrowserExtension>
 	 </extension>
-  <extension
-        point="org.eclipse.core.runtime.preferences">
-     <initializer
-           class="com.mmxlabs.lngdataserver.integration.vessels.preferences.PreferenceInitializer">
-     </initializer>
-  </extension>
-  <extension
-        point="org.eclipse.ui.preferencePages">
-     <page
-           category="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
-           class="com.mmxlabs.lngdataserver.integration.vessels.preferences.VesselsRepositoryPreferencesPage"
-           id="com.mmxlabs.lngdataserver.integration.vessels.preferences.VesselsRepositoryPreferencesPage"
-           name="Vessel service">
-     </page>
-  </extension>
 </plugin>

@@ -107,7 +107,7 @@ public class MMXIDLookupInjector extends BaseComponentHelper {
 								composite.setLayout(layout);
 								// Composite composite = new Composite(container, SWT.NONE);
 								try {
-									final LocationRepository repo = new LocationRepository(BackEndUrlProvider.INSTANCE.getUrl());
+									final LocationRepository repo = new LocationRepository();
 									final String version = "<not specified>";
 									final List<Port> ports = repo.getPorts(version);
 									final DefaultPortProvider portProvider = new DefaultPortProvider(version, ports);

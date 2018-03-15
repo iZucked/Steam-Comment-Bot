@@ -19,8 +19,6 @@ public class VesselsSelectionPage extends WizardPage {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(VesselsSelectionPage.class);
 
-	private final VesselsRepository vesselsRepository = new VesselsRepository(null, null);
-
 	private String versionTag;
 	private boolean isSelected = false;
 
@@ -41,7 +39,7 @@ public class VesselsSelectionPage extends WizardPage {
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
 		try {
-			vesselsRepository.getVersions().forEach(v -> combo.add(v.getIdentifier()));
+			VesselsRepository.INSTANCE.getVersions().forEach(v -> combo.add(v.getIdentifier()));
 		} catch (Exception e2) {
 			LOGGER.error("Error retrieving vessels versions", e2);
 		}
@@ -65,7 +63,7 @@ public class VesselsSelectionPage extends WizardPage {
 	public IVesselsProvider getVesselsVersion() {
 		if (isSelected) {
 			try {
-				return vesselsRepository.getVesselsProvider(versionTag);
+				return VesselsRepository.INSTANCE.getVesselsProvider(versionTag);
 			} catch (Exception e) {
 				LOGGER.error("Error retrieving vessels for version {}", versionTag);
 				LOGGER.error(e.getMessage());

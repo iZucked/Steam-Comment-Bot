@@ -6,11 +6,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,26 +16,20 @@ import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Curve;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 public class PricingRepository extends AbstractDataRepository {
+
+	public static PricingRepository INSTANCE = new PricingRepository();
 
 	private static final Logger LOG = LoggerFactory.getLogger(PricingRepository.class);
 
 	private static final String SYNC_VERSION_ENDPOINT = "/pricing/sync/versions/";
 
-	public PricingRepository(@Nullable IPreferenceStore preferenceStore) {
-		super(preferenceStore, null);
-		// try to get ready
+	private PricingRepository() {
 		isReady();
-		this.upstreamUrl = getUpstreamUrl();
-	}
+		newUpstreamURL();
 
-	public PricingRepository(@Nullable IPreferenceStore preferenceStore, String localURL) {
-		super(preferenceStore, localURL);
-		this.upstreamUrl = getUpstreamUrl();
-		if (upstreamUrl != null) {
-			PricingClient.setHttpClient(buildClientWithBasicAuth());
-		}
 	}
 
 	public boolean isReady() {
@@ -71,26 +62,35 @@ public class PricingRepository extends AbstractDataRepository {
 		}
 	}
 
-	public void publishVersion(String version) throws IOException {
-		PricingClient.publishVersion(version, backendUrl, upstreamUrl);
+	public List<DataVersion> getUpstreamVersions() {
+		ensureReady();
+		try {
+			return PricingClient.getVersions(upstreamUrl, UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()).stream().map(v -> {
+				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished(), v.isCurrent());
+			}).collect(Collectors.toList());
+		} catch (final Exception e) {
+			LOG.error("Error fetching pricing versions" + e.getMessage());
+			throw new RuntimeException("Error fetching pricing versions", e);
+		}
 	}
 
 	public void saveVersion(Version version) throws IOException {
 		PricingClient.saveVersion(backendUrl, version);
 	}
-	
+
 	public boolean deleteVersion(String version) throws IOException {
 		return PricingClient.deleteVersion(backendUrl, version);
 	}
-	
+
 	public boolean renameVersion(String oldVersion, String newVersion) throws IOException {
 		return PricingClient.renameVersion(backendUrl, oldVersion, newVersion);
 	}
-	
+
 	public boolean setCurrentVersion(String version) throws IOException {
 		return PricingClient.setCurrentVersion(backendUrl, version);
 	}
-	
+
 	public IPricingProvider getLatestPrices() throws IOException {
 		ensureReady();
 		return getPricingProvider(getVersions().get(0).getIdentifier());
@@ -111,11 +111,6 @@ public class PricingRepository extends AbstractDataRepository {
 	}
 
 	@Override
-	public void syncUpstreamVersion(String version) throws Exception {
-		PricingClient.getUpstreamVersion(backendUrl, upstreamUrl, version);
-	}
-
-	@Override
 	public List<DataVersion> updateAvailable() throws Exception {
 		final List<PricingVersion> upstreamVersions = PricingClient.getVersions(upstreamUrl);
 		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
@@ -124,17 +119,7 @@ public class PricingRepository extends AbstractDataRepository {
 	}
 
 	@Override
-	protected CompletableFuture<String> waitForNewLocalVersion() {
-		return PricingClient.notifyOnNewVersion(backendUrl);
-	}
-
-	@Override
-	protected CompletableFuture<String> waitForNewUpstreamVersion() {
-		return PricingClient.notifyOnNewVersion(upstreamUrl);
-	}
-
-	@Override
-	protected void newUpstreamURL(String upstreamURL) {
+	protected void newUpstreamURL() {
 
 	}
 
@@ -146,5 +131,15 @@ public class PricingRepository extends AbstractDataRepository {
 	@Override
 	protected boolean canWaitForNewUpstreamVersion() {
 		return true;
+	}
+
+	@Override
+	protected String getSyncVersionEndpoint() {
+		return SYNC_VERSION_ENDPOINT;
+	}
+
+	@Override
+	protected String getVersionNotificationEndpoint() {
+		return "/pricing/version_notification";
 	}
 }

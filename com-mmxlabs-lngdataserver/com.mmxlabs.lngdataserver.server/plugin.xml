@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
+            class="com.mmxlabs.lngdataserver.server.preferences.DataserverPreferencePage"
             id="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
             name="Data Server">
       </page>

@@ -1,6 +1,5 @@
 package com.mmxlabs.lngdataserver.lng.importers.vessels.ui;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class VesselsToScenarioImportWizard extends Wizard implements IImportWiza
 		IVesselsProvider vesselsProvider;
 		if (versionIdentifier != null) {
 			try {
-				vesselsProvider = new VesselsRepository(null, null).getVesselsProvider(versionIdentifier);
+				vesselsProvider = VesselsRepository.INSTANCE.getVesselsProvider(versionIdentifier);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;

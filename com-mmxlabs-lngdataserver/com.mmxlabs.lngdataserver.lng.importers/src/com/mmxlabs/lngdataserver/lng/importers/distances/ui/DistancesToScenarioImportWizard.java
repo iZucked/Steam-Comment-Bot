@@ -2,6 +2,7 @@ package com.mmxlabs.lngdataserver.lng.importers.distances.ui;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.activation.Activator;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
@@ -76,10 +77,11 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 						monitor.beginTask("Copy distances", scenarioSelectionPage.getSelectedScenarios().size() * 3);
 
 						try {
-							final DistanceRepository distanceRepository = new DistanceRepository(null, BackEndUrlProvider.INSTANCE.getUrl());
+							final DistanceRepository distanceRepository = DistanceRepository.INSTANCE;
+							
 							final IDistanceProvider distanceProvider = distanceRepository.getDistances(versionTag);
 
-							final LocationRepository portRepository = new LocationRepository(BackEndUrlProvider.INSTANCE.getUrl());
+							final LocationRepository portRepository = new LocationRepository();
 							ILocationProvider portProvider;
 							portProvider = new DefaultPortProvider(versionTag, portRepository.getPorts(versionTag));
 							final PortAndDistancesToScenarioCopier copier = new PortAndDistancesToScenarioCopier();

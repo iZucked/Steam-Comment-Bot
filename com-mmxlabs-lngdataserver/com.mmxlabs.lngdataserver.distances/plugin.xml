@@ -15,21 +15,6 @@
 -->
 
 <plugin>
-<extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
-            class="com.mmxlabs.lngdataserver.integration.distances.preferences.DistancesRepositoryPreferencesPage"
-            id="com.mmxlabs.lngdataserver.repository.csv.preference.DistancesRepositoryPreferencesPage"
-            name="Distances Service">
-      </page>
-   </extension>
-      <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="com.mmxlabs.lngdataserver.integration.distances.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
    	 <extension
 	   point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserExtension">
 		<DataBrowserExtension

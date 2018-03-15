@@ -57,7 +57,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		pricingRepository = new PricingRepository(getPreferenceStore());
+		pricingRepository = PricingRepository.INSTANCE;
 		pricingRepository.listenToPreferenceChanges();
 		pricingDataRoot.setActionHandler(new PricingRepositoryActionHandler(pricingRepository, pricingDataRoot));
 

@@ -57,7 +57,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		vesselsRepository = new VesselsRepository(getPreferenceStore(), null);
+		vesselsRepository = VesselsRepository.INSTANCE;
 		vesselsRepository.listenToPreferenceChanges();
 		vesselsDataRoot.setActionHandler(new VesselsRepositoryActionHandler(vesselsRepository, vesselsDataRoot));
 

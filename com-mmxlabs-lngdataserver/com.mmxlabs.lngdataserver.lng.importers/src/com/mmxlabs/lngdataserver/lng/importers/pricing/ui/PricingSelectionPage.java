@@ -21,8 +21,6 @@ public class PricingSelectionPage extends WizardPage {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PricingSelectionPage.class);
 
-	private final PricingRepository pricingRepository = new PricingRepository(null);
-
 	private String versionTag;
 	private boolean isSelected = false;
 
@@ -43,8 +41,8 @@ public class PricingSelectionPage extends WizardPage {
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
 		try {
-			pricingRepository.isReady();
-			pricingRepository.getVersions().forEach(v -> combo.add(v.getIdentifier()));
+			PricingRepository.INSTANCE.isReady();
+			PricingRepository.INSTANCE.getVersions().forEach(v -> combo.add(v.getIdentifier()));
 		} catch (Exception e1) {
 			LOGGER.error("Error retrieving pricing versions", e1);
 		}
@@ -70,7 +68,7 @@ public class PricingSelectionPage extends WizardPage {
 	public IPricingProvider getPricingVersion() {
 		if (isSelected) {
 			try {
-				return pricingRepository.getPricingProvider(versionTag);
+				return PricingRepository.INSTANCE.getPricingProvider(versionTag);
 			} catch (IOException e) {
 				LOGGER.error("Error retrieving pricing for version {}", versionTag);
 				LOGGER.error(e.getMessage());

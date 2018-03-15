@@ -18,7 +18,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 public class DefaultDistanceProviderTests {
 
 	private boolean initialized = false;
-	private final DistanceRepository repo = new DistanceRepository(null);
+	private final DistanceRepository repo = DistanceRepository.INSTANCE;
 
 	public IDistanceProvider getDistanceProvider(String version) throws Exception {
 		// Map<String, Map<String, Integer>> result = CsvDistancesImporter.importMatrix(reader, new DefaultImportContext(".".charAt(0)));

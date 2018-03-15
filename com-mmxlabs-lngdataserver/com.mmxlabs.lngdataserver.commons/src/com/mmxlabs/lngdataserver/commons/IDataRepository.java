@@ -7,11 +7,13 @@ public interface IDataRepository {
 
 	List<DataVersion> getVersions();
 
+	List<DataVersion> getUpstreamVersions();
+
 	boolean isReady();
 
-	void syncUpstreamVersion(final String version) throws Exception;
+	boolean syncUpstreamVersion(final String version) throws Exception;
 
-	void publishVersion(String version) throws Exception;
+	boolean publishVersion(String version) throws Exception;
 
 	List<DataVersion> updateAvailable() throws Exception;
 

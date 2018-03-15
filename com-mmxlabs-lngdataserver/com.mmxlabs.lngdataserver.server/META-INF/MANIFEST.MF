@@ -16,9 +16,12 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.lngdataserver.lib;bundle-version="1.0.0",
  org.eclipse.core.resources,
  org.eclipse.ui.workbench,
- org.eclipse.ui;bundle-version="3.109.0"
+ org.eclipse.ui;bundle-version="3.109.0",
+ org.eclipse.equinox.security;bundle-version="1.2.300",
+ com.mmxlabs.common.common-util
 Import-Package: org.slf4j,
  org.slf4j.helpers,
  org.slf4j.spi
 Export-Package: com.mmxlabs.lngdataserver.server
 Bundle-Vendor: Minimax Labs Ltd.
+Bundle-Activator: com.mmxlabs.lngdataserver.server.internal.Activator

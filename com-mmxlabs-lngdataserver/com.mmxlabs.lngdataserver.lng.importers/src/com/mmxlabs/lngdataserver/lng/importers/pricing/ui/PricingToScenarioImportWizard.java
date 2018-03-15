@@ -53,7 +53,7 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 		IPricingProvider pricingProvider;
 		if (versionIdentifier != null) {
 			try {
-				pricingProvider = new PricingRepository(null).getPricingProvider(versionIdentifier);
+				pricingProvider = PricingRepository.INSTANCE.getPricingProvider(versionIdentifier);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;

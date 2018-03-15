@@ -54,7 +54,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		distanceRepository = new DistanceRepository(getPreferenceStore());
+		distanceRepository = DistanceRepository.INSTANCE;
 		distanceRepository.listenToPreferenceChanges();
 		distancesDataRoot.setActionHandler(new DistanceRepositoryActionHandler(distanceRepository, distancesDataRoot));
 
