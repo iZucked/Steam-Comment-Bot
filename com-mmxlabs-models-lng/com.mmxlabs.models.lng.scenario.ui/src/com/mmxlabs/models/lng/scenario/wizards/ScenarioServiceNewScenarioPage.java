@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.scenario.wizards;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -151,6 +153,9 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 			scenarioName = DefaultScenarioNameRoot + ++counter;			
 		}
 		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd-HHmm");
+		scenarioName = LocalDateTime.now().format(formatter);
+
 		fileText.setText(scenarioName);		
 	}
 
@@ -172,14 +177,14 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 			return;
 		}
 		
-		if (scenarioName.length() > 0 && !scenarioName.startsWith(DefaultScenarioNameRoot)){
-			final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
-			IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
-			if(section==null) {
-				section = dialogSettings.addNewSection(SECTION_NAME);
-			}
-			section.put(ScenarioName_KEY, scenarioName);
-		}
+//		if (scenarioName.length() > 0 && !scenarioName.startsWith(DefaultScenarioNameRoot)){
+//			final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+//			IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+//			if(section==null) {
+//				section = dialogSettings.addNewSection(SECTION_NAME);
+//			}
+//			section.put(ScenarioName_KEY, scenarioName);
+//		}
 		
 		// Check for naming conflicts
 		final Set<String> existing = new HashSet<String>();
