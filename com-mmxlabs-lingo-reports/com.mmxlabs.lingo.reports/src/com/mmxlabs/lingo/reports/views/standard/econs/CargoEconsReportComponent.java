@@ -293,7 +293,10 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			if (element instanceof CargoEconsReportRow) {
 				final CargoEconsReportRow row = (CargoEconsReportRow) element;
 				if (row.includeUnits) {
-					return row.prefixUnit + row.formatter.render(columnElement) + row.suffixUnit;
+					String value = row.formatter.render(columnElement);
+					if (value != null) {
+						return row.prefixUnit + value + row.suffixUnit;
+					}
 				} else {
 					return row.formatter.render(columnElement);
 				}
@@ -328,6 +331,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		public void update(final ViewerCell cell) {
 			cell.setText(getText(cell.getElement()));
 			final Object element = cell.getElement();
+			
 			if (element instanceof CargoEconsReportRow) {
 				final CargoEconsReportRow row = (CargoEconsReportRow) element;
 
