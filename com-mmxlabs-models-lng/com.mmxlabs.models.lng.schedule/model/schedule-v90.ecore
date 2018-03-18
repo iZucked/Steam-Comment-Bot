@@ -22,8 +22,11 @@
         eType="#//Fitness" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="unusedElements" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" transient="true"/>
+<<<<<<< HEAD
     <eStructuralFeatures xsi:type="ecore:EReference" name="inventoryLevels" upperBound="-1"
         eType="#//InventoryEvents" containment="true"/>
+=======
+>>>>>>> GCO improvements
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Fitness" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fitnessValue" lowerBound="1"
@@ -379,6 +382,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedJourney" eType="#//Journey"/>
   </eClassifiers>
+<<<<<<< HEAD
   <eClassifiers xsi:type="ecore:EClass" name="InventoryEvents">
     <eStructuralFeatures xsi:type="ecore:EReference" name="facility" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Inventory"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
@@ -396,4 +400,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="breachedMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="breachedMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
+=======
+>>>>>>> GCO improvements
 </ecore:EPackage>

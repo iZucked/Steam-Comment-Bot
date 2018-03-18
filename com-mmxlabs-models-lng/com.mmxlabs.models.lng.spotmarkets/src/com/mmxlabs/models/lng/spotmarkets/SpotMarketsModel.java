@@ -23,6 +23,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterInMarkets <em>Charter In Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutMarkets <em>Charter Out Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutMarketParameters <em>Charter Out Market Parameters</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel()
@@ -191,6 +192,32 @@ public interface SpotMarketsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<CharterOutMarket> getCharterOutMarkets();
+
+	/**
+	 * Returns the value of the '<em><b>Charter Out Market Parameters</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Out Market Parameters</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Out Market Parameters</em>' containment reference.
+	 * @see #setCharterOutMarketParameters(CharterOutMarketParameters)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel_CharterOutMarketParameters()
+	 * @model containment="true"
+	 * @generated
+	 */
+	CharterOutMarketParameters getCharterOutMarketParameters();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutMarketParameters <em>Charter Out Market Parameters</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Out Market Parameters</em>' containment reference.
+	 * @see #getCharterOutMarketParameters()
+	 * @generated
+	 */
+	void setCharterOutMarketParameters(CharterOutMarketParameters value);
 
 } // end of  SpotMarketsModel
 

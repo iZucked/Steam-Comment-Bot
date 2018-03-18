@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsAdapterFactory;
 
@@ -317,6 +318,29 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutMarketParametersItemProvider charterOutMarketParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutMarketParametersAdapter() {
+		if (charterOutMarketParametersItemProvider == null) {
+			charterOutMarketParametersItemProvider = new CharterOutMarketParametersItemProvider(this);
+		}
+
+		return charterOutMarketParametersItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -460,6 +484,7 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 		if (charterOutStartDateItemProvider != null) charterOutStartDateItemProvider.dispose();
 		if (charterOutMarketItemProvider != null) charterOutMarketItemProvider.dispose();
 		if (charterInMarketItemProvider != null) charterInMarketItemProvider.dispose();
+		if (charterOutMarketParametersItemProvider != null) charterOutMarketParametersItemProvider.dispose();
 	}
 
 }

@@ -43,6 +43,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getAvailablePorts <em>Available Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getVessels <em>Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}</li>
  * </ul>
  *
  * @generated
@@ -137,6 +138,35 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * @ordered
 	 */
 	protected EList<AVesselSet<Vessel>> vessels;
+
+	/**
+	 * The default value of the '{@link #getMaxCharterOutDuration() <em>Max Charter Out Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxCharterOutDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MAX_CHARTER_OUT_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMaxCharterOutDuration() <em>Max Charter Out Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxCharterOutDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int maxCharterOutDuration = MAX_CHARTER_OUT_DURATION_EDEFAULT;
+
+	/**
+	 * This is true if the Max Charter Out Duration attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean maxCharterOutDurationESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -240,6 +270,52 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getMaxCharterOutDuration() {
+		return maxCharterOutDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMaxCharterOutDuration(int newMaxCharterOutDuration) {
+		int oldMaxCharterOutDuration = maxCharterOutDuration;
+		maxCharterOutDuration = newMaxCharterOutDuration;
+		boolean oldMaxCharterOutDurationESet = maxCharterOutDurationESet;
+		maxCharterOutDurationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION, oldMaxCharterOutDuration, maxCharterOutDuration, !oldMaxCharterOutDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMaxCharterOutDuration() {
+		int oldMaxCharterOutDuration = maxCharterOutDuration;
+		boolean oldMaxCharterOutDurationESet = maxCharterOutDurationESet;
+		maxCharterOutDuration = MAX_CHARTER_OUT_DURATION_EDEFAULT;
+		maxCharterOutDurationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION, oldMaxCharterOutDuration, MAX_CHARTER_OUT_DURATION_EDEFAULT, oldMaxCharterOutDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMaxCharterOutDuration() {
+		return maxCharterOutDurationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getCharterOutRate() {
 		return charterOutRate;
 	}
@@ -328,6 +404,8 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				return getAvailablePorts();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
 				return getVessels();
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
+				return getMaxCharterOutDuration();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -362,6 +440,9 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				getVessels().clear();
 				getVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
+				setMaxCharterOutDuration((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -392,6 +473,9 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
 				getVessels().clear();
 				return;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
+				unsetMaxCharterOutDuration();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -416,6 +500,8 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				return availablePorts != null && !availablePorts.isEmpty();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
 				return vessels != null && !vessels.isEmpty();
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
+				return isSetMaxCharterOutDuration();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -480,6 +566,8 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 		result.append(charterOutRate);
 		result.append(", minCharterOutDuration: ");
 		result.append(minCharterOutDuration);
+		result.append(", maxCharterOutDuration: ");
+		if (maxCharterOutDurationESet) result.append(maxCharterOutDuration); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

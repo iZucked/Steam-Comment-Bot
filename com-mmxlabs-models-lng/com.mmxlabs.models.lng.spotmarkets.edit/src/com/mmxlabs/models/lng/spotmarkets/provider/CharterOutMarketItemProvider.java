@@ -57,6 +57,7 @@ public class CharterOutMarketItemProvider
 			addMinCharterOutDurationPropertyDescriptor(object);
 			addAvailablePortsPropertyDescriptor(object);
 			addVesselsPropertyDescriptor(object);
+			addMaxCharterOutDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -172,6 +173,28 @@ public class CharterOutMarketItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Max Charter Out Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxCharterOutDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutMarket_maxCharterOutDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutMarket_maxCharterOutDuration_feature", "_UI_CharterOutMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -263,6 +286,7 @@ public class CharterOutMarketItemProvider
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__NAME:
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__CHARTER_OUT_RATE:
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__EXTENSIONS:

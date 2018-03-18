@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.util;
 
+import com.mmxlabs.models.lng.spotmarkets.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -182,6 +183,12 @@ public class SpotMarketsSwitch<@Nullable T> extends Switch<T> {
 			case SpotMarketsPackage.SPOT_CHARTER_MARKET: {
 				SpotCharterMarket spotCharterMarket = (SpotCharterMarket)theEObject;
 				T result = caseSpotCharterMarket(spotCharterMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SpotMarketsPackage.CHARTER_OUT_MARKET_PARAMETERS: {
+				CharterOutMarketParameters charterOutMarketParameters = (CharterOutMarketParameters)theEObject;
+				T result = caseCharterOutMarketParameters(charterOutMarketParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -366,6 +373,21 @@ public class SpotMarketsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSpotCharterMarket(SpotCharterMarket object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Market Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Out Market Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterOutMarketParameters(CharterOutMarketParameters object) {
 		return null;
 	}
 

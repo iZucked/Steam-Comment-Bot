@@ -17,6 +17,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -60,7 +61,7 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 
 		defaultSetTitle("Charter Out  Market");
 
-		final Action editCharterOutStartDateAction = new Action("Edit Charter Out Start Date") {
+		final Action editCharterOutStartDateAction = new Action("Edit charter out dates") {
 			@Override
 			public void run() {
 
@@ -69,14 +70,23 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 					final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
 
-					CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
-					if (charterOutStartDate == null) {
-						charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
-						final Command cmd = SetCommand.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE, charterOutStartDate);
+//					CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
+//					if (charterOutStartDate == null) {
+//						charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
+//						final Command cmd = SetCommand.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE, charterOutStartDate);
+//						getEditingDomain().getCommandStack().execute(cmd);
+//					}
+//
+//					DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, charterOutStartDate);
+					CharterOutMarketParameters charterOutMarketParameters = spotMarketsModel.getCharterOutMarketParameters();
+					if (charterOutMarketParameters == null) {
+						charterOutMarketParameters = SpotMarketsFactory.eINSTANCE.createCharterOutMarketParameters();
+						final Command cmd = SetCommand.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS, charterOutMarketParameters);
 						getEditingDomain().getCommandStack().execute(cmd);
 					}
 
-					DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, charterOutStartDate);
+					DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, charterOutMarketParameters);
+
 				}
 			}
 		};

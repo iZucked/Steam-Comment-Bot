@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -125,6 +126,13 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	private EClass spotCharterMarketEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass charterOutMarketParametersEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -273,6 +281,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	public EReference getSpotMarketsModel_CharterOutMarkets() {
 		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSpotMarketsModel_CharterOutMarketParameters() {
+		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -604,6 +621,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCharterOutMarket_MaxCharterOutDuration() {
+		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getCharterOutMarket_CharterOutRate() {
 		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -669,6 +695,33 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	public EAttribute getSpotCharterMarket_Enabled() {
 		return (EAttribute)spotCharterMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCharterOutMarketParameters() {
+		return charterOutMarketParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterOutMarketParameters_CharterOutStartDate() {
+		return (EAttribute)charterOutMarketParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterOutMarketParameters_CharterOutEndDate() {
+		return (EAttribute)charterOutMarketParametersEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -761,6 +814,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
+		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS);
 
 		spotMarketGroupEClass = createEClass(SPOT_MARKET_GROUP);
 		createEReference(spotMarketGroupEClass, SPOT_MARKET_GROUP__AVAILABILITY);
@@ -807,6 +861,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION);
 		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__AVAILABLE_PORTS);
 		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__VESSELS);
+		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION);
 
 		charterInMarketEClass = createEClass(CHARTER_IN_MARKET);
 		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__VESSEL);
@@ -821,6 +876,10 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		spotCharterMarketEClass = createEClass(SPOT_CHARTER_MARKET);
 		createEAttribute(spotCharterMarketEClass, SPOT_CHARTER_MARKET__ENABLED);
+
+		charterOutMarketParametersEClass = createEClass(CHARTER_OUT_MARKET_PARAMETERS);
+		createEAttribute(charterOutMarketParametersEClass, CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_START_DATE);
+		createEAttribute(charterOutMarketParametersEClass, CHARTER_OUT_MARKET_PARAMETERS__CHARTER_OUT_END_DATE);
 
 		// Create enums
 		spotTypeEEnum = createEEnum(SPOT_TYPE);
@@ -886,6 +945,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotMarketsModel_CharterOutStartDate(), this.getCharterOutStartDate(), null, "charterOutStartDate", null, 0, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_CharterInMarkets(), this.getCharterInMarket(), null, "charterInMarkets", null, 0, -1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_CharterOutMarkets(), this.getCharterOutMarket(), null, "charterOutMarkets", null, 0, -1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSpotMarketsModel_CharterOutMarketParameters(), this.getCharterOutMarketParameters(), null, "charterOutMarketParameters", null, 0, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spotMarketGroupEClass, SpotMarketGroup.class, "SpotMarketGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSpotMarketGroup_Availability(), this.getSpotAvailability(), null, "availability", null, 1, 1, SpotMarketGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -953,6 +1013,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		g2 = createEGenericType(theFleetPackage.getVessel());
 		g1.getETypeArguments().add(g2);
 		initEReference(getCharterOutMarket_Vessels(), g1, null, "vessels", null, 0, -1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutMarket_MaxCharterOutDuration(), ecorePackage.getEInt(), "maxCharterOutDuration", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterInMarketEClass, CharterInMarket.class, "CharterInMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterInMarket_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -971,6 +1032,10 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		initEClass(spotCharterMarketEClass, SpotCharterMarket.class, "SpotCharterMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpotCharterMarket_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(charterOutMarketParametersEClass, CharterOutMarketParameters.class, "CharterOutMarketParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCharterOutMarketParameters_CharterOutStartDate(), theDateTimePackage.getLocalDate(), "charterOutStartDate", null, 0, 1, CharterOutMarketParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutMarketParameters_CharterOutEndDate(), theDateTimePackage.getLocalDate(), "charterOutEndDate", null, 0, 1, CharterOutMarketParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(spotTypeEEnum, SpotType.class, "SpotType");

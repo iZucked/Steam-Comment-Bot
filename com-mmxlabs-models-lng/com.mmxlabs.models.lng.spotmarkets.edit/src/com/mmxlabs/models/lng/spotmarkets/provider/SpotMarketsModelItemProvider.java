@@ -71,6 +71,7 @@ public class SpotMarketsModelItemProvider
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
+			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS);
 		}
 		return childrenFeatures;
 	}
@@ -132,6 +133,7 @@ public class SpotMarketsModelItemProvider
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -183,6 +185,11 @@ public class SpotMarketsModelItemProvider
 			(createChildParameter
 				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS,
 				 SpotMarketsFactory.eINSTANCE.createCharterOutMarket()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS,
+				 SpotMarketsFactory.eINSTANCE.createCharterOutMarketParameters()));
 	}
 
 	/**

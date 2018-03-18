@@ -17,6 +17,8 @@
         eType="#//CharterInMarket" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutMarkets" upperBound="-1"
         eType="#//CharterOutMarket" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutMarketParameters"
+        eType="#//CharterOutMarketParameters" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SpotType">
     <eLiterals name="FOBSale" literal="FOB Sale"/>
@@ -137,6 +139,9 @@
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
       </eGenericType>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCharterOutDuration"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterInMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eOperations name="getMarketOrContractMinDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -178,5 +183,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="SpotCharterMarket" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterOutMarketParameters">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutEndDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
 </ecore:EPackage>

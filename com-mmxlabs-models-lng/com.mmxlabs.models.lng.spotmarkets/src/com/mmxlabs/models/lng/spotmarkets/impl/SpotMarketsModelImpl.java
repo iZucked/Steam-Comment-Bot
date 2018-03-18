@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -37,6 +38,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterInMarkets <em>Charter In Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterOutMarkets <em>Charter Out Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterOutMarketParameters <em>Charter Out Market Parameters</em>}</li>
  * </ul>
  *
  * @generated
@@ -111,6 +113,16 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 	 * @ordered
 	 */
 	protected EList<CharterOutMarket> charterOutMarkets;
+
+	/**
+	 * The cached value of the '{@link #getCharterOutMarketParameters() <em>Charter Out Market Parameters</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterOutMarketParameters()
+	 * @generated
+	 * @ordered
+	 */
+	protected CharterOutMarketParameters charterOutMarketParameters;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -375,6 +387,49 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CharterOutMarketParameters getCharterOutMarketParameters() {
+		return charterOutMarketParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCharterOutMarketParameters(CharterOutMarketParameters newCharterOutMarketParameters, NotificationChain msgs) {
+		CharterOutMarketParameters oldCharterOutMarketParameters = charterOutMarketParameters;
+		charterOutMarketParameters = newCharterOutMarketParameters;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS, oldCharterOutMarketParameters, newCharterOutMarketParameters);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterOutMarketParameters(CharterOutMarketParameters newCharterOutMarketParameters) {
+		if (newCharterOutMarketParameters != charterOutMarketParameters) {
+			NotificationChain msgs = null;
+			if (charterOutMarketParameters != null)
+				msgs = ((InternalEObject)charterOutMarketParameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS, null, msgs);
+			if (newCharterOutMarketParameters != null)
+				msgs = ((InternalEObject)newCharterOutMarketParameters).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS, null, msgs);
+			msgs = basicSetCharterOutMarketParameters(newCharterOutMarketParameters, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS, newCharterOutMarketParameters, newCharterOutMarketParameters));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -392,6 +447,8 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				return ((InternalEList<?>)getCharterInMarkets()).basicRemove(otherEnd, msgs);
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 				return ((InternalEList<?>)getCharterOutMarkets()).basicRemove(otherEnd, msgs);
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS:
+				return basicSetCharterOutMarketParameters(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -418,6 +475,8 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				return getCharterInMarkets();
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 				return getCharterOutMarkets();
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS:
+				return getCharterOutMarketParameters();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -454,6 +513,9 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				getCharterOutMarkets().clear();
 				getCharterOutMarkets().addAll((Collection<? extends CharterOutMarket>)newValue);
 				return;
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS:
+				setCharterOutMarketParameters((CharterOutMarketParameters)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -487,6 +549,9 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 				getCharterOutMarkets().clear();
 				return;
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS:
+				setCharterOutMarketParameters((CharterOutMarketParameters)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -513,6 +578,8 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				return charterInMarkets != null && !charterInMarkets.isEmpty();
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 				return charterOutMarkets != null && !charterOutMarkets.isEmpty();
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKET_PARAMETERS:
+				return charterOutMarketParameters != null;
 		}
 		return super.eIsSet(featureID);
 	}

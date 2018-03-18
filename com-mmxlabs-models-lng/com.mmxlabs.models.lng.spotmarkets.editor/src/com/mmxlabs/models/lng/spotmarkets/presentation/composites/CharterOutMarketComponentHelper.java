@@ -71,6 +71,7 @@ public class CharterOutMarketComponentHelper extends BaseComponentHelper {
 		add_minCharterOutDurationEditor(detailComposite, topClass);
 		add_availablePortsEditor(detailComposite, topClass);
 		add_vesselsEditor(detailComposite, topClass);
+		add_maxCharterOutDurationEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the minCharterOutDuration feature on CharterOutMarket
@@ -97,6 +98,15 @@ public class CharterOutMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__VESSELS));
+	}
+
+	/**
+	 * Create the editor for the maxCharterOutDuration feature on CharterOutMarket
+	 *
+	 * @generated
+	 */
+	protected void add_maxCharterOutDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__MAX_CHARTER_OUT_DURATION));
 	}
 
 	/**

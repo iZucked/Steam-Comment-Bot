@@ -27,6 +27,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getAvailablePorts <em>Available Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getVessels <em>Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarket()
@@ -107,6 +108,59 @@ public interface CharterOutMarket extends SpotCharterMarket, NamedObject {
 	 * @generated
 	 */
 	EList<AVesselSet<Vessel>> getVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Max Charter Out Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Max Charter Out Duration</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Max Charter Out Duration</em>' attribute.
+	 * @see #isSetMaxCharterOutDuration()
+	 * @see #unsetMaxCharterOutDuration()
+	 * @see #setMaxCharterOutDuration(int)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarket_MaxCharterOutDuration()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	int getMaxCharterOutDuration();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Max Charter Out Duration</em>' attribute.
+	 * @see #isSetMaxCharterOutDuration()
+	 * @see #unsetMaxCharterOutDuration()
+	 * @see #getMaxCharterOutDuration()
+	 * @generated
+	 */
+	void setMaxCharterOutDuration(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMaxCharterOutDuration()
+	 * @see #getMaxCharterOutDuration()
+	 * @see #setMaxCharterOutDuration(int)
+	 * @generated
+	 */
+	void unsetMaxCharterOutDuration();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMaxCharterOutDuration <em>Max Charter Out Duration</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Max Charter Out Duration</em>' attribute is set.
+	 * @see #unsetMaxCharterOutDuration()
+	 * @see #getMaxCharterOutDuration()
+	 * @see #setMaxCharterOutDuration(int)
+	 * @generated
+	 */
+	boolean isSetMaxCharterOutDuration();
 
 	/**
 	 * Returns the value of the '<em><b>Charter Out Rate</b></em>' attribute.

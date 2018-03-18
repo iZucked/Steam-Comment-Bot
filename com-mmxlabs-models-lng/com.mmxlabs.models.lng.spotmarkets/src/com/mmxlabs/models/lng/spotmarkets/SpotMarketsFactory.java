@@ -116,6 +116,15 @@ public interface SpotMarketsFactory extends EFactory {
 	CharterInMarket createCharterInMarket();
 
 	/**
+	 * Returns a new object of class '<em>Charter Out Market Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Out Market Parameters</em>'.
+	 * @generated
+	 */
+	CharterOutMarketParameters createCharterOutMarketParameters();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
