@@ -114,6 +114,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -3240,12 +3241,30 @@ public class LNGScenarioTransformer {
 		{
 			final SpotMarketsModel spotMarketsModel = rootObject.getReferenceModel().getSpotMarketsModel();
 
+			final CharterOutMarketParameters charterOutMarketParameters = spotMarketsModel.getCharterOutMarketParameters();
+			if (charterOutMarketParameters != null) {
+				if (charterOutMarketParameters.getCharterOutStartDate() != null) {
+					builder.setGeneratedCharterOutStartTime(dateHelper.convertTime(charterOutMarketParameters.getCharterOutStartDate().atStartOfDay(ZoneId.of("UTC"))));
+				} else {
+					builder.setGeneratedCharterOutStartTime(0);
+				}
+				if (charterOutMarketParameters.getCharterOutEndDate() != null) {
+					builder.setGeneratedCharterOutEndTime(dateHelper.convertTime(charterOutMarketParameters.getCharterOutEndDate().atStartOfDay(ZoneId.of("UTC"))));
+				} else {
+					builder.setGeneratedCharterOutEndTime(Integer.MAX_VALUE);
+				}
+			} else {
+				builder.setGeneratedCharterOutStartTime(0);
+				builder.setGeneratedCharterOutEndTime(Integer.MAX_VALUE);
+			}
+
 			final CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
 			if (charterOutStartDate != null && charterOutStartDate.getCharterOutStartDate() != null) {
 				builder.setGeneratedCharterOutStartTime(dateHelper.convertTime(charterOutStartDate.getCharterOutStartDate().atStartOfDay(ZoneId.of("UTC"))));
 			} else {
 				builder.setGeneratedCharterOutStartTime(0);
 			}
+
 			List<CharterInMarket> charterInMarkets = new LinkedList<>();
 			charterInMarkets.addAll(spotMarketsModel.getCharterInMarkets());
 			if (extraCharterInMarkets != null) {
@@ -3445,6 +3464,8 @@ public class LNGScenarioTransformer {
 
 					final int minDuration = 24 * eCharterOutMarket.getMinCharterOutDuration();
 
+					final int maxDuration = eCharterOutMarket.isSetMaxCharterOutDuration() ? 24 * eCharterOutMarket.getMinCharterOutDuration() : Integer.MAX_VALUE;
+
 					final Set<Port> portSet = SetUtils.getObjects(eCharterOutMarket.getAvailablePorts());
 
 					final List<Port> sortedPortSet = new ArrayList<>(portSet);
@@ -3458,7 +3479,7 @@ public class LNGScenarioTransformer {
 						}
 					}
 					for (final Vessel eVessel : SetUtils.getObjects(eCharterOutMarket.getVessels())) {
-						builder.createCharterOutCurve(vesselAssociation.lookupNullChecked(eVessel), charterOutCurve, minDuration, marketPorts);
+						builder.createCharterOutCurve(vesselAssociation.lookupNullChecked(eVessel), charterOutCurve, minDuration, maxDuration, marketPorts);
 					}
 				}
 			}
