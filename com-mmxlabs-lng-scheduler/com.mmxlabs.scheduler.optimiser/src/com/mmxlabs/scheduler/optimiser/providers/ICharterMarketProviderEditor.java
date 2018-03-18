@@ -18,7 +18,10 @@ public interface ICharterMarketProviderEditor extends ICharterMarketProvider {
 
 	void addCharterInOption(@NonNull IVessel vessel, @NonNull ILongCurve charterInCurve);
 
-	void addCharterOutOption(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, @NonNull Set<@NonNull IPort> allowedPorts);
+	void addCharterOutOption(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, int maxDuration, @NonNull Set<@NonNull IPort> allowedPorts);
 
 	void setCharterOutStartTime(int startTime);
+	
+	void setCharterOutEndTime(int endTime);
+
 }

@@ -555,8 +555,10 @@ public interface ISchedulerBuilder {
 	 *            The hourly charter out price curve
 	 * @param minDuration
 	 *            The minimum duration in hours a charter out can be.
+	 * @param maxDuration
+	 *            The maximum duration in hours a charter out can be.
 	 */
-	void createCharterOutCurve(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, @NonNull Set<IPort> allowedPorts);
+	void createCharterOutCurve(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, int maxDuration, @NonNull Set<IPort> allowedPorts);
 
 	/**
 	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such
@@ -656,6 +658,13 @@ public interface ISchedulerBuilder {
 	 * @param charterOutStartTime
 	 */
 	void setGeneratedCharterOutStartTime(int charterOutStartTime);
+
+	/**
+	 * Set the latest time we can start generating charter outs.
+	 * 
+	 * @param charterOutEndTime
+	 */
+	void setGeneratedCharterOutEndTime(int charterOutEndTime);
 
 	@NonNull
 	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt,

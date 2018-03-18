@@ -26,6 +26,7 @@ public class GeneratedCharterOutOption {
 	private IPort port;
 	private Triple<Integer, ERouteOption, Integer> toCharterPort;
 	private Triple<Integer, ERouteOption, Integer> fromCharterPort;
+	private int charterOutIdleTimeHours;
 	private long maxCharteringRevenue = -1;
 
 	// Data for setting cached options
@@ -193,5 +194,13 @@ public class GeneratedCharterOutOption {
 
 	public void setPortOptions(PortOptions portOptions) {
 		this.portOptions = portOptions;
+	}
+
+	public int getCharterOutIdleTimeHours() {
+		return charterOutIdleTimeHours;
+	}
+
+	public void setCharterOutIdleTimeHours(int charterOutIdleTimeHours) {
+		this.charterOutIdleTimeHours = charterOutIdleTimeHours;
 	}
 }

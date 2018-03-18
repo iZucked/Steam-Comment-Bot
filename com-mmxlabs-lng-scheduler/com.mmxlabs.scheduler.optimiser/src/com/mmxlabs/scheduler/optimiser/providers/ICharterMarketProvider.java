@@ -29,6 +29,8 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 		 * @return
 		 */
 		int getMinDuration();
+		
+		int getMaxDuration();
 
 		int getCharterPrice();
 
@@ -50,6 +52,13 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getCharterOutStartTime();
+
+	/**
+	 * Return the latest time we can charter out from.
+	 * 
+	 * @return
+	 */
+	int getCharterOutEndTime();
 
 	@NonNull
 	Set<@NonNull IPort> getCharteringPortsForVessel(@NonNull IVessel vessel);

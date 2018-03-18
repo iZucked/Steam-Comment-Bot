@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -20,7 +19,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
@@ -55,9 +53,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
@@ -296,10 +292,13 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				if (fromCharterPort == null) {
 					continue;
 				}
-				final int availableCharteringTime = availableTime - toCharterPort.getThird() - fromCharterPort.getThird();
+				final int availableCharteringTime = Math.min(availableTime - toCharterPort.getThird() - fromCharterPort.getThird(), option.getMaxDuration());
+				final int charterOutIdleTime = availableTime - toCharterPort.getThird() - fromCharterPort.getThird() - availableCharteringTime;
+
 				final int charterStartTime = ballastStartTime + toCharterPort.getThird();
 				final long dailyPrice = (long) option.getCharterPrice(charterStartTime);
-				if (charterStartTime < charterMarketProvider.getCharterOutStartTime()) {
+				if (charterStartTime < charterMarketProvider.getCharterOutStartTime() ||
+						charterStartTime > charterMarketProvider.getCharterOutEndTime()) {
 					continue;
 				}
 				final long charteringRevenue = Calculator.quantityFromRateTime(dailyPrice, availableCharteringTime) / 24L;
@@ -311,6 +310,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					gcoo.setPort(charterOutPort);
 					gcoo.setMaxCharteringRevenue(charteringRevenue);
 					gcoo.setCharterStartTime(charterStartTime);
+					gcoo.setCharterOutIdleTimeHours(charterOutIdleTime);
 				}
 			}
 		}
@@ -463,7 +463,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions(charterOutPortSlot, originalBallast.getOptions().getToPortSlot());
 		charterToReturnPortVoyageOptions.setRoute(charterOutOption.getFromCharterPort().getSecond(), charterOutOption.getFromCharterPort().getFirst(), charterToReturnPortRouteCosts);
-		charterToReturnPortVoyageOptions.setAvailableTime(charterOutOption.getFromCharterPort().getThird());
+		charterToReturnPortVoyageOptions.setAvailableTime(charterOutOption.getFromCharterPort().getThird() + charterOutOption.getCharterOutIdleTimeHours());
 		charterToReturnPortVoyageOptions.setVesselState(VesselState.Ballast);
 		charterToReturnPortVoyageOptions.setVessel(originalBallast.getOptions().getVessel());
 		charterToReturnPortVoyageOptions.setShouldBeCold(originalBallast.getOptions().shouldBeCold());
