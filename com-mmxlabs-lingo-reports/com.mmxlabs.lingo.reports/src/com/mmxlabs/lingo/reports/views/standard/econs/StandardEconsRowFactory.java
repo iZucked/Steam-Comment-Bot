@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -73,23 +74,38 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 	// public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
 	// public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
 	// public static final DecimalFormat DaysFormat = new DecimalFormat("##");
+	@Override
 	public Collection<CargoEconsReportRow> createRows(@NonNull final EconsOptions options, @Nullable final Collection<Object> targets) {
 
 		boolean containsCargo = false;
 		boolean containsEvent = false;
 		boolean containsCharterOut = false;
+		boolean containsCooldown = false;
 		if (targets == null || targets.isEmpty()) {
 			containsCargo = true;
 		} else {
 			for (final Object target : targets) {
 				if (target instanceof CargoAllocation) {
+					CargoAllocation cargoAllocation = (CargoAllocation) target;
 					containsCargo = true;
+					for (Event evt : cargoAllocation.getEvents()) {
+						if (evt instanceof Cooldown) {
+							containsCooldown = true;
+							break;
+						}
+					}
 				}
 				if (target instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
 					containsEvent = true;
 					if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
 						containsCharterOut = true;
+					}
+					for (Event evt : vesselEventVisit.getEvents()) {
+						if (evt instanceof Cooldown) {
+							containsCooldown = true;
+							break;
+						}
 					}
 				}
 			}
@@ -107,6 +123,10 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		rows.add(createRow(70, "    Canal", true, "$", "", true, createShippingCanalCosts(options)));
 		rows.add(createRow(80, "    Boil-off", true, "$", "", true, createShippingBOGTotal(options), createBOGColourProvider(options)));
 		rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
+		if (containsCooldown) {
+			rows.add(createRow(92, "    Cooldown Cost", true, "$", "", true, createShippingCooldownCosts(options)));
+
+		}
 		if (containsCharterOut) {
 			rows.add(createRow(100, "Charter Revenue", true, "$", "", false, createShippingCharterRevenue(options)));
 			rows.add(createRow(110, "Repositioning", true, "$", "", true, createShippingRepositioning(options)));
@@ -1012,6 +1032,27 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 				} else if (object instanceof List<?>) {
 					int value = getFromCargoAllocationPairList(Integer.class, StandardEconsRowFactory::genericShippingCharterCostsHelper, object);
 					return DollarsFormat.format(value);
+				}
+				return null;
+
+			}
+		};
+	}
+
+	public @NonNull ICellRenderer createShippingCooldownCosts(final EconsOptions options) {
+		return new BaseFormatter() {
+			@Override
+			public @Nullable String render(final Object object) {
+				if (object instanceof EventGrouping) {
+					EventGrouping eventGrouping = (EventGrouping) object;
+
+					for (Event evt : eventGrouping.getEvents()) {
+						if (evt instanceof Cooldown) {
+							Cooldown cooldown = (Cooldown) evt;
+							final int cost = cooldown.getCost();
+							return DollarsFormat.format(cost);
+						}
+					}
 				}
 				return null;
 
