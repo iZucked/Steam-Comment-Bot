@@ -318,7 +318,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	protected CompletableFuture<Boolean> notifyOnNewVersion(boolean upstream) {
-		String baseUrl = upstream ? BackEndUrlProvider.INSTANCE.getUrl() : UpstreamUrlProvider.INSTANCE.getBaseURL();
+		String baseUrl = upstream ? UpstreamUrlProvider.INSTANCE.getBaseURL() : BackEndUrlProvider.INSTANCE.getUrl() ;
 
 		if (baseUrl == null || baseUrl.isEmpty()) {
 			return null;
