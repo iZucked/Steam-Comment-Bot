@@ -262,19 +262,22 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		final Request pullRequest = new Request.Builder().url(backendUrl + getSyncVersionEndpoint() + version).get().build();
 		final Response pullResponse = localClient.newCall(pullRequest).execute();
 		if (!pullResponse.isSuccessful()) {
+			pullResponse.body().close();
 			return false;
 		}
 		final String json = pullResponse.body().string();
-		//
-		// // Post the data to local repo
 
-		String credential = Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+		// Post the data to local repo
 
 		final RequestBody body = RequestBody.create(JSON, json);
 		final Request postRequest = createUpstreamRequestBuilder(upstreamUrl + getSyncVersionEndpoint()) //
 				.post(body).build();
 		final Response postResponse = upstreamClient.newCall(postRequest).execute();
-		return postResponse.isSuccessful();
+		try {
+			return postResponse.isSuccessful();
+		} finally {
+			postResponse.body().close();
+		}
 	}
 
 	protected Request.Builder createUpstreamRequestBuilder(String url) {
@@ -296,6 +299,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 
 		final Response pullResponse = upstreamClient.newCall(pullRequest).execute();
 		if (!pullResponse.isSuccessful()) {
+			pullResponse.body().close();
 			return false;
 		}
 		final String json = pullResponse.body().string();
@@ -305,8 +309,11 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		final Request postRequest = new Request.Builder().url(backendUrl + getSyncVersionEndpoint()).post(body).build();
 		final Response postResponse = localClient.newCall(postRequest).execute();
 		// TODO: Check return code etc
-
-		return postResponse.isSuccessful();
+		try {
+			return postResponse.isSuccessful();
+		} finally {
+			postResponse.body().close();
+		}
 	}
 
 	protected CompletableFuture<Boolean> waitForNewLocalVersion() {
@@ -318,7 +325,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	protected CompletableFuture<Boolean> notifyOnNewVersion(boolean upstream) {
-		String baseUrl = upstream ? UpstreamUrlProvider.INSTANCE.getBaseURL() : BackEndUrlProvider.INSTANCE.getUrl() ;
+		String baseUrl = upstream ? UpstreamUrlProvider.INSTANCE.getBaseURL() : BackEndUrlProvider.INSTANCE.getUrl();
 
 		if (baseUrl == null || baseUrl.isEmpty()) {
 			return null;
