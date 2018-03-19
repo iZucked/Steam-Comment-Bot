@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
@@ -44,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 public class PriceIntervalProviderHelper {
 
@@ -58,6 +60,10 @@ public class PriceIntervalProviderHelper {
 
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
+	
+	@Inject
+	private SchedulerCalculationUtils schedulerCalculationUtils;
+
 
 	private final Set<PricingEventType> loadPricingEventTypeSet = new HashSet<>(
 			Arrays.asList(new PricingEventType[] { PricingEventType.END_OF_LOAD, PricingEventType.END_OF_LOAD_WINDOW, PricingEventType.START_OF_LOAD, PricingEventType.START_OF_LOAD_WINDOW, }));
@@ -1045,4 +1051,15 @@ public class PriceIntervalProviderHelper {
 		return inclusiveEnd + 1;
 	}
 
+	public long getCharterRateForTimePickingDecision(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart, @NonNull IResource resource) {
+		IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER ||
+				vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			if (portTimeWindowRecord == portTimeWindowRecordStart) {
+				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
+						portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
+			}
+		}
+		return 0L;
+	}
 }
