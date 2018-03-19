@@ -114,8 +114,8 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		final List<CargoEconsReportRow> rows = new LinkedList<>();
 		if (containsCargo) {
 			rows.add(createRow(10, "Purchase", true, "$", "", true, createBuyValuePrice(options)));
-			rows.add(createRow(20, "    Price", true, "$", "mmBtu", true, createBuyPrice(options)));
-			rows.add(createRow(30, "    Volume", true, "", "mmBtu", false, createBuyVolumeMMBTuPrice(options)));
+			rows.add(createRow(20, "    Price", true, "$", "", true, createBuyPrice(options)));
+			rows.add(createRow(30, "    Volume (mmBtu)", true, "", "", false, createBuyVolumeMMBTuPrice(options)));
 		}
 		rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options)));
 		rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options)));
@@ -125,7 +125,6 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		rows.add(createRow(90, "    Charter Cost", true, "$", "", true, createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
 		if (containsCooldown) {
 			rows.add(createRow(92, "    Cooldown Cost", true, "$", "", true, createShippingCooldownCosts(options)));
-
 		}
 		if (containsCharterOut) {
 			rows.add(createRow(100, "Charter Revenue", true, "$", "", false, createShippingCharterRevenue(options)));
@@ -135,8 +134,8 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		}
 		if (containsCargo) {
 			rows.add(createRow(140, "Sale", true, "$", "", false, createSellValuePrice(options)));
-			rows.add(createRow(150, "    Price", true, "$", "mmBtu", false, createSellPrice(options)));
-			rows.add(createRow(160, "    Volume", true, "", "mmBtu", false, createSellVolumeMMBTuPrice(options)));
+			rows.add(createRow(150, "    Price", true, "$", "", false, createSellPrice(options)));
+			rows.add(createRow(160, "    Volume (mmBtu)", true, "", "", false, createSellVolumeMMBTuPrice(options)));
 			if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
 				rows.add(createRow(170, "Equity P&L", true, "$", "", false, createPNLEquity(options)));
 			}
@@ -144,7 +143,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		}
 		rows.add(createRow(190, "P&L", true, "$", "", false, createPNLTotal(options)));
 		if (containsCargo) {
-			final CargoEconsReportRow row = createRow(200, "Margin", true, "$", "mmBtu", false, createPNLPerMMBTU(options));
+			final CargoEconsReportRow row = createRow(200, "Margin", true, "$", "", false, createPNLPerMMBTU(options));
 			row.tooltip = () -> {
 				switch (options.marginBy) {
 				case PURCHASE_VOLUME:
