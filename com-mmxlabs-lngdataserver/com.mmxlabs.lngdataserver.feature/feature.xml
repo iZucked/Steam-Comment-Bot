@@ -72,7 +72,7 @@ All rights reserved.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-  
+
    <plugin
          id="com.fasterxml.jackson.core.jackson-annotations"
          download-size="0"
@@ -173,6 +173,13 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.lngdataserver.integration.vessels"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lngdataserver.integration.ui.scenarios"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -246,66 +246,68 @@ public class DataBrowser extends ViewPart {
 					final Node selectedNode = (Node) treeSelection.getFirstElement();
 					if (!(selectedNode instanceof CompositeNode)) {
 						CompositeNode parentNode = (CompositeNode) selectedNode.getParent();
-						final IDataBrowserActionsHandler actionHandler = parentNode.getActionHandler();
-						if (actionHandler != null) {
-							if (actionHandler.supportsRename()) {
-								data_mgr.add(new RunnableAction("Rename", () -> {
-									// FIXME: Implement! Dialog for user entry then call handler
-									final IInputValidator validator = null;
-									final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Rename version " + selectedNode.getDisplayName(), "Choose new element name", "", validator);
-									if (dialog.open() == Window.OK) {
-										dialog.getValue();
-									}
-									
-									if (actionHandler.rename(selectedNode.getDisplayName(), dialog.getValue())){
-										selectedNode.setDisplayName(dialog.getValue());
-									}
-								}));
-								itemsAdded = true;
-							} else {
-								data_mgr.add(new RunnableAction("Rename (Not suppported)", () -> {
+						if (parentNode != null) {
+							final IDataBrowserActionsHandler actionHandler = parentNode.getActionHandler();
+							if (actionHandler != null) {
+								if (actionHandler.supportsRename()) {
+									data_mgr.add(new RunnableAction("Rename", () -> {
+										// FIXME: Implement! Dialog for user entry then call handler
+										final IInputValidator validator = null;
+										final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Rename version " + selectedNode.getDisplayName(), "Choose new element name",
+												"", validator);
+										if (dialog.open() == Window.OK) {
+											dialog.getValue();
+										}
 
-								}));
-								itemsAdded = true;
-							}
-							if (!selectedNode.isPublished() && actionHandler.supportsPublish()) {
-								data_mgr.add(new RunnableAction("Publish", () -> {
+										if (actionHandler.rename(selectedNode.getDisplayName(), dialog.getValue())) {
+											selectedNode.setDisplayName(dialog.getValue());
+										}
+									}));
+									itemsAdded = true;
+								} else {
+									data_mgr.add(new RunnableAction("Rename (Not suppported)", () -> {
 
-									if (actionHandler.publish(selectedNode.getDisplayName())) {
-										selectedNode.setPublished(true);
-									}
-								}));
-								itemsAdded = true;
-							}
-							if (actionHandler.supportsDelete()) {
-								data_mgr.add(new RunnableAction("Delete", () -> {
-									if (actionHandler.delete(selectedNode.getDisplayName())) {
-										parentNode.getChildren().remove(selectedNode);
-									}
-								}));
-								itemsAdded = true;
-							} else {
-								data_mgr.add(new RunnableAction("Delete (Not suppported)", () -> {
+									}));
+									itemsAdded = true;
+								}
+								if (/*!selectedNode.isPublished() && */ actionHandler.supportsPublish()) {
+									data_mgr.add(new RunnableAction("Publish", () -> {
 
-								}));
-								itemsAdded = true;
-							}
-							
-							if (actionHandler.supportsSetCurrent()) {
-								data_mgr.add(new RunnableAction("Set as Current", () -> {
-									if (actionHandler.setCurrent(selectedNode.getDisplayName())) {
-										parentNode.setCurrent(selectedNode);
-										selectedNode.getParent().setCurrent(selectedNode);
-									}
-								}));
-								itemsAdded = true;
-							} else {
-								data_mgr.add(new RunnableAction("Set as Current (Not suppported)", () -> {
+										if (actionHandler.publish(selectedNode.getDisplayName())) {
+//											selectedNode.setPublished(true);
+										}
+									}));
+									itemsAdded = true;
+								}
+								if (actionHandler.supportsDelete()) {
+									data_mgr.add(new RunnableAction("Delete", () -> {
+										if (actionHandler.delete(selectedNode.getDisplayName())) {
+											parentNode.getChildren().remove(selectedNode);
+										}
+									}));
+									itemsAdded = true;
+								} else {
+									data_mgr.add(new RunnableAction("Delete (Not suppported)", () -> {
 
-								}));
-								itemsAdded = true;
+									}));
+									itemsAdded = true;
+								}
+
+								if (actionHandler.supportsSetCurrent()) {
+									data_mgr.add(new RunnableAction("Set as Current", () -> {
+										if (actionHandler.setCurrent(selectedNode.getDisplayName())) {
+											parentNode.setCurrent(selectedNode);
+											selectedNode.getParent().setCurrent(selectedNode);
+										}
+									}));
+									itemsAdded = true;
+								} else {
+									data_mgr.add(new RunnableAction("Set as Current (Not suppported)", () -> {
+
+									}));
+									itemsAdded = true;
+								}
 							}
-							
 						}
 					}
 					if (selectedNode instanceof CompositeNode) {
