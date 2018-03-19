@@ -330,6 +330,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		@Override
 		public void update(final ViewerCell cell) {
 			cell.setText(getText(cell.getElement()));
+			cell.setForeground(getForeground(cell.getElement()));
+			cell.setBackground(getBackground(cell.getElement()));
+
 			final Object element = cell.getElement();
 			
 			if (element instanceof CargoEconsReportRow) {
