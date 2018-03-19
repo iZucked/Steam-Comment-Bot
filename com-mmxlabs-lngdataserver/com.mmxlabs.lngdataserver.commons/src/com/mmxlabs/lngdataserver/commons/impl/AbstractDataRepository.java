@@ -335,7 +335,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 					: new Request.Builder() //
 							.url(url);
 			Request request = requestBuilder.build();
-			Response response;
+			Response response = null;
 			try {
 				response = longPollingClient.newCall(request).execute();
 				if (response.isSuccessful()) {
@@ -346,6 +346,10 @@ public abstract class AbstractDataRepository implements IDataRepository {
 			} catch (IOException e) {
 				LOG.error("Error waiting for new version");
 				throw new RuntimeException("Error waiting for new version");
+			} finally {
+				if (response != null) {
+					response.body().close();
+				}
 			}
 		});
 		return completableFuture;
