@@ -304,10 +304,10 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the mmxId feature on Vessel
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_mmxIdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__MMX_ID));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__MMX_ID));
 	}
 
 	/**
