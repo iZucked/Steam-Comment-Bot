@@ -108,9 +108,9 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 							result.add(cs);
 						}
 					}
-					for (InventoryEvents inventory : schedule.getInventoryLevels()) {
-						result.add(inventory);
-					}
+//					for (InventoryEvents inventory : schedule.getInventoryLevels()) {
+//						result.add(inventory);
+//					}
 				}
 			}
 			return result.toArray();
@@ -125,9 +125,9 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				}
 				seqs.add(seq);
 			}
-			for (InventoryEvents inventory : schedule.getInventoryLevels()) {
-				seqs.add(inventory);
-			}
+//			for (InventoryEvents inventory : schedule.getInventoryLevels()) {
+//				seqs.add(inventory);
+//			}
 			return seqs.toArray();
 		} else if (parent instanceof Sequence) {
 			final Sequence sequence = (Sequence) parent;
@@ -219,10 +219,10 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 			}
 			return newEvents.toArray();
 		} else if (parent instanceof InventoryEvents) {
-			InventoryEvents inventoryEvents = (InventoryEvents) parent;
-			return inventoryEvents.getEvents().stream() //
-					.filter(evt -> evt.isBreachedMin() || evt.isBreachedMax()) //
-					.toArray();
+//			InventoryEvents inventoryEvents = (InventoryEvents) parent;
+//			return inventoryEvents.getEvents().stream() //
+//					.filter(evt -> evt.isBreachedMin() || evt.isBreachedMax()) //
+//					.toArray();
 
 		}
 		return null;
