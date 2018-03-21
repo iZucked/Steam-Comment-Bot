@@ -127,10 +127,10 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the overrideInaccessibleRoutes feature on CharterInMarket
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_overrideInaccessibleRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES));
 	}
 
 	/**
