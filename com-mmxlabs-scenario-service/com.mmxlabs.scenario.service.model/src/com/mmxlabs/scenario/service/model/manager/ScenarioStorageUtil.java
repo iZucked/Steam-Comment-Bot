@@ -686,4 +686,29 @@ public class ScenarioStorageUtil {
 	public static File getTempDirectory() {
 		return INSTANCE.storageDirectory.toFile();
 	}
+
+	public static @Nullable Manifest loadManifest(final File scenarioFile, IScenarioCipherProvider scenarioCipherProvider) {
+		final URI fileURI = URI.createFileURI(scenarioFile.toString());
+
+		final URI manifestURI = ScenarioStorageUtil.createArtifactURI(fileURI, ScenarioStorageUtil.PATH_MANIFEST_OBJECT);
+
+		assert manifestURI != null;
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
+		assert resourceSet != null;
+
+		try {
+			final Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
+			if (resource.getContents().size() == 1) {
+				final EObject top = resource.getContents().get(0);
+				if (top instanceof Manifest) {
+					return (Manifest) top;
+				}
+			}
+		} catch (final Exception e) {
+			// Unable to parse file for some reason
+			log.debug("Unable to find manifest for " + scenarioFile, e);
+		}
+		return null;
+	}
+
 }
