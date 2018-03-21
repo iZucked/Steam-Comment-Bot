@@ -131,6 +131,7 @@ public class PortsRepository extends AbstractDataRepository {
 		upstreamApi.getApiClient().setBasePath(upstreamURL);
 		upstreamApi.getApiClient().setUsername(UpstreamUrlProvider.INSTANCE.getUsername());
 		upstreamApi.getApiClient().setPassword(UpstreamUrlProvider.INSTANCE.getPassword());
+		upstreamApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
 	}
 
 	public void saveVersion(final Version version) throws Exception {

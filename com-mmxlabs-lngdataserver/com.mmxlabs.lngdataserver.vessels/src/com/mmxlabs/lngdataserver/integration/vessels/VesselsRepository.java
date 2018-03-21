@@ -131,11 +131,14 @@ public class VesselsRepository extends AbstractDataRepository {
 		upstreamApi.getApiClient().setBasePath(upstreamURL);
 		upstreamApi.getApiClient().setUsername(UpstreamUrlProvider.INSTANCE.getUsername());
 		upstreamApi.getApiClient().setPassword(UpstreamUrlProvider.INSTANCE.getPassword());
+		upstreamApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
 
 		upstreamWaitingApi.getApiClient().setBasePath(upstreamURL);
 		upstreamWaitingApi.getApiClient().setUsername(UpstreamUrlProvider.INSTANCE.getUsername());
 		upstreamWaitingApi.getApiClient().setPassword(UpstreamUrlProvider.INSTANCE.getPassword());
 		upstreamWaitingApi.getApiClient().getHttpClient().setReadTimeout(0, TimeUnit.MILLISECONDS);
+
+		upstreamWaitingApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
 	}
 
 	@Override

@@ -64,7 +64,7 @@ public class PricingClient {
 
 	public static List<PricingVersion> getVersions(String baseUrl, String username, String password) throws IOException {
 		Request pricingRequest = new Request.Builder().url(baseUrl + "/pricing/versions") //
-				.addHeader("Athorization", Credentials.basic(username, password)) //
+				.addHeader("Authorization", Credentials.basic(username, password)) //
 				.build();
 		Response pricingResponse = CLIENT.newCall(pricingRequest).execute();
 

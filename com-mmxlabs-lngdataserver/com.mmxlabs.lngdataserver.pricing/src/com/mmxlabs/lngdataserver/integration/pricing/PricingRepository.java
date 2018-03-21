@@ -112,7 +112,7 @@ public class PricingRepository extends AbstractDataRepository {
 
 	@Override
 	public List<DataVersion> updateAvailable() throws Exception {
-		final List<PricingVersion> upstreamVersions = PricingClient.getVersions(upstreamUrl);
+		final List<DataVersion> upstreamVersions = getUpstreamVersions();
 		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
 		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
 		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished())).collect(Collectors.toList());

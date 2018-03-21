@@ -1,6 +1,7 @@
 package com.mmxlabs.lngdataserver.commons.impl;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -11,17 +12,20 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
+import okhttp3.Authenticator;
 import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.Route;
 
 /**
  * This implementation is not thread-safe.
@@ -190,53 +194,52 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	public void registerUpstreamVersionListener(final Consumer<String> versionConsumer) {
 		newUpstreamVersionCallbacks.add(versionConsumer);
 	}
-	//
-	// protected Triple<String, String, String> getServiceAuth() {
-	// return auth;
-	// }
 
-	// protected OkHttpClient buildClientWithBasicAuth() {
-	// Triple<String, String, String> serviceAuth = getServiceAuth();
-	// if (serviceAuth != null) {
-	// OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-	// clientBuilder.authenticator(new Authenticator() {
-	// @Override
-	// public Request authenticate(Route route, Response response) throws IOException {
-	// if (responseCount(response) >= 3) {
-	// return null;
-	// }
-	// String credential = Credentials.basic(auth.getSecond(), auth.getThird());
-	// return response.request().newBuilder().header("Authorization", credential).build();
-	// }
-	// });
-	// return clientBuilder.build();
-	// }
-	//
-	// return new OkHttpClient();
-	// }
-	//
-	// private int responseCount(Response response) {
-	// int result = 1;
-	// while ((response = response.priorResponse()) != null) {
-	// result++;
-	// }
-	// return result;
-	// }
-	//
-	// protected com.squareup.okhttp.Authenticator getAuthenticator() {
-	// return new com.squareup.okhttp.Authenticator() {
-	// @Override
-	// public com.squareup.okhttp.Request authenticate(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
-	// String credential = Credentials.basic("scott", "tiger");
-	// return response.request().newBuilder().header("Authorization", credential).build();
-	// }
-	//
-	// @Override
-	// public com.squareup.okhttp.Request authenticateProxy(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
-	// return null;
-	// }
-	// };
-	// }
+	protected OkHttpClient buildClientWithBasicAuth() {
+		Triple<String, String, String> auth = new Triple(UpstreamUrlProvider.INSTANCE.getBaseURL(),
+				UpstreamUrlProvider.INSTANCE.getUsername(),
+				UpstreamUrlProvider.INSTANCE.getPassword());
+		if (auth != null) {
+			OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+			clientBuilder.authenticator(new Authenticator() {
+				@Override
+				public Request authenticate(Route route, Response response) throws IOException {
+					if (responseCount(response) >= 3) {
+						return null;
+					}
+					String credential = Credentials.basic(auth.getSecond(), auth.getThird());
+					return response.request().newBuilder().header("Authorization", credential).build();
+				}
+			});
+			return clientBuilder.build();
+		}
+
+		return new OkHttpClient();
+	}
+
+	private int responseCount(Response response) {
+		int result = 1;
+		while ((response = response.priorResponse()) != null) {
+			result++;
+		}
+		return result;
+	}
+
+	protected com.squareup.okhttp.Authenticator getAuthenticator() {
+		return new com.squareup.okhttp.Authenticator() {
+			@Override
+			public com.squareup.okhttp.Request authenticate(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
+				String credential = Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+				return response.request().newBuilder().header("Authorization", credential).build();
+			}
+
+			@Override
+			public com.squareup.okhttp.Request authenticateProxy(Proxy proxy, com.squareup.okhttp.Response response) throws IOException {
+				return null;
+			}
+		};
+	}
+
 	protected boolean canWaitForNewLocalVersion() {
 		return false;
 	}
@@ -335,7 +338,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		final CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
 			final Request.Builder requestBuilder = upstream ? createUpstreamRequestBuilder(url)
 					: new Request.Builder() //
-							.url(url);
+					.url(url);
 			final Request request = requestBuilder.build();
 			Response response = null;
 			try {

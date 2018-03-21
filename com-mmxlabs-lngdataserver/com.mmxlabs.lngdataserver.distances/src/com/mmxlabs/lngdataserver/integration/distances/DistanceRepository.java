@@ -23,6 +23,8 @@ import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.lngdataservice.client.distances.ApiClient;
 import com.mmxlabs.lngdataservice.client.distances.ApiException;
 import com.mmxlabs.lngdataservice.client.distances.api.DistancesApi;
+import com.mmxlabs.lngdataservice.client.distances.auth.Authentication;
+import com.mmxlabs.lngdataservice.client.distances.auth.HttpBasicAuth;
 import com.mmxlabs.lngdataservice.client.distances.model.Version;
 
 /**
@@ -155,6 +157,7 @@ public class DistanceRepository extends AbstractDataRepository {
 		upstreamApi.getApiClient().setBasePath(upstreamURL);
 		upstreamApi.getApiClient().setUsername(UpstreamUrlProvider.INSTANCE.getUsername());
 		upstreamApi.getApiClient().setPassword(UpstreamUrlProvider.INSTANCE.getPassword());
+		upstreamApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
 	}
 
 	protected static LocalDateTime fromDateTimeAtUTC(final DateTime dateTime) {
