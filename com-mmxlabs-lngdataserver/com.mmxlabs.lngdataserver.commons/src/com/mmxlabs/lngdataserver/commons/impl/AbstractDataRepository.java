@@ -98,8 +98,8 @@ public abstract class AbstractDataRepository implements IDataRepository {
 					if (newVersionFuture != null) {
 						final Boolean newVersionAvailable = newVersionFuture.get();
 						if (Boolean.TRUE == newVersionAvailable) {
-							List<DataVersion> versions = getVersions();
-							for (DataVersion v : versions) {
+							final List<DataVersion> versions = getVersions();
+							for (final DataVersion v : versions) {
 								newLocalVersionCallbacks.forEach(c -> c.accept(v.getIdentifier()));
 							}
 						}
@@ -138,8 +138,8 @@ public abstract class AbstractDataRepository implements IDataRepository {
 				try {
 					final Boolean versionAvailable = newVersionFuture.get();
 					if (versionAvailable == Boolean.TRUE) {
-						List<DataVersion> versions = getUpstreamVersions();
-						for (DataVersion v : versions) {
+						final List<DataVersion> versions = getUpstreamVersions();
+						for (final DataVersion v : versions) {
 							newUpstreamVersionCallbacks.forEach(c -> c.accept(v.getIdentifier()));
 						}
 					}
@@ -254,34 +254,29 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	@Override
 	public boolean publishVersion(final String version) throws Exception {
 
-		OkHttpClient localClient = new okhttp3.OkHttpClient();
-		OkHttpClient upstreamClient = new okhttp3.OkHttpClient();
-
-		// Pull down the version data
-
+		final OkHttpClient localClient = new okhttp3.OkHttpClient();
+		// load in the version data
 		final Request pullRequest = new Request.Builder().url(backendUrl + getSyncVersionEndpoint() + version).get().build();
-		final Response pullResponse = localClient.newCall(pullRequest).execute();
-		if (!pullResponse.isSuccessful()) {
-			pullResponse.body().close();
-			return false;
+		final String json;
+		try (final Response pullResponse = localClient.newCall(pullRequest).execute()) {
+			if (!pullResponse.isSuccessful()) {
+				return false;
+			}
+			json = pullResponse.body().string();
 		}
-		final String json = pullResponse.body().string();
 
-		// Post the data to local repo
-
+		// Post the data to upstream repo
+		final OkHttpClient upstreamClient = new okhttp3.OkHttpClient();
 		final RequestBody body = RequestBody.create(JSON, json);
 		final Request postRequest = createUpstreamRequestBuilder(upstreamUrl + getSyncVersionEndpoint()) //
 				.post(body).build();
-		final Response postResponse = upstreamClient.newCall(postRequest).execute();
-		try {
+		try (Response postResponse = upstreamClient.newCall(postRequest).execute()) {
 			return postResponse.isSuccessful();
-		} finally {
-			postResponse.body().close();
 		}
 	}
 
-	protected Request.Builder createUpstreamRequestBuilder(String url) {
-		String credential = Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+	protected Request.Builder createUpstreamRequestBuilder(final String url) {
+		final String credential = Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
 		return new Request.Builder() //
 				.url(url) //
 				.addHeader("Authorization", credential);
@@ -290,8 +285,8 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	@Override
 	public boolean syncUpstreamVersion(final String version) throws Exception {
 
-		OkHttpClient localClient = new okhttp3.OkHttpClient();
-		OkHttpClient upstreamClient = new okhttp3.OkHttpClient();
+		final OkHttpClient localClient = new okhttp3.OkHttpClient();
+		final OkHttpClient upstreamClient = new okhttp3.OkHttpClient();
 
 		// Pull down the version data
 		final Request pullRequest = createUpstreamRequestBuilder(upstreamUrl + getSyncVersionEndpoint() + version) //
@@ -324,24 +319,24 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		return notifyOnNewVersion(true);
 	}
 
-	protected CompletableFuture<Boolean> notifyOnNewVersion(boolean upstream) {
-		String baseUrl = upstream ? UpstreamUrlProvider.INSTANCE.getBaseURL() : BackEndUrlProvider.INSTANCE.getUrl();
+	protected CompletableFuture<Boolean> notifyOnNewVersion(final boolean upstream) {
+		final String baseUrl = upstream ? UpstreamUrlProvider.INSTANCE.getBaseURL() : BackEndUrlProvider.INSTANCE.getUrl();
 
 		if (baseUrl == null || baseUrl.isEmpty()) {
 			return null;
 		}
 
-		OkHttpClient longPollingClient = new OkHttpClient().newBuilder() //
+		final OkHttpClient longPollingClient = new OkHttpClient().newBuilder() //
 				.readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS) //
 				.build();
 
-		String url = baseUrl + getVersionNotificationEndpoint();
+		final String url = baseUrl + getVersionNotificationEndpoint();
 		LOG.debug("Calling url {}", url);
-		CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
-			Request.Builder requestBuilder = upstream ? createUpstreamRequestBuilder(url)
+		final CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
+			final Request.Builder requestBuilder = upstream ? createUpstreamRequestBuilder(url)
 					: new Request.Builder() //
 							.url(url);
-			Request request = requestBuilder.build();
+			final Request request = requestBuilder.build();
 			Response response = null;
 			try {
 				response = longPollingClient.newCall(request).execute();
@@ -350,7 +345,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 					return Boolean.TRUE;
 				}
 				return Boolean.FALSE;
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				LOG.error("Error waiting for new version");
 				throw new RuntimeException("Error waiting for new version");
 			} finally {

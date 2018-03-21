@@ -6,13 +6,9 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.nio.file.Path;
-import java.util.Dictionary;
-import java.util.HashMap;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -103,7 +99,7 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 			baseCaseFolder.mkdirs();
 		}
 
-//		storeURI = URI.createFileURI(baseCaseFolder.getCanonicalPath());
+		// storeURI = URI.createFileURI(baseCaseFolder.getCanonicalPath());
 
 		client = new BaseCaseServiceClient();
 
@@ -112,8 +108,10 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 
 			getServiceModel();
 			setReady();
-			client.start(baseCaseFolder, f -> {
+			client.start(baseCaseFolder, (f, creationDate) -> {
 				ScenarioInstance instance = constructInstance(f);
+				ZonedDateTime date = creationDate.atZone(ZoneId.of("UTC"));
+				instance.setName(String.format("Basecase %04d-%02d-%02d %02d:%02d", date.getYear(), date.getMonthValue(), date.getDayOfMonth(), date.getHour(), date.getMinute()));
 				if (instance != null) {
 					RunnerHelper.asyncExec(() -> {
 						serviceModel.getElements().add(instance);

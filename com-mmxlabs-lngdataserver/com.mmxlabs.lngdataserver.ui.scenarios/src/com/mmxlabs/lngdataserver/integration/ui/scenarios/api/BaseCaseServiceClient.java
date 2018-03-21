@@ -2,18 +2,14 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.Date;
+import java.time.Instant;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-
-import org.eclipse.ui.internal.handlers.DisplayHelpHandler;
+import java.util.function.BiConsumer;
 
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 import okhttp3.Credentials;
 import okhttp3.MediaType;
@@ -34,14 +30,7 @@ public class BaseCaseServiceClient {
 
 	private File baseCaseFolder;
 
-	public static void main(String[] args) throws IOException {
-		BaseCaseServiceClient c = new BaseCaseServiceClient();
-		String o = c.uploadBaseCase(new File("c://temp//test-data.txt"));
-		System.out.println(o);
-
-	}
-
-	public String uploadBaseCase(File file) throws IOException {
+	private String uploadBaseCase(File file) throws IOException {
 
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
@@ -61,15 +50,17 @@ public class BaseCaseServiceClient {
 
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful())
+			if (!response.isSuccessful()) {
+				response.body().close();
 				throw new IOException("Unexpected code " + response);
+			}
 
 			String responseStr = response.body().string();
 			return responseStr;
 		}
 	}
 
-	public boolean downloadTo(String uuid, File file) throws IOException {
+	public boolean downloadTo(String uuid, File file, BiConsumer<File, Instant> callback) throws IOException {
 		OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
@@ -82,6 +73,7 @@ public class BaseCaseServiceClient {
 
 		Response response = httpClient.newCall(request).execute();
 		if (!response.isSuccessful()) {
+			response.body().close();
 			throw new IOException("Unexpected code: " + response);
 		}
 		try (BufferedSource bufferedSource = response.body().source()) {
@@ -90,8 +82,15 @@ public class BaseCaseServiceClient {
 			bufferedSink.close();
 		}
 		// TODO: Is it a valid .lingo file?
-		Date date = response.headers().getDate("Last-Modified");
-		return true;
+		String date = response.headers().get("MMX-CreationDate");
+		if (date != null) {
+			Instant creationDate = Instant.ofEpochSecond(Long.parseLong(date));
+			callback.accept(file, creationDate);
+			return true;
+		}
+
+		// , Long.toString(baseCaseRecord.getCreationDate().getEpochSecond())");
+		return false;
 	}
 
 	public String getCurrentBaseCase() throws IOException {
@@ -107,6 +106,7 @@ public class BaseCaseServiceClient {
 
 		Response response = httpClient.newCall(request).execute();
 		if (!response.isSuccessful()) {
+			response.body().close();
 			throw new IOException("Unexpected code: " + response);
 		}
 		String value = response.body().string();
@@ -117,7 +117,7 @@ public class BaseCaseServiceClient {
 	private ScheduledThreadPoolExecutor pollTaskExecutor;
 	private ScheduledFuture<?> task;
 
-	public void start(File baseCaseFolder, Consumer<File> callback) {
+	public void start(File baseCaseFolder, BiConsumer<File, Instant> callback) {
 		this.baseCaseFolder = baseCaseFolder;
 		pollTaskExecutor = new ScheduledThreadPoolExecutor(1);
 		boolean[] firstRun = { true };
@@ -130,8 +130,8 @@ public class BaseCaseServiceClient {
 					File target = new File(baseCaseFolder.getAbsolutePath() + File.separator + uuid + ".lingo");
 					if (!target.exists()) {
 						try {
-							downloadTo(uuid, target);
-							callback.accept(target);
+							downloadTo(uuid, target, callback);
+//							callback.accept(target, date);
 							firstRun[0] = false;
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -152,13 +152,13 @@ public class BaseCaseServiceClient {
 
 					} else {
 						if (firstRun[0]) {
-							callback.accept(target);
+//							callback.accept(target);
 						}
 						firstRun[0] = false;
 					}
 				}
 			} catch (Exception e) {
-
+				int ii =0 ;
 			}
 
 		}, 0, 5, TimeUnit.MINUTES);
