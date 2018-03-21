@@ -37,6 +37,7 @@
 		<module>com.mmxlabs.lngdataserver.pricing.tests</module>
 
 		<module>com.mmxlabs.lngdataserver.ui</module>
+		<module>com.mmxlabs.lngdataserver.ui.scenarios</module>
 		<module>com.mmxlabs.lngdataserver.browser</module>
 		<module>com.mmxlabs.lngdataserver.browser.edit</module>
 		<module>com.mmxlabs.lngdataserver.browser.ui</module>
