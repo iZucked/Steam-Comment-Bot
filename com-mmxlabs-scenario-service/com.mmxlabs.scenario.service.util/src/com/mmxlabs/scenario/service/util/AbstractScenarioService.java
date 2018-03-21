@@ -35,7 +35,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	private static final EAttribute uuidAttribute = ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid();
 
 	private final @NonNull String name;
-	private ScenarioService serviceModel;
+	protected ScenarioService serviceModel;
 
 	protected IScenarioCipherProvider _scenarioCipherProvider;
 
