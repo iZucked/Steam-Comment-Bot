@@ -213,8 +213,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 						o_vessel.getNBORate(VesselState.Laden), o_vessel, load.getCargoCVValue(), true);
 				Assert.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[1]);
 				final TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);
+				final long charterRate = 0;
 				final int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,
-						loadDuration, new IntervalData[] { purchase }, new IntervalData[] { sales }, new IntervalData[] { sales });
+						loadDuration, new IntervalData[] { purchase }, new IntervalData[] { sales }, new IntervalData[] { sales }, charterRate);
 				Assert.assertArrayEquals(findBestBucketPairWithRouteAndBoiloffConsiderations, new int[] { 10, 11, 50, 51 });
 			});
 		});
