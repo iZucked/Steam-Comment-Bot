@@ -259,7 +259,7 @@ public class DataBrowser extends ViewPart {
 											dialog.getValue();
 										}
 
-										if (actionHandler.rename(selectedNode.getDisplayName(), dialog.getValue())) {
+										if (actionHandler.rename(selectedNode.getVersionIdentifier(), dialog.getValue())) {
 											selectedNode.setDisplayName(dialog.getValue());
 										}
 									}));
@@ -273,7 +273,7 @@ public class DataBrowser extends ViewPart {
 								if (/*!selectedNode.isPublished() && */ actionHandler.supportsPublish()) {
 									data_mgr.add(new RunnableAction("Publish", () -> {
 
-										if (actionHandler.publish(selectedNode.getDisplayName())) {
+										if (actionHandler.publish(selectedNode.getVersionIdentifier())) {
 //											selectedNode.setPublished(true);
 										}
 									}));
@@ -281,7 +281,7 @@ public class DataBrowser extends ViewPart {
 								}
 								if (actionHandler.supportsDelete()) {
 									data_mgr.add(new RunnableAction("Delete", () -> {
-										if (actionHandler.delete(selectedNode.getDisplayName())) {
+										if (actionHandler.delete(selectedNode.getVersionIdentifier())) {
 											parentNode.getChildren().remove(selectedNode);
 										}
 									}));
@@ -295,7 +295,7 @@ public class DataBrowser extends ViewPart {
 
 								if (actionHandler.supportsSetCurrent()) {
 									data_mgr.add(new RunnableAction("Set as Current", () -> {
-										if (actionHandler.setCurrent(selectedNode.getDisplayName())) {
+										if (actionHandler.setCurrent(selectedNode.getVersionIdentifier())) {
 											parentNode.setCurrent(selectedNode);
 											selectedNode.getParent().setCurrent(selectedNode);
 										}

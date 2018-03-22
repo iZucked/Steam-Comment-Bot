@@ -224,6 +224,15 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getNode_VersionIdentifier() {
+		return (EAttribute) nodeEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getIDataBrowserActionsHandler() {
 		return iDataBrowserActionsHandlerEDataType;
 	}
@@ -271,6 +280,7 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 		createEAttribute(nodeEClass, NODE__DISPLAY_NAME);
 		createEReference(nodeEClass, NODE__PARENT);
 		createEAttribute(nodeEClass, NODE__PUBLISHED);
+		createEAttribute(nodeEClass, NODE__VERSION_IDENTIFIER);
 
 		// Create data types
 		iDataBrowserActionsHandlerEDataType = createEDataType(IDATA_BROWSER_ACTIONS_HANDLER);
@@ -330,6 +340,8 @@ public class BrowserPackageImpl extends EPackageImpl implements BrowserPackage {
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_Published(), ecorePackage.getEBoolean(), "published", null, 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
+		initEAttribute(getNode_VersionIdentifier(), ecorePackage.getEString(), "versionIdentifier", null, 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(iDataBrowserActionsHandlerEDataType, IDataBrowserActionsHandler.class, "IDataBrowserActionsHandler", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#getDisplayName <em>Display Name</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#isPublished <em>Published</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.Node#getVersionIdentifier <em>Version Identifier</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getNode()
@@ -101,5 +102,31 @@ public interface Node extends EObject {
 	 * @generated
 	 */
 	void setPublished(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Version Identifier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Version Identifier</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Version Identifier</em>' attribute.
+	 * @see #setVersionIdentifier(String)
+	 * @see com.mmxlabs.lngdataserver.browser.BrowserPackage#getNode_VersionIdentifier()
+	 * @model
+	 * @generated
+	 */
+	String getVersionIdentifier();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lngdataserver.browser.Node#getVersionIdentifier <em>Version Identifier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Version Identifier</em>' attribute.
+	 * @see #getVersionIdentifier()
+	 * @generated
+	 */
+	void setVersionIdentifier(String value);
 
 } // Node

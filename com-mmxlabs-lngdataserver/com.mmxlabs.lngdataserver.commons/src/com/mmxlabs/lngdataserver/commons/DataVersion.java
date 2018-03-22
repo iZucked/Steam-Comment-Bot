@@ -1,6 +1,7 @@
 package com.mmxlabs.lngdataserver.commons;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DataVersion {
 	
@@ -24,6 +25,12 @@ public class DataVersion {
 	
 	public String getIdentifier() {
 		return identifier;
+	}
+	public String getFullIdentifier() {
+		if (identifier.contains("initial_version")) {
+			return getIdentifier();
+		}
+		return String.format("%s", createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 	}
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;

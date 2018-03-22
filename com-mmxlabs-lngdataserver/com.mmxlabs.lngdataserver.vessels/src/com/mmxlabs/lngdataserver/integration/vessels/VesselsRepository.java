@@ -1,6 +1,7 @@
 package com.mmxlabs.lngdataserver.integration.vessels;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -77,8 +78,8 @@ public class VesselsRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return localApi.getVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
-				return new DataVersion(v.getIdentifier(), createdAt, /* v.isPublished() */ false);
+				final LocalDateTime createdAt = LocalDateTime.parse(v.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00"));// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				return new DataVersion(v.getIdentifier(), createdAt, false);
 			}).collect(Collectors.toList());
 		} catch (Exception e) {
 			LOG.error("Error fetching vessels versions" + e.getMessage());
@@ -90,8 +91,8 @@ public class VesselsRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return upstreamApi.getVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
-				return new DataVersion(v.getIdentifier(), createdAt, /* v.isPublished() */ false);
+				final LocalDateTime createdAt = LocalDateTime.parse(v.getCreatedAt());// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished());
 			}).collect(Collectors.toList());
 		} catch (Exception e) {
 			LOG.error("Error fetching vessels versions" + e.getMessage());

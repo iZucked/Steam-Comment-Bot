@@ -120,7 +120,8 @@ public class Activator extends AbstractUIPlugin {
 					for (final DataVersion v : versions) {
 						final Node version = BrowserFactory.eINSTANCE.createLeaf();
 						version.setParent(pricingDataRoot);
-						version.setDisplayName(v.getIdentifier());
+						version.setDisplayName(v.getFullIdentifier());
+						version.setVersionIdentifier(v.getIdentifier());
 						version.setPublished(v.isPublished());
 						
 						if (v.isCurrent()) {
@@ -147,6 +148,7 @@ public class Activator extends AbstractUIPlugin {
 					}
 					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
 					newVersion.setDisplayName(versionString);
+					newVersion.setVersionIdentifier(versionString);
 					pricingDataRoot.getChildren().add(newVersion);
 				});
 			});

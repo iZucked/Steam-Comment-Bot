@@ -64,19 +64,19 @@ public class WebNavigatorView extends ViewPart {
 				if (node.getParent() != null) {
 					if (node.getParent().getDisplayName().equals("Distances")) {
 						System.out.println("update received: " + node.getDisplayName());
-						browser.setUrl(getUrl("distances", node.getDisplayName()));
+						browser.setUrl(getUrl("distances", node.getVersionIdentifier()));
 					}
 					if (node.getParent().getDisplayName().equals("Pricing")) {
 						System.out.println("update received: " + node.getDisplayName());
-						browser.setUrl(getUrl("pricing", node.getDisplayName()));
+						browser.setUrl(getUrl("pricing", node.getVersionIdentifier()));
 					}
 					if (node.getParent().getDisplayName().equals("Vessels")) {
 						System.out.println("update received: " + node.getDisplayName());
-						browser.setUrl(getUrl("vessels", node.getDisplayName()));
+						browser.setUrl(getUrl("vessels", node.getVersionIdentifier()));
 					}
 					if (node.getParent().getDisplayName().equals("Ports")) {
 						System.out.println("update received: " + node.getDisplayName());
-						browser.setUrl(getUrl("ports", node.getDisplayName()));
+						browser.setUrl(getUrl("ports", node.getVersionIdentifier()));
 					}
 				}
 			}

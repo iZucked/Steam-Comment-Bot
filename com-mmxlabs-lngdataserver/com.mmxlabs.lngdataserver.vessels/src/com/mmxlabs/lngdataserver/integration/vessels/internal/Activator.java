@@ -125,7 +125,8 @@ public class Activator extends AbstractUIPlugin {
 						for (DataVersion v : versions) {
 							Node version = BrowserFactory.eINSTANCE.createLeaf();
 							version.setParent(vesselsDataRoot);
-							version.setDisplayName(v.getIdentifier());
+							version.setDisplayName(v.getFullIdentifier());
+							version.setVersionIdentifier(v.getIdentifier());
 							version.setPublished(v.isPublished());
 							if (first) {
 								RunnerHelper.asyncExec(c -> vesselsDataRoot.setCurrent(version));
@@ -154,6 +155,7 @@ public class Activator extends AbstractUIPlugin {
 
 					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
 					newVersion.setDisplayName(versionString);
+					newVersion.setVersionIdentifier(versionString);
 					newVersion.setParent(vesselsDataRoot);
 					vesselsDataRoot.getChildren().add(0, newVersion);
 				});

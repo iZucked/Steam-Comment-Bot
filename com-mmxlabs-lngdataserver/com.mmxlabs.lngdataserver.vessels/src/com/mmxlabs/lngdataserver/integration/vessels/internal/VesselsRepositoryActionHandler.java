@@ -131,7 +131,8 @@ public class VesselsRepositoryActionHandler implements IDataBrowserActionsHandle
 				for (final DataVersion v : versions) {
 					final Node version = BrowserFactory.eINSTANCE.createLeaf();
 					version.setParent(dataRoot);
-					version.setDisplayName(v.getIdentifier());
+					version.setDisplayName(v.getFullIdentifier());
+					version.setVersionIdentifier(v.getIdentifier());
 					version.setPublished(v.isPublished());
 					if (first) {
 						dataRoot.setCurrent(version);

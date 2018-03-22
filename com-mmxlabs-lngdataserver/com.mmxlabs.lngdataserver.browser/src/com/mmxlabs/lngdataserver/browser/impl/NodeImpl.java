@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#getDisplayName <em>Display Name</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#isPublished <em>Published</em>}</li>
+ *   <li>{@link com.mmxlabs.lngdataserver.browser.impl.NodeImpl#getVersionIdentifier <em>Version Identifier</em>}</li>
  * </ul>
  *
  * @generated
@@ -79,6 +80,26 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 	 * @ordered
 	 */
 	protected boolean published = PUBLISHED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVersionIdentifier() <em>Version Identifier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVersionIdentifier()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VERSION_IDENTIFIER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVersionIdentifier() <em>Version Identifier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVersionIdentifier()
+	 * @generated
+	 * @ordered
+	 */
+	protected String versionIdentifier = VERSION_IDENTIFIER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -184,6 +205,27 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getVersionIdentifier() {
+		return versionIdentifier;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVersionIdentifier(String newVersionIdentifier) {
+		String oldVersionIdentifier = versionIdentifier;
+		versionIdentifier = newVersionIdentifier;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BrowserPackage.NODE__VERSION_IDENTIFIER, oldVersionIdentifier, versionIdentifier));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -195,6 +237,8 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 			return basicGetParent();
 		case BrowserPackage.NODE__PUBLISHED:
 			return isPublished();
+		case BrowserPackage.NODE__VERSION_IDENTIFIER:
+			return getVersionIdentifier();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -215,6 +259,9 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 			return;
 		case BrowserPackage.NODE__PUBLISHED:
 			setPublished((Boolean) newValue);
+			return;
+		case BrowserPackage.NODE__VERSION_IDENTIFIER:
+			setVersionIdentifier((String) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -237,6 +284,9 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 		case BrowserPackage.NODE__PUBLISHED:
 			setPublished(PUBLISHED_EDEFAULT);
 			return;
+		case BrowserPackage.NODE__VERSION_IDENTIFIER:
+			setVersionIdentifier(VERSION_IDENTIFIER_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -255,6 +305,8 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 			return parent != null;
 		case BrowserPackage.NODE__PUBLISHED:
 			return published != PUBLISHED_EDEFAULT;
+		case BrowserPackage.NODE__VERSION_IDENTIFIER:
+			return VERSION_IDENTIFIER_EDEFAULT == null ? versionIdentifier != null : !VERSION_IDENTIFIER_EDEFAULT.equals(versionIdentifier);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -274,6 +326,8 @@ public abstract class NodeImpl extends MinimalEObjectImpl.Container implements N
 		result.append(displayName);
 		result.append(", published: ");
 		result.append(published);
+		result.append(", versionIdentifier: ");
+		result.append(versionIdentifier);
 		result.append(')');
 		return result.toString();
 	}

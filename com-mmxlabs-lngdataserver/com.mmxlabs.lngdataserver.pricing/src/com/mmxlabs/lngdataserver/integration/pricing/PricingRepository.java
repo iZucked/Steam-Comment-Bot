@@ -53,7 +53,7 @@ public class PricingRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return PricingClient.getVersions(backendUrl).stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = v.getCreatedAt();
 				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished(), v.isCurrent());
 			}).collect(Collectors.toList());
 		} catch (final Exception e) {
@@ -66,7 +66,7 @@ public class PricingRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return PricingClient.getVersions(upstreamUrl, UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()).stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = v.getCreatedAt();
 				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished(), v.isCurrent());
 			}).collect(Collectors.toList());
 		} catch (final Exception e) {

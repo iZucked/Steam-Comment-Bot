@@ -123,13 +123,22 @@ public interface BrowserPackage extends EPackage {
 	int NODE__PUBLISHED = 2;
 
 	/**
+	 * The feature id for the '<em><b>Version Identifier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE__VERSION_IDENTIFIER = 3;
+
+	/**
 	 * The number of structural features of the '<em>Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NODE_FEATURE_COUNT = 3;
+	int NODE_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Node</em>' class.
@@ -176,6 +185,15 @@ public interface BrowserPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE_NODE__PUBLISHED = NODE__PUBLISHED;
+
+	/**
+	 * The feature id for the '<em><b>Version Identifier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_NODE__VERSION_IDENTIFIER = NODE__VERSION_IDENTIFIER;
 
 	/**
 	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
@@ -267,6 +285,15 @@ public interface BrowserPackage extends EPackage {
 	 * @ordered
 	 */
 	int LEAF__PUBLISHED = NODE__PUBLISHED;
+
+	/**
+	 * The feature id for the '<em><b>Version Identifier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEAF__VERSION_IDENTIFIER = NODE__VERSION_IDENTIFIER;
 
 	/**
 	 * The number of structural features of the '<em>Leaf</em>' class.
@@ -414,6 +441,17 @@ public interface BrowserPackage extends EPackage {
 	EAttribute getNode_Published();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lngdataserver.browser.Node#getVersionIdentifier <em>Version Identifier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Version Identifier</em>'.
+	 * @see com.mmxlabs.lngdataserver.browser.Node#getVersionIdentifier()
+	 * @see #getNode()
+	 * @generated
+	 */
+	EAttribute getNode_VersionIdentifier();
+
+	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler <em>IData Browser Actions Handler</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -532,6 +570,13 @@ public interface BrowserPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NODE__PUBLISHED = eINSTANCE.getNode_Published();
+		/**
+		 * The meta object literal for the '<em><b>Version Identifier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NODE__VERSION_IDENTIFIER = eINSTANCE.getNode_VersionIdentifier();
 		/**
 		 * The meta object literal for the '<em>IData Browser Actions Handler</em>' data type.
 		 * <!-- begin-user-doc -->
