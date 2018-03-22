@@ -31,12 +31,17 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.scenario.service.ui,
  com.mmxlabs.license.features,
  com.mmxlabs.common.common-util,
- com.mmxlabs.lngdataserver.lib
+ com.mmxlabs.lngdataserver.lib,
+ com.google.inject,
+ org.ops4j.peaberry,
+ org.ops4j.peaberry.eclipse,
+ com.mmxlabs.models.lng.schedule
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.slf4j
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator
-Export-Package: com.mmxlabs.lngdataserver.integration.ui.scenarios
+Export-Package: com.mmxlabs.lngdataserver.integration.ui.scenarios,
+ com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
 Service-Component: OSGI-INF/*
