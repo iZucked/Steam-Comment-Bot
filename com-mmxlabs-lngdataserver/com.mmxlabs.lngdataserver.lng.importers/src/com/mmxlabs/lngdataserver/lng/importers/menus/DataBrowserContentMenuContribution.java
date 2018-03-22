@@ -1,5 +1,6 @@
 package com.mmxlabs.lngdataserver.lng.importers.menus;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Function;
@@ -21,6 +22,8 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ScenarioServicePublishAction;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.ui.PricingFromScenarioImportWizard;
@@ -96,6 +99,12 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 			if (firstElement instanceof ScenarioInstance) {
 				ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
 				Manifest manifest = scenarioInstance.getManifest();
+
+				menuManager.add(new RunnableAction("Publish scenario", () -> {
+					ScenarioServicePublishAction.publishScenario(scenarioInstance);
+				}));
+				itemsAdded = true;
+
 				if (manifest != null) {
 					for (ModelArtifact modelArtifact : manifest.getModelDependencies()) {
 						// if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), modelArtifact.getKey())) {
@@ -117,6 +126,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 							}));
 							itemsAdded = true;
 						}
+						
 						// if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), modelArtifact.getKey())) {
 						// menuManager.add(new RunnableAction("Export pricing data", () -> {
 						// exportVessels(scenarioInstance);

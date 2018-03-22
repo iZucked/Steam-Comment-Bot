@@ -70,10 +70,13 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 	public void delete(final Container container) {
 
 	}
-
+	@Override
+	public void fireEvent(ScenarioServiceEvent event, ScenarioInstance scenarioInstance) {
+		super.fireEvent(event, scenarioInstance);
+	}
+	
 	@Override
 	protected ScenarioService initServiceModel() {
-
 		final ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
 		serviceModel.setName(serviceName);
 		serviceModel.setDescription("Shared base cases");

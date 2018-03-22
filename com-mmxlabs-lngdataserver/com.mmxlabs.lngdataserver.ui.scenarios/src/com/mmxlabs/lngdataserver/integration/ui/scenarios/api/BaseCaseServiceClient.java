@@ -30,7 +30,7 @@ public class BaseCaseServiceClient {
 
 	private File baseCaseFolder;
 
-	private String uploadBaseCase(File file) throws IOException {
+	public String uploadBaseCase(File file) throws IOException {
 
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
