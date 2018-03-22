@@ -94,8 +94,9 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 
 		final IVessel vessel = getIVessel(null);
+		final long charterRate = 0;
 		final int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals,
-				salesIntervals, false);
+				salesIntervals, charterRate, false);
 		Assert.assertArrayEquals(new int[] { 0, 0, 40, 40 }, times);
 	}
 
