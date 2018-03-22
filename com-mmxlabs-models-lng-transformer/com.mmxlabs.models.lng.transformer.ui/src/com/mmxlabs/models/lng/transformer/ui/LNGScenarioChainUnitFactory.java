@@ -165,7 +165,7 @@ public class LNGScenarioChainUnitFactory {
 				final HillClimbOptimisationStage stage = (HillClimbOptimisationStage) template;
 				if (stage.getAnnealingSettings().getIterations() > 0) {
 					if (template instanceof ParallelHillClimbOptimisationStage) {
-						LNGParallelHillClimbingOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION);
+						LNGParallelHillClimbingOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_HILLCLIMBING_OPTIMISATION);
 					} else {
 						if (jobCount > 1) {
 							LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, true);
