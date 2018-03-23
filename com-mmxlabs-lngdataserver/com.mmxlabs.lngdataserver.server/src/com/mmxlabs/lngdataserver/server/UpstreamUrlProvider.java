@@ -2,6 +2,7 @@ package com.mmxlabs.lngdataserver.server;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -16,6 +17,8 @@ import com.mmxlabs.lngdataserver.server.internal.Activator;
 import com.mmxlabs.lngdataserver.server.preferences.StandardDateRepositoryPreferenceConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
+import io.netty.util.internal.chmv8.ForkJoinPool;
+
 public class UpstreamUrlProvider {
 	public static final UpstreamUrlProvider INSTANCE = new UpstreamUrlProvider();
 
@@ -23,6 +26,7 @@ public class UpstreamUrlProvider {
 	private final Set<IUpstreamDetailChangedListener> listeners = new HashSet<>();
 
 	private boolean hasDetails = false;
+	private AtomicBoolean dialogOpen = new AtomicBoolean(false);
 
 	public UpstreamUrlProvider() {
 
@@ -58,16 +62,22 @@ public class UpstreamUrlProvider {
 			if (display == null) {
 				return "";
 			}
-			display.syncExec(() -> {
-				final AuthDetailsPromptDialog dialog = new AuthDetailsPromptDialog(display.getActiveShell());
-				dialog.setBlockOnOpen(true);
-				if (dialog.open() == Window.OK) {
-					UpstreamUrlProvider.this.username = dialog.getUsername();
-					UpstreamUrlProvider.this.password = new String(dialog.getPassword());
+			if (dialogOpen.compareAndSet(false, true)) {
+				display.syncExec(() -> {
+					final AuthDetailsPromptDialog dialog = new AuthDetailsPromptDialog(display.getActiveShell());
+					dialog.setBlockOnOpen(true);
+					if (dialog.open() == Window.OK) {
+						UpstreamUrlProvider.this.username = dialog.getUsername();
+						UpstreamUrlProvider.this.password = new String(dialog.getPassword());
+					}
 					hasDetails = true;
-				}
-			});
-
+				});
+				// Fire change listener without further blocking this call
+				ForkJoinPool.commonPool().submit(() -> fireChangedListeners());
+			}
+		}
+		if (!hasDetails) {
+			return "";
 		}
 
 		return url;
