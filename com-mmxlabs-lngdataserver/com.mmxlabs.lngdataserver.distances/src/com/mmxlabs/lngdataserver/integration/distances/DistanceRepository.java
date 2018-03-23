@@ -153,11 +153,12 @@ public class DistanceRepository extends AbstractDataRepository {
 	protected void doHandleUpstreamURLChange() {
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
-
-		upstreamApi.getApiClient().setBasePath(upstreamURL);
-		upstreamApi.getApiClient().setUsername(UpstreamUrlProvider.INSTANCE.getUsername());
-		upstreamApi.getApiClient().setPassword(UpstreamUrlProvider.INSTANCE.getPassword());
-		upstreamApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
+		if (upstreamURL != null && !upstreamURL.isEmpty()) {
+			upstreamApi.getApiClient().setBasePath(upstreamURL);
+			upstreamApi.getApiClient().setUsername(UpstreamUrlProvider.INSTANCE.getUsername());
+			upstreamApi.getApiClient().setPassword(UpstreamUrlProvider.INSTANCE.getPassword());
+			upstreamApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
+		}
 	}
 
 	protected static LocalDateTime fromDateTimeAtUTC(final DateTime dateTime) {
