@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -277,19 +279,24 @@ public final class LicenseChecker {
 	private static void importExtraCertsFromHome(final KeyStore keystore) {
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
-			final File f = new File(userHome + "/cacerts/");
-			if (f.exists() && f.isDirectory()) {
-				for (final File certFile : f.listFiles()) {
-					if (certFile.isFile()) {
-						try (FileInputStream inStream = new FileInputStream(certFile)) {
-							final CertificateFactory factory = CertificateFactory.getInstance("X.509");
-							final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
-							keystore.setCertificateEntry(f.getName(), cert);
-						} catch (final Exception e) {
-							log.error("Unable to import certificate " + f.getAbsolutePath(), e);
+			File f;
+			try {
+				f = new File(new URI(userHome + "/cacerts/"));
+
+				if (f.exists() && f.isDirectory()) {
+					for (final File certFile : f.listFiles()) {
+						if (certFile.isFile()) {
+							try (FileInputStream inStream = new FileInputStream(certFile)) {
+								final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+								final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
+								keystore.setCertificateEntry(f.getName(), cert);
+							} catch (final Exception e) {
+								log.error("Unable to import certificate " + f.getAbsolutePath(), e);
+							}
 						}
 					}
 				}
+			} catch (URISyntaxException e1) {
 			}
 		}
 	}
