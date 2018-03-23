@@ -31,7 +31,7 @@ public class AuthDetailsPromptDialog extends Dialog {
 	@Override
 	protected void configureShell(final Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Authentication for Data Hub");
+		newShell.setText("Authentication for LiNGO Hub");
 	}
 
 	@Override
