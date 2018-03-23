@@ -1,17 +1,23 @@
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.domain.EditingDomain;
+
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -94,6 +100,18 @@ public class ScenarioServicePublishAction {
 		} catch (IOException e) {
 			System.out.println("Error uploading the basecase scenario");
 			e.printStackTrace();
+		}
+		Iterable<IReportPublisherExtension> reports  = ReportPublisherExtensionUtil.getContextMenuExtensions();
+		
+		for (IReportPublisherExtension reportPublisherExtension :ReportPublisherExtensionUtil.getContextMenuExtensions()) {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			
+			reportPublisherExtension.publishReport(scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider), outputStream);
+			String reportType = reportPublisherExtension.getReportType();
+			
+			// Call the correct upload report endpoint;
+			
+			outputStream.toByteArray();
 		}
 	}
 }

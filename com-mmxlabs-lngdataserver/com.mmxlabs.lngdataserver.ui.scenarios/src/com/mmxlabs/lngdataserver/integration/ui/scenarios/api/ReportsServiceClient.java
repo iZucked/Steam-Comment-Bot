@@ -22,11 +22,10 @@ import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
 
-public class BaseCaseServiceClient {
+public class ReportsServiceClient {
 
-	private static final String BASECASE_UPLOAD_URL = "/scenarios/v1/basecase/upload";
-	private static final String BASECASE_DOWNLOAD_URL = "/scenarios/v1/basecase/";
-	private static final String BASECASE_CURRENT_URL = "/scenarios/v1/basecase/current";
+	private static final String BASECASE_UPLOAD_URL = "/scenarios/v1/reports/upload";
+	private static final String BASECASE_GET_URL = "/scenarios/v1/reports/";
 
 	private File baseCaseFolder;
 
@@ -67,7 +66,7 @@ public class BaseCaseServiceClient {
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
 		Request request = new Request.Builder() //
-				.url(String.format("%s%s/%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
+				.url(String.format("%s%s/%s", upstreamURL, BASECASE_GET_URL, uuid)) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
@@ -93,27 +92,6 @@ public class BaseCaseServiceClient {
 		return false;
 	}
 
-	public static String getCurrentBaseCase() throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
-
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
-
-		Request request = new Request.Builder() //
-				.url(upstreamURL + BASECASE_CURRENT_URL) //
-				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
-				.build();
-
-		Response response = httpClient.newCall(request).execute();
-		if (!response.isSuccessful()) {
-			response.body().close();
-			throw new IOException("Unexpected code: " + response);
-		}
-		String value = response.body().string();
-
-		return value;
-	}
-
 	private ScheduledThreadPoolExecutor pollTaskExecutor;
 	private ScheduledFuture<?> task;
 
@@ -125,7 +103,7 @@ public class BaseCaseServiceClient {
 			try {
 				// Connect to service.
 				// Does the current match known current?
-				String uuid = getCurrentBaseCase();
+				String uuid = BaseCaseServiceClient.getCurrentBaseCase();
 				{
 					File target = new File(baseCaseFolder.getAbsolutePath() + File.separator + uuid + ".lingo");
 					if (!target.exists()) {
