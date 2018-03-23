@@ -3,7 +3,6 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,12 +16,10 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -54,7 +51,6 @@ public class ScenarioServicePublishAction {
 			analyticsModel.getOptimisations().clear();
 
 			scenarioDataProvider =  SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);	
-		//}
 		
 		// Evaluate scenario
 		//try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
@@ -65,7 +61,6 @@ public class ScenarioServicePublishAction {
 
 				//final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 				OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
-				assert optimisationPlan != null;
 				
 				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
 				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, true,
@@ -102,7 +97,6 @@ public class ScenarioServicePublishAction {
 			System.out.println("Error uploading the basecase scenario");
 			e.printStackTrace();
 		}
-		Iterable<IReportPublisherExtension> reports  = ReportPublisherExtensionUtil.getContextMenuExtensions();
 		
 		for (IReportPublisherExtension reportPublisherExtension :ReportPublisherExtensionUtil.getContextMenuExtensions()) {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -112,6 +106,15 @@ public class ScenarioServicePublishAction {
 			
 			// Call the correct upload report endpoint;
 			outputStream.toByteArray();
+			ReportsServiceClient reportsServiceClient = new ReportsServiceClient();
+			
+			try {
+				reportsServiceClient.uploadReport(outputStream.toString(), reportType, baseCaseServiceClient.getCurrentBaseCase());
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+			
 		}
 	}
 }

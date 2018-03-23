@@ -67,7 +67,7 @@ public class BaseCaseServiceClient {
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
 		Request request = new Request.Builder() //
-				.url(String.format("%s%s/%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
+				.url(String.format("%s%s%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 

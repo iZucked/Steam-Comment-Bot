@@ -34,9 +34,9 @@ public class ReportsServiceClient {
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				.addFormDataPart("basecase", "basecase.lingo", RequestBody.create(mediaType, data))//
+				.addFormDataPart("report", type + ".json", RequestBody.create(mediaType, data))//
 				.build();
-
+		//String upstreamURL = "http://"
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
 		Request request = new Request.Builder() //
