@@ -61,6 +61,7 @@ public class ScenarioServicePublishAction {
 
 				//final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 				OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
+				assert optimisationPlan != null;
 				
 				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
 				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, true,
