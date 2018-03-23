@@ -8,6 +8,12 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
+
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
@@ -134,14 +140,41 @@ public class BaseCaseServiceClient {
 				{
 					File target = new File(baseCaseFolder.getAbsolutePath() + File.separator + uuid + ".lingo");
 					if (!target.exists()) {
-						try {
-							downloadTo(uuid, target, callback);
-							// callback.accept(target, date);
-							firstRun[0] = false;
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						final Job background = new Job("Downloading basecase") {
+
+							@Override
+							public IStatus run(final IProgressMonitor monitor) {
+								// Having a method called "main" in the stacktrace stops SpringBoot throwing an exception in the logging framework
+								return main(monitor);
+							}
+
+							public IStatus main(final IProgressMonitor monitor) {
+								monitor.beginTask("Downloading latest basecase...", IProgressMonitor.UNKNOWN);
+								try {
+
+									downloadTo(uuid, target, callback);
+
+									firstRun[0] = false;
+									monitor.worked(1);
+								} catch (final Exception e) {
+								} finally {
+									monitor.done();
+								}
+								return Status.OK_STATUS;
+							}
+						};
+						background.setSystem(false);
+						background.setUser(true);
+						background.setPriority(Job.LONG);
+
+						background.schedule();
+						System.out.println("Downloading basecase in background...");
+
+						// callback.accept(target, date);
+						//} catch (IOException e) {
+						//	// TODO Auto-generated catch block
+						//	e.printStackTrace();
+						//}
 
 						// updateScenarioModel(target);
 						//
