@@ -98,7 +98,9 @@ public class BaseCaseServiceClient {
 				.build();
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
-
+		if (upstreamURL == null || upstreamURL.isEmpty()) {
+			return null;
+		}
 		Request request = new Request.Builder() //
 				.url(upstreamURL + BASECASE_CURRENT_URL) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
@@ -126,12 +128,15 @@ public class BaseCaseServiceClient {
 				// Connect to service.
 				// Does the current match known current?
 				String uuid = getCurrentBaseCase();
+				if (uuid == null) {
+					return;
+				}
 				{
 					File target = new File(baseCaseFolder.getAbsolutePath() + File.separator + uuid + ".lingo");
 					if (!target.exists()) {
 						try {
 							downloadTo(uuid, target, callback);
-//							callback.accept(target, date);
+							// callback.accept(target, date);
 							firstRun[0] = false;
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -152,13 +157,13 @@ public class BaseCaseServiceClient {
 
 					} else {
 						if (firstRun[0]) {
-//							callback.accept(target);
+							// callback.accept(target);
 						}
 						firstRun[0] = false;
 					}
 				}
 			} catch (Exception e) {
-				int ii =0 ;
+				int ii = 0;
 			}
 
 		}, 0, 5, TimeUnit.MINUTES);
