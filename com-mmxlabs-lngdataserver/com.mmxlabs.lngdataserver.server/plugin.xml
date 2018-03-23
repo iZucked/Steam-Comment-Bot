@@ -10,5 +10,11 @@
             name="Data Server">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.mmxlabs.lngdataserver.server.preferences.DatahubPreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

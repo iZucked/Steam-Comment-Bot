@@ -5,11 +5,14 @@ import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import com.mmxlabs.lngdataserver.server.internal.Activator;
+
 public class DataserverPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public DataserverPreferencePage() {
 		super(GRID);
 		setDescription("Data Hub - Upstream");
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	}
 
 	@Override
