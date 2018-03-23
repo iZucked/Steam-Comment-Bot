@@ -49,7 +49,7 @@ public class VesselsRepository extends AbstractDataRepository {
 			}
 		});
 
-		newUpstreamURL();
+		doHandleUpstreamURLChange();
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class VesselsRepository extends AbstractDataRepository {
 	}
 
 	@Override
-	protected void newUpstreamURL() {
+	protected void doHandleUpstreamURLChange() {
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 

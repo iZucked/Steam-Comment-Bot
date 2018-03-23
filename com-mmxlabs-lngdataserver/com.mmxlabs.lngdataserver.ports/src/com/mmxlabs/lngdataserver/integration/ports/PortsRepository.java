@@ -45,7 +45,7 @@ public class PortsRepository extends AbstractDataRepository {
 			}
 		});
 
-		newUpstreamURL();
+		doHandleUpstreamURLChange();
 	}
 
 	public boolean isReady() {
@@ -124,7 +124,7 @@ public class PortsRepository extends AbstractDataRepository {
 	}
 
 	@Override
-	protected void newUpstreamURL() {
+	protected void doHandleUpstreamURLChange() {
 
 		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 

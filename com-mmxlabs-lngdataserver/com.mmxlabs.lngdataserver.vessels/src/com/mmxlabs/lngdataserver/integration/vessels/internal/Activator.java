@@ -58,7 +58,6 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 
 		vesselsRepository = VesselsRepository.INSTANCE;
-		vesselsRepository.listenToPreferenceChanges();
 		vesselsDataRoot.setActionHandler(new VesselsRepositoryActionHandler(vesselsRepository, vesselsDataRoot));
 
 		active = true;
@@ -74,7 +73,6 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		if (vesselsRepository != null) {
 			vesselsRepository.stopListeningForNewLocalVersions();
-			vesselsRepository.stopListenToPreferenceChanges();
 			vesselsRepository = null;
 		}
 		vesselsDataRoot.setActionHandler(null);

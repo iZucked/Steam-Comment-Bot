@@ -50,43 +50,12 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	protected Thread upstreamVersionThread;
 
 	public AbstractDataRepository() {
-		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> newUpstreamURL());
+		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> doHandleUpstreamURLChange());
 		upstreamUrl = getUpstreamUrl();
 	}
 
-	@Override
-	public void listenToPreferenceChanges() {
-		// if (preferenceStore != null) {
-		// preferenceStore.addPropertyChangeListener(listener);
-		// }
-	}
-
-	@Override
-	public void stopListenToPreferenceChanges() {
-		// if (preferenceStore != null) {
-		// preferenceStore.removePropertyChangeListener(listener);
-		// }
-	}
-	//
-	// protected Triple<String, String, String> getUserServiceAuth() {
-	// IPreferenceStore p_preferenceStore = preferenceStore;
-	// if (p_preferenceStore != null) {
-	// final String url = p_preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
-	// final String username = p_preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY);
-	// final String password = p_preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY);
-	//
-	// return new Triple<>(url, username, password);
-	// }
-	// return new Triple<>();
-	// }
-
 	protected String getUpstreamUrl() {
 		return UpstreamUrlProvider.INSTANCE.getBaseURL();
-		// if (preferenceStore != null) {
-		// final String url = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
-		// return url;
-		// }
-		// return "";
 	}
 
 	@Override
@@ -196,9 +165,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	protected OkHttpClient buildClientWithBasicAuth() {
-		Triple<String, String, String> auth = new Triple(UpstreamUrlProvider.INSTANCE.getBaseURL(),
-				UpstreamUrlProvider.INSTANCE.getUsername(),
-				UpstreamUrlProvider.INSTANCE.getPassword());
+		Triple<String, String, String> auth = new Triple(UpstreamUrlProvider.INSTANCE.getBaseURL(), UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
 		if (auth != null) {
 			OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 			clientBuilder.authenticator(new Authenticator() {
@@ -248,7 +215,22 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		return false;
 	}
 
-	protected abstract void newUpstreamURL();
+	protected void handleUpstreamURLChange() {
+		// Restart change listener after detail change
+		boolean restartChangeListener = false;
+		if (listenForNewUpstreamVersions) {
+			restartChangeListener = true;
+			stopListeningForNewUpstreamVersions();
+		}
+
+		doHandleUpstreamURLChange();
+
+		if (restartChangeListener) {
+			startListenForNewUpstreamVersions();
+		}
+	}
+
+	protected abstract void doHandleUpstreamURLChange();
 
 	public boolean hasUpstream() {
 		return upstreamUrl != null && !upstreamUrl.isEmpty();
@@ -338,7 +320,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		final CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
 			final Request.Builder requestBuilder = upstream ? createUpstreamRequestBuilder(url)
 					: new Request.Builder() //
-					.url(url);
+							.url(url);
 			final Request request = requestBuilder.build();
 			Response response = null;
 			try {

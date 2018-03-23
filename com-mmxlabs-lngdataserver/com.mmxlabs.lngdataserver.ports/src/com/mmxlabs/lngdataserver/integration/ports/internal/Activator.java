@@ -56,7 +56,6 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 
 		portsRepository = new PortsRepository(getPreferenceStore(), null);
-		portsRepository.listenToPreferenceChanges();
 		portsDataRoot.setActionHandler(new PortsRepositoryActionHandler(portsRepository, portsDataRoot));
 
 		active = true;
@@ -72,7 +71,6 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		if (portsRepository != null) {
 			portsRepository.stopListeningForNewLocalVersions();
-			portsRepository.stopListenToPreferenceChanges();
 			portsRepository = null;
 		}
 		portsDataRoot.setActionHandler(null);

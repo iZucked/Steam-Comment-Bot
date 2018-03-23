@@ -28,7 +28,7 @@ public class PricingRepository extends AbstractDataRepository {
 
 	private PricingRepository() {
 		isReady();
-		newUpstreamURL();
+		doHandleUpstreamURLChange();
 
 	}
 
@@ -119,7 +119,7 @@ public class PricingRepository extends AbstractDataRepository {
 	}
 
 	@Override
-	protected void newUpstreamURL() {
+	protected void doHandleUpstreamURLChange() {
 
 	}
 

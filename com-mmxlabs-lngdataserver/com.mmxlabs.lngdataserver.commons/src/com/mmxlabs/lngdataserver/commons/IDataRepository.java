@@ -17,10 +17,6 @@ public interface IDataRepository {
 
 	List<DataVersion> updateAvailable() throws Exception;
 
-	void listenToPreferenceChanges();
-
-	void stopListenToPreferenceChanges();
-
 	void startListenForNewLocalVersions();
 
 	void startListenForNewUpstreamVersions();

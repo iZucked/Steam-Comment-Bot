@@ -13,80 +13,66 @@ import com.mmxlabs.lngdataserver.server.preferences.StandardDateRepositoryPrefer
 public class UpstreamUrlProvider {
 	public static final UpstreamUrlProvider INSTANCE = new UpstreamUrlProvider();
 
-	private IPreferenceStore preferenceStore;
+	private final IPreferenceStore preferenceStore;
+	private final Set<IUpstreamDetailChangedListener> listeners = new HashSet<>();
 
 	public UpstreamUrlProvider() {
 
 		preferenceStore = Activator.getDefault().getPreferenceStore();
 		preferenceStore.addPropertyChangeListener(listener);
-
-		// ISecurePreferences root = SecurePreferencesFactory.getDefault();
-		// ISecurePreferences node = root.node("datahub/upstream");
-		// node.put("password", myPassword, true);
 	}
 
 	private final IPropertyChangeListener listener = new IPropertyChangeListener() {
 		@Override
-		public void propertyChange(PropertyChangeEvent event) {
+		public void propertyChange(final PropertyChangeEvent event) {
 			switch (event.getProperty()) {
 			case StandardDateRepositoryPreferenceConstants.P_URL_KEY:
-				// case StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY:
-				// case StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY:
-				//
-				// boolean listen = listenForNewUpstreamVersions;
-				// if (listen) {
-				// stopListeningForNewUpstreamVersions();
-				// }
-				// upstreamUrl = getUpstreamUrl();
-				// newUpstreamURL(upstreamUrl);
-				//
-				// if (listen) {
-				// startListenForNewUpstreamVersions();
-				// }
-				//
-				// break;
-				// default:
+			case StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY:
+			case StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY:
+				for (final IUpstreamDetailChangedListener l : listeners) {
+					try {
+						l.changed();
+					} catch (final Exception e) {
+
+					}
+				}
 			}
 		}
 	};
 
-	private Set<IUpstreamDetailChangedListener> listeners = new HashSet<>();
-
 	public String getBaseURL() {
-//		String url = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
-//		if (url == null) {
-//			return "";
-//		}
-//		return url;
-		return "https://kubera.mmxlabs.lan:9090/";
+		final String url = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
+		if (url == null) {
+			return "";
+		}
+		return url;
 	}
 
 	public String getUsername() {
-		return "ds_admin";// l..preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY);
+		return preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY);
 	}
 
 	public String getPassword() {
-		// Best to use char[] for password.
-		return "ds_admin";// preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY).toCharArray();
+		return preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY);
 	}
-	//
-	// public @Nullable Pair<String, String> getCredientals() {
-	// ISecurePreferences root = SecurePreferencesFactory.getDefault();
-	// if (root.nodeExists("datahub/upstream")) {
-	// ISecurePreferences node = root.node("datahub/upstream");
-	// String username = node.get("username", null);
-	// String password = node.get("password", null);
-	//
-	// return new Pair<>(username, password);
-	// }
-	// return null;
-	// }
 
-	public void registerDetailsChangedLister(IUpstreamDetailChangedListener listener) {
+	public void registerDetailsChangedLister(final IUpstreamDetailChangedListener listener) {
 		listeners.add(listener);
 	}
 
-	public void deregisterDetailsChangedLister(IUpstreamDetailChangedListener listener) {
+	public void deregisterDetailsChangedLister(final IUpstreamDetailChangedListener listener) {
 		listeners.remove(listener);
+	}
+
+	public boolean isAvailable() {
+		final String url = getBaseURL();
+		if (url == null || url.isEmpty()) {
+			return false;
+		}
+
+		if (!url.startsWith("http")) {
+			return false;
+		}
+		return true;
 	}
 }

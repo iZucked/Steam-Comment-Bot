@@ -55,7 +55,6 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 
 		distanceRepository = DistanceRepository.INSTANCE;
-		distanceRepository.listenToPreferenceChanges();
 		distancesDataRoot.setActionHandler(new DistanceRepositoryActionHandler(distanceRepository, distancesDataRoot));
 
 		active = true;
@@ -72,7 +71,6 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(final BundleContext context) throws Exception {
 		if (distanceRepository != null) {
 			distanceRepository.stopListeningForNewLocalVersions();
-			distanceRepository.stopListenToPreferenceChanges();
 			distanceRepository = null;
 		}
 		distancesDataRoot.setActionHandler(null);

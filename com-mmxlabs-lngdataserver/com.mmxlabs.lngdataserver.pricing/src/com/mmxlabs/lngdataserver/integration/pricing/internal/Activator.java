@@ -58,7 +58,6 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 
 		pricingRepository = PricingRepository.INSTANCE;
-		pricingRepository.listenToPreferenceChanges();
 		pricingDataRoot.setActionHandler(new PricingRepositoryActionHandler(pricingRepository, pricingDataRoot));
 
 		active = true;
@@ -73,7 +72,6 @@ public class Activator extends AbstractUIPlugin {
 	@Override
 	public void stop(final BundleContext context) throws Exception {
 		if (pricingRepository != null) {
-			pricingRepository.stopListenToPreferenceChanges();
 			pricingRepository.stopListeningForNewLocalVersions();
 			pricingRepository = null;
 		}

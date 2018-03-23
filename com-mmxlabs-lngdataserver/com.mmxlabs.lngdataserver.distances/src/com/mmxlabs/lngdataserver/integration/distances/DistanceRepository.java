@@ -55,7 +55,7 @@ public class DistanceRepository extends AbstractDataRepository {
 			}
 		});
 
-		newUpstreamURL();
+		doHandleUpstreamURLChange();
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class DistanceRepository extends AbstractDataRepository {
 	}
 
 	@Override
-	protected void newUpstreamURL() {
+	protected void doHandleUpstreamURLChange() {
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
