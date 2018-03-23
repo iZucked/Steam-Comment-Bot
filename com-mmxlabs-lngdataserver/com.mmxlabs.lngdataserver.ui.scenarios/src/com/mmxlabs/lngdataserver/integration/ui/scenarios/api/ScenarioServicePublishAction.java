@@ -110,7 +110,6 @@ public class ScenarioServicePublishAction {
 			String reportType = reportPublisherExtension.getReportType();
 			
 			// Call the correct upload report endpoint;
-			
 			outputStream.toByteArray();
 		}
 	}

@@ -9,7 +9,7 @@ import org.ops4j.peaberry.eclipse.MapName;
 
 /**
  */
-@ExtensionBean("com.mmxlabs.lngdataserver.integration.ui.scenarios.ReportPublisherExtension")
+@ExtensionBean("com.mmxlabs.lngdataserver.integration.ui.scenarios.ReportPublisher")
 public interface ReportPublisherExtensionPoint {
 
 	@MapName("class")

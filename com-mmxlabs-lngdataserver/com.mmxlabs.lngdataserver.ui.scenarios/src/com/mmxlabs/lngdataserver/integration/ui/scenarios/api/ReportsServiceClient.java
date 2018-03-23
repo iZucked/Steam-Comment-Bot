@@ -24,23 +24,23 @@ import okio.Okio;
 
 public class ReportsServiceClient {
 
-	private static final String BASECASE_UPLOAD_URL = "/scenarios/v1/reports/upload";
-	private static final String BASECASE_GET_URL = "/scenarios/v1/reports/";
+	private static final String REPORT_UPLOAD_URL = "/scenarios/v1/reports/upload";
+	private static final String REPORT_GET_URL = "/scenarios/v1/reports/";
 
 	private File baseCaseFolder;
 
-	public String uploadBaseCase(File file) throws IOException {
+	public String uploadReport(String data, String type, String uuid) throws IOException {
 
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				.addFormDataPart("basecase", "basecase.lingo", RequestBody.create(mediaType, file))//
+				.addFormDataPart("basecase", "basecase.lingo", RequestBody.create(mediaType, data))//
 				.build();
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
 		Request request = new Request.Builder() //
-				.url(upstreamURL + BASECASE_UPLOAD_URL) //
+				.url(upstreamURL + REPORT_UPLOAD_URL + "/" + uuid + "/" + type) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
@@ -66,7 +66,7 @@ public class ReportsServiceClient {
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
 		Request request = new Request.Builder() //
-				.url(String.format("%s%s/%s", upstreamURL, BASECASE_GET_URL, uuid)) //
+				.url(String.format("%s%s/%s", upstreamURL, REPORT_GET_URL, uuid)) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
