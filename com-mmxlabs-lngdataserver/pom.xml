@@ -42,8 +42,6 @@
 		<module>com.mmxlabs.lngdataserver.browser.edit</module>
 		<module>com.mmxlabs.lngdataserver.browser.ui</module>
 
-		<module>com.mmxlabs.lngdataserver.data.distances</module>
-
 		<module>com.mmxlabs.lngdataserver.feature</module>
 		<module>com.mmxlabs.lngdataserver.p2</module>
 
