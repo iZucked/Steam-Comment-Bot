@@ -10,6 +10,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -92,10 +94,21 @@ public class ScenarioServicePublishAction {
 		}
 		
 		// UploadFile
+		String response = null;
 		try {
-			baseCaseServiceClient.uploadBaseCase(tmpScenarioFile);
+			response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile);
 		} catch (IOException e) {
 			System.out.println("Error uploading the basecase scenario");
+			e.printStackTrace();
+		}
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String uuid = null;
+		try {
+			JsonNode actualObj = mapper.readTree(response);
+			uuid = actualObj.get("uuid").textValue();
+		} catch (IOException e) {
+			System.out.println("Cannot read server response after basecase upload");
 			e.printStackTrace();
 		}
 		
@@ -110,12 +123,19 @@ public class ScenarioServicePublishAction {
 			ReportsServiceClient reportsServiceClient = new ReportsServiceClient();
 			
 			try {
-				reportsServiceClient.uploadReport(outputStream.toString(), reportType, baseCaseServiceClient.getCurrentBaseCase());
+				reportsServiceClient.uploadReport(outputStream.toString(), reportType, uuid);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return;
 			}
-			
+		}
+		
+		try {
+			baseCaseServiceClient.setCurrentBaseCase(uuid);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error while setting the new baseCase as current");
+			e.printStackTrace();
 		}
 	}
 }

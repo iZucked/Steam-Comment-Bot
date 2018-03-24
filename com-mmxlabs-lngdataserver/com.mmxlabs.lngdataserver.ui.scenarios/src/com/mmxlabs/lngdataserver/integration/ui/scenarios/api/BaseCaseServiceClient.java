@@ -122,6 +122,29 @@ public class BaseCaseServiceClient {
 		return value;
 	}
 
+	public static String setCurrentBaseCase(String uuid) throws IOException {
+		OkHttpClient httpClient = new OkHttpClient.Builder() //
+				.build();
+
+		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		if (upstreamURL == null || upstreamURL.isEmpty()) {
+			return null;
+		}
+		Request request = new Request.Builder() //
+				.url(upstreamURL + BASECASE_CURRENT_URL + "/" + uuid) //
+				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
+				.build();
+
+		Response response = httpClient.newCall(request).execute();
+		if (!response.isSuccessful()) {
+			response.body().close();
+			throw new IOException("Unexpected code: " + response);
+		}
+		String value = response.body().string();
+
+		return value;
+	}
+	
 	private ScheduledThreadPoolExecutor pollTaskExecutor;
 	private ScheduledFuture<?> task;
 
