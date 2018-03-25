@@ -3,6 +3,8 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +16,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
@@ -145,6 +149,29 @@ public class BaseCaseServiceClient {
 		return value;
 	}
 	
+	public static String getBaseCaseDetails(String uuid) throws IOException {
+		OkHttpClient httpClient = new OkHttpClient.Builder() //
+				.build();
+
+		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		if (upstreamURL == null || upstreamURL.isEmpty()) {
+			return null;
+		}
+		Request request = new Request.Builder() //
+				.url(upstreamURL + BASECASE_DOWNLOAD_URL + uuid + "/details") //
+				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
+				.build();
+
+		Response response = httpClient.newCall(request).execute();
+		if (!response.isSuccessful()) {
+			response.body().close();
+			throw new IOException("Unexpected code: " + response);
+		}
+		String value = response.body().string();
+
+		return value;
+	}
+	
 	private ScheduledThreadPoolExecutor pollTaskExecutor;
 	private ScheduledFuture<?> task;
 
@@ -213,16 +240,29 @@ public class BaseCaseServiceClient {
 
 					} else {
 						if (firstRun[0]) {
-							// callback.accept(target);
+							 String details = getBaseCaseDetails(uuid);
+							 
+							 ObjectMapper mapper = new ObjectMapper();
+							 try {
+								 JsonNode actualObj = mapper.readTree(details);
+								 String creationDate = actualObj.get("creationDate").textValue();
+								 Instant instant = Instant.parse(creationDate); 
+
+								 callback.accept(target, instant);
+							 } catch (Exception e) {
+								 e.printStackTrace();
+							 }
 						}
 						firstRun[0] = false;
 					}
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				int ii = 0;
+				
 			}
 
-		}, 0, 5, TimeUnit.MINUTES);
+		}, 60, 30, TimeUnit.SECONDS);
 
 	}
 
