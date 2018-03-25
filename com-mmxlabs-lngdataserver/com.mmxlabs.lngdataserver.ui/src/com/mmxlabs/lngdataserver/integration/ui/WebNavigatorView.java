@@ -92,7 +92,7 @@ public class WebNavigatorView extends ViewPart {
 
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> RunnerHelper.asyncExec(() -> {
 			if (!browser.isDisposed()) {
-				browser.setUrl(getUrl("distances", ""));
+				browser.setUrl(getUrl("pricing", "latest"));
 				getViewSite().getWorkbenchWindow().getSelectionService().addSelectionListener("com.mmxlabs.lngdataserver.browser.ui.DataBrowser", selectionListener);
 			}
 		}));
