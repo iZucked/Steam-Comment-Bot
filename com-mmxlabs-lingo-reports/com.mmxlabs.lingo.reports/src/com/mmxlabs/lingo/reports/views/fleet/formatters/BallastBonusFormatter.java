@@ -9,6 +9,7 @@ import java.util.List;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -53,12 +54,14 @@ public class BallastBonusFormatter extends CostFormatter {
 	private int getBallastBonus(Sequence sequence) {
 		int revenue = 0;
 		for (Event evt : sequence.getEvents()) {
-			if (evt instanceof VesselEventVisit) {
-
+			if (evt instanceof EndEvent) {
+				final EndEvent endEvent = (EndEvent) evt;
+				revenue -= endEvent.getBallastBonusFee();
+			} else if (evt instanceof VesselEventVisit) {
 				VesselEventVisit cargoAllocation = (VesselEventVisit) evt;
 				if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
 					final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
-					revenue = charterOutEvent.getBallastBonus();
+					revenue += charterOutEvent.getBallastBonus();
 				}
 			}
 		}
