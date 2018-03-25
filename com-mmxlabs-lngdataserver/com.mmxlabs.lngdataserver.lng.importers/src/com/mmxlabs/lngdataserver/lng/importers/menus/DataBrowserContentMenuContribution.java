@@ -100,7 +100,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
 				Manifest manifest = scenarioInstance.getManifest();
 
-				menuManager.add(new RunnableAction("Publish scenario", () -> {
+				menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
 					ScenarioServicePublishAction.publishScenario(scenarioInstance);
 				}));
 				itemsAdded = true;

@@ -20,7 +20,7 @@
             category="com.mmxlabs.lngdataserver.views.dataserver"
             class="com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView"
             id="com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView"
-            name="UI"
+            name=""
             restorable="true">
       	</view>
     </extension>
