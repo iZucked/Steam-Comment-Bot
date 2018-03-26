@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
 package com.mmxlabs.lngdataserver.integration.distances.exceptions;
 
 public class RouteOptionNotFoundException extends RuntimeException{
