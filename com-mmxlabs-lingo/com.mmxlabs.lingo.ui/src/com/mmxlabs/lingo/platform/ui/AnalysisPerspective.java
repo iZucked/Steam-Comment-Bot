@@ -8,6 +8,7 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
+import org.eclipse.ui.internal.e4.compatibility.ModeledPageLayout;
 
 import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
@@ -24,8 +25,15 @@ import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportVi
 
 public class AnalysisPerspective implements IPerspectiveFactory {
 
+	@SuppressWarnings("restriction")
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
+
+		if (layout instanceof ModeledPageLayout) {
+			ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
+			modeledPageLayout.stackView("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView", IPageLayout.ID_EDITOR_AREA, false);
+			modeledPageLayout.stackView("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:Dynamic", IPageLayout.ID_EDITOR_AREA, false);
+		}
 
 		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.65f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, "reportsFolder");
