@@ -633,12 +633,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// addKeyboardShortcuts(menu);
 		menu.add(newWindowAction);
 		final Separator sep = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
-		sep.setVisible(!Util.isMac());
+		//sep.setVisible(!Util.isMac());
 		menu.add(sep);
 
 		// See the comment for quit in createFileMenu
 		final ActionContributionItem openPreferencesItem = new ActionContributionItem(openPreferencesAction);
-		openPreferencesItem.setVisible(!Util.isMac());
+		//openPreferencesItem.setVisible(!Util.isMac());
 		menu.add(openPreferencesItem);
 
 		menu.add(ContributionItemFactory.OPEN_WINDOWS.create(getWindow()));
