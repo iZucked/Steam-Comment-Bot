@@ -2,6 +2,7 @@ package com.mmxlabs.lngdataserver.server;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -9,15 +10,11 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.handlers.DisplayHelpHandler;
 
 import com.mmxlabs.lngdataserver.server.dialogs.AuthDetailsPromptDialog;
 import com.mmxlabs.lngdataserver.server.internal.Activator;
 import com.mmxlabs.lngdataserver.server.preferences.StandardDateRepositoryPreferenceConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
-
-import io.netty.util.internal.chmv8.ForkJoinPool;
 
 public class UpstreamUrlProvider {
 	public static final UpstreamUrlProvider INSTANCE = new UpstreamUrlProvider();
