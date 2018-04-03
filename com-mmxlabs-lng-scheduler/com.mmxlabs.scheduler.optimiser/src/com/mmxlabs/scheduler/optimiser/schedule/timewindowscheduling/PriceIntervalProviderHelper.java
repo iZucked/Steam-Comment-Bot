@@ -60,10 +60,9 @@ public class PriceIntervalProviderHelper {
 
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
-	
+
 	@Inject
 	private SchedulerCalculationUtils schedulerCalculationUtils;
-
 
 	private final Set<PricingEventType> loadPricingEventTypeSet = new HashSet<>(
 			Arrays.asList(new PricingEventType[] { PricingEventType.END_OF_LOAD, PricingEventType.END_OF_LOAD_WINDOW, PricingEventType.START_OF_LOAD, PricingEventType.START_OF_LOAD_WINDOW, }));
@@ -103,12 +102,12 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public List<int[]> buildComplexPriceIntervals(final int start, final int end, @NonNull final ILoadOption load, @NonNull final IDischargeOption discharge,
+	public List<int @NonNull []> buildComplexPriceIntervals(final int start, final int end, @NonNull final ILoadOption load, @NonNull final IDischargeOption discharge,
 			@NonNull final IPriceIntervalProvider loadPriceIntervalProvider, @NonNull final IPriceIntervalProvider dischargePriceIntervalProvider,
 			@NonNull final IPortTimeWindowsRecord portTimeWindowRecord) {
-		final int[][] intervals = getOverlappingWindows(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, start, end, portTimeWindowRecord);
-		final List<int[]> bestIntervals = new LinkedList<>();
-		for (final int[] interval : intervals) {
+		final int @NonNull [] @NonNull [] intervals = getOverlappingWindows(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, start, end, portTimeWindowRecord);
+		final List<int @NonNull []> bestIntervals = new LinkedList<>();
+		for (final int @NonNull [] interval : intervals) {
 			final int loadPricingTime = shiftTimeByTimezoneToUTC(interval[0], load, portTimeWindowRecord, getPriceEventFromSlotOrContract(load, portTimeWindowRecord));
 			final int purchasePrice = getPriceFromLoadOrDischargeCalculator(load, load, discharge, loadPricingTime);
 			final int dischargePricingTime = shiftTimeByTimezoneToUTC(interval[0], discharge, portTimeWindowRecord, getPriceEventFromSlotOrContract(discharge, portTimeWindowRecord));
@@ -306,12 +305,12 @@ public class PriceIntervalProviderHelper {
 		return new NonNullPair<LadenRouteData, Long>(bestCanal, bestMargin);
 	}
 
-	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3, final IVessel vessel,
-			final int cv, final int equivalenceFactor, final LadenRouteData canal, final long charterRatePerDay, final boolean isLaden) {
+	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3,
+			final @NonNull IVessel vessel, final int cv, final int equivalenceFactor, final LadenRouteData canal, final long charterRatePerDay, final boolean isLaden) {
 		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed,
 				(int) canal.ladenTimeAtNBOSpeed);
-		final long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vessel, cv, times, canal.ladenRouteDistance, equivalenceFactor, vesselBaseFuelCalculator.getBaseFuelPrices(vessel, times[0]),
-				canal.transitTime, loadDuration, isLaden);
+		final long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vessel, cv, times, canal.ladenRouteDistance, equivalenceFactor,
+				vesselBaseFuelCalculator.getBaseFuelPrices(vessel, times[0]), canal.transitTime, loadDuration, isLaden);
 
 		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (long) (times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel
 																																				// costs
@@ -1051,10 +1050,10 @@ public class PriceIntervalProviderHelper {
 		return inclusiveEnd + 1;
 	}
 
-	public long getCharterRateForTimePickingDecision(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart, @NonNull IResource resource) {
+	public long getCharterRateForTimePickingDecision(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart,
+			@NonNull IResource resource) {
 		IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER ||
-				vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			if (portTimeWindowRecord == portTimeWindowRecordStart) {
 				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
 						portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
