@@ -90,12 +90,12 @@ public class ChangeSetViewCreatorService {
 			boolean foundPerspective = false;
 			final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
 			for (final MPerspective p : perspectives) {
-				if (p.getElementId().equals("com.mmxlabs.lingo.reports.diff.DiffPerspective")) {
+				if (p.getElementId().equals("com.mmxlabs.lingo.app.perspective.analysis")) {
 					try {
 						partService.switchPerspective(p);
 					} catch (final IllegalStateException e) {
 						// SG: I have seen this happen when we have a modal dialog open (it was the optimisation params).
-//						log.error("Unable to open compare perspective", e);
+						// log.error("Unable to open compare perspective", e);
 					}
 					foundPerspective = true;
 					break;
@@ -104,7 +104,7 @@ public class ChangeSetViewCreatorService {
 			if (!foundPerspective) {
 				// Fallback to eclipse 3.x API to open perspective
 				try {
-					PlatformUI.getWorkbench().showPerspective("com.mmxlabs.lingo.reports.diff.DiffPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+					PlatformUI.getWorkbench().showPerspective("com.mmxlabs.lingo.app.perspective.analysis", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 				} catch (final WorkbenchException e) {
 					log.error("Unable to open compare perspective", e);
 				}
