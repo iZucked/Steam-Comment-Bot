@@ -33,6 +33,8 @@ public class AuthDetailsPromptDialog extends Dialog {
 	
 	private String url;
 	
+	private boolean errorLabelPresent = false;
+	
 	public AuthDetailsPromptDialog(final Shell parentShell) {
 		super(parentShell);
 	}
@@ -93,6 +95,16 @@ public class AuthDetailsPromptDialog extends Dialog {
 		}
 
 		if (!UpstreamUrlProvider.checkCredentials(url, nameField.getText(), passwordField.getText())) {
+			if (!errorLabelPresent) {
+
+				final Composite comp = this.getContents().getParent();
+				final Label errorLabel = new Label(comp, SWT.TOP | SWT.CENTER);
+				errorLabel.setText("Error: invalid credentials");
+				errorLabelPresent = true;
+				comp.layout();
+				comp.pack();
+			}
+			
 			return;
 		}
 		

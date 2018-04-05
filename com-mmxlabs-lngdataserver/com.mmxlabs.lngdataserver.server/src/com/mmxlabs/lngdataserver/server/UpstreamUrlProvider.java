@@ -82,8 +82,6 @@ public class UpstreamUrlProvider {
 					UpstreamUrlProvider.this.password = storedPassword;
 					if (checkCredentials(url, username, password)) {
 						hasDetails = true;
-					} else {
-						dialogOpen.compareAndSet(true, false);
 					}
 				} catch (StorageException e1) {
 					e1.printStackTrace();
@@ -105,6 +103,7 @@ public class UpstreamUrlProvider {
 					if (dialog.open() == Window.OK) {
 						UpstreamUrlProvider.this.username = dialog.getUsername();
 						UpstreamUrlProvider.this.password = new String(dialog.getPassword());
+						dialogOpen.compareAndSet(true, false);
 					}
 					hasDetails = true;
 				});
