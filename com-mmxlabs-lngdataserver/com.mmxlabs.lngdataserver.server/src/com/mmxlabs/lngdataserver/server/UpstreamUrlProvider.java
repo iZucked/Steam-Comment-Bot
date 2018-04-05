@@ -1,10 +1,14 @@
 package com.mmxlabs.lngdataserver.server;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -15,6 +19,11 @@ import com.mmxlabs.lngdataserver.server.dialogs.AuthDetailsPromptDialog;
 import com.mmxlabs.lngdataserver.server.internal.Activator;
 import com.mmxlabs.lngdataserver.server.preferences.StandardDateRepositoryPreferenceConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
+
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class UpstreamUrlProvider {
 	public static final UpstreamUrlProvider INSTANCE = new UpstreamUrlProvider();
@@ -54,14 +63,44 @@ public class UpstreamUrlProvider {
 			return "";
 		}
 
+		if (!testUpstreamAvailability(url)) {
+			return "";
+		}
+
+		if (!checkCredentials(url, username, password)) {
+			hasDetails = false;
+		}
+		
+		if (!hasDetails) {
+			ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
+			if (preferences.nodeExists("upstream")) {
+				ISecurePreferences node = preferences.node("upstream");
+				try {
+					String storedUsername = node.get("username", "n/a");
+					String storedPassword = node.get("password", "n/a");
+					UpstreamUrlProvider.this.username = storedUsername;
+					UpstreamUrlProvider.this.password = storedPassword;
+					if (checkCredentials(url, username, password)) {
+						hasDetails = true;
+					} else {
+						dialogOpen.compareAndSet(true, false);
+					}
+				} catch (StorageException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		
 		if (!hasDetails) {
 			final Display display = RunnerHelper.getWorkbenchDisplay();
 			if (display == null) {
 				return "";
 			}
+			
 			if (dialogOpen.compareAndSet(false, true)) {
 				display.syncExec(() -> {
 					final AuthDetailsPromptDialog dialog = new AuthDetailsPromptDialog(display.getActiveShell());
+					dialog.setUrl(url);
 					dialog.setBlockOnOpen(true);
 					if (dialog.open() == Window.OK) {
 						UpstreamUrlProvider.this.username = dialog.getUsername();
@@ -73,6 +112,7 @@ public class UpstreamUrlProvider {
 				ForkJoinPool.commonPool().submit(() -> fireChangedListeners());
 			}
 		}
+
 		if (!hasDetails) {
 			return "";
 		}
@@ -96,6 +136,62 @@ public class UpstreamUrlProvider {
 		listeners.remove(listener);
 	}
 
+	static public boolean checkCredentials(String url, String username, String password) {
+		
+		if (username == null || username.isEmpty()) {
+			return false;
+		}
+		
+		if (password == null || password.isEmpty()) {
+			return false;
+		}
+		
+		final OkHttpClient httpClient = new okhttp3.OkHttpClient();
+		
+		Request loginRequest = new Request.Builder().url(url + "/api/login") //
+				.addHeader("Authorization", Credentials.basic(username, password)) //
+				.build();
+
+		try {
+			Response loginResponse = httpClient.newCall(loginRequest).execute();
+			if (!loginResponse.isSuccessful()) {
+				System.out.println("Bad credentials");
+				return false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return true;
+	}
+
+	static public boolean testUpstreamAvailability(String url) {
+		final OkHttpClient localClient = new okhttp3.OkHttpClient();
+		Request pingRequest = null;
+		try {
+			pingRequest = new Request.Builder().url(url + "/ping").get().build();
+		} catch (IllegalArgumentException e) {
+			System.out.println("No valid url anymore");
+			return false;
+		}
+		
+		if (pingRequest == null) {
+			return false;
+		}
+		
+		try (final Response pullResponse = localClient.newCall(pingRequest).execute()) {
+			if (!pullResponse.isSuccessful()) {
+				return false;
+			}
+		} catch (IOException e) {
+			// e.printStackTrace();
+			System.out.println("No reachable upstream server");
+			return false;
+		}
+
+		return true;
+	}
+
 	public boolean isAvailable() {
 		final String url = getBaseURL();
 		if (url == null || url.isEmpty()) {
@@ -105,6 +201,15 @@ public class UpstreamUrlProvider {
 		if (!url.startsWith("http")) {
 			return false;
 		}
+
+		if (url.charAt(url.length() - 1) == '/') {
+			return false;
+		}
+
+		if (!testUpstreamAvailability(getBaseURL())) {
+			return false;
+		}
+
 		return true;
 	}
 

@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.lngdataserver.server.dialogs;
 
+import java.io.IOException;
+
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -14,6 +19,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+
 public class AuthDetailsPromptDialog extends Dialog {
 
 	private Text passwordField;
@@ -23,7 +30,9 @@ public class AuthDetailsPromptDialog extends Dialog {
 	private Text nameField;
 
 	private String username;
-
+	
+	private String url;
+	
 	public AuthDetailsPromptDialog(final Shell parentShell) {
 		super(parentShell);
 	}
@@ -58,11 +67,40 @@ public class AuthDetailsPromptDialog extends Dialog {
 		}
 		return comp;
 	}
-
+	
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	private void saveToSecureStorage(String username, String password) {
+		 ISecurePreferences preferences = SecurePreferencesFactory
+                 .getDefault();
+         ISecurePreferences node = preferences.node("upstream");
+         try {
+             node.put("username", username, true);
+             node.put("password", password, true);
+         } catch (StorageException e1) {
+             e1.printStackTrace();
+         }		
+		
+	}
+	
 	@Override
 	protected void okPressed() {
+		if (!UpstreamUrlProvider.testUpstreamAvailability(url)) {
+			super.okPressed();
+			return;
+		}
+
+		if (!UpstreamUrlProvider.checkCredentials(url, nameField.getText(), passwordField.getText())) {
+			return;
+		}
+		
 		username = nameField.getText();
 		password = passwordField.getTextChars();
+		
+		saveToSecureStorage(username, passwordField.getText());
+		
 		super.okPressed();
 	}
 

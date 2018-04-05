@@ -55,6 +55,10 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	protected String getUpstreamUrl() {
+		if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
+			return null;
+		}
+		
 		return UpstreamUrlProvider.INSTANCE.getBaseURL();
 	}
 
@@ -109,6 +113,9 @@ public abstract class AbstractDataRepository implements IDataRepository {
 			while (listenForNewUpstreamVersions) {
 				final CompletableFuture<Boolean> newVersionFuture = waitForNewUpstreamVersion();
 				try {
+					if (newVersionFuture == null) {
+						return;
+					}
 					final Boolean versionAvailable = newVersionFuture.get();
 					if (versionAvailable == Boolean.TRUE) {
 						final List<DataVersion> versions = getUpstreamVersions();

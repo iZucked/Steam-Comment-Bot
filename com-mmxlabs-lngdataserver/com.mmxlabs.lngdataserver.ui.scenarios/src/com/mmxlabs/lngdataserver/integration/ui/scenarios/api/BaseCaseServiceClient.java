@@ -104,13 +104,19 @@ public class BaseCaseServiceClient {
 	}
 
 	public static String getCurrentBaseCase() throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
-				.build();
-
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
+		
+		if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
+			return null;
+		}
+		
+		OkHttpClient httpClient = new OkHttpClient.Builder() //
+				.build();
+
 		Request request = new Request.Builder() //
 				.url(upstreamURL + BASECASE_CURRENT_URL) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
