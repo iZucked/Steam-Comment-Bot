@@ -12,14 +12,12 @@ import javax.inject.Named;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IViewPart;
@@ -31,8 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
-import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -102,7 +100,7 @@ public class AnalyseScenarioHandler {
 		boolean foundPerspective = false;
 		final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
 		for (final MPerspective p : perspectives) {
-			if (p.getElementId().equals("com.mmxlabs.lingo.reports.diff.DiffPerspective")) {
+			if (p.getElementId().equals(ReportsConstants.PERSPECTIVE_ANALYSIS_ID)) {
 				partService.switchPerspective(p);
 				foundPerspective = true;
 				break;
@@ -111,7 +109,7 @@ public class AnalyseScenarioHandler {
 		if (!foundPerspective) {
 			// Fallback to eclipse 3.x API to open perspective
 			try {
-				PlatformUI.getWorkbench().showPerspective("com.mmxlabs.lingo.reports.diff.DiffPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+				PlatformUI.getWorkbench().showPerspective(ReportsConstants.PERSPECTIVE_ANALYSIS_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 			} catch (final WorkbenchException e) {
 				LOG.error("Unable to open compare perspective", e);
 			}
@@ -119,10 +117,9 @@ public class AnalyseScenarioHandler {
 		{
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			try {
-				final String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";// :" + solution.getID();
 
 				// No colon in id strings
-				IViewPart actionSetPart = activePage.showView(viewPartId, "Dynamic", IWorkbenchPage.VIEW_ACTIVATE);
+				IViewPart actionSetPart = activePage.showView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, ReportsConstants.VIEW_COMPARE_DYNAMIC_SECONDARY_ID, IWorkbenchPage.VIEW_ACTIVATE);
 				if (actionSetPart instanceof ChangeSetView) {
 					ChangeSetView changeSetView = (ChangeSetView) actionSetPart;
 

@@ -12,10 +12,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IViewPart;
@@ -28,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
+import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -38,8 +36,6 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class CompareScenariosHandler extends AbstractHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(CompareScenariosHandler.class);
-
-	private static final String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -66,7 +62,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 								boolean foundPerspective = false;
 								final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
 								for (final MPerspective p : perspectives) {
-									if (p.getElementId().equals("com.mmxlabs.lingo.reports.diff.DiffPerspective")) {
+									if (p.getElementId().equals(ReportsConstants.PERSPECTIVE_ANALYSIS_ID)) {
 										partService.switchPerspective(p);
 										foundPerspective = true;
 										break;
@@ -75,7 +71,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 								if (!foundPerspective) {
 									// Fallback to eclipse 3.x API to open perspective
 									try {
-										PlatformUI.getWorkbench().showPerspective("com.mmxlabs.lingo.reports.diff.DiffPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+										PlatformUI.getWorkbench().showPerspective(ReportsConstants.PERSPECTIVE_ANALYSIS_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 									} catch (final WorkbenchException e) {
 										log.error("Unable to open compare perspective", e);
 									}
@@ -84,7 +80,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 									IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 									try {
 										// No colon in id strings
-										IViewPart part = activePage.showView(viewPartId, null, IWorkbenchPage.VIEW_ACTIVATE);
+										IViewPart part = activePage.showView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, null, IWorkbenchPage.VIEW_ACTIVATE);
 
 										return;
 									} catch (PartInitException e) {
@@ -97,8 +93,8 @@ public class CompareScenariosHandler extends AbstractHandler {
 						// Split call to allow some time to display the view before triggering the selection. There probably is still a race-condition here
 						RunnerHelper.asyncExec(() -> {
 
-							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, (Consumer<IScenarioServiceSelectionProvider>) provider -> provider
-									.setPinnedPair(new ScenarioResult(pin), new ScenarioResult(other), true));
+							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class,
+									(Consumer<IScenarioServiceSelectionProvider>) provider -> provider.setPinnedPair(new ScenarioResult(pin), new ScenarioResult(other), true));
 						});
 					}
 				}

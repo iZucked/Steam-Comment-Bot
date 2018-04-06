@@ -21,6 +21,7 @@ import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -79,18 +80,15 @@ public class ChangeSetViewCreatorService {
 	}
 
 	private void openView(final AnalyticsSolution solution) {
-		// final EPartService partService = PlatformUI.getWorkbench().getService(EPartService.class);
 		final EPartService partService = PlatformUI.getWorkbench().getService(EPartService.class);
 		final EModelService modelService = PlatformUI.getWorkbench().getService(EModelService.class);
 		final MApplication application = PlatformUI.getWorkbench().getService(MApplication.class);
-
-		final String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";// :" + solution.getID();
 
 		RunnerHelper.asyncExec(() -> {
 			boolean foundPerspective = false;
 			final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
 			for (final MPerspective p : perspectives) {
-				if (p.getElementId().equals("com.mmxlabs.lingo.app.perspective.analysis")) {
+				if (p.getElementId().equals(ReportsConstants.PERSPECTIVE_ANALYSIS_ID)) {
 					try {
 						partService.switchPerspective(p);
 					} catch (final IllegalStateException e) {
@@ -104,7 +102,7 @@ public class ChangeSetViewCreatorService {
 			if (!foundPerspective) {
 				// Fallback to eclipse 3.x API to open perspective
 				try {
-					PlatformUI.getWorkbench().showPerspective("com.mmxlabs.lingo.app.perspective.analysis", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+					PlatformUI.getWorkbench().showPerspective(ReportsConstants.PERSPECTIVE_ANALYSIS_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 				} catch (final WorkbenchException e) {
 					log.error("Unable to open compare perspective", e);
 				}
@@ -114,7 +112,7 @@ public class ChangeSetViewCreatorService {
 				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
 					// No colon in id strings
-					IViewPart part = activePage.showView(viewPartId, "Dynamic", IWorkbenchPage.VIEW_ACTIVATE);
+					IViewPart part = activePage.showView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, ReportsConstants.VIEW_COMPARE_DYNAMIC_SECONDARY_ID, IWorkbenchPage.VIEW_ACTIVATE);
 					if (part instanceof ChangeSetView) {
 						ChangeSetView changeSetView = (ChangeSetView) part;
 						changeSetView.openAnalyticsSolution(solution);

@@ -9,6 +9,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
 
+import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
@@ -35,8 +36,8 @@ public class DiffPerspective implements IPerspectiveFactory {
 		final IFolderLayout econsArea = layout.createFolder("econsArea", IPageLayout.RIGHT, 0.85f, "reportsArea");
 
 		diffArea.addView("com.mmxlabs.scenario.service.ui.navigator");
-		changeSetArea.addView("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView");
-		changeSetArea.addPlaceholder("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:Dynamic");
+		changeSetArea.addView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID);
+		changeSetArea.addPlaceholder(ReportsConstants.VIEW_COMPARE_DYNAMIC_ID);
 		fleetReportArea.addView(ConfigurableFleetReportView.ID);
 
 		ganttArea.addView(ScheduleSummaryReport.ID);
@@ -55,7 +56,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.diff.DiffGroupView");
 		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");
 
-		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView");
+		layout.addShowViewShortcut(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID);
 
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.editing");
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
