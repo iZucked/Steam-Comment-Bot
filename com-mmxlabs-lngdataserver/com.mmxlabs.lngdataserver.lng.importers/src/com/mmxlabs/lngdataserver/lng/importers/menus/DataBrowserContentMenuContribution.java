@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.menus;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Function;
@@ -24,9 +23,9 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ScenarioServicePublishAction;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
@@ -36,7 +35,6 @@ import com.mmxlabs.lngdataserver.lng.importers.port.ui.PortsToScenarioImportWiza
 import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.ui.VesselsToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
