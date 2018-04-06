@@ -10,6 +10,8 @@ import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
 import org.eclipse.ui.internal.e4.compatibility.ModeledPageLayout;
 
+import com.mmxlabs.lingo.reports.ReportsConstants;
+
 public class EditingPerspective implements IPerspectiveFactory {
 
 	private static final String CostsRoot = "com.mmxlabs.models.lng.pricing.editor.";
@@ -19,8 +21,8 @@ public class EditingPerspective implements IPerspectiveFactory {
 
 		if (layout instanceof ModeledPageLayout) {
 			ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
-			modeledPageLayout.stackView("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView", IPageLayout.ID_EDITOR_AREA, false);
-			modeledPageLayout.stackView("com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:Dynamic", IPageLayout.ID_EDITOR_AREA, false);
+			modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);
+			modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_DYNAMIC_SECONDARY_ID, IPageLayout.ID_EDITOR_AREA, false);
 		}
 
 		// final IFolderLayout costsFolder = layout.createFolder("costsFolder", IPageLayout.RIGHT, 0.75f, IPageLayout.ID_EDITOR_AREA);
