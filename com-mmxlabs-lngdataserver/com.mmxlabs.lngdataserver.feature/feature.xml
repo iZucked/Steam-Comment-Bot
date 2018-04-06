@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2017
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.lngdataserver.feature"
       label="LNG Data Server"
-      version="4.4.8.qualifier"
+      version="4.4.9.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
