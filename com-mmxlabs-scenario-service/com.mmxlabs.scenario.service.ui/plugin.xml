@@ -365,26 +365,6 @@
          </enabledWhen>
       </handler>
       <handler
-            class="com.mmxlabs.scenario.service.ui.commands.ForkScenarioCommandHandler"
-            commandId="com.mmxlabs.scenario.service.ui.fork">
-         <activeWhen>
-            <with
-                  variable="selection">
-               <iterate
-                     ifEmpty="false"
-                     operator="and">
-                  <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                  </instanceof>
-                  <test
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.scenario.service.ui.caps.forking">
-                  </test>
-               </iterate>
-            </with>
-         </activeWhen>
-      </handler>
-      <handler
             class="com.mmxlabs.scenario.service.ui.commands.RevertScenarioCommandHandler"
             commandId="com.mmxlabs.scenario.service.ui.revert">
               <activeWhen>
