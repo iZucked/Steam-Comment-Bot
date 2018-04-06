@@ -11,6 +11,26 @@
    <extension-point id="ParameterModeExtender" name="ParameterModeExtender" schema="schema/ParameterModeExtender.exsd"/>
 	<extension
             point="org.eclipse.ui.handlers">
+ 		<handler
+            class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.ForkScenarioCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.fork">
+         <activeWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false"
+                     operator="and">
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+                  <test
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.scenario.service.ui.caps.forking">
+                  </test>
+               </iterate>
+            </with>
+         </activeWhen>
+      </handler>            
          <handler
                class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.StartOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.play">
