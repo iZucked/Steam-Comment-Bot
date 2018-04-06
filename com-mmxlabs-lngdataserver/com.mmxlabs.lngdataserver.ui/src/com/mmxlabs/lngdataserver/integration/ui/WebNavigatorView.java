@@ -88,6 +88,8 @@ public class WebNavigatorView extends ViewPart {
 
 		try {
 			// Icon from https://commons.wikimedia.org/wiki/Category:Throbbers#/media/File:Ajax-loader.gif
+			// Trigger extraction of throbber.gif to file system so relative urls work in builds
+			URL _gif_resource = FileLocator.toFileURL(getClass().getResource("/throbber.gif"));
 			URL resource = FileLocator.toFileURL(getClass().getResource("/wait.html"));
 			browser.setUrl(resource.toExternalForm());
 		} catch (IOException e) {
