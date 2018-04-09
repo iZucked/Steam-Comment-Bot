@@ -163,11 +163,11 @@ public class ScenarioStorageUtil {
 		return URI.createURI("archive:" + archiveURI.toString() + "!/" + fragment);
 	}
 
-	public static String storeToTemporaryFile(final ScenarioModelRecord instance) throws IOException {
+	public static File storeToTemporaryFile(final ScenarioModelRecord instance) throws IOException {
 		final File tempFile = INSTANCE.getTemporaryFile(instance);
 		storeToFile(instance, tempFile);
 
-		return tempFile.getAbsolutePath();
+		return tempFile;
 	}
 
 	public static void storeToFile(final ScenarioModelRecord modelRecord, final File file) throws IOException {
@@ -685,6 +685,13 @@ public class ScenarioStorageUtil {
 
 	public static File getTempDirectory() {
 		return INSTANCE.storageDirectory.toFile();
+	}
+
+	public static @Nullable Manifest loadManifest(final File scenarioFile) {
+
+		return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+			return loadManifest(scenarioFile, scenarioCipherProvider);
+		});
 	}
 
 	public static @Nullable Manifest loadManifest(final File scenarioFile, IScenarioCipherProvider scenarioCipherProvider) {

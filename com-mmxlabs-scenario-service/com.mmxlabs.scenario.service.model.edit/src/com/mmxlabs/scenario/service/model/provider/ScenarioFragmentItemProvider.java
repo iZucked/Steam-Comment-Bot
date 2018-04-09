@@ -122,7 +122,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 		// Delegate to the fragment's item provider to get an image if possible.
 		final EObject fragment = ((ScenarioFragment) object).getFragment();
 		if (fragment != null) {
-		final IItemLabelProvider lp = (IItemLabelProvider) ((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory().adapt(fragment, IItemLabelProvider.class);
+			final IItemLabelProvider lp = (IItemLabelProvider) ((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory().adapt(fragment, IItemLabelProvider.class);
 			if (lp != null) {
 				return lp.getImage(fragment);
 			}

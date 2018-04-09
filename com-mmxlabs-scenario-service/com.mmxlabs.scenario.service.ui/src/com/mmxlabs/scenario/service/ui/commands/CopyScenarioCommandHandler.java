@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service.ui.commands;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -23,9 +24,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 /**
@@ -45,8 +45,8 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 					final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
 					final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
-					final ArrayList<String> tempFiles = new ArrayList<String>();
-					final ArrayList<ScenarioInstance> instances = new ArrayList<ScenarioInstance>();
+					final List<String> tempFiles = new ArrayList<>();
+					final List<ScenarioInstance> instances = new ArrayList<>();
 					for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 						final Object element = iterator.next();
 						if (element instanceof ScenarioInstance) {
@@ -55,7 +55,7 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 							try {
 								@NonNull
 								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-								tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(modelRecord));
+								tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(modelRecord).getAbsolutePath());
 							} catch (final IOException e) {
 								e.printStackTrace();
 							}

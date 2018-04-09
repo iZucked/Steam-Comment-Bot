@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -106,11 +107,13 @@ public final class ScenarioServiceModelUtils {
 			// Close all open editors
 			final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
 			final IWorkbench workbench = PlatformUI.getWorkbench();
-			for (final IWorkbenchPage page : workbench.getActiveWorkbenchWindow().getPages()) {
+			for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
+				for (final IWorkbenchPage page : window.getPages()) {
 
-				final IEditorReference[] editorReferences = page.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
-				if (editorReferences != null && editorReferences.length > 0) {
-					assert page.closeEditors(editorReferences, false);
+					final IEditorReference[] editorReferences = page.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+					if (editorReferences != null && editorReferences.length > 0) {
+						assert page.closeEditors(editorReferences, false);
+					}
 				}
 			}
 

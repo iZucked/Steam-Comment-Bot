@@ -506,6 +506,15 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__MANIFEST = CONTAINER_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>External ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__EXTERNAL_ID = CONTAINER_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @Note: Compatibility filter created
@@ -513,7 +522,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 11;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -965,6 +974,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getScenarioInstance_Manifest();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getExternalID <em>External ID</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>External ID</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getExternalID()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_ExternalID();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientScenarioVersion <em>Client Scenario Version</em>}'.

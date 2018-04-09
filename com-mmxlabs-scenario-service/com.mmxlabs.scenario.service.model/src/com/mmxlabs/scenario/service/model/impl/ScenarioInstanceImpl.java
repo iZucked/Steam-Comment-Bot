@@ -35,6 +35,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isReadonly <em>Readonly</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getManifest <em>Manifest</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getExternalID <em>External ID</em>}</li>
  * </ul>
  *
  * @generated
@@ -219,6 +220,24 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getExternalID() {
+		return (String) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ExternalID(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setExternalID(String newExternalID) {
+		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ExternalID(), newExternalID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getClientScenarioVersion() {
 		return (Integer) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientScenarioVersion(), true);
 	}
@@ -258,6 +277,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	public int getContainedInstanceCount() {
 		return super.getContainedInstanceCount() + 1;
 	}
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -28,6 +28,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getManifest <em>Manifest</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getExternalID <em>External ID</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance()
@@ -258,6 +259,32 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setManifest(Manifest value);
+
+	/**
+	 * Returns the value of the '<em><b>External ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>External ID</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>External ID</em>' attribute.
+	 * @see #setExternalID(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ExternalID()
+	 * @model
+	 * @generated
+	 */
+	String getExternalID();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getExternalID <em>External ID</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>External ID</em>' attribute.
+	 * @see #getExternalID()
+	 * @generated
+	 */
+	void setExternalID(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Client Scenario Version</b></em>' attribute.

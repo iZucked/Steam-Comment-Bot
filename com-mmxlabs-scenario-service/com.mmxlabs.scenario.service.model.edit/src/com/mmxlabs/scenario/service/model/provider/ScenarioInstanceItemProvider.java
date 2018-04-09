@@ -56,6 +56,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 			addReadonlyPropertyDescriptor(object);
 			addValidationStatusCodePropertyDescriptor(object);
 			addManifestPropertyDescriptor(object);
+			addExternalIDPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -142,6 +143,18 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioInstance_manifest_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_manifest_feature", "_UI_ScenarioInstance_type"),
 				ScenarioServicePackage.eINSTANCE.getScenarioInstance_Manifest(), true, false, true, null, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the External ID feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addExternalIDPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_externalID_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_externalID_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioInstance_ExternalID(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -244,6 +257,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__EXTERNAL_ID:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
