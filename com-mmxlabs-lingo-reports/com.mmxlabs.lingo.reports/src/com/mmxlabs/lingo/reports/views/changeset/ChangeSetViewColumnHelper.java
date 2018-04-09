@@ -92,6 +92,12 @@ public class ChangeSetViewColumnHelper {
 
 	private Image imageHalfCircle;
 	private Image imageOpenCircle;
+	private Image imageSteadyArrow;
+	private Image imageGreenArrowDown;
+	private Image imageGreenArrowUp;
+	private Image imageRedArrowDown;
+	private Image imageRedArrowUp;
+
 	private Color colour_VesselTypeColumn;
 
 	private final ChangeSetView view;
@@ -117,7 +123,8 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn column_Violations;
 
 	/**
-	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
+	 * Display textual vessel change markers - used for unit testing where graphics
+	 * are not captured in data dump.
 	 */
 	private boolean textualVesselMarkers = false;
 
@@ -149,17 +156,40 @@ public class ChangeSetViewColumnHelper {
 		this.textualVesselMarkers = textualVesselMarkers;
 	}
 
+	private ImageDescriptor getImageDescriptor(String path) {
+		final ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.reports", path);
+		return imageDescriptor;
+	}
+
 	public ChangeSetViewColumnHelper(final ChangeSetView view, final GridTreeViewer viewer) {
 		this.view = view;
 		this.viewer = viewer;
 
-		final ImageDescriptor openCircleDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.reports", "icons/open-circle.png");
-		final ImageDescriptor closedCircleDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.reports", "icons/closed-circle.png");
-		final ImageDescriptor halfCircleDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.reports", "icons/half-circle.png");
+		final ImageDescriptor imageDescriptorSteadyArrow;
+		final ImageDescriptor imageDescriptorGreenArrowDown;
+		final ImageDescriptor imageDescriptorGreenArrowUp;
+		final ImageDescriptor imageDescriptorRedArrowDown;
+		final ImageDescriptor imageDescriptorRedArrowUp;
+
+		final ImageDescriptor openCircleDescriptor = getImageDescriptor("icons/open-circle.png");
+		final ImageDescriptor closedCircleDescriptor = getImageDescriptor("icons/closed-circle.png");
+		final ImageDescriptor halfCircleDescriptor = getImageDescriptor("icons/half-circle.png");
+
+		imageDescriptorSteadyArrow = getImageDescriptor("icons/steady_arrow.png");
+		imageDescriptorGreenArrowDown = getImageDescriptor("icons/green_arrow_down.png");
+		imageDescriptorGreenArrowUp = getImageDescriptor("icons/green_arrow_up.png");
+		imageDescriptorRedArrowDown = getImageDescriptor("icons/red_arrow_down.png");
+		imageDescriptorRedArrowUp = getImageDescriptor("icons/red_arrow_up.png");
 
 		imageOpenCircle = openCircleDescriptor.createImage();
 		imageClosedCircle = closedCircleDescriptor.createImage();
 		imageHalfCircle = halfCircleDescriptor.createImage();
+
+		imageSteadyArrow = imageDescriptorSteadyArrow.createImage();
+		imageGreenArrowDown = imageDescriptorGreenArrowDown.createImage();
+		imageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
+		imageRedArrowDown = imageDescriptorRedArrowDown.createImage();
+		imageRedArrowUp = imageDescriptorRedArrowUp.createImage();
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
@@ -169,7 +199,7 @@ public class ChangeSetViewColumnHelper {
 
 		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumeExtendeders();
 	}
-
+	
 	public void makeColumns() {
 		// Create columns
 		{
@@ -204,7 +234,6 @@ public class ChangeSetViewColumnHelper {
 
 			}
 		});
-
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
@@ -224,8 +253,10 @@ public class ChangeSetViewColumnHelper {
 		// gvc.getColumn().setHeaderTooltip("P&&L Components");
 		// gvc.getColumn().setWidth(20);
 		// gvc.setLabelProvider(createStubLabelProvider());
-		// // gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
-		// // ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+		// // gvc.setLabelProvider(createDeltaLabelProvider(true,
+		// ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
+		// // ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION,
+		// SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
 		// createWordWrapRenderer(gvc);
 		// gvc.getColumn().setCellRenderer(createCellRenderer());
 		// gvc.getColumn().setDetail(false);
@@ -236,8 +267,10 @@ public class ChangeSetViewColumnHelper {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("+ Sales");
+
 			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+			gvc.setLabelProvider(
+					createDeltaLabelProvider(true, false, true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
 			createWordWrapRenderer(gvc);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
@@ -249,7 +282,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("- Purchase");
 			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+			gvc.setLabelProvider(createDeltaLabelProvider(true, true, true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
 			createWordWrapRenderer(gvc);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
@@ -442,7 +475,7 @@ public class ChangeSetViewColumnHelper {
 			this.column_LoadVolume.getColumn().setText("tBtu");
 			this.column_LoadVolume.getColumn().setWidth(55);
 			this.column_LoadVolume.setLabelProvider(
-					createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+					createDeltaLabelProvider(true, false, false, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 			this.column_LoadVolume.getColumn().setCellRenderer(createCellRenderer());
 
 			this.column_LoadVolume.getColumn().setVisible(showCompareColumns);
@@ -499,7 +532,7 @@ public class ChangeSetViewColumnHelper {
 			this.column_DischargeVolume.getColumn().setText("tBtu");
 			this.column_DischargeVolume.getColumn().setWidth(55);
 			this.column_DischargeVolume.setLabelProvider(
-					createDeltaLabelProvider(true, false, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+					createDeltaLabelProvider(true, false, false, false, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 			this.column_DischargeVolume.getColumn().setCellRenderer(createCellRenderer());
 			this.column_DischargeVolume.getColumn().setVisible(showCompareColumns);
 		}
@@ -529,7 +562,8 @@ public class ChangeSetViewColumnHelper {
 
 			}
 		});
-		// Vessel columns are dynamically created - create a stub column to lock down the position in the table
+		// Vessel columns are dynamically created - create a stub column to lock down
+		// the position in the table
 		{
 			final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
@@ -719,7 +753,8 @@ public class ChangeSetViewColumnHelper {
 						final int s = gc.getLineStyle();
 						gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
 						// gc.setLineStyle(SWT.LINE_DOT);
-						// gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
+						// gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x,
+						// getBounds().y);
 						gc.setLineStyle(SWT.LINE_DOT);
 						// gc.setLineWidth(1);
 						gc.drawLine(getBounds().x, getBounds().y + getBounds().height, getBounds().width + getBounds().x, getBounds().y + getBounds().height);
@@ -758,7 +793,8 @@ public class ChangeSetViewColumnHelper {
 								final int s = gc.getLineStyle();
 								gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 								// gc.setLineStyle(SWT.LINE_DOT);
-								// gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
+								// gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x,
+								// getBounds().y);
 								gc.setLineStyle(SWT.LINE_SOLID);
 								if (foundTarget) {
 									gc.setLineWidth(2);
@@ -865,7 +901,8 @@ public class ChangeSetViewColumnHelper {
 						originalAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 						newAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
 					} else {
-						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						// Unlike other RHS colums where we want to diff against the old and new slot
+						// linked to the cargo, we want to show the date diff for this slot.
 						originalAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
 						newAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
 					}
@@ -915,7 +952,8 @@ public class ChangeSetViewColumnHelper {
 						originalAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 						newAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
 					} else {
-						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						// Unlike other RHS colums where we want to diff against the old and new slot
+						// linked to the cargo, we want to show the date diff for this slot.
 						originalAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
 						newAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
 					}
@@ -1000,7 +1038,8 @@ public class ChangeSetViewColumnHelper {
 						}
 
 					} else {
-						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						// Unlike other RHS colums where we want to diff against the old and new slot
+						// linked to the cargo, we want to show the date diff for this slot.
 						final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
 						final SlotAllocation newDischargeAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
 						isSpot = tableRow.isRhsSpot();
@@ -1045,12 +1084,12 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean isLHS, final EStructuralFeature field, final EStructuralFeature attrib) {
+	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean isLHS, final EStructuralFeature field, final EStructuralFeature attrib) {
 
 		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE;
 		final EReference to = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER;
 
-		return createLambdaLabelProvider(asInt, false, change -> getNumber(from, field, attrib, change), change -> getNumber(to, field, attrib, change));
+		return createLambdaLabelProvider(asInt, asCost, withColour, false, change -> getNumber(from, field, attrib, change), change -> getNumber(to, field, attrib, change));
 	}
 
 	@NonNull
@@ -1107,7 +1146,13 @@ public class ChangeSetViewColumnHelper {
 						if (delta == 0) {
 							cell.setText("0.00");
 						} else {
-							cell.setText(String.format("%s%,.3G", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(delta)));
+							cell.setText(String.format("%,.3G", Math.abs(delta)));
+
+							if (metrics.getPnlDelta() < 0) {
+								cell.setImage(imageRedArrowDown);
+							} else {
+								cell.setImage(imageGreenArrowUp);
+							}
 						}
 					}
 				}
@@ -1123,7 +1168,13 @@ public class ChangeSetViewColumnHelper {
 						delta = 0;
 					}
 					if (delta != 0) {
-						cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+						cell.setText(String.format("%,.3G", Math.abs(delta)));
+
+						if (delta < 0) {
+							cell.setImage(imageRedArrowDown);
+						} else {
+							cell.setImage(imageGreenArrowUp);
+						}
 					}
 
 				}
@@ -1132,7 +1183,7 @@ public class ChangeSetViewColumnHelper {
 	}
 
 	private CellLabelProvider createTaxDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, true, change -> {
+		return createLambdaLabelProvider(true, false, true, true, change -> {
 			return ChangeSetKPIUtil.getTax(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalTaxEtcValue);
 		}, change -> {
 			return ChangeSetKPIUtil.getTax(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalTaxEtcValue);
@@ -1207,6 +1258,11 @@ public class ChangeSetViewColumnHelper {
 						final int lateness = (int) Math.round((double) scenarioMetrics.getLateness() / 24.0);
 						cell.setText(String.format("%s%d / %d", latenessDelta < 0 ? "↓" : latenessDelta == 0 ? "" : "↑", Math.abs(latenessDelta), lateness));
 
+						if (latenessDelta < 0) {
+							cell.setImage(imageGreenArrowDown);
+						} else if (latenessDelta > 0) {
+							cell.setImage(imageRedArrowUp);
+						}
 						if (lateness != 0) {
 							cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 						}
@@ -1241,8 +1297,20 @@ public class ChangeSetViewColumnHelper {
 					delta = (int) Math.round((double) delta / 24.0);
 					if (delta != 0L) {
 						cell.setText(String.format("%s %d%s", delta < 0 ? "↓" : "↑", Math.abs(delta), flexStr));
+
+						if (delta < 0) {
+							cell.setImage(imageGreenArrowDown);
+						} else {
+							cell.setImage(imageRedArrowUp);
+						}
 					} else if (originalDelta != 0L) {
 						cell.setText(String.format("%s %s%s", originalDelta < 0 ? "↓" : "↑", "<1", flexStr));
+
+						if (originalDelta < 0) {
+							cell.setImage(imageGreenArrowDown);
+						} else {
+							cell.setImage(imageRedArrowUp);
+						}
 					}
 				}
 			}
@@ -1324,6 +1392,11 @@ public class ChangeSetViewColumnHelper {
 						cell.setText(String.format("%s%d / %d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : deltaMetrics.getCapacityDelta() == 0 ? "" : "↑", Math.abs(deltaMetrics.getCapacityDelta()),
 								scenarioMetrics.getCapacity()));
 
+						if (deltaMetrics.getCapacityDelta() < 0) {
+							cell.setImage(imageGreenArrowDown);
+						} else if (deltaMetrics.getCapacityDelta() > 0) {
+							cell.setImage(imageRedArrowUp);
+						}
 						if (scenarioMetrics.getCapacity() != 0) {
 							cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 						}
@@ -1338,6 +1411,11 @@ public class ChangeSetViewColumnHelper {
 					final long delta = t - f;
 					if (delta != 0) {
 						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+						if (delta < 0) {
+							cell.setImage(imageGreenArrowDown);
+						} else {
+							cell.setImage(imageRedArrowUp);
+						}
 					}
 
 				}
@@ -1346,7 +1424,7 @@ public class ChangeSetViewColumnHelper {
 	}
 
 	private CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, false, change -> {
+		return createLambdaLabelProvider(true, false, true, false, change -> {
 			return ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalCargoOtherValue);
 		}, change -> {
 			return ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalCargoOtherValue);
@@ -1355,7 +1433,7 @@ public class ChangeSetViewColumnHelper {
 
 	private CellLabelProvider createUpstreamDeltaLabelProvider() {
 
-		return createLambdaLabelProvider(true, true, change -> {
+		return createLambdaLabelProvider(true, false, true, true, change -> {
 			return ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalUpstreamValue);
 		}, change -> {
 			return ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalUpstreamValue);
@@ -1364,7 +1442,7 @@ public class ChangeSetViewColumnHelper {
 
 	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
 
-		return createLambdaLabelProvider(true, true, change -> {
+		return createLambdaLabelProvider(true, true, true, true, change -> {
 			return ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalShippingDESValue);
 		}, change -> {
 			return ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalShippingDESValue);
@@ -1374,7 +1452,7 @@ public class ChangeSetViewColumnHelper {
 
 	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
 
-		return createLambdaLabelProvider(true, true, change -> {
+		return createLambdaLabelProvider(true, true, true, true, change -> {
 			return ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalUpsideValue);
 		}, change -> {
 			return ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalUpsideValue);
@@ -1382,7 +1460,7 @@ public class ChangeSetViewColumnHelper {
 	}
 
 	private CellLabelProvider createShippingDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, false, change -> {
+		return createLambdaLabelProvider(true, true, true, false, change -> {
 			return ChangeSetKPIUtil.getShipping(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalShippingFOBValue);
 		}, change -> {
 			return ChangeSetKPIUtil.getShipping(change, ResultType.After) + getExtraValue(change, ResultType.After, IChangeSetColumnValueExtender::getAdditionalShippingFOBValue);
@@ -1395,12 +1473,12 @@ public class ChangeSetViewColumnHelper {
 	}
 
 	private CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType shippingCostType) {
-		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
+		return createLambdaLabelProvider(true, true, true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
 				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
 	}
 
 	private CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType... shippingCostTypes) {
-		return createLambdaLabelProvider(true, false, change -> {
+		return createLambdaLabelProvider(true, true, true, false, change -> {
 			long sum = 0L;
 			for (final ShippingCostType shippingCostType : shippingCostTypes) {
 				sum += ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType);
@@ -1568,7 +1646,7 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	private CellLabelProvider createLambdaLabelProvider(final boolean asInt, final boolean asSigFigs, final Function<ChangeSetTableRow, Number> calcF,
+	private CellLabelProvider createLambdaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean asSigFigs, final Function<ChangeSetTableRow, Number> calcF,
 			final Function<ChangeSetTableRow, Number> calcT) {
 
 		final ToDoubleBiFunction<Number, Number> deltaDoubleUpdater = (f, t) -> {
@@ -1626,18 +1704,54 @@ public class ChangeSetViewColumnHelper {
 				if (asInt) {
 					delta = delta / 1000000.0;
 					if (Math.abs(delta) > 0.001) {
-						if (asSigFigs) {
-							cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+						if (!withColour) {
+							if (asSigFigs) {
+								cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+							} else {
+								cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+							}
 						} else {
-							cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+							if (asSigFigs) {
+								cell.setText(String.format("%,.3G", Math.abs(delta)));
+							} else {
+								cell.setText(String.format("%,.3f", Math.abs(delta)));
+							}
+
+							if (delta < 0) {
+								if (asCost) {
+									cell.setImage(imageGreenArrowDown);
+								} else {
+									cell.setImage(imageRedArrowDown);
+								}
+							} else {
+								if (asCost) {
+									cell.setImage(imageRedArrowUp);
+								} else {
+									cell.setImage(imageGreenArrowUp);
+								}
+							}
 						}
 					}
 				} else {
 					if (Math.abs(delta) > 0.009) {
-						if (asSigFigs) {
-							cell.setText(String.format("%s %,.2G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+						if (!withColour) {
+							if (asSigFigs) {
+								cell.setText(String.format("%s %,.2G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+							} else {
+								cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+							}
 						} else {
-							cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+							if (asSigFigs) {
+								cell.setText(String.format("%s %,.2G", Math.abs(delta)));
+							} else {
+								cell.setText(String.format("%s %,.2f", Math.abs(delta)));
+							}
+
+							if (delta < 0) {
+								cell.setImage(imageRedArrowDown);
+							} else {
+								cell.setImage(imageRedArrowUp);
+							}
 						}
 					}
 				}
@@ -1684,8 +1798,20 @@ public class ChangeSetViewColumnHelper {
 				delta = (int) Math.round((double) delta / 24.0);
 				if (delta != 0L) {
 					cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+
+					if (delta < 0) {
+						cell.setImage(imageRedArrowDown);
+					} else {
+						cell.setImage(imageRedArrowUp);
+					}
 				} else if (originalDelta != 0L) {
 					cell.setText(String.format("%s %s", originalDelta < 0 ? "↓" : "↑", "<1"));
+
+					if (originalDelta < 0) {
+						cell.setImage(imageRedArrowDown);
+					} else {
+						cell.setImage(imageRedArrowUp);
+					}
 				}
 			}
 		};
@@ -1771,6 +1897,12 @@ public class ChangeSetViewColumnHelper {
 				}
 				if (Math.abs(delta) > 0.009) {
 					cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+
+					if (delta < 0) {
+						cell.setImage(imageRedArrowDown);
+					} else {
+						cell.setImage(imageGreenArrowUp);
+					}
 				}
 			}
 
@@ -1900,6 +2032,26 @@ public class ChangeSetViewColumnHelper {
 		if (imageClosedCircle != null) {
 			imageClosedCircle.dispose();
 			imageClosedCircle = null;
+		}
+		if (imageSteadyArrow != null) {
+			imageSteadyArrow.dispose();
+			imageSteadyArrow = null;
+		}
+		if (imageGreenArrowUp != null) {
+			imageGreenArrowUp.dispose();
+			imageGreenArrowUp = null;
+		}
+		if (imageGreenArrowDown != null) {
+			imageGreenArrowDown.dispose();
+			imageGreenArrowDown = null;
+		}
+		if (imageRedArrowUp != null) {
+			imageRedArrowUp.dispose();
+			imageRedArrowUp = null;
+		}
+		if (imageRedArrowDown != null) {
+			imageRedArrowDown.dispose();
+			imageRedArrowDown = null;
 		}
 		if (colour_VesselTypeColumn != null) {
 			colour_VesselTypeColumn.dispose();
