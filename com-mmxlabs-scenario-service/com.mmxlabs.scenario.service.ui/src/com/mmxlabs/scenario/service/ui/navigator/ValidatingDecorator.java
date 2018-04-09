@@ -18,6 +18,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDirtyListener;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
 import com.mmxlabs.scenario.service.model.manager.IScenarioValidationListener;
@@ -93,8 +94,12 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
-
-		if (element instanceof ScenarioInstance) {
+		if (element instanceof ScenarioService) {
+			ScenarioService scenarioService = (ScenarioService) element;
+			if (!scenarioService.isLocal()) {
+				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/remote.gif"), IDecoration.BOTTOM_RIGHT);
+			}
+		} else if (element instanceof ScenarioInstance) {
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
 			@NonNull
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);

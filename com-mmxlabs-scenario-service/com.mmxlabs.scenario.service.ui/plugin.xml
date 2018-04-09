@@ -657,7 +657,7 @@
             state="true">
          <enablement>
                <objectClass
-                     name="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                    name="com.mmxlabs.scenario.service.model.Container">
                </objectClass>
          </enablement>
       </decorator>
