@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
@@ -74,7 +75,7 @@ public class BaseCaseServiceClient {
 		}
 	}
 
-	public boolean downloadTo(String uuid, File file, BiConsumer<File, Instant> callback) throws IOException {
+	public boolean downloadTo(String uuid, File file, TriConsumer<File, String, Instant> callback) throws IOException {
 		OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
@@ -99,7 +100,7 @@ public class BaseCaseServiceClient {
 		String date = response.headers().get("MMX-CreationDate");
 		if (date != null) {
 			Instant creationDate = Instant.ofEpochSecond(Long.parseLong(date));
-			callback.accept(file, creationDate);
+			callback.accept(file, uuid, creationDate);
 			return true;
 		}
 
@@ -113,11 +114,11 @@ public class BaseCaseServiceClient {
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		
+
 		if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
 			return null;
 		}
-		
+
 		OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
@@ -158,7 +159,7 @@ public class BaseCaseServiceClient {
 
 		return value;
 	}
-	
+
 	public static String getBaseCaseDetails(String uuid) throws IOException {
 		OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
@@ -181,11 +182,11 @@ public class BaseCaseServiceClient {
 
 		return value;
 	}
-	
+
 	private ScheduledThreadPoolExecutor pollTaskExecutor;
 	private ScheduledFuture<?> task;
 
-	public void start(File baseCaseFolder, BiConsumer<File, Instant> callback) {
+	public void start(File baseCaseFolder, TriConsumer<File, String, Instant> callback) {
 		this.baseCaseFolder = baseCaseFolder;
 		pollTaskExecutor = new ScheduledThreadPoolExecutor(1);
 		boolean[] firstRun = { true };
@@ -231,10 +232,10 @@ public class BaseCaseServiceClient {
 						System.out.println("Downloading basecase in background...");
 
 						// callback.accept(target, date);
-						//} catch (IOException e) {
-						//	// TODO Auto-generated catch block
-						//	e.printStackTrace();
-						//}
+						// } catch (IOException e) {
+						// // TODO Auto-generated catch block
+						// e.printStackTrace();
+						// }
 
 						// updateScenarioModel(target);
 						//
@@ -250,18 +251,18 @@ public class BaseCaseServiceClient {
 
 					} else {
 						if (firstRun[0]) {
-							 String details = getBaseCaseDetails(uuid);
-							 
-							 ObjectMapper mapper = new ObjectMapper();
-							 try {
-								 JsonNode actualObj = mapper.readTree(details);
-								 String creationDate = actualObj.get("creationDate").textValue();
-								 Instant instant = Instant.parse(creationDate); 
+							String details = getBaseCaseDetails(uuid);
 
-								 callback.accept(target, instant);
-							 } catch (Exception e) {
-								 e.printStackTrace();
-							 }
+							ObjectMapper mapper = new ObjectMapper();
+							try {
+								JsonNode actualObj = mapper.readTree(details);
+								String creationDate = actualObj.get("creationDate").textValue();
+								Instant instant = Instant.parse(creationDate);
+
+								callback.accept(target, uuid, instant);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
 						firstRun[0] = false;
 					}
@@ -269,7 +270,7 @@ public class BaseCaseServiceClient {
 			} catch (Exception e) {
 				e.printStackTrace();
 				int ii = 0;
-				
+
 			}
 
 		}, 60, 30, TimeUnit.SECONDS);

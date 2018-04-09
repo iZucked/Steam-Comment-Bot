@@ -111,8 +111,9 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 
 			getServiceModel();
 			setReady();
-			client.start(baseCaseFolder, (f, creationDate) -> {
+			client.start(baseCaseFolder, (f, externalId, creationDate) -> {
 				ScenarioInstance instance = constructInstance(f);
+				instance.setExternalID(externalId);
 				ZonedDateTime date = creationDate.atZone(ZoneId.of("UTC"));
 				instance.setName(String.format("Basecase %04d-%02d-%02d %02d:%02d", date.getYear(), date.getMonthValue(), date.getDayOfMonth(), date.getHour(), date.getMinute()));
 				if (instance != null) {
@@ -160,7 +161,6 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 			scenarioInstance.setReadonly(true);
 			scenarioInstance.setUuid(manifest.getUUID());
 
-			final URI fileURI = URI.createFileURI(f.getAbsolutePath());
 			scenarioInstance.setRootObjectURI(archiveURI.toString());
 
 			final String scenarioname = f.getName().replaceFirst("\\.lingo$", "");
