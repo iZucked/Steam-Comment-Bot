@@ -12,6 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 
 import com.mmxlabs.common.Pair;
@@ -196,7 +200,39 @@ public class SharedScenarioUpdater {
 	}
 
 	private boolean downloadScenario(final String uuid, final File f, IProgressListener progressListener) throws IOException {
-		return client.downloadTo(uuid, f, progressListener);
+		boolean[] ret = new boolean[1];
+		final Job background = new Job("Download shared team scenario") {
+
+			@Override
+			public IStatus run(final IProgressMonitor monitor) {
+				// Having a method called "main" in the stacktrace stops SpringBoot throwing an exception in the logging framework
+				return main(monitor);
+			}
+
+			public IStatus main(final IProgressMonitor monitor) {
+				try {
+					ret[0] = client.downloadTo(uuid, f, wrapMonitor(monitor));
+				} catch (Exception e) {
+					// return Status.
+				} finally {
+					monitor.done();
+				}
+
+				return Status.OK_STATUS;
+			}
+		};
+		background.setSystem(false);
+		background.setUser(true);
+		// background.setPriority(Job.LONG);
+
+		background.schedule();
+		try {
+			background.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		return ret[0];
 	}
 
 	protected ScenarioInstance loadScenarioFrom(final File f, final String uuid, final String scenarioname) {
@@ -320,4 +356,27 @@ public class SharedScenarioUpdater {
 		}
 	};
 
+	private IProgressListener wrapMonitor(IProgressMonitor monitor) {
+		if (monitor == null) {
+			return null;
+		}
+
+		return new IProgressListener() {
+			boolean firstCall = true;
+
+			@Override
+			public void update(long bytesRead, long contentLength, boolean done) {
+				if (firstCall) {
+					int total = (int) (contentLength / 1000L);
+					if (total == 0) {
+						total = 1;
+					}
+					monitor.beginTask("Transfer", total);
+					firstCall = false;
+				}
+				int worked = (int) (bytesRead / 1000L);
+				monitor.worked(worked);
+			}
+		};
+	}
 }

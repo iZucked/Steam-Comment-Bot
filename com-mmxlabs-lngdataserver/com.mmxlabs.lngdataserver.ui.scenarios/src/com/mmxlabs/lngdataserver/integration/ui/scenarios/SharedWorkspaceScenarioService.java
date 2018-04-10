@@ -181,7 +181,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		File workspaceLocationFile = workspaceLocation.toFile();
 
-		baseCaseFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "scenarios" + File.separator + "basecases");
+		baseCaseFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "scenarios" + File.separator + "team");
 		if (!baseCaseFolder.exists()) {
 			baseCaseFolder.mkdirs();
 		}
