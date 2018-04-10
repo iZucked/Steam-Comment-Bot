@@ -25,17 +25,20 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.UIEvents.Item;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerRow;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -46,6 +49,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
@@ -138,7 +142,26 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
 		return imageDescriptor.createImage();
 	}
-
+	private CellLabelProvider createRowHeaderLabelProvider() {
+		return new CellLabelProvider() {
+			
+			@Override
+			public void update(ViewerCell cell) {
+				Object element = cell.getElement();
+				
+				if (element == null) {
+					return;
+				}
+				
+				if (!(element instanceof CargoEconsReportRow)) {
+					return;
+				}
+				
+				CargoEconsReportRow row = (CargoEconsReportRow) cell.getElement();
+				cell.setText(row.name);
+			}
+		};
+	}
 	@PostConstruct
 	public void createPartControl(final Composite parent) {
 
@@ -150,22 +173,31 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		cellImageRedArrowUp = createImage("icons/red_arrow_up.png");
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+
+		
 		GridViewerHelper.configureLookAndFeel(viewer);
 		ColumnViewerToolTipSupport.enableFor(viewer);
 
-		// Add the name column
-		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			GridViewerHelper.configureLookAndFeel(gvc);
-			gvc.getColumn().setText("Name");
-			gvc.setLabelProvider(new FieldTypeNameLabelProvider());
-			gvc.getColumn().setWidth(100);
-		}
 
+
+		viewer.getGrid().setRowHeaderVisible(true);
+		viewer.setContentProvider(new ArrayContentProvider());
+		
+		viewer.setRowHeaderLabelProvider(createRowHeaderLabelProvider());
+		viewer.getGrid().setEmptyRowHeaderRenderer(viewer.getGrid().getEmptyCellRenderer());
+		
+		// Add the name column
+
+		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+		{
+			GridViewerHelper.configureLookAndFeel(gvc);
+			gvc.getColumn().setText("Dummy");
+			gvc.setLabelProvider(new FieldTypeNameLabelProvider());
+			gvc.getColumn().setVisible(false);
+		}
 		// All other columns dynamically added.
 
 		// Array content provider as we pass in an array of enums
-		viewer.setContentProvider(new ArrayContentProvider());
 		// Our input!
 
 		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
@@ -174,9 +206,14 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			return true;
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
-
+		
+		if (rows != null && rows.size() > 0) {
+			gvc.getColumn().dispose();
+		}
+		
 		viewer.setInput(rows);
 		viewer.getGrid().setHeaderVisible(true);
+
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_CargoEcons");
 	}
