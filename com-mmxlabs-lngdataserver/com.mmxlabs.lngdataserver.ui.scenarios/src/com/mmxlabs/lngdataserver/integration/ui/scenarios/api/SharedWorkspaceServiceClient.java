@@ -16,9 +16,11 @@ import org.json.JSONObject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
+import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
 import okhttp3.Credentials;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -74,8 +76,18 @@ public class SharedWorkspaceServiceClient {
 		}
 	}
 
-	public boolean downloadTo(String uuid, File file) throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+	public boolean downloadTo(String uuid, File file, IProgressListener progressListener) throws IOException {
+		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+		if (progressListener != null) {
+			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
+				@Override
+				public Response intercept(Chain chain) throws IOException {
+					Response originalResponse = chain.proceed(chain.request());
+					return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
+				}
+			});
+		}
+		OkHttpClient httpClient = clientBuilder //
 				.build();
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();

@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import org.eclipse.emf.common.util.URI;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
 import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
@@ -171,7 +172,7 @@ public class SharedScenarioUpdater {
 			final File f = new File(String.format("%s%s%s.lingo", basePath, File.separator, uuid));
 			if (!f.exists()) {
 				try {
-					if (!downloadScenario(uuid, f)) {
+					if (!downloadScenario(uuid, f, null)) {
 						// Something went wrong - reset lastModified to trigger another refresh
 						lastModified = Instant.EPOCH;
 						// Failed!
@@ -194,8 +195,8 @@ public class SharedScenarioUpdater {
 		}
 	}
 
-	private boolean downloadScenario(final String uuid, final File f) throws IOException {
-		return client.downloadTo(uuid, f);
+	private boolean downloadScenario(final String uuid, final File f, IProgressListener progressListener) throws IOException {
+		return client.downloadTo(uuid, f, progressListener);
 	}
 
 	protected ScenarioInstance loadScenarioFrom(final File f, final String uuid, final String scenarioname) {
