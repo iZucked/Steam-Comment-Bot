@@ -22,6 +22,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel <em>Scenario Model</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isLocal <em>Local</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceID <em>Service ID</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isOffline <em>Offline</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService()
@@ -212,5 +213,31 @@ public interface ScenarioService extends Container {
 	 * @generated
 	 */
 	void setServiceID(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Offline</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Offline</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Offline</em>' attribute.
+	 * @see #setOffline(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_Offline()
+	 * @model
+	 * @generated
+	 */
+	boolean isOffline();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#isOffline <em>Offline</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Offline</em>' attribute.
+	 * @see #isOffline()
+	 * @generated
+	 */
+	void setOffline(boolean value);
 
 } // ScenarioService

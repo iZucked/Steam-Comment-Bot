@@ -25,6 +25,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getScenarioModel <em>Scenario Model</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isLocal <em>Local</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getServiceID <em>Service ID</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isOffline <em>Offline</em>}</li>
  * </ul>
  *
  * @generated
@@ -173,6 +174,24 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 */
 	public void setServiceID(String newServiceID) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_ServiceID(), newServiceID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isOffline() {
+		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_Offline(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOffline(boolean newOffline) {
+		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_Offline(), newOffline);
 	}
 
 } //ScenarioServiceImpl

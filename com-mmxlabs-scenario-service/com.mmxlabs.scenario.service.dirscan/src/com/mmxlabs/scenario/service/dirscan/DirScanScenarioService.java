@@ -303,6 +303,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		serviceModel.setDescription("Shared folder scenario service");
 		serviceModel.setLocal(false);
 		serviceModel.setServiceID(getSerivceID());
+		serviceModel.setOffline(true);
 		serviceModel.eAdapters().add(serviceModelAdapter);
 
 		return serviceModel;
@@ -366,6 +367,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						// Initial model load
 						new Thread(() -> {
 							getServiceModel();
+							getServiceModel().setOffline(false);
 							setReady();
 						}).start();
 						return Status.OK_STATUS;
@@ -419,6 +421,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		// Terminate watch thread
 		watchThreadRunning = false;
 		// Remove Model elements
+		getServiceModel().setOffline(true);
 		getServiceModel().getElements().clear();
 
 		// Empty maps

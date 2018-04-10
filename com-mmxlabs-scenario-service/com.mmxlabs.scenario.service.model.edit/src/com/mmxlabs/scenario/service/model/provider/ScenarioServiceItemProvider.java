@@ -52,6 +52,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 			addScenarioModelPropertyDescriptor(object);
 			addLocalPropertyDescriptor(object);
 			addServiceIDPropertyDescriptor(object);
+			addOfflinePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -141,13 +142,31 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 	}
 
 	/**
-	 * This returns ScenarioService.gif.
+	 * This adds a property descriptor for the Offline feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	protected void addOfflinePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_offline_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_offline_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioService_Offline(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This returns ScenarioService.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
 	@Override
 	public Object getImage(Object object) {
+		if (object instanceof ScenarioService) {
+			ScenarioService scenarioService = (ScenarioService) object;
+			if (scenarioService.isOffline()) {
+				return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioServiceOffline"));
+			}
+		}
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioService"));
 	}
 
@@ -181,6 +200,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
 		case ScenarioServicePackage.SCENARIO_SERVICE__LOCAL:
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_ID:
+		case ScenarioServicePackage.SCENARIO_SERVICE__OFFLINE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
