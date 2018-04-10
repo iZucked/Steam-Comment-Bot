@@ -353,7 +353,12 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			}
 
 			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
-				renameWalk((Container) notification.getNotifier(), notification.getOldStringValue(), notification.getNewStringValue());
+				if (notification.getNewStringValue().contains("/")) {
+					// Do not allow forward slashed in names - used as separator in service backend
+					RunnerHelper.asyncExec(() -> ((Container) notification.getNotifier()).setName(notification.getNewStringValue().replaceAll("/", "_")));
+				} else {
+					renameWalk((Container) notification.getNotifier(), notification.getOldStringValue(), notification.getNewStringValue());
+				}
 			}
 		}
 
