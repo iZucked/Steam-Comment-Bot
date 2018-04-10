@@ -62,19 +62,19 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		// Cargo Econs
 		final IFolderLayout econsArea = layout.createFolder("econsArea", IPageLayout.RIGHT, 0.85f, IPageLayout.ID_EDITOR_AREA);
 		econsArea.addView("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
-		{
-			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
-			viewLayout.setCloseable(false);
-			viewLayout.setMoveable(false);
-		}
+//		{
+//			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
+//			viewLayout.setCloseable(false);
+//			viewLayout.setMoveable(false);
+//		}
 		// PNL Details
 
 		econsArea.addView("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
-		{
-			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
-			viewLayout.setCloseable(false);
-			viewLayout.setMoveable(false);
-		}
+//		{
+//			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
+//			viewLayout.setCloseable(false);
+//			viewLayout.setMoveable(false);
+//		}
 
 		reportsFolder.addView(SchedulerView.ID);
 		reportsFolder.addView(AbstractVerticalCalendarReportView.ID);
