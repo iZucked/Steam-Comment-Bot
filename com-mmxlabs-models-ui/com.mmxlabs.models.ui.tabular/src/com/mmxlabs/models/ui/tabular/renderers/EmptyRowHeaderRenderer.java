@@ -39,34 +39,15 @@ public class EmptyRowHeaderRenderer extends AbstractRenderer
         
         if (!grid.getCellSelectionEnabled())
         {
-
-            gc.drawLine(getBounds().x, getBounds().y, getBounds().x + getBounds().width - 1,
-                        getBounds().y);
-            gc.drawLine(getBounds().x, getBounds().y, getBounds().x, getBounds().y + getBounds().height
-                                                                     - 1);
-    
-            gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-            gc.drawLine(getBounds().x + 1, getBounds().y + 1,
-                        getBounds().x + getBounds().width - 2, getBounds().y + 1);
-            gc.drawLine(getBounds().x + 1, getBounds().y + 1, getBounds().x + 1,
-                        getBounds().y + getBounds().height - 2);
-    
-            gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+        		// Draw bottom line
+            gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x + getBounds().width,
+                        getBounds().y + getBounds().height - 1);
+            
+            // Drow right line
             gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x
                                                                               + getBounds().width - 1,
-                        getBounds().y + getBounds().height - 1);
-            gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x
-                                                                               + getBounds().width - 1,
-                        getBounds().y + getBounds().height - 1);
-    
-                        gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
 
-            gc.drawLine(getBounds().x + getBounds().width - 2, getBounds().y + 1,
-                        getBounds().x + getBounds().width - 2, getBounds().y + getBounds().height
-                                                               - 2);
-            gc.drawLine(getBounds().x + 1, getBounds().y + getBounds().height - 2,
-                        getBounds().x + getBounds().width - 2, getBounds().y + getBounds().height
-                                                               - 2);
+                        getBounds().y + getBounds().height - 1);
         }
         else
         {
