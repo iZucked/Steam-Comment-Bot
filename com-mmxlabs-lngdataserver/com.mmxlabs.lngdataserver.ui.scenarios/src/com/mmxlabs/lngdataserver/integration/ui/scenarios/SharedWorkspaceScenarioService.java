@@ -121,6 +121,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		serviceModel.setName(serviceName);
 		serviceModel.setDescription("Team workspace");
 		serviceModel.setLocal(false);
+		serviceModel.setOffline(true);
 		serviceModel.setServiceID(getSerivceID());
 		serviceModel.eAdapters().add(serviceModelAdapter);
 

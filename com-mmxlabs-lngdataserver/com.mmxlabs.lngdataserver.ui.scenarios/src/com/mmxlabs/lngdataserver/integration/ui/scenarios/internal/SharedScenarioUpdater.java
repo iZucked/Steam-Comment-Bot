@@ -296,13 +296,20 @@ public class SharedScenarioUpdater {
 	}
 
 	public void refresh() throws IOException {
-		final Instant m = client.getLastModified();
-		if (m != null) {
-			if (m.isAfter(lastModified)) {
-				final Pair<List<Pair<String, String>>, Instant> scenariosPair = client.getScenarios();
-				if (scenariosPair != null) {
-					update(scenariosPair.getFirst());
-					lastModified = scenariosPair.getSecond();
+		boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		if (!modelRoot.isOffline() != available) {
+			RunnerHelper.syncExecDisplayOptional(() -> modelRoot.setOffline(!available));
+		}
+
+		if (available) {
+			final Instant m = client.getLastModified();
+			if (m != null) {
+				if (m.isAfter(lastModified)) {
+					final Pair<List<Pair<String, String>>, Instant> scenariosPair = client.getScenarios();
+					if (scenariosPair != null) {
+						update(scenariosPair.getFirst());
+						lastModified = scenariosPair.getSecond();
+					}
 				}
 			}
 		}
