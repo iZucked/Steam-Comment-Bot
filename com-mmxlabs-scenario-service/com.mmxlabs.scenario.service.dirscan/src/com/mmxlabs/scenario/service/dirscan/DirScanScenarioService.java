@@ -36,6 +36,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
@@ -131,129 +132,141 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name) throws Exception {
-
-		final String uuid = EcoreUtil.generateUUID();
-		final StringBuilder sb = new StringBuilder();
-		{
-			Container c = parent;
-			while (c != null && !(c instanceof ScenarioService)) {
-				sb.insert(0, File.separator + c.getName());
-				c = c.getParent();
-			}
-
-		}
-		//
-		lock.readLock().lock();
+	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
 		try {
-			final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + ".lingo");
-			URI archiveURI = URI.createFileURI(target.getAbsolutePath());
-
-			if (target.exists()) {
-				final boolean[] response = new boolean[1];
-				final Display display = PlatformUI.getWorkbench().getDisplay();
-				display.syncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
-								String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
-
-					}
-				});
-				if (!response[0]) {
-					return null;
+			progressMonitor.beginTask("Copy", 1);
+			final String uuid = EcoreUtil.generateUUID();
+			final StringBuilder sb = new StringBuilder();
+			{
+				Container c = parent;
+				while (c != null && !(c instanceof ScenarioService)) {
+					sb.insert(0, File.separator + c.getName());
+					c = c.getParent();
 				}
+
 			}
-			tmpRecord.saveCopyTo(uuid, archiveURI);
+			//
+			lock.readLock().lock();
+			try {
+				final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + ".lingo");
+				URI archiveURI = URI.createFileURI(target.getAbsolutePath());
 
-			log.debug("Inserting scenario into " + parent);
+				if (target.exists()) {
+					final boolean[] response = new boolean[1];
+					final Display display = PlatformUI.getWorkbench().getDisplay();
+					display.syncExec(new Runnable() {
 
-			// Create new model nodes
-			final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+						@Override
+						public void run() {
+							response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
+									String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
 
-			// Create a new UUID
-			newInstance.setUuid(uuid);
-			newInstance.setMetadata(metadata);
+						}
+					});
+					if (!response[0]) {
+						return null;
+					}
+				}
+				tmpRecord.saveCopyTo(uuid, archiveURI);
 
-			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
+				log.debug("Inserting scenario into " + parent);
 
-			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
-			assert destURI != null;
+				// Create new model nodes
+				final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+				final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+
+				// Create a new UUID
+				newInstance.setUuid(uuid);
+				newInstance.setMetadata(metadata);
+
+				final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
+
+				final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
+				assert destURI != null;
+			} finally {
+				lock.readLock().unlock();
+				pokeWatchThread();
+			}
+
+			progressMonitor.worked(1);
+
+			return null;
 		} finally {
-			lock.readLock().unlock();
-			pokeWatchThread();
+			progressMonitor.done();
 		}
-		return null;
-
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name) throws Exception {
-
-		final String uuid = EcoreUtil.generateUUID();
-		final StringBuilder sb = new StringBuilder();
-		{
-			Container c = parent;
-			while (c != null && !(c instanceof ScenarioService)) {
-				sb.insert(0, File.separator + c.getName());
-				c = c.getParent();
-			}
-
-		}
-		//
-		lock.readLock().lock();
+	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
 		try {
-			final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + ".lingo");
-			URI archiveURI = URI.createFileURI(target.getAbsolutePath());
-
-			if (target.exists()) {
-				final boolean[] response = new boolean[1];
-				final Display display = PlatformUI.getWorkbench().getDisplay();
-				display.syncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
-								String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
-
-					}
-				});
-				if (!response[0]) {
-					return null;
-				}
-			}
+			progressMonitor.beginTask("Copy", 1);
+			final String uuid = EcoreUtil.generateUUID();
+			final StringBuilder sb = new StringBuilder();
 			{
-				{
-					final EObject rootObject = EcoreUtil.copy(scenarioDataProvider.getScenario());
-					ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-						final Map<String, EObject> extraDataObjects = ScenarioStorageUtil.createCopyOfExtraData(scenarioDataProvider);
-						ScenarioStorageUtil.storeToURI(uuid, rootObject, extraDataObjects, scenarioDataProvider.getManifest(), archiveURI, scenarioCipherProvider);
-					});
+				Container c = parent;
+				while (c != null && !(c instanceof ScenarioService)) {
+					sb.insert(0, File.separator + c.getName());
+					c = c.getParent();
 				}
+
 			}
+			//
+			lock.readLock().lock();
+			try {
+				final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + ".lingo");
+				URI archiveURI = URI.createFileURI(target.getAbsolutePath());
 
-			log.debug("Inserting scenario into " + parent);
+				if (target.exists()) {
+					final boolean[] response = new boolean[1];
+					final Display display = PlatformUI.getWorkbench().getDisplay();
+					display.syncExec(new Runnable() {
 
-			// Create new model nodes
-			final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+						@Override
+						public void run() {
+							response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
+									String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
 
-			// Create a new UUID
-			newInstance.setUuid(uuid);
-			newInstance.setMetadata(metadata);
+						}
+					});
+					if (!response[0]) {
+						return null;
+					}
+				}
+				{
+					{
+						final EObject rootObject = EcoreUtil.copy(scenarioDataProvider.getScenario());
+						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+							final Map<String, EObject> extraDataObjects = ScenarioStorageUtil.createCopyOfExtraData(scenarioDataProvider);
+							ScenarioStorageUtil.storeToURI(uuid, rootObject, extraDataObjects, scenarioDataProvider.getManifest(), archiveURI, scenarioCipherProvider);
+						});
+					}
+				}
 
-			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
+				log.debug("Inserting scenario into " + parent);
 
-			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
-			assert destURI != null;
+				// Create new model nodes
+				final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+				final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+
+				// Create a new UUID
+				newInstance.setUuid(uuid);
+				newInstance.setMetadata(metadata);
+
+				final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
+
+				final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
+				assert destURI != null;
+			} finally {
+				lock.readLock().unlock();
+				pokeWatchThread();
+			}
+			progressMonitor.worked(1);
+
+			return null;
+
 		} finally {
-			lock.readLock().unlock();
-			pokeWatchThread();
+			progressMonitor.done();
 		}
-		return null;
-
 	}
 
 	@Override

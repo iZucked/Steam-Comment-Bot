@@ -136,7 +136,6 @@ public final class ScenarioServiceModelUtils {
 
 	// FIXME: Duplicates API in ScenarioServiceUtils
 	@Deprecated
-
 	@Nullable
 	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, final String currentName, @NonNull final Set<String> existingNames,
 			final IProgressMonitor monitor) throws Exception {
@@ -149,7 +148,7 @@ public final class ScenarioServiceModelUtils {
 
 		final IScenarioService destinationScenarioService = SSDataManager.Instance.findScenarioService(destination);
 
-		return destinationScenarioService.copyInto(destination, record, newName);
+		return destinationScenarioService.copyInto(destination, record, newName, monitor);
 	}
 
 	public static ScenarioInstance fork(@NonNull final ScenarioInstance instance, final String finalNewName, final IProgressMonitor monitor) throws Exception {

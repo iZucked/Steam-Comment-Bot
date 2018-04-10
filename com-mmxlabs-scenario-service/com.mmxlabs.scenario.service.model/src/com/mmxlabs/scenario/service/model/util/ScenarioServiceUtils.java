@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
@@ -94,13 +95,14 @@ public final class ScenarioServiceUtils {
 	}
 
 	@Nullable
-	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, @NonNull final Set<String> existingNames) throws Exception {
-		return copyScenario(scenario, destination, scenario.getName(), existingNames);
+	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, @NonNull final Set<String> existingNames,
+			@Nullable IProgressMonitor progressMonitor) throws Exception {
+		return copyScenario(scenario, destination, scenario.getName(), existingNames, progressMonitor);
 	}
 
 	@Nullable
-	public static ScenarioInstance copyScenario(@NonNull final ScenarioModelRecord modelRecord, @NonNull final Container destination, final String currentName, @NonNull final Set<String> existingNames)
-			throws Exception {
+	public static ScenarioInstance copyScenario(@NonNull final ScenarioModelRecord modelRecord, @NonNull final Container destination, final String currentName,
+			@NonNull final Set<String> existingNames, @Nullable IProgressMonitor progressMonitor) throws Exception {
 
 		final String newName = ScenarioServiceUtils.getNextName(currentName, existingNames);
 
@@ -111,14 +113,14 @@ public final class ScenarioServiceUtils {
 		}
 		//
 		// Create the scenario duplicate
-		final ScenarioInstance theDupe = scenarioService.copyInto(destination, modelRecord, newName);
+		final ScenarioInstance theDupe = scenarioService.copyInto(destination, modelRecord, newName, progressMonitor);
 		//
 		return theDupe;
 	}
 
 	@Nullable
-	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, final String currentName, final Set<String> existingNames)
-			throws Exception {
+	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, final String currentName, final Set<String> existingNames,
+			@Nullable IProgressMonitor progressMonitor) throws Exception {
 
 		// Some services can return null here pending some asynchronous update mechanism
 		// Prefix "Copy of" only if we are copying within the container
@@ -128,18 +130,19 @@ public final class ScenarioServiceUtils {
 		@NonNull
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 
-		return copyScenario(modelRecord, destination, newName);
+		return copyScenario(modelRecord, destination, newName, progressMonitor);
 	}
 
 	@Nullable
-	public static ScenarioInstance copyScenario(@NonNull final ScenarioModelRecord modelRecord, @NonNull final Container destination, final String finalName) throws Exception {
+	public static ScenarioInstance copyScenario(@NonNull final ScenarioModelRecord modelRecord, @NonNull final Container destination, final String finalName,
+			@Nullable IProgressMonitor progressMonitor) throws Exception {
 
 		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(destination);
 
 		if (scenarioService == null) {
 			throw new IllegalStateException();
 		}
-		return scenarioService.copyInto(destination, modelRecord, finalName);
+		return scenarioService.copyInto(destination, modelRecord, finalName, progressMonitor);
 
 	}
 

@@ -247,7 +247,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 								@Override
 								public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-									monitor.beginTask("Copying", 6 * files.length);
+									monitor.beginTask("Copying", 10 * files.length);
 									try {
 
 										for (final String filePath : files) {
@@ -262,7 +262,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 											final URL scenarioURL = file.toURI().toURL();
 											ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioURL, (modelRecord, modelReference) -> {
 												try {
-													ScenarioServiceUtils.copyScenario(modelRecord, container, scenarioName, existingNames);
+													ScenarioServiceUtils.copyScenario(modelRecord, container, scenarioName, existingNames, new SubProgressMonitor(monitor, 4));
 												} catch (final Exception e) {
 													log.error(e.getMessage(), e);
 												}

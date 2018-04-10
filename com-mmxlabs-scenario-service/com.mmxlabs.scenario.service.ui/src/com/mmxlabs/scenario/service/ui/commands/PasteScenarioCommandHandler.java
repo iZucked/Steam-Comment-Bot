@@ -20,6 +20,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -114,7 +115,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 					@Override
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						monitor.beginTask("Copying", numTasks);
+						monitor.beginTask("Copying", 3 * numTasks);
 						try {
 							for (final Object o : iterable) {
 								if (o instanceof ScenarioInstance) {
@@ -122,7 +123,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 									monitor.subTask("Copying " + scenarioInstance.getName());
 									log.debug("Local paste " + scenarioInstance.getName());
 									try {
-										final ScenarioInstance duplicate = ScenarioServiceUtils.copyScenario(scenarioInstance, container, existingNames);
+										final ScenarioInstance duplicate = ScenarioServiceUtils.copyScenario(scenarioInstance, container, existingNames, new SubProgressMonitor(monitor, 2));
 										if (duplicate != null) {
 											existingNames.add(duplicate.getName());
 										}
@@ -226,7 +227,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 						@Override
 						public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-							SubMonitor m = SubMonitor.convert(monitor, "Copying", 6 * scenarioFiles.size());
+							SubMonitor m = SubMonitor.convert(monitor, "Copying", 10 * scenarioFiles.size());
 							try {
 
 								for (final File f : scenarioFiles) {
@@ -243,7 +244,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 									final Set<String> existingNames = ScenarioServiceUtils.getExistingNames(destinationContainer);
 
 									ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(f.toURL(), (modelRecord, modelReference) -> {
-										ScenarioServiceUtils.copyScenario(modelRecord, destinationContainer, scenarioName, existingNames);
+										ScenarioServiceUtils.copyScenario(modelRecord, destinationContainer, scenarioName, existingNames, m.split(4));
 									}, m.split(5));
 
 									m.worked(1);
