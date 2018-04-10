@@ -284,10 +284,7 @@
             commandId="com.mmxlabs.scenario.service.ui.newfolder">
          <activeWhen>
             <or>
-               <count
-                     value="0">
-               </count>
-               <and>
+				<and>
                   <count
                         value="1">
                   </count>
