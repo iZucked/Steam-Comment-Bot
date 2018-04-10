@@ -174,20 +174,17 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
-		
 		GridViewerHelper.configureLookAndFeel(viewer);
 		ColumnViewerToolTipSupport.enableFor(viewer);
-
-
 
 		viewer.getGrid().setRowHeaderVisible(true);
 		viewer.setContentProvider(new ArrayContentProvider());
 		
+		// Set row header column
 		viewer.setRowHeaderLabelProvider(createRowHeaderLabelProvider());
-		viewer.getGrid().setEmptyRowHeaderRenderer(viewer.getGrid().getEmptyCellRenderer());
+		viewer.refreshRowHeaders(null);
 		
-		// Add the name column
-
+		// Add the dummy name column to fix row height issue
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 		{
 			GridViewerHelper.configureLookAndFeel(gvc);
@@ -197,9 +194,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		}
 		// All other columns dynamically added.
 
-		// Array content provider as we pass in an array of enums
 		// Our input!
-
+		// Array content provider as we pass in an array of enums
 		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
 		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
 			rows.addAll(factory.createRows(options, null));
@@ -207,13 +203,13 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
 		
-		if (rows != null && rows.size() > 0) {
-			gvc.getColumn().dispose();
-		}
-		
 		viewer.setInput(rows);
 		viewer.getGrid().setHeaderVisible(true);
 
+		// If we have data, dispose of the dummy name column immediately
+		if (rows != null && rows.size() > 0) {
+			gvc.getColumn().dispose();
+		}
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_CargoEcons");
 	}
