@@ -29,4 +29,6 @@ public interface IScenarioServiceEditorInput extends IEditorInput {
 	 * @return
 	 */
 	ScenarioInstance getScenarioInstance();
+
+	boolean isValid();
 }

@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ui.IElementFactory;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.internal.part.NullEditorInput;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -33,7 +34,7 @@ public class ScenarioServiceElementFactory implements IElementFactory {
 	public IAdaptable createElement(final IMemento memento) {
 		final String uuid = memento.getString(TAG_UUID);
 		if (uuid == null) {
-			return null;
+			return ScenarioServiceEditorInput.invalidInput();
 		}
 
 		for (final WeakReference<IScenarioService> ref : Activator.getDefault().getScenarioServices().values()) {
@@ -54,7 +55,8 @@ public class ScenarioServiceElementFactory implements IElementFactory {
 			}
 		}
 
-		return null;
+		// Cann't find scenario, mark as invalid to trigger editor closure
+		return ScenarioServiceEditorInput.invalidInput();
 	}
 
 	/**
@@ -75,7 +77,9 @@ public class ScenarioServiceElementFactory implements IElementFactory {
 	 *            the scenario service editor input
 	 */
 	public static void saveState(final IMemento memento, final ScenarioServiceEditorInput input) {
-		final String uuid = input.getScenarioInstance().getUuid();
-		memento.putString(TAG_UUID, uuid);
+		if (input.isValid()) {
+			final String uuid = input.getScenarioInstance().getUuid();
+			memento.putString(TAG_UUID, uuid);
+		}
 	}
 }

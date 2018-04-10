@@ -21,6 +21,17 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput, 
 	private final ScenarioServiceItemProviderAdapterFactory adapterFactory = new ScenarioServiceItemProviderAdapterFactory();
 
 	private final ScenarioInstance scenarioInstance;
+	private boolean valid = true;
+
+	public static ScenarioServiceEditorInput invalidInput() {
+		ScenarioServiceEditorInput input = new ScenarioServiceEditorInput(null);
+		input.valid = false;
+		return input;
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
 
 	public ScenarioServiceEditorInput(final ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
@@ -44,6 +55,9 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput, 
 
 	@Override
 	public String getName() {
+		if (!valid) {
+			return "Close me";
+		}
 		return scenarioInstance.getName();
 	}
 
@@ -81,15 +95,22 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput, 
 
 	@Override
 	public int hashCode() {
-		return scenarioInstance.hashCode();
+		return isValid() ? scenarioInstance.hashCode() : 0;
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-
+		if (obj == this) {
+			return true;
+		}
+		if (!isValid()) {
+			return false;
+		}
 		if (obj instanceof ScenarioServiceEditorInput) {
 			final ScenarioServiceEditorInput other = (ScenarioServiceEditorInput) obj;
-
+			if (!other.isValid()) {
+				return false;
+			}
 			// TODO: Implement equals?
 			// use UUIDS?
 			return other.scenarioInstance.equals(scenarioInstance);

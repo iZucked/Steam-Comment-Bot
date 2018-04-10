@@ -18,7 +18,11 @@ public class ScenarioServiceLinkHelper implements ILinkHelper {
 
 	@Override
 	public IStructuredSelection findSelection(final IEditorInput anInput) {
-		return new StructuredSelection(anInput.getAdapter(ScenarioInstance.class));
+		ScenarioInstance adapter = anInput.getAdapter(ScenarioInstance.class);
+		if (adapter != null) {
+			return new StructuredSelection(adapter);
+		}
+		return StructuredSelection.EMPTY;
 	}
 
 	@Override
