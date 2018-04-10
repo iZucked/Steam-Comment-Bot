@@ -64,6 +64,7 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.internal.part.NullEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -361,17 +362,24 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-
+		if (input instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
+			// If not valid request editor to be closed.
+			// We can't stop it from being restored on start up, so rely on this instead
+			if (!ssInput.isValid()) {
+				super.init(site, new NullEditorInput());
+				this.initException = new IllegalArgumentException("Obsolete editor input");
+				RunnerHelper.asyncExec(() -> site.getPage().closeEditor(JointModelEditorPart.this, false));
+				return;
+			}
+		}
 		try {
-
 			super.init(site, input);
 			setPartName(input.getName());
 			final MMXRootObject root;
 			final ScenarioInstance instance;
 			if (input instanceof IScenarioServiceEditorInput) {
-
 				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
-
 				updateTitleImage(ssInput);
 
 				instance = ssInput.getScenarioInstance();
