@@ -38,7 +38,7 @@ public class VesselsRepository extends AbstractDataRepository {
 
 	public static final VesselsRepository INSTANCE = new VesselsRepository();
 
-	private VesselsRepository() {
+	public VesselsRepository() {
 		localApi = new VesselsApi(new ApiClient());
 		localWaitingApi = new VesselsApi(new ApiClient());
 

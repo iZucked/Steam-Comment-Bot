@@ -84,7 +84,6 @@ public class AuthDetailsPromptDialog extends Dialog {
          } catch (StorageException e1) {
              e1.printStackTrace();
          }		
-		
 	}
 	
 	@Override

@@ -181,9 +181,9 @@ public class UpstreamUrlProvider {
 		if (pingRequest == null) {
 			return false;
 		}
-
-		try (final Response pullResponse = localClient.newCall(pingRequest).execute()) {
-			if (!pullResponse.isSuccessful()) {
+		
+		try (final Response pingResponse = localClient.newCall(pingRequest).execute()) {
+			if (!pingResponse.isSuccessful()) {
 				return false;
 			}
 		} catch (IOException e) {
