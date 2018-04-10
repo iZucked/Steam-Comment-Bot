@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -51,7 +52,8 @@ public class ExportScheduleHelper {
 		return export(scenarioResult, null, true, null);
 	}
 
-	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult, @Nullable final String nameSuggestion, boolean openScenario, @Nullable BiConsumer<LNGScenarioModel, Schedule> modelCustomiser) throws Exception {
+	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult, @Nullable final String nameSuggestion, boolean openScenario,
+			@Nullable BiConsumer<LNGScenarioModel, Schedule> modelCustomiser) throws Exception {
 		// Original data
 		final LNGScenarioModel o_scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel o_scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
@@ -115,7 +117,7 @@ public class ExportScheduleHelper {
 			// Open but deleted scenario?
 			return null;
 		}
-		final ScenarioInstance theFork = scenarioService.copyInto(scenarioInstance, scenarioDataProvider, newForkName);
+		final ScenarioInstance theFork = scenarioService.copyInto(scenarioInstance, scenarioDataProvider, newForkName, new NullProgressMonitor());
 
 		if (openScenario) {
 			try {

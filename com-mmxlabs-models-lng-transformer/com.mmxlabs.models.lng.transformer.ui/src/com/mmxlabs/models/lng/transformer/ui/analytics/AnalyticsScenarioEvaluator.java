@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
@@ -93,7 +94,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			scenarioRunner.evaluateInitialState();
 			if (parentForFork != null && fork) {
 				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
-				scenarioService.copyInto(parentForFork, scenarioDataProvider, forkName);
+				scenarioService.copyInto(parentForFork, scenarioDataProvider, forkName, new NullProgressMonitor());
 			}
 
 		} catch (final Exception e) {

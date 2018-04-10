@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.Collection;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
@@ -84,6 +85,6 @@ public class LNGScenarioRunnerUtils {
 			@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final String newName) throws Exception {
 
 		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(target);
-		return scenarioService.copyInto(target, scenarioDataProvider, newName);
+		return scenarioService.copyInto(target, scenarioDataProvider, newName, new NullProgressMonitor());
 	}
 }
