@@ -74,7 +74,7 @@ public class UpstreamUrlProvider {
 		if (!checkCredentials(url, username, password)) {
 			hasDetails = false;
 		}
-		
+
 		if (!hasDetails) {
 			ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
 			if (preferences.nodeExists("upstream")) {
@@ -92,13 +92,13 @@ public class UpstreamUrlProvider {
 				}
 			}
 		}
-		
+
 		if (!hasDetails) {
 			final Display display = RunnerHelper.getWorkbenchDisplay();
 			if (display == null) {
 				return "";
 			}
-			
+
 			if (dialogOpen.compareAndSet(false, true)) {
 				display.syncExec(() -> {
 					final AuthDetailsPromptDialog dialog = new AuthDetailsPromptDialog(display.getActiveShell());
@@ -140,17 +140,17 @@ public class UpstreamUrlProvider {
 	}
 
 	static public boolean checkCredentials(String url, String username, String password) {
-		
+
 		if (username == null || username.isEmpty()) {
 			return false;
 		}
-		
+
 		if (password == null || password.isEmpty()) {
 			return false;
 		}
-		
+
 		final OkHttpClient httpClient = new okhttp3.OkHttpClient();
-		
+
 		Request loginRequest = new Request.Builder().url(url + "/api/login") //
 				.addHeader("Authorization", Credentials.basic(username, password)) //
 				.build();
@@ -177,11 +177,11 @@ public class UpstreamUrlProvider {
 			System.out.println("No valid url anymore");
 			return false;
 		}
-		
+
 		if (pingRequest == null) {
 			return false;
 		}
-		
+
 		try (final Response pullResponse = localClient.newCall(pingRequest).execute()) {
 			if (!pullResponse.isSuccessful()) {
 				return false;
