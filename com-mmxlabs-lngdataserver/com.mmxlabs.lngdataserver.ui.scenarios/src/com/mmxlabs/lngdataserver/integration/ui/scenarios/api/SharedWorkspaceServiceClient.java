@@ -133,7 +133,7 @@ public class SharedWorkspaceServiceClient {
 		return value;
 	}
 
-	public static Pair<List<Pair<String, String>>, Instant> getScenarios() throws IOException {
+	public static Pair<String, Instant> getScenarios() throws IOException {
 		OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
@@ -150,23 +150,15 @@ public class SharedWorkspaceServiceClient {
 			if (!response.isSuccessful()) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			String jsonData = response.body().string();
-			// final String jsonData = response.body().string();
-			final JSONArray Jobject = new JSONArray(jsonData);
-			List<Pair<String, String>> l = new LinkedList<>();
-			for (int i = 0; i < Jobject.length(); ++i) {
-				final JSONObject versionObject = Jobject.getJSONObject(i);
-				final String uuidString = versionObject.getString("uuid");
-				final String pathString = versionObject.getString("path");
-				l.add(new Pair<>(uuidString, pathString));
-			}
 			String date = response.headers().get("MMX-LastModified");
-			if (date != null) {
-				Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
-				return new Pair<>(l, lastModified);
+			if (date == null) {
+				return null;
 			}
+			Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
+			String jsonData = response.body().string();
+			return new Pair<>(jsonData, lastModified);
+
 		}
-		return null;
 	}
 
 	public static void deleteScenario(String uuid) throws IOException {
@@ -240,5 +232,17 @@ public class SharedWorkspaceServiceClient {
 				throw new IOException("Unexpected code: " + response);
 			}
 		}
+	}
+
+	public List<Pair<String, String>> parseScenariosJSONData(String jsonData) {
+		final JSONArray Jobject = new JSONArray(jsonData);
+		List<Pair<String, String>> l = new LinkedList<>();
+		for (int i = 0; i < Jobject.length(); ++i) {
+			final JSONObject versionObject = Jobject.getJSONObject(i);
+			final String uuidString = versionObject.getString("uuid");
+			final String pathString = versionObject.getString("path");
+			l.add(new Pair<>(uuidString, pathString));
+		}
+		return l;
 	}
 }

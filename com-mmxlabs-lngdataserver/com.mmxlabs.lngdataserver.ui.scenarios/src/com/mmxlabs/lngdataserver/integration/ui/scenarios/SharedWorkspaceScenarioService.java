@@ -65,9 +65,13 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 	@Override
 	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
+		if (serviceModel.isOffline()) {
+			return null;
+		}
+
 		try {
 			if (progressMonitor != null) {
-//				progressMonitor.beginTask("Copy", 1000);
+				// progressMonitor.beginTask("Copy", 1000);
 			}
 			StringBuilder path = new StringBuilder();
 			Container p = parent;
@@ -120,6 +124,10 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 	@Override
 	public void delete(final Container container) {
+		if (serviceModel.isOffline()) {
+			return;
+		}
+
 		List<String> uuidsToDelete = new LinkedList<>();
 		recursiveDelete(container, uuidsToDelete);
 		for (String uuid : uuidsToDelete) {
@@ -215,7 +223,9 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 	@Override
 	public void moveInto(final List<Container> elements, final Container destination) {
-
+		if (serviceModel.isOffline()) {
+			return;
+		}
 		String basePath = "";
 		final StringBuilder sb = new StringBuilder();
 		Container parent = destination;

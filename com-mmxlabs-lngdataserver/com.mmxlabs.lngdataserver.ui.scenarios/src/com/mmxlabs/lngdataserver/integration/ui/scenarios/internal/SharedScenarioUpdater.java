@@ -18,6 +18,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
@@ -279,7 +281,21 @@ public class SharedScenarioUpdater {
 	}
 
 	public void start() {
+		File f = new File(basePath.getAbsolutePath() + "/scenarios.json");
+		if (f.exists()) {
+			String json;
+			try {
+				json = Files.toString(f, Charsets.UTF_8);
 
+				final List<Pair<String, String>> scenariosList = client.parseScenariosJSONData(json);
+				if (scenariosList != null) {
+					update(scenariosList);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		updateThread = new Thread() {
 			@Override
 			public void run() {
@@ -346,9 +362,11 @@ public class SharedScenarioUpdater {
 			final Instant m = client.getLastModified();
 			if (m != null) {
 				if (m.isAfter(lastModified)) {
-					final Pair<List<Pair<String, String>>, Instant> scenariosPair = client.getScenarios();
+					final Pair<String, Instant> scenariosPair = client.getScenarios();
+					final List<Pair<String, String>> scenariosList = client.parseScenariosJSONData(scenariosPair.getFirst());
 					if (scenariosPair != null) {
-						update(scenariosPair.getFirst());
+						update(scenariosList);
+						Files.write(scenariosPair.getFirst(), new File(basePath.getAbsolutePath() + "/scenarios.json"), Charsets.UTF_8);
 						lastModified = scenariosPair.getSecond();
 					}
 				}
