@@ -63,8 +63,10 @@ public class SharedWorkspaceServiceClient {
 				throw new IOException("Unexpected code " + response);
 			}
 
-			String responseStr = response.body().string();
-			return responseStr;
+			String jsonData = response.body().string();
+			final JSONObject Jobject = new JSONObject(jsonData);
+			final String uuidString = Jobject.getString("uuid");
+			return uuidString;
 		}
 	}
 

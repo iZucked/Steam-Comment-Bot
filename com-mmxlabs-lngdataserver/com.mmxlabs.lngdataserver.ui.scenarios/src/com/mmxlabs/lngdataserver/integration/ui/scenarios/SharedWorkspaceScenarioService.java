@@ -6,6 +6,9 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,7 +72,24 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		}
 
 		File f = ScenarioStorageUtil.storeToTemporaryFile(tmpRecord);
-		client.uploadScenario(f, path.toString());
+		try {
+			String uuid = client.uploadScenario(f, path.toString());
+			if (uuid != null) {
+				Path target = Paths.get(baseCaseFolder.getAbsolutePath(), String.format("%s.lingo", uuid));
+				Files.copy(f.toPath(), target);
+			}
+		} finally {
+			if (f != null) {
+				f.delete();
+			}
+		}
+
+		try {
+			updater.refresh();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return null;
 
@@ -97,6 +117,13 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		if (container instanceof Folder) {
 			RunnerHelper.asyncExec(() -> container.getParent().getElements().remove(container));
 		}
+		try {
+			updater.refresh();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private void recursiveDelete(Container parent, List<String> uuids) {
