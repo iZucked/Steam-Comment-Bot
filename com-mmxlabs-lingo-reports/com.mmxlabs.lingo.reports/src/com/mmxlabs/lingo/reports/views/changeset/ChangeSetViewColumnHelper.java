@@ -199,7 +199,7 @@ public class ChangeSetViewColumnHelper {
 
 		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumeExtendeders();
 	}
-	
+
 	public void makeColumns() {
 		// Create columns
 		{
@@ -282,7 +282,8 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("- Purchase");
 			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, true, true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+			gvc.setLabelProvider(
+					createDeltaLabelProvider(true, true, true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
 			createWordWrapRenderer(gvc);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
@@ -531,8 +532,8 @@ public class ChangeSetViewColumnHelper {
 			this.column_DischargeVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			this.column_DischargeVolume.getColumn().setText("tBtu");
 			this.column_DischargeVolume.getColumn().setWidth(55);
-			this.column_DischargeVolume.setLabelProvider(
-					createDeltaLabelProvider(true, false, false, false, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+			this.column_DischargeVolume.setLabelProvider(createDeltaLabelProvider(true, false, false, false, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
+					SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 			this.column_DischargeVolume.getColumn().setCellRenderer(createCellRenderer());
 			this.column_DischargeVolume.getColumn().setVisible(showCompareColumns);
 		}
@@ -1084,7 +1085,8 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean isLHS, final EStructuralFeature field, final EStructuralFeature attrib) {
+	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean isLHS, final EStructuralFeature field,
+			final EStructuralFeature attrib) {
 
 		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE;
 		final EReference to = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER;
@@ -1146,7 +1148,11 @@ public class ChangeSetViewColumnHelper {
 						if (delta == 0) {
 							cell.setText("0.00");
 						} else {
-							cell.setText(String.format("%,.3G", Math.abs(delta)));
+							if (textualVesselMarkers) {
+								cell.setText(String.format("%s%,.3G", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(delta)));
+							} else {
+								cell.setText(String.format("%,.3G", Math.abs(delta)));
+							}
 
 							if (metrics.getPnlDelta() < 0) {
 								cell.setImage(imageRedArrowDown);
@@ -1168,7 +1174,12 @@ public class ChangeSetViewColumnHelper {
 						delta = 0;
 					}
 					if (delta != 0) {
-						cell.setText(String.format("%,.3G", Math.abs(delta)));
+
+						if (textualVesselMarkers) {
+							cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+						} else {
+							cell.setText(String.format("%,.3G", Math.abs(delta)));
+						}
 
 						if (delta < 0) {
 							cell.setImage(imageRedArrowDown);
@@ -1256,7 +1267,12 @@ public class ChangeSetViewColumnHelper {
 					if (deltaMetrics != null) {
 						final int latenessDelta = (int) Math.round((double) deltaMetrics.getLatenessDelta() / 24.0);
 						final int lateness = (int) Math.round((double) scenarioMetrics.getLateness() / 24.0);
-						cell.setText(String.format("%s%d / %d", latenessDelta < 0 ? "↓" : latenessDelta == 0 ? "" : "↑", Math.abs(latenessDelta), lateness));
+
+						if (textualVesselMarkers) {
+							cell.setText(String.format("%s%d / %d", latenessDelta < 0 ? "↓" : latenessDelta == 0 ? "" : "↑", Math.abs(latenessDelta), lateness));
+						} else {
+							cell.setText(String.format("%d / %d", Math.abs(latenessDelta), lateness));
+						}
 
 						if (latenessDelta < 0) {
 							cell.setImage(imageGreenArrowDown);
@@ -1296,7 +1312,12 @@ public class ChangeSetViewColumnHelper {
 					final long originalDelta = delta;
 					delta = (int) Math.round((double) delta / 24.0);
 					if (delta != 0L) {
-						cell.setText(String.format("%s %d%s", delta < 0 ? "↓" : "↑", Math.abs(delta), flexStr));
+
+						if (textualVesselMarkers) {
+							cell.setText(String.format("%s %d%s", delta < 0 ? "↓" : "↑", Math.abs(delta), flexStr));
+						} else {
+							cell.setText(String.format("%d%s", Math.abs(delta), flexStr));
+						}
 
 						if (delta < 0) {
 							cell.setImage(imageGreenArrowDown);
@@ -1304,8 +1325,12 @@ public class ChangeSetViewColumnHelper {
 							cell.setImage(imageRedArrowUp);
 						}
 					} else if (originalDelta != 0L) {
-						cell.setText(String.format("%s %s%s", originalDelta < 0 ? "↓" : "↑", "<1", flexStr));
 
+						if (textualVesselMarkers) {
+							cell.setText(String.format("%s %s%s", originalDelta < 0 ? "↓" : "↑", "<1", flexStr));
+						} else {
+							cell.setText(String.format("%s%s", "<1", flexStr));
+						}
 						if (originalDelta < 0) {
 							cell.setImage(imageGreenArrowDown);
 						} else {
@@ -1389,9 +1414,13 @@ public class ChangeSetViewColumnHelper {
 					final Metrics scenarioMetrics = group.getCurrentMetrics();
 					final DeltaMetrics deltaMetrics = group.getDeltaMetrics();
 					if (deltaMetrics != null) {
-						cell.setText(String.format("%s%d / %d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : deltaMetrics.getCapacityDelta() == 0 ? "" : "↑", Math.abs(deltaMetrics.getCapacityDelta()),
-								scenarioMetrics.getCapacity()));
 
+						if (textualVesselMarkers) {
+							cell.setText(String.format("%s%d / %d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : deltaMetrics.getCapacityDelta() == 0 ? "" : "↑",
+									Math.abs(deltaMetrics.getCapacityDelta()), scenarioMetrics.getCapacity()));
+						} else {
+							cell.setText(String.format("%d / %d", Math.abs(deltaMetrics.getCapacityDelta()), scenarioMetrics.getCapacity()));
+						}
 						if (deltaMetrics.getCapacityDelta() < 0) {
 							cell.setImage(imageGreenArrowDown);
 						} else if (deltaMetrics.getCapacityDelta() > 0) {
@@ -1410,7 +1439,13 @@ public class ChangeSetViewColumnHelper {
 
 					final long delta = t - f;
 					if (delta != 0) {
-						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+
+						if (textualVesselMarkers) {
+							cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+						} else {
+							cell.setText(String.format("%d", Math.abs(delta)));
+						}
+
 						if (delta < 0) {
 							cell.setImage(imageGreenArrowDown);
 						} else {
@@ -1704,7 +1739,7 @@ public class ChangeSetViewColumnHelper {
 				if (asInt) {
 					delta = delta / 1000000.0;
 					if (Math.abs(delta) > 0.001) {
-						if (!withColour) {
+						if (!withColour || textualVesselMarkers) {
 							if (asSigFigs) {
 								cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 							} else {
@@ -1734,7 +1769,7 @@ public class ChangeSetViewColumnHelper {
 					}
 				} else {
 					if (Math.abs(delta) > 0.009) {
-						if (!withColour) {
+						if (!withColour || textualVesselMarkers) {
 							if (asSigFigs) {
 								cell.setText(String.format("%s %,.2G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 							} else {
@@ -1797,7 +1832,11 @@ public class ChangeSetViewColumnHelper {
 				final long originalDelta = delta;
 				delta = (int) Math.round((double) delta / 24.0);
 				if (delta != 0L) {
-					cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					if (textualVesselMarkers) {
+						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					} else {
+						cell.setText(String.format("%d", Math.abs(delta)));
+					}
 
 					if (delta < 0) {
 						cell.setImage(imageRedArrowDown);
@@ -1805,8 +1844,11 @@ public class ChangeSetViewColumnHelper {
 						cell.setImage(imageRedArrowUp);
 					}
 				} else if (originalDelta != 0L) {
-					cell.setText(String.format("%s %s", originalDelta < 0 ? "↓" : "↑", "<1"));
-
+					if (textualVesselMarkers) {
+						cell.setText(String.format("%s %s", originalDelta < 0 ? "↓" : "↑", "<1"));
+					} else {
+						cell.setText(String.format("%s", "<1"));
+					}
 					if (originalDelta < 0) {
 						cell.setImage(imageRedArrowDown);
 					} else {
@@ -1896,7 +1938,12 @@ public class ChangeSetViewColumnHelper {
 					}
 				}
 				if (Math.abs(delta) > 0.009) {
-					cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+
+					if (textualVesselMarkers) {
+						cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					} else {
+						cell.setText(String.format("%,.2f", Math.abs(delta)));
+					}
 
 					if (delta < 0) {
 						cell.setImage(imageRedArrowDown);
