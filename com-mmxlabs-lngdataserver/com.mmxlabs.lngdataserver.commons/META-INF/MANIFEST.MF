@@ -18,5 +18,6 @@ Import-Package: com.squareup.okhttp,
  org.slf4j
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lngdataserver.commons,
+ com.mmxlabs.lngdataserver.commons.http,
  com.mmxlabs.lngdataserver.commons.impl,
  com.mmxlabs.lngdataserver.commons.model

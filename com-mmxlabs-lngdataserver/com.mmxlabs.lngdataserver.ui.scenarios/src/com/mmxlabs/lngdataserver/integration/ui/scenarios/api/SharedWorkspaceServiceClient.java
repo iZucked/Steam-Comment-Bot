@@ -14,8 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
-import com.mongodb.selector.ReadPreferenceServerSelector;
 
 import okhttp3.Credentials;
 import okhttp3.MediaType;
@@ -37,7 +38,7 @@ public class SharedWorkspaceServiceClient {
 	private static final String SCENARIO_MOVE_URL = "/scenarios/v1/shared/move/";
 	private static final String SCENARIO_LAST_MODIFIED_URL = "/scenarios/v1/shared/lastModified";
 
-	public String uploadScenario(File file, String path) throws IOException {
+	public String uploadScenario(File file, String path, IProgressListener progressListener) throws IOException {
 
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
@@ -47,6 +48,9 @@ public class SharedWorkspaceServiceClient {
 				.build();
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		if (progressListener != null) {
+			requestBody = new ProgressRequestBody(requestBody, progressListener);
+		}
 
 		Request request = new Request.Builder() //
 				.url(upstreamURL + SCENARIO_UPLOAD_URL) //

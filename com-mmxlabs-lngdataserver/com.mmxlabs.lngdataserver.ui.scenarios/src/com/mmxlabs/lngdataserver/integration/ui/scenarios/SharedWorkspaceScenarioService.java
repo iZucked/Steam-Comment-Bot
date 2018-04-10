@@ -14,11 +14,14 @@ import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.SharedScenarioUpdater;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -61,45 +64,58 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 	private SharedScenarioUpdater updater;
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name) throws Exception {
-
-		StringBuilder path = new StringBuilder();
-		Container p = parent;
-		path.append(name);
-		while (p != null && !(p instanceof ScenarioService)) {
-			path.insert(0, p.getName() + "/");
-			p = p.getParent();
-		}
-
-		File f = ScenarioStorageUtil.storeToTemporaryFile(tmpRecord);
+	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
 		try {
-			String uuid = client.uploadScenario(f, path.toString());
-			if (uuid != null) {
-				Path target = Paths.get(baseCaseFolder.getAbsolutePath(), String.format("%s.lingo", uuid));
-				Files.copy(f.toPath(), target);
+			if (progressMonitor != null) {
+//				progressMonitor.beginTask("Copy", 1000);
 			}
+			StringBuilder path = new StringBuilder();
+			Container p = parent;
+			path.append(name);
+			while (p != null && !(p instanceof ScenarioService)) {
+				path.insert(0, p.getName() + "/");
+				p = p.getParent();
+			}
+
+			File f = ScenarioStorageUtil.storeToTemporaryFile(tmpRecord);
+			try {
+				String uuid = client.uploadScenario(f, path.toString(), wrapMonitor(progressMonitor));
+				if (uuid != null) {
+					Path target = Paths.get(baseCaseFolder.getAbsolutePath(), String.format("%s.lingo", uuid));
+					Files.copy(f.toPath(), target);
+				}
+			} finally {
+				if (f != null) {
+					f.delete();
+				}
+			}
+			try {
+				updater.refresh();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
 		} finally {
-			if (f != null) {
-				f.delete();
+			if (progressMonitor != null) {
+				progressMonitor.done();
 			}
 		}
-
-		try {
-			updater.refresh();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
-
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name) throws Exception {
-
-		return null;
-
+	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
+		try {
+			if (progressMonitor != null) {
+				progressMonitor.beginTask("Copy", 1);
+			}
+			return null;
+		} finally {
+			if (progressMonitor != null) {
+				progressMonitor.done();
+			}
+		}
 	}
 
 	@Override
@@ -384,5 +400,29 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 		}
 
+	}
+
+	private IProgressListener wrapMonitor(IProgressMonitor monitor) {
+		if (monitor == null) {
+			return null;
+		}
+
+		return new IProgressListener() {
+			boolean firstCall = true;
+
+			@Override
+			public void update(long bytesRead, long contentLength, boolean done) {
+				if (firstCall) {
+					int total = (int) (contentLength / 1000L);
+					if (total == 0) {
+						total = 1;
+					}
+					monitor.beginTask("Transfer", total);
+					firstCall = false;
+				}
+				int worked = (int) (bytesRead / 1000L);
+				monitor.worked(worked);
+			}
+		};
 	}
 }

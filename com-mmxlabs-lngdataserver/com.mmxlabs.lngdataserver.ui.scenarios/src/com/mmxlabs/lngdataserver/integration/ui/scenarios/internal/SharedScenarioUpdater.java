@@ -54,6 +54,8 @@ public class SharedScenarioUpdater {
 		}
 	};
 
+	private Thread updateThread;
+
 	public SharedScenarioUpdater(final ScenarioService modelRoot, final File basePath, final SharedWorkspaceServiceClient client) {
 		this.modelRoot = modelRoot;
 		this.basePath = basePath;
@@ -233,20 +235,21 @@ public class SharedScenarioUpdater {
 	}
 
 	public void stop() {
-		// TODO Auto-generated method stub
-
+		if (updateThread != null) {
+			updateThread.interrupt();
+			updateThread = null;
+		}
 	}
 
 	public void start() {
 
-		final Thread t = new Thread() {
+		updateThread = new Thread() {
 			@Override
 			public void run() {
 
 				while (true) {
 					try {
 						refresh();
-
 					} catch (final IOException e1) {
 						e1.printStackTrace();
 					}
@@ -255,13 +258,14 @@ public class SharedScenarioUpdater {
 						Thread.sleep(10_000);
 					} catch (final InterruptedException e) {
 						e.printStackTrace();
+						interrupt(); // preserve interruption status
+						return;
 					}
 				}
-
 			}
 
 		};
-		t.start();
+		updateThread.start();
 
 	}
 
