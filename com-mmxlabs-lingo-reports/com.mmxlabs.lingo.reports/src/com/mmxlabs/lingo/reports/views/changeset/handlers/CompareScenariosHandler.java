@@ -62,7 +62,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 								boolean foundPerspective = false;
 								final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
 								for (final MPerspective p : perspectives) {
-									if (p.getElementId().equals(ReportsConstants.PERSPECTIVE_ANALYSIS_ID)) {
+									if (p.getElementId().equals(ReportsConstants.PERSPECTIVE_COMPARE_ID)) {
 										partService.switchPerspective(p);
 										foundPerspective = true;
 										break;
@@ -71,7 +71,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 								if (!foundPerspective) {
 									// Fallback to eclipse 3.x API to open perspective
 									try {
-										PlatformUI.getWorkbench().showPerspective(ReportsConstants.PERSPECTIVE_ANALYSIS_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+										PlatformUI.getWorkbench().showPerspective(ReportsConstants.PERSPECTIVE_COMPARE_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 									} catch (final WorkbenchException e) {
 										log.error("Unable to open compare perspective", e);
 									}
