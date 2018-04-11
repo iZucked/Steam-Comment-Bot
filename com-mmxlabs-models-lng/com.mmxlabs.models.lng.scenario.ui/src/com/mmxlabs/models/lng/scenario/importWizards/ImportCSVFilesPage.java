@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -489,7 +490,7 @@ public class ImportCSVFilesPage extends WizardPage {
 				@Override
 				public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-					monitor.beginTask("Import Scenario", 2);
+					monitor.beginTask("Import Scenario", 3);
 					try {
 						final DefaultImportContext context = new DefaultImportContext(decimalSeparator);
 
@@ -505,7 +506,7 @@ public class ImportCSVFilesPage extends WizardPage {
 							final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 
 							try {
-								final ScenarioInstance newInstance = scenarioService.copyInto(container, scenarioDataProvider, mainPage.getFileName());
+								final ScenarioInstance newInstance = scenarioService.copyInto(container, scenarioDataProvider, mainPage.getFileName(), new SubProgressMonitor(monitor, 1));
 								monitor.worked(1);
 
 								ImportCSVFilesPage.this.setScenarioInstance(newInstance);

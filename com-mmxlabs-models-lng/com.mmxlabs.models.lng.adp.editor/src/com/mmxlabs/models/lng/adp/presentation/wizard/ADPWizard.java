@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -80,7 +81,7 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 						try {
 							final SimpleScenarioDataProvider scenarioDataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
 							final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(instance);
-							fork[0] = scenarioService.copyInto(instance, scenarioDataProvider, "ADP Plan");
+							fork[0] = scenarioService.copyInto(instance, scenarioDataProvider, "ADP Plan", new SubProgressMonitor(monitor, 1));
 						} catch (final Exception e) {
 							e.printStackTrace();
 						}
