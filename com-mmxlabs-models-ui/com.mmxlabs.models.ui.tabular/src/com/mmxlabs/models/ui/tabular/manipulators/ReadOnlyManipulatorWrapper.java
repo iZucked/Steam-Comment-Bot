@@ -8,11 +8,13 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 
 /**
  * An {@link ICellManipulator} and {@link ICellRenderer} wrapper class to take an existing implemention of these interfaces and disable the editing capabilities.
@@ -20,7 +22,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  * @author Simon Goodall
  * 
  */
-public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRenderer> implements ICellManipulator, ICellRenderer {
+public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRenderer> implements ICellManipulator, ICellRenderer, IImageProvider {
 
 	private final T wrapped;
 
@@ -83,5 +85,13 @@ public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRender
 	@Override
 	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
 		wrapped.setExtraCommandsHook(extraCommandsHook);
+	}
+
+	@Override
+	public Image getImage(Object element) {
+		if (wrapped instanceof IImageProvider) {
+			return ((IImageProvider) wrapped).getImage(element);
+		}
+		return null;
 	}
 }
