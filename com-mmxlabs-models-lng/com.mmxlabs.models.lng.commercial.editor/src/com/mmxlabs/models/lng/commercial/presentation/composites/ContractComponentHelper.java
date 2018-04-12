@@ -161,9 +161,9 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 * @generated NO
 	 */
 	protected void add_startDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if (LicenseFeatures.isPermitted("features:adp")) {
+//		if (LicenseFeatures.isPermitted("features:adp")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__START_DATE));
-		}
+//		}
 	}
 
 	/**
