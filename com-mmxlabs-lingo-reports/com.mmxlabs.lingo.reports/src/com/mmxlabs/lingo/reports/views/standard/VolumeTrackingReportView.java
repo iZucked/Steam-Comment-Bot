@@ -5,7 +5,9 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.Year;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +44,8 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * @author Simon McGregor
  */
 public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrackingReportView.VolumeData> {
-
+	private final static Month DEFAULT_MONTH = Month.OCTOBER;
+	
 	private final Pair<Year, Year> dateRange = new Pair<>();
 
 	private enum ValueMode {
@@ -77,11 +80,20 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	 * @param calendar
 	 * @return
 	 */
-	private Year getGasYear(final ZonedDateTime calendar) {
+	private Year getGasYear(SlotAllocation sa, final ZonedDateTime calendar) {
 		final LocalDate utc = calendar.toLocalDate();
 
+		Month gasYearMonth = DEFAULT_MONTH;
+		Contract contract = sa.getContract();
+		if (contract != null && contract.getStartDate() != null) {
+			Month month = contract.getStartDate().getMonth();
+			if (month != null) {
+				gasYearMonth = month;
+			}
+		}
+
 		// subtract one year from the reported year for dates prior to october
-		final int yearOffset = (utc.getMonthValue() < Calendar.OCTOBER) ? -1 : 0;
+		final int yearOffset = (utc.getMonthValue() < gasYearMonth.getValue()) ? -1 : 0;
 
 		return Year.of(utc.getYear() + yearOffset);
 	}
@@ -192,7 +204,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 							contractName = contract.getName();
 						}
 						assert contractName != null;
-						final Year year = getGasYear(sa.getSlotVisit().getStart());
+						final Year year = getGasYear(sa, sa.getSlotVisit().getStart());
 						if (sa.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
 							final Map<Year, Long> m = purchaseVolumes.getOrDefault(contractName, new HashMap<>());
 							final long newValue = m.getOrDefault(year, 0L) + volume;
