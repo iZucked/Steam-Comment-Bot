@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.util;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
@@ -30,7 +31,9 @@ import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -454,10 +457,116 @@ public class ScheduleModelKPIUtils {
 		}
 		return null;
 	}
+	
+	public static Integer calculateLegFuel(final Object object, final EStructuralFeature cargoAllocationRef, final EStructuralFeature allocationRef,  ShippingCostType shippingCostType, @NonNull final TotalType totalType) {
+		if (object instanceof EObject) {
+			final EObject eObject = (EObject) object;
+			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
+			final SlotAllocation allocation = (SlotAllocation) eObject.eGet(allocationRef);
+			return calculateLegFuel(cargoAllocation, allocation, shippingCostType, totalType);
+
+		}
+		return null;
+	}
+
+	private static Integer calculateLegFuel(final CargoAllocation cargoAllocation, final SlotAllocation allocation, final ShippingCostType shippingCostType, @NonNull final TotalType totalType) {
+		if (allocation != null && cargoAllocation != null) {
+
+			boolean collecting = false;
+			int total = 0;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) event;
+					if (allocation.getSlotVisit() == event) {
+						collecting = true;
+					} else {
+						if (collecting) {
+							// Finished!
+							break;
+						}
+					}
+					if (collecting) {
+						if (shippingCostType == ShippingCostType.LNG_COSTS) {
+							total += getFuelDetails(slotVisit, totalType, Fuel.NBO, Fuel.FBO);
+						}
+						if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+							total += getFuelDetails(slotVisit, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+						}
+
+					}
+
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					if (collecting) {
+						if (shippingCostType == ShippingCostType.LNG_COSTS) {
+							total += getFuelDetails(journey, totalType, Fuel.NBO, Fuel.FBO);
+						}
+						if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+							total += getFuelDetails(journey, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+						}
+					}
+				} else if (event instanceof Idle) {
+					final Idle idle = (Idle) event;
+					if (collecting) {
+						if (shippingCostType == ShippingCostType.LNG_COSTS) {
+							total += getFuelDetails(idle, totalType, Fuel.NBO, Fuel.FBO);
+						}
+						if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+							total += getFuelDetails(idle, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+						}
+					}
+				}
+			}
+			return total;
+		}
+		return null;
+	}
+
+	public static Double calculateLegSpeed(final Object object, final EStructuralFeature cargoAllocationRef, final EStructuralFeature allocationRef) {
+		if (object instanceof EObject) {
+			final EObject eObject = (EObject) object;
+			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
+			final SlotAllocation allocation = (SlotAllocation) eObject.eGet(allocationRef);
+			return calculateLegSpeed(cargoAllocation, allocation);
+
+		}
+		return null;
+	}
+
+	private static Double calculateLegSpeed(final CargoAllocation cargoAllocation, final SlotAllocation allocation) {
+		if (allocation != null && cargoAllocation != null) {
+
+			boolean collecting = false;
+			int total = 0;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) event;
+					if (allocation.getSlotVisit() == event) {
+						collecting = true;
+					} else {
+						if (collecting) {
+							// Finished!
+							break;
+						}
+					}
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					if (collecting) {
+						return journey.getSpeed();
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 	public enum ShippingCostType {
 		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE, //
 		HOURS // Not included in all
+	}
+	
+	public enum TotalType {
+		QUANTITY_M3, QUANTITY_MMBTU, QUANTITY_MT, COST
 	}
 
 	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue, ShippingCostType costType) {
@@ -568,6 +677,37 @@ public class ScheduleModelKPIUtils {
 			for (final FuelQuantity fq : fuelQuantities) {
 				if (fuelsOfInterest.contains(fq.getFuel())) {
 					sum += fq.getCost();
+				}
+			}
+		}
+		return sum;
+	}
+	
+	protected static long getFuelDetails(final FuelUsage fuelUser, final TotalType totalType, final Fuel... fuels) {
+		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
+		long sum = 0L;
+		if (fuelUser != null) {
+			final List<FuelQuantity> fuelQuantities = fuelUser.getFuels();
+			for (final FuelQuantity fq : fuelQuantities) {
+				if (fuelsOfInterest.contains(fq.getFuel())) {
+					if (totalType == TotalType.COST) {
+						sum += fq.getCost();
+					} else if (totalType == TotalType.QUANTITY_M3) {
+						Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.M3).findFirst();
+						if (quantity.isPresent()) {
+							sum += quantity.get().getQuantity();
+						}
+					} else if (totalType == TotalType.QUANTITY_MMBTU) {
+						Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.MMBTU).findFirst();
+						if (quantity.isPresent()) {
+							sum += quantity.get().getQuantity();
+						}
+					} else if (totalType == TotalType.QUANTITY_MT) {
+						Optional<FuelAmount> quantity = fq.getAmounts().stream().filter(a -> a.getUnit() == FuelUnit.MMBTU).findFirst();
+						if (quantity.isPresent()) {
+							sum += quantity.get().getQuantity();
+						}
+					}
 				}
 			}
 		}
