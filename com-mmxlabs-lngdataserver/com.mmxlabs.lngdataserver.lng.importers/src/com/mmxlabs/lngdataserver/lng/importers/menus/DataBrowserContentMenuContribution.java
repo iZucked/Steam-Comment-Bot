@@ -26,7 +26,6 @@ import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExten
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
-//import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ScenarioServicePublishAction;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.ui.PricingFromScenarioImportWizard;
@@ -103,7 +102,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				Manifest manifest = scenarioInstance.getManifest();
 
 				menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
-					//ScenarioServicePublishAction.publishScenario(scenarioInstance);
+					ScenarioServicePublishAction.publishScenario(scenarioInstance);
 				}));
 				itemsAdded = true;
 

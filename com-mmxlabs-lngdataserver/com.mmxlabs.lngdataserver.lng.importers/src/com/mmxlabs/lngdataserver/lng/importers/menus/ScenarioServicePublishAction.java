@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
+package com.mmxlabs.lngdataserver.lng.importers.menus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,15 +17,24 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
+import com.mmxlabs.lngdataservice.client.ports.ApiException;
+import com.mmxlabs.lngdataservice.client.ports.api.PortApi;
+import com.mmxlabs.lngdataservice.client.vessel.api.VesselsApi;
 import com.mmxlabs.lngdataserver.integration.ports.PortsClient;
+import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
+import com.mmxlabs.lngdataserver.integration.vessels.VesselsClient;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.exporters.pricing.ui.PricingFromScenarioImportWizard;
+import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -37,7 +46,6 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
@@ -54,7 +62,7 @@ public class ScenarioServicePublishAction {
 
 		IScenarioDataProvider scenarioDataProvider = null;
 		LNGScenarioModel scenarioModel = null;
-		
+
 		try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 			final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -111,10 +119,55 @@ public class ScenarioServicePublishAction {
 			e.printStackTrace();
 			return;
 		}
+		
+		
+		/*
+		// Port data
 
+		String portsVersionUUID = null;
+		try {
+			PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+			portsVersionUUID = portModel.getUuid();
+
+			PortApi p = new PortApi();
+			p.fetchVersionUsingGET(portsVersionUUID);
+		} catch (ApiException e) {
+			String portUUID = exportPort(modelRecord, scenarioModel);
+		}
+		
+		// Pricing data
+
+		String pricingVersionUUID = null;
+		try {
+			PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
+			pricingVersionUUID = pricingModel.getUuid();
+
+			PricingClient p = new PricingClient();
+			p.getUpstreamVersion("", "", pricingVersionUUID);
+		} catch (IOException e) {
+			pricingVersionUUID = exportPricing(modelRecord, scenarioModel);
+		}
+		
+		// Vessels data
+
+		String fleetVersionUUID = null;
+		try {
+			FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
+			fleetVersionUUID = fleetModel.getUuid();
+			VesselsApi p = new VesselsApi();
+			p.getVersionUsingGET(fleetVersionUUID);
+		} catch (com.mmxlabs.lngdataservice.client.vessel.ApiException e) {
+			fleetVersionUUID = exportVessel(modelRecord, scenarioModel);
+		}
+		
+		// distances Data
+		String distancesVersionUUID = null;
+		*/
+		
 		// UploadFile
 		String response = null;
 		try {
+			//response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, portsVersionUUID, fleetVersionUUID, pricingVersionUUID, distancesVersionUUID);
 			response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile);
 		} catch (IOException e) {
 			System.out.println("Error uploading the basecase scenario");
@@ -148,21 +201,7 @@ public class ScenarioServicePublishAction {
 				return;
 			}
 		}
-
-		// If no pricing version
-		// export
-		// else check if version is online yet
-		String pricingUUID = exportPricing(modelRecord, scenarioModel);
-		
-		// If no vessel version
-		// export
-		
-		// If no port version
-		// export
-		
-		// If no distance version
-		// export
-		
+	
 		try {
 			baseCaseServiceClient.setCurrentBaseCase(uuid);
 		} catch (IOException e) {
@@ -190,7 +229,7 @@ public class ScenarioServicePublishAction {
 
 		return versionId;
 	}
-	
+
 	private static String exportPort(ModelRecord modelRecord, LNGScenarioModel scenarioModel) {
 		String url = BackEndUrlProvider.INSTANCE.getUrl();
 		String versionId = null;
@@ -209,16 +248,15 @@ public class ScenarioServicePublishAction {
 
 		return versionId;
 	}
-	
-	/*
+
 	private static String exportVessel(ModelRecord modelRecord, LNGScenarioModel scenarioModel) {
 		String url = BackEndUrlProvider.INSTANCE.getUrl();
 		String versionId = null;
-		PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		com.mmxlabs.lngdataservice.client.vessel.model.Version version = VesselsFromScenarioCopier.generateVersion(portModel);
+		FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
+		com.mmxlabs.lngdataservice.client.vessel.model.Version version = VesselsFromScenarioCopier.generateVersion(fleetModel);
 
 		try {
-			boolean res = PortsClient.saveVersion(url, version);
+			boolean res = VesselsClient.saveVersion(url, version);
 			if (res) {
 				versionId = version.getIdentifier();
 			}
@@ -229,5 +267,5 @@ public class ScenarioServicePublishAction {
 
 		return versionId;
 	}
-	*/
+
 }

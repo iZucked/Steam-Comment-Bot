@@ -51,7 +51,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.lngdataserver.commons;bundle-version="4.4.10",
  com.google.guava;bundle-version="21.0.0",
  com.mmxlabs.lngdataserver.integration.pricing,
- com.mmxlabs.lngdataserver.lng.importers,
  com.mmxlabs.lngdataserver.integration.vessels;bundle-version="4.4.9"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.slf4j

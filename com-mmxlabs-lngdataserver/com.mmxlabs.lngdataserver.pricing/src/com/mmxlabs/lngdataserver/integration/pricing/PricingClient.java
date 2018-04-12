@@ -95,6 +95,20 @@ public class PricingClient {
 		final Response postResponse = CLIENT.newCall(postRequest).execute();
 		return postResponse.isSuccessful();
 	}
+	
+	public static PricingVersion pullUpstreamVersion(String upstreamUrl, String version) throws IOException {
+
+		// Pull down the version data
+		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
+		final Response pullResponse = CLIENT.newCall(pullRequest).execute();
+		if (!pullResponse.isSuccessful()) {
+			return null;
+		}
+
+		Version v = new ObjectMapper().readValue(pullResponse.body().byteStream(), new TypeReference<Version>() {});
+
+		return new PricingVersion(v.getIdentifier(), v.getCreatedAt(), true, v.isCurrent());
+	}
 
 	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
 

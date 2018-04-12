@@ -20,6 +20,7 @@ import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.lngdataservice.client.vessel.ApiClient;
 import com.mmxlabs.lngdataservice.client.vessel.api.VesselsApi;
+import com.mmxlabs.lngdataservice.client.vessel.model.Version;
 
 import okhttp3.OkHttpClient;
 
@@ -91,6 +92,19 @@ public class VesselsRepository extends AbstractDataRepository {
 		}
 	}
 
+	@Override 
+	public DataVersion getUpstreamVersion(String identifier) {
+		ensureReady();
+		try {
+				Version v =	upstreamApi.getVersionUsingGET(identifier);
+				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				return new DataVersion(v.getIdentifier(), createdAt, true);
+		} catch (final Exception e) {
+			LOG.error("Error fetching specific ports version" + e.getMessage());
+			throw new RuntimeException("Error fetching specific ports version", e);
+		}
+	}
+	
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();
 		try {

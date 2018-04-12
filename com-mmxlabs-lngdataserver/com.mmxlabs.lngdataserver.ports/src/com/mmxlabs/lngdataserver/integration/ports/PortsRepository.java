@@ -96,6 +96,19 @@ public class PortsRepository extends AbstractDataRepository {
 		}
 	}
 
+	@Override 
+	public DataVersion getUpstreamVersion(String identifier) {
+		ensureReady();
+		try {
+				Version v =	upstreamApi.fetchVersionUsingGET(identifier);
+				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				return new DataVersion(v.getIdentifier(), createdAt, true);
+		} catch (final Exception e) {
+			LOG.error("Error fetching specific ports version" + e.getMessage());
+			throw new RuntimeException("Error fetching specific ports version", e);
+		}
+	}
+	
 	public IPortsProvider getPortsProvider(final String versionTag) {
 		ensureReady();
 		try {
@@ -159,4 +172,7 @@ public class PortsRepository extends AbstractDataRepository {
 	protected String getVersionNotificationEndpoint() {
 		return "/ports/version_notification";
 	}
+
+
+	
 }

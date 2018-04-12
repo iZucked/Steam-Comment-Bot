@@ -45,11 +45,16 @@ public class BaseCaseServiceClient {
 
 	private File baseCaseFolder;
 
+	//public String uploadBaseCase(File file, String portsVersionUUID, String vesselsVersionUUID, String pricingVersionUUID, String distancesVersionUUID) throws IOException {
 	public String uploadBaseCase(File file) throws IOException {
 
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
+				//.addFormDataPart("pricingVersion", pricingVersionUUID)
+				//.addFormDataPart("portsVersion", portsVersionUUID)
+				//.addFormDataPart("vesselsVersion", vesselsVersionUUID)
+				//.addFormDataPart("distancesVersion", distancesVersionUUID)
 				.addFormDataPart("basecase", "basecase.lingo", RequestBody.create(mediaType, file))//
 				.build();
 

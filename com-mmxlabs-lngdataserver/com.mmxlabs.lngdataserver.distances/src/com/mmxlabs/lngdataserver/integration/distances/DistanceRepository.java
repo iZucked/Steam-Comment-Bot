@@ -19,6 +19,7 @@ import org.joda.time.DateTime;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.bp.OffsetDateTime;
 
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
@@ -84,6 +85,7 @@ public class DistanceRepository extends AbstractDataRepository {
 	@Override
 	public List<DataVersion> getVersions() {
 		ensureReady();
+		/*
 		try {
 			return localApi.getVersionsUsingGET().stream().map(v -> {
 				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getMillis()), ZoneId.of("UTC"));
@@ -93,6 +95,8 @@ public class DistanceRepository extends AbstractDataRepository {
 			LOG.error("Error fetching distances versions" + e.getMessage());
 			throw new RuntimeException("Error fetching distances versions", e);
 		}
+		*/
+		return null;
 	}
 
 	@Override
@@ -100,12 +104,25 @@ public class DistanceRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return upstreamApi.getVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getMillis()), ZoneId.of("UTC"));
-				return new DataVersion(v.getIdentifier(), createdAt, v.getPublished());
+				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochSecond(v.getCreatedAt().toEpochSecond()), ZoneId.of("UTC"));
+				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished());
 			}).collect(Collectors.toList());
 		} catch (final ApiException e) {
 			LOG.error("Error fetching distances versions" + e.getMessage());
 			throw new RuntimeException("Error fetching distances versions", e);
+		}
+	}
+	
+	@Override 
+	public DataVersion getUpstreamVersion(String identifier) {
+		ensureReady();
+		try {
+				Version v =	upstreamApi.getFullVersionUsingGET(identifier);
+				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				return new DataVersion(v.getIdentifier(), createdAt, true);
+		} catch (final Exception e) {
+			LOG.error("Error fetching specific ports version" + e.getMessage());
+			throw new RuntimeException("Error fetching specific ports version", e);
 		}
 	}
 
@@ -127,12 +144,12 @@ public class DistanceRepository extends AbstractDataRepository {
 		final List<Version> upstreamVersions = upstreamApi.getVersionsUsingGET();
 		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
 		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
-		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.getPublished())).collect(Collectors.toList());
+		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.isPublished())).collect(Collectors.toList());
 	}
 
 	public List<DataVersion> getUpstreamDistances() throws ApiException {
 		final List<Version> upstreamVersions = upstreamApi.getVersionsUsingGET();
-		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.getPublished())).collect(Collectors.toList());
+		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.isPublished())).collect(Collectors.toList());
 	}
 
 	public @Nullable IDistanceProvider getLatestDistances() {
@@ -165,8 +182,8 @@ public class DistanceRepository extends AbstractDataRepository {
 		}
 	}
 
-	protected static LocalDateTime fromDateTimeAtUTC(final DateTime dateTime) {
-		return LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTime.getMillis()), ZoneId.of("UTC"));
+	protected static LocalDateTime fromDateTimeAtUTC(final OffsetDateTime dateTime) {
+		return LocalDateTime.ofInstant(Instant.ofEpochSecond(dateTime.toEpochSecond()), ZoneId.of("UTC"));
 	}
 
 	@Override
@@ -188,5 +205,6 @@ public class DistanceRepository extends AbstractDataRepository {
 	protected String getVersionNotificationEndpoint() {
 		return "/distances/version_notification";
 	}
+
 
 }
