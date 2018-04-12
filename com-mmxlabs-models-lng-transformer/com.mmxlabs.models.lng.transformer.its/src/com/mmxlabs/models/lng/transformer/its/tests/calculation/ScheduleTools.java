@@ -35,7 +35,13 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 public final class ScheduleTools {
 
 	@Nullable
-	public static CargoAllocation findCargoAllocation(@NonNull final String cargoID, @NonNull final Schedule schedule) {
+	public static CargoAllocation findCargoAllocation(@Nullable final String cargoID, @Nullable final Schedule schedule) {
+		if (cargoID == null) {
+			return null;
+		}
+		if (schedule == null) {
+			return null;
+		}
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			if (cargoID.equals(ca.getName())) {
 				return ca;
@@ -78,7 +84,7 @@ public final class ScheduleTools {
 	public static double getFuelConsumption(final List<FuelConsumption> consumptions, final double speed) {
 
 		assert consumptions != null;
-		
+
 		double lowerBound = 0.0;
 		double upperBound = Double.MAX_VALUE;
 		FuelConsumption lowerConsumption = null;
