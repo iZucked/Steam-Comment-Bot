@@ -23,6 +23,7 @@ import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.PinnedScheduleFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.CapacityViolationDescriptionFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.LatenessDescriptionFormatter;
@@ -76,6 +77,7 @@ import com.mmxlabs.models.lng.schedule.util.CapacityUtils;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.TotalType;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
@@ -846,6 +848,50 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 			}));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden_lng_cost":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden LNG Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+
+					return ScheduleModelKPIUtils.calculateLegFuel(object, cargoAllocationRef, loadAllocationRef, ShippingCostType.LNG_COSTS, TotalType.COST);
+				}
+
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden_lng_m3":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden LNG (M³)", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+
+					return ScheduleModelKPIUtils.calculateLegFuel(object, cargoAllocationRef, loadAllocationRef, ShippingCostType.LNG_COSTS, TotalType.QUANTITY_M3);
+				}
+
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden_lng_mmbtu":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden LNG (MMBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+
+					return ScheduleModelKPIUtils.calculateLegFuel(object, cargoAllocationRef, loadAllocationRef, ShippingCostType.LNG_COSTS, TotalType.QUANTITY_MMBTU);
+				}
+
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden_speed":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden Speed", null, ColumnType.NORMAL, new NumberOfDPFormatter(1) {
+				@Override
+				public Double getDoubleValue(final Object object) {
+
+					return ScheduleModelKPIUtils.calculateLegSpeed(object, cargoAllocationRef, loadAllocationRef);
+				}
+
+			}));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballastcost":
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
@@ -854,6 +900,50 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					return ScheduleModelKPIUtils.calculateLegCost(object, cargoAllocationRef, dischargeAllocationRef);
 				}
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast_lng_cost":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast LNG Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+
+					return ScheduleModelKPIUtils.calculateLegFuel(object, cargoAllocationRef, dischargeAllocationRef, ShippingCostType.LNG_COSTS, TotalType.COST);
+				}
+
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast_lng_m3":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast LNG (M³)", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+
+					return ScheduleModelKPIUtils.calculateLegFuel(object, cargoAllocationRef, dischargeAllocationRef, ShippingCostType.LNG_COSTS, TotalType.QUANTITY_M3);
+				}
+
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast_lng_mmbtu":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast LNG (MMBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+
+					return ScheduleModelKPIUtils.calculateLegFuel(object, cargoAllocationRef, dischargeAllocationRef, ShippingCostType.LNG_COSTS, TotalType.QUANTITY_MMBTU);
+				}
+
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast_speed":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Speed", null, ColumnType.NORMAL, new NumberOfDPFormatter(1) {
+				@Override
+				public Double getDoubleValue(final Object object) {
+
+					return ScheduleModelKPIUtils.calculateLegSpeed(object, cargoAllocationRef, dischargeAllocationRef);
+				}
+
 			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.totalcost":

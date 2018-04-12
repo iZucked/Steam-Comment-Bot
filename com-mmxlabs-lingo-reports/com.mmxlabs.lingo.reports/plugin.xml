@@ -306,7 +306,39 @@
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.laden_lng_cost">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.laden_lng_m3">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.laden_lng_mmbtu">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.ballastcost">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.ballast_lng_cost">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.ballast_lng_m3">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.ballast_lng_mmbtu">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.laden_speed">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.ballast_speed">
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
