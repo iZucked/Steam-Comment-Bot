@@ -78,7 +78,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
-	private static final boolean includeTimeCharterInFitness = true;
+	protected static final boolean includeTimeCharterInFitness = true;
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
@@ -544,7 +544,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return postTaxValue;
 	}
 
-	private void generateShippingAnnotations(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+	protected void generateShippingAnnotations(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final IAnnotatedSolution annotatedSolution, IDetailTree shippingDetails, final IEntity shippingEntity, final long preTaxValue, long postTaxValue, final int utcEquivTaxTime,
 			final ISequenceElement exportElement, final boolean includeLNG) {
 		{
