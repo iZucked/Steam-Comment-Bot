@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.minimaxlabs.rnd.representation.ShipmentData;
-import com.mmxlabs.models.lng.transformer.longterm.ILightWeightSequenceOptimiser;
+import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightSequenceOptimiser;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -96,6 +96,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		r = new Random(seed);
 	}
 
+	@Override
 	public List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability,
 			ArrayList<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
 		double[] capacity = vessels.stream().mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000).toArray();

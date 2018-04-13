@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.longterm;
+package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,6 +29,11 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintChecker;
+import com.mmxlabs.models.lng.transformer.longterm.ICargoToCargoCostCalculator;
+import com.mmxlabs.models.lng.transformer.longterm.ICargoVesselRestrictionsMatrixProducer;
+import com.mmxlabs.models.lng.transformer.longterm.ILongTermMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimisationData;
+import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserHelper.ShippingType;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.core.IModifiableSequence;

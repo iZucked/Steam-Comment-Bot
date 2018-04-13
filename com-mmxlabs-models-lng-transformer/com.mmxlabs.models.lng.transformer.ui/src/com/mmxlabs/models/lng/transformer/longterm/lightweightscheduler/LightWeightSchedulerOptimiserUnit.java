@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.longterm;
+package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,6 +51,12 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.longterm.CargoVesselRestrictionsMatrixProducer;
+import com.mmxlabs.models.lng.transformer.longterm.ICargoToCargoCostCalculator;
+import com.mmxlabs.models.lng.transformer.longterm.ICargoVesselRestrictionsMatrixProducer;
+import com.mmxlabs.models.lng.transformer.longterm.ILongTermMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.longterm.SequencesToPortSlotsUtils;
+import com.mmxlabs.models.lng.transformer.longterm.SimpleCargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.longterm.metaheuristic.TabuLightWeightSequenceOptimiser;
 import com.mmxlabs.models.lng.transformer.longterm.webservice.WebserviceLongTermMatrixOptimiser;
 import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;

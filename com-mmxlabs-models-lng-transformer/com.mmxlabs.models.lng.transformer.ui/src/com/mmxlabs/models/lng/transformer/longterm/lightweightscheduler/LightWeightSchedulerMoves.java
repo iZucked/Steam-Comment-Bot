@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.longterm;
+package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
 import java.util.ArrayList;
 import java.util.Collections;
