@@ -118,7 +118,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		if (containsCargo) {
 			rows.add(createRow(10, "Purchase", true, "$", "", true, createBuyValuePrice(options)));
 			rows.add(createRow(20, "    Price", true, "$", "", true, createBuyPrice(options)));
-			rows.add(createRow(30, "    Volume (mmBtu)", true, "", "", false, createBuyVolumeMMBTuPrice(options)));
+			rows.add(createRow(30, "    Volume", true, "", "", false, createBuyVolumeMMBTuPrice(options)));
 		}
 		rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options)));
 		rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options)));
@@ -138,7 +138,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		if (containsCargo) {
 			rows.add(createRow(140, "Sale", true, "$", "", false, createSellValuePrice(options)));
 			rows.add(createRow(150, "    Price", true, "$", "", false, createSellPrice(options)));
-			rows.add(createRow(160, "    Volume (mmBtu)", true, "", "", false, createSellVolumeMMBTuPrice(options)));
+			rows.add(createRow(160, "    Volume", true, "", "", false, createSellVolumeMMBTuPrice(options)));
 			if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
 				rows.add(createRow(170, "Equity P&L", true, "$", "", false, createPNLEquity(options)));
 			}
