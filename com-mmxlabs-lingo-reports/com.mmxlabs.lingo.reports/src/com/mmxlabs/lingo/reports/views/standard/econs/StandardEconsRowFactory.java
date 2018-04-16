@@ -70,9 +70,12 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 	public static final DecimalFormat DaysFormat = new DecimalFormat("##");
 
 	//
-	// public static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
-	// public static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
-	// public static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
+	// public static final DecimalFormat DollarsFormat = new
+	// DecimalFormat("$##,###,###,###");
+	// public static final DecimalFormat VolumeMMBtuFormat = new
+	// DecimalFormat("##,###,###,###mmBtu");
+	// public static final DecimalFormat DollarsPerMMBtuFormat = new
+	// DecimalFormat("$###.###/mmBtu");
 	// public static final DecimalFormat DaysFormat = new DecimalFormat("##");
 	@Override
 	public Collection<CargoEconsReportRow> createRows(@NonNull final EconsOptions options, @Nullable final Collection<Object> targets) {
@@ -115,7 +118,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		if (containsCargo) {
 			rows.add(createRow(10, "Purchase", true, "$", "", true, createBuyValuePrice(options)));
 			rows.add(createRow(20, "    Price", true, "$", "", true, createBuyPrice(options)));
-			rows.add(createRow(30, "    Volume (mmBtu)", true, "", "", false, createBuyVolumeMMBTuPrice(options)));
+			rows.add(createRow(30, "    Volume", true, "", "", false, createBuyVolumeMMBTuPrice(options)));
 		}
 		rows.add(createRow(40, "Shipping", true, "$", "", true, createShippingCosts(options)));
 		rows.add(createRow(50, "    Bunkers", true, "$", "", true, createShippingBunkersTotal(options)));
@@ -135,7 +138,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		if (containsCargo) {
 			rows.add(createRow(140, "Sale", true, "$", "", false, createSellValuePrice(options)));
 			rows.add(createRow(150, "    Price", true, "$", "", false, createSellPrice(options)));
-			rows.add(createRow(160, "    Volume (mmBtu)", true, "", "", false, createSellVolumeMMBTuPrice(options)));
+			rows.add(createRow(160, "    Volume", true, "", "", false, createSellVolumeMMBTuPrice(options)));
 			if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
 				rows.add(createRow(170, "Equity P&L", true, "$", "", false, createPNLEquity(options)));
 			}
@@ -573,37 +576,68 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	public double cargoAllocationPNLPerMMBTUHelper(Object object, StandardEconsRowFactory.EconsOptions options) {
-		if (object instanceof CargoAllocation) {
+	public double cargoAllocationPNLPerMMBTUVolumeHelper(Object object, StandardEconsRowFactory.EconsOptions options) {
 
-			CargoAllocation cargoAllocation = (CargoAllocation) object;
-			final Integer pnl = getPNLValue(cargoAllocation);
-			if (pnl != null) {
-				double volume = 0.0;
-				if (options.marginBy == MarginBy.PURCHASE_VOLUME) {
-					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-						if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-							volume += allocation.getEnergyTransferred();
-						}
-					}
-				} else if (options.marginBy == MarginBy.SALE_VOLUME) {
-					for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-						if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
-							volume += allocation.getEnergyTransferred();
-						}
-					}
-				} else {
-					return 0.0f;
+		if (!(object instanceof CargoAllocation)) {
+			return 0.0f;
+		}
+
+		if (options.marginBy != MarginBy.PURCHASE_VOLUME && options.marginBy != MarginBy.SALE_VOLUME) {
+			return 0.0f;
+		}
+
+		CargoAllocation cargoAllocation = (CargoAllocation) object;
+		double volume = 0.0;
+
+		if (options.marginBy == MarginBy.PURCHASE_VOLUME) {
+			for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+				if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
+					volume += allocation.getEnergyTransferred();
 				}
-
-				if (volume != 0.0) {
-					return (double) pnl / volume;
-				} else {
-					return 0.0f;
+			}
+		} else if (options.marginBy == MarginBy.SALE_VOLUME) {
+			for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+				if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
+					volume += allocation.getEnergyTransferred();
 				}
 			}
 		}
-		return 0.0f;
+
+		if (volume == 0.0) {
+			return 0.0f;
+		}
+
+		return volume;
+	}
+
+	public double cargoAllocationPNLPerMMBTUPNLHelper(Object object, StandardEconsRowFactory.EconsOptions options) {
+		if (!(object instanceof CargoAllocation)) {
+			return 0.0f;
+		}
+
+		CargoAllocation cargoAllocation = (CargoAllocation) object;
+		final Integer pnl = getPNLValue(cargoAllocation);
+
+		return (double) pnl;
+	}
+
+	public double cargoAllocationPNLPerMMBTUHelper(Object object, StandardEconsRowFactory.EconsOptions options) {
+		if (!(object instanceof CargoAllocation)) {
+			return 0.0f;
+		}
+		CargoAllocation cargoAllocation = (CargoAllocation) object;
+
+		final Integer pnl = getPNLValue(cargoAllocation);
+		if (pnl == null) {
+			return 0.0f;
+		}
+
+		double volume = cargoAllocationPNLPerMMBTUVolumeHelper(object, options);
+		if (volume == 0.0) {
+			return 0.0f;
+		}
+
+		return (double) pnl / volume;
 	}
 
 	public @NonNull ICellRenderer createPNLPerMMBTU(final EconsOptions options) {
@@ -635,9 +669,25 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 					}, object, options);
 					return DollarsPerMMBtuFormat.format(value);
 				} else if (object instanceof List<?>) {
-					double value = getFromCargoAllocationPairListBi(Double.class, (data, options) -> {
-						return cargoAllocationPNLPerMMBTUHelper(data, options);
-					}, object, options);
+					List<DeltaPair> pairs = (List<DeltaPair>) object;
+
+					double totalVolume = pairs.stream().mapToDouble(x ->
+						cargoAllocationPNLPerMMBTUVolumeHelper(x.first(), options)
+					).sum();
+
+					double totalPNL = pairs.stream().mapToDouble(x ->
+						cargoAllocationPNLPerMMBTUPNLHelper(x.first(), options)
+					).sum();
+
+					double totalOldVolume = pairs.stream().mapToDouble(x ->
+						cargoAllocationPNLPerMMBTUVolumeHelper(x.second(), options)
+					).sum();
+
+					double totalOldPNL = pairs.stream().mapToDouble(x ->
+						cargoAllocationPNLPerMMBTUPNLHelper(x.second(), options)
+					).sum();
+
+					double value = (double) (totalOldPNL / totalOldVolume) - (double) (totalPNL / totalVolume) ;
 					return DollarsPerMMBtuFormat.format(value);
 				}
 
