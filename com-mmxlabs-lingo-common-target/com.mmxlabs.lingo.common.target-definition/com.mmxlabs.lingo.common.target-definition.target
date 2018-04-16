@@ -1,119 +1,121 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="32">
+<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="34">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.jdt.annotation" version="2.1.100.v20170511-1408"/>
-<unit id="org.eclipse.jdt.annotation.source" version="2.1.100.v20170511-1408"/>
-<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
-<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.jdt.annotation" version="2.1.100.v20170511-1408"/>
+<unit id="org.eclipse.jdt.annotation.source" version="2.1.100.v20170511-1408"/>
+<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.swt.tools.feature.feature.group" version="3.106.0.v20170503-0851"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.oxygen/R-4.7.1a-201710090410/org.eclipse.updates.oxygen-R-4.7.1a-201710090410.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.oxygen/R-4.7.1a-201710090410/org.eclipse.updates.oxygen-R-4.7.1a-201710090410.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.pde.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.query.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.validation.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.core.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.core.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.ide.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.forms.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.transaction.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.source.feature.group" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.oxygen/201710111001/org.eclipse.oxygen-201710111001.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.query.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.transaction.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.validation.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.pde.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.swtbot.forms.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.swtbot.ide.feature.group" version="0.0.0"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.oxygen/201710111001/org.eclipse.oxygen-201710111001.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.apache.log4j" version="0.0.0"/>
-<unit id="org.apache.log4j.source" version="0.0.0"/>
-<unit id="javax.activation" version="0.0.0"/>
-<unit id="javax.activation.source" version="0.0.0"/>
-<unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
-<unit id="org.hamcrest.core.source" version="1.3.0.v201303031735"/>
-<unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
-<unit id="org.hamcrest.integration.source" version="1.3.0.v201305210900"/>
-<unit id="org.hamcrest.library" version="1.3.0.v201505072020"/>
-<unit id="org.hamcrest.library.source" version="1.3.0.v201505072020"/>
-<unit id="org.hamcrest.generator" version="1.3.0.v201305210900"/>
-<unit id="org.hamcrest.generator.source" version="1.3.0.v201305210900"/>
-<unit id="javax.xml.soap" version="0.0.0"/>
-<unit id="javax.xml.ws" version="0.0.0"/>
-<unit id="javax.xml.stream" version="0.0.0"/>
-<unit id="javax.xml" version="0.0.0"/>
-<unit id="javax.wsdl" version="0.0.0"/>
-<unit id="javax.wsdl.source" version="0.0.0"/>
-<unit id="javax.xml.bind" version="0.0.0"/>
-<unit id="org.aopalliance" version="0.0.0"/>
-<unit id="javax.xml.ws" version="0.0.0"/>
-<unit id="javax.xml" version="0.0.0"/>
-<unit id="javax.jms" version="0.0.0"/>
-<unit id="javax.jms.source" version="0.0.0"/>
-<unit id="org.apache.commons.math" version="0.0.0"/>
-<unit id="org.apache.commons.math.source" version="0.0.0"/>
-<unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
-<unit id="org.slf4j.ext" version="1.7.10.v20170224-1220"/>
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
 <unit id="ch.qos.logback.classic.source" version="0.0.0"/>
 <unit id="ch.qos.logback.core" version="0.0.0"/>
 <unit id="ch.qos.logback.core.source" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j.source" version="0.0.0"/>
-<unit id="org.apache.poi" version="3.9.0.v201405241750"/>
-<unit id="org.apache.poi.source" version="3.9.0.v201405241750"/>
-<unit id="org.apache.poi.ooxml" version="3.9.0.v201405241905"/>
-<unit id="org.apache.poi.ooxml.source" version="3.9.0.v201405241905"/>
-<unit id="org.apache.poi.ooxml.schemas" version="3.9.0.v201405241750"/>
-<unit id="org.apache.poi.ooxml.schemas.source" version="3.9.0.v201405241750"/>
-<unit id="org.apache.xmlbeans" version="2.3.0.v201605172150"/>
-<unit id="org.apache.xmlbeans.source" version="2.3.0.v201605172150"/>
-<unit id="org.dom4j" version="1.6.1.v201312101416"/>
-<unit id="org.dom4j.source" version="1.6.1.v201312101416"/>
-<unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
-<unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
+<unit id="com.google.guava" version="21.0.0.v20170206-1425"/>
+<unit id="com.google.guava.source" version="21.0.0.v20170206-1425"/>
+<unit id="javax.activation" version="0.0.0"/>
+<unit id="javax.activation.source" version="0.0.0"/>
+<unit id="javax.jms" version="0.0.0"/>
+<unit id="javax.jms.source" version="0.0.0"/>
+<unit id="javax.wsdl" version="0.0.0"/>
+<unit id="javax.wsdl.source" version="0.0.0"/>
+<unit id="javax.xml" version="0.0.0"/>
+<unit id="javax.xml" version="0.0.0"/>
+<unit id="javax.xml.bind" version="0.0.0"/>
+<unit id="javax.xml.soap" version="0.0.0"/>
+<unit id="javax.xml.stream" version="0.0.0"/>
+<unit id="javax.xml.ws" version="0.0.0"/>
+<unit id="javax.xml.ws" version="0.0.0"/>
+<unit id="org.aopalliance" version="0.0.0"/>
 <unit id="org.apache.commons.cli" version="1.2.0.v201404270220"/>
 <unit id="org.apache.commons.cli.source" version="1.2.0.v201404270220"/>
 <unit id="org.apache.commons.lang" version="2.6.0.v201404270220"/>
 <unit id="org.apache.commons.lang.source" version="2.6.0.v201404270220"/>
-<unit id="com.google.guava" version="21.0.0.v20170206-1425"/>
-<unit id="com.google.guava.source" version="21.0.0.v20170206-1425"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20170919201930/orbit-buildrepo-R20170919201930.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
+<unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
+<unit id="org.apache.commons.math" version="0.0.0"/>
+<unit id="org.apache.commons.math.source" version="0.0.0"/>
+<unit id="org.apache.log4j" version="0.0.0"/>
+<unit id="org.apache.log4j.source" version="0.0.0"/>
+<unit id="org.apache.poi" version="3.9.0.v201405241750"/>
+<unit id="org.apache.poi.ooxml" version="3.9.0.v201405241905"/>
+<unit id="org.apache.poi.ooxml.schemas" version="3.9.0.v201405241750"/>
+<unit id="org.apache.poi.ooxml.schemas.source" version="3.9.0.v201405241750"/>
+<unit id="org.apache.poi.ooxml.source" version="3.9.0.v201405241905"/>
+<unit id="org.apache.poi.source" version="3.9.0.v201405241750"/>
+<unit id="org.apache.xmlbeans" version="2.3.0.v201605172150"/>
+<unit id="org.apache.xmlbeans.source" version="2.3.0.v201605172150"/>
+<unit id="org.dom4j" version="1.6.1.v201312101416"/>
+<unit id="org.dom4j.source" version="1.6.1.v201312101416"/>
+<unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
+<unit id="org.hamcrest.core.source" version="1.3.0.v201303031735"/>
+<unit id="org.hamcrest.generator" version="1.3.0.v201305210900"/>
+<unit id="org.hamcrest.generator.source" version="1.3.0.v201305210900"/>
+<unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
+<unit id="org.hamcrest.integration.source" version="1.3.0.v201305210900"/>
+<unit id="org.hamcrest.library" version="1.3.0.v201505072020"/>
+<unit id="org.hamcrest.library.source" version="1.3.0.v201505072020"/>
+<unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
+<unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
+<unit id="org.slf4j.ext" version="1.7.10.v20170224-1220"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20170919201930/orbit-buildrepo-R20170919201930.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
 <unit id="org.eclipse.nebula.widgets.formattedtext" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/" id="mmxlabs-releases" />
+<unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.9.2"/>
-<unit id="com.fasterxml.jackson.core.jackson-core" version="2.9.2"/>
-<unit id="com.fasterxml.jackson.core.jackson-databind" version="2.9.2"/>
-<unit id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" version="2.9.2"/>
 <unit id="com.fasterxml.jackson.core.jackson-annotations.source" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.core.jackson-core" version="2.9.2"/>
 <unit id="com.fasterxml.jackson.core.jackson-core.source" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.core.jackson-databind" version="2.9.2"/>
 <unit id="com.fasterxml.jackson.core.jackson-databind.source" version="2.9.2"/>
+<unit id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" version="2.9.2"/>
 <unit id="com.google.inject" version="4.1.0"/>
 <unit id="com.googlecode.json-simple" version="0.0.0"/>
 <unit id="com.googlecode.json-simple.source" version="0.0.0"/>
+<unit id="de.flapdoodle.embed.mongo" version="0.0.0"/>
+<unit id="de.flapdoodle.embed.process" version="0.0.0"/>
 <unit id="net.bytebuddy.byte-buddy" version="1.7.8"/>
 <unit id="net.bytebuddy.byte-buddy-agent" version="1.7.8"/>
 <unit id="org.apache.commons.codec" version="1.11.0"/>
@@ -134,19 +136,23 @@
 <unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse.source" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.source" version="1.3.0"/>
-<unit id="de.flapdoodle.embed.mongo" version="0.0.0"/>
-<unit id="de.flapdoodle.embed.process" version="0.0.0"/>
 <unit id="org.swtchart" version="0.0.0"/>
 <unit id="org.swtchart.ext" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.16/mmxlabs-external-1.0.16-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.16/mmxlabs-external-1.0.16-p2-repo.zip-unzip/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.lngdataservice.port-distances.client" version="0.0.0"/>
+<unit id="com.mmxlabs.lngdataservice.ports.client" version="0.0.0"/>
+<unit id="com.mmxlabs.lngdataservice.vessel.client" version="0.0.0"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/lngdataservice/com-mmxlabs-lngdataservice-clients.p2/1.0.0-SNAPSHOT/com-mmxlabs-lngdataservice-clients.p2-1.0.0-SNAPSHOT-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.lngdataservice.k" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/lngdataservice/com-mmxlabs-lngdataservice-k.p2/1.1.0.RELEASE/com-mmxlabs-lngdataservice-k.p2-1.1.0.RELEASE-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/lngdataservice/com-mmxlabs-lngdataservice-k.p2/1.1.0.RELEASE/com-mmxlabs-lngdataservice-k.p2-1.1.0.RELEASE-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.lngdataservice.v" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/snapshots-v2-unzip/content/com/mmxlabs/lngdataservice/com-mmxlabs-lngdataservice-v.p2/1.0.0-SNAPSHOT/com-mmxlabs-lngdataservice-v.p2-1.0.0-SNAPSHOT-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/lngdataservice/com-mmxlabs-lngdataservice-v.p2/1.0.0-SNAPSHOT/com-mmxlabs-lngdataservice-v.p2-1.0.0-SNAPSHOT-p2-repo.zip-unzip/"/>
 </location>
 </locations>
 </target>
