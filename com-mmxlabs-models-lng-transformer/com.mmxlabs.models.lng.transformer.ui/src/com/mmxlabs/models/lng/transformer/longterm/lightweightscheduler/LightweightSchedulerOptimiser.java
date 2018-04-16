@@ -155,6 +155,9 @@ public class LightweightSchedulerOptimiser {
 		int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
 		int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
 		
+		// get constraints
+		// get fitness functions
+		
 		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(shippedCargoes, vessels, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel);
 //		List<List<Integer>> sequences = null;
 //		try {
@@ -318,4 +321,15 @@ public class LightweightSchedulerOptimiser {
 		return readCase.sequences;
 	}
 
+	private List<ILightWeightConstraintChecker> getConstraintCheckers(LightWeightConstraintCheckerRegistry registry, List<String> names) {
+		List<ILightWeightConstraintChecker> constraintCheckers = new LinkedList<>();
+		Collection<ILightWeightConstraintCheckerFactory> constraintCheckerFactories = registry.getFitnessFunctionFactories();
+		for (String name : names) {
+			for (ILightWeightConstraintCheckerFactory lightWeightConstraintCheckerFactory : constraintCheckerFactories) {
+				if (lightWeightConstraintCheckerFactory.getName().equals(name)) {
+					lightWeightConstraintCheckerFactory.createConstraintChecker();
+				}
+			}
+		}
+	}
 }

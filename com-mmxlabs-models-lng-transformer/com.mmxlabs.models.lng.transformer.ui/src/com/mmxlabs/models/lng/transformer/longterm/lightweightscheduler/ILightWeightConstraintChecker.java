@@ -1,5 +1,7 @@
 package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
-public interface ILightWeightConstraintChecker {
+import java.util.List;
 
+public interface ILightWeightConstraintChecker {
+	boolean checkSequence(List<Integer> sequence, int vessel);
 }
