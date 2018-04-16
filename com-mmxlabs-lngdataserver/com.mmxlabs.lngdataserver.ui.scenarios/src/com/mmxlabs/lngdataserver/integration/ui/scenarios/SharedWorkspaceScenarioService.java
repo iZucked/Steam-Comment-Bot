@@ -206,17 +206,10 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			this.updater = new SharedScenarioUpdater(serviceModel, baseCaseFolder, client);
 			updater.start();
 		}).start();
-
-		// final String path = d.get("path").toString();
-		// serviceName = d.get("serviceName").toString();
-
-		// Convert to absolute path
-
 	}
 
 	public void stop() {
 		if (updater != null) {
-			// client.stop();
 			updater.stop();
 		}
 	}

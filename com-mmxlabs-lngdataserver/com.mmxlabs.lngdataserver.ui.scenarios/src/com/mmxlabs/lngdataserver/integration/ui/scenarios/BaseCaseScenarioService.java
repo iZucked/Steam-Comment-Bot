@@ -6,8 +6,6 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -19,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
-import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseScenarioUpdater;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -54,6 +52,8 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 
 	private BaseCaseServiceClient client;
 
+	private BaseCaseScenarioUpdater updater;
+
 	@Override
 	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
 
@@ -72,11 +72,12 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 	public void delete(final Container container) {
 
 	}
+
 	@Override
 	public void fireEvent(ScenarioServiceEvent event, ScenarioInstance scenarioInstance) {
 		super.fireEvent(event, scenarioInstance);
 	}
-	
+
 	@Override
 	protected ScenarioService initServiceModel() {
 		final ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
@@ -104,8 +105,6 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 			baseCaseFolder.mkdirs();
 		}
 
-		// storeURI = URI.createFileURI(baseCaseFolder.getCanonicalPath());
-
 		client = new BaseCaseServiceClient();
 
 		// Initial model load
@@ -113,29 +112,14 @@ public class BaseCaseScenarioService extends AbstractScenarioService {
 
 			getServiceModel();
 			setReady();
-			client.start(baseCaseFolder, (f, externalId, creationDate) -> {
-				ScenarioInstance instance = constructInstance(f);
-				instance.setExternalID(externalId);
-				ZonedDateTime date = creationDate.atZone(ZoneId.of("UTC"));
-				instance.setName(String.format("Basecase %04d-%02d-%02d %02d:%02d", date.getYear(), date.getMonthValue(), date.getDayOfMonth(), date.getHour(), date.getMinute()));
-				if (instance != null) {
-					RunnerHelper.asyncExec(() -> {
-						serviceModel.getElements().add(instance);
-					});
-				}
-			});
+			this.updater = new BaseCaseScenarioUpdater(serviceModel, baseCaseFolder, client);
+			updater.start();
 		}).start();
-
-		// final String path = d.get("path").toString();
-		// serviceName = d.get("serviceName").toString();
-
-		// Convert to absolute path
-
 	}
 
 	public void stop() {
-		if (client != null) {
-			client.stop();
+		if (updater != null) {
+			updater.stop();
 		}
 	}
 

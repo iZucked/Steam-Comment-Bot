@@ -7,26 +7,18 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.jobs.Job;
+import org.json.JSONObject;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.common.util.TriConsumer;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.commons.http.ProgressRequestBody;
+import com.mmxlabs.lngdataserver.commons.http.ProgressResponseBody;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
-import com.mmxlabs.rcp.common.RunnerHelper;
 
 import okhttp3.Credentials;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -43,20 +35,22 @@ public class BaseCaseServiceClient {
 	private static final String BASECASE_DOWNLOAD_URL = "/scenarios/v1/basecase/";
 	private static final String BASECASE_CURRENT_URL = "/scenarios/v1/basecase/current";
 
-	private File baseCaseFolder;
-
-	//public String uploadBaseCase(File file, String portsVersionUUID, String vesselsVersionUUID, String pricingVersionUUID, String distancesVersionUUID) throws IOException {
-	public String uploadBaseCase(File file) throws IOException {
+	// public String uploadBaseCase(File file, String portsVersionUUID, String vesselsVersionUUID, String pricingVersionUUID, String distancesVersionUUID) throws IOException {
+	public String uploadBaseCase(File file, IProgressListener progressListener) throws IOException {
 
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				//.addFormDataPart("pricingVersion", pricingVersionUUID)
-				//.addFormDataPart("portsVersion", portsVersionUUID)
-				//.addFormDataPart("vesselsVersion", vesselsVersionUUID)
-				//.addFormDataPart("distancesVersion", distancesVersionUUID)
+				// .addFormDataPart("pricingVersion", pricingVersionUUID)
+				// .addFormDataPart("portsVersion", portsVersionUUID)
+				// .addFormDataPart("vesselsVersion", vesselsVersionUUID)
+				// .addFormDataPart("distancesVersion", distancesVersionUUID)
 				.addFormDataPart("basecase", "basecase.lingo", RequestBody.create(mediaType, file))//
 				.build();
+		
+		if (progressListener != null) {
+			requestBody = new ProgressRequestBody(requestBody, progressListener);
+		}
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
@@ -80,8 +74,18 @@ public class BaseCaseServiceClient {
 		}
 	}
 
-	public boolean downloadTo(String uuid, File file, TriConsumer<File, String, Instant> callback) throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+	public boolean downloadTo(String uuid, File file, IProgressListener progressListener) throws IOException {
+		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+		if (progressListener != null) {
+			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
+				@Override
+				public Response intercept(Chain chain) throws IOException {
+					Response originalResponse = chain.proceed(chain.request());
+					return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
+				}
+			});
+		}
+		OkHttpClient httpClient = clientBuilder //
 				.build();
 
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
@@ -101,16 +105,7 @@ public class BaseCaseServiceClient {
 			bufferedSink.writeAll(bufferedSource);
 			bufferedSink.close();
 		}
-		// TODO: Is it a valid .lingo file?
-		String date = response.headers().get("MMX-CreationDate");
-		if (date != null) {
-			Instant creationDate = Instant.ofEpochSecond(Long.parseLong(date));
-			callback.accept(file, uuid, creationDate);
-			return true;
-		}
-
-		// , Long.toString(baseCaseRecord.getCreationDate().getEpochSecond())");
-		return false;
+		return true;
 	}
 
 	public static String getCurrentBaseCase() throws IOException {
@@ -188,123 +183,12 @@ public class BaseCaseServiceClient {
 		return value;
 	}
 
-	private ScheduledThreadPoolExecutor pollTaskExecutor;
-	private ScheduledFuture<?> task;
+	public Pair<String, Instant> parseScenariosJSONData(String jsonData) {
+		final JSONObject versionObject = new JSONObject(jsonData);
 
-	public void start(File baseCaseFolder, TriConsumer<File, String, Instant> callback) {
-		this.baseCaseFolder = baseCaseFolder;
-		pollTaskExecutor = new ScheduledThreadPoolExecutor(1);
-		boolean[] firstRun = { true };
-		task = pollTaskExecutor.scheduleAtFixedRate(() -> {
-			try {
-				// Connect to service.
-				// Does the current match known current?
-				String uuid = getCurrentBaseCase();
-				if (uuid == null) {
-					return;
-				}
-				{
-					File target = new File(baseCaseFolder.getAbsolutePath() + File.separator + uuid + ".lingo");
-					if (!target.exists()) {
-						final Job background = new Job("Downloading basecase") {
-
-							@Override
-							public IStatus run(final IProgressMonitor monitor) {
-								// Having a method called "main" in the stacktrace stops SpringBoot throwing an exception in the logging framework
-								return main(monitor);
-							}
-
-							public IStatus main(final IProgressMonitor monitor) {
-								monitor.beginTask("Downloading latest basecase...", IProgressMonitor.UNKNOWN);
-								try {
-
-									downloadTo(uuid, target, callback);
-
-									firstRun[0] = false;
-									monitor.worked(1);
-								} catch (final Exception e) {
-								} finally {
-									monitor.done();
-								}
-								return Status.OK_STATUS;
-							}
-						};
-						background.setSystem(false);
-						background.setUser(true);
-						background.setPriority(Job.LONG);
-
-						background.schedule();
-						System.out.println("Downloading basecase in background...");
-
-						// callback.accept(target, date);
-						// } catch (IOException e) {
-						// // TODO Auto-generated catch block
-						// e.printStackTrace();
-						// }
-
-						// updateScenarioModel(target);
-						//
-						// cleanup();
-
-						// Download scenario to folder
-
-						// Update internal references
-
-						// Update data model
-
-						// Delete old data?
-
-					} else {
-						if (firstRun[0]) {
-							String details = getBaseCaseDetails(uuid);
-
-							ObjectMapper mapper = new ObjectMapper();
-							try {
-								JsonNode actualObj = mapper.readTree(details);
-								String creationDate = actualObj.get("creationDate").textValue();
-								Instant instant = Instant.parse(creationDate);
-
-								callback.accept(target, uuid, instant);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-						firstRun[0] = false;
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				int ii = 0;
-
-			}
-
-		}, 60, 30, TimeUnit.SECONDS);
-
-	}
-
-	private void cleanup() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void updateScenarioModel(File target) {
-		// TODO Auto-generated method stub
-		RunnerHelper.asyncExec(() -> {
-			// Update scenario model
-		});
-	}
-
-	public void stop() {
-		task.cancel(true);
-
-		pollTaskExecutor.shutdown();
-	}
-
-	public File getBaseCaseFolder() {
-		return baseCaseFolder;
-	}
-
-	public void setBaseCaseFolder(File baseCaseFolder) {
-		this.baseCaseFolder = baseCaseFolder;
+		final String uuidString = versionObject.getString("uuid");
+		final String creationDate = versionObject.getString("creationDate");
+		Instant instant = Instant.parse(creationDate);
+		return new Pair<>(uuidString, instant);
 	}
 }

@@ -7,23 +7,26 @@ package com.mmxlabs.lngdataserver.lng.importers.menus;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
-import com.mmxlabs.lngdataservice.client.ports.ApiException;
-import com.mmxlabs.lngdataservice.client.ports.api.PortApi;
-import com.mmxlabs.lngdataservice.client.vessel.api.VesselsApi;
 import com.mmxlabs.lngdataserver.integration.ports.PortsClient;
-import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
@@ -54,160 +57,178 @@ import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 public class ScenarioServicePublishAction {
 
 	public static void publishScenario(ScenarioInstance scenarioInstance) {
-		BaseCaseServiceClient baseCaseServiceClient = new BaseCaseServiceClient();
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 
-		// Copy the scenario
-		// TODO
+		try {
+			dialog.run(true, false, m -> publishScenario(scenarioInstance, m));
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		IScenarioDataProvider scenarioDataProvider = null;
-		LNGScenarioModel scenarioModel = null;
+	}
 
-		try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
-			final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+	public static void publishScenario(ScenarioInstance scenarioInstance, IProgressMonitor parent_progressMonitor) {
 
-			final EcoreUtil.Copier copier = new Copier();
-			scenarioModel = (LNGScenarioModel) copier.copy(o_scenarioModel);
+		parent_progressMonitor.beginTask("Publish base case", 1000);
+		SubMonitor progressMonitor = SubMonitor.convert(parent_progressMonitor, 1000);
+		try {
+			progressMonitor.subTask("Prepare base case");
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
-			copier.copyReferences();
-			AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
+			// Copy the scenario
+			// TODO
 
-			// Strip optimisation result
-			analyticsModel.getOptionModels().clear();
-			analyticsModel.getOptimisations().clear();
+			IScenarioDataProvider scenarioDataProvider = null;
+			LNGScenarioModel scenarioModel = null;
 
-			scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
+			try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+				final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-			// Evaluate scenario
-			// try (IScenarioDataProvider o_scenarioDataProvider =
-			// modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL"))
-			// {
-			final ExecutorService executorService = Executors.newSingleThreadExecutor();
+				final EcoreUtil.Copier copier = new Copier();
+				scenarioModel = (LNGScenarioModel) copier.copy(o_scenarioModel);
 
-			try {
-				final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+				copier.copyReferences();
+				AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 
-				// final LNGScenarioModel o_scenarioModel =
-				// o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-				OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
-				assert optimisationPlan != null;
+				// Strip optimisation result
+				analyticsModel.getOptionModels().clear();
+				analyticsModel.getOptimisations().clear();
 
-				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, true,
-						LNGTransformerHelper.HINT_SHIPPING_ONLY);
-				scenarioDataProvider.setLastEvaluationFailed(true);
-				runner.evaluateInitialState();
-				scenarioDataProvider.setLastEvaluationFailed(false);
-			} finally {
-				executorService.shutdown();
+				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
+
+				// Evaluate scenario
+				// try (IScenarioDataProvider o_scenarioDataProvider =
+				// modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL"))
+				// {
+				final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+				try {
+					final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+
+					// final LNGScenarioModel o_scenarioModel =
+					// o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+					OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
+					assert optimisationPlan != null;
+
+					// Hack: Add on shipping only hint to avoid generating spot markets during eval.
+					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, true,
+							LNGTransformerHelper.HINT_SHIPPING_ONLY);
+					scenarioDataProvider.setLastEvaluationFailed(true);
+					runner.evaluateInitialState();
+					scenarioDataProvider.setLastEvaluationFailed(false);
+				} finally {
+					executorService.shutdown();
+				}
 			}
-		}
 
-		// CreateFile
-		File tmpScenarioFile = null;
-
-		try {
-			tmpScenarioFile = ScenarioStorageUtil.getTempDirectory().createTempFile("publishScenarioUtil_", "");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-
-		try {
-			ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		
-		/*
-		// Port data
-
-		String portsVersionUUID = null;
-		try {
-			PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-			portsVersionUUID = portModel.getUuid();
-
-			PortApi p = new PortApi();
-			p.fetchVersionUsingGET(portsVersionUUID);
-		} catch (ApiException e) {
-			String portUUID = exportPort(modelRecord, scenarioModel);
-		}
-		
-		// Pricing data
-
-		String pricingVersionUUID = null;
-		try {
-			PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-			pricingVersionUUID = pricingModel.getUuid();
-
-			PricingClient p = new PricingClient();
-			p.getUpstreamVersion("", "", pricingVersionUUID);
-		} catch (IOException e) {
-			pricingVersionUUID = exportPricing(modelRecord, scenarioModel);
-		}
-		
-		// Vessels data
-
-		String fleetVersionUUID = null;
-		try {
-			FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
-			fleetVersionUUID = fleetModel.getUuid();
-			VesselsApi p = new VesselsApi();
-			p.getVersionUsingGET(fleetVersionUUID);
-		} catch (com.mmxlabs.lngdataservice.client.vessel.ApiException e) {
-			fleetVersionUUID = exportVessel(modelRecord, scenarioModel);
-		}
-		
-		// distances Data
-		String distancesVersionUUID = null;
-		*/
-		
-		// UploadFile
-		String response = null;
-		try {
-			//response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, portsVersionUUID, fleetVersionUUID, pricingVersionUUID, distancesVersionUUID);
-			response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile);
-		} catch (IOException e) {
-			System.out.println("Error uploading the basecase scenario");
-			e.printStackTrace();
-		}
-
-		ObjectMapper mapper = new ObjectMapper();
-		String uuid = null;
-		try {
-			JsonNode actualObj = mapper.readTree(response);
-			uuid = actualObj.get("uuid").textValue();
-		} catch (IOException e) {
-			System.out.println("Cannot read server response after basecase upload");
-			e.printStackTrace();
-		}
-
-		for (IReportPublisherExtension reportPublisherExtension : ReportPublisherExtensionUtil.getContextMenuExtensions()) {
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-			reportPublisherExtension.publishReport(scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider), outputStream);
-			String reportType = reportPublisherExtension.getReportType();
-
-			// Call the correct upload report endpoint;
-			outputStream.toByteArray();
-			ReportsServiceClient reportsServiceClient = new ReportsServiceClient();
+			// CreateFile
+			File tmpScenarioFile = null;
 
 			try {
-				reportsServiceClient.uploadReport(outputStream.toString(), reportType, uuid);
+				tmpScenarioFile = ScenarioStorageUtil.getTempDirectory().createTempFile("publishScenarioUtil_", "");
 			} catch (IOException e) {
 				e.printStackTrace();
 				return;
 			}
-		}
-	
-		try {
-			baseCaseServiceClient.setCurrentBaseCase(uuid);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Error while setting the new baseCase as current");
-			e.printStackTrace();
+
+			try {
+				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+
+			progressMonitor.worked(200);
+
+			BaseCaseServiceClient baseCaseServiceClient = new BaseCaseServiceClient();
+			progressMonitor.subTask("Upload base case");
+			/*
+			 * // Port data
+			 * 
+			 * String portsVersionUUID = null; try { PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel); portsVersionUUID = portModel.getUuid();
+			 * 
+			 * PortApi p = new PortApi(); p.fetchVersionUsingGET(portsVersionUUID); } catch (ApiException e) { String portUUID = exportPort(modelRecord, scenarioModel); }
+			 * 
+			 * // Pricing data
+			 * 
+			 * String pricingVersionUUID = null; try { PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel); pricingVersionUUID = pricingModel.getUuid();
+			 * 
+			 * PricingClient p = new PricingClient(); p.getUpstreamVersion("", "", pricingVersionUUID); } catch (IOException e) { pricingVersionUUID = exportPricing(modelRecord, scenarioModel); }
+			 * 
+			 * // Vessels data
+			 * 
+			 * String fleetVersionUUID = null; try { FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel); fleetVersionUUID = fleetModel.getUuid(); VesselsApi p = new VesselsApi();
+			 * p.getVersionUsingGET(fleetVersionUUID); } catch (com.mmxlabs.lngdataservice.client.vessel.ApiException e) { fleetVersionUUID = exportVessel(modelRecord, scenarioModel); }
+			 * 
+			 * // distances Data String distancesVersionUUID = null;
+			 */
+
+			// UploadFile
+			String response = null;
+			SubMonitor uploadMonitor = progressMonitor.split(500);
+			try {
+				// response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, portsVersionUUID, fleetVersionUUID, pricingVersionUUID, distancesVersionUUID);
+				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, wrapMonitor(uploadMonitor));
+			} catch (IOException e) {
+				System.out.println("Error uploading the basecase scenario");
+				e.printStackTrace();
+			} finally {
+				uploadMonitor.done();
+			}
+
+			ObjectMapper mapper = new ObjectMapper();
+			String uuid = null;
+			try {
+				JsonNode actualObj = mapper.readTree(response);
+				uuid = actualObj.get("uuid").textValue();
+			} catch (IOException e) {
+				System.out.println("Cannot read server response after basecase upload");
+				e.printStackTrace();
+			}
+
+			Iterable<IReportPublisherExtension> publishers = ReportPublisherExtensionUtil.getContextMenuExtensions();
+			ArrayList<IReportPublisherExtension> publishersList = Lists.newArrayList(publishers);
+
+			progressMonitor.subTask("Publish base case reports");
+			SubMonitor publishersMonitor = progressMonitor.split(300);
+			try {
+
+				publishersMonitor.beginTask("Publish base case reports", publishersList.size());
+				for (IReportPublisherExtension reportPublisherExtension : publishersList) {
+					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+					reportPublisherExtension.publishReport(scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider), outputStream);
+					String reportType = reportPublisherExtension.getReportType();
+
+					// Call the correct upload report endpoint;
+					outputStream.toByteArray();
+					ReportsServiceClient reportsServiceClient = new ReportsServiceClient();
+
+					try {
+						reportsServiceClient.uploadReport(outputStream.toString(), reportType, uuid);
+					} catch (IOException e) {
+						e.printStackTrace();
+						return;
+					}
+					publishersMonitor.worked(1);
+				}
+			} finally {
+				publishersMonitor.done();
+			}
+
+			try {
+				baseCaseServiceClient.setCurrentBaseCase(uuid);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Error while setting the new baseCase as current");
+				e.printStackTrace();
+			}
+		} finally {
+			progressMonitor.done();
 		}
 	}
 
@@ -266,6 +287,30 @@ public class ScenarioServicePublishAction {
 		}
 
 		return versionId;
+	}
+
+	private static IProgressListener wrapMonitor(IProgressMonitor monitor) {
+		if (monitor == null) {
+			return null;
+		}
+
+		return new IProgressListener() {
+			boolean firstCall = true;
+
+			@Override
+			public void update(long bytesRead, long contentLength, boolean done) {
+				if (firstCall) {
+					int total = (int) (contentLength / 1000L);
+					if (total == 0) {
+						total = 1;
+					}
+					monitor.beginTask("Transfer", total);
+					firstCall = false;
+				}
+				int worked = (int) (bytesRead / 1000L);
+				monitor.worked(worked);
+			}
+		};
 	}
 
 }
