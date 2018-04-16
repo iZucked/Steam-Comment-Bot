@@ -212,12 +212,9 @@ public class SlotTypePainter implements PaintListener {
 		if (isOptional && !isSpot) {
 			graphics.setBackground(Green);
 			y = (int) midpoint - (terminalSize / 2) + 3;
-			if (isLeft) {
-				graphics.fillOval(ca.x + terminalSize + 4, y, 4, 4);
-			} else {
-				graphics.fillOval(x + 4 + extraRadius / 2, y, 4, 4);
-			}
+			graphics.fillOval(x + 4 + extraRadius / 2, y, 4, 4);
 		}
+
 	}
 
 	public synchronized void redraw() {
