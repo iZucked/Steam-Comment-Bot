@@ -45,6 +45,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -137,7 +138,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
 			if (viewer != null) {
 				for (final ScenarioResult instance : deselected) {
-					viewer.refresh(instance.getScenarioInstance(), true);
+					RunnerHelper.syncExecDisplayOptional(() -> viewer.refresh(instance.getScenarioInstance(), true));
 				}
 			}
 		}
