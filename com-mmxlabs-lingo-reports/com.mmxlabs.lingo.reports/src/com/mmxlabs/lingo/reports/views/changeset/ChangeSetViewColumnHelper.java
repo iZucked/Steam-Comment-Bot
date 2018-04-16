@@ -97,6 +97,8 @@ public class ChangeSetViewColumnHelper {
 	private Image imageGreenArrowUp;
 	private Image imageRedArrowDown;
 	private Image imageRedArrowUp;
+	private Image imageDarkArrowDown;
+	private Image imageDarkArrowUp;
 
 	private Color colour_VesselTypeColumn;
 
@@ -170,6 +172,8 @@ public class ChangeSetViewColumnHelper {
 		final ImageDescriptor imageDescriptorGreenArrowUp;
 		final ImageDescriptor imageDescriptorRedArrowDown;
 		final ImageDescriptor imageDescriptorRedArrowUp;
+		final ImageDescriptor imageDescriptorDarkArrowDown;
+		final ImageDescriptor imageDescriptorDarkArrowUp;
 
 		final ImageDescriptor openCircleDescriptor = getImageDescriptor("icons/open-circle.png");
 		final ImageDescriptor closedCircleDescriptor = getImageDescriptor("icons/closed-circle.png");
@@ -180,6 +184,8 @@ public class ChangeSetViewColumnHelper {
 		imageDescriptorGreenArrowUp = getImageDescriptor("icons/green_arrow_up.png");
 		imageDescriptorRedArrowDown = getImageDescriptor("icons/red_arrow_down.png");
 		imageDescriptorRedArrowUp = getImageDescriptor("icons/red_arrow_up.png");
+		imageDescriptorDarkArrowDown = getImageDescriptor("icons/dark_arrow_down.png");
+		imageDescriptorDarkArrowUp = getImageDescriptor("icons/dark_arrow_up.png");
 
 		imageOpenCircle = openCircleDescriptor.createImage();
 		imageClosedCircle = closedCircleDescriptor.createImage();
@@ -190,6 +196,8 @@ public class ChangeSetViewColumnHelper {
 		imageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
 		imageRedArrowDown = imageDescriptorRedArrowDown.createImage();
 		imageRedArrowUp = imageDescriptorRedArrowUp.createImage();
+		imageDarkArrowDown = imageDescriptorDarkArrowDown.createImage();
+		imageDarkArrowUp = imageDescriptorDarkArrowUp.createImage();
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
@@ -1032,7 +1040,18 @@ public class ChangeSetViewColumnHelper {
 							}
 
 							if (isDelta) {
-								cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+								if (textualVesselMarkers) {
+									cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+								} else {
+									cell.setText(String.format("(%s%.1f)", windowDate, Math.abs(deltaHours / 24.0)));
+								}
+
+								if (deltaHours < 0) {
+									cell.setImage(imageDarkArrowDown);
+								} else {
+									cell.setImage(imageDarkArrowUp);
+								}
+
 							} else {
 								cell.setText(windowDate);
 							}
@@ -1074,7 +1093,17 @@ public class ChangeSetViewColumnHelper {
 							}
 
 							if (isDelta) {
-								cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+								if (textualVesselMarkers) {
+									cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+								} else {
+									cell.setText(String.format("(%s%.1f)", windowDate, Math.abs(deltaHours / 24.0)));
+								}
+
+								if (deltaHours < 0) {
+									cell.setImage(imageDarkArrowDown);
+								} else {
+									cell.setImage(imageDarkArrowUp);
+								}
 							} else {
 								cell.setText(windowDate);
 							}
@@ -1739,7 +1768,7 @@ public class ChangeSetViewColumnHelper {
 				if (asInt) {
 					delta = delta / 1000000.0;
 					if (Math.abs(delta) > 0.001) {
-						if (!withColour || textualVesselMarkers) {
+						if (textualVesselMarkers) {
 							if (asSigFigs) {
 								cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 							} else {
@@ -1753,23 +1782,39 @@ public class ChangeSetViewColumnHelper {
 							}
 
 							if (delta < 0) {
-								if (asCost) {
-									cell.setImage(imageGreenArrowDown);
+								if (withColour) {
+									if (asCost) {
+										cell.setImage(imageGreenArrowDown);
+									} else {
+										cell.setImage(imageRedArrowDown);
+									}
 								} else {
-									cell.setImage(imageRedArrowDown);
+									if (asCost) {
+										cell.setImage(imageDarkArrowDown);
+									} else {
+										cell.setImage(imageDarkArrowDown);
+									}
 								}
 							} else {
-								if (asCost) {
-									cell.setImage(imageRedArrowUp);
+								if (withColour) {
+									if (asCost) {
+										cell.setImage(imageRedArrowUp);
+									} else {
+										cell.setImage(imageGreenArrowUp);
+									}
 								} else {
-									cell.setImage(imageGreenArrowUp);
+									if (asCost) {
+										cell.setImage(imageDarkArrowUp);
+									} else {
+										cell.setImage(imageDarkArrowUp);
+									}
 								}
 							}
 						}
 					}
 				} else {
 					if (Math.abs(delta) > 0.009) {
-						if (!withColour || textualVesselMarkers) {
+						if (textualVesselMarkers) {
 							if (asSigFigs) {
 								cell.setText(String.format("%s %,.2G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 							} else {
@@ -1783,9 +1828,33 @@ public class ChangeSetViewColumnHelper {
 							}
 
 							if (delta < 0) {
-								cell.setImage(imageRedArrowDown);
+								if (withColour) {
+									if (asCost) {
+										cell.setImage(imageGreenArrowDown);
+									} else {
+										cell.setImage(imageRedArrowDown);
+									}
+								} else {
+									if (asCost) {
+										cell.setImage(imageDarkArrowDown);
+									} else {
+										cell.setImage(imageDarkArrowDown);
+									}
+								}
 							} else {
-								cell.setImage(imageRedArrowUp);
+								if (withColour) {
+									if (asCost) {
+										cell.setImage(imageRedArrowUp);
+									} else {
+										cell.setImage(imageGreenArrowUp);
+									}
+								} else {
+									if (asCost) {
+										cell.setImage(imageDarkArrowUp);
+									} else {
+										cell.setImage(imageDarkArrowUp);
+									}
+								}
 							}
 						}
 					}
@@ -1946,9 +2015,9 @@ public class ChangeSetViewColumnHelper {
 					}
 
 					if (delta < 0) {
-						cell.setImage(imageRedArrowDown);
+						cell.setImage(imageDarkArrowDown);
 					} else {
-						cell.setImage(imageGreenArrowUp);
+						cell.setImage(imageDarkArrowUp);
 					}
 				}
 			}
@@ -2099,6 +2168,14 @@ public class ChangeSetViewColumnHelper {
 		if (imageRedArrowDown != null) {
 			imageRedArrowDown.dispose();
 			imageRedArrowDown = null;
+		}
+		if (imageDarkArrowUp != null) {
+			imageDarkArrowUp.dispose();
+			imageDarkArrowUp = null;
+		}
+		if (imageDarkArrowDown != null) {
+			imageDarkArrowDown.dispose();
+			imageDarkArrowDown = null;
 		}
 		if (colour_VesselTypeColumn != null) {
 			colour_VesselTypeColumn.dispose();
