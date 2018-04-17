@@ -349,7 +349,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	}
 
 	private void fillLocalPullDown(final IMenuManager manager) {
-		manager.add(new Separator());
+//		manager.add(new Separator());
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
