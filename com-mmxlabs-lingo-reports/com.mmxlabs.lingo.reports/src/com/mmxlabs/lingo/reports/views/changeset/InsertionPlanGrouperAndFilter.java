@@ -52,8 +52,7 @@ import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 
 /**
- * Class to organise insertion plans and optionally filter out related but
- * "poorer" choices
+ * Class to organise insertion plans and optionally filter out related but "poorer" choices
  *
  */
 public class InsertionPlanGrouperAndFilter extends ViewerFilter {
@@ -310,7 +309,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			if (tableRoot == null) {
 				return;
 			}
-			
+
 			final Map<ChangeSetMetadata, List<ChangeSetTableGroup>> grouper = new LinkedHashMap<>();
 			for (final ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
 				final Pair<String, Object> p = getDestination(tableGroup, target);
@@ -430,7 +429,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.lhsType = FilterSlotType.BY_ID;
 								f.rhsKey = row.getRhsName();
 								f.rhsType = FilterSlotType.BY_ID;
-								f.rhsNegate = exclude;
+								f.negate = exclude;
 								mergeFilter(f);
 								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 
@@ -445,7 +444,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.lhsType = FilterSlotType.BY_ID;
 								f.rhsKey = contract.getName();
 								f.rhsType = FilterSlotType.BY_CONTRACT;
-								f.rhsNegate = exclude;
+								f.negate = exclude;
 								mergeFilter(f);
 								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 
@@ -462,7 +461,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.lhsType = FilterSlotType.BY_ID;
 									f.rhsKey = null;
 									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
-									f.rhsNegate = exclude;
+									f.negate = exclude;
 									mergeFilter(f);
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 
@@ -474,7 +473,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.lhsType = FilterSlotType.BY_ID;
 									f.rhsKey = market.getName();
 									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
-									f.rhsNegate = exclude;
+									f.negate = exclude;
 									mergeFilter(f);
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 
@@ -489,7 +488,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							f.lhsKey = row.getLhsName();
 							f.lhsType = FilterSlotType.BY_ID;
 							f.rhsType = FilterSlotType.BY_OPEN;
-							f.rhsNegate = exclude;
+							f.negate = exclude;
 							mergeFilter(f);
 							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 						}));
@@ -503,7 +502,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 						f.lhsType = FilterSlotType.BY_ID;
 						f.vesselType = FilterVesselType.BY_NAME;
 						f.vesselKey = row.getAfterVesselName();
-						f.vesselNegate = exclude;
+						f.negate = exclude;
 						mergeFilter(f);
 						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 					}));
@@ -527,7 +526,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.lhsType = FilterSlotType.BY_ID;
 								f.rhsKey = row.getRhsName();
 								f.rhsType = FilterSlotType.BY_ID;
-								f.lhsNegate = exclude;
+								f.negate = exclude;
 								mergeFilter(f);
 								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 							}));
@@ -541,7 +540,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.lhsType = FilterSlotType.BY_CONTRACT;
 								f.rhsKey = row.getRhsName();
 								f.rhsType = FilterSlotType.BY_ID;
-								f.lhsNegate = exclude;
+								f.negate = exclude;
 								mergeFilter(f);
 								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 							}));
@@ -557,7 +556,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.lhsType = FilterSlotType.BY_SPOT_MARKET;
 									f.rhsKey = row.getRhsName();
 									f.rhsType = FilterSlotType.BY_ID;
-									f.lhsNegate = exclude;
+									f.negate = exclude;
 									mergeFilter(f);
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 								}));
@@ -568,7 +567,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									f.lhsType = FilterSlotType.BY_SPOT_MARKET;
 									f.rhsKey = row.getRhsName();
 									f.rhsType = FilterSlotType.BY_ID;
-									f.lhsNegate = exclude;
+									f.negate = exclude;
 									mergeFilter(f);
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 
@@ -583,7 +582,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							f.lhsType = FilterSlotType.BY_OPEN;
 							f.rhsKey = row.getRhsName();
 							f.rhsType = FilterSlotType.BY_ID;
-							f.lhsNegate = exclude;
+							f.negate = exclude;
 							mergeFilter(f);
 							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 						}));
@@ -604,7 +603,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							f.rhsType = FilterSlotType.BY_ID;
 							f.vesselType = FilterVesselType.BY_NAME;
 							f.vesselKey = row.getAfterVesselName();
-							f.vesselNegate = exclude;
+							f.negate = exclude;
 							mergeFilter(f);
 							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 						}));
@@ -993,7 +992,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			final String base;
 			switch (groupMode) {
 			case Complexity:
-				base = String.format("∆%d ",  complexity);
+				base = String.format("∆%d ", complexity);
 				break;
 			case Target:
 				base = String.format("%s ", dest);
@@ -1017,7 +1016,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	private Pair<String, Object> getDestination(final ChangeSetTableGroup tableGroup, final Object target) {
 		final ChangeSet changeSet = tableGroup.getChangeSet();
 		Object sendTo = null;
-	// TODO: Does this need to check alternative base?
+		// TODO: Does this need to check alternative base?
 		for (final ChangeSetRow row : changeSet.getChangeSetRowsToDefaultBase()) {
 			final ChangeSetRowDataGroup afterData = row.getAfterData();
 			if (afterData == null) {
@@ -1087,7 +1086,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	public Collection<Object> getExpandedGroups() {
 		return expandedGroups;
 	}
-	
+
 	public GroupMode getGroupMode() {
 		return groupMode;
 	}

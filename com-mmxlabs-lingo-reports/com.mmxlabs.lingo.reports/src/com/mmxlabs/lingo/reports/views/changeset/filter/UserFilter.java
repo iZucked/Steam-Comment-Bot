@@ -24,24 +24,23 @@ public class UserFilter {
 
 	public FilterSlotType lhsType;
 	public String lhsKey;
-	public boolean lhsNegate;
 
 	public FilterSlotType rhsType;
 	public String rhsKey;
-	public boolean rhsNegate;
 
 	public FilterVesselType vesselType;
 	public String vesselKey;
-	public boolean vesselNegate;
 	private final String label;
+
+	public boolean negate;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(label, lhsType, lhsKey, lhsNegate, rhsType, rhsKey, rhsNegate, vesselType, vesselKey, vesselNegate);
+		return Objects.hash(label, lhsType, lhsKey, rhsType, rhsKey, vesselType, vesselKey, negate);
 	}
 
 	public String getLabel() {
-		if (lhsNegate || rhsNegate || vesselNegate) {
+		if (negate) {
 			return label + " (exclude)";
 		}
 		return label;
@@ -56,9 +55,7 @@ public class UserFilter {
 		if (obj instanceof UserFilter) {
 			final UserFilter other = (UserFilter) obj;
 			return //
-			lhsNegate == other.lhsNegate //
-					&& rhsNegate == other.rhsNegate //
-					&& vesselNegate == other.vesselNegate //
+			negate == other.negate //
 					&& Objects.equals(lhsType, other.lhsType) //
 					&& Objects.equals(rhsType, other.rhsType) //
 					&& Objects.equals(vesselType, other.vesselType) //
@@ -76,6 +73,10 @@ public class UserFilter {
 	}
 
 	public boolean include(final ChangeSetTableGroup group) {
+		if (group == null) {
+			return false;
+		}
+
 		if (lhsType == FilterSlotType.ANY && rhsType == FilterSlotType.ANY && vesselType == FilterVesselType.ANY) {
 			// Negate does not apply here
 			return true;
@@ -86,9 +87,15 @@ public class UserFilter {
 		while (itr.hasNext()) {
 			final ChangeSetTableRow row = itr.next();
 			final boolean match = doesLHSMatch(row) && doesRHSMatch(row) && doesVesselMatch(row);
-			if (!match) {
-				itr.remove();
-				continue;
+			if (negate) {
+				if (match) {
+					return false;
+				}
+			} else {
+				if (!match) {
+					itr.remove();
+					continue;
+				}
 			}
 		}
 		return !rows.isEmpty();
@@ -100,23 +107,23 @@ public class UserFilter {
 			return true;
 		}
 		if (lhsType == FilterSlotType.BY_OPEN) {
-			return !lhsNegate == !row.isLhsSlot();
+			return !row.isLhsSlot();
 		}
 		if (lhsType == FilterSlotType.BY_ID) {
-			return !lhsNegate == (lhsKey.equalsIgnoreCase(row.getLhsName()));
+			return (lhsKey.equalsIgnoreCase(row.getLhsName()));
 		}
 		if (lhsType == FilterSlotType.BY_CONTRACT) {
-			return !lhsNegate == (row.isLhsSlot() && row.getLhsAfter().getLoadSlot() != null && row.getLhsAfter().getLoadSlot().getContract() != null
+			return (row.isLhsSlot() && row.getLhsAfter() != null && row.getLhsAfter().getLoadSlot() != null && row.getLhsAfter().getLoadSlot().getContract() != null
 					&& lhsKey.equalsIgnoreCase(row.getLhsAfter().getLoadSlot().getContract().getName()));
 		}
 		try {
 			if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
-				return !lhsNegate == (row.isLhsSpot() && row.getLhsAfter().getLoadSlot() != null && (lhsKey == null
+				return (row.isLhsSpot() && row.getLhsAfter() != null && row.getLhsAfter().getLoadSlot() != null && (lhsKey == null
 						|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
 			}
 		} catch (final Exception e) {
 			if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
-				return !lhsNegate == (row.isLhsSpot() && (lhsKey == null
+				return (row.isLhsSpot() && (lhsKey == null
 						|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
 			}
 		}
@@ -129,17 +136,17 @@ public class UserFilter {
 			return true;
 		}
 		if (rhsType == FilterSlotType.BY_OPEN) {
-			return !rhsNegate == !row.isRhsSlot();
+			return !row.isRhsSlot();
 		}
 		if (rhsType == FilterSlotType.BY_ID) {
-			return !rhsNegate == (rhsKey.equalsIgnoreCase(row.getRhsName()));
+			return (rhsKey.equalsIgnoreCase(row.getRhsName()));
 		}
 		if (rhsType == FilterSlotType.BY_CONTRACT) {
-			return !rhsNegate == (row.isRhsSlot() && row.getRhsAfter().getDischargeSlot().getContract() != null
+			return (row.isRhsSlot() && row.getRhsAfter() != null && row.getRhsAfter().getDischargeSlot().getContract() != null
 					&& rhsKey.equalsIgnoreCase(row.getRhsAfter().getDischargeSlot().getContract().getName()));
 		}
 		if (rhsType == FilterSlotType.BY_SPOT_MARKET) {
-			return !rhsNegate == (row.isRhsSpot() && (rhsKey == null
+			return (row.isRhsSpot() && (rhsKey == null
 					|| ((SpotSlot) row.getRhsAfter().getDischargeSlot()).getMarket() != null && rhsKey.equalsIgnoreCase(((SpotSlot) row.getRhsAfter().getDischargeSlot()).getMarket().getName())));
 		}
 
@@ -151,7 +158,7 @@ public class UserFilter {
 			return true;
 		}
 		if (vesselType == FilterVesselType.BY_NAME) {
-			return !vesselNegate == vesselKey.equalsIgnoreCase(row.getAfterVesselName());
+			return vesselKey.equalsIgnoreCase(row.getAfterVesselName());
 		}
 
 		return true;
