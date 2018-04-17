@@ -33,7 +33,7 @@ public class UserFilter {
 	public FilterVesselType vesselType;
 	public String vesselKey;
 	public boolean vesselNegate;
-	private String label;
+	private final String label;
 
 	@Override
 	public int hashCode() {
@@ -49,12 +49,12 @@ public class UserFilter {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == this) {
 			return true;
 		}
 		if (obj instanceof UserFilter) {
-			UserFilter other = (UserFilter) obj;
+			final UserFilter other = (UserFilter) obj;
 			return //
 			lhsNegate == other.lhsNegate //
 					&& rhsNegate == other.rhsNegate //
@@ -71,37 +71,31 @@ public class UserFilter {
 		return super.equals(obj);
 	}
 
-	public UserFilter(String label) {
+	public UserFilter(final String label) {
 		this.label = label;
 	}
 
-	public boolean include(ChangeSetTableGroup group) {
+	public boolean include(final ChangeSetTableGroup group) {
 		if (lhsType == FilterSlotType.ANY && rhsType == FilterSlotType.ANY && vesselType == FilterVesselType.ANY) {
 			// Negate does not apply here
 			return true;
 		}
 
-		List<ChangeSetTableRow> rows = new LinkedList<>(group.getRows());
-		Iterator<ChangeSetTableRow> itr = rows.iterator();
+		final List<ChangeSetTableRow> rows = new LinkedList<>(group.getRows());
+		final Iterator<ChangeSetTableRow> itr = rows.iterator();
 		while (itr.hasNext()) {
-			ChangeSetTableRow row = itr.next();
-			if (!doesLHSMatch(row)) {
-				itr.remove();
-				continue;
-			}
-			if (!doesRHSMatch(row)) {
-				itr.remove();
-				continue;
-			}
-			if (!doesVesselMatch(row)) {
+			final ChangeSetTableRow row = itr.next();
+			final boolean match = doesLHSMatch(row) && doesRHSMatch(row) && doesVesselMatch(row);
+			if (!match) {
 				itr.remove();
 				continue;
 			}
 		}
 		return !rows.isEmpty();
+
 	}
 
-	private boolean doesLHSMatch(ChangeSetTableRow row) {
+	private boolean doesLHSMatch(final ChangeSetTableRow row) {
 		if (lhsType == FilterSlotType.ANY) {
 			return true;
 		}
@@ -116,11 +110,11 @@ public class UserFilter {
 					&& lhsKey.equalsIgnoreCase(row.getLhsAfter().getLoadSlot().getContract().getName()));
 		}
 		try {
-		if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
-			return !lhsNegate == (row.isLhsSpot() && row.getLhsAfter().getLoadSlot() != null && (lhsKey == null
-					|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
-		}
-		} catch (Exception e) {
+			if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
+				return !lhsNegate == (row.isLhsSpot() && row.getLhsAfter().getLoadSlot() != null && (lhsKey == null
+						|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
+			}
+		} catch (final Exception e) {
 			if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
 				return !lhsNegate == (row.isLhsSpot() && (lhsKey == null
 						|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
@@ -130,7 +124,7 @@ public class UserFilter {
 		return true;
 	}
 
-	private boolean doesRHSMatch(ChangeSetTableRow row) {
+	private boolean doesRHSMatch(final ChangeSetTableRow row) {
 		if (rhsType == FilterSlotType.ANY) {
 			return true;
 		}
@@ -152,7 +146,7 @@ public class UserFilter {
 		return true;
 	}
 
-	private boolean doesVesselMatch(ChangeSetTableRow row) {
+	private boolean doesVesselMatch(final ChangeSetTableRow row) {
 		if (vesselType == FilterVesselType.ANY) {
 			return true;
 		}
