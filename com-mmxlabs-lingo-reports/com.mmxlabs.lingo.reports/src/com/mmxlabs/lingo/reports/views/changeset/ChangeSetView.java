@@ -571,7 +571,8 @@ public class ChangeSetView extends ViewPart {
 							}
 						}
 
-						while (selectedElements.remove(null));
+						while (selectedElements.remove(null))
+							;
 
 						// Update selected elements
 						scenarioComparisonService.setSelectedElements(selectedElements);
@@ -727,9 +728,6 @@ public class ChangeSetView extends ViewPart {
 			}
 		});
 
-		scenarioComparisonService.addListener(listener);
-		scenarioComparisonService.triggerListener(listener);
-
 		viewer.addOpenListener(new IOpenListener() {
 
 			@Override
@@ -779,25 +777,29 @@ public class ChangeSetView extends ViewPart {
 			final ContextMenuManager listener = new ContextMenuManager();
 			viewer.getGrid().addMenuDetectListener(listener);
 		}
-		
+
 		eventHandler = new EventHandler() {
-			
+
 			@Override
 			public void handleEvent(org.osgi.service.event.Event event) {
-//				event.getProperty(name)
-				Object o = event.getProperty("org.eclipse.e4.data")
-						;
+				// event.getProperty(name)
+				Object o = event.getProperty("org.eclipse.e4.data");
 				if (o instanceof ScenarioInstance) {
 					ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-					
-				onClosingScenario(scenarioInstance);
+
+					onClosingScenario(scenarioInstance);
 				}
-				int ii =0;
+				int ii = 0;
 			}
 		};
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE, eventHandler);
-		
+
+		String secondaryId = getViewSite().getSecondaryId();
+		if (!"Dynamic".equals(secondaryId)) {
+			scenarioComparisonService.addListener(listener);
+			scenarioComparisonService.triggerListener(listener);
+		}
 		synchronized (postCreateActions) {
 			viewCreated = true;
 			while (!postCreateActions.isEmpty()) {
@@ -996,7 +998,7 @@ public class ChangeSetView extends ViewPart {
 	public void dispose() {
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		eventBroker.unsubscribe(eventHandler);
-		
+
 		if (lastParent != null) {
 			lastParent.eAdapters().remove(adapter);
 		}
@@ -1487,7 +1489,7 @@ public class ChangeSetView extends ViewPart {
 			}
 			getViewSite().getActionBars().getToolBarManager().update(true);
 		}
-		
+
 		if (viewMode == ViewMode.INSERTIONS) {
 			columnHelper.showCompareColumns(false);
 		} else {
