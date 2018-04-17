@@ -150,7 +150,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			if (object instanceof Slot) {
 				final Slot slot = (Slot) object;
 				if (slot instanceof LoadSlot) {
-					LoadSlot loadSlot = (LoadSlot) slot;
+					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (loadSlot.isDESPurchase()) {
 						if (slot.isDivertible()) {
 							return yesSymbol;
@@ -159,7 +159,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 				}
 				if (slot instanceof DischargeSlot) {
-					DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					if (dischargeSlot.isFOBSale()) {
 						if (slot.isDivertible()) {
 							return yesSymbol;
@@ -274,11 +274,20 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final LocalDateAttributeManipulator rendMan = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editingDomain) {
 							@Override
 							public String renderSetValue(final Object owner, final Object object) {
-								final String v = super.renderSetValue(owner, object);
+								String v = super.renderSetValue(owner, object);
 								if (v != "") {
 									final String suffix = getTimeWindowSuffix(owner);
-									return v + suffix;
+									v = v + suffix;
 								}
+								if (v != "") {
+									if (owner instanceof Slot) {
+										final Slot slot = (Slot) owner;
+										if (slot.getWindowFlex() != 0) {
+											v = v + " *";
+										}
+									}
+								}
+
 								return v;
 							}
 						};
@@ -338,6 +347,19 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editingDomain);
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Duration", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.setTooltip("Visit duration in hours");
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					{
+						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlex(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Flex", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					{
+						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlexUnits(), editingDomain,
+								(e) -> mapName((TimePeriod) e));
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
 					}
@@ -435,7 +457,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Restrictions", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
-						
+
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
 							@Override
@@ -449,7 +471,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 							}
 						});
-						
+
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), editingDomain);
@@ -476,9 +498,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedListsArePermissive(), editingDomain) {
-							public boolean canEdit(Object object) {
+
+							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									Slot slot = (Slot) object;
+									final Slot slot = (Slot) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -491,9 +514,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
-							public boolean canEdit(Object object) {
+							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									Slot slot = (Slot) object;
+									final Slot slot = (Slot) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -507,9 +530,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
-							public boolean canEdit(Object object) {
+							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									Slot slot = (Slot) object;
+									final Slot slot = (Slot) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -619,11 +642,20 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final LocalDateAttributeManipulator rendMan = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editingDomain) {
 							@Override
 							public String renderSetValue(final Object owner, final Object object) {
-								final String v = super.renderSetValue(owner, object);
+								String v = super.renderSetValue(owner, object);
 								if (v != "") {
 									final String suffix = getTimeWindowSuffix(owner);
-									return v + suffix;
+									v = v + suffix;
 								}
+								if (v != "") {
+									if (owner instanceof Slot) {
+										final Slot slot = (Slot) owner;
+										if (slot.getWindowFlex() != 0) {
+											v = v + " *";
+										}
+									}
+								}
+
 								return v;
 							}
 						};
@@ -676,6 +708,19 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editingDomain);
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Duration", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.setTooltip("Visit duration in hours");
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					{
+						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlex(), editingDomain);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Flex", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
+						createColumn.column.getColumn().setSummary(false);
+						createColumn.column.getColumn().setDetail(true);
+					}
+					{
+						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlexUnits(), editingDomain,
+								(e) -> mapName((TimePeriod) e));
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setSummary(false);
 						createColumn.column.getColumn().setDetail(true);
 					}
@@ -773,7 +818,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Restrictions", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
-						
 
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
@@ -813,9 +857,10 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedListsArePermissive(), editingDomain) {
-							public boolean canEdit(Object object) {
+
+							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									Slot slot = (Slot) object;
+									final Slot slot = (Slot) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -828,9 +873,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
-							public boolean canEdit(Object object) {
+							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									Slot slot = (Slot) object;
+									final Slot slot = (Slot) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -844,9 +889,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), referenceValueProvider, editingDomain,
 								MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
-							public boolean canEdit(Object object) {
+							public boolean canEdit(final Object object) {
 								if (object instanceof Slot) {
-									Slot slot = (Slot) object;
+									final Slot slot = (Slot) object;
 									return slot.isOverrideRestrictions() && super.canEdit(object);
 								}
 								return false;
@@ -899,7 +944,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Diversion", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
-						
 
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
@@ -915,23 +959,23 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 							}
 						});
-						
+
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
-							public boolean canEdit(Object object) {
+							public boolean canEdit(final Object object) {
 
 								if (object instanceof LoadSlot) {
-									LoadSlot loadSlot = (LoadSlot) object;
+									final LoadSlot loadSlot = (LoadSlot) object;
 									return loadSlot.isDESPurchase();
 
 								}
 								return false;
 							}
 
-							public String render(Object object) {
+							public String render(final Object object) {
 								if (object instanceof LoadSlot) {
-									LoadSlot loadSlot = (LoadSlot) object;
+									final LoadSlot loadSlot = (LoadSlot) object;
 									if (loadSlot.isDESPurchase()) {
 										return super.render(object);
 
@@ -944,24 +988,23 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
-						
-						
+
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
-							public boolean canEdit(Object object) {
+							public boolean canEdit(final Object object) {
 
 								if (object instanceof LoadSlot) {
-									LoadSlot loadSlot = (LoadSlot) object;
+									final LoadSlot loadSlot = (LoadSlot) object;
 									return loadSlot.isDESPurchase() && loadSlot.isDivertible();
 
 								}
 								return false;
 							}
 
-							public String render(Object object) {
+							public String render(final Object object) {
 								if (object instanceof LoadSlot) {
-									LoadSlot loadSlot = (LoadSlot) object;
+									final LoadSlot loadSlot = (LoadSlot) object;
 									if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
 										return super.render(object);
 
@@ -1002,7 +1045,6 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Diversion", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(false);
 						createColumn.column.getColumn().setSummary(true);
-						
 
 						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
@@ -1018,23 +1060,24 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 							}
 						});
-						
+
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Divertible(), editingDomain) {
-							public boolean canEdit(Object object) {
+
+							public boolean canEdit(final Object object) {
 
 								if (object instanceof DischargeSlot) {
-									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									final DischargeSlot dischargeSlot = (DischargeSlot) object;
 									return dischargeSlot.isFOBSale();
 
 								}
 								return false;
 							}
 
-							public String render(Object object) {
+							public String render(final Object object) {
 								if (object instanceof DischargeSlot) {
-									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									final DischargeSlot dischargeSlot = (DischargeSlot) object;
 									if (dischargeSlot.isFOBSale()) {
 										return super.render(object);
 									}
@@ -1043,25 +1086,26 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return "";
 							};
 						};
+
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Divertible", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
 						createColumn.column.getColumn().setDetail(true);
 						createColumn.column.getColumn().setSummary(false);
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(), editingDomain) {
-							public boolean canEdit(Object object) {
+							public boolean canEdit(final Object object) {
 
 								if (object instanceof DischargeSlot) {
-									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									final DischargeSlot dischargeSlot = (DischargeSlot) object;
 									return dischargeSlot.isFOBSale() && dischargeSlot.isDivertible();
 
 								}
 								return false;
 							}
 
-							public String render(Object object) {
+							public String render(final Object object) {
 								if (object instanceof DischargeSlot) {
-									DischargeSlot dischargeSlot = (DischargeSlot) object;
+									final DischargeSlot dischargeSlot = (DischargeSlot) object;
 									if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
 										return super.render(object);
 									}
