@@ -86,6 +86,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
@@ -756,6 +757,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				return;
 			}
 			if (e3Part instanceof PropertySheet) {
+				return;
+			}
+			if (e3Part instanceof ScenarioServiceNavigator) {
 				return;
 			}
 		}
