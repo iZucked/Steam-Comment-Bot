@@ -87,18 +87,11 @@ public class UserFilter {
 		while (itr.hasNext()) {
 			final ChangeSetTableRow row = itr.next();
 			final boolean match = doesLHSMatch(row) && doesRHSMatch(row) && doesVesselMatch(row);
-			if (negate) {
-				if (match) {
-					return false;
-				}
-			} else {
-				if (!match) {
-					itr.remove();
-					continue;
-				}
+			if (match) {
+				return !negate;
 			}
 		}
-		return !rows.isEmpty();
+		return negate;
 
 	}
 
