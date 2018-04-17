@@ -475,7 +475,8 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 			toolbar.add(copyToClipboardAction);
 		}
 
-		{
+		// Disable menu contributions for embedded panes. This stops empty menus appearing
+		if (externalMenuManager != null) {
 			// Menu Manager
 			{
 				final String menuID = getMenuID();
