@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -66,6 +67,7 @@ public class SharedScenarioUpdater {
 	};
 
 	private Thread updateThread;
+	private ReentrantLock updateLock = new ReentrantLock();
 
 	public SharedScenarioUpdater(final ScenarioService modelRoot, final File basePath, final SharedWorkspaceServiceClient client) {
 		this.modelRoot = modelRoot;
@@ -305,10 +307,13 @@ public class SharedScenarioUpdater {
 			public void run() {
 
 				while (true) {
+					updateLock.lock();
 					try {
 						refresh();
 					} catch (final IOException e1) {
 						e1.printStackTrace();
+					} finally {
+						updateLock.unlock();
 					}
 
 					try {
@@ -400,5 +405,13 @@ public class SharedScenarioUpdater {
 				monitor.worked(worked);
 			}
 		};
+	}
+
+	public void pause() {
+		updateLock.lock();
+	}
+
+	public void resume() {
+		updateLock.unlock();
 	}
 }

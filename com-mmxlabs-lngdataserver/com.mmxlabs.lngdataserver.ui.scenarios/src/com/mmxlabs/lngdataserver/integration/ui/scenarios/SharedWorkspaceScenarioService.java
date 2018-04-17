@@ -83,12 +83,14 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 			File f = ScenarioStorageUtil.storeToTemporaryFile(tmpRecord);
 			try {
+				updater.pause();
 				String uuid = client.uploadScenario(f, path.toString(), wrapMonitor(progressMonitor));
 				if (uuid != null) {
 					Path target = Paths.get(baseCaseFolder.getAbsolutePath(), String.format("%s.lingo", uuid));
 					Files.copy(f.toPath(), target);
 				}
 			} finally {
+				updater.resume();
 				if (f != null) {
 					f.delete();
 				}
