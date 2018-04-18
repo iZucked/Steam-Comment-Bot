@@ -22,6 +22,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charterOutStartDate"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charterInMarkets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charterOutMarkets"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charterOutMarketParameters"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//SpotMarketGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketGroup/availability"/>
@@ -38,6 +39,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/priceInfo"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/entity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/pricingEvent"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/restrictedListsArePermissive"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/restrictedPorts"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/restrictedContracts"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//DESPurchaseMarket">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//DESPurchaseMarket/cv"/>
@@ -62,17 +66,32 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutStartDate/charterOutStartDate"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//CharterOutMarket">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/charterOutPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/charterOutRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/minCharterOutDuration"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/availablePorts"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/vessels"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/maxCharterOutDuration"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//CharterInMarket">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/charterInPrice"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/vessel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/charterInRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/spotCharterCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/overrideInaccessibleRoutes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/inaccessibleRoutes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/charterContract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/nominal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/minDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/maxDuration"/>
+      <genOperations ecoreOperation="spotmarkets.ecore#//CharterInMarket/getMarketOrContractMinDuration"/>
+      <genOperations ecoreOperation="spotmarkets.ecore#//CharterInMarket/getMarketOrContractMaxDuration"/>
     </genClasses>
     <genClasses image="false" ecoreClass="spotmarkets.ecore#//SpotCharterMarket">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotCharterMarket/enabled"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotCharterMarket/vesselClass"/>
+      <genFeatures createChild="false" propertyDescription="Is the market available to be used"
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotCharterMarket/enabled"/>
+    </genClasses>
+    <genClasses ecoreClass="spotmarkets.ecore#//CharterOutMarketParameters">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarketParameters/charterOutStartDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarketParameters/charterOutEndDate"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

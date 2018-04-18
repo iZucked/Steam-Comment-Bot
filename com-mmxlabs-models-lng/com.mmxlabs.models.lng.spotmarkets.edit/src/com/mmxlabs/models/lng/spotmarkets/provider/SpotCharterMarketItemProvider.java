@@ -82,7 +82,7 @@ public class SpotCharterMarketItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_SpotCharterMarket_enabled_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotCharterMarket_enabled_feature", "_UI_SpotCharterMarket_type"),
+				 getString("_UI_SpotCharterMarket_enabled_description"),
 				 SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__ENABLED,
 				 true,
 				 false,

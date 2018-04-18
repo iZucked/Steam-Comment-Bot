@@ -50,7 +50,7 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Name ", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
 
-		addTypicalColumn("Enabled", new BooleanAttributeManipulator(SpotMarketsPackage.eINSTANCE.getSpotCharterMarket_Enabled(), getEditingDomain()));
+		addTypicalColumn("Active", new BooleanAttributeManipulator(SpotMarketsPackage.eINSTANCE.getSpotCharterMarket_Enabled(), getEditingDomain()));
 
 		addTypicalColumn("Vessels", new MultipleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_Vessels(), getReferenceValueProviderCache(), getEditingDomain(),
 				MMXCorePackage.eINSTANCE.getNamedObject_Name()));

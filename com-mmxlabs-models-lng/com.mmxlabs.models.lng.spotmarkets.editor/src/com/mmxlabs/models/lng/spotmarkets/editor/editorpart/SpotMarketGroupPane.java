@@ -53,7 +53,7 @@ public class SpotMarketGroupPane extends ScenarioTableViewerPane {
 		final IReferenceValueProviderProvider provider = getReferenceValueProviderCache();
 
 		addTypicalColumn("Name", new BasicAttributeManipulator(mmx.getNamedObject_Name(), getEditingDomain()));
-		addTypicalColumn("Enabled", new BooleanAttributeManipulator(pp.getSpotMarket_Enabled(), getEditingDomain()));
+		addTypicalColumn("Active", new BooleanAttributeManipulator(pp.getSpotMarket_Enabled(), getEditingDomain()));
 		switch (spotType) {
 		case DES_PURCHASE:
 			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
