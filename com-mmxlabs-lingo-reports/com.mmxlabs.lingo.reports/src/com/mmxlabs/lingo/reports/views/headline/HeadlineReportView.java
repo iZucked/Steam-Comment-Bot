@@ -91,12 +91,13 @@ public class HeadlineReportView extends ViewPart {
 	 * which is used to calculate the required column width.
 	 */
 	public enum ColumnDefinition {
-		LABEL_SALES_REVENUE(ColumnType.Label, "Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
-				"features:headline-sales-revenue"), LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_UPSIDE(ColumnType.Label, "Upside", null, "features:report-headline-upside"), VALUE_UPSIDE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
 				"features:report-headline-upside"), //
+		LABEL_SALES_REVENUE(ColumnType.Label, "Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
+				"features:headline-sales-revenue"), //
 		LABEL_EQUITY(ColumnType.Label, "Equity", null, "features:report-equity-book"), VALUE_EQUITY(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:report-equity-book"), //
 		LABEL_IDLE_DAYS(ColumnType.Label, "Idle", null, "features:headline-idle-days"), VALUE_IDLE_DAYS(ColumnType.Value, 24000l, KPIReportTransformer.TYPE_TIME, "features:headline-idle-days"), //
 		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null, "features:optimisation-charter-out-generation"), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME,
