@@ -12,12 +12,12 @@ import org.eclipse.ui.internal.e4.compatibility.ModeledPageLayout;
 
 import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
+import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.FitnessReportView;
-import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.lingo.reports.views.standard.TotalsHierarchyView;
