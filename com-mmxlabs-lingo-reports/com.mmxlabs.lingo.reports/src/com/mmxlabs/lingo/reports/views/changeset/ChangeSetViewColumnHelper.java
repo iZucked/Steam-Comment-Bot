@@ -204,7 +204,7 @@ public class ChangeSetViewColumnHelper {
 
 		colour_VesselTypeColumn = new Color(Display.getDefault(), new RGB(240, 240, 240));
 
-		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumeExtendeders();
+		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumnExtendeders();
 	}
 
 	public void makeColumns() {

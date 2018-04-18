@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.standard;
+package com.mmxlabs.lingo.reports.views.headline;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -39,7 +39,8 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
-import com.mmxlabs.lingo.reports.views.standard.HeadlineReportTransformer.RowData;
+import com.mmxlabs.lingo.reports.views.headline.HeadlineReportTransformer.RowData;
+import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -90,16 +91,18 @@ public class HeadlineReportView extends ViewPart {
 	 * which is used to calculate the required column width.
 	 */
 	public enum ColumnDefinition {
-		LABEL_SALES_REVENUE(ColumnType.Label, "Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-sales-revenue"), 
-		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_SALES_REVENUE(ColumnType.Label, "Revenue", null, "features:headline-sales-revenue"), VALUE_SALES_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
+				"features:headline-sales-revenue"), LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_UPSIDE(ColumnType.Label, "Upside", null, "features:report-headline-upside"), VALUE_UPSIDE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
+				"features:report-headline-upside"), //
 		LABEL_EQUITY(ColumnType.Label, "Equity", null, "features:report-equity-book"), VALUE_EQUITY(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:report-equity-book"), //
-		LABEL_IDLE_DAYS(ColumnType.Label, "Idle", null, "features:headline-idle-days"), VALUE_IDLE_DAYS(ColumnType.Value, 24000l, KPIReportTransformer.TYPE_TIME,
-				"features:headline-idle-days"), //
+		LABEL_IDLE_DAYS(ColumnType.Label, "Idle", null, "features:headline-idle-days"), VALUE_IDLE_DAYS(ColumnType.Value, 24000l, KPIReportTransformer.TYPE_TIME, "features:headline-idle-days"), //
 		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null, "features:optimisation-charter-out-generation"), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME,
 				"features:optimisation-charter-out-generation"), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:optimisation-charter-out-generation"), //
-		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"),  VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:headline-purchase-cost"), //	
+		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"), VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
+				"features:headline-purchase-cost"), //
 		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
 		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
 
@@ -243,6 +246,8 @@ public class HeadlineReportView extends ViewPart {
 				return d.shippingPNL;
 			case VALUE_TRADING:
 				return d.tradingPNL;
+			case VALUE_UPSIDE:
+				return d.upside;
 			case VALUE_EQUITY:
 				return d.upstreamDownstreamPNL;
 			case VALUE_VIOLATIONS:
@@ -338,6 +343,13 @@ public class HeadlineReportView extends ViewPart {
 						color = (d.shippingPNL - pinD.shippingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
+				case VALUE_UPSIDE:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						color = (d.upside - pinD.upside) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
 				case VALUE_EQUITY:
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
@@ -346,11 +358,11 @@ public class HeadlineReportView extends ViewPart {
 					}
 					break;
 				case VALUE_IDLE_DAYS:
-//					if (pinD == null) {
-						color = SWT.COLOR_BLACK;
-//					} else {
-//						color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
-//					}
+					// if (pinD == null) {
+					color = SWT.COLOR_BLACK;
+					// } else {
+					// color = (d.idleTime - pinD.idleTime) <= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					// }
 					break;
 				case VALUE_GCO_DAYS:
 				case VALUE_GCO_REVENUE:
