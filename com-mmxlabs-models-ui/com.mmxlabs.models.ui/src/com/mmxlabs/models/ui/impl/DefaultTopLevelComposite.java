@@ -4,20 +4,25 @@
  */
 package com.mmxlabs.models.ui.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -37,6 +42,12 @@ import com.mmxlabs.models.ui.editors.util.EditorUtils;
  * 
  */
 public class DefaultTopLevelComposite extends Composite implements IDisplayComposite {
+
+	/**
+	 * Adapter factory instance. This contains all factories registered in the global registry.
+	 */
+	protected final ComposedAdapterFactory FACTORY = createAdapterFactory();
+
 	protected IDisplayComposite topLevel = null;
 	protected List<EReference> childReferences = new LinkedList<EReference>();
 	protected List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
@@ -146,6 +157,29 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 			g2.setLayout(new FillLayout());
 			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
 
+			// Tooltips
+			if (object != null) {
+				// Set to blank by default - and replace below if the feature is
+				// found
+				String toolTip = "";
+				// This will fetch the property source of the input object
+				final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY.adapt(object, IItemPropertySource.class);
+
+				// Iterate through the property descriptors to find a matching
+				// descriptor for the feature
+				for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(object)) {
+
+					Object feature = descriptor.getFeature(object);
+					if (ref.equals(feature)) {
+						// Found match
+						toolTip = descriptor.getDescription(value).replace("{0}", EditorUtils.unmangle(object.eClass().getName()).toLowerCase());
+						break;
+					}
+				}
+
+				g2.setToolTipText(toolTip);
+			}
+
 			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(),
 					dialogContext, toolkit);
 
@@ -213,5 +247,17 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 			changed |= child.checkVisibility(context);
 		}
 		return changed;
+	}
+
+	/**
+	 * Utility method to create a {@link ComposedAdapterFactory}. Taken from org.eclipse.emf.compare.util.AdapterUtils.
+	 * 
+	 * @return
+	 */
+	public static ComposedAdapterFactory createAdapterFactory() {
+		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
+		factories.add(new ReflectiveItemProviderAdapterFactory());
+		return new ComposedAdapterFactory(factories);
 	}
 }
