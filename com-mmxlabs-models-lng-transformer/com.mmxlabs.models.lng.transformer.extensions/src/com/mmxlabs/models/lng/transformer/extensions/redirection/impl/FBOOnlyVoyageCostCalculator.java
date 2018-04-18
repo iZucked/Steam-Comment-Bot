@@ -4,19 +4,16 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection.impl;
 
-import java.util.Map;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
-import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
@@ -26,8 +23,10 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -43,6 +42,9 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
+
+	@Inject
+	private IPortCostProvider portCostProvider;
 
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
@@ -93,9 +95,11 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 			final PortDetails loadDetails = new PortDetails(new PortOptions(notionalLoadSlot));
 			loadDetails.getOptions().setVisitDuration(loadDuration);
+			loadDetails.setPortCosts(portCostProvider.getPortCost(loadPort, vessel, PortType.Load));
 
 			final PortDetails dischargeDetails = new PortDetails(new PortOptions(notionalDischargeSlot));
 			dischargeDetails.getOptions().setVisitDuration(dischargeDuration);
+			dischargeDetails.setPortCosts(portCostProvider.getPortCost(dischargePort, vessel, PortType.Discharge));
 
 			final PortDetails returnDetails = new PortDetails(new PortOptions(notionalReturnSlot));
 			returnDetails.getOptions().setVisitDuration(0);
