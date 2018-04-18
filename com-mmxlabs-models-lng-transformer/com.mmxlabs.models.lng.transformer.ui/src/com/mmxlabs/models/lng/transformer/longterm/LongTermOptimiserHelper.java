@@ -13,13 +13,17 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -37,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
@@ -54,6 +59,9 @@ public class LongTermOptimiserHelper {
 		NON_SHIPPED,
 		ALL
 	}
+	
+	private static Set<VesselInstanceType> ALLOWED_VESSEL_TYPES = Sets.newHashSet(VesselInstanceType.FLEET, VesselInstanceType.SPOT_CHARTER, VesselInstanceType.TIME_CHARTER);
+
 	/**
 	 * Moves everything to the unused list
 	 * @param sequences
@@ -250,6 +258,54 @@ public class LongTermOptimiserHelper {
 			}
 		}
 	}
+	
+	public static List<List<IPortSlot>> getCargoes(List<ILoadOption> loads, List<IDischargeOption> discharges, boolean[][] pairingsMatrix, ShippingType cargoFilter) {
+		List<List<IPortSlot>> cargoes = new LinkedList<>();
+		for (int loadId = 0; loadId < pairingsMatrix.length; loadId++) {
+			for (int dischargeId = 0; dischargeId < pairingsMatrix[loadId].length; dischargeId++) {
+				if (cargoFilter == ShippingType.SHIPPED || cargoFilter == ShippingType.NON_SHIPPED) {
+					// FOB/DES check if filter is on
+					boolean shipped = loads.get(loadId) instanceof ILoadSlot && discharges.get(dischargeId) instanceof IDischargeSlot;
+					boolean expression = cargoFilter == ShippingType.SHIPPED ? !shipped : shipped;
+					if (expression) {
+						continue;
+					}
+				} 
+				if (pairingsMatrix[loadId][dischargeId]) {
+					cargoes.add(Lists.newArrayList(loads.get(loadId), discharges.get(dischargeId)));
+				}
+			}
+		}
+		return cargoes;
+	}
+
+	public static boolean isShippedVessel(@NonNull IVesselAvailability v) {
+		return ALLOWED_VESSEL_TYPES.contains(v.getVesselInstanceType());
+	}
+	
+	public static IVesselAvailability getPNLVessel(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket, IVesselProvider vesselProvider) {
+		IVesselAvailability nominalMarketAvailability = null;
+		final ISpotCharterInMarket o_nominalMarket = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
+		for (final IResource resource : vesselProvider.getSortedResources()) {
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			if (vesselAvailability.getSpotCharterInMarket() == o_nominalMarket && vesselAvailability.getSpotIndex() == -1) {
+				nominalMarketAvailability = vesselAvailability;
+				break;
+			}
+		}
+		assert nominalMarketAvailability != null;
+		return nominalMarketAvailability;
+	}
+
+	public static long[] getCargoPNL(Long[][] profit, List<List<IPortSlot>> cargoes, List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull IVesselAvailability pnlVessel) {
+		long[] pnl = new long[cargoes.size()];
+		int idx = 0;
+		for (List<IPortSlot> cargo : cargoes) {
+			pnl[idx++] = profit[loads.indexOf(cargo.get(0))][discharges.indexOf(cargo.get(cargo.size() - 1))]/pnlVessel.getVessel().getCargoCapacity();
+		}
+		return pnl;
+	}
+
 
 
 }

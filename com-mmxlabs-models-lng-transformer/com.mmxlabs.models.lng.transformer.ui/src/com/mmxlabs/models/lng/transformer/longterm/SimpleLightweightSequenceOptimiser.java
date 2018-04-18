@@ -28,7 +28,7 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 	private static final int LATENESS_WEIGHT = 1_000_000;
 
 	@Override
-	public List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
+	public List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
 		List<List<Integer>> sequences = createSequences(vessels);
 		sequences.get(0).add(0);
 		sequences.get(0).add(1);
@@ -62,7 +62,7 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 		return sequences;
 	}
 	
-	private Long evaluate(List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
+	private Long evaluate(List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
 		long totalCost = 0;
 		long totalPNL = 0;
 		long totalLateness = 0;
@@ -88,7 +88,7 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 		return COST_WEIGHT * (totalCost/1_000_000) + PNL_WEIGHT * (totalPNL/1_000) + LATENESS_WEIGHT*totalLateness;
 	}
 	
-	private boolean  checkRestrictions(List<Integer> sequence, int vessel, ArrayList<Set<Integer>> cargoVesselRestrictions) {
+	private boolean  checkRestrictions(List<Integer> sequence, int vessel, List<Set<Integer>> cargoVesselRestrictions) {
 		for (int c : sequence) {
 			if (cargoVesselRestrictions.get(c).contains(vessel)) {
 				return false;

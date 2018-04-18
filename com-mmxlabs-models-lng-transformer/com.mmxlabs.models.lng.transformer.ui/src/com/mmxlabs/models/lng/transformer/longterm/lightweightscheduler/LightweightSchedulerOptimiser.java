@@ -23,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.minimaxlabs.rnd.representation.LightWeightOutputData;
 import com.mmxlabs.common.Pair;
@@ -72,9 +73,6 @@ public class LightweightSchedulerOptimiser {
 		
 	}
 	
-	private enum CargoType {
-		SHIPPED, NON_SHIPPED, ALL
-	}
 	
 	@Inject
 	private ILongTermSlotsProvider longTermSlotsProvider;
@@ -102,8 +100,11 @@ public class LightweightSchedulerOptimiser {
 	
 	@Inject
 	private ILightWeightSequenceOptimiser lightWeightSequenceOptimiser;
+	
+	@Inject
+	private ILightWeightOptimisationData lightWeightOptimisationData;
 
-	private List<IPairwiseConstraintChecker> constraintCheckers = new LinkedList<>();
+//	private List<IPairwiseConstraintChecker> constraintCheckers = new LinkedList<>();
 
 	private static Set<VesselInstanceType> ALLOWED_VESSEL_TYPES = Sets.newHashSet(VesselInstanceType.FLEET, VesselInstanceType.SPOT_CHARTER, VesselInstanceType.TIME_CHARTER);
 
@@ -116,49 +117,9 @@ public class LightweightSchedulerOptimiser {
 	 * @return
 	 */
 	public Pair<ISequences, Long> optimise(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
-		// (1) Identify LT slots
-		@NonNull
-		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
-		List<ILoadOption> loads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
-		List<IDischargeOption> discharges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
-		optimiserRecorder.init(loads, discharges);
 		
-		// (2) Generate S2S bindings matrix for LT slots
-		ExecutorService es = Executors.newSingleThreadExecutor();
-		LongTermOptimiserHelper.getS2SBindings(loads, discharges, charterInMarket, es, dataTransformer, optimiserRecorder);
-		
-		// now using our profits recorder we have a full matrix of constraints and pnl
-		Long[][] profit = optimiserRecorder.getProfit();
+		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getCargoPNL(), lightWeightOptimisationData.getCargoToCargoCostsOnAvailability(), lightWeightOptimisationData.getCargoVesselRestrictions(), lightWeightOptimisationData.getCargoToCargoMinTravelTimes(), lightWeightOptimisationData.getCargoMinTravelTimes());
 
-		// (3) Optimise matrix
-		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid());
-		
-		if (pairingsMatrix == null) {
-			return null;
-		}
-		// (4) Export the pairings matrix to a Map
-		Map<ILoadOption, IDischargeOption> pairingsMap = new HashMap<>();
-		for (ILoadOption load : loads) {
-			pairingsMap.put(load, optimiserRecorder.getPairedDischarge(load, pairingsMatrix));
-		}
-
-		// create data for optimiser
-		List<List<IPortSlot>> shippedCargoes = getCargoes(loads, discharges, pairingsMatrix, CargoType.SHIPPED);
-		List<@NonNull IVesselAvailability> vessels = vesselProvider.getSortedResources().stream().map(v -> vesselProvider.getVesselAvailability(v)).filter(v -> isShippedVessel(v)).collect(Collectors.toList());
-		
-		@NonNull
-		IVesselAvailability pnlVessel = getPNLVessel(dataTransformer, charterInMarket);
-		Long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
-		ArrayList<Set<Integer>> cargoVesselRestrictions = cargoVesselRestrictionsMatrixProducer.getIntegerCargoVesselRestrictions(shippedCargoes, vessels,
-				cargoVesselRestrictionsMatrixProducer.getCargoVesselRestrictions(shippedCargoes, vessels, getResourceAllocationConstraintChecker(this.constraintCheckers), getPortExclusionConstraintChecker(this.constraintCheckers)));
-		long[] cargoPNL = getCargoPNL(profit, shippedCargoes, loads, discharges, pnlVessel);
-		int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
-		int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
-		
-		// get constraints
-		// get fitness functions
-		
-		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(shippedCargoes, vessels, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel);
 //		List<List<Integer>> sequences = null;
 //		try {
 //			sequences = getStoredSequences("/tmp/gurobiOutput.gb");
@@ -169,10 +130,14 @@ public class LightweightSchedulerOptimiser {
 
 		// (5) Export the pairings matrix to the raw sequences
 		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
+		
+		@NonNull
+		IVesselAvailability pnlVessel = LongTermOptimiserHelper.getPNLVessel(dataTransformer, charterInMarket, vesselProvider);
+
 		// update shipped
-		updateSequences(rawSequences, sequences, shippedCargoes, vessels, pairingsMap, vesselProvider.getResource(pnlVessel));
+		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getPairingsMap());
 		// update non-shipped
-		LongTermOptimiserHelper.updateVirtualSequences(rawSequences, pairingsMap, vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
+		LongTermOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getPairingsMap(), vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
 		return new Pair<>(rawSequences, 0L);
 	}
 
@@ -186,41 +151,6 @@ public class LightweightSchedulerOptimiser {
 		return pnl;
 	}
 
-	@NonLDD
-	private List<List<IPortSlot>> getCargoes(List<ILoadOption> loads, List<IDischargeOption> discharges, boolean[][] pairingsMatrix, CargoType cargoFilter) {
-		List<List<IPortSlot>> cargoes = new LinkedList<>();
-		for (int loadId = 0; loadId < pairingsMatrix.length; loadId++) {
-			for (int dischargeId = 0; dischargeId < pairingsMatrix[loadId].length; dischargeId++) {
-				if (cargoFilter == CargoType.SHIPPED || cargoFilter == CargoType.NON_SHIPPED) {
-					// FOB/DES check if filter is on
-					boolean shipped = loads.get(loadId) instanceof ILoadSlot && discharges.get(dischargeId) instanceof IDischargeSlot;
-					boolean expression = cargoFilter == CargoType.SHIPPED ? !shipped : shipped;
-					if (expression) {
-						continue;
-					}
-				} 
-				if (pairingsMatrix[loadId][dischargeId]) {
-					cargoes.add(Lists.newArrayList(loads.get(loadId), discharges.get(dischargeId)));
-				}
-			}
-		}
-		return cargoes;
-	}
-
-	@Inject
-	private void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
-		this.constraintCheckers = new LinkedList<>();
-		for (final IConstraintChecker checker : injectedConstraintCheckers) {
-			if (checker instanceof IPairwiseConstraintChecker) {
-				final IPairwiseConstraintChecker constraintChecker = (IPairwiseConstraintChecker) checker;
-				constraintCheckers.add(constraintChecker);
-
-				// Prep with initial sequences.
-				constraintChecker.checkConstraints(initialRawSequences, null);
-			}
-		}
-	}
-
 	/**
 	 * Updates the raw sequences given an allocations matrix
 	 * 
@@ -232,7 +162,7 @@ public class LightweightSchedulerOptimiser {
 	 * @param nominal
 	 */
 	@NonLDD
-	private void updateSequences(@NonNull IModifiableSequences rawSequences, List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal) {
+	private void updateSequences(@NonNull IModifiableSequences rawSequences, List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap) {
 		LongTermOptimiserHelper.moveElementsToUnusedList(rawSequences, portSlotProvider);
 		for (int vesselIndex = 0; vesselIndex < vessels.size(); vesselIndex++) {
 			IVesselAvailability vesselAvailability = vessels.get(vesselIndex);
@@ -321,15 +251,34 @@ public class LightweightSchedulerOptimiser {
 		return readCase.sequences;
 	}
 
-	private List<ILightWeightConstraintChecker> getConstraintCheckers(LightWeightConstraintCheckerRegistry registry, List<String> names) {
+	private List<ILightWeightConstraintChecker> getConstraintCheckers(Injector injector, LightWeightConstraintCheckerRegistry registry, List<String> names) {
 		List<ILightWeightConstraintChecker> constraintCheckers = new LinkedList<>();
 		Collection<ILightWeightConstraintCheckerFactory> constraintCheckerFactories = registry.getFitnessFunctionFactories();
 		for (String name : names) {
 			for (ILightWeightConstraintCheckerFactory lightWeightConstraintCheckerFactory : constraintCheckerFactories) {
 				if (lightWeightConstraintCheckerFactory.getName().equals(name)) {
-					lightWeightConstraintCheckerFactory.createConstraintChecker();
+					ILightWeightConstraintChecker constraintChecker = lightWeightConstraintCheckerFactory.createConstraintChecker();
+					injector.injectMembers(constraintChecker);
+					constraintCheckers.add(constraintChecker);
 				}
 			}
 		}
+		return constraintCheckers;
 	}
+	
+	private List<ILightWeightFitnessFunction> getFitnessFunctions(Injector injector, LightWeightFitnessFunctionRegistry registry, List<String> names) {
+		List<ILightWeightFitnessFunction> fitnessFunctions = new LinkedList<>();
+		Collection<ILightWeightFitnessFunctionFactory> fitnessFunctionFactories = registry.getFitnessFunctionFactories();
+		for (String name : names) {
+			for (ILightWeightFitnessFunctionFactory lightWeightFitnessFunctionFactory : fitnessFunctionFactories) {
+				if (lightWeightFitnessFunctionFactory.getName().equals(name)) {
+					ILightWeightFitnessFunction fitnessFunction = lightWeightFitnessFunctionFactory.createFitnessFunction();
+					injector.injectMembers(fitnessFunction);
+					fitnessFunctions.add(fitnessFunction);
+				}
+			}
+		}
+		return fitnessFunctions;
+	}
+
 }

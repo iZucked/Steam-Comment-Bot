@@ -98,7 +98,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 	@Override
 	public List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability,
-			ArrayList<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
+			List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
 		double[] capacity = vessels.stream().mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000).toArray();
 
 		double[] cargoPNLasDouble = new double[cargoPNL.length];

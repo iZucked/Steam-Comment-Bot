@@ -66,8 +66,6 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 	}
 
 	private double calculateProfitOnSequence(List<Integer> sequence, double capacity, double[] cargoPNL) {
-		// return sequence.stream().mapToDouble(s -> cargoPNL[s] * capacity).sum();
-
 		double sum = 0.0f;
 		for (int i = 0; i < sequence.size(); i++) {
 			sum += cargoPNL[sequence.get(i)] * capacity;

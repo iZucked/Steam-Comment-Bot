@@ -88,8 +88,6 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	private final Map<Thread, LightweightSchedulerOptimiser> threadCache = new ConcurrentHashMap<>(100);
 
-	private @NonNull ExecutorService executorService;
-
 	private LNGScenarioModel initialScenario;
 
 	@SuppressWarnings("null")
@@ -97,8 +95,9 @@ public class LightWeightSchedulerOptimiserUnit {
 			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
 			LNGScenarioModel initialScenario, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
-		this.executorService = executorService;
 		this.initialScenario = initialScenario;
+		
+		CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -109,34 +108,34 @@ public class LightWeightSchedulerOptimiserUnit {
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 
-		modules.add(new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
-				HashSetLongTermSlotsEditor longTermSlotEditor = new HashSetLongTermSlotsEditor();
-				bind(ILongTermSlotsProvider.class).toInstance(longTermSlotEditor);
-				bind(ILongTermSlotsProviderEditor.class).toInstance(longTermSlotEditor);
-//				LongTermMatrixOptimiser matrixOptimiser = new LongTermMatrixOptimiser();
-				WebserviceLongTermMatrixOptimiser matrixOptimiser = new WebserviceLongTermMatrixOptimiser();
-				bind(ILongTermMatrixOptimiser.class).toInstance(matrixOptimiser);
-				bind(ICargoToCargoCostCalculator.class).to(SimpleCargoToCargoCostCalculator.class);
-				bind(ICargoVesselRestrictionsMatrixProducer.class).to(CargoVesselRestrictionsMatrixProducer.class);
-				bind(ILightWeightSequenceOptimiser.class).to(TabuLightWeightSequenceOptimiser.class);
-			}
-
-			@Provides
-			private LightweightSchedulerOptimiser providePerThreadBagMover(@NonNull final Injector injector) {
-
-				LightweightSchedulerOptimiser lightweightSchedulerOptimiser = threadCache.get(Thread.currentThread());
-				if (lightweightSchedulerOptimiser == null) {
-					lightweightSchedulerOptimiser = new LightweightSchedulerOptimiser();
-					injector.injectMembers(lightweightSchedulerOptimiser);
-					threadCache.put(Thread.currentThread(), lightweightSchedulerOptimiser);
-				}
-				return lightweightSchedulerOptimiser;
-			}
-			
-		});
+		modules.add(new LightWeightSchedulerModule(threadCache, charterInMarket, dataTransformer));
+//		modules.add(new AbstractModule() {
+//			@Override
+//			protected void configure() {
+//				bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+//				HashSetLongTermSlotsEditor longTermSlotEditor = new HashSetLongTermSlotsEditor();
+//				bind(ILongTermSlotsProvider.class).toInstance(longTermSlotEditor);
+//				bind(ILongTermSlotsProviderEditor.class).toInstance(longTermSlotEditor);
+//				WebserviceLongTermMatrixOptimiser matrixOptimiser = new WebserviceLongTermMatrixOptimiser();
+//				bind(ILongTermMatrixOptimiser.class).toInstance(matrixOptimiser);
+//				bind(ICargoToCargoCostCalculator.class).to(SimpleCargoToCargoCostCalculator.class);
+//				bind(ICargoVesselRestrictionsMatrixProducer.class).to(CargoVesselRestrictionsMatrixProducer.class);
+//				bind(ILightWeightSequenceOptimiser.class).to(TabuLightWeightSequenceOptimiser.class);
+//			}
+//
+//			@Provides
+//			private LightweightSchedulerOptimiser providePerThreadBagMover(@NonNull final Injector injector) {
+//
+//				LightweightSchedulerOptimiser lightweightSchedulerOptimiser = threadCache.get(Thread.currentThread());
+//				if (lightweightSchedulerOptimiser == null) {
+//					lightweightSchedulerOptimiser = new LightweightSchedulerOptimiser();
+//					injector.injectMembers(lightweightSchedulerOptimiser);
+//					threadCache.put(Thread.currentThread(), lightweightSchedulerOptimiser);
+//				}
+//				return lightweightSchedulerOptimiser;
+//			}
+//			
+//		});
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 	}

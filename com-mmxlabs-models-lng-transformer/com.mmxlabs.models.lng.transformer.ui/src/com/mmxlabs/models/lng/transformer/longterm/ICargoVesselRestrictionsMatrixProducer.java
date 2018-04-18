@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintChecker;
 
 public interface ICargoVesselRestrictionsMatrixProducer {
-	Map<List<IPortSlot>, List<IVesselAvailability>> getCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, ResourceAllocationConstraintChecker resourceAllocationChecker, PortExclusionConstraintChecker portExclusionConstraintChecker);
+	Map<List<IPortSlot>, List<IVesselAvailability>> getCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
 	ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, Map<List<IPortSlot>, List<IVesselAvailability>> restrictions);
-	ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, ResourceAllocationConstraintChecker resourceAllocationChecker, PortExclusionConstraintChecker portExclusionConstraintChecker);
+	ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
 }
