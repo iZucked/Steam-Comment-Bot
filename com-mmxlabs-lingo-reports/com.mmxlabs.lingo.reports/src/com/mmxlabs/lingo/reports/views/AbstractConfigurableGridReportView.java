@@ -86,6 +86,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
@@ -167,21 +168,20 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				public int compare(final Viewer viewer, Object e1, Object e2) {
 					RowGroup g1 = null;
 					RowGroup g2 = null;
-					
+
 					Boolean firstIsComposite = false;
 					Boolean secondIsComposite = false;
-					
+
 					if (e1 instanceof Row) {
 						g1 = ((Row) e1).getRowGroup();
 					}
 					if (e2 instanceof Row) {
 						g2 = ((Row) e2).getRowGroup();
 					}
-					
 
 					if (e1 instanceof CompositeRow) {
 						CompositeRow tmp = ((CompositeRow) e1);
-						
+
 						if (tmp.getPreviousRow() != null) {
 							g1 = tmp.getPreviousRow().getRowGroup();
 							e1 = tmp.getPreviousRow();
@@ -195,7 +195,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 					if (e2 instanceof CompositeRow) {
 						CompositeRow tmp = ((CompositeRow) e2);
-						
+
 						if (tmp.getPreviousRow() != null) {
 							g2 = tmp.getPreviousRow().getRowGroup();
 							e2 = tmp.getPreviousRow();
@@ -209,11 +209,11 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					if (e1 instanceof List) {
 						return Integer.MAX_VALUE;
 					}
-					
+
 					if (e2 instanceof List) {
 						return Integer.MIN_VALUE;
 					}
-					
+
 					if (g1 == g2) {
 						int res = vc.compare(viewer, e1, e2);
 						return res;
@@ -759,10 +759,22 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			if (e3Part instanceof PropertySheet) {
 				return;
 			}
+			if (e3Part instanceof ScenarioServiceNavigator) {
+				return;
+			}
 		}
+
 		final ISelection selection = SelectionHelper.adaptSelection(selectionObject);
+
 		viewer.setSelection(selection, true);
-		ViewerHelper.refresh(viewer, true);
+
+		if (refreshOnSelectionChange()) {
+			ViewerHelper.refresh(viewer, true);
+		}
+	}
+
+	protected boolean refreshOnSelectionChange() {
+		return false;
 	}
 
 	protected boolean handleSelections() {

@@ -125,8 +125,7 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn column_Violations;
 
 	/**
-	 * Display textual vessel change markers - used for unit testing where graphics
-	 * are not captured in data dump.
+	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
 	 */
 	private boolean textualVesselMarkers = false;
 
@@ -205,7 +204,7 @@ public class ChangeSetViewColumnHelper {
 
 		colour_VesselTypeColumn = new Color(Display.getDefault(), new RGB(240, 240, 240));
 
-		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumeExtendeders();
+		columnExtenders = ChangeSetColumnValueExtenderExtensionUtil.getColumnExtendeders();
 	}
 
 	public void makeColumns() {
@@ -1295,21 +1294,23 @@ public class ChangeSetViewColumnHelper {
 
 					if (deltaMetrics != null) {
 						final int latenessDelta = (int) Math.round((double) deltaMetrics.getLatenessDelta() / 24.0);
-						final int lateness = (int) Math.round((double) scenarioMetrics.getLateness() / 24.0);
+						if (deltaMetrics.getLatenessDelta() != 0) {
+							final int lateness = (int) Math.round((double) scenarioMetrics.getLateness() / 24.0);
 
-						if (textualVesselMarkers) {
-							cell.setText(String.format("%s%d / %d", latenessDelta < 0 ? "↓" : latenessDelta == 0 ? "" : "↑", Math.abs(latenessDelta), lateness));
-						} else {
-							cell.setText(String.format("%d / %d", Math.abs(latenessDelta), lateness));
-						}
+							if (textualVesselMarkers) {
+								cell.setText(String.format("%s%d / %d", latenessDelta < 0 ? "↓" : latenessDelta == 0 ? "" : "↑", Math.abs(latenessDelta), lateness));
+							} else {
+								cell.setText(String.format("%d / %d", Math.abs(latenessDelta), lateness));
+							}
 
-						if (latenessDelta < 0) {
-							cell.setImage(imageGreenArrowDown);
-						} else if (latenessDelta > 0) {
-							cell.setImage(imageRedArrowUp);
-						}
-						if (lateness != 0) {
-							cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+							if (deltaMetrics.getLatenessDelta() < 0) {
+								cell.setImage(imageGreenArrowDown);
+							} else if (deltaMetrics.getLatenessDelta() > 0) {
+								cell.setImage(imageRedArrowUp);
+							}
+							if (deltaMetrics.getLatenessDelta() > 0) {
+								cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+							}
 						}
 					}
 				}
@@ -1443,20 +1444,21 @@ public class ChangeSetViewColumnHelper {
 					final Metrics scenarioMetrics = group.getCurrentMetrics();
 					final DeltaMetrics deltaMetrics = group.getDeltaMetrics();
 					if (deltaMetrics != null) {
-
-						if (textualVesselMarkers) {
-							cell.setText(String.format("%s%d / %d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : deltaMetrics.getCapacityDelta() == 0 ? "" : "↑",
-									Math.abs(deltaMetrics.getCapacityDelta()), scenarioMetrics.getCapacity()));
-						} else {
-							cell.setText(String.format("%d / %d", Math.abs(deltaMetrics.getCapacityDelta()), scenarioMetrics.getCapacity()));
-						}
-						if (deltaMetrics.getCapacityDelta() < 0) {
-							cell.setImage(imageGreenArrowDown);
-						} else if (deltaMetrics.getCapacityDelta() > 0) {
-							cell.setImage(imageRedArrowUp);
-						}
-						if (scenarioMetrics.getCapacity() != 0) {
-							cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+						if (deltaMetrics.getCapacityDelta() != 0) {
+							if (textualVesselMarkers) {
+								cell.setText(String.format("%s%d / %d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : deltaMetrics.getCapacityDelta() == 0 ? "" : "↑",
+										Math.abs(deltaMetrics.getCapacityDelta()), scenarioMetrics.getCapacity()));
+							} else {
+								cell.setText(String.format("%d / %d", Math.abs(deltaMetrics.getCapacityDelta()), scenarioMetrics.getCapacity()));
+							}
+							if (deltaMetrics.getCapacityDelta() < 0) {
+								cell.setImage(imageGreenArrowDown);
+							} else if (deltaMetrics.getCapacityDelta() > 0) {
+								cell.setImage(imageRedArrowUp);
+							}
+							if (deltaMetrics.getCapacityDelta() > 0) {
+								cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+							}
 						}
 					}
 				}

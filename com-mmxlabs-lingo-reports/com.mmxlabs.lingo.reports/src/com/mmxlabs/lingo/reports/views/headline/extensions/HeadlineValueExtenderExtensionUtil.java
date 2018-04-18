@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.changeset.extensions;
+package com.mmxlabs.lingo.reports.views.headline.extensions;
 
 import static org.ops4j.peaberry.Peaberry.osgiModule;
 import static org.ops4j.peaberry.Peaberry.service;
@@ -22,17 +22,17 @@ import com.google.inject.TypeLiteral;
 
 /**
  */
-public class ChangeSetColumnValueExtenderExtensionUtil {
+public class HeadlineValueExtenderExtensionUtil {
 
-	public static Iterable<IChangeSetColumnValueExtender> getColumnExtendeders() {
+	public static Iterable<IHeadlineValueExtender> getColumnExtendeders() {
 
 		Injector injector = Guice.createInjector(new ExtensionsModule());
-		Iterable<ChangeSetColumnValueExtenderExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<ChangeSetColumnValueExtenderExtensionPoint>>() {
+		Iterable<HeadlineValueExtenderExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<HeadlineValueExtenderExtensionPoint>>() {
 		}));
 		if (extensions != null) {
-			Collection<IChangeSetColumnValueExtender> result = new LinkedList<>();
-			for (ChangeSetColumnValueExtenderExtensionPoint ext : extensions) {
-				IChangeSetColumnValueExtender instance = ext.getExtender();
+			Collection<IHeadlineValueExtender> result = new LinkedList<>();
+			for (HeadlineValueExtenderExtensionPoint ext : extensions) {
+				IHeadlineValueExtender instance = ext.getExtender();
 				if (instance != null) {
 					result.add(instance);
 				}
@@ -47,9 +47,9 @@ public class ChangeSetColumnValueExtenderExtensionUtil {
 
 		@Override
 		protected void configure() {
-			install(osgiModule(FrameworkUtil.getBundle(ChangeSetColumnValueExtenderExtensionUtil.class).getBundleContext(), eclipseRegistry()));
+			install(osgiModule(FrameworkUtil.getBundle(HeadlineValueExtenderExtensionUtil.class).getBundleContext(), eclipseRegistry()));
 
-			bind(iterable(ChangeSetColumnValueExtenderExtensionPoint.class)).toProvider(service(ChangeSetColumnValueExtenderExtensionPoint.class).multiple());
+			bind(iterable(HeadlineValueExtenderExtensionPoint.class)).toProvider(service(HeadlineValueExtenderExtensionPoint.class).multiple());
 		}
 
 	}

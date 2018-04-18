@@ -24,24 +24,23 @@ public class UserFilter {
 
 	public FilterSlotType lhsType;
 	public String lhsKey;
-	public boolean lhsNegate;
 
 	public FilterSlotType rhsType;
 	public String rhsKey;
-	public boolean rhsNegate;
 
 	public FilterVesselType vesselType;
 	public String vesselKey;
-	public boolean vesselNegate;
-	private String label;
+	private final String label;
+
+	public boolean negate;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(label, lhsType, lhsKey, lhsNegate, rhsType, rhsKey, rhsNegate, vesselType, vesselKey, vesselNegate);
+		return Objects.hash(label, lhsType, lhsKey, rhsType, rhsKey, vesselType, vesselKey, negate);
 	}
 
 	public String getLabel() {
-		if (lhsNegate || rhsNegate || vesselNegate) {
+		if (negate) {
 			return label + " (exclude)";
 		}
 		return label;
@@ -49,16 +48,14 @@ public class UserFilter {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == this) {
 			return true;
 		}
 		if (obj instanceof UserFilter) {
-			UserFilter other = (UserFilter) obj;
+			final UserFilter other = (UserFilter) obj;
 			return //
-			lhsNegate == other.lhsNegate //
-					&& rhsNegate == other.rhsNegate //
-					&& vesselNegate == other.vesselNegate //
+			negate == other.negate //
 					&& Objects.equals(lhsType, other.lhsType) //
 					&& Objects.equals(rhsType, other.rhsType) //
 					&& Objects.equals(vesselType, other.vesselType) //
@@ -71,58 +68,55 @@ public class UserFilter {
 		return super.equals(obj);
 	}
 
-	public UserFilter(String label) {
+	public UserFilter(final String label) {
 		this.label = label;
 	}
 
-	public boolean include(ChangeSetTableGroup group) {
+	public boolean include(final ChangeSetTableGroup group) {
+		if (group == null) {
+			return false;
+		}
+
 		if (lhsType == FilterSlotType.ANY && rhsType == FilterSlotType.ANY && vesselType == FilterVesselType.ANY) {
 			// Negate does not apply here
 			return true;
 		}
 
-		List<ChangeSetTableRow> rows = new LinkedList<>(group.getRows());
-		Iterator<ChangeSetTableRow> itr = rows.iterator();
+		final List<ChangeSetTableRow> rows = new LinkedList<>(group.getRows());
+		final Iterator<ChangeSetTableRow> itr = rows.iterator();
 		while (itr.hasNext()) {
-			ChangeSetTableRow row = itr.next();
-			if (!doesLHSMatch(row)) {
-				itr.remove();
-				continue;
-			}
-			if (!doesRHSMatch(row)) {
-				itr.remove();
-				continue;
-			}
-			if (!doesVesselMatch(row)) {
-				itr.remove();
-				continue;
+			final ChangeSetTableRow row = itr.next();
+			final boolean match = doesLHSMatch(row) && doesRHSMatch(row) && doesVesselMatch(row);
+			if (match) {
+				return !negate;
 			}
 		}
-		return !rows.isEmpty();
+		return negate;
+
 	}
 
-	private boolean doesLHSMatch(ChangeSetTableRow row) {
+	private boolean doesLHSMatch(final ChangeSetTableRow row) {
 		if (lhsType == FilterSlotType.ANY) {
 			return true;
 		}
 		if (lhsType == FilterSlotType.BY_OPEN) {
-			return !lhsNegate == !row.isLhsSlot();
+			return !row.isLhsSlot();
 		}
 		if (lhsType == FilterSlotType.BY_ID) {
-			return !lhsNegate == (lhsKey.equalsIgnoreCase(row.getLhsName()));
+			return (lhsKey.equalsIgnoreCase(row.getLhsName()));
 		}
 		if (lhsType == FilterSlotType.BY_CONTRACT) {
-			return !lhsNegate == (row.isLhsSlot() && row.getLhsAfter().getLoadSlot() != null && row.getLhsAfter().getLoadSlot().getContract() != null
+			return (row.isLhsSlot() && row.getLhsAfter() != null && row.getLhsAfter().getLoadSlot() != null && row.getLhsAfter().getLoadSlot().getContract() != null
 					&& lhsKey.equalsIgnoreCase(row.getLhsAfter().getLoadSlot().getContract().getName()));
 		}
 		try {
-		if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
-			return !lhsNegate == (row.isLhsSpot() && row.getLhsAfter().getLoadSlot() != null && (lhsKey == null
-					|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
-		}
-		} catch (Exception e) {
 			if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
-				return !lhsNegate == (row.isLhsSpot() && (lhsKey == null
+				return (row.isLhsSpot() && row.getLhsAfter() != null && row.getLhsAfter().getLoadSlot() != null && (lhsKey == null
+						|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
+			}
+		} catch (final Exception e) {
+			if (lhsType == FilterSlotType.BY_SPOT_MARKET) {
+				return (row.isLhsSpot() && (lhsKey == null
 						|| ((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket() != null && lhsKey.equalsIgnoreCase(((SpotSlot) row.getLhsAfter().getLoadSlot()).getMarket().getName())));
 			}
 		}
@@ -130,34 +124,34 @@ public class UserFilter {
 		return true;
 	}
 
-	private boolean doesRHSMatch(ChangeSetTableRow row) {
+	private boolean doesRHSMatch(final ChangeSetTableRow row) {
 		if (rhsType == FilterSlotType.ANY) {
 			return true;
 		}
 		if (rhsType == FilterSlotType.BY_OPEN) {
-			return !rhsNegate == !row.isRhsSlot();
+			return !row.isRhsSlot();
 		}
 		if (rhsType == FilterSlotType.BY_ID) {
-			return !rhsNegate == (rhsKey.equalsIgnoreCase(row.getRhsName()));
+			return (rhsKey.equalsIgnoreCase(row.getRhsName()));
 		}
 		if (rhsType == FilterSlotType.BY_CONTRACT) {
-			return !rhsNegate == (row.isRhsSlot() && row.getRhsAfter().getDischargeSlot().getContract() != null
+			return (row.isRhsSlot() && row.getRhsAfter() != null && row.getRhsAfter().getDischargeSlot().getContract() != null
 					&& rhsKey.equalsIgnoreCase(row.getRhsAfter().getDischargeSlot().getContract().getName()));
 		}
 		if (rhsType == FilterSlotType.BY_SPOT_MARKET) {
-			return !rhsNegate == (row.isRhsSpot() && (rhsKey == null
+			return (row.isRhsSpot() && (rhsKey == null
 					|| ((SpotSlot) row.getRhsAfter().getDischargeSlot()).getMarket() != null && rhsKey.equalsIgnoreCase(((SpotSlot) row.getRhsAfter().getDischargeSlot()).getMarket().getName())));
 		}
 
 		return true;
 	}
 
-	private boolean doesVesselMatch(ChangeSetTableRow row) {
+	private boolean doesVesselMatch(final ChangeSetTableRow row) {
 		if (vesselType == FilterVesselType.ANY) {
 			return true;
 		}
 		if (vesselType == FilterVesselType.BY_NAME) {
-			return !vesselNegate == vesselKey.equalsIgnoreCase(row.getAfterVesselName());
+			return vesselKey.equalsIgnoreCase(row.getAfterVesselName());
 		}
 
 		return true;

@@ -132,10 +132,10 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 			List<Object> rows = new ArrayList<>(table.getRows().size());
 			rows.addAll(table.getRows());
-			
+
 			/* We don't need to diff the schedule summary for now */
-			//rows.addAll(table.getCompositeRows());
-			
+			// rows.addAll(table.getCompositeRows());
+
 			ViewerHelper.setInput(viewer, true, rows);
 		}
 
@@ -197,7 +197,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 						}
 					}
 				}
-				
+
 				if (element instanceof Row) {
 					final Row row = (Row) element;
 					// Filter out reference scenario if required
@@ -280,7 +280,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			for (final IScheduleBasedReportInitialStateExtension ext : initialStates) {
 
 				final String viewId = ext.getViewID();
-				
+
 				// Is this a matching view definition?
 				if (viewId != null && viewId.equals(getViewSite().getId())) {
 					// Get visible columns and order
@@ -371,7 +371,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			}
 		}
 	}
-	
+
 	public void processCompositeInputs(final List<CompositeRow> result) {
 		for (final CompositeRow row : result) {
 			if (row != null) {
@@ -385,7 +385,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			}
 		}
 	}
-	
+
 	@Override
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return builder.adaptSelectionFromWidget(selection);
@@ -449,4 +449,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		manager.addColumns(ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID, getBlockManager());
 	}
 
+	@Override
+	protected boolean refreshOnSelectionChange() {
+		return (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !scenarioComparisonService.getSelectedElements().isEmpty());
+	}
 }

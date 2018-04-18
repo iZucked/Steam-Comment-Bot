@@ -2,10 +2,18 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.standard;
+package com.mmxlabs.lingo.reports.views.headline;
+
+import java.awt.PageAttributes.ColorType;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.w3c.dom.CDATASection;
 
+import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView.ColumnDefinition;
+import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView.ColumnType;
+import com.mmxlabs.lingo.reports.views.headline.extensions.HeadlineValueExtenderExtensionUtil;
+import com.mmxlabs.lingo.reports.views.headline.extensions.IHeadlineValueExtender;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -29,14 +37,15 @@ class HeadlineReportTransformer {
 
 	public static class RowData {
 
-		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long upstreamDownstreamPNL, final Long mtmPnl, final Long idleTime,
-				final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex, Long purchaseCost,
-				Long salesRevenue) {
+		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long upside, final Long upstreamDownstreamPNL, final Long mtmPnl,
+				final Long idleTime, final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex,
+				Long purchaseCost, Long salesRevenue) {
 			super();
 			this.scheduleName = scheduleName;
 			this.totalPNL = totalPNL;
 			this.tradingPNL = tradingPNL;
 			this.shippingPNL = shippingPNL;
+			this.upside = upside;
 			this.upstreamDownstreamPNL = upstreamDownstreamPNL;
 			this.mtmPnl = mtmPnl;
 			this.idleTime = idleTime;
@@ -55,6 +64,7 @@ class HeadlineReportTransformer {
 			this.totalPNL = null;
 			this.tradingPNL = null;
 			this.shippingPNL = null;
+			this.upside = null;
 			this.upstreamDownstreamPNL = null;
 			this.mtmPnl = null;
 			this.idleTime = null;
@@ -71,6 +81,7 @@ class HeadlineReportTransformer {
 		public final Long totalPNL;
 		public final Long tradingPNL;
 		public final Long shippingPNL;
+		public final Long upside;
 		public final Long upstreamDownstreamPNL;
 		public final Long mtmPnl;
 		// public final Long shippingCost;
@@ -130,6 +141,7 @@ class HeadlineReportTransformer {
 		final long totalTradingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.TRADING_PNL_IDX];
 		final long totalShippingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.SHIPPING_PNL_IDX];
 		final long totalUpstreamPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.UPSTREAM_PNL_IDX];
+		final long totalUpside = 0L;
 
 		final int[] scheduleLateness = ScheduleModelKPIUtils.getScheduleLateness(schedule);
 		final long totalLatenessHoursExcludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
@@ -138,7 +150,69 @@ class HeadlineReportTransformer {
 		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
 
 		ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
-		return new RowData(modelRecord.getName(), totalTradingPNL + totalShippingPNL + totalUpstreamPNL, totalTradingPNL, totalShippingPNL, totalUpstreamPNL, totalMtMPNL, totalIdleHours,
-				totalGCOHours, totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex, totalPurchaseCost, totalSalesRevenue);
+		return augment(schedule, scenarioResult, totalSalesRevenue, totalPurchaseCost, totalMtMPNL, totalIdleHours, totalGCOHours, totalGCORevenue, totalTradingPNL, totalShippingPNL, totalUpstreamPNL,
+				totalUpside, totalLatenessHoursExcludingFlex, totalLatenessHoursIncludingFlex, totalCapacityViolationCount, modelRecord);
+	}
+
+	private RowData augment(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult, long totalSalesRevenue, long totalPurchaseCost, long totalMtMPNL, long totalIdleHours,
+			long totalGCOHours, long totalGCORevenue, long totalTradingPNL, long totalShippingPNL, long totalUpstreamPNL, long totalUpside, long totalLatenessHoursExcludingFlex,
+			long totalLatenessHoursIncludingFlex, long totalCapacityViolationCount, ScenarioModelRecord modelRecord) {
+
+		long totalPNL = totalTradingPNL + totalShippingPNL + totalUpstreamPNL;
+		Iterable<IHeadlineValueExtender> columnExtendeders = HeadlineValueExtenderExtensionUtil.getColumnExtendeders();
+		if (columnExtendeders != null) {
+			for (ColumnDefinition d : ColumnDefinition.values()) {
+				if (d.getColumnType() == ColumnType.Value) {
+					long extra = 0L;
+					for (IHeadlineValueExtender ext : columnExtendeders) {
+						extra += ext.getExtraValue(schedule, scenarioResult, d);
+					}
+					switch (d) {
+
+					case VALUE_EQUITY:
+						totalUpstreamPNL += extra;
+						break;
+					case VALUE_GCO_DAYS:
+						totalGCOHours += extra;
+						break;
+					case VALUE_GCO_REVENUE:
+						totalGCORevenue += extra;
+						break;
+					case VALUE_IDLE_DAYS:
+						totalIdleHours += extra;
+						break;
+					case VALUE_PNL:
+						totalPNL += extra;
+						break;
+					case VALUE_PURCHASE_COST:
+						totalPurchaseCost += extra;
+						break;
+					case VALUE_SALES_REVENUE:
+						totalSalesRevenue += extra;
+						break;
+					case VALUE_SHIPPING:
+						totalShippingPNL += extra;
+						break;
+					case VALUE_TRADING:
+						totalTradingPNL += extra;
+						break;
+					case VALUE_UPSIDE:
+						totalUpside += extra;
+						break;
+					case VALUE_VIOLATIONS:
+						totalCapacityViolationCount += extra;
+						break;
+					case VALUE_LATENESS:
+						// Ignore as multivalued
+						break;
+					default:
+						throw new IllegalStateException();
+					}
+				}
+			}
+		}
+
+		return new RowData(modelRecord.getName(), totalPNL, totalTradingPNL, totalShippingPNL, totalUpside, totalUpstreamPNL, totalMtMPNL, totalIdleHours, totalGCOHours, totalGCORevenue,
+				totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex, totalPurchaseCost, totalSalesRevenue);
 	}
 }
