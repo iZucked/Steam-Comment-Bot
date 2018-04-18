@@ -4,11 +4,8 @@
  */
 package com.mmxlabs.lngdataserver.browser.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStream;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -41,26 +38,29 @@ public class Activator extends Plugin {
 		super.stop(context);
 	}
 
-	public static Image createScaledImage(String imageType) {
+	public static Image createScaledImage(final String imageType) {
 
 		final Bundle bundle = FrameworkUtil.getBundle(Activator.class);
-		ImageDataProvider imageDataProvider;
-		try {
-			final String basePath = new File(FileLocator.toFileURL(bundle.getResource("/icons/")).toURI()).getAbsolutePath();
+		final ImageDataProvider imageDataProvider = zoom -> {
 
-			imageDataProvider = zoom -> {
-				switch (zoom) {
-				case 150:
-					return new ImageData(basePath + "/" + imageType + "_24.png");
-				case 200:
-					return new ImageData(basePath + "/" + imageType + "_32.png");
-				default:
-					return new ImageData(basePath + "/" + imageType + "_16.png");
-				}
-			};
-		} catch (URISyntaxException | IOException e) {
-			throw new RuntimeException(e);
-		}
+			final String resource;
+			switch (zoom) {
+			case 150:
+				resource = String.format("/icons/%s_24.png", imageType);
+				break;
+			case 200:
+				resource = String.format("/icons/%s_32.png", imageType);
+				break;
+			default:
+				resource = String.format("/icons/%s_16.png", imageType);
+				break;
+			}
+			try (InputStream is = bundle.getResource(resource).openStream()) {
+				return new ImageData(is);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		};
 		return new Image(PlatformUI.getWorkbench().getDisplay(), imageDataProvider);
 	}
 }
