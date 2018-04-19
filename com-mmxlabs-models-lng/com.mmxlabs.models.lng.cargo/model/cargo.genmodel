@@ -112,23 +112,24 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/nominatedVessel"/>
       <genFeatures createChild="false" propertyDescription="If selected, an open slot will be unable to form a cargo"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortDuration"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractMinQuantity"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractMaxQuantity"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractVolumeLimitsUnit"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDuration"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeLimitsUnit"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTime"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTime"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTimeWithFlex"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTimeWithFlex"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortWindowSize"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortWindowSizeUnits"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSize"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSizeUnits"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowSizeInHours"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatedEntity"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractCancellationExpression"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatedPricingEvent"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateEntity"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateRestrictedListsArePermissive"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCancellationExpression"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePricingEvent"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getPricingDateAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotContractParams"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractCounterparty"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCounterparty"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//LoadSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>
@@ -136,8 +137,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/DESPurchase"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//LoadSlot/transferFrom"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/salesDeliveryType"/>
-      <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegatedCV"/>
-      <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrContractDeliveryType"/>
+      <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateCV"/>
+      <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateDeliveryType"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//DischargeSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/FOBSale"/>
@@ -145,9 +146,9 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//DischargeSlot/transferTo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/minCvValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/maxCvValue"/>
-      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrContractMinCv"/>
-      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrContractMaxCv"/>
-      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrContractDeliveryType"/>
+      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateMinCv"/>
+      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateMaxCv"/>
+      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateDeliveryType"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//SpotSlot">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//SpotSlot/market"/>
@@ -219,8 +220,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterOutEvent/ballastBonus"/>
       <genFeatures createChild="false" propertyDescription="A fixed cost paid for repositioning this charter out"
           ecoreFeature="ecore:EAttribute cargo.ecore#//CharterOutEvent/repositioningFee"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CharterOutEvent/requiredHeel"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CharterOutEvent/availableHeel"/>
+      <genFeatures property="Readonly" children="true" createChild="true" propertyCategory=""
+          propertyDescription="This is the heel range required to be sold to the charter out counterparty. Any heel in excess will be free."
+          ecoreFeature="ecore:EReference cargo.ecore#//CharterOutEvent/requiredHeel"/>
+      <genFeatures property="Readonly" children="true" createChild="true" propertyCategory=""
+          propertyDescription="This is the heel range available at the end of the charter to buy back."
+          ecoreFeature="ecore:EReference cargo.ecore#//CharterOutEvent/availableHeel"/>
       <genOperations ecoreOperation="cargo.ecore#//CharterOutEvent/getEndPort"/>
     </genClasses>
     <genClasses image="false" ecoreClass="cargo.ecore#//AssignableElement">
@@ -257,7 +262,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/endDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/period"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/counterParty"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/reliability"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/volume"/>
+      <genOperations ecoreOperation="cargo.ecore#//InventoryEventRow/getReliableVolume"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//InventoryCapacityRow">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/date"/>

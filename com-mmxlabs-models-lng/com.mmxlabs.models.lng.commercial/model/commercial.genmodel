@@ -55,7 +55,8 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedContracts"/>
       <genFeatures notify="false" createChild="false" propertyDescription="If set, these ports cannot be paried to this contract."
           propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedPorts"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/priceInfo"/>
+      <genFeatures property="Readonly" children="true" createChild="true" propertyDescription="Specific contract type parameters"
+          ecoreFeature="ecore:EReference commercial.ecore#//Contract/priceInfo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/notes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/contractType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/pricingEvent"/>
@@ -110,7 +111,10 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalJourneyBallastBonusContractLine/returnPorts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/includeCanal"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="commercial.ecore#//CharterContract"/>
+    <genClasses image="false" ecoreClass="commercial.ecore#//CharterContract">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//CharterContract/minDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//CharterContract/maxDuration"/>
+    </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SimpleCharterContract"/>
     <genClasses image="false" ecoreClass="commercial.ecore#//BallastBonusCharterContract">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusCharterContract/ballastBonusContract"/>

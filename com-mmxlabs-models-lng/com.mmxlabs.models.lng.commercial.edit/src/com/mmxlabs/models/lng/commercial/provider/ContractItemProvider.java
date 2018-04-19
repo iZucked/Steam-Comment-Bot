@@ -65,6 +65,7 @@ public class ContractItemProvider
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
+			addPriceInfoPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addContractTypePropertyDescriptor(object);
 			addPricingEventPropertyDescriptor(object);
@@ -288,6 +289,28 @@ public class ContractItemProvider
 				 true,
 				 false,
 				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Price Info feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPriceInfoPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_priceInfo_feature"),
+				 getString("_UI_Contract_priceInfo_description"),
+				 CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 false,
+				 false,
+				 false,
 				 null,
 				 null,
 				 null));

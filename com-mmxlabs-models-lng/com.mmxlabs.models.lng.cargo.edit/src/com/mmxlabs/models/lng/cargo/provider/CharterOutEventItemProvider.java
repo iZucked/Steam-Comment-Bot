@@ -56,6 +56,8 @@ public class CharterOutEventItemProvider
 			addHireRatePropertyDescriptor(object);
 			addBallastBonusPropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
+			addRequiredHeelPropertyDescriptor(object);
+			addAvailableHeelPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -122,6 +124,50 @@ public class CharterOutEventItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Required Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRequiredHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutEvent_requiredHeel_feature"),
+				 getString("_UI_CharterOutEvent_requiredHeel_description"),
+				 CargoPackage.Literals.CHARTER_OUT_EVENT__REQUIRED_HEEL,
+				 false,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Available Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAvailableHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutEvent_availableHeel_feature"),
+				 getString("_UI_CharterOutEvent_availableHeel_description"),
+				 CargoPackage.Literals.CHARTER_OUT_EVENT__AVAILABLE_HEEL,
+				 false,
+				 false,
+				 false,
+				 null,
 				 null,
 				 null));
 	}
