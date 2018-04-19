@@ -62,11 +62,16 @@ public class UpstreamUrlProvider {
 	protected String password;
 
 	public String getBaseURL() {
-		final String url = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
-		if (url == null) {
+		String base_url = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
+		if (base_url == null) {
 			return "";
 		}
 
+		// Strip trailing forward slash if present
+		if (base_url.charAt(base_url.length() - 1) == '/') {
+			base_url = base_url.substring(0, base_url.length() - 1);
+		}
+		final String url = base_url;
 		if (!testUpstreamAvailability(url)) {
 			return "";
 		}
@@ -181,7 +186,7 @@ public class UpstreamUrlProvider {
 		if (pingRequest == null) {
 			return false;
 		}
-		
+
 		try (final Response pingResponse = localClient.newCall(pingRequest).execute()) {
 			if (!pingResponse.isSuccessful()) {
 				return false;
