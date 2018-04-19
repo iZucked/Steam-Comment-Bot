@@ -8,6 +8,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+
 public class Activator extends AbstractUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.server"; //$NON-NLS-1$
@@ -25,6 +27,9 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
+		// Trigger class load and property change hooks
+		UpstreamUrlProvider.INSTANCE.isAvailable();
+
 	}
 
 	@Override
@@ -41,5 +46,4 @@ public class Activator extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(final String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
-
 }

@@ -15,4 +15,10 @@
 -->
 <plugin>
    <extension-point id="ReportPublisher" name="ReportPublisher" schema="schema/ReportPublisher.exsd"/>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.PluginStartup">
+      </startup>
+   </extension>
 </plugin>

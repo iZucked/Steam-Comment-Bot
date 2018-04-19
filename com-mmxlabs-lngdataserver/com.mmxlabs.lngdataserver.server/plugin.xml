@@ -22,5 +22,11 @@
             class="com.mmxlabs.lngdataserver.server.preferences.DatahubPreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.lngdataserver.server.internal.PluginStartup">
+      </startup>
+   </extension>
 
 </plugin>

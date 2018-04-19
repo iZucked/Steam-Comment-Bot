@@ -33,15 +33,22 @@ public class UpstreamUrlProvider {
 	public static final UpstreamUrlProvider INSTANCE = new UpstreamUrlProvider();
 
 	private final IPreferenceStore preferenceStore;
-	private final Set<IUpstreamDetailChangedListener> listeners = new HashSet<>();
+	private final Set<IUpstreamDetailChangedListener> detailListeners = new HashSet<>();
+	private final Set<IUpstreamServiceChangedListener> workspaceListeners = new HashSet<>();
 
 	private boolean hasDetails = false;
 	private AtomicBoolean dialogOpen = new AtomicBoolean(false);
 
-	public UpstreamUrlProvider() {
+	private boolean baseCaseServiceEnabled = false;
+	private boolean teamServiceEnabled = false;
+
+	private UpstreamUrlProvider() {
 
 		preferenceStore = Activator.getDefault().getPreferenceStore();
 		preferenceStore.addPropertyChangeListener(listener);
+
+		baseCaseServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY));
+		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
 	}
 
 	private final IPropertyChangeListener listener = new IPropertyChangeListener() {
@@ -52,6 +59,15 @@ public class UpstreamUrlProvider {
 				// case StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY:
 				// case StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY:
 				fireChangedListeners();
+				break;
+			case StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY:
+				baseCaseServiceEnabled = Boolean.TRUE.equals(event.getNewValue());
+				fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.BaseCaseWorkspace);
+				break;
+			case StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY:
+				teamServiceEnabled = Boolean.TRUE.equals(event.getNewValue());
+				fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.TeamWorkspace);
+				break;
 			}
 		}
 
@@ -137,11 +153,19 @@ public class UpstreamUrlProvider {
 	}
 
 	public void registerDetailsChangedLister(final IUpstreamDetailChangedListener listener) {
-		listeners.add(listener);
+		detailListeners.add(listener);
 	}
 
 	public void deregisterDetailsChangedLister(final IUpstreamDetailChangedListener listener) {
-		listeners.remove(listener);
+		detailListeners.remove(listener);
+	}
+
+	public void registerServiceChangedLister(final IUpstreamServiceChangedListener listener) {
+		workspaceListeners.add(listener);
+	}
+
+	public void deregisterServiceChangedLister(final IUpstreamServiceChangedListener listener) {
+		workspaceListeners.remove(listener);
 	}
 
 	static public boolean checkCredentials(String url, String username, String password) {
@@ -222,12 +246,30 @@ public class UpstreamUrlProvider {
 	}
 
 	private void fireChangedListeners() {
-		for (final IUpstreamDetailChangedListener l : listeners) {
+		for (final IUpstreamDetailChangedListener l : detailListeners) {
 			try {
 				l.changed();
 			} catch (final Exception e) {
 
 			}
 		}
+	}
+
+	private void fireServiceChangedListeners(IUpstreamServiceChangedListener.Service serviceType) {
+		for (final IUpstreamServiceChangedListener l : workspaceListeners) {
+			try {
+				l.changed(serviceType);
+			} catch (final Exception e) {
+
+			}
+		}
+	}
+
+	public boolean isBaseCaseServiceEnabled() {
+		return baseCaseServiceEnabled;
+	}
+
+	public boolean isTeamServiceEnabled() {
+		return teamServiceEnabled;
 	}
 }
