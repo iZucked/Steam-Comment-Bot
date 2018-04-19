@@ -1042,7 +1042,7 @@ public class ChangeSetViewColumnHelper {
 								if (textualVesselMarkers) {
 									cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
 								} else {
-									cell.setText(String.format("(%s%.1f)", windowDate, Math.abs(deltaHours / 24.0)));
+									cell.setText(String.format("%s (%.1f)", windowDate, Math.abs(deltaHours / 24.0)));
 								}
 
 								if (deltaHours < 0) {
@@ -1095,7 +1095,7 @@ public class ChangeSetViewColumnHelper {
 								if (textualVesselMarkers) {
 									cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
 								} else {
-									cell.setText(String.format("(%s%.1f)", windowDate, Math.abs(deltaHours / 24.0)));
+									cell.setText(String.format("%s (%.1f)", windowDate, Math.abs(deltaHours / 24.0)));
 								}
 
 								if (deltaHours < 0) {
