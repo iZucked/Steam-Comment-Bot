@@ -130,7 +130,11 @@ public class BaseCaseServiceClient {
 		Response response = httpClient.newCall(request).execute();
 		if (!response.isSuccessful()) {
 			response.body().close();
-			throw new IOException("Unexpected code: " + response);
+			// 404 Not found is a valid response if there is no current basecase 
+			if (response.code() != 404) {
+				throw new IOException("Unexpected code: " + response);
+			}
+			return null;
 		}
 		String value = response.body().string();
 
