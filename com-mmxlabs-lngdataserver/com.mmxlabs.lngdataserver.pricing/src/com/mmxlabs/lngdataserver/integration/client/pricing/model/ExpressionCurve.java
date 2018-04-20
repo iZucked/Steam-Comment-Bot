@@ -7,7 +7,6 @@ package com.mmxlabs.lngdataserver.integration.client.pricing.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiModel;
 import org.mongodb.morphia.annotations.Entity;
 

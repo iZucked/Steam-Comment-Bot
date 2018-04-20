@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.json.JSONObject;
 
 import com.mmxlabs.common.Pair;

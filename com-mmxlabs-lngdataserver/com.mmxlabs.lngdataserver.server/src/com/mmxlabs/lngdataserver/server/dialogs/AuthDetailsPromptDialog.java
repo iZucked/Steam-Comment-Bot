@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.server.dialogs;
 
-import java.io.IOException;
-
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;

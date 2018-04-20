@@ -9,26 +9,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.pricing.IPricingProvider;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
 import com.mmxlabs.lngdataserver.lng.exporters.pricing.PricingFromScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.importers.pricing.PricingToScenarioCopier;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;

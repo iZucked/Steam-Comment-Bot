@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.exporters.port.ui;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -15,12 +14,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.ports.PortsClient;
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
-import com.mmxlabs.lngdataservice.client.ports.ApiException;
-import com.mmxlabs.lngdataservice.client.ports.api.PortApi;
-import com.mmxlabs.lngdataservice.client.ports.model.Port;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataservice.client.ports.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;

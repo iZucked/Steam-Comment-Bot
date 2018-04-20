@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.lng.exporters.vessels.ui;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -17,9 +16,6 @@ import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.lng.exporters.vessels.VesselsFromScenarioCopier;
-import com.mmxlabs.lngdataservice.client.vessel.ApiException;
-import com.mmxlabs.lngdataservice.client.vessel.api.VesselsApi;
-import com.mmxlabs.lngdataservice.client.vessel.model.Vessel;
 import com.mmxlabs.lngdataservice.client.vessel.model.Version;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.fleet.FleetModel;

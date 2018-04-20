@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 import org.apache.http.auth.AuthenticationException;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTime;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +27,6 @@ import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.lngdataservice.client.distances.ApiClient;
 import com.mmxlabs.lngdataservice.client.distances.ApiException;
 import com.mmxlabs.lngdataservice.client.distances.api.DistancesApi;
-import com.mmxlabs.lngdataservice.client.distances.auth.Authentication;
-import com.mmxlabs.lngdataservice.client.distances.auth.HttpBasicAuth;
 import com.mmxlabs.lngdataservice.client.distances.model.Version;
 
 /**

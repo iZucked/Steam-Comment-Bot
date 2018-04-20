@@ -20,9 +20,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.http.UrlFetcher;
 import com.mmxlabs.common.json.JSONConverter;
-import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortFactory;
 
 public class UpstreamRoutingPointFetcher {
 

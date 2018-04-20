@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 
 public class DistancesSelectionPage extends WizardPage {
 

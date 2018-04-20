@@ -13,7 +13,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImportWizard;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.client.pricing.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;

@@ -4,12 +4,8 @@
  */
 package com.mmxlabs.lngdataserver.browser.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Set;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -17,16 +13,9 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageDataProvider;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
-import com.mmxlabs.lngdataserver.browser.Leaf;
 import com.mmxlabs.lngdataserver.browser.Node;
-import com.mmxlabs.lngdataserver.browser.impl.LeafImpl;
 
 public class DataBrowserLabelProvider extends ColumnLabelProvider implements IColorProvider {
 

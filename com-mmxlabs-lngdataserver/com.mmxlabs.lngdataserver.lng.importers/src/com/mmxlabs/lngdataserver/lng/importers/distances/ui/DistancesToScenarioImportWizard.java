@@ -6,8 +6,6 @@ package com.mmxlabs.lngdataserver.lng.importers.distances.ui;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.activation.Activator;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -27,7 +25,6 @@ import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
 import com.mmxlabs.lngdataserver.integration.distances.ILocationProvider;
 import com.mmxlabs.lngdataserver.integration.distances.LocationRepository;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
-import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;

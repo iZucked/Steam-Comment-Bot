@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.client.pricing.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import java.util.List;
 
 public class BulkContainer {

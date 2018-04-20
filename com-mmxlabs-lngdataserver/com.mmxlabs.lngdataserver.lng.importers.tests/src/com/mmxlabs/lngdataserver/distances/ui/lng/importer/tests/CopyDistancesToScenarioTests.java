@@ -38,7 +38,6 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.port.impl.LocationImpl;
 import com.mmxlabs.models.lng.port.impl.PortImpl;
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 
