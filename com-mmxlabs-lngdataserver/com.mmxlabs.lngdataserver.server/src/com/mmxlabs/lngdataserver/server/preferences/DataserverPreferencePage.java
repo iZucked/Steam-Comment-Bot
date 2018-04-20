@@ -27,7 +27,7 @@ public class DataserverPreferencePage extends FieldEditorPreferencePage implemen
 		// addField(new StringFieldEditor(StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY, "&Username", getFieldEditorParent()));
 		// addField(new StringFieldEditor(StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY, "&Password", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY, "Enable &Base case workspace", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "Enable &Team workspace", getFieldEditorParent()));
+//		addField(new BooleanFieldEditor(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "Enable &Team workspace", getFieldEditorParent()));
 	}
 
 	@Override
