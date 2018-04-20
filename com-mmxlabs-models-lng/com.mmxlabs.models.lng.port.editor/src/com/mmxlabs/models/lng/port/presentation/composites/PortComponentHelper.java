@@ -223,10 +223,10 @@ public class PortComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the mmxId feature on Port
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_mmxIdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MMX_ID));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MMX_ID));
 	}
 
 	/**
