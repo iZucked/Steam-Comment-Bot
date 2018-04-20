@@ -179,7 +179,9 @@ public class ScenarioServicePublishAction {
 			} finally {
 				uploadMonitor.done();
 			}
-
+			if (response == null) {
+				throw new RuntimeException("Error publishing base case");
+			}
 			ObjectMapper mapper = new ObjectMapper();
 			String uuid = null;
 			try {

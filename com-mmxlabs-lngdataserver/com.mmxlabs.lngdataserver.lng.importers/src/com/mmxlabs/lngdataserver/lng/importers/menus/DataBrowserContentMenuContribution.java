@@ -103,7 +103,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				Manifest manifest = scenarioInstance.getManifest();
 
 				menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
-					//ScenarioServicePublishAction.publishScenario(scenarioInstance);
+					ScenarioServicePublishAction.publishScenario(scenarioInstance);
 				}));
 				itemsAdded = true;
 

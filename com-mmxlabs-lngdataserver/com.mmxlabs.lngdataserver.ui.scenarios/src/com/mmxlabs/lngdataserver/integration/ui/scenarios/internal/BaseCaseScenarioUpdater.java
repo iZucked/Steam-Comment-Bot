@@ -322,13 +322,20 @@ public class BaseCaseScenarioUpdater {
 
 		if (available) {
 			final String currentUUID = client.getCurrentBaseCase();
-			if (currentUUID != null && !currentUUID.isEmpty()) {
+			if (currentUUID != null ) {
+				if (currentUUID.isEmpty()) {
+					update(null);
+					lastUUID = currentUUID;
+				}
 				if (!currentUUID.equals(lastUUID)) {
 					final String scenariosData = client.getBaseCaseDetails(currentUUID);
 					final Pair<String, Instant> scenariosInfo = client.parseScenariosJSONData(scenariosData);
 					if (scenariosInfo != null) {
 						update(scenariosInfo);
 						Files.write(scenariosData, new File(basePath.getAbsolutePath() + "/basecase.json"), Charsets.UTF_8);
+						lastUUID = currentUUID;
+					} else {
+						update(null);
 						lastUUID = currentUUID;
 					}
 				}

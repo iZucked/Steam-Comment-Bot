@@ -40,13 +40,13 @@ public class BaseCaseServiceClient {
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				// .addFormDataPart("pricingVersion", pricingVersionUUID)
-				// .addFormDataPart("portsVersion", portsVersionUUID)
-				// .addFormDataPart("vesselsVersion", vesselsVersionUUID)
-				// .addFormDataPart("distancesVersion", distancesVersionUUID)
-				.addFormDataPart("basecase", "basecase.lingo", RequestBody.create(mediaType, file))//
+				.addFormDataPart("pricingVersionUUID", "") //
+				.addFormDataPart("portsVersionUUID", "") //
+				.addFormDataPart("vesselsVersionUUID", "") //
+				.addFormDataPart("distancesVersionUUID", "") //
+				.addFormDataPart("basecase", "basecase.lingo", RequestBody.create(mediaType, file)) //
 				.build();
-		
+
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
@@ -129,11 +129,11 @@ public class BaseCaseServiceClient {
 		Response response = httpClient.newCall(request).execute();
 		if (!response.isSuccessful()) {
 			response.body().close();
-			// 404 Not found is a valid response if there is no current basecase 
+			// 404 Not found is a valid response if there is no current basecase
 			if (response.code() != 404) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			return null;
+			return "";
 		}
 		String value = response.body().string();
 
