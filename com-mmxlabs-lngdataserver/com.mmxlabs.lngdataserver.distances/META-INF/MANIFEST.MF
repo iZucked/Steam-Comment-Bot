@@ -31,6 +31,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lngdataserver.integration.distances,
  com.mmxlabs.lngdataserver.integration.distances.exceptions
 Bundle-Activator: com.mmxlabs.lngdataserver.integration.distances.internal.Activator
-Bundle-ClassPath: .,
- lib/distances-client-1.0.0-SNAPSHOT.jar
+Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
