@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -99,15 +100,17 @@ public class DistanceRepository extends AbstractDataRepository {
 	@Override
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();
-		try {
-			return upstreamApi.getVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochSecond(v.getCreatedAt().toEpochSecond()), ZoneId.of("UTC"));
-				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished());
-			}).collect(Collectors.toList());
-		} catch (final ApiException e) {
-			LOG.error("Error fetching distances versions" + e.getMessage());
-			throw new RuntimeException("Error fetching distances versions", e);
-		}
+//		try {
+//			return upstreamApi.getVersionsUsingGET().stream().map(v -> {
+//				final LocalDateTime createdAt = LocalDateTime.ofInstant(Instant.ofEpochSecond(v.getCreatedAt().toEpochSecond()), ZoneId.of("UTC"));
+//				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished());
+//			}).collect(Collectors.toList());
+		// } catch (final ApiException e) {
+		// LOG.error("Error fetching distances versions" + e.getMessage());
+		// throw new RuntimeException("Error fetching distances versions", e);
+		// }
+		return null;
+
 	}
 	
 	@Override 
@@ -138,15 +141,17 @@ public class DistanceRepository extends AbstractDataRepository {
 
 	@Override
 	public List<DataVersion> updateAvailable() throws ApiException {
-		final List<Version> upstreamVersions = upstreamApi.getVersionsUsingGET();
-		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
-		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
-		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.isPublished())).collect(Collectors.toList());
+//		final List<Version> upstreamVersions = upstreamApi.getVersionsUsingGET();
+//		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
+//		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
+//		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.isPublished())).collect(Collectors.toList());
+		return Collections.emptyList();
 	}
 
 	public List<DataVersion> getUpstreamDistances() throws ApiException {
-		final List<Version> upstreamVersions = upstreamApi.getVersionsUsingGET();
-		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.isPublished())).collect(Collectors.toList());
+//		final List<Version> upstreamVersions = upstreamApi.getVersionsUsingGET();
+//		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.isPublished())).collect(Collectors.toList());
+		return Collections.emptyList();
 	}
 
 	public @Nullable IDistanceProvider getLatestDistances() {
@@ -185,12 +190,12 @@ public class DistanceRepository extends AbstractDataRepository {
 
 	@Override
 	protected boolean canWaitForNewLocalVersion() {
-		return true;
+		return false;
 	}
 
 	@Override
 	protected boolean canWaitForNewUpstreamVersion() {
-		return true;
+		return false;
 	}
 
 	@Override
