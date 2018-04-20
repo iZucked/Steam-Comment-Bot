@@ -79,7 +79,7 @@ public class UpstreamUrlProvider {
 
 	public String getBaseURL() {
 		String base_url = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
-		if (base_url == null) {
+		if (base_url == null || base_url.isEmpty()) {
 			return "";
 		}
 
