@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.name.Named;
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.longterm.CargoVesselRestrictionsMatrixProducer;
@@ -42,6 +45,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
 public class LightWeightSchedulerModule extends AbstractModule {
+	private static final String LIGHTWEIGHT_FITNESS_FUNCTION_NAMES = "LIGHTWEIGHT_FITNESS_FUNCTION_NAMES";
+	private static final String LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES = "LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES";
+
 	Map<Thread, LightweightSchedulerOptimiser> threadCache;
 	private CharterInMarket nominalCharterInMarket;
 	private LNGDataTransformer dataTransformer;
@@ -78,7 +84,8 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	}
 	
 	@Provides
-	private LightWeightOptimisationData provideLightWeightOptimisationData(LongTermOptimisationData optimiserRecorder, ILongTermSlotsProvider longTermSlotsProvider, ILongTermMatrixOptimiser matrixOptimiser,
+	@Singleton
+	private ILightWeightOptimisationData provideLightWeightOptimisationData(LongTermOptimisationData optimiserRecorder, ILongTermSlotsProvider longTermSlotsProvider, ILongTermMatrixOptimiser matrixOptimiser,
 			IVesselProvider vesselProvider, ICargoToCargoCostCalculator cargoToCargoCostCalculator, ICargoVesselRestrictionsMatrixProducer cargoVesselRestrictionsMatrixProducer) {
 		// (1) Identify LT slots
 		@NonNull
@@ -123,6 +130,64 @@ public class LightWeightSchedulerModule extends AbstractModule {
 				cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap);
 		
 		return lightWeightOptimisationData;
+	}
+	
+	@Provides
+	@Singleton
+	private List<ILightWeightConstraintChecker> getConstraintCheckers(Injector injector, LightWeightConstraintCheckerRegistry registry, @Named(LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES) List<String> names) {
+		List<ILightWeightConstraintChecker> constraintCheckers = new LinkedList<>();
+		Collection<ILightWeightConstraintCheckerFactory> constraintCheckerFactories = registry.getConstraintCheckerFactories();
+		for (String name : names) {
+			for (ILightWeightConstraintCheckerFactory lightWeightConstraintCheckerFactory : constraintCheckerFactories) {
+				if (lightWeightConstraintCheckerFactory.getName().equals(name)) {
+					ILightWeightConstraintChecker constraintChecker = lightWeightConstraintCheckerFactory.createConstraintChecker();
+					injector.injectMembers(constraintChecker);
+					constraintCheckers.add(constraintChecker);
+				}
+			}
+		}
+		return constraintCheckers;
+	}
+	
+	@Provides
+	@Singleton
+	private List<ILightWeightFitnessFunction> getFitnessFunctions(Injector injector, LightWeightFitnessFunctionRegistry registry, @Named(LIGHTWEIGHT_FITNESS_FUNCTION_NAMES) List<String> names) {
+		List<ILightWeightFitnessFunction> fitnessFunctions = new LinkedList<>();
+		Collection<ILightWeightFitnessFunctionFactory> fitnessFunctionFactories = registry.getFitnessFunctionFactories();
+		for (String name : names) {
+			for (ILightWeightFitnessFunctionFactory lightWeightFitnessFunctionFactory : fitnessFunctionFactories) {
+				if (lightWeightFitnessFunctionFactory.getName().equals(name)) {
+					ILightWeightFitnessFunction fitnessFunction = lightWeightFitnessFunctionFactory.createFitnessFunction();
+					injector.injectMembers(fitnessFunction);
+					fitnessFunctions.add(fitnessFunction);
+				}
+			}
+		}
+		return fitnessFunctions;
+	}
+	
+	@Provides
+	LightWeightConstraintCheckerRegistry getLightweightConstraintCheckerRegistry() {
+		LightWeightConstraintCheckerRegistry registry = new LightWeightConstraintCheckerRegistry();
+		registry.registerConstraintCheckerFactory(new LightWeightShippingRestrictionsConstraintCheckerFactory());
+		return registry;
+	}
+	
+	@Provides
+	LightWeightFitnessFunctionRegistry getLightweightFitnessFunctionRegistry() {
+		LightWeightFitnessFunctionRegistry registry = new LightWeightFitnessFunctionRegistry();
+		registry.registerFitnessFunctionFactory(new DefaultPNLLightWeightFitnessFunctionFactory());
+		return registry;
+	}
+
+	@Provides
+	@Named(LIGHTWEIGHT_FITNESS_FUNCTION_NAMES) List<String> getFitnessFunctionNames() {
+		return CollectionsUtil.makeLinkedList("DefaultPNLLightWeightFitnessFunction");
+	}
+	
+	@Provides
+	@Named(LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES) List<String> getConstraintCheckerNames() {
+		return CollectionsUtil.makeLinkedList("LightWeightShippingRestrictionsConstraintChecker");
 	}
 
 }

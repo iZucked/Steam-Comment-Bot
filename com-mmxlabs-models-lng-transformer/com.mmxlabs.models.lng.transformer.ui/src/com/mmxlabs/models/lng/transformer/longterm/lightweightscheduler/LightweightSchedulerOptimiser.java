@@ -104,7 +104,11 @@ public class LightweightSchedulerOptimiser {
 	@Inject
 	private ILightWeightOptimisationData lightWeightOptimisationData;
 
-//	private List<IPairwiseConstraintChecker> constraintCheckers = new LinkedList<>();
+	@Inject
+	private List<ILightWeightConstraintChecker> constraintCheckers;
+	
+	@Inject
+	private List<ILightWeightFitnessFunction> fitnessFunctions;
 
 	private static Set<VesselInstanceType> ALLOWED_VESSEL_TYPES = Sets.newHashSet(VesselInstanceType.FLEET, VesselInstanceType.SPOT_CHARTER, VesselInstanceType.TIME_CHARTER);
 
@@ -118,7 +122,9 @@ public class LightweightSchedulerOptimiser {
 	 */
 	public Pair<ISequences, Long> optimise(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
 		
-		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getCargoPNL(), lightWeightOptimisationData.getCargoToCargoCostsOnAvailability(), lightWeightOptimisationData.getCargoVesselRestrictions(), lightWeightOptimisationData.getCargoToCargoMinTravelTimes(), lightWeightOptimisationData.getCargoMinTravelTimes());
+		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(),
+				lightWeightOptimisationData.getCargoPNL(), lightWeightOptimisationData.getCargoToCargoCostsOnAvailability(), lightWeightOptimisationData.getCargoVesselRestrictions(),
+				lightWeightOptimisationData.getCargoToCargoMinTravelTimes(), lightWeightOptimisationData.getCargoMinTravelTimes(), constraintCheckers, fitnessFunctions);
 
 //		List<List<Integer>> sequences = null;
 //		try {
@@ -249,36 +255,6 @@ public class LightweightSchedulerOptimiser {
 			}
 		}
 		return readCase.sequences;
-	}
-
-	private List<ILightWeightConstraintChecker> getConstraintCheckers(Injector injector, LightWeightConstraintCheckerRegistry registry, List<String> names) {
-		List<ILightWeightConstraintChecker> constraintCheckers = new LinkedList<>();
-		Collection<ILightWeightConstraintCheckerFactory> constraintCheckerFactories = registry.getFitnessFunctionFactories();
-		for (String name : names) {
-			for (ILightWeightConstraintCheckerFactory lightWeightConstraintCheckerFactory : constraintCheckerFactories) {
-				if (lightWeightConstraintCheckerFactory.getName().equals(name)) {
-					ILightWeightConstraintChecker constraintChecker = lightWeightConstraintCheckerFactory.createConstraintChecker();
-					injector.injectMembers(constraintChecker);
-					constraintCheckers.add(constraintChecker);
-				}
-			}
-		}
-		return constraintCheckers;
-	}
-	
-	private List<ILightWeightFitnessFunction> getFitnessFunctions(Injector injector, LightWeightFitnessFunctionRegistry registry, List<String> names) {
-		List<ILightWeightFitnessFunction> fitnessFunctions = new LinkedList<>();
-		Collection<ILightWeightFitnessFunctionFactory> fitnessFunctionFactories = registry.getFitnessFunctionFactories();
-		for (String name : names) {
-			for (ILightWeightFitnessFunctionFactory lightWeightFitnessFunctionFactory : fitnessFunctionFactories) {
-				if (lightWeightFitnessFunctionFactory.getName().equals(name)) {
-					ILightWeightFitnessFunction fitnessFunction = lightWeightFitnessFunctionFactory.createFitnessFunction();
-					injector.injectMembers(fitnessFunction);
-					fitnessFunctions.add(fitnessFunction);
-				}
-			}
-		}
-		return fitnessFunctions;
 	}
 
 }

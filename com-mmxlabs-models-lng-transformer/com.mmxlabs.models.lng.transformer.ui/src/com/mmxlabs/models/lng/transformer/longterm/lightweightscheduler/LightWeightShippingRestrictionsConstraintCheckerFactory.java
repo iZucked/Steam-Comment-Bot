@@ -1,7 +1,7 @@
 package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
 public class LightWeightShippingRestrictionsConstraintCheckerFactory implements ILightWeightConstraintCheckerFactory {
-	final String NAME = "LightWeightShippingRestrictionsConstraintCheckerFactory";
+	final String NAME = "LightWeightShippingRestrictionsConstraintChecker";
 	
 	@Override
 	public String getName() {

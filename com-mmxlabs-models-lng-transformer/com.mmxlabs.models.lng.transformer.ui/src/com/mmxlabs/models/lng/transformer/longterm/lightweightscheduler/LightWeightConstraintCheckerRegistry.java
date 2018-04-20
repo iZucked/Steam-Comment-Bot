@@ -9,11 +9,11 @@ import org.eclipse.jdt.annotation.NonNull;
 public class LightWeightConstraintCheckerRegistry {
 	List<ILightWeightConstraintCheckerFactory> constraintCheckerFactories = new LinkedList<>();
 	
-	public void registerFitnessFunctionFactory(@NonNull ILightWeightConstraintCheckerFactory factory) {
+	public void registerConstraintCheckerFactory(@NonNull ILightWeightConstraintCheckerFactory factory) {
 		constraintCheckerFactories.add(factory);
 	}
 	
-	public Collection<ILightWeightConstraintCheckerFactory> getFitnessFunctionFactories() {
+	public Collection<ILightWeightConstraintCheckerFactory> getConstraintCheckerFactories() {
 		return constraintCheckerFactories;
 	}
 }
