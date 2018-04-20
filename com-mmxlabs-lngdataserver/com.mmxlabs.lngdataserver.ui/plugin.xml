@@ -24,14 +24,4 @@
             restorable="true">
       	</view>
     </extension>
-  
-   <extension
-       point="com.mmxlabs.models.ui.componenthelpers">
-    <componentHelper
-          helperClass="com.mmxlabs.lngdataserver.integration.ui.composites.MMXIDLookupInjector"
-          id="com.mmxlabs.lngdataserver.ui.distances.composites.MMXIDLookupInjector"
-          inheritable="false"
-          modelClass="com.mmxlabs.models.lng.port.Location">
-    </componentHelper>
- </extension>
 </plugin>
