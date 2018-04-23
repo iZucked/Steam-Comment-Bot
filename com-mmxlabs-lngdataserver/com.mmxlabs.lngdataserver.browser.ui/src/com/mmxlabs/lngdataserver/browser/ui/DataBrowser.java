@@ -377,7 +377,9 @@ public class DataBrowser extends ViewPart {
 					GridViewerHelper.configureLookAndFeel(c2);
 
 					// Hacky renaming...
-					String lbl = dataRoot.getDisplayName().replaceAll(" (loading...)", "");
+					String lbl_base = dataRoot.getDisplayName();
+					// Note this is a regex string!
+					String lbl = lbl_base.replaceAll(" \\(loading...\\)", "");
 					c2.getColumn().setText(lbl);
 				} catch (final Exception e) {
 					LOGGER.error(e.getMessage(), e);
