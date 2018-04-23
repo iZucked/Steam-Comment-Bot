@@ -27,6 +27,7 @@ import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.integration.ports.PortsClient;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ReportsServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
@@ -155,10 +156,63 @@ public class ScenarioServicePublishAction {
 			 * 
 			 * // Pricing data
 			 * 
-			 * String pricingVersionUUID = null; try { PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel); pricingVersionUUID = pricingModel.getUuid();
-			 * 
-			 * PricingClient p = new PricingClient(); p.getUpstreamVersion("", "", pricingVersionUUID); } catch (IOException e) { pricingVersionUUID = exportPricing(modelRecord, scenarioModel); }
-			 * 
+			 */
+
+			String pricingVersionUUID = null;
+			{
+				PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
+				pricingVersionUUID = pricingModel.getUuid();
+
+				boolean hasLocal = PricingRepository.INSTANCE.hasLocalVersion(pricingVersionUUID);
+				Boolean hasUpstream = PricingRepository.INSTANCE.hasUpstreamVersion(pricingVersionUUID);
+				if (hasUpstream == null) {
+					// no response from upstream - abort!
+				}
+
+				if (hasLocal && hasUpstream) {
+					// Great, versions all present
+				}
+				if (hasUpstream && !hasLocal) {
+					// Pull down from upstream
+					try {
+						if (!PricingRepository.INSTANCE.syncUpstreamVersion(pricingVersionUUID)) {
+							// Error, but not critical.
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					if (!hasLocal) {
+						// export to backend server
+						exportPricing(modelRecord, scenarioModel);
+					}
+					if (!hasUpstream) {
+						// Publish
+						try {
+							PricingRepository.INSTANCE.publishVersion(pricingVersionUUID);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+
+			// try {
+			//
+			//
+			// if (!PricingRepository.INSTANCE.hasVersion(pricingVersionUUID)) {
+			//
+			// }
+			//
+			// PricingClient p = new PricingClient();
+			// p.getUpstreamVersion("", "", pricingVersionUUID);
+			// } catch (IOException e) {
+			// pricingVersionUUID = exportPricing(modelRecord, scenarioModel);
+			// }
+
+			/*
 			 * // Vessels data
 			 * 
 			 * String fleetVersionUUID = null; try { FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel); fleetVersionUUID = fleetModel.getUuid(); VesselsApi p = new VesselsApi();
@@ -172,7 +226,7 @@ public class ScenarioServicePublishAction {
 			SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
 				// response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, portsVersionUUID, fleetVersionUUID, pricingVersionUUID, distancesVersionUUID);
-				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, wrapMonitor(uploadMonitor));
+				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, pricingVersionUUID, wrapMonitor(uploadMonitor));
 			} catch (IOException e) {
 				System.out.println("Error uploading the basecase scenario");
 				e.printStackTrace();

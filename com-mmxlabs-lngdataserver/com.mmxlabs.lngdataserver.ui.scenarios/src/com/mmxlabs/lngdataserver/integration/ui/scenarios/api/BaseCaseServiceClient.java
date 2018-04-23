@@ -35,12 +35,14 @@ public class BaseCaseServiceClient {
 	private static final String BASECASE_CURRENT_URL = "/scenarios/v1/basecase/current";
 
 	// public String uploadBaseCase(File file, String portsVersionUUID, String vesselsVersionUUID, String pricingVersionUUID, String distancesVersionUUID) throws IOException {
-	public String uploadBaseCase(File file, IProgressListener progressListener) throws IOException {
-
+	public String uploadBaseCase(File file, String pricingVersionUUID, IProgressListener progressListener) throws IOException {
+		if (pricingVersionUUID == null) {
+			throw new IllegalArgumentException("Pricing version cannot be null");
+		}
 		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				.addFormDataPart("pricingVersionUUID", "") //
+				.addFormDataPart("pricingVersionUUID", pricingVersionUUID) //
 				.addFormDataPart("portsVersionUUID", "") //
 				.addFormDataPart("vesselsVersionUUID", "") //
 				.addFormDataPart("distancesVersionUUID", "") //

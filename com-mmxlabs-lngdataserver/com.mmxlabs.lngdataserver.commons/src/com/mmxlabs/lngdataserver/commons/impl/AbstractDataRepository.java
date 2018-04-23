@@ -356,4 +356,40 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	protected abstract String getVersionNotificationEndpoint();
 
 	protected abstract String getSyncVersionEndpoint();
+
+	public boolean hasLocalVersion(String version) {
+		if (version == null || version.isEmpty()) {
+			return false;
+		}
+
+		List<DataVersion> versions = getVersions();
+
+		if (versions != null) {
+			for (DataVersion v : versions) {
+				if (version.equals(v.getIdentifier())) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public boolean hasUpstreamVersion(String version) {
+		if (version == null || version.isEmpty()) {
+			return false;
+		}
+
+		List<DataVersion> versions = getUpstreamVersions();
+
+		if (versions != null) {
+			for (DataVersion v : versions) {
+				if (version.equals(v.getIdentifier())) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 }
