@@ -15,6 +15,7 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.BallastBonusFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.BaseFuelCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.CanalCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.CharterCostFormatter;
+import com.mmxlabs.lingo.reports.views.fleet.formatters.CooldownCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.HeelCostFormatter;
@@ -100,6 +101,10 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.total_with_BOG":
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, 
 					new SimpleEmfBlockColumnFactory(columnID, "Total cost BOG ($)", null, ColumnType.NORMAL, new TotalWithBOGFormatter(false, true, CostFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.fleet.cooldowncosts":
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Cooldown ($)", "Total cooldown costs", ColumnType.NORMAL, new CooldownCostFormatter(false), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));
 			break;
 		case COLUMN_BLOCK_GCO_VESSEL: {
 
