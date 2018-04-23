@@ -274,11 +274,11 @@ public class DataBrowser extends ViewPart {
 									}));
 									itemsAdded = true;
 								}
-								if (/*!selectedNode.isPublished() && */ actionHandler.supportsPublish()) {
+								if (/* !selectedNode.isPublished() && */ actionHandler.supportsPublish()) {
 									data_mgr.add(new RunnableAction("Publish", () -> {
 
 										if (actionHandler.publish(selectedNode.getVersionIdentifier())) {
-//											selectedNode.setPublished(true);
+											// selectedNode.setPublished(true);
 										}
 									}));
 									itemsAdded = true;
@@ -297,20 +297,20 @@ public class DataBrowser extends ViewPart {
 									itemsAdded = true;
 								}
 
-								if (actionHandler.supportsSetCurrent()) {
-									data_mgr.add(new RunnableAction("Set as Current", () -> {
-										if (actionHandler.setCurrent(selectedNode.getVersionIdentifier())) {
-											parentNode.setCurrent(selectedNode);
-											selectedNode.getParent().setCurrent(selectedNode);
-										}
-									}));
-									itemsAdded = true;
-								} else {
-									data_mgr.add(new RunnableAction("Set as Current (Not suppported)", () -> {
-
-									}));
-									itemsAdded = true;
-								}
+								// if (actionHandler.supportsSetCurrent()) {
+								// data_mgr.add(new RunnableAction("Set as Current", () -> {
+								// if (actionHandler.setCurrent(selectedNode.getVersionIdentifier())) {
+								// parentNode.setCurrent(selectedNode);
+								// selectedNode.getParent().setCurrent(selectedNode);
+								// }
+								// }));
+								// itemsAdded = true;
+								// } else {
+								// data_mgr.add(new RunnableAction("Set as Current (Not suppported)", () -> {
+								//
+								// }));
+								// itemsAdded = true;
+								// }
 							}
 						}
 					}
