@@ -38,13 +38,14 @@ public class PricingClient {
 
 	public static List<PricingVersion> getVersions(String baseUrl) throws IOException {
 		Request pricingRequest = new Request.Builder().url(baseUrl + "/pricing/versions").build();
-		Response pricingResponse = CLIENT.newCall(pricingRequest).execute();
+		try (Response pricingResponse = CLIENT.newCall(pricingRequest).execute()) {
 
-		List<Version> pricingVersions = new ObjectMapper().readValue(pricingResponse.body().byteStream(), new TypeReference<List<Version>>() {
-		});
+			List<Version> pricingVersions = new ObjectMapper().readValue(pricingResponse.body().byteStream(), new TypeReference<List<Version>>() {
+			});
 
-		return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
-				.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished(), v.isCurrent())).collect(Collectors.toList());
+			return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
+					.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished(), v.isCurrent())).collect(Collectors.toList());
+		}
 	}
 
 	public static boolean publishVersion(String version, String baseUrl, String upstreamUrl) throws IOException {
@@ -57,57 +58,62 @@ public class PricingClient {
 
 		RequestBody body = RequestBody.create(JSON, json);
 		Request request = new Request.Builder().url(baseUrl + "/pricing/sync/publish").post(body).build();
-		Response response = CLIENT.newCall(request).execute();
+		try (Response response = CLIENT.newCall(request).execute()) {
 
-		if (!response.isSuccessful()) {
-			LOGGER.error("Error publishing version: " + response.message());
-			return false;
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error publishing version: " + response.message());
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 
 	public static List<PricingVersion> getVersions(String baseUrl, String username, String password) throws IOException {
 		Request pricingRequest = new Request.Builder().url(baseUrl + "/pricing/versions") //
 				.addHeader("Authorization", Credentials.basic(username, password)) //
 				.build();
-		Response pricingResponse = CLIENT.newCall(pricingRequest).execute();
+		try (Response pricingResponse = CLIENT.newCall(pricingRequest).execute()) {
 
-		List<Version> pricingVersions = new ObjectMapper().readValue(pricingResponse.body().byteStream(), new TypeReference<List<Version>>() {
-		});
+			List<Version> pricingVersions = new ObjectMapper().readValue(pricingResponse.body().byteStream(), new TypeReference<List<Version>>() {
+			});
 
-		return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
-				.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished(), v.isCurrent())).collect(Collectors.toList());
+			return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
+					.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished(), v.isCurrent())).collect(Collectors.toList());
+		}
 	}
-	
-	public static boolean getUpstreamVersion(String baseUrl, String upstreamUrl, String version) throws IOException {
 
+	public static boolean getUpstreamVersion(String baseUrl, String upstreamUrl, String version) throws IOException {
+		final String json;
 		// Pull down the version data
 		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
-		final Response pullResponse = CLIENT.newCall(pullRequest).execute();
-		if (!pullResponse.isSuccessful()) {
-			return false;
+		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
+			if (!pullResponse.isSuccessful()) {
+				return false;
+			}
+			json = pullResponse.body().string();
 		}
-		final String json = pullResponse.body().string();
-
 		// Post the data to local repo
 		final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
 		final Request postRequest = new Request.Builder().url(baseUrl + SYNC_VERSION_ENDPOINT).post(body).build();
-		final Response postResponse = CLIENT.newCall(postRequest).execute();
-		return postResponse.isSuccessful();
+		try (final Response postResponse = CLIENT.newCall(postRequest).execute()) {
+			return postResponse.isSuccessful();
+		}
 	}
-	
+
 	public static PricingVersion pullUpstreamVersion(String upstreamUrl, String version) throws IOException {
 
 		// Pull down the version data
 		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
-		final Response pullResponse = CLIENT.newCall(pullRequest).execute();
-		if (!pullResponse.isSuccessful()) {
-			return null;
+		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
+			if (!pullResponse.isSuccessful()) {
+				return null;
+			}
+
+			Version v = new ObjectMapper().readValue(pullResponse.body().byteStream(), new TypeReference<Version>() {
+			});
+
+			return new PricingVersion(v.getIdentifier(), v.getCreatedAt(), true, v.isCurrent());
 		}
-
-		Version v = new ObjectMapper().readValue(pullResponse.body().byteStream(), new TypeReference<Version>() {});
-
-		return new PricingVersion(v.getIdentifier(), v.getCreatedAt(), true, v.isCurrent());
 	}
 
 	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
@@ -116,25 +122,27 @@ public class PricingClient {
 
 		RequestBody body = RequestBody.create(JSON, json);
 		Request request = new Request.Builder().url(baseUrl + SYNC_VERSION_ENDPOINT).post(body).build();
-		Response response = CLIENT.newCall(request).execute();
+		try (Response response = CLIENT.newCall(request).execute()) {
 
-		if (!response.isSuccessful()) {
-			LOGGER.error("Error publishing version: " + response.message());
-			return false;
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error publishing version: " + response.message());
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 
 	public static boolean deleteVersion(String baseUrl, String version) throws IOException {
 
 		Request request = new Request.Builder().url(baseUrl + "/pricing/version/" + version).delete().build();
-		Response response = CLIENT.newCall(request).execute();
+		try (Response response = CLIENT.newCall(request).execute()) {
 
-		if (!response.isSuccessful()) {
-			LOGGER.error("Error deleting version: " + response.message());
-			return false;
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error deleting version: " + response.message());
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 
 	public static boolean renameVersion(String baseUrl, String oldVersion, String newVersion) throws IOException {
@@ -146,26 +154,28 @@ public class PricingClient {
 
 		RequestBody body = RequestBody.create(JSON, json);
 		Request request = new Request.Builder().url(baseUrl + "/pricing/version/rename/").patch(body).build();
-		Response response = CLIENT.newCall(request).execute();
+		try (Response response = CLIENT.newCall(request).execute()) {
 
-		if (!response.isSuccessful()) {
-			LOGGER.error("Error renaming version: " + response.message());
-			return false;
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error renaming version: " + response.message());
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 
 	public static boolean setCurrentVersion(String baseUrl, String version) throws IOException {
 
 		RequestBody body = RequestBody.create(JSON, "{}");
 		Request request = new Request.Builder().url(baseUrl + "/pricing/version/current/" + version).patch(body).build();
-		Response response = CLIENT.newCall(request).execute();
+		try (Response response = CLIENT.newCall(request).execute()) {
 
-		if (!response.isSuccessful()) {
-			LOGGER.error("Error setting current version: " + response.message());
-			return false;
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error setting current version: " + response.message());
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 
 	public static CompletableFuture<String> notifyOnNewVersion(String baseUrl, String username, String password) {
@@ -178,7 +188,7 @@ public class PricingClient {
 				builder = builder.addHeader("Authorization", Credentials.basic(username, password));
 			}
 			Request request = builder.build();
-			Response response;
+			Response response = null;
 			try {
 				response = longPollingClient.newCall(request).execute();
 				Version newVersion = new ObjectMapper().readValue(response.body().byteStream(), Version.class);
@@ -186,6 +196,10 @@ public class PricingClient {
 			} catch (IOException e) {
 				LOGGER.error("Error waiting for new version");
 				throw new RuntimeException("Error waiting for new version");
+			} finally {
+				if (response != null) {
+					response.close();
+				}
 			}
 		});
 		return completableFuture;
@@ -211,16 +225,18 @@ public class PricingClient {
 		String url = baseUrl + group + "?v=" + version;
 		LOGGER.debug("Calling url {}", url);
 		Request request = new Request.Builder().url(url).build();
-		Response response = CLIENT.newCall(request).execute();
-		return new ObjectMapper().readValue(response.body().byteStream(), new TypeReference<List<Curve>>() {
-		});
+		try (Response response = CLIENT.newCall(request).execute()) {
+			return new ObjectMapper().readValue(response.body().byteStream(), new TypeReference<List<Curve>>() {
+			});
+		}
 	}
 
 	public static <T> T getCurve(String baseUrl, String version, String curve, Class<T> type) throws IOException {
 		Request request = new Request.Builder().url(baseUrl + "/curves/" + curve + "?v=" + version).build();
-		Response response = CLIENT.newCall(request).execute();
-		T result = new ObjectMapper().readValue(response.body().byteStream(), type);
-		return result;
+		try (Response response = CLIENT.newCall(request).execute()) {
+			T result = new ObjectMapper().readValue(response.body().byteStream(), type);
+			return result;
+		}
 	}
 
 }

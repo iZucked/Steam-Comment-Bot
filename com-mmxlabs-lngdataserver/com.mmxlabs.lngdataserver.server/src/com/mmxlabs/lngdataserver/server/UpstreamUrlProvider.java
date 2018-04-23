@@ -42,6 +42,8 @@ public class UpstreamUrlProvider {
 	private boolean baseCaseServiceEnabled = false;
 	private boolean teamServiceEnabled = false;
 
+	private static final OkHttpClient CLIENT = new okhttp3.OkHttpClient();
+
 	private UpstreamUrlProvider() {
 
 		preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -178,14 +180,13 @@ public class UpstreamUrlProvider {
 			return false;
 		}
 
-		final OkHttpClient httpClient = new okhttp3.OkHttpClient();
+		// final OkHttpClient httpClient = new okhttp3.OkHttpClient();
 
 		Request loginRequest = new Request.Builder().url(url + "/api/login") //
 				.addHeader("Authorization", Credentials.basic(username, password)) //
 				.build();
 
-		try {
-			Response loginResponse = httpClient.newCall(loginRequest).execute();
+		try (Response loginResponse = CLIENT.newCall(loginRequest).execute()) {
 			if (!loginResponse.isSuccessful()) {
 				System.out.println("Bad credentials");
 				return false;
@@ -198,7 +199,6 @@ public class UpstreamUrlProvider {
 	}
 
 	static public boolean testUpstreamAvailability(String url) {
-		final OkHttpClient localClient = new okhttp3.OkHttpClient();
 		Request pingRequest = null;
 		try {
 			pingRequest = new Request.Builder().url(url + "/ping").get().build();
@@ -211,7 +211,7 @@ public class UpstreamUrlProvider {
 			return false;
 		}
 
-		try (final Response pingResponse = localClient.newCall(pingRequest).execute()) {
+		try (final Response pingResponse = CLIENT.newCall(pingRequest).execute()) {
 			if (!pingResponse.isSuccessful()) {
 				return false;
 			}

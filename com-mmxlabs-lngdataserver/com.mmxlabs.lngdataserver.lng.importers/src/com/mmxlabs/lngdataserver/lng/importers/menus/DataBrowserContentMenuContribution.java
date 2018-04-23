@@ -35,6 +35,7 @@ import com.mmxlabs.lngdataserver.lng.importers.port.ui.PortsToScenarioImportWiza
 import com.mmxlabs.lngdataserver.lng.importers.pricing.ui.PricingToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.lng.importers.vessels.ui.VesselsToScenarioImportWizard;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
+import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -101,12 +102,12 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 			if (firstElement instanceof ScenarioInstance) {
 				ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
 				Manifest manifest = scenarioInstance.getManifest();
-
-				menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
-					ScenarioServicePublishAction.publishScenario(scenarioInstance);
-				}));
-				itemsAdded = true;
-
+				if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
+					menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
+						ScenarioServicePublishAction.publishScenario(scenarioInstance);
+					}));
+					itemsAdded = true;
+				}
 				if (manifest != null) {
 					for (ModelArtifact modelArtifact : manifest.getModelDependencies()) {
 						// if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), modelArtifact.getKey())) {
@@ -122,13 +123,13 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 							}));
 							itemsAdded = true;
 						}
-//						if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
-//							menuManager.add(new RunnableAction("Export ports data", () -> {
-//								exportPorts(scenarioInstance);
-//							}));
-//							itemsAdded = true;
-//						}
-						
+						// if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
+						// menuManager.add(new RunnableAction("Export ports data", () -> {
+						// exportPorts(scenarioInstance);
+						// }));
+						// itemsAdded = true;
+						// }
+
 						// if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), modelArtifact.getKey())) {
 						// menuManager.add(new RunnableAction("Export pricing data", () -> {
 						// exportVessels(scenarioInstance);

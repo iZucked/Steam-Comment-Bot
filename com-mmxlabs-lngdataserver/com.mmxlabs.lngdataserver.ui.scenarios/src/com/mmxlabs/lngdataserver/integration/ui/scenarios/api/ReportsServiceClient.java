@@ -40,7 +40,7 @@ public class ReportsServiceClient {
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("report", type + ".json", RequestBody.create(mediaType, data))//
 				.build();
-		//String upstreamURL = "http://"
+		// String upstreamURL = "http://"
 		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
 		Request request = new Request.Builder() //
@@ -74,26 +74,27 @@ public class ReportsServiceClient {
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
-		Response response = httpClient.newCall(request).execute();
-		if (!response.isSuccessful()) {
-			response.body().close();
-			throw new IOException("Unexpected code: " + response);
-		}
-		try (BufferedSource bufferedSource = response.body().source()) {
-			BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-			bufferedSink.writeAll(bufferedSource);
-			bufferedSink.close();
-		}
-		// TODO: Is it a valid .lingo file?
-		String date = response.headers().get("MMX-CreationDate");
-		if (date != null) {
-			Instant creationDate = Instant.ofEpochSecond(Long.parseLong(date));
-			callback.accept(file, creationDate);
-			return true;
-		}
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				response.body().close();
+				throw new IOException("Unexpected code: " + response);
+			}
+			try (BufferedSource bufferedSource = response.body().source()) {
+				BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
+				bufferedSink.writeAll(bufferedSource);
+				bufferedSink.close();
+			}
+			// TODO: Is it a valid .lingo file?
+			String date = response.headers().get("MMX-CreationDate");
+			if (date != null) {
+				Instant creationDate = Instant.ofEpochSecond(Long.parseLong(date));
+				callback.accept(file, creationDate);
+				return true;
+			}
 
-		// , Long.toString(baseCaseRecord.getCreationDate().getEpochSecond())");
-		return false;
+			// , Long.toString(baseCaseRecord.getCreationDate().getEpochSecond())");
+			return false;
+		}
 	}
 
 	private ScheduledThreadPoolExecutor pollTaskExecutor;
@@ -113,7 +114,7 @@ public class ReportsServiceClient {
 					if (!target.exists()) {
 						try {
 							downloadTo(uuid, target, callback);
-//							callback.accept(target, date);
+							// callback.accept(target, date);
 							firstRun[0] = false;
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -134,13 +135,13 @@ public class ReportsServiceClient {
 
 					} else {
 						if (firstRun[0]) {
-//							callback.accept(target);
+							// callback.accept(target);
 						}
 						firstRun[0] = false;
 					}
 				}
 			} catch (Exception e) {
-				int ii =0 ;
+				int ii = 0;
 			}
 
 		}, 0, 5, TimeUnit.MINUTES);

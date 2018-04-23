@@ -69,7 +69,7 @@ public class PricingRepository extends AbstractDataRepository {
 	public DataVersion getUpstreamVersion(String identifier) {
 		ensureReady();
 		try {
-				PricingVersion v =PricingClient.pullUpstreamVersion(upstreamUrl, identifier);
+				PricingVersion v =PricingClient.pullUpstreamVersion(getUpstreamUrl(), identifier);
 				final LocalDateTime createdAt = LocalDateTime.now();
 				// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
 				return new DataVersion(v.getIdentifier(), createdAt, true);
@@ -82,7 +82,7 @@ public class PricingRepository extends AbstractDataRepository {
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();
 		try {
-			return PricingClient.getVersions(upstreamUrl, UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()).stream().map(v -> {
+			return PricingClient.getVersions(getUpstreamUrl(), UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()).stream().map(v -> {
 				final LocalDateTime createdAt = v.getCreatedAt();
 				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished(), v.isCurrent());
 			}).collect(Collectors.toList());

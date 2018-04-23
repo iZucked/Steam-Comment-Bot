@@ -41,16 +41,16 @@ public class DataImporter {
 					{
 						final String versionURL = BackEndUrlProvider.INSTANCE.getUrl() + "/distances/versions";
 						final Request request = new Request.Builder().url(versionURL).get().build();
-						final Response response = CLIENT.newCall(request).execute();
-						final String jsonData = response.body().string();
-						final JSONArray Jobject = new JSONArray(jsonData);
-						for (int i = 0; i < Jobject.length(); ++i) {
-							final JSONObject versionObject = Jobject.getJSONObject(i);
-							final String versionString = versionObject.getString("identifier");
-							knownVersions.add(versionString);
+						try (final Response response = CLIENT.newCall(request).execute()) {
+							final String jsonData = response.body().string();
+							final JSONArray Jobject = new JSONArray(jsonData);
+							for (int i = 0; i < Jobject.length(); ++i) {
+								final JSONObject versionObject = Jobject.getJSONObject(i);
+								final String versionString = versionObject.getString("identifier");
+								knownVersions.add(versionString);
+							}
 						}
 					}
-
 					final String url = BackEndUrlProvider.INSTANCE.getUrl() + endpoint;
 
 					for (final File child : f.listFiles()) {
@@ -64,8 +64,9 @@ public class DataImporter {
 								final String json = Files.toString(child, Charsets.UTF_8);
 								final RequestBody body = RequestBody.create(JSON, json);
 								final Request request = new Request.Builder().url(url).post(body).build();
-								final Response response = CLIENT.newCall(request).execute();
-								 // System.out.println(response.message());
+								try (final Response response = CLIENT.newCall(request).execute()) {
+									// System.out.println(response.message());
+								}
 							} catch (final Exception e) {
 								e.printStackTrace();
 							}

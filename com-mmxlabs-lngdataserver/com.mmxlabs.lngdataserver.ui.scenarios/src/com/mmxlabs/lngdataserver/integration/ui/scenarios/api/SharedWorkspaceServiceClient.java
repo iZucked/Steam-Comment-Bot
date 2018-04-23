@@ -97,16 +97,17 @@ public class SharedWorkspaceServiceClient {
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
-		Response response = httpClient.newCall(request).execute();
-		if (!response.isSuccessful()) {
-			response.body().close();
-			throw new IOException("Unexpected code: " + response);
-		}
-		try (BufferedSource bufferedSource = response.body().source()) {
-			BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-			bufferedSink.writeAll(bufferedSource);
-			bufferedSink.close();
-			return true;
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				response.body().close();
+				throw new IOException("Unexpected code: " + response);
+			}
+			try (BufferedSource bufferedSource = response.body().source()) {
+				BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
+				bufferedSink.writeAll(bufferedSource);
+				bufferedSink.close();
+				return true;
+			}
 		}
 	}
 
@@ -123,14 +124,15 @@ public class SharedWorkspaceServiceClient {
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
-		Response response = httpClient.newCall(request).execute();
-		if (!response.isSuccessful()) {
-			response.body().close();
-			throw new IOException("Unexpected code: " + response);
-		}
-		String value = response.body().string();
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				response.body().close();
+				throw new IOException("Unexpected code: " + response);
+			}
+			String value = response.body().string();
 
-		return value;
+			return value;
+		}
 	}
 
 	public static Pair<String, Instant> getScenarios() throws IOException {

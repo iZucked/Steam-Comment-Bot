@@ -29,12 +29,13 @@ public class PortsClient {
 
 		RequestBody body = RequestBody.create(JSON, json);
 		Request request = new Request.Builder().url(baseUrl + "/ports/bulk").post(body).build();
-		Response response = CLIENT.newCall(request).execute();
+		try (Response response = CLIENT.newCall(request).execute()) {
 
-		if (!response.isSuccessful()) {
-			LOGGER.error("Error publishing version: " + response.message());
-			return false;
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error publishing version: " + response.message());
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 }

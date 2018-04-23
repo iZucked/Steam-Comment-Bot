@@ -25,16 +25,17 @@ public class DistanceUploaderClient {
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
-		String json = new ObjectMapper().writeValueAsString(version );
+		String json = new ObjectMapper().writeValueAsString(version);
 
 		RequestBody body = RequestBody.create(JSON, json);
 		Request request = new Request.Builder().url(baseUrl + "/distances/sync/versions").post(body).build();
-		Response response = CLIENT.newCall(request).execute();
+		try (Response response = CLIENT.newCall(request).execute()) {
 
-		if (!response.isSuccessful()) {
-			LOGGER.error("Error publishing version: " + response.message());
-			return false;
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error publishing version: " + response.message());
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 }

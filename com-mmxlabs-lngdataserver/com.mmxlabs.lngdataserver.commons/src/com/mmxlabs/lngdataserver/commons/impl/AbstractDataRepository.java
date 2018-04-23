@@ -44,7 +44,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 
 	// protected final Triple<String, String, String> auth;
 	protected String backendUrl;
-	protected String upstreamUrl;
+	// protected String upstreamUrl;
 	protected boolean listenForNewLocalVersions;
 	protected boolean listenForNewUpstreamVersions;
 	protected final List<Consumer<String>> newLocalVersionCallbacks = new LinkedList<>();
@@ -53,16 +53,22 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	protected Thread localVersionThread;
 	protected Thread upstreamVersionThread;
 
+	protected final OkHttpClient CLIENT = new okhttp3.OkHttpClient();
+
+	protected final OkHttpClient LONG_POLLING_CLIENT = new OkHttpClient().newBuilder() //
+			.readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS) //
+			.build();
+
 	public AbstractDataRepository() {
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> doHandleUpstreamURLChange());
-		upstreamUrl = getUpstreamUrl();
+		// upstreamUrl = getUpstreamUrl();
 	}
 
 	protected String getUpstreamUrl() {
 		if (!UpstreamUrlProvider.INSTANCE.isAvailable()) {
 			return null;
 		}
-		
+
 		return UpstreamUrlProvider.INSTANCE.getBaseURL();
 	}
 
@@ -109,6 +115,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		if (!canWaitForNewUpstreamVersion()) {
 			return;
 		}
+		String upstreamUrl = getUpstreamUrl();
 		if (upstreamUrl == null || upstreamUrl.trim().isEmpty()) {
 			// No URL, do not try and connect
 			return;
@@ -175,25 +182,25 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		newUpstreamVersionCallbacks.add(versionConsumer);
 	}
 
-	protected OkHttpClient buildClientWithBasicAuth() {
-		Triple<String, String, String> auth = new Triple(UpstreamUrlProvider.INSTANCE.getBaseURL(), UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
-		if (auth != null) {
-			OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-			clientBuilder.authenticator(new Authenticator() {
-				@Override
-				public Request authenticate(Route route, Response response) throws IOException {
-					if (responseCount(response) >= 3) {
-						return null;
-					}
-					String credential = Credentials.basic(auth.getSecond(), auth.getThird());
-					return response.request().newBuilder().header("Authorization", credential).build();
-				}
-			});
-			return clientBuilder.build();
-		}
-
-		return new OkHttpClient();
-	}
+	// protected OkHttpClient buildClientWithBasicAuth() {
+	// Triple<String, String, String> auth = new Triple(UpstreamUrlProvider.INSTANCE.getBaseURL(), UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+	// if (auth != null) {
+	// OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+	// clientBuilder.authenticator(new Authenticator() {
+	// @Override
+	// public Request authenticate(Route route, Response response) throws IOException {
+	// if (responseCount(response) >= 3) {
+	// return null;
+	// }
+	// String credential = Credentials.basic(auth.getSecond(), auth.getThird());
+	// return response.request().newBuilder().header("Authorization", credential).build();
+	// }
+	// });
+	// return clientBuilder.build();
+	// }
+	//
+	// return new OkHttpClient();
+	// }
 
 	private int responseCount(Response response) {
 		int result = 1;
@@ -244,17 +251,17 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	protected abstract void doHandleUpstreamURLChange();
 
 	public boolean hasUpstream() {
+		String upstreamUrl = getUpstreamUrl();
 		return upstreamUrl != null && !upstreamUrl.isEmpty();
 	}
 
 	@Override
 	public boolean publishVersion(final String version) throws Exception {
 
-		final OkHttpClient localClient = new okhttp3.OkHttpClient();
 		// load in the version data
 		final Request pullRequest = new Request.Builder().url(backendUrl + getSyncVersionEndpoint() + version).get().build();
 		final String json;
-		try (final Response pullResponse = localClient.newCall(pullRequest).execute()) {
+		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
 			if (!pullResponse.isSuccessful()) {
 				return false;
 			}
@@ -262,11 +269,10 @@ public abstract class AbstractDataRepository implements IDataRepository {
 		}
 
 		// Post the data to upstream repo
-		final OkHttpClient upstreamClient = new okhttp3.OkHttpClient();
 		final RequestBody body = RequestBody.create(JSON, json);
-		final Request postRequest = createUpstreamRequestBuilder(upstreamUrl + getSyncVersionEndpoint()) //
+		final Request postRequest = createUpstreamRequestBuilder(getUpstreamUrl() + getSyncVersionEndpoint()) //
 				.post(body).build();
-		try (Response postResponse = upstreamClient.newCall(postRequest).execute()) {
+		try (Response postResponse = CLIENT.newCall(postRequest).execute()) {
 			return postResponse.isSuccessful();
 		}
 	}
@@ -281,29 +287,23 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	@Override
 	public boolean syncUpstreamVersion(final String version) throws Exception {
 
-		final OkHttpClient localClient = new okhttp3.OkHttpClient();
-		final OkHttpClient upstreamClient = new okhttp3.OkHttpClient();
-
 		// Pull down the version data
-		final Request pullRequest = createUpstreamRequestBuilder(upstreamUrl + getSyncVersionEndpoint() + version) //
+		final Request pullRequest = createUpstreamRequestBuilder(getUpstreamUrl() + getSyncVersionEndpoint() + version) //
 				.get().build();
+		final String json;
 
-		final Response pullResponse = upstreamClient.newCall(pullRequest).execute();
-		if (!pullResponse.isSuccessful()) {
-			pullResponse.body().close();
-			return false;
+		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
+			if (!pullResponse.isSuccessful()) {
+				return false;
+			}
+			json = pullResponse.body().string();
 		}
-		final String json = pullResponse.body().string();
-
 		// Post the data to local repo
 		final RequestBody body = RequestBody.create(JSON, json);
 		final Request postRequest = new Request.Builder().url(backendUrl + getSyncVersionEndpoint()).post(body).build();
-		final Response postResponse = localClient.newCall(postRequest).execute();
-		// TODO: Check return code etc
-		try {
+		try (final Response postResponse = CLIENT.newCall(postRequest).execute()) {
+			// TODO: Check return code etc
 			return postResponse.isSuccessful();
-		} finally {
-			postResponse.body().close();
 		}
 	}
 
@@ -322,10 +322,6 @@ public abstract class AbstractDataRepository implements IDataRepository {
 			return null;
 		}
 
-		final OkHttpClient longPollingClient = new OkHttpClient().newBuilder() //
-				.readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS) //
-				.build();
-
 		final String url = baseUrl + getVersionNotificationEndpoint();
 		LOG.debug("Calling url {}", url);
 		final CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
@@ -335,7 +331,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 			final Request request = requestBuilder.build();
 			Response response = null;
 			try {
-				response = longPollingClient.newCall(request).execute();
+				response = LONG_POLLING_CLIENT.newCall(request).execute();
 				if (response.isSuccessful()) {
 					// Version newVersion = new ObjectMapper().readValue(response.body().byteStream(), Version.class);
 					return Boolean.TRUE;
