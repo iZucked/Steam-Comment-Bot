@@ -158,46 +158,8 @@ public class ScenarioServicePublishAction {
 			 * 
 			 */
 
-			String pricingVersionUUID = null;
-			{
-				PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-				pricingVersionUUID = pricingModel.getUuid();
-
-				boolean hasLocal = PricingRepository.INSTANCE.hasLocalVersion(pricingVersionUUID);
-				Boolean hasUpstream = PricingRepository.INSTANCE.hasUpstreamVersion(pricingVersionUUID);
-				if (hasUpstream == null) {
-					// no response from upstream - abort!
-				}
-
-				if (hasLocal && hasUpstream) {
-					// Great, versions all present
-				}
-				if (hasUpstream && !hasLocal) {
-					// Pull down from upstream
-					try {
-						if (!PricingRepository.INSTANCE.syncUpstreamVersion(pricingVersionUUID)) {
-							// Error, but not critical.
-						}
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else {
-					if (!hasLocal) {
-						// export to backend server
-						exportPricing(modelRecord, scenarioModel);
-					}
-					if (!hasUpstream) {
-						// Publish
-						try {
-							PricingRepository.INSTANCE.publishVersion(pricingVersionUUID);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
+			// String distanceVersionUUID = checkDistancesDataVersion(modelRecord, scenarioModel);
+			String pricingVersionUUID = checkPricingDataVersion(modelRecord, scenarioModel);
 
 			// try {
 			//
@@ -286,6 +248,50 @@ public class ScenarioServicePublishAction {
 		} finally {
 			progressMonitor.done();
 		}
+	}
+
+	private static String checkPricingDataVersion(final ScenarioModelRecord modelRecord, LNGScenarioModel scenarioModel) {
+		String pricingVersionUUID;
+		{
+			PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
+			pricingVersionUUID = pricingModel.getMarketCurveDataVersion();
+
+			boolean hasLocal = PricingRepository.INSTANCE.hasLocalVersion(pricingVersionUUID);
+			Boolean hasUpstream = PricingRepository.INSTANCE.hasUpstreamVersion(pricingVersionUUID);
+			if (hasUpstream == null) {
+				// no response from upstream - abort!
+			}
+
+			if (hasLocal && hasUpstream) {
+				// Great, versions all present
+			}
+			if (hasUpstream && !hasLocal) {
+				// Pull down from upstream
+				try {
+					if (!PricingRepository.INSTANCE.syncUpstreamVersion(pricingVersionUUID)) {
+						// Error, but not critical.
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				if (!hasLocal) {
+					// export to backend server
+					exportPricing(modelRecord, scenarioModel);
+				}
+				if (!hasUpstream) {
+					// Publish
+					try {
+						PricingRepository.INSTANCE.publishVersion(pricingVersionUUID);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return pricingVersionUUID;
 	}
 
 	private static String exportPricing(ModelRecord modelRecord, LNGScenarioModel scenarioModel) {
