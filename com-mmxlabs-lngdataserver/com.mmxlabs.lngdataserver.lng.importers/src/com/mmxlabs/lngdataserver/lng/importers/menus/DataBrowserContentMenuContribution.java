@@ -122,12 +122,12 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 							}));
 							itemsAdded = true;
 						}
-						if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
-							menuManager.add(new RunnableAction("Export ports data", () -> {
-								exportPorts(scenarioInstance);
-							}));
-							itemsAdded = true;
-						}
+//						if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
+//							menuManager.add(new RunnableAction("Export ports data", () -> {
+//								exportPorts(scenarioInstance);
+//							}));
+//							itemsAdded = true;
+//						}
 						
 						// if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), modelArtifact.getKey())) {
 						// menuManager.add(new RunnableAction("Export pricing data", () -> {
