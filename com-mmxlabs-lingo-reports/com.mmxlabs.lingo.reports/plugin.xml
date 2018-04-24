@@ -161,6 +161,22 @@
             name="Panama Bookings Report"
             restorable="true">
       </view>
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
+            icon="icons/cview16/exec_statistic_view.gif"
+            id="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
+            name="Income Statement (Contract)"
+            restorable="true">
+      </view>
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion"
+            icon="icons/cview16/exec_statistic_view.gif"
+            id="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion"
+            name="Income Statement (Region)"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
