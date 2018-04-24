@@ -91,6 +91,12 @@ public class ReportTesterHelper {
 	public static final String CANAL_BOOKINGS_REPORT_ID = "com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport";
 	public static final String CANAL_BOOKINGS_REPORT_SHORTNAME = "CanalBookings";
 
+	public static final String INCOME_STATEMENT_REGION_REPORT_ID = "com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion";
+	public static final String INCOME_STATEMENT_REGION_REPORT_SHORTNAME = "IncomeStatementRegion";
+	
+	public static final String INCOME_STATEMENT_CONTRACT_REPORT_ID = "com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract";
+	public static final String INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME = "IncomeStatementContract";
+	
 	@FunctionalInterface
 	interface IScenarioSelection {
 

@@ -104,4 +104,16 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 		Assume.assumeTrue(LicenseFeatures.isPermitted("features:exposures"));
 		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html");
 	}
+	
+	@Test
+	@Category(ReportTest.class)
+	public void testIncomeStatementRegion() throws Exception {
+		testReports(ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_SHORTNAME, "html");
+	}
+
+	@Test
+	@Category(ReportTest.class)
+	public void testIncomeStatementContract() throws Exception {
+		testReports(ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME, "html");
+	}
 }
