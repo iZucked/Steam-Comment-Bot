@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Distances Repository
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.distances.tests;singleton:=true
-Bundle-Version: 4.4.12.RELEASE
+Bundle-Version: 4.4.13.qualifier
 Fragment-Host: com.mmxlabs.lngdataserver.integration.distances
 Require-Bundle: org.junit,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
