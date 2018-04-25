@@ -244,6 +244,15 @@ public class CargoEditorMenuHelper {
 			public void menuAboutToShow(final IMenuManager manager) {
 
 				final DischargeSlot dischargeSlot = dischargeSlots.get(index);
+				if (dischargeSlot.getCargo() == null) {
+					final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
+					if (dischargeSlot.isFOBSale() == false) {
+						createSpotMarketMenu(markToMenuManager, SpotType.DES_PURCHASE, dischargeSlot);
+					}
+					createSpotMarketMenu(markToMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
+					manager.add(markToMenuManager);
+
+				}
 
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
@@ -579,6 +588,16 @@ public class CargoEditorMenuHelper {
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
 				final LoadSlot loadSlot = loadSlots.get(index);
+
+				if (loadSlot.getCargo() == null) {
+					final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
+					createSpotMarketMenu(markToMenuManager, SpotType.DES_SALE, loadSlot);
+					if (loadSlot.isDESPurchase() == false) {
+						createSpotMarketMenu(markToMenuManager, SpotType.FOB_SALE, loadSlot);
+					}
+					manager.add(markToMenuManager);
+				}
+
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				createNewSlotMenu(newMenuManager, loadSlot);
@@ -587,6 +606,7 @@ public class CargoEditorMenuHelper {
 				if (loadSlot.isDESPurchase() == false) {
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot);
 				}
+
 				createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 				createDeleteSlotMenu(manager, loadSlot);
 				if (loadSlot.isDESPurchase()) {
@@ -752,7 +772,7 @@ public class CargoEditorMenuHelper {
 					final int restriction = discharge.getShippingDaysRestriction();
 					return (daysDifference <= restriction);
 				}
-				
+
 				return overlap;
 			}
 			// shipped cargo
