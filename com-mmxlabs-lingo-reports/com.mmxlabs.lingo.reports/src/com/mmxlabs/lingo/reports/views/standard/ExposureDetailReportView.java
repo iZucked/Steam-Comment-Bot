@@ -236,7 +236,13 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 					if (reference instanceof EAttribute) {
 						if (eObject.eClass().getEAllAttributes().contains(reference)) {
 							final Object o = ((EObject) element).eGet(reference);
-							cell.setText(o.toString());
+							if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
+								cell.setText(String.format("%,.3f", (Double) o));
+							} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
+								cell.setText(String.format("%,.1f", ((Double) o).doubleValue()));
+							} else {
+								cell.setText(o.toString());
+							}
 						}
 					} else {
 						if (eObject.eClass().getEAllReferences().contains(reference)) {
