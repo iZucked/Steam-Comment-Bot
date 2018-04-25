@@ -247,9 +247,9 @@ public class CargoEditorMenuHelper {
 				if (dischargeSlot.getCargo() == null) {
 					final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
 					if (dischargeSlot.isFOBSale() == false) {
-						createSpotMarketMenu(markToMenuManager, SpotType.DES_PURCHASE, dischargeSlot);
+						createSpotMarketMenu(markToMenuManager, SpotType.DES_PURCHASE, dischargeSlot, "");
 					}
-					createSpotMarketMenu(markToMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
+					createSpotMarketMenu(markToMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, "");
 					manager.add(markToMenuManager);
 
 				}
@@ -259,9 +259,9 @@ public class CargoEditorMenuHelper {
 				createNewSlotMenu(newMenuManager, dischargeSlot);
 				createMenus(manager, dischargeSlot, dischargeSlot.getCargo(), filterSlotsByCompatibility(dischargeSlot, cargoModel.getLoadSlots()), false);
 				if (dischargeSlot.isFOBSale() == false) {
-					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot);
+					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, " market");
 				}
-				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
+				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, " market");
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
@@ -591,9 +591,9 @@ public class CargoEditorMenuHelper {
 
 				if (loadSlot.getCargo() == null) {
 					final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
-					createSpotMarketMenu(markToMenuManager, SpotType.DES_SALE, loadSlot);
+					createSpotMarketMenu(markToMenuManager, SpotType.DES_SALE, loadSlot, "");
 					if (loadSlot.isDESPurchase() == false) {
-						createSpotMarketMenu(markToMenuManager, SpotType.FOB_SALE, loadSlot);
+						createSpotMarketMenu(markToMenuManager, SpotType.FOB_SALE, loadSlot, "");
 					}
 					manager.add(markToMenuManager);
 				}
@@ -602,9 +602,9 @@ public class CargoEditorMenuHelper {
 				manager.add(newMenuManager);
 				createNewSlotMenu(newMenuManager, loadSlot);
 				createMenus(manager, loadSlot, loadSlot.getCargo(), filterSlotsByCompatibility(loadSlot, cargoModel.getDischargeSlots()), true);
-				createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot);
+				createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, " market");
 				if (loadSlot.isDESPurchase() == false) {
-					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot);
+					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, " market");
 				}
 
 				createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
@@ -1013,13 +1013,13 @@ public class CargoEditorMenuHelper {
 		return slotsByDate;
 	}
 
-	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source) {
+	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, String marketMenuSuffix) {
 		final SpotMarketsModel pricingModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 		final Collection<SpotMarket> validMarkets = new LinkedList<SpotMarket>();
 		String menuName = "";
 		boolean isSpecial = false;
 		if (spotType == SpotType.DES_PURCHASE) {
-			menuName = "DES Purchase";
+			menuName = "DES";
 			final SpotMarketGroup group = pricingModel.getDesPurchaseSpotMarket();
 			for (final SpotMarket market : group.getMarkets()) {
 				final Set<Port> ports = SetUtils.getObjects(((DESPurchaseMarket) market).getDestinationPorts());
@@ -1029,13 +1029,13 @@ public class CargoEditorMenuHelper {
 			}
 			isSpecial = true;
 		} else if (spotType == SpotType.DES_SALE) {
-			menuName = "DES Sale";
+			menuName = "DES";
 			validMarkets.addAll(pricingModel.getDesSalesSpotMarket().getMarkets());
 		} else if (spotType == SpotType.FOB_PURCHASE) {
-			menuName = "FOB Purchase";
+			menuName = "FOB";
 			validMarkets.addAll(pricingModel.getFobPurchasesSpotMarket().getMarkets());
 		} else if (spotType == SpotType.FOB_SALE) {
-			menuName = "FOB Sale";
+			menuName = "FOB";
 			final SpotMarketGroup group = pricingModel.getFobSalesSpotMarket();
 			for (final SpotMarket market : group.getMarkets()) {
 				final Set<Port> originPorts = SetUtils.getObjects(((FOBSalesMarket) market).getOriginPorts());
@@ -1045,11 +1045,11 @@ public class CargoEditorMenuHelper {
 			}
 			isSpecial = true;
 		}
-		final MenuManager subMenu = new MenuManager("New " + menuName + " Market Slot", null);
+		final MenuManager subMenu = new MenuManager(menuName + marketMenuSuffix, null);
 
 		if (source.getWindowStart() != null) {
 			for (final SpotMarket market : validMarkets) {
-				subMenu.add(new CreateSlotAction("Create " + market.getName() + " slot", source, market, isSpecial, null));
+				subMenu.add(new CreateSlotAction(market.getName(), source, market, isSpecial, null));
 			}
 		}
 
