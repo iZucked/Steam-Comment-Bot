@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -198,17 +199,16 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					if (nominatedVessel == null) {
 						return false;
 					}
-					final Pair<Integer, Integer> desTimes = fobSaleTimeCalculator.getDivertableFOBTimes(fobPurchase, fobSale, nominatedVessel, resource);
+					final Triple<Integer, Integer, Integer> desTimes = fobSaleTimeCalculator.getDivertableFOBTimes(fobPurchase, fobSale, nominatedVessel, resource);
 					if (desTimes == null) {
 						return false;
 					}
-					final int returnTime = desTimes.getSecond();
+					final int returnTime = desTimes.getThird();
 					if (returnTime - desTimes.getFirst() > shippingHours) {
 						return false;
 					}
 					return true;
 				}
-				// TODO: FOB Sale
 			}
 		}
 		return true;

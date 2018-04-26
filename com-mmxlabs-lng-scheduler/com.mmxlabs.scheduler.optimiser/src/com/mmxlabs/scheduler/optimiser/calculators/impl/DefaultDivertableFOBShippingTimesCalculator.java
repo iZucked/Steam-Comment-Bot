@@ -18,12 +18,10 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -51,8 +49,8 @@ public class DefaultDivertableFOBShippingTimesCalculator implements IDivertableF
 	private IDistanceProvider distanceProvider;
 
 	@Override
-	public Pair<@NonNull Integer, @NonNull Integer> getDivertableFOBTimes(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption, final @NonNull IVessel nominatedVessel,
-			final @NonNull IResource resource) {
+	public Triple<@NonNull Integer, @NonNull Integer, @NonNull Integer> getDivertableFOBTimes(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption,
+			final @NonNull IVessel nominatedVessel, final @NonNull IResource resource) {
 
 		final Triple<Integer, ERouteOption, Integer> ladenDistanceData = getShortestTravelTimeToPort(sellOption, buyOption.getPort(), sellOption.getPort(), nominatedVessel,
 				getReferenceSpeed(nominatedVessel, VesselState.Laden));
@@ -75,14 +73,18 @@ public class DefaultDivertableFOBShippingTimesCalculator implements IDivertableF
 		final int dischargeDuration = durationProvider.getElementDuration(sellElement, resource);
 
 		ITimeWindow baseTime = shippingHoursRestrictionProvider.getBaseTime(sellElement);
-		int earlyFOBLoadTime = buyOption.getTimeWindow().getInclusiveStart() + loadDuration + notionalLadenTime;
-		if (earlyFOBLoadTime >= baseTime.getInclusiveStart()) {
-			int returnTime = earlyFOBLoadTime + dischargeDuration + notionalBallastTime;
-			return new Pair<>(buyOption.getTimeWindow().getInclusiveStart(), returnTime);
+		int earlyFOBDischargeTime = buyOption.getTimeWindow().getInclusiveStart() + loadDuration + notionalLadenTime;
+		if (earlyFOBDischargeTime >= baseTime.getInclusiveStart()) {
+			// Arriva after window start (or may even by late)
+			int startOfDischarge = earlyFOBDischargeTime;
+			int returnTime = startOfDischarge + dischargeDuration + notionalBallastTime;
+			return new Triple<>(buyOption.getTimeWindow().getInclusiveStart(), startOfDischarge, returnTime);
 		} else {
+			// Arrive before window, so depart as late as possible and arrive at discharge window start
 			int fobTime = Math.min(baseTime.getInclusiveStart() - notionalLadenTime - loadDuration, buyOption.getTimeWindow().getExclusiveEnd() - 1);
-			int returnTime = fobTime + loadDuration + notionalLadenTime + dischargeDuration + notionalBallastTime;
-			return new Pair<>(fobTime, returnTime);
+			int dischargeTime = baseTime.getInclusiveStart();
+			int returnTime = dischargeTime + dischargeDuration + notionalBallastTime;
+			return new Triple<>(fobTime, dischargeTime, returnTime);
 		}
 	}
 

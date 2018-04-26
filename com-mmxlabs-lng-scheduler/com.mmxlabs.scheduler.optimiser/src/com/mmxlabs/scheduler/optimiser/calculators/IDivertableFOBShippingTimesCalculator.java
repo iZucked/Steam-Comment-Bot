@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.calculators;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 public interface IDivertableFOBShippingTimesCalculator {
 
 	/**
-	 * Returns Load Time and Return time
+	 * Returns Load Time, disscharge time and return time
 	 * 
 	 * @param buyOption
 	 * @param sellOption
@@ -29,5 +29,6 @@ public interface IDivertableFOBShippingTimesCalculator {
 	 * @param resource
 	 * @return
 	 */
-	Pair<@NonNull Integer, @NonNull Integer> getDivertableFOBTimes(@NonNull ILoadOption buyOption, @NonNull IDischargeOption sellOption, @NonNull IVessel nominatedVessel, @NonNull IResource resource);
+	Triple<@NonNull Integer, @NonNull Integer, @NonNull Integer> getDivertableFOBTimes(@NonNull ILoadOption buyOption, @NonNull IDischargeOption sellOption, @NonNull IVessel nominatedVessel,
+			@NonNull IResource resource);
 }
