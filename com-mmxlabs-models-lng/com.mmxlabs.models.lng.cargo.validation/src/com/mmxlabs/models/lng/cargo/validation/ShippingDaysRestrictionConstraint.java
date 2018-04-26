@@ -340,7 +340,9 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withTypedName("Purchase",load.getName());
 			failures.add(baseFactory
 					.withObjectAndFeature(load.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes()) //
-					.withMessage(String.format("is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", discharge.getName(), TravelTimeUtils.formatHours(ladenTravelTimeInHours), TravelTimeUtils.formatHours(ladenTravelTimeInHours - maxTime) )) //
+					.withMessage((ladenTravelTimeInHours - maxTime) > ladenTravelTimeInHours ? (String.format("is paired with a sale at %s. However the slot windows are incompatible", discharge.getName())) : 
+						(String.format("is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", discharge.getName(), TravelTimeUtils.formatHours(ladenTravelTimeInHours), TravelTimeUtils.formatHours(ladenTravelTimeInHours - maxTime)) 
+						)) //
 					.make(ctx));
 		}
 	}
