@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.validation;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.rcp.common.ServiceHelper;
 
@@ -316,6 +318,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										dsd.addEObjectAndFeature(fobSale, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 										failures.add(dsd);
 									}
+									
+									cargoDateConstraint(fobPurchase, fobSale, loadDurationInHours + ladenTimeInHours, ctx, failures);
 								}
 							}
 							return Activator.PLUGIN_ID;
@@ -326,5 +330,18 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 		}
 
 		return Activator.PLUGIN_ID;
+	}
+	
+	private void cargoDateConstraint(LoadSlot load, DischargeSlot discharge, int ladenTravelTimeInHours, final IValidationContext ctx, final List<IStatus> failures) {
+		ZonedDateTime windowStartWithSlotOrPortTime = load.getWindowStartWithSlotOrPortTime();
+		ZonedDateTime windowEndWithSlotOrPortTime = discharge.getWindowEndWithSlotOrPortTime();
+		long maxTime = ChronoUnit.HOURS.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime);
+		if (maxTime < ladenTravelTimeInHours) {
+			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withTypedName("Purchase",load.getName());
+			failures.add(baseFactory
+					.withObjectAndFeature(load.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes()) //
+					.withMessage(String.format("is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", discharge.getName(), TravelTimeUtils.formatHours(ladenTravelTimeInHours), TravelTimeUtils.formatHours(ladenTravelTimeInHours - maxTime) )) //
+					.make(ctx));
+		}
 	}
 }
