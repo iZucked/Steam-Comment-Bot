@@ -80,7 +80,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 		final GridViewerColumn gvc2 = createColumn("Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
 		final GridColumnGroup volumeGroup = createGroup("Volume");
 
-		final GridViewerColumn gvc3 = createColumn("mmBtu", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_MMBTU);
+//		final GridViewerColumn gvc3 = createColumn("mmBtu", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_MMBTU);
 		final GridViewerColumn gvc4 = createColumn("Native", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS);
 		final GridViewerColumn gvc5 = createColumn("Unit", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT);
 
@@ -236,7 +236,9 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 					if (reference instanceof EAttribute) {
 						if (eObject.eClass().getEAllAttributes().contains(reference)) {
 							final Object o = ((EObject) element).eGet(reference);
-							if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
+							if (o == null) {
+								cell.setText("");
+							} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
 								cell.setText(String.format("%,.3f", (Double) o));
 							} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
 								cell.setText(String.format("%,.1f", ((Double) o).doubleValue()));
