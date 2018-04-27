@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -245,13 +246,14 @@ public class CargoEditorMenuHelper {
 
 				final DischargeSlot dischargeSlot = dischargeSlots.get(index);
 				if (dischargeSlot.getCargo() == null) {
-					final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
-					if (dischargeSlot.isFOBSale() == false) {
-						createSpotMarketMenu(markToMenuManager, SpotType.DES_PURCHASE, dischargeSlot, "");
+					if (SecurityUtils.getSubject().isPermitted("features:menu-item-markto")) {
+						final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
+						if (dischargeSlot.isFOBSale() == false) {
+							createSpotMarketMenu(markToMenuManager, SpotType.DES_PURCHASE, dischargeSlot, "");
+						}
+						createSpotMarketMenu(markToMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, "");
+						manager.add(markToMenuManager);
 					}
-					createSpotMarketMenu(markToMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, "");
-					manager.add(markToMenuManager);
-
 				}
 
 				final MenuManager newMenuManager = new MenuManager("New...", null);
@@ -590,12 +592,14 @@ public class CargoEditorMenuHelper {
 				final LoadSlot loadSlot = loadSlots.get(index);
 
 				if (loadSlot.getCargo() == null) {
-					final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
-					createSpotMarketMenu(markToMenuManager, SpotType.DES_SALE, loadSlot, "");
-					if (loadSlot.isDESPurchase() == false) {
-						createSpotMarketMenu(markToMenuManager, SpotType.FOB_SALE, loadSlot, "");
+					if (SecurityUtils.getSubject().isPermitted("features:menu-item-markto")) {
+						final MenuManager markToMenuManager = new MenuManager("Mark to...", null);
+						createSpotMarketMenu(markToMenuManager, SpotType.DES_SALE, loadSlot, "");
+						if (loadSlot.isDESPurchase() == false) {
+							createSpotMarketMenu(markToMenuManager, SpotType.FOB_SALE, loadSlot, "");
+						}
+						manager.add(markToMenuManager);
 					}
-					manager.add(markToMenuManager);
 				}
 
 				final MenuManager newMenuManager = new MenuManager("New...", null);

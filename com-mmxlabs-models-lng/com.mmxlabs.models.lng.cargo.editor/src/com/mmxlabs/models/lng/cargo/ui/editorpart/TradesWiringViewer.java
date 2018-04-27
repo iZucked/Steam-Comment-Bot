@@ -1035,6 +1035,22 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		dischargeDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.DISCHARGE_OR_LOAD));
 
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+		if (SecurityUtils.getSubject().isPermitted("features:report-counterparty")) {
+			addTradesColumn(dischargeColumns, "Counterparty",
+					new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(pkg.getSlot_Counterparty(), editingDomain) {
+
+						@Override
+						protected String renderSetValue(final Object container, final Object setValue) {
+							return setValue == null ? "" : setValue.toString();
+						}
+						
+						@Override
+						public boolean isValueUnset(Object object) {
+							return false;
+						}
+
+					}), new RowDataEMFPath(false, Type.DISCHARGE));
+		}
 		addTradesColumn(dischargeColumns, "Price",
 				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain) {
 
