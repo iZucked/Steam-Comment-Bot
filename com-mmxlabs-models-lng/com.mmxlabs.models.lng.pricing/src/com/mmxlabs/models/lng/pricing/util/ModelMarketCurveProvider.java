@@ -49,6 +49,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 	public ModelMarketCurveProvider(final @NonNull PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
+		pricingModel.eAdapters().add(this);
 	}
 
 	public String getVersion() {
