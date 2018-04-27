@@ -79,7 +79,7 @@ public class OptimisationJobRunner {
 						boolean relaxedValidation = "Period Scenario".equals(modelRecord.getName());
 
 						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(sdp, false, relaxedValidation)) {
+						if (!validateScenario(sdp, true, relaxedValidation)) {
 							scenarioLock.unlock();
 							return;
 						}
