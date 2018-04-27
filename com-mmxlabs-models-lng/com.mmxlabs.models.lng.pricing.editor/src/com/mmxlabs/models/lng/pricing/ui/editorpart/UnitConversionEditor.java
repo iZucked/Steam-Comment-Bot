@@ -5,13 +5,16 @@
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -43,15 +47,10 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 
-/**
- * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
- * 
- * @author hinton
- * 
- */
 public class UnitConversionEditor extends Dialog {
 
 	public UnitConversionEditor(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation) {
@@ -88,9 +87,36 @@ public class UnitConversionEditor extends Dialog {
 		viewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		viewer.getGrid().setHeaderVisible(true);
 
-		viewer.addTypicalColumn("Number of ...", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FROM, scenarioEditingLocation.getEditingDomain()));
-		viewer.addTypicalColumn("in ...", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__TO, scenarioEditingLocation.getEditingDomain()));
-		viewer.addTypicalColumn("is ...", new NumericAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FACTOR, scenarioEditingLocation.getEditingDomain()));
+		viewer.addTypicalColumn("", new NumericAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FACTOR, scenarioEditingLocation.getEditingDomain()));
+		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FROM, scenarioEditingLocation.getEditingDomain()));
+		viewer.addColumn("", new ICellRenderer() {
+
+			@Override
+			public Comparable getComparable(Object object) {
+				return 1;
+			}
+
+			@Override
+			public @Nullable String render(Object object) {
+				return "is equal to 1";
+			}
+
+			@Override
+			public boolean isValueUnset(Object object) {
+				return false;
+			}
+
+			@Override
+			public @Nullable Object getFilterValue(Object object) {
+				return null;
+			}
+
+			@Override
+			public @Nullable Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+				return null;
+			}
+		}, null);
+		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__TO, scenarioEditingLocation.getEditingDomain()));
 
 		viewer.init(scenarioEditingLocation.getAdapterFactory(), scenarioEditingLocation.getModelReference(), PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
 
