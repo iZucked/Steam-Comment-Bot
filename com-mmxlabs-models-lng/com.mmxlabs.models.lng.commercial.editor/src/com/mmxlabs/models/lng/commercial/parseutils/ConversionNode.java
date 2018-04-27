@@ -32,4 +32,11 @@ public class ConversionNode extends AbstractMarkedUpNode {
 	public UnitConversion getFactor() {
 		return factor;
 	}
+
+	public String getToUnits() {
+		if (isReverse) {
+			return factor.getFrom();
+		}
+		return factor.getTo();
+	}
 }
