@@ -57,6 +57,8 @@ public class ExposuresTest {
 		return Arrays.asList(new Object[][] { //
 				{ "HH", "HH", "HH", single(calcExpected("HH", 5.0, 1.0)), indiciesOf(makeHH()) }, //
 
+				{ "10%Brent", "10%Brent", "Brent", single(new ExpectedResult("Brent", defaultVolumeInMMBTU * 0.1, defaultVolumeInMMBTU * 0.1 * 90.0)), indiciesOf(makeBrent()) }, //
+
 				{ "A + 1", "A + 1", "HH", single(calcExpected("A", 5.0, 1.0)), indiciesOf(makeHH(), makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), 5)) }, //
 
 				{ "HH * 3 - 2", "HH * 3 - 2", "HH", single(calcExpected("HH", 5.0, 3.0)), indiciesOf(makeHH()) }, //
@@ -98,12 +100,12 @@ public class ExposuresTest {
 						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6)) }, //
 
 				// Reverse factor means detected units are still therms and alt conversion code path happends.
-//				{ "NBP (Units) Reverse Conversion", "90%NBP*mmBtus_per_therm*FX_p_to_USD", "NBP", single(calcExpected("NBP", 30.0, 0.9 / 10.0, 0.9 * 30.0 / 100.0 / 10.0 * 1.3)),
-//						indiciesOf(makeIndex("NBP", "p", "therm", YearMonth.of(2000, 1), 30)) }, //
+				// { "NBP (Units) Reverse Conversion", "90%NBP*mmBtus_per_therm*FX_p_to_USD", "NBP", single(calcExpected("NBP", 30.0, 0.9 / 10.0, 0.9 * 30.0 / 100.0 / 10.0 * 1.3)),
+				// indiciesOf(makeIndex("NBP", "p", "therm", YearMonth.of(2000, 1), 30)) }, //
 
 				/// Another Complex example
-//				{ "TTF (Units) Reverse Conversion ", "((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 / 0.293297, (12.6 - 0.4) / 0.293297 * 1.111)),
-//						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6)) }, //
+				// { "TTF (Units) Reverse Conversion ", "((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 / 0.293297, (12.6 - 0.4) / 0.293297 * 1.111)),
+				// indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6)) }, //
 
 				// { "HH - Shift -1", "SHIFT(HH,0-1)", "HH", calcExpected(8, 1, 8), indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
@@ -195,6 +197,10 @@ public class ExposuresTest {
 								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
 
 		});
+	}
+
+	private static CommodityIndex makeBrent() {
+		return makeIndex("Brent", "$", "bbl", YearMonth.of(2000, 1), 90);
 	}
 
 	private static CommodityIndex makeHH() {
