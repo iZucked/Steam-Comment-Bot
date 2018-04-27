@@ -15,6 +15,7 @@ import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
@@ -113,26 +114,55 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		}
 		for (final NamedIndexContainer<?> index : curves) {
 			final String proposal = index.getName();
+			String type = "";
+			if (index instanceof CurrencyIndex) {
+				type = " (currency conversion)";
+			}
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 				final String c = proposal.substring(contents.length());
-				list.add(new ContentProposal(c, proposal, null, c.length()));
+				list.add(new ContentProposal(c, proposal + type, null, c.length()));
 			}
 		}
 
+		String labelSuffix = " (unit conversion)";
 		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
 			{
 				final String proposal = PriceIndexUtils.createConversionFactorName(factor);
 				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 					final String c = proposal.substring(contents.length());
-					list.add(new ContentProposal(c, proposal, String.format("Number of %s\'s per %s is %.6f", factor.getFrom(), factor.getTo(), factor.getFactor()), c.length()));
+					list.add(new ContentProposal(c, proposal + labelSuffix, String.format("Number of %s\'s per %s is %.6f", factor.getFrom(), factor.getTo(), factor.getFactor()), c.length()));
 				}
 			}
 			{
 				final String proposal = PriceIndexUtils.createReverseConversionFactorName(factor);
 				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 					final String c = proposal.substring(contents.length());
-					list.add(new ContentProposal(c, proposal, String.format("Number of %s\'s per %s is %.6f", factor.getTo(), factor.getFactor(), 1.0 / factor.getFactor()), c.length()));
+					list.add(new ContentProposal(c, proposal + labelSuffix, String.format("Number of %s\'s per %s is %.6f", factor.getTo(), factor.getFactor(), 1.0 / factor.getFactor()), c.length()));
 				}
+			}
+		}
+
+		{
+			final String proposal = "MIN(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal + "a,b)", "Function returning the lower value of a or b.", c.length()));
+			}
+		}
+		{
+			final String proposal = "MAX(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal + "a,b)", "Function returning the higher value of a or b.", c.length()));
+			}
+		}
+		{
+			final String proposal = "SHIFT(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal + "index,months)",
+						"Function shifting the index price by the number of months. A positive value will take the price from previous months. A negative value takes the price from future months.",
+						c.length()));
 			}
 		}
 
