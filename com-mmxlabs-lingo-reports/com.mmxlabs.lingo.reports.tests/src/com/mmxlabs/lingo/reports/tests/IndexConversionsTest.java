@@ -158,11 +158,11 @@ public class IndexConversionsTest {
 	
 	@Test
 	public void test__calculation_MX_PLUS_Q() {
-		final String expression = "100%(HH*FX_EURO_to_USD*mwhs_per_mmBtu)+?";
+		final String expression = "100%(HH*FX_EURO_to_USD*mwh_to_mmBtu)+?";
 		@Nullable
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10);
 		String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
-		Assert.assertEquals("((10.0)-(100.0%((HH)*((FX_EURO_to_USD)*(mwhs_per_mmBtu)))))", rearrangedExpression);
+		Assert.assertEquals("((10.0)-(100.0%((HH)*((FX_EURO_to_USD)*(mwh_to_mmBtu)))))", rearrangedExpression);
 		System.out.println(rearrangedExpression);
 		double parseExpression = parseExpression(rearrangedExpression);
 		Assert.assertEquals(8.37, parseExpression, 0.001);

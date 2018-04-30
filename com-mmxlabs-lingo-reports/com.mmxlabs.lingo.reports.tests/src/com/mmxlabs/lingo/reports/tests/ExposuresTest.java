@@ -92,19 +92,19 @@ public class ExposuresTest {
 				{ "A*HH (3)", "A*HH", "HH", multi(calcExpected("HH", 5.0, 20 / 2)), indiciesOf(makeHH(), makeIndex("A", "$", "mmBtu", "B/2"), makeIndex("B", "$", "mmBtu", "20")) }, //
 
 				/// Complex example with all components - a %, unit conversion and FX curve
-				{ "NBP (Units)", "90%NBP*therms_per_mmBtu*FX_p_to_USD", "NBP", single(calcExpected("NBP", 30.0, 0.9 * 10.0, 0.9 * 30.0 / 100.0 * 10.0 * 1.3)),
+				{ "NBP (Units)", "90%NBP*therm_to_mmBtu*FX_p_to_USD", "NBP", single(calcExpected("NBP", 30.0, 0.9 * 10.0, 0.9 * 30.0 / 100.0 * 10.0 * 1.3)),
 						indiciesOf(makeIndex("NBP", "p", "therm", YearMonth.of(2000, 1), 30)) }, //
 
 				/// Another Complex example
-				{ "TTF (Units)", "((TTF-0.4))*mwhs_per_mmBtu*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 * 0.293297, (12.6 - 0.4) * 0.293297 * 1.111)),
+				{ "TTF (Units)", "((TTF-0.4))*mwh_to_mmBtu*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 * 0.293297, (12.6 - 0.4) * 0.293297 * 1.111)),
 						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6)) }, //
 
 				// Reverse factor means detected units are still therms and alt conversion code path happends.
-				// { "NBP (Units) Reverse Conversion", "90%NBP*mmBtus_per_therm*FX_p_to_USD", "NBP", single(calcExpected("NBP", 30.0, 0.9 / 10.0, 0.9 * 30.0 / 100.0 / 10.0 * 1.3)),
+				// { "NBP (Units) Reverse Conversion", "90%NBP*mmBtu_to_therm*FX_p_to_USD", "NBP", single(calcExpected("NBP", 30.0, 0.9 / 10.0, 0.9 * 30.0 / 100.0 / 10.0 * 1.3)),
 				// indiciesOf(makeIndex("NBP", "p", "therm", YearMonth.of(2000, 1), 30)) }, //
 
 				/// Another Complex example
-				// { "TTF (Units) Reverse Conversion ", "((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 / 0.293297, (12.6 - 0.4) / 0.293297 * 1.111)),
+				// { "TTF (Units) Reverse Conversion ", "((TTF-0.4)) *mmBtu_to_MwH*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 / 0.293297, (12.6 - 0.4) / 0.293297 * 1.111)),
 				// indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6)) }, //
 
 				// { "HH - Shift -1", "SHIFT(HH,0-1)", "HH", calcExpected(8, 1, 8), indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
@@ -151,16 +151,16 @@ public class ExposuresTest {
 				{ "HH - Max: (2)", "MAX(HH, 2*HH2)", "HH", multi(calcExpected("HH2", YearMonth.of(2016, 4), 6, 2, 12)),
 						indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 4), 5), makeIndex("HH2", "$", "mmbtu", YearMonth.of(2016, 4), 6)) }, //
 
-				{ "Max (with Units - TTF better) ", "MAX(HH, ((TTF-0.4)) *MWhs_per_mmBtu*FX_EURO_to_USD)", "TTF", single(calcExpected("TTF", 12.6, 1.0 * 0.293297, (12.6 - 0.4) * 0.293297 * 1.111)),
+				{ "Max (with Units - TTF better) ", "MAX(HH, ((TTF-0.4)) *MWh_to_mmBtu*FX_EURO_to_USD)", "TTF", single(calcExpected("TTF", 12.6, 1.0 * 0.293297, (12.6 - 0.4) * 0.293297 * 1.111)),
 						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 3.9)) }, //
 
-				{ "Max (with Units - HH better) ", "MAX(HH, ((TTF-0.4)) *MWhs_per_mmBtu*FX_EURO_to_USD)", "TTF", single(calcExpected("HH", 4, 1.0, 4.0)),
+				{ "Max (with Units - HH better) ", "MAX(HH, ((TTF-0.4)) *MWh_to_mmBtu*FX_EURO_to_USD)", "TTF", single(calcExpected("HH", 4, 1.0, 4.0)),
 						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 4)) }, //
 
-				{ "Min (with Units - TTF better) ", "MIN(HH, ((TTF-0.4)) *MWhs_per_mmBtu*FX_EURO_to_USD)", "TTF", single(calcExpected("TTF", 12.6, 1.0 * 0.293297, (12.6 - 0.4) * 0.293297 * 1.111)),
+				{ "Min (with Units - TTF better) ", "MIN(HH, ((TTF-0.4)) *MWh_to_mmBtu*FX_EURO_to_USD)", "TTF", single(calcExpected("TTF", 12.6, 1.0 * 0.293297, (12.6 - 0.4) * 0.293297 * 1.111)),
 						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 4.0)) }, //
 
-				{ "Min (with Units - HH better) ", "MIN(HH, ((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("HH", 3.9, 1.0, 3.9)),
+				{ "Min (with Units - HH better) ", "MIN(HH, ((TTF-0.4)) *mmBtu_to_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("HH", 3.9, 1.0, 3.9)),
 						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 3.9)) }, //
 
 				{ "DatedAvg 3,0,1 ", "DATEDAVG(Brent,3,0,1)", "Brent", multi(//
