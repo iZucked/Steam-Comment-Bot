@@ -214,7 +214,7 @@ public class PriceIndexUtils {
 		if (from.isEmpty() || to.isEmpty()) {
 			return null;
 		}
-		return String.format("%ss_per_%s", from, to);
+		return String.format("%s_to_%s", from, to);
 	}
 
 	public static @Nullable String createReverseConversionFactorName(@NonNull final UnitConversion factor) {
@@ -223,7 +223,7 @@ public class PriceIndexUtils {
 		if (from.isEmpty() || to.isEmpty()) {
 			return null;
 		}
-		return String.format("%ss_per_%s", to, from);
+		return String.format("%s_to_%s", to, from);
 	}
 
 	private static @NonNull String getString(@Nullable final String str) {

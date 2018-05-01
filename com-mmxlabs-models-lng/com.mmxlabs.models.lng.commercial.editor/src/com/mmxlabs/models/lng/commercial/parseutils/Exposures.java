@@ -440,7 +440,7 @@ public class Exposures {
 				exposureDetail.setVolumeInMMBTU(isPurchase ? record.mmbtuVolume : -record.mmbtuVolume);
 
 				// Is the record unit in mmBtu? Then either it always was mmBtu OR we have converted the native units to mmBtu
-				if (record.volumeUnit.isEmpty() || "mmbtu".equalsIgnoreCase(record.volumeUnit)) {
+				if (record.volumeUnit == null || record.volumeUnit.isEmpty() || "mmbtu".equalsIgnoreCase(record.volumeUnit)) {
 					exposureDetail.setVolumeInNativeUnits(isPurchase ? record.nativeVolume : -record.nativeVolume);
 					exposureDetail.setNativeValue(isPurchase ? record.nativeValue : -record.nativeValue);
 				} else {

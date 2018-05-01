@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.pricing.parser.Node;
 
 public class LookupData {
 	public PricingModel pricingModel;
-	public 	Map<String, CommodityIndex> commodityMap = new HashMap<>();
+	public Map<String, CommodityIndex> commodityMap = new HashMap<>();
 	public Map<String, CurrencyIndex> currencyMap = new HashMap<>();
 	public Map<String, UnitConversion> conversionMap = new HashMap<>();
 	public Map<String, UnitConversion> reverseConversionMap = new HashMap<>();

@@ -103,9 +103,16 @@ public class PricingModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(CONVERSION_FACTORS_KEY)) {
 			importConversionFactors(pricingModel, inputs.get(CONVERSION_FACTORS_KEY), context);
 		}
+		if (pricingModel.getConversionFactors().isEmpty()) {
+			// Create default conversion factors
+			makeConversionFactor("therm", "mmBtu", 10, pricingModel);
+			makeConversionFactor("bbl", "mmBtu", 0.180136, pricingModel);
+			makeConversionFactor("MWh", "mmBtu", 0.293297, pricingModel);
+
+		}
 
 		pricingModel.setMarketCurveDataVersion(EcoreUtil.generateUUID());
-		
+
 		return pricingModel;
 	}
 
@@ -143,4 +150,13 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public EClass getEClass() {
 		return PricingPackage.eINSTANCE.getPricingModel();
 	}
+
+	private void makeConversionFactor(final String from, final String to, final double f, final PricingModel pricingModel) {
+		final UnitConversion factor = PricingFactory.eINSTANCE.createUnitConversion();
+		factor.setFrom(from);
+		factor.setTo(to);
+		factor.setFactor(f);
+		pricingModel.getConversionFactors().add(factor);
+	}
+
 }
