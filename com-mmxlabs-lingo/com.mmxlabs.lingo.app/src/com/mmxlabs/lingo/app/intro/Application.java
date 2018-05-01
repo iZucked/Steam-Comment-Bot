@@ -95,6 +95,8 @@ public class Application implements IApplication {
 					e.printStackTrace();
 				}
 			}
+			// Sometimes dir disappears? Perhaps the tree-walker check does not work?
+			tempDirectory.mkdirs();
 		}
 
 		// HAK
