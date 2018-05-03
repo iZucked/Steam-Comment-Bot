@@ -71,6 +71,7 @@ white_space = {new_line} | [ \t\f]
 "MAX"            { return symbol("max",MAX); }
 "SHIFT"           { return symbol("shift",SHIFT); }
 "DATEDAVG"           { return symbol("datedavg",DATEDAVG); }
+"SPLITMONTH"           { return symbol("splitmonth", SPLITMONTH); }
  
 /* separators */
   \"              { string.setLength(0); yybegin(STRING); }

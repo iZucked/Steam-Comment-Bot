@@ -60,6 +60,9 @@ public class SeriesParserTest {
 				{ "ShIfT(HH,4)", 1.0 }, //
 
 				{ "datedAVG(HH,1,2,3)", 1.0 }, //
+				
+				// Testing split month function
+				{ "splitmonth(HH,HH,15)", 0 }, //
 		});
 	}
 
