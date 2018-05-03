@@ -107,6 +107,8 @@ public class MigrateToV77 extends AbstractMigrationUnit {
 						} else if (isPanamaSouth(entryB)) {
 							southEntrance = entryB;
 						}
+					} else {
+						continue;
 					}
 					route.setRef("northEntrance", northEntrance);
 					route.setRef("southEntrance", southEntrance);
