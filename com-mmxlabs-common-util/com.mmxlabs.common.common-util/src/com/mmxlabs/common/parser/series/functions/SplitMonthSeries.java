@@ -25,37 +25,21 @@ public class SplitMonthSeries implements ISeries {
 		// TODO: Add the logic !!!
 		// !!!!!!!!!!!!!!!!!!!!!!!
 		
-		/*
-		return shiftee.getChangePoints();
-		 */
-		return new int[0];
+		return series1.getChangePoints();
 	}
 
 	@Override
 	public Number evaluate(int point) {
-		// TODO: Add the logic !!!
-		// !!!!!!!!!!!!!!!!!!!!!!!
+		Number value = null;
 		
-		/*
-		double sum = 0;
-		int resetDelta = (currentMonth ) % reset;
-		int startMonth = currentMonth//
-				- months //
-				- resetDelta //
-				- lag;
-		for (int i = 0; i < months; ++i) {
-			int m = startMonth + i;
-			int time = mapper.mapMonthToChangePoint(m);
-			double v = shiftee.evaluate(time).doubleValue();
-			if (v == 0.0) {
-				// No data, cannot create average, return 0
-				return 0.0;
-			}
-			sum += v;
+		//Use first curve
+		if (point < splitPoint) {
+			value = series1.evaluate(point);
+		} else {
+			// Use second curve
+			value = series2.evaluate(point);
 		}
-		sum /= (double) months;
-		return Double.valueOf(sum);
-		 */
-		return Double.valueOf(0);
+		
+		return value;
 	}
 }

@@ -62,7 +62,7 @@ public class SeriesParserTest {
 				{ "datedAVG(HH,1,2,3)", 1.0 }, //
 				
 				// Testing split month function
-				{ "splitmonth(HH,HH,15)", 0 }, //
+				{ "splitmonth(HH,HH2, 15)", 1.0 }, //
 		});
 	}
 
@@ -83,6 +83,7 @@ public class SeriesParserTest {
 	double parse(String expression) {
 		SeriesParser parser = new SeriesParser();
 		parser.addSeriesExpression("HH", "1.0");
+		parser.addSeriesExpression("HH2", "2.0");
 
 		parser.setShiftMapper((a, b) -> a);
 		parser.setCalendarMonthMapper(new CalendarMonthMapper() {
