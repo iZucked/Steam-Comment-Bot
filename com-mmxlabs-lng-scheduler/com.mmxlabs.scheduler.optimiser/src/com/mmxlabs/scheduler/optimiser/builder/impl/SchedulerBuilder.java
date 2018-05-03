@@ -1330,7 +1330,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			eventSequenceElements.add(redirectElement);
 			eventSequenceElements.add(endElement);
 
+			startSlot.setEventPortSlots(eventPortSlots);
+			redirectSlot.setEventPortSlots(eventPortSlots);
 			endSlot.setEventPortSlots(eventPortSlots);
+			startSlot.setEventSequenceElements(eventSequenceElements);
+			redirectSlot.setEventSequenceElements(eventSequenceElements);
 			endSlot.setEventSequenceElements(eventSequenceElements);
 
 			// patch up sequencing constraints
