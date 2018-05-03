@@ -60,12 +60,13 @@ Number = {Integer}|({FLit1}|{FLit2}|{FLit3}) {Exponent}?
 new_line = \r|\n|\r\n;
 white_space = {new_line} | [ \t\f]
 
+%ignorecase
 %state STRING
 
 %%
 
 <YYINITIAL>{
-/* keywords - case sensitive! */
+/* keywords - case insensitive! */
 "MIN"              { return symbol("min",MIN); }
 "MAX"            { return symbol("max",MAX); }
 "SHIFT"           { return symbol("shift",SHIFT); }
