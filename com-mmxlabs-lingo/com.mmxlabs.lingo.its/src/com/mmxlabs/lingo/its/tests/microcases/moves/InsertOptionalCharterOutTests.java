@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.InsertOptionalElementMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.RemoveOptionalElementMoveHandler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -227,37 +228,60 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(charterOutEvent, IPortSlot.class);
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-			final ISequenceElement element = portSlotProvider.getElement(portSlot);
+			final IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) portSlot;
+			{
+				// Validate event is transformed correctly and linked up
+				Assert.assertEquals(3, vesselEventPortSlot.getEventPortSlots().size());
+				Assert.assertEquals(3, vesselEventPortSlot.getEventSequenceElements().size());
+				for (final IPortSlot ps : vesselEventPortSlot.getEventPortSlots()) {
+					Assert.assertEquals(3, ((IVesselEventPortSlot) ps).getEventPortSlots().size());
+					Assert.assertEquals(3, ((IVesselEventPortSlot) ps).getEventSequenceElements().size());
+
+				}
+			}
 
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
 			final InsertOptionalElementMoveHandler handler = injector.getInstance(InsertOptionalElementMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
+			{
+				final ISequenceElement element = portSlotProvider.getElement(portSlot);
+				final Pair<IResource, Integer> elementPair = lookupManager.lookup(element);
+				Assert.assertNotNull(elementPair);
 
-			final Pair<IResource, Integer> elementPair = lookupManager.lookup(element);
-			Assert.assertNotNull(elementPair);
+				final Random random = new Random(0);
 
-			final Random random = new Random(0);
+				final IMove move = handler.generateAddingMove(element, elementPair.getSecond(), lookupManager, random);
 
-			final IMove move = handler.generateAddingMove(element, elementPair.getSecond(), lookupManager, random);
+				final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
+				move.apply(result);
 
-			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
-			move.apply(result);
+				final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+				final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+				// Check expectations
+				// 5 events: start, start-charter, redirect-charter out, charter-out, end
+				Assert.assertNotNull("Sequence is null", result.getSequence(resource1));
+				Assert.assertEquals(5, result.getSequence(resource1).size());
+				Assert.assertEquals(0, result.getUnusedElements().size());
 
-			// Check expectations
-			// 5 events: start, start-charter, redirect-charter out, charter-out, end
-			Assert.assertNotNull("Sequence is null", result.getSequence(resource1));
-			Assert.assertEquals(5, result.getSequence(resource1).size());
-			Assert.assertEquals(0, result.getUnusedElements().size());
+				Assert.assertEquals("start-charter_out_test_solo", result.getSequence(resource1).get(1).getName());
+				Assert.assertEquals("redirect-charter_out_test_solo", result.getSequence(resource1).get(2).getName());
+				Assert.assertEquals("charter_out_test_solo", result.getSequence(resource1).get(3).getName());
+			}
 
-			Assert.assertEquals("start-charter_out_test_solo", result.getSequence(resource1).get(1).getName());
-			Assert.assertEquals("redirect-charter_out_test_solo", result.getSequence(resource1).get(2).getName());
-			Assert.assertEquals("charter_out_test_solo", result.getSequence(resource1).get(3).getName());
+			// Make sure we can insert from *ANY* element in the element sequence
+			for (final ISequenceElement element : vesselEventPortSlot.getEventSequenceElements()) {
+				final Pair<IResource, Integer> elementPair = lookupManager.lookup(element);
+				Assert.assertNotNull(elementPair);
+
+				final Random random = new Random(0);
+
+				final IMove move = handler.generateAddingMove(element, elementPair.getSecond(), lookupManager, random);
+				Assert.assertNotNull(move);
+			}
 		});
 	}
 
@@ -366,18 +390,18 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer());
 			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, charterOutEvent);
 
-			Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
+			final Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
 			// Create the export command and try to execute it
 			final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-			Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
+			final Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
 
 			Assert.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that everything is still there
-			VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
+			final VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
 			Assert.assertNotNull(availability);
 		});
 	}
@@ -416,18 +440,18 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer());
 			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, charterOutEvent);
 
-			Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
+			final Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
 			// Create the export command and try to execute it
 			final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-			Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
+			final Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
 
 			Assert.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that everything is still there
-			VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
+			final VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
 			Assert.assertNotNull(availability);
 		});
 	}
@@ -467,18 +491,18 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			SequenceHelper.addToUnused(result, scenarioToOptimiserBridge.getDataTransformer(), charterOutEvent);
 
-			Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
+			final Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
 			// Create the export command and try to execute it
 			final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-			Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
+			final Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
 
 			Assert.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that the charter out event is now vessel-less
-			VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
+			final VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
 			Assert.assertNull(availability);
 		});
 	}
