@@ -41,7 +41,10 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			Character.valueOf('*'), //
 			Character.valueOf('/'), //
 			Character.valueOf('%'), //
-			Character.valueOf('?'));
+			Character.valueOf('?'), //
+			Character.valueOf(','), //
+			Character.valueOf('(') //
+			);
 
 	private LNGScenarioModel scenarioModel;
 
