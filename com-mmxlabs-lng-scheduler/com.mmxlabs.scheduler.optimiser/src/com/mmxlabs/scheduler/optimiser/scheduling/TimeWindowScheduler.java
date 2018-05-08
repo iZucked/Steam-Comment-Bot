@@ -24,7 +24,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
@@ -45,6 +44,7 @@ public class TimeWindowScheduler {
 	@Inject
 	@Named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)
 	private boolean usePriceBasedWindowTrimming = false;
+
 	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean useCanalBasedWindowTrimming = false;
