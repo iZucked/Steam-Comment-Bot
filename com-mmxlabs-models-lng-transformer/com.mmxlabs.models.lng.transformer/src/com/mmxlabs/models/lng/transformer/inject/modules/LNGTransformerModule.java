@@ -81,12 +81,12 @@ import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindow
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.PortTimesRecordMaker;
 import com.mmxlabs.scheduler.optimiser.scheduling.PriceBasedWindowTrimmer;
-import com.mmxlabs.scheduler.optimiser.scheduling.RandomSlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
@@ -186,7 +186,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(FeasibleTimeWindowTrimmer.class);
 		bind(PriceBasedWindowTrimmer.class);
 
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
 
 		bind(PriceIntervalProviderHelper.class);
@@ -194,8 +194,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(IArrivalTimeScheduler.class).to(ArrivalTimeScheduler.class);
 		bind(TimeWindowScheduler.class);
-
-		bind(ISlotTimeScheduler.class).to(RandomSlotTimeScheduler.class);
+		bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class);
 
 		bind(PortTimesRecordMaker.class);
 
