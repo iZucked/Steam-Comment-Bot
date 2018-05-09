@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.scheduler</groupId>
 	<artifactId>com.mmxlabs.scheduler.parent</artifactId>
@@ -30,7 +32,6 @@
 		<module>com.mmxlabs.scheduler.optimiser</module>
 		<module>com.mmxlabs.scheduler.optimiser.tests</module>
 		<module>com.mmxlabs.scheduler.optimiser.feature</module>
-		<module>com.mmxlabs.scheduler.p2</module>
 	</modules>
 
 	<build>
@@ -58,7 +59,7 @@
 							<groupId>com.mmxlabs.lingo.common.target</groupId>
 							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 							<version>${project.version}</version>
-						</artifact>						
+						</artifact>
 					</target>
 
 					<environments>
@@ -85,22 +86,4 @@
 
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>useNexusRepos</id>
-			<repositories>
-				<repository>
-					<id>com-mmxlabs-common-util.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-optimiser.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/${project.version}/com.mmxlabs.optimiser.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-			</repositories>
-		</profile>
-	</profiles>
 </project>
