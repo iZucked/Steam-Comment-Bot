@@ -97,14 +97,14 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						maxDate = f_maxDate.apply(maxDate, r.getEndDate());
 
 						LocalDateTime start = r.getStartDate().atStartOfDay();
-						if (r.getStartDate() == r.getEndDate()) {
+						if (r.getStartDate().equals(r.getEndDate())) {
 							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 							evt.setEvent(r);
-							evt.setDate(r.getStartDate().atStartOfDay());
+							evt.setDate(start);
 							evt.setChangeQuantity(r.getReliableVolume());
 							events.add(evt);
 						} else {
-							while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
+							while (start.isBefore(r.getEndDate().atStartOfDay())) {
 
 								final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 								evt.setEvent(r);
@@ -143,14 +143,15 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						maxDate = f_maxDate.apply(maxDate, r.getEndDate());
 
 						LocalDateTime start = r.getStartDate().atStartOfDay();
-						if (r.getStartDate() == r.getEndDate()) {
+						if (r.getStartDate().equals(r.getEndDate())) {
 							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 							evt.setEvent(r);
-							evt.setDate(r.getStartDate().atStartOfDay());
+							evt.setDate(start);
 							evt.setChangeQuantity(-r.getReliableVolume());
 							events.add(evt);
 						} else {
-							while (start.isBefore(r.getEndDate().plusDays(1).atStartOfDay())) {
+							LocalDateTime end = r.getEndDate().atStartOfDay();
+							while (start.isBefore(end)) {
 
 								final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 								evt.setEvent(r);
@@ -171,16 +172,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 				}
-				// }
-				//
-				// LocalDate latestInventoryDate = null;
-				// if (tableLevels.size() > 0) {
-				// Optional<InventoryLevel> inventoryLevel = tableLevels.stream().sorted((a,b) -> -a.date.compareTo(b.date)).findFirst();
-				// if (inventoryLevel.isPresent()) {
-				// latestInventoryDate = inventoryLevel.get().date;
-				// }
-				// }
-				// final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
+
 				if (maxDate != null && schedule != null) {
 					for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 						final Slot slot = slotAllocation.getSlot();
@@ -292,6 +284,10 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 				}
+
+				// Sort before storing
+				events.sort((a, b) -> a.getDate().compareTo(b.getDate()));
+
 				inventoryChangeEvents.getEvents().addAll(events);
 			}
 		}
