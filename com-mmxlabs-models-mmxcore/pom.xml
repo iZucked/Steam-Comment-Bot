@@ -31,8 +31,6 @@
 		<module>com.mmxlabs.models.mmxcore.edit</module>
 
 		<module>com.mmxlabs.models.mmxcore.runtime.feature</module>
-
-		<module>com.mmxlabs.models.mmxcore.p2</module>
 	</modules>
 
 	<build>
