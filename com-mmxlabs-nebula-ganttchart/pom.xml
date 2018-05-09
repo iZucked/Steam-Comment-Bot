@@ -19,7 +19,6 @@
 	<modules>
 		<module>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart</module>
 		<module>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature</module>
-		<module>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.p2</module>
 	</modules>
 
 	<build>
