@@ -51,6 +51,7 @@ import org.swtchart.Chart;
 import org.swtchart.IAxisSet;
 import org.swtchart.IBarSeries;
 import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.ISeriesSet;
@@ -354,7 +355,7 @@ public class InventoryReport extends ViewPart {
 									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
-								final ILineSeries series = createLineSeries(seriesSet, "Inventory", inventoryLevels);
+								final ILineSeries series = createSmoothLineSeries(seriesSet, "Inventory", inventoryLevels);
 								series.setSymbolSize(1);
 								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 
@@ -394,9 +395,9 @@ public class InventoryReport extends ViewPart {
 									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
-
-								final ILineSeries series = createLineSeries(seriesSet, "Tank min", inventoryLevels);
-								series.setSymbolSize(2);
+								final ILineSeries series = createStepLineSeries(seriesSet, "Tank min", inventoryLevels);
+								series.setSymbolSize(1);
+								series.setSymbolType(PlotSymbolType.NONE);
 								series.setLineStyle(LineStyle.DASH);
 								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW));
 							}
@@ -414,8 +415,9 @@ public class InventoryReport extends ViewPart {
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
 
-								final ILineSeries series = createLineSeries(seriesSet, "Tank max", inventoryLevels);
-								series.setSymbolSize(2);
+								final ILineSeries series = createStepLineSeries(seriesSet, "Tank max", inventoryLevels);
+								series.setSymbolSize(1);
+								series.setSymbolType(PlotSymbolType.NONE);
 								series.setLineStyle(LineStyle.DASH);
 								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 							}
@@ -428,7 +430,7 @@ public class InventoryReport extends ViewPart {
 									.collect(Collectors.toList());
 							if (!values.isEmpty()) {
 
-								final IBarSeries series = createBarSeries(seriesSet, "Cargoes", values);
+								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Cargoes", values);
 								series.setBarWidth(1);
 								series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
 							}
@@ -440,7 +442,7 @@ public class InventoryReport extends ViewPart {
 									.collect(Collectors.toList());
 							if (!values.isEmpty()) {
 
-								final IBarSeries series = createBarSeries(seriesSet, "Open", values);
+								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Open", values);
 								series.setBarWidth(1);
 								series.setBarColor(color_Orange);
 							}
@@ -454,7 +456,7 @@ public class InventoryReport extends ViewPart {
 										.collect(Collectors.toList());
 								if (!values.isEmpty()) {
 
-									final IBarSeries series = createBarSeries(seriesSet, "3rd-party", values);
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "3rd-party", values);
 									series.setBarWidth(2);
 									series.setBarColor(color_Orange);
 								}
@@ -500,10 +502,37 @@ public class InventoryReport extends ViewPart {
 
 		Collections.sort(tableLevels, (a, b) -> a.date.compareTo(b.date));
 
+		// inventoryLevels.sort((a,b) -> a.getFirst().compareTo(b.getFirst()));
+
+		int total = 0;
+		for (final InventoryLevel lvl : tableLevels) {
+			lvl.runningTotal = total + lvl.changeInM3;
+			total = lvl.runningTotal;
+		}
+
 		tableViewer.setInput(tableLevels);
 	}
 
-	private ILineSeries createLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
+	private ILineSeries createSmoothLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
+
+		final Date[] dates = new Date[data.size()];
+		final double[] values = new double[data.size()];
+		int idx = 0;
+		for (final Pair<LocalDateTime, Integer> e : data) {
+			final int sum = e.getSecond();
+
+			dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
+			values[idx] = (double) sum;
+			idx++;
+		}
+
+		final ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, name);
+		series.setXDateSeries(dates);
+		series.setYSeries(values);
+		return series;
+	}
+
+	private ILineSeries createStepLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
 
 		final Date[] dates = new Date[2 * data.size() - 1];
 		final double[] values = new double[2 * data.size() - 1];
@@ -528,22 +557,21 @@ public class InventoryReport extends ViewPart {
 		return series;
 	}
 
-	private IBarSeries createBarSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
+	private IBarSeries createDaySizedBarSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
 
-		final Date[] dates = new Date[2 * data.size() - 1];
-		final double[] values = new double[2 * data.size() - 1];
+		final Date[] dates = new Date[2 * data.size()];
+		final double[] values = new double[2 * data.size()];
 		int idx = 0;
 		for (final Pair<LocalDateTime, Integer> e : data) {
-			if (idx != 0) {
-				dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
-				values[idx] = values[idx - 1];
-				idx++;
-			}
 
 			final int sum = e.getSecond();
 
 			dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
 			values[idx] = (double) sum;
+			idx++;
+
+			dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).plusDays(1).toInstant());
+			values[idx] = 0;
 			idx++;
 		}
 
