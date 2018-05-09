@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.mmxlabs.lingo</groupId>
@@ -8,11 +11,11 @@
 	</parent>
 	<artifactId>com.mmxlabs.lingo.its</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	
+
 	<properties>
 		<sonar.exclusions>file:**/*.java</sonar.exclusions>
 	</properties>
-	
+
 	<build>
 		<plugins>
 
@@ -82,9 +85,11 @@
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>true</useUIThread>
 
-					<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile}</argLine>
+					<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true
+						-Dlingo.enc.keyfile=${lingo.enc.keyfile}</argLine>
 
-					<!-- Automatically start these bundles at specified run level. These contain the services required for test execution -->
+					<!-- Automatically start these bundles at specified run level. These 
+						contain the services required for test execution -->
 					<bundleStartLevel>
 
 						<bundle>
@@ -186,9 +191,9 @@
 						<version>${tycho.version}</version>
 						<configuration>
 							<providerHint>junit47</providerHint>
-          					<providerProperties>
+							<providerProperties>
 								<groups>com.mmxlabs.lingo.its.tests.category.QuickTest</groups>
-          					</providerProperties>
+							</providerProperties>
 							<failIfNoTests>false</failIfNoTests>
 							<!-- Only run Tests marked with the Quick Test annotation -->
 							<group>com.mmxlabs.lingo.its.tests.category.QuickTest</group>
@@ -224,9 +229,9 @@
 						<version>${tycho.version}</version>
 						<configuration>
 							<providerHint>junit47</providerHint>
-          					<providerProperties>
+							<providerProperties>
 								<excludegroups>${test.excludeCategories}</excludegroups>
-          					</providerProperties>
+							</providerProperties>
 							<failIfNoTests>false</failIfNoTests>
 						</configuration>
 					</plugin>
@@ -244,9 +249,9 @@
 						<version>${tycho.version}</version>
 						<configuration>
 							<providerHint>junit47</providerHint>
-          					<providerProperties>
+							<providerProperties>
 								<groups>com.mmxlabs.lingo.its.tests.category.${test.category}</groups>
-          					</providerProperties>
+							</providerProperties>
 							<failIfNoTests>false</failIfNoTests>
 							<!-- Only run Tests marked with the Quick Test annotation -->
 							<group>com.mmxlabs.lingo.its.tests.category.${test.category}</group>
@@ -257,7 +262,8 @@
 
 		</profile>
 
-		<!-- Enable this profile to run the its test independently of the full build. -->
+		<!-- Enable this profile to run the its test independently of the full 
+			build. -->
 		<profile>
 			<id>useBuildRepos</id>
 			<repositories>
@@ -268,7 +274,7 @@
 				</repository>
 			</repositories>
 		</profile>
-				<profile>
+		<profile>
 			<id>useProvidedRepo</id>
 			<repositories>
 				<repository>
@@ -277,8 +283,8 @@
 					<layout>p2</layout>
 				</repository>
 				<repository>
-					<id>lingo-transformer-its-p2</id>
-					<url>${env.LINGO_TRANSFORMER_ITS_P2_REPO}</url>
+					<id>lingo-its-p2</id>
+					<url>${env.LINGO_ITS_P2_REPO}</url>
 					<layout>p2</layout>
 				</repository>
 			</repositories>
