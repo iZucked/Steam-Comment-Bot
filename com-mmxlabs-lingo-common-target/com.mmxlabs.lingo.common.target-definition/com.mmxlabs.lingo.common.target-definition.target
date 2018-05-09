@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="39">
+<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="40">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.jdt.annotation" version="2.1.100.v20170511-1408"/>
-<unit id="org.eclipse.jdt.annotation.source" version="2.1.100.v20170511-1408"/>
+<unit id="org.eclipse.jdt.annotation" version="2.1.150.v20180322-1206"/>
+<unit id="org.eclipse.jdt.annotation.source" version="2.1.150.v20180322-1206"/>
 <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
 <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.swt.tools.feature.feature.group" version="3.106.0.v20170503-0851"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.oxygen/R-4.7.1a-201710090410/org.eclipse.updates.oxygen-R-4.7.1a-201710090410.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.oxygen/R-4.7.3a-201803300640/org.eclipse.updates.oxygen-R-4.7.3a-201803300640.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
@@ -38,7 +38,7 @@
 <unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.swtbot.forms.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.swtbot.ide.feature.group" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.oxygen/201710111001/org.eclipse.oxygen-201710111001.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.oxygen/201804111000/org.eclipse.oxygen-201804111000.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
@@ -96,7 +96,7 @@
 <unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
 <unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
 <unit id="org.slf4j.ext" version="1.7.10.v20170224-1220"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20170919201930/orbit-buildrepo-R20170919201930.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20180330011457/orbit-buildrepo-R20180330011457.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.formattedtext" version="0.0.0"/>
