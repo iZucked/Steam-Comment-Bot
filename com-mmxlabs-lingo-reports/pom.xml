@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.reports</groupId>
 	<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
@@ -32,9 +33,6 @@
 
 		<!-- Features -->
 		<module>com.mmxlabs.lingo.reports.feature</module>
-
-		<module>com.mmxlabs.lingo.reports.p2</module>
-
 	</modules>
 
 	<build>
@@ -93,69 +91,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-			<id>com-mmxlabs-models-datetime.hg</id>
-			<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.3.RELEASE/com.mmxlabs.models.datetime.p2-2.1.3.RELEASE.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
-	<profiles>
-		<profile>
-			<id>useNexusRepos</id>
-			<repositories>
-				<repository>
-					<id>com-mmxlabs-common-util.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-optimiser.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/${project.version}/com.mmxlabs.optimiser.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-lng-scheduler.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/${project.version}/com.mmxlabs.scheduler.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-models-mmxcore.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/${project.version}/com.mmxlabs.models.mmxcore.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-jobmanager.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/${project.version}/com.mmxlabs.jobmanager.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-rcp-common.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-scenario-service.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/${project.version}/com.mmxlabs.scenario.service.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-models-migration.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/migration/com.mmxlabs.models.migration.p2/${project.version}/com.mmxlabs.models.migration.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-models-ui.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/${project.version}/com.mmxlabs.models.ui.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-				<repository>
-					<id>com-mmxlabs-models-lng.hg</id>
-					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/lng/com.mmxlabs.models.lng.p2/${project.version}/com.mmxlabs.models.lng.p2-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-			</repositories>
-		</profile>
-	</profiles>
 </project>
