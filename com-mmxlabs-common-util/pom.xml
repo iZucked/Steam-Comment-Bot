@@ -37,8 +37,6 @@
 		<module>com.mmxlabs.common.common-nauticaldistances</module>
 
 		<module>com.mmxlabs.common.util.feature</module>
-
-		<module>com.mmxlabs.common.util.p2</module>
 	</modules>
 
 	<build>
