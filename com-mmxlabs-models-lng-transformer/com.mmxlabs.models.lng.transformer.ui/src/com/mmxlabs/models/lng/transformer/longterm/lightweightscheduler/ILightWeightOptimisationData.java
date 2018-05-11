@@ -27,4 +27,10 @@ public interface ILightWeightOptimisationData {
 
 	Map<ILoadOption, IDischargeOption> getPairingsMap();
 
+	int[] getDesiredVesselCargoCount();
+
+	double[] getVesselCapacities();
+
+	long[] getDesiredVesselCargoWeight();
+
 }

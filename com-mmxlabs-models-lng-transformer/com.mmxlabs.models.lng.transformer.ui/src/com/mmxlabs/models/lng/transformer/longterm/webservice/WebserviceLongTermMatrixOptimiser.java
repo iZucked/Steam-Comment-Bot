@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.longterm.webservice;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,13 +17,16 @@ public class WebserviceLongTermMatrixOptimiser implements ILongTermMatrixOptimis
 	ObjectMapper mapper = new ObjectMapper();
 	
 	@Override
-	public boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid) {
+	public boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
+			List<Map<String, List<Integer>>> maxSlotsConstraints, List<Map<String, List<Integer>>> minSlotsConstraints) {
 		SimpleHTTPPostRequester requester = new SimpleHTTPPostRequester();
 		Map<String, Object> map = new HashMap<>();
 		map.put("pnl", values);
 		map.put("optionalLoads", optionalLoads);
 		map.put("optionalDischarges", (optionalDischarges));
 		map.put("restricted", (valid));
+		map.put("maxSlots", (maxSlotsConstraints));
+		map.put("minSlots", (minSlotsConstraints));
 		
 		boolean[][] pairings = null;
 

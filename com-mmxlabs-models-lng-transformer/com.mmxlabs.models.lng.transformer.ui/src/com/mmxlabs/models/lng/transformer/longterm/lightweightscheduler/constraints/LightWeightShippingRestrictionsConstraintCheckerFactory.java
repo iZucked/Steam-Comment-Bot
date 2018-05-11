@@ -1,11 +1,13 @@
-package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
+package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.constraints;
+
+import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightConstraintChecker;
+import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightConstraintCheckerFactory;
 
 public class LightWeightShippingRestrictionsConstraintCheckerFactory implements ILightWeightConstraintCheckerFactory {
 	final String NAME = "LightWeightShippingRestrictionsConstraintChecker";
 	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return NAME;
 	}
 

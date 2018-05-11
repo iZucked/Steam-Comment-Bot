@@ -885,7 +885,7 @@ public class LNGScenarioTransformer {
 
 		buildVesselEvents(builder, portAssociation, vesselAssociation, modelEntityMap);
 
-		buildSpotCargoMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
+		buildSpotCargoMarkets(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap);
 
 		buildMarkToMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
 
@@ -1984,7 +1984,7 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildSpotCargoMarkets(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
-			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
+			Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
 
 		// Not needed for a shipping only optimisation
 		if (shippingOnly) {
@@ -2003,7 +2003,7 @@ public class LNGScenarioTransformer {
 		final ZonedDateTime latestDate = dateHelper.getLatestTime();
 
 		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesPurchaseSpotMarket());
-		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket());
+		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket(), vesselAssociation);
 		buildFOBPurchaseSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getFobPurchasesSpotMarket());
 		buildFOBSalesSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getFobSalesSpotMarket());
 
@@ -2338,7 +2338,7 @@ public class LNGScenarioTransformer {
 
 	private void buildDESSalesSpotMarket(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
 			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, @NonNull final ZonedDateTime earliestDate,
-			@NonNull final ZonedDateTime latestDate, @Nullable final SpotMarketGroup desSalesSpotMarket) {
+			@NonNull final ZonedDateTime latestDate, @Nullable final SpotMarketGroup desSalesSpotMarket, Association<Vessel, IVessel> vesselAssociation) {
 		if (desSalesSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = desSalesSpotMarket.getAvailability();
@@ -2443,6 +2443,7 @@ public class LNGScenarioTransformer {
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
+								desSlot.getAllowedVessels().addAll(desSalesMarket.getAllowedVessels());
 								modelEntityMap.addModelObject(desSlot, desSalesSlot);
 
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
@@ -2453,6 +2454,9 @@ public class LNGScenarioTransformer {
 								marketGroupSlots.add(desSalesSlot);
 
 								registerSpotMarketSlot(modelEntityMap, desSlot, desSalesSlot);
+								
+								applySlotVesselRestrictions(desSlot.getAllowedVessels(), desSalesSlot, vesselAssociation);
+
 
 							}
 						}

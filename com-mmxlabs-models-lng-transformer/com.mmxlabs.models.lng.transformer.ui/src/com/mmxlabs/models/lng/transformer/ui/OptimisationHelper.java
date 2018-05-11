@@ -271,6 +271,14 @@ public final class OptimisationHelper {
 
 	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
 			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
+		
+//		scenario.getCargoModel().getCargoes().forEach(c-> {
+//			for (Slot slot : c.getSlots()) {
+//				slot.setCargo(null);
+//			}
+//		});
+//		scenario.getCargoModel().getCargoes().clear();
+		
 		boolean optionAdded = false;
 		boolean enabledOptionAdded = false;
 
@@ -922,9 +930,9 @@ public final class OptimisationHelper {
 			plan.getStages().add(stage);
 		}
 		{
-			final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings));
-			stage.getAnnealingSettings().setEpochLength(epochLength);
-			plan.getStages().add(stage);
+//			final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+//			stage.getAnnealingSettings().setEpochLength(epochLength);
+//			plan.getStages().add(stage);
 		}
 
 		if (userSettings.isBuildActionSets()) {

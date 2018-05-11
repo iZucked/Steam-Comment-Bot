@@ -11,7 +11,6 @@ import java.time.ZonedDateTime;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,7 +20,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import com.minimaxlabs.rnd.representation.ShipmentData;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightConstraintChecker;
@@ -68,7 +66,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	public TabuLightWeightSequenceOptimiser() {
-		this(10_000, 1000, 6, 0);
+		this(10_000, 1000, 15, 0);
 	}
 
 	public TabuLightWeightSequenceOptimiser(int globalIterations, int searchIterations, int maxAge, int randomSeed) {
@@ -182,7 +180,9 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
                 .mapToObj(v -> (List<Integer>) new LinkedList<Integer>())
                 .collect(Collectors.toList());
 
-        List<List<Integer>> bestSchedule = null;
+        List<List<Integer>> bestSchedule = Arrays.stream(vesselCapacities, 0, vesselCount)
+                .mapToObj(v -> (List<Integer>) new LinkedList<Integer>())
+                .collect(Collectors.toList());
 
         List<Integer> cargoes = IntStream.range(0, cargoCount).boxed().collect(Collectors.toList());
         List<Integer> unusedCargoes = new ArrayList<>(cargoes);
@@ -280,6 +280,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
                 bestSchedule = copySolution(schedule);
                 bestFitness = currentFitness;
                 bestIteration = iteration;
+                System.out.println("best found:"+iteration);
             }
         }
 
@@ -293,6 +294,9 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
         System.out.printf("\n\nFitness best : %f\n", bestScoreBest);
         System.out.printf("Iteration best: %d it\n", bestIteration);
+
+        finalPrint(bestSchedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
+                cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, constraintCheckers, fitnessFunctions);
 
         printSolution(bestSchedule);
 		return bestSchedule;
@@ -375,5 +379,64 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		
 		return fitness;
 	}
+	
+	public Double finalPrint(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
+	List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
+		
+		for (ILightWeightConstraintChecker constraintChecker : constraintCheckers) {
+			for (int availability = 0; availability < sequences.size(); availability++) {
+				List<Integer> sequence = sequences.get(availability);
+				 // calculate restrictions
+				 boolean checkRestrictions = constraintChecker.checkSequence(sequence, availability);
+				 if (!checkRestrictions) {
+					 return -Double.MAX_VALUE;
+				 }
+			}
+		}
+		Double fitness = 0.;
+		for (ILightWeightFitnessFunction fitnessFunction : fitnessFunctions) {
+			Double evaluate = fitnessFunction.evaluate(sequences, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+			fitness = fitness + evaluate;
+		}
+		
+		double totalCost = 0;
+		double totalPNL = 0;
+		long totalLateness = 0;
+		int used = 0;
+
+		for (int availability = 0; availability < sequences.size(); availability++) {
+			List<Integer> sequence = sequences.get(availability);
+			used += sequence.size();
+			// calculate costs
+			// calculate lateness
+			int lateness = calculateLatenessOnSequence(sequence, availability, loads, discharges, cargoToCargoMinTravelTimes, cargoMinTravelTimes);
+			totalLateness += lateness;
+			// calculate pnl
+		}
+		System.out.println("lateness:"+totalLateness);
+		
+		return fitness;
+	}
+
+	private int calculateLatenessOnSequence(List<Integer> sequence, int availability,
+			Interval[] loads, Interval[] discharges,
+			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
+		int current = 0;
+		int lateness = 0;
+		for (int i = 0; i < sequence.size(); i++) {
+			int currIdx = sequence.get(i);
+			int earliestCargoStart = Math.max(current, (int) loads[currIdx].getStart());
+			lateness += (Math.min(0, (int) loads[currIdx].getEnd() - 1 - earliestCargoStart) * -1);
+
+			int earliestCargoEnd = Math.max(earliestCargoStart + cargoMinTravelTimes[currIdx][availability], (int) discharges[currIdx].getStart());
+			lateness += (Math.min(0, (int) discharges[currIdx].getEnd() - 1 - earliestCargoEnd) * -1);
+
+			if (i < sequence.size() - 1) {
+				current = earliestCargoEnd + cargoToCargoMinTravelTimes[currIdx][sequence.get(i + 1)][availability];
+			}
+		}
+		return lateness;
+	}
+
 
 }

@@ -14,23 +14,30 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private List<List<IPortSlot>> cargoes;
 	private List<IVesselAvailability> vessels;
 	private long[] cargoPNL;
+	private double[] vesselCapacities;
 	private Long[][][] cargoToCargoCostsOnAvailability;
 	private ArrayList<Set<Integer>> cargoVesselRestrictions;
 	private int[][][] cargoToCargoMinTravelTimes;
 	private int[][] cargoMinTravelTimes;
 	private Map<ILoadOption, IDischargeOption> pairingsMap;
+	private int[] desiredVesselCargoCount;
+	private long[] desiredVesselCargoWeight;
 	
-	public LightWeightOptimisationData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL,
-			Long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions,
-			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Map<ILoadOption, IDischargeOption> pairingsMap) {
+	public LightWeightOptimisationData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, double[] vesselCapacities,
+			long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions,
+			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Map<ILoadOption, IDischargeOption> pairingsMap,
+			int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight) {
 				this.cargoes = cargoes;
 				this.vessels = vessels;
+				this.vesselCapacities = vesselCapacities;
 				this.cargoPNL = cargoPNL;
 				this.cargoToCargoCostsOnAvailability = cargoToCargoCostsOnAvailability;
 				this.cargoVesselRestrictions = cargoVesselRestrictions;
 				this.cargoToCargoMinTravelTimes = cargoToCargoMinTravelTimes;
 				this.cargoMinTravelTimes = cargoMinTravelTimes;
 				this.pairingsMap = pairingsMap;
+				this.desiredVesselCargoCount = desiredVesselCargoCount;
+				this.setDesiredVesselCargoWeight(desiredVesselCargoWeight);
 	}
 	
 	public List<IVesselAvailability> getVessels() {
@@ -39,9 +46,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public void setVessels(List<IVesselAvailability> vessels) {
 		this.vessels = vessels;
 	}
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightOptimisationData#getCargoPNL()
-	 */
+
 	@Override
 	public long[] getCargoPNL() {
 		return cargoPNL;
@@ -49,9 +54,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public void setCargoPNL(long[] cargoPNL) {
 		this.cargoPNL = cargoPNL;
 	}
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightOptimisationData#getCargoToCargoCostsOnAvailability()
-	 */
+
 	@Override
 	public Long[][][] getCargoToCargoCostsOnAvailability() {
 		return cargoToCargoCostsOnAvailability;
@@ -59,9 +62,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public void setCargoToCargoCostsOnAvailability(Long[][][] cargoToCargoCostsOnAvailability) {
 		this.cargoToCargoCostsOnAvailability = cargoToCargoCostsOnAvailability;
 	}
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightOptimisationData#getCargoVesselRestrictions()
-	 */
+
 	@Override
 	public ArrayList<Set<Integer>> getCargoVesselRestrictions() {
 		return cargoVesselRestrictions;
@@ -69,9 +70,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public void setCargoVesselRestrictions(ArrayList<Set<Integer>> cargoVesselRestrictions) {
 		this.cargoVesselRestrictions = cargoVesselRestrictions;
 	}
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightOptimisationData#getCargoToCargoMinTravelTimes()
-	 */
+
 	@Override
 	public int[][][] getCargoToCargoMinTravelTimes() {
 		return cargoToCargoMinTravelTimes;
@@ -79,9 +78,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public void setCargoToCargoMinTravelTimes(int[][][] cargoToCargoMinTravelTimes) {
 		this.cargoToCargoMinTravelTimes = cargoToCargoMinTravelTimes;
 	}
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightOptimisationData#getCargoMinTravelTimes()
-	 */
+
 	@Override
 	public int[][] getCargoMinTravelTimes() {
 		return cargoMinTravelTimes;
@@ -89,9 +86,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public void setCargoMinTravelTimes(int[][] cargoMinTravelTimes) {
 		this.cargoMinTravelTimes = cargoMinTravelTimes;
 	}
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightOptimisationData#getCargoes()
-	 */
+
 	@Override
 	public List<List<IPortSlot>> getCargoes() {
 		return cargoes;
@@ -106,5 +101,29 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 
 	public void setPairingsMap(Map<ILoadOption, IDischargeOption> pairingsMap) {
 		this.pairingsMap = pairingsMap;
+	}
+
+	public int[] getDesiredVesselCargoCount() {
+		return desiredVesselCargoCount;
+	}
+
+	public void setDesiredVesselCargoCount(int[] desiredVesselCargoCount) {
+		this.desiredVesselCargoCount = desiredVesselCargoCount;
+	}
+
+	public double[] getVesselCapacities() {
+		return vesselCapacities;
+	}
+
+	public void setVesselCapacities(double[] vesselCapacities) {
+		this.vesselCapacities = vesselCapacities;
+	}
+
+	public long[] getDesiredVesselCargoWeight() {
+		return desiredVesselCargoWeight;
+	}
+
+	public void setDesiredVesselCargoWeight(long[] desiredVesselCargoWeight) {
+		this.desiredVesselCargoWeight = desiredVesselCargoWeight;
 	}
 }

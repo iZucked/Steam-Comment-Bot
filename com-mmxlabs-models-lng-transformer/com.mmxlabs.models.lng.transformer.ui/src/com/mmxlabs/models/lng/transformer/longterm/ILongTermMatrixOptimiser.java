@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.longterm;
 
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 public interface ILongTermMatrixOptimiser {
@@ -11,7 +14,9 @@ public interface ILongTermMatrixOptimiser {
 	/**
 	 * Finds optimal pairings of slots given a value array
 	 * @param values
+	 * @param minSlotsConstraints TODO
 	 * @return
 	 */
-	boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid);
+	boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
+			List<Map<String, List<Integer>>> maxSlotsConstraints, List<Map<String, List<Integer>>> minSlotsConstraints);
 }

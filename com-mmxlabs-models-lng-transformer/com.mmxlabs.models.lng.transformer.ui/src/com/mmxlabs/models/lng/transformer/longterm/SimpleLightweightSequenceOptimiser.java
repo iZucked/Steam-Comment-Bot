@@ -12,11 +12,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightConstraintChecker;
+import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightSequenceOptimiser;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.LightWeightSchedulerMoves;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -28,7 +28,10 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 	private static final int LATENESS_WEIGHT = 1_000_000;
 
 	@Override
-	public List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
+	public
+	List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability,
+			List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, List<ILightWeightConstraintChecker> constraintCheckers,
+			List<ILightWeightFitnessFunction> fitnessFunctions) {
 		List<List<Integer>> sequences = createSequences(vessels);
 		sequences.get(0).add(0);
 		sequences.get(0).add(1);
@@ -85,7 +88,9 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 			totalPNL += profit;
 		}
 		
-		return COST_WEIGHT * (totalCost/1_000_000) + PNL_WEIGHT * (totalPNL/1_000) + LATENESS_WEIGHT*totalLateness;
+		return COST_WEIGHT * (totalCost/1_000_000)
+				+ PNL_WEIGHT * (totalPNL/1_000)
+				+ LATENESS_WEIGHT*totalLateness;
 	}
 	
 	private boolean  checkRestrictions(List<Integer> sequence, int vessel, List<Set<Integer>> cargoVesselRestrictions) {
@@ -98,7 +103,10 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 	}
 
 	private List<List<Integer>> createSequences(List<IVesselAvailability> vessels) {
-		return vessels.stream().map(v -> (List<Integer>) new LinkedList<Integer>()).collect(Collectors.toList());
+		return vessels
+				.stream()
+				.map(v -> (List<Integer>) new LinkedList<Integer>())
+				.collect(Collectors.toList());
 	}
 
 	private int calculateLatenessOnSequence(List<Integer> sequence, int availability, List<List<IPortSlot>> cargoes, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
@@ -109,7 +117,8 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 			List<IPortSlot> currentCargo = cargoes.get(currIdx);
 			int earliestCargoStart = Math.max(current, getFirstTime(currentCargo).getInclusiveStart());
 			lateness += (Math.min(0, getFirstTime(currentCargo).getExclusiveEnd() - 1 - earliestCargoStart) * -1);
-			int earliestCargoEnd = Math.max(earliestCargoStart + cargoMinTravelTimes[currIdx][availability], getLastTime(currentCargo).getInclusiveStart());
+			int earliestCargoEnd = Math.max(earliestCargoStart + cargoMinTravelTimes[currIdx][availability],
+					getLastTime(currentCargo).getInclusiveStart());
 			lateness += (Math.min(0, getLastTime(currentCargo).getExclusiveEnd() - 1 - earliestCargoEnd) * -1);
 			if (i < sequence.size() - 1) {
 				current = earliestCargoEnd + cargoToCargoMinTravelTimes[currIdx][sequence.get(i+1)][availability];
@@ -119,7 +128,10 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 	}
 	
 	private long calculateProfitOnSequence(List<Integer> sequence, Long capacity, long[] cargoPNL) {
-		return sequence.stream().mapToLong(s -> cargoPNL[s]*capacity).sum();
+		return sequence
+				.stream()
+				.mapToLong(s -> cargoPNL[s]*capacity)
+				.sum();
 	}
 	
 	private long calculateCostOnSequence(List<Integer> sequence, int availability, Long[][][] cargoToCargoCostsOnAvailability) {
@@ -137,5 +149,4 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 	private ITimeWindow getLastTime(List<IPortSlot> cargo) {
 		return cargo.get(cargo.size() - 1).getTimeWindow();
 	}
-
 }

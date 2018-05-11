@@ -1,12 +1,13 @@
-package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
+package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.fitnessfunctions;
 
 import java.util.List;
 
+import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.longterm.metaheuristic.TabuLightWeightSequenceOptimiser.Interval;
 
 public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitnessFunction {
 
-	public static final double LATENESS_FINE = 1_000_000;
+	public static final double LATENESS_FINE = 10_000_000;
 	public static final double UNFULFILLED_FINE = 10_000_000;
 
 	@Override
@@ -44,10 +45,8 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 		}
 		return total;
 	}
-	
-	private int calculateLatenessOnSequence(List<Integer> sequence, int availability,
-			Interval[] loads, Interval[] discharges,
-			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
+
+	private int calculateLatenessOnSequence(List<Integer> sequence, int availability, Interval[] loads, Interval[] discharges, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
 		int current = 0;
 		int lateness = 0;
 		for (int i = 0; i < sequence.size(); i++) {
@@ -73,5 +72,10 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 		return sum;
 	}
 
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

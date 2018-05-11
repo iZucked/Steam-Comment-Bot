@@ -7,29 +7,19 @@ package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.name.Named;
 import com.minimaxlabs.rnd.representation.LightWeightOutputData;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintChecker;
 import com.mmxlabs.models.lng.transformer.longterm.ICargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.longterm.ICargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.models.lng.transformer.longterm.ILongTermMatrixOptimiser;
@@ -42,8 +32,6 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -73,16 +61,6 @@ public class LightweightSchedulerOptimiser {
 		
 	}
 	
-	
-	@Inject
-	private ILongTermSlotsProvider longTermSlotsProvider;
-
-	@Inject
-	private ILongTermMatrixOptimiser matrixOptimiser;
-
-	@Inject
-	private LongTermOptimisationData optimiserRecorder;
-
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
@@ -92,12 +70,6 @@ public class LightweightSchedulerOptimiser {
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
-	@Inject
-	private ICargoToCargoCostCalculator cargoToCargoCostCalculator;
-
-	@Inject
-	private ICargoVesselRestrictionsMatrixProducer cargoVesselRestrictionsMatrixProducer;
-	
 	@Inject
 	private ILightWeightSequenceOptimiser lightWeightSequenceOptimiser;
 	
@@ -126,7 +98,6 @@ public class LightweightSchedulerOptimiser {
 				lightWeightOptimisationData.getCargoPNL(), lightWeightOptimisationData.getCargoToCargoCostsOnAvailability(), lightWeightOptimisationData.getCargoVesselRestrictions(),
 				lightWeightOptimisationData.getCargoToCargoMinTravelTimes(), lightWeightOptimisationData.getCargoMinTravelTimes(), constraintCheckers, fitnessFunctions);
 
-//		List<List<Integer>> sequences = null;
 //		try {
 //			sequences = getStoredSequences("/tmp/gurobiOutput.gb");
 //		} catch (IOException e) {
@@ -141,9 +112,19 @@ public class LightweightSchedulerOptimiser {
 		IVesselAvailability pnlVessel = LongTermOptimiserHelper.getPNLVessel(dataTransformer, charterInMarket, vesselProvider);
 
 		// update shipped
-		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getPairingsMap());
+		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getCargoes(),
+				lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getPairingsMap());
 		// update non-shipped
-		LongTermOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getPairingsMap(), vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
+		LongTermOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getPairingsMap(),
+				vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
+		HashMap<ILoadOption, IDischargeOption> ununsedMap = new HashMap<>(lightWeightOptimisationData.getPairingsMap());
+		for (List<Integer> sequence : sequences) {
+			for (Integer idx : sequence) {
+				ununsedMap.remove(lightWeightOptimisationData.getCargoes().get(idx).get(0));
+			}
+		}
+		LongTermOptimiserHelper.updateVirtualSequences(rawSequences, ununsedMap, vesselProvider.getResource(pnlVessel),
+				portSlotProvider, virtualVesselSlotProvider, vesselProvider, ShippingType.SHIPPED);
 		return new Pair<>(rawSequences, 0L);
 	}
 
@@ -212,32 +193,6 @@ public class LightweightSchedulerOptimiser {
 				}
 			}
 		}
-	}
-
-	private IVesselAvailability getPNLVessel(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
-		IVesselAvailability nominalMarketAvailability = null;
-		final ISpotCharterInMarket o_nominalMarket = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
-		for (final IResource resource : vesselProvider.getSortedResources()) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getSpotCharterInMarket() == o_nominalMarket && vesselAvailability.getSpotIndex() == -1) {
-				nominalMarketAvailability = vesselAvailability;
-				break;
-			}
-		}
-		assert nominalMarketAvailability != null;
-		return nominalMarketAvailability;
-	}
-
-	private boolean isShippedVessel(@NonNull IVesselAvailability v) {
-		return ALLOWED_VESSEL_TYPES.contains(v.getVesselInstanceType());
-	}
-
-	private ResourceAllocationConstraintChecker getResourceAllocationConstraintChecker(List<IPairwiseConstraintChecker> constraintCheckers) {
-		return constraintCheckers.parallelStream().filter(c -> (c instanceof ResourceAllocationConstraintChecker)).map(c -> (ResourceAllocationConstraintChecker) c).findFirst().get();
-	}
-
-	private PortExclusionConstraintChecker getPortExclusionConstraintChecker(List<IPairwiseConstraintChecker> constraintCheckers) {
-		return constraintCheckers.parallelStream().filter(c -> (c instanceof PortExclusionConstraintChecker)).map(c -> (PortExclusionConstraintChecker) c).findFirst().get();
 	}
 
 	private static List<List<Integer>> getStoredSequences(String path) throws IOException {

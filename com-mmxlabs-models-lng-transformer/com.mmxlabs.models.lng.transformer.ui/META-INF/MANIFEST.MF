@@ -69,6 +69,7 @@ Service-Component: OSGI-INF/*.xml
 Export-Package: com.mmxlabs.models.lng.transformer.actionplan,
  com.mmxlabs.models.lng.transformer.breakeven,
  com.mmxlabs.models.lng.transformer.longterm,
+ com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler,
  com.mmxlabs.models.lng.transformer.ui,
  com.mmxlabs.models.lng.transformer.ui.actionablesets,
  com.mmxlabs.models.lng.transformer.ui.analytics,
