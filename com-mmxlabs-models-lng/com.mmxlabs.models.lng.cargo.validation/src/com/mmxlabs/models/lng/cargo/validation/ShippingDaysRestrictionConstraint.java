@@ -343,6 +343,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 					.withMessage((ladenTravelTimeInHours - maxTime) > ladenTravelTimeInHours ? (String.format("is paired with a sale at %s. However the slot windows are incompatible", discharge.getName())) : 
 						(String.format("is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", discharge.getName(), TravelTimeUtils.formatHours(ladenTravelTimeInHours), TravelTimeUtils.formatHours(ladenTravelTimeInHours - maxTime)) 
 						)) //
+					.withSeverity(IStatus.WARNING) //
 					.make(ctx));
 		}
 	}
