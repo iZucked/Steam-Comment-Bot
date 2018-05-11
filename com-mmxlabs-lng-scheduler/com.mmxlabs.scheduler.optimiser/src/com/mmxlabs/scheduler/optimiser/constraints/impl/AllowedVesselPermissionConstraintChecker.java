@@ -114,7 +114,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
-	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
+	public boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
 		// Skip these element types
 		if (portTypeProvider.getPortType(element) == PortType.Start) {
 			return true;

@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 public final class HashSetLongTermSlotsEditor implements ILongTermSlotsProviderEditor {
 
 	@NonNull
-	private final Set<IPortSlot> portSlotMap = new HashSet<>();
+	private final Set<IPortSlot> portSlotMap = new LinkedHashSet<>();
 
 	@Override
 	public @NonNull Collection<IPortSlot> getLongTermSlots() {
