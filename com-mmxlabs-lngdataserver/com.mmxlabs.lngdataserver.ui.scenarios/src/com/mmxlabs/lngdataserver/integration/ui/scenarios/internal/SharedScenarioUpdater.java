@@ -319,7 +319,6 @@ public class SharedScenarioUpdater {
 					try {
 						Thread.sleep(10_000);
 					} catch (final InterruptedException e) {
-						e.printStackTrace();
 						interrupt(); // preserve interruption status
 						return;
 					}
