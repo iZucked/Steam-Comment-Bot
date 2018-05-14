@@ -108,8 +108,9 @@ public class DefaultModelEntityMap implements ModelEntityMap {
 	@NonNull
 	public ZonedDateTime getDateFromHours(final int hours, final String tz) {
 		final String timeZone = (tz == null) ? "UTC" : tz;
-		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
-		return dateHelper.getEarliestTime().withZoneSameInstant(ZoneId.of(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
+		final ZonedDateTime rawDate = dateHelper.getEarliestTime().withZoneSameInstant(ZoneId.of(timeZone)).plusHours(hours);
+		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromDate(rawDate);
+		return rawDate.plusMinutes(offsetMinutes);
 	}
 
 	/**
