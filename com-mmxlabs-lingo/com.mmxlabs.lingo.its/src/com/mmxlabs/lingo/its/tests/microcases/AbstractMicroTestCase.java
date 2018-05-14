@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -195,7 +197,7 @@ public abstract class AbstractMicroTestCase {
 		}
 
 		// Generate internal data
-		final ExecutorService executorService = createExecutorService();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(),
@@ -244,7 +246,7 @@ public abstract class AbstractMicroTestCase {
 		}
 
 		// Generate internal data
-		final ExecutorService executorService = createExecutorService();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
@@ -279,7 +281,7 @@ public abstract class AbstractMicroTestCase {
 		}
 
 		// Generate internal data
-		final ExecutorService executorService = createExecutorService();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimiserPlan, scenarioDataProvider.getEditingDomain(), null, localOverrides,
 					null, true);

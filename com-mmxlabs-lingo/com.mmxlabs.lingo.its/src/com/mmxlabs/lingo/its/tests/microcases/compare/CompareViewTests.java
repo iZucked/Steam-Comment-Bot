@@ -32,6 +32,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
@@ -73,6 +74,7 @@ import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -946,7 +948,7 @@ public class CompareViewTests {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final ExecutorService executorService = createExecutorService();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
 			scenarioRunner.evaluateInitialState();

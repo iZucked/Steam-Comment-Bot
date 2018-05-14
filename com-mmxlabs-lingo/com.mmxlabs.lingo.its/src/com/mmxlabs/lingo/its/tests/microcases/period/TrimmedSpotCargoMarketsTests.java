@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -110,7 +112,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
@@ -222,7 +224,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,

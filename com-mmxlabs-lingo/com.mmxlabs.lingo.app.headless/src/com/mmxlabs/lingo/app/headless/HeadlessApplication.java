@@ -41,6 +41,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
@@ -177,7 +179,7 @@ public class HeadlessApplication implements IApplication {
 
 			// Create logging module
 			final int no_threads = getNumThreads(headlessParameters);
-			final @NonNull ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
+			final @NonNull CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(no_threads));
 
 			final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
 
