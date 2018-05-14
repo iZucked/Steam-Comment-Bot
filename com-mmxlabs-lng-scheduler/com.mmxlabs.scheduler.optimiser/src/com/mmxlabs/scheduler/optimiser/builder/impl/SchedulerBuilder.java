@@ -1659,14 +1659,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private boolean matchingWindows(final @Nullable ITimeWindow tw1, final @Nullable ITimeWindow tw2) {
 
 		if (tw1 != null && tw2 != null) {
-			// End is within
-			if (tw1.getExclusiveEnd() > tw2.getInclusiveStart() && tw1.getExclusiveEnd() - 1 < tw2.getExclusiveEnd()) {
-				return true;
-			}
-			// Start is within
-			if (tw1.getInclusiveStart() >= tw2.getInclusiveStart() && tw1.getInclusiveStart() < tw2.getExclusiveEnd()) {
-				return true;
-			}
+			return tw1.overlaps(tw2);
 		}
 
 		return false;

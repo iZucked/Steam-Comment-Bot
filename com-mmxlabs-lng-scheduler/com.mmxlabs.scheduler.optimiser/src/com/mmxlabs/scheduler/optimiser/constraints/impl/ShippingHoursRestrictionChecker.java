@@ -177,14 +177,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 						ITimeWindow tw1 = fobPurchase.getTimeWindow();
 						ITimeWindow tw2 = fobSale.getTimeWindow();
 						if (tw1 != null && tw2 != null) {
-							// End is within
-							if (tw1.getExclusiveEnd() > tw2.getInclusiveStart() && tw1.getExclusiveEnd() - 1 < tw2.getExclusiveEnd()) {
-								return true;
-							}
-							// Start is within
-							if (tw1.getInclusiveStart() >= tw2.getInclusiveStart() && tw1.getInclusiveStart() < tw2.getExclusiveEnd()) {
-								return true;
-							}
+							return tw1.overlaps(tw2);
 						}
 						return false;
 					}
