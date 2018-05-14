@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -148,9 +149,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testLowLevelCosts() throws Exception {
-		
+
 		Assert.fail("Alex - fix me!");
-		
+
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
@@ -764,12 +765,19 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				// get optimised time windows
 				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				System.out.println(MicroCaseDateUtils.getZonedDateTime(2016, 07, 01, 0, getDefaultEMFLoadSlot().getPort()));
 
-				Assert.assertEquals(MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, loadFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFLoadSlot().getPort().getZoneId()),
-						MicroCaseDateUtils.getZonedDateTime(2016, 07, 01, 0, getDefaultEMFLoadSlot().getPort()));
-				Assert.assertEquals(
-						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()),
-						MicroCaseDateUtils.getZonedDateTime(2016, 8, 21, 0, getDefaultEMFDischargeSlot().getPort()));
+				System.out.println(MicroCaseDateUtils.getZonedDateTime(2016, 8, 21, 0, getDefaultEMFDischargeSlot().getPort()));
+				System.out.println(
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()));
+				System.out.println(dischargeFeasibleTimeWindow);
+				System.out.println(getDefaultEMFDischargeSlot().getPort().getZoneId().getRules().getOffset(LocalDateTime.of(2018, 1, 1, 0, 0)));
+				System.out.println(getDefaultEMFDischargeSlot().getPort().getZoneId().getRules().getOffset(LocalDateTime.of(2018, 6, 1, 0, 0)));
+
+				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 07, 01, 0, getDefaultEMFLoadSlot().getPort()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, loadFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFLoadSlot().getPort().getZoneId()));
+				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 8, 21, 0, getDefaultEMFDischargeSlot().getPort()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()));
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
 			});
 		});

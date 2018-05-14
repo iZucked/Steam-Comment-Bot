@@ -889,9 +889,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1266_666, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1266_666, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1266.666 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 0.0);
+					Assert.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(1245.833 * 5.0 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
 
 				}
 				{
@@ -907,9 +907,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_165_834, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(5_243_333, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(5_268_333, heelRecord.getHeelAtEndInM3());
 					Assert.assertEquals(0, heelRecord.getHeelCost());
 					Assert.assertEquals(0, heelRecord.getHeelRevenue());
 
@@ -1000,9 +1000,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1266_666, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1266_666, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1266.666 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 0.0);
+					Assert.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
 
 				}
 				{
@@ -1018,7 +1018,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_210_834, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
 					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
 					Assert.assertEquals(0, heelRecord.getHeelCost());
@@ -1331,9 +1331,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1266_666, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1266_666, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1266.666 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 0.0);
+					Assert.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
 					Assert.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
@@ -1349,7 +1349,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_165_834, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
 					Assert.assertEquals(12_874_577, heelRecord.getHeelAtEndInM3());
 					Assert.assertEquals(0, heelRecord.getHeelCost());
@@ -1665,9 +1665,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1266_666, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1266_666, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1266.666 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 0.0);
+					Assert.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
 
 				}
 				{
@@ -1683,9 +1683,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot1);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_165_834, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(5_493_333, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(5_514_166, heelRecord.getHeelAtEndInM3());
 					Assert.assertEquals(0, heelRecord.getHeelCost());
 					Assert.assertEquals(0, heelRecord.getHeelRevenue());
 				}
@@ -1702,7 +1702,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot2);
 					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_180_834, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
 					Assert.assertEquals(4_141_502, heelRecord.getHeelAtEndInM3());
 					Assert.assertEquals(0, heelRecord.getHeelCost());
