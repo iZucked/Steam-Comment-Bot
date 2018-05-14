@@ -28,26 +28,19 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provides;
-import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
-import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
-import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
-import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_AnnealingSettingsModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -68,11 +61,7 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NonDominatedSolution;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.optimiser.lso.impl.SimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.optimiser.optimiser.lso.parallellso.LSOMover;
-import com.mmxlabs.optimiser.optimiser.lso.parallellso.ParallelSimpleMultiObjectiveOptimiser;
-import com.mmxlabs.optimiser.optimiser.lso.parallellso.ProcessorAgnosticParallelLSO;
 import com.mmxlabs.optimiser.optimiser.lso.parallellso.SequentialParallelSimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.optimiser.lso.parallellso.SimpleMultiObjectiveLSOMover;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -83,7 +72,7 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 	
 	@NonNull
 	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings, @NonNull final MultipleSolutionSimilarityOptimisationStage stageSettings,
-			@Nullable final ExecutorService executorService, final int progressTicks, final boolean singleSolution) {
+			@Nullable final CleanableExecutorService executorService, final int progressTicks, final boolean singleSolution) {
 		@NonNull
 		final Collection<@NonNull String> hints = new HashSet<>(chainBuilder.getDataTransformer().getHints());
 		if (userSettings.isGenerateCharterOuts()) {
@@ -101,7 +90,7 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 
 	public LNGParallelMultiObjectiveOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final MultipleSolutionSimilarityOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService, final boolean singleSolution) {
+			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService, final boolean singleSolution) {
 		super(dataTransformer, stage, userSettings, stageSettings, initialSequences, inputSequences, hints, executorService);
 		this.singleSolution = singleSolution;
 	}

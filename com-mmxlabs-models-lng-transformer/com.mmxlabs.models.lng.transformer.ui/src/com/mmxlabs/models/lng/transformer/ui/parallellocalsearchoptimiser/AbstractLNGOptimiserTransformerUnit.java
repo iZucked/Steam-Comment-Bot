@@ -6,30 +6,19 @@ package com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.google.inject.name.Names;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.util.TriFunction;
-import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
-import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
@@ -40,22 +29,15 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_AnnealingSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.optimiser.optimiser.lso.parallellso.LSOMover;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsAndFitnessSettingsStage> implements ILNGStateTransformerUnit {
@@ -73,11 +55,14 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 	
 	protected final LocalSearchOptimiser optimiser;
 
+	protected CleanableExecutorService executorService;
+
 	public AbstractLNGOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService) {
+			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
 		this.dataTransformer = dataTransformer;
 		this.stage = stage;
+		this.executorService = executorService;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 

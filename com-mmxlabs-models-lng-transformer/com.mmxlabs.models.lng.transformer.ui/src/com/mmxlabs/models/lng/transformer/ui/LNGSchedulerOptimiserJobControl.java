@@ -20,6 +20,7 @@ import org.eclipse.ui.progress.IProgressConstants;
 
 import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -53,7 +54,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private final LNGScenarioRunner scenarioRunner;
 
-	private ExecutorService executorService;
+	private CleanableExecutorService executorService;
 
 	public LNGSchedulerOptimiserJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(),

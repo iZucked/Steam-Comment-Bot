@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
@@ -59,7 +60,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGSchedulerEvaluationJobControl")) {
 			final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();

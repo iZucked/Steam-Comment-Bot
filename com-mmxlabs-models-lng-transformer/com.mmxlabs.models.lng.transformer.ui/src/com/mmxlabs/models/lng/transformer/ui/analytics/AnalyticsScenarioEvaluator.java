@@ -31,6 +31,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
@@ -58,6 +59,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -85,7 +87,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		optimisationPlan.getStages().clear();
 
 		// Generate internal data
-		final ExecutorService executorService = Executors.newFixedThreadPool(1);
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null, null,

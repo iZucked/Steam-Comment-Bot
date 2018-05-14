@@ -14,6 +14,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -34,7 +35,7 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 			if (object instanceof LNGScenarioModel) {
 
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) object;
-				final ExecutorService executorService = Executors.newSingleThreadExecutor();
+				final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 				try {
 					scenarioDataProvider.setLastEvaluationFailed(true);
 

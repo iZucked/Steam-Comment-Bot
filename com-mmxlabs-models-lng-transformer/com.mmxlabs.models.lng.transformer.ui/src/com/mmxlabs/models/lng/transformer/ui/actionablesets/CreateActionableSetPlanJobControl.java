@@ -22,6 +22,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
@@ -79,7 +80,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 	private final LNGScenarioRunner scenarioRunner;
 
-	private final ExecutorService executorService;
+	private final CleanableExecutorService executorService;
 
 	private final EditingDomain originalEditingDomain;
 

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Module;
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -59,24 +60,24 @@ public class LNGScenarioRunner {
 
 	private @NonNull final ExecutorService executorService;
 
-	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
+	public LNGScenarioRunner(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
 		this(exectorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), runnerHook, evaluationOnly, initialHints);
 
 	}
 
-	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
+	public LNGScenarioRunner(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@Nullable final Module extraModule, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
 		this(exectorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), extraModule, null, runnerHook, evaluationOnly, initialHints);
 	}
 
-	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
+	public LNGScenarioRunner(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
 			@NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly,
 			final String... initialHints) {
 		this(exectorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, null, runnerHook, evaluationOnly, initialHints);
 	}
 
-	public LNGScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
+	public LNGScenarioRunner(@NonNull final CleanableExecutorService executorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
 			@NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule, @Nullable final IOptimiserInjectorService localOverrides,
 			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
 

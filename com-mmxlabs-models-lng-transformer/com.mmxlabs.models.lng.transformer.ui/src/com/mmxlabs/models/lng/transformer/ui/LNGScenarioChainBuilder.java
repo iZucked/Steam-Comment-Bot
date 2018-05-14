@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
@@ -49,7 +51,7 @@ public class LNGScenarioChainBuilder {
 	 * @return
 	 */
 	public static IChainRunner createStandardOptimisationChain(@NonNull final String resultName, @NonNull final LNGDataTransformer dataTransformer,
-			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final ExecutorService executorService,
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final CleanableExecutorService executorService,
 			@NonNull final String @Nullable... initialHints) {
 		boolean createOptimiser = false;
 
@@ -121,14 +123,14 @@ public class LNGScenarioChainBuilder {
 	}
 
 	@NonNull
-	public static ExecutorService createExecutorService() {
+	public static CleanableExecutorService createExecutorService() {
 		final int cores = getNumberOfAvailableCores();
 		return createExecutorService(cores);
 	}
 
 	@NonNull
-	public static ExecutorService createExecutorService(final int nThreads) {
-		return Executors.newFixedThreadPool(nThreads);
+	public static CleanableExecutorService createExecutorService(final int nThreads) {
+		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(nThreads));
 	}
 
 	public static int getNumberOfAvailableCores() {

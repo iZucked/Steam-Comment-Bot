@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 
 import org.junit.Assert;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
@@ -29,6 +30,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -127,7 +129,7 @@ public class SuboptimalScenarioTester {
 
 		final int n = loadPorts.length;
 
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 			// optimise the scenario
 

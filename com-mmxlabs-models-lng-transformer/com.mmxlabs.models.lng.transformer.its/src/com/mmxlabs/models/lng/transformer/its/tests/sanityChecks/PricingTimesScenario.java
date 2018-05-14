@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -142,7 +144,7 @@ public class PricingTimesScenario {
 	 * Main testing methods to run the created scenario and compare the actual and expected price
 	 */
 	public void testSalesPrice(final double... prices) {
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, LNGScenarioRunnerUtils.createDefaultOptimisationPlan(),
 					new TransformerExtensionTestBootstrapModule(), null, true);

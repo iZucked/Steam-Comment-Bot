@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
@@ -60,7 +61,7 @@ public class LNGScenarioChainUnitFactory {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
-	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final @NonNull ExecutorService executorService,
+	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final @NonNull CleanableExecutorService executorService,
 			final @NonNull OptimisationStage template, final int jobCount, final @NonNull UserSettings userSettings) {
 		if (template instanceof CleanStateOptimisationStage) {
 			final CleanStateOptimisationStage stage = (CleanStateOptimisationStage) template;

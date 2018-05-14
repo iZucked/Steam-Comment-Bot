@@ -27,6 +27,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
@@ -103,7 +104,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	private InsertionOptimisationStage insertionStage;
 
-	public LNGSchedulerInsertSlotJobRunner(final ExecutorService executorService, @Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider,
+	public LNGSchedulerInsertSlotJobRunner(final CleanableExecutorService executorService, @Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider,
 			final EditingDomain editingDomain, final UserSettings userSettings, final List<Slot> targetSlots, final List<VesselEvent> targetEvents) {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;

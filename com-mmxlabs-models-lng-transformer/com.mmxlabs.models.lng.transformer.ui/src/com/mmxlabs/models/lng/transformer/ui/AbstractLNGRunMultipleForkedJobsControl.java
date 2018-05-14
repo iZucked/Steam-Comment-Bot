@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
@@ -56,8 +57,8 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
 	private final List<SimilarityFuture> jobs;
-	private final ExecutorService controlService;
-	private final ExecutorService runnerService;
+	private final CleanableExecutorService controlService;
+	private final CleanableExecutorService runnerService;
 
 	private class SimilarityFuture implements Runnable {
 
@@ -134,7 +135,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		final int numberOfThreads = getNumberOfThreads();
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 		// This executor is for the futures we create and execute here...
-		controlService = Executors.newFixedThreadPool(numberOfThreads);
+		controlService = LNGScenarioChainBuilder.createExecutorService(numberOfThreads);
 		// .. this executor is for the optimisation itself to avoid blocking the control executor
 		runnerService = LNGScenarioChainBuilder.createExecutorService();
 		// Disable optimisation in P&L testing phase
