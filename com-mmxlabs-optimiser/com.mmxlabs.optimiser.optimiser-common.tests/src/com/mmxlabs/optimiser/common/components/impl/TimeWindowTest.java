@@ -45,4 +45,20 @@ public class TimeWindowTest {
 		Assert.assertFalse(tw1.equals(new Object()));
 	}
 
+	@Test
+	public void testOverlaps() {
+		final TimeWindow tw1 = new TimeWindow(10, 20);
+		final TimeWindow tw2 = new TimeWindow(10, 20);
+		final TimeWindow tw3 = new TimeWindow(20, 21);
+		final TimeWindow tw4 = new TimeWindow(1, 10);
+		final TimeWindow tw5 = new TimeWindow(10, 11);
+		final TimeWindow tw6 = new TimeWindow(11, 12);
+
+		Assert.assertTrue(tw1.overlaps(tw1)); // Identity
+		Assert.assertTrue(tw1.overlaps(tw2)); // Equivalence
+		Assert.assertFalse(tw1.overlaps(tw3)); // Out of bounds
+		Assert.assertFalse(tw1.overlaps(tw4)); // Out of bounds
+		Assert.assertTrue(tw1.overlaps(tw5)); // Intersects
+		Assert.assertTrue(tw1.overlaps(tw5)); // Intersects
+	}
 }

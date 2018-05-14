@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.common.components.impl;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 /**
@@ -104,5 +106,18 @@ public final class MutableTimeWindow implements ITimeWindow {
 	@Override
 	public String toString() {
 		return String.format("[%d, %d)", start, end);
+	}
+
+	@Override
+	public boolean overlaps(@NonNull ITimeWindow other) {
+		int a = getInclusiveStart();
+		int b = getExclusiveEnd() - 1;
+		int c = other.getInclusiveStart();
+		int d = other.getExclusiveEnd() - 1;
+
+		if (b - c >= 0 && d - a >= 0) {
+			return true;
+		}
+		return false;
 	}
 }

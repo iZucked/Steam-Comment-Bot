@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Interface defining a window of time bounded by {@link #getStart()} and {@link #getEnd()}.
  * 
@@ -16,8 +18,16 @@ public interface ITimeWindow {
 
 	// TODO: Should the end be inclusive or exclusive?
 	int getExclusiveEnd();
-	
+
 	int getExclusiveEndFlex();
-	
+
 	int getExclusiveEndWithoutFlex();
+
+	/**
+	 * Return true if the non-flex interval overlaps
+	 * 
+	 * @param other
+	 * @return
+	 */
+	boolean overlaps(@NonNull ITimeWindow other);
 }
