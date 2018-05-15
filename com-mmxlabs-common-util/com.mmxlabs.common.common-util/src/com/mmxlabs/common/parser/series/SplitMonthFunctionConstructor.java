@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.functions.SplitMonthSeries;
 
@@ -42,6 +44,11 @@ public class SplitMonthFunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public @NonNull ISeries evaluate() {
-		return new SplitMonthSeries(series1.evaluate(), series2.evaluate(), splitPoint, calendarMonthMapper);
+		return new SplitMonthSeries(series1.evaluate(), series2.evaluate(), splitPoint, calendarMonthMapper, null);
+	}
+	
+	@Override
+	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+		return new SplitMonthSeries(series1.evaluate(), series2.evaluate(), splitPoint, calendarMonthMapper, earliestAndLatestTime);
 	}
 }

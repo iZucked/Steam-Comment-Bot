@@ -1,6 +1,8 @@
 /* // Originally based on example from http://www2.cs.tum.edu/projekte/cup/examples.php */
 import java_cup.runtime.*;
 import java.util.*;
+import java.time.ZonedDateTime;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.*;
 import com.mmxlabs.common.parser.series.*;
 import com.mmxlabs.common.parser.series.functions.*;
@@ -74,6 +76,11 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpres
 						@Override
 						public ISeries evaluate() {
 							return new Minus(e.evaluate());
+						}
+						
+						@Override
+						public ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+							return evaluate();
 						}
 					};         :}
   	     %prec UMINUS

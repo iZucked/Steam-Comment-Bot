@@ -7,6 +7,8 @@ package com.mmxlabs.common.parser.impl;
 
 import java_cup.runtime.*;
 import java.util.*;
+import java.time.ZonedDateTime;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.*;
 import com.mmxlabs.common.parser.series.*;
 import com.mmxlabs.common.parser.series.functions.*;
@@ -474,6 +476,11 @@ class CUP$Parser$actions {
 						@Override
 						public ISeries evaluate() {
 							return new Minus(e.evaluate());
+						}
+						
+						@Override
+						public ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+							return evaluate();
 						}
 					};         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);

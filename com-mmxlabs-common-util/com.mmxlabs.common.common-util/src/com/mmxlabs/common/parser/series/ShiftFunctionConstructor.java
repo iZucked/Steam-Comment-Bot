@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.functions.ShiftedSeries;
 
@@ -46,6 +48,11 @@ public class ShiftFunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public @NonNull ISeries evaluate() {
+		return new ShiftedSeries(toShift.evaluate(), shiftBy, shiftMapper);
+	}
+	
+	@Override
+	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
 		return new ShiftedSeries(toShift.evaluate(), shiftBy, shiftMapper);
 	}
 }
