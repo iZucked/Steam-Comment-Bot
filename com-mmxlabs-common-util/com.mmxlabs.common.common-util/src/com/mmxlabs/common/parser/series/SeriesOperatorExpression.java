@@ -89,7 +89,8 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 		public static final IOp DIV = new IOp() {
 			@Override
 			public Number evaluate(final Number a, final Number b) {
-				return a.doubleValue() / b.doubleValue();
+				// Divide by zero check
+				return b.doubleValue() == 0.0 ? 0.0 : a.doubleValue() / b.doubleValue();
 			}
 		};
 
