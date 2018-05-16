@@ -55,6 +55,11 @@ public class DynamicEObjectWrapperImpl extends DynamicEObjectImpl implements EOb
 		eSet(feature, value);
 	}
 
+	@Override
+	public boolean hasFeature(final String name) {
+		return eClass().getEStructuralFeature(name) != null;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAttrib(final String name) {

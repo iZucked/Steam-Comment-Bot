@@ -35,6 +35,14 @@ public interface EObjectWrapper extends EObject {
 	List<EObjectWrapper> getRefAsList(String name);
 
 	/**
+	 * Returns true if feature is present.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	boolean hasFeature(String name);
+	
+	/**
 	 * Find the named {@link EAttribute} and return the result.
 	 * 
 	 * @param name
