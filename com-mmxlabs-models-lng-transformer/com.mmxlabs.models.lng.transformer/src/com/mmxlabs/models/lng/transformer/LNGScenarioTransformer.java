@@ -132,6 +132,7 @@ import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -289,6 +290,10 @@ public class LNGScenarioTransformer {
 	@NonNull
 	private ILoadPriceCalculatorProviderEditor loadPriceCalculatorProvider;
 
+
+	@Inject
+	private IntegerIntervalCurveHelper integerIntervalCurveHelper;
+	
 	@Inject
 	@NonNull
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
@@ -1635,7 +1640,16 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				dischargePriceCalculator = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
+				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
+
+				final String splitMonthToken = "splitmonth(";
+				boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+
+				if (isSplitMonth) {
+					priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+				}
+
+				dischargePriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 				injector.injectMembers(dischargePriceCalculator);
 			}
 		} else if (dischargeSlot instanceof SpotSlot) {
@@ -1817,7 +1831,16 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				loadPriceCalculator = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
+				
+				final String splitMonthToken = "splitmonth(";
+				boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+
+				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
+				if (isSplitMonth) {
+					priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+				}
+
+				loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 				injector.injectMembers(loadPriceCalculator);
 
 			}
