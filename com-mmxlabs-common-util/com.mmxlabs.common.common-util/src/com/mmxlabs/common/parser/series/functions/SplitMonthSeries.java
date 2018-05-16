@@ -56,22 +56,37 @@ public class SplitMonthSeries implements ISeries {
 	
 	@Override
 	public int[] getChangePoints() {
-		int period = 15;
 		int ic = -1;
 		
 		if (earliestAndLatestTime == null) {
 			return NONE;
 		}
 
-		long seriesDurationInMonth = ChronoUnit.MONTHS.between(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond());
-		int changePoints[] = new int[(int) seriesDurationInMonth * 2];
 
-		for (int i = 0; i < seriesDurationInMonth; i++) {
+		int startMonth = mapper.mapChangePointToMonth(0);
+		int 	endMonth = startMonth + ((int) ChronoUnit.MONTHS.between(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond()));
+		
+		if (series1.getChangePoints().length != 0 && series2.getChangePoints().length != 0) {
+			int startTime = Math.min(series1.getChangePoints()[0],
+				 series2.getChangePoints()[0]);
+		
+			int endTime = Math.max(series1.getChangePoints()[series1.getChangePoints().length - 1],
+				 series2.getChangePoints()[series2.getChangePoints().length - 1]);
+
+			startMonth = mapper.mapChangePointToMonth(startTime);
+			endMonth = mapper.mapChangePointToMonth(endTime);
+		}
+
+
+		//long seriesDurationInMonth = ChronoUnit.MONTHS.between(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond());
+		int changePoints[] = new int[(endMonth - startMonth) * 2];
+		
+		for (int i = startMonth; i < endMonth; i++) {
 			// Should be the start of the month in 'unit' (hour)
 			int monthStartPoint = mapper.mapMonthToChangePoint(i);
 
 			changePoints[++ic] = monthStartPoint;
-			changePoints[++ic] = monthStartPoint + daysToPoint(period);
+			changePoints[++ic] = monthStartPoint + daysToPoint(splitPoint);
 		}
 
 		return changePoints;
