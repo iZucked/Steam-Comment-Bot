@@ -28,11 +28,14 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.commercial.parseutils.LookupData;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
@@ -196,6 +199,20 @@ public class ExposuresTest {
 						indiciesOf(//
 								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
 
+				{ "Currency data - missing", "GAS_NBP_GBP*therm_to_mmBtu/p_to_USD", "GAS_NBP_GBP", //
+						single(calcExpected("GAS_NBP_GBP", pricingDate, 5, 10.0, 0.0)), //
+						indiciesOf( //
+								makeIndex("GAS_NBP_GBP", "p", "therm", pricingDate, 5, 6, 7, 8, 9), //
+								makeCurrencyIndex("p_to_USD", "p", "", pricingDate.plusMonths(2), 1.4) //
+						) //
+				}, { "Currency data - present", "GAS_NBP_GBP*therm_to_mmBtu/p_to_USD", "GAS_NBP_GBP", //
+						single(calcExpected("GAS_NBP_GBP", pricingDate, 5, 10.0, 5.0 * 10.0 / 1.4)), //
+						indiciesOf( //
+								makeIndex("GAS_NBP_GBP", "p", "therm", pricingDate, 5, 6, 7, 8, 9), //
+								makeCurrencyIndex("p_to_USD", "p", "", pricingDate, 1.4) //
+						) //
+				},
+
 		});
 	}
 
@@ -213,10 +230,10 @@ public class ExposuresTest {
 
 	private @NonNull final String expression;
 	private @NonNull final String indexName;
-	private @NonNull final CommodityIndex[] indicies;
+	private @NonNull final NamedIndexContainer<?>[] indicies;
 	private @NonNull final ResultChecker checker;
 
-	public ExposuresTest(final String name, final String expression, final String indexName, final @NonNull ResultChecker expectedResult, final CommodityIndex... indicies) {
+	public ExposuresTest(final String name, final String expression, final String indexName, final @NonNull ResultChecker expectedResult, final NamedIndexContainer<?>[] indicies) {
 		this.checker = expectedResult;
 		this.indicies = indicies;
 		this.indexName = indexName;
@@ -228,8 +245,18 @@ public class ExposuresTest {
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
 
-		for (final CommodityIndex idx : indicies) {
-			pricingModel.getCommodityIndices().add(idx);
+		for (final NamedIndexContainer<?> idx : indicies) {
+			if (idx instanceof CommodityIndex) {
+				pricingModel.getCommodityIndices().add((CommodityIndex) idx);
+			} else if (idx instanceof CurrencyIndex) {
+				pricingModel.getCurrencyIndices().add((CurrencyIndex) idx);
+			} else if (idx instanceof CharterIndex) {
+				pricingModel.getCharterIndices().add((CharterIndex) idx);
+			} else if (idx instanceof BaseFuelIndex) {
+				pricingModel.getBaseFuelPrices().add((BaseFuelIndex) idx);
+			} else {
+				Assert.fail();
+			}
 		}
 
 		makeConversionFactor("therm", "mmbtu", 10, pricingModel);
@@ -335,7 +362,31 @@ public class ExposuresTest {
 		return index;
 	}
 
-	private static CommodityIndex[] indiciesOf(final CommodityIndex... indicies) {
+	private static CurrencyIndex makeCurrencyIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth startDate, final double... values) {
+
+		final DataIndex<Double> data = PricingFactory.eINSTANCE.createDataIndex();
+
+		YearMonth date = startDate;
+		for (final double v : values) {
+			final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+			pt.setDate(date);
+			pt.setValue(v);
+
+			data.getPoints().add(pt);
+			date = date.plusMonths(1);
+		}
+
+		final CurrencyIndex index = PricingFactory.eINSTANCE.createCurrencyIndex();
+		index.setName(name);
+		index.setData(data);
+
+		index.setCurrencyUnit(currencyUnit);
+		index.setVolumeUnit(volumeUnit);
+
+		return index;
+	}
+
+	private static NamedIndexContainer<?>[] indiciesOf(final NamedIndexContainer<?>... indicies) {
 		return indicies;
 	}
 
