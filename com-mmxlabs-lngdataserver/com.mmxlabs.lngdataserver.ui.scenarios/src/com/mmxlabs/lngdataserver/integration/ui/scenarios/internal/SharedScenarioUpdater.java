@@ -199,11 +199,12 @@ public class SharedScenarioUpdater {
 			}
 
 			final ScenarioInstance instance = mapping.computeIfAbsent(uuid, u -> loadScenarioFrom(f, u, name));
-
-			RunnerHelper.syncExecDisplayOptional(() -> {
-				instance.setName(name);
-				parent.getElements().add(instance);
-			});
+			if (instance != null) {
+				RunnerHelper.syncExecDisplayOptional(() -> {
+					instance.setName(name);
+					parent.getElements().add(instance);
+				});
+			}
 		}
 	}
 
