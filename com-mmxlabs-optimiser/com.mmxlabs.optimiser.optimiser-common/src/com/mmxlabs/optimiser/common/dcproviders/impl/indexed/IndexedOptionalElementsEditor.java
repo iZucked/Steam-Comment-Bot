@@ -38,10 +38,10 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		return !isElementOptional(element);
 	}
 
-	@Override
-	public List<@NonNull ISequenceElement> getOptionalElements() {
-		return Collections.unmodifiableList(optionalList);
-	}
+//	@Override
+//	public List<@NonNull ISequenceElement> getOptionalElements() {
+//		return Collections.unmodifiableList(optionalList);
+//	}
 
 //	@Override
 //	public List<@NonNull ISequenceElement> getRequiredElements() {

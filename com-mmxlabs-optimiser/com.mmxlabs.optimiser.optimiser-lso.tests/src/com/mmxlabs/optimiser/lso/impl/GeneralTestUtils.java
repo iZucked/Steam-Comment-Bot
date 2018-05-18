@@ -16,6 +16,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.mmxlabs.optimiser.common.scenario.PhaseOptimisationData;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -127,15 +128,15 @@ public final class GeneralTestUtils {
 		return fitnessEvaluator;
 	}
 
-	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, IOptimisationData data, @NonNull final Random random, final int numberOfIterations,
+	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, IOptimisationData data, PhaseOptimisationData pData, @NonNull final Random random, final int numberOfIterations,
 			final int stepSize, final IOptimiserProgressMonitor monitor) {
 
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
 		final List<IEvaluationProcess> evaluationProcesses = evaluationProcessInstantiator.instantiateEvaluationProcesses(context.getEvaluationProcessRegistry(), context.getEvaluationProcesses(),
-				data);
+				pData);
 
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(), data);
+		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(), pData);
 
 		final EvaluatedStateConstraintCheckerInstantiator evaluatedStateConstraintCheckerInstantiator = new EvaluatedStateConstraintCheckerInstantiator();
 		final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers = evaluatedStateConstraintCheckerInstantiator

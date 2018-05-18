@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * {@link IFitnessHelper} implementations provide helper methods to evaluate the fitness of a set of {@link ISequences}.
@@ -31,14 +31,14 @@ public interface IFitnessHelper {
 	 * 
 	 * @param fitnessCores
 	 */
-	void initFitnessCores(@NonNull Collection<IFitnessCore> fitnessCores, @NonNull IOptimisationData data);
+	void initFitnessCores(@NonNull Collection<IFitnessCore> fitnessCores, @NonNull IPhaseOptimisationData data);
 
 	/**
 	 * Initialise {@link IFitnessCore}s based upon the a {@link Collection} of {@link IFitnessComponent}s
 	 * 
 	 * @param fitnessCores
 	 */
-	void initFitnessComponents(@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull IOptimisationData data);
+	void initFitnessComponents(@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull IPhaseOptimisationData data);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s

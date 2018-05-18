@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public class ConstraintCheckerInstantiatorModule extends AbstractModule {
 
@@ -30,7 +30,7 @@ public class ConstraintCheckerInstantiatorModule extends AbstractModule {
 
 	@Provides
 	private List<IConstraintChecker> provideConstraintCheckers(@NonNull final Injector injector, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
-			@NonNull @Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, @NonNull final IOptimisationData optimisationData) {
+			@NonNull @Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, @NonNull final IPhaseOptimisationData optimisationData) {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(constraintCheckerRegistry, enabledConstraintNames, optimisationData);
 

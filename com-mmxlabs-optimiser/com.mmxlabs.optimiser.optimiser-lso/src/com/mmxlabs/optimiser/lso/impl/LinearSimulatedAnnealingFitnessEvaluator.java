@@ -29,7 +29,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.IThresholder;
 
@@ -80,7 +80,7 @@ public class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessEvaluat
 	}
 
 	@Inject
-	public void initialise(final @NonNull IOptimisationData data) {
+	public void initialise(final @NonNull IPhaseOptimisationData data) {
 		// Initialise the fitness functions
 		fitnessHelper.initFitnessComponents(getFitnessComponents(), data);
 	}

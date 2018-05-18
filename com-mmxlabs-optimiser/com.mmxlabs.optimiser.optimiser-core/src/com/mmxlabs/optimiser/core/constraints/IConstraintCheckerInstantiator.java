@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public interface IConstraintCheckerInstantiator {
 
@@ -19,7 +19,7 @@ public interface IConstraintCheckerInstantiator {
 	 * @return
 	 */
 	@NonNull
-	List<IConstraintChecker> instantiateConstraintCheckers(@NonNull IConstraintCheckerRegistry registry, @NonNull IOptimisationData optimisationData);
+	List<IConstraintChecker> instantiateConstraintCheckers(@NonNull IConstraintCheckerRegistry registry, @NonNull IPhaseOptimisationData optimisationData);
 
 	/**
 	 * Return new instances of all {@link IConstraintChecker}s the {@link IConstraintCheckerRegistry} knows about. The returned list will contain {@link IConstraintChecker}s in the same order as the
@@ -30,6 +30,6 @@ public interface IConstraintCheckerInstantiator {
 	 * @return
 	 */
 	@NonNull
-	List<IConstraintChecker> instantiateConstraintCheckers(@NonNull IConstraintCheckerRegistry registry, @NonNull List<String> constraintCheckerNames, @NonNull IOptimisationData optimisationData);
+	List<IConstraintChecker> instantiateConstraintCheckers(@NonNull IConstraintCheckerRegistry registry, @NonNull List<String> constraintCheckerNames, @NonNull IPhaseOptimisationData optimisationData);
 
 }

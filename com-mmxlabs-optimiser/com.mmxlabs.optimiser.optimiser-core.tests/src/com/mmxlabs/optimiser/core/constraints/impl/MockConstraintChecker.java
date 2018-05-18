@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public class MockConstraintChecker implements IConstraintChecker {
 
@@ -41,7 +41,7 @@ public class MockConstraintChecker implements IConstraintChecker {
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
 
 	}
 }

@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Implementation of {@link IConstraintChecker} to enforce a specific ordering of sequence elements. This uses a {@link IOrderedSequenceElementsDataComponentProvider} instance to provide the
@@ -47,7 +47,7 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
 
 	}
 

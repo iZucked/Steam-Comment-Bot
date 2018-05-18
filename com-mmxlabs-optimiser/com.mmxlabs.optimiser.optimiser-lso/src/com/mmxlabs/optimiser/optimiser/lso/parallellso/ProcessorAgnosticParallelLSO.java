@@ -31,7 +31,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -40,7 +40,7 @@ import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 
 	public static final String PARALLEL_LSO_BATCH_SIZE = "MMX_PARALLEL_LSO_BATCH_SIZE";
-	protected IOptimisationData data;
+	protected IPhaseOptimisationData data;
 	private ModifiableSequences currentRawSequences;
 	private ModifiableSequences potentialRawSequences;
 

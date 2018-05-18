@@ -21,7 +21,7 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * A {@link IConstraintChecker} implementation which enforces elements that are locked and initially unlocked can never be used in the final solution. This implements an early break-out, meaning only
@@ -78,7 +78,7 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
 	}
 
 	@Override

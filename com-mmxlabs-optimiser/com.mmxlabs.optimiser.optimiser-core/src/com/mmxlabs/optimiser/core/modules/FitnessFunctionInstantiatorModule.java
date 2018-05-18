@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public class FitnessFunctionInstantiatorModule extends AbstractModule {
 
@@ -34,7 +34,7 @@ public class FitnessFunctionInstantiatorModule extends AbstractModule {
 	@Provides
 	private List<IFitnessComponent> provideFitnessComponents(@NonNull final Injector injector, @NonNull final IFitnessHelper fitnessHelper,
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @Named(ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames,
-			final @NonNull IOptimisationData optimisationData) {
+			final @NonNull IPhaseOptimisationData optimisationData) {
 
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(fitnessFunctionRegistry, enabledFitnessNames);

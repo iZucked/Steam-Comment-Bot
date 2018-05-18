@@ -37,7 +37,7 @@ public class OptimisationContextTest {
 		final List<@NonNull String> evaluatedStateConstraintCheckers = Collections.emptyList();
 		final IEvaluatedStateConstraintCheckerRegistry evaluatedStateConstraintCheckerRegistry = Mockito.mock(IEvaluatedStateConstraintCheckerRegistry.class);
 
-		final OptimisationContext optContext = new OptimisationContext(optimisationData, initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry,
+		final OptimisationContext optContext = new OptimisationContext(initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry,
 				evaluationProcesses, evaluationProcessRegistry, evaluatedStateConstraintCheckers, evaluatedStateConstraintCheckerRegistry);
 
 //		Assert.assertSame(optimisationData, optContext.getOptimisationData());

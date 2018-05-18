@@ -21,7 +21,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Basic implementation of {@link IFitnessHelper}.
@@ -70,7 +70,7 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public void initFitnessComponents(@NonNull final Collection<IFitnessComponent> fitnessComponents, @NonNull final IOptimisationData data) {
+	public void initFitnessComponents(@NonNull final Collection<IFitnessComponent> fitnessComponents, @NonNull final IPhaseOptimisationData data) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 		initFitnessCores(fitnessCores, data);
 
@@ -87,7 +87,7 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public void initFitnessCores(@NonNull final Collection<IFitnessCore> fitnessCores, @NonNull final IOptimisationData data) {
+	public void initFitnessCores(@NonNull final Collection<IFitnessCore> fitnessCores, @NonNull final IPhaseOptimisationData data) {
 		for (final IFitnessCore core : fitnessCores) {
 			core.init(data);
 		}

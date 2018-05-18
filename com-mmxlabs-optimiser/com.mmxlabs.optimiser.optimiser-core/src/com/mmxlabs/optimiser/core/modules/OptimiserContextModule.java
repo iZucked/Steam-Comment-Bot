@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.impl.EvaluationContext;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public class OptimiserContextModule extends AbstractModule {
 
@@ -33,7 +33,7 @@ public class OptimiserContextModule extends AbstractModule {
 
 	@Provides
 
-	private IOptimisationContext createOptimisationContext(@NonNull final IOptimisationData data, @NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences sequences,
+	private IOptimisationContext createOptimisationContext(@NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences sequences,
 
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry, @NonNull final IEvaluatedStateConstraintCheckerRegistry evaluatedStateConstraintCheckerRegistry,
@@ -60,12 +60,12 @@ public class OptimiserContextModule extends AbstractModule {
 		// evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
 		final List<String> evaluationStateConstraintCheckers = new ArrayList<>(evaluatedStateConstraintCheckerRegistry.getConstraintCheckerNames());
 
-		return new OptimisationContext(data, sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry,
+		return new OptimisationContext(sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry,
 				evaluationStateConstraintCheckers, evaluatedStateConstraintCheckerRegistry);
 	}
 
 	@Provides
-	private IEvaluationContext createEvaluationContext(@NonNull final IOptimisationData data, @NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences sequences,
+	private IEvaluationContext createEvaluationContext(@NonNull final IPhaseOptimisationData data, @NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences sequences,
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry) {
 

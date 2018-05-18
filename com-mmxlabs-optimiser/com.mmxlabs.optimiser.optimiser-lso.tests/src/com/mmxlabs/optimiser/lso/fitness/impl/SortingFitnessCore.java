@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.IntegerElement;
 
 public final class SortingFitnessCore implements IFitnessCore {
@@ -62,7 +62,7 @@ public final class SortingFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void init(@NonNull final IOptimisationData data) {
+	public void init(@NonNull final IPhaseOptimisationData data) {
 		fitness = Long.MAX_VALUE;
 	}
 

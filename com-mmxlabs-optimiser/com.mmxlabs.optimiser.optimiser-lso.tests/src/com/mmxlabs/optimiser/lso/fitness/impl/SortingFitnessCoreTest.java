@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 
 public class SortingFitnessCoreTest {
@@ -34,7 +35,7 @@ public class SortingFitnessCoreTest {
 
 		final SortingFitnessFactory factory = new SortingFitnessFactory();
 		core = factory.instantiate();
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 		assert data != null;
 		core.init(data);
 

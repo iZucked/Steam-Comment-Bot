@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 @SuppressWarnings("null")
 public class FitnessHelperTest {
@@ -167,7 +167,7 @@ public class FitnessHelperTest {
 	@Test
 	public void testInitFitnessCores() {
 
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 
 		final FitnessHelper helper = new FitnessHelper();
 
@@ -188,7 +188,7 @@ public class FitnessHelperTest {
 	@Test
 	public void testInitFitnessComponents() {
 
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 
 		final FitnessHelper helper = new FitnessHelper();
 

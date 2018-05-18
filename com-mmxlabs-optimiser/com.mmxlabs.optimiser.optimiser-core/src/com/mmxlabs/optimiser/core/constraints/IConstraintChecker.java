@@ -12,7 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * {@link IConstraintChecker} implementations check {@link ISequences} for constraint violations. For example this could be to ensure sequence elements are assigned to particular resources or to
@@ -56,6 +56,6 @@ public interface IConstraintChecker {
 	 * 
 	 * @param optimisationData
 	 */
-	default void setOptimisationData(@NonNull IOptimisationData optimisationData) {
+	default void setOptimisationData(@NonNull IPhaseOptimisationData optimisationData) {
 	};
 }

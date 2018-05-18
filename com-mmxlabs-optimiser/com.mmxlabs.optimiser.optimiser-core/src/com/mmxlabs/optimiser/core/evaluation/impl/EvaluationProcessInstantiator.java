@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessInstantiator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Class used to obtain {@link IEvaluationProcess}s from the {@link IEvaluationProcessRegistry}
@@ -28,7 +28,7 @@ public final class EvaluationProcessInstantiator implements IEvaluationProcessIn
 
 	@Override
 	@NonNull
-	public List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull final IEvaluationProcessRegistry registry, @NonNull final IOptimisationData optimisationData) {
+	public List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull final IEvaluationProcessRegistry registry, @NonNull final IPhaseOptimisationData optimisationData) {
 
 		final Collection<IEvaluationProcessFactory> factories = registry.getEvaluationProcessFactories();
 		final List<IEvaluationProcess> checkers = new ArrayList<IEvaluationProcess>(factories.size());
@@ -43,7 +43,7 @@ public final class EvaluationProcessInstantiator implements IEvaluationProcessIn
 	@Override
 	@NonNull
 	public List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull final IEvaluationProcessRegistry registry, @NonNull final List<String> evaluationProcessNames,
-			@NonNull final IOptimisationData optimisationData) {
+			@NonNull final IPhaseOptimisationData optimisationData) {
 
 		final List<IEvaluationProcess> evaluationProcesses = new ArrayList<IEvaluationProcess>(evaluationProcessNames.size());
 

@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Class used to obtain {@link IConstraintChecker}s from the {@link IConstraintCheckerRegistry}
@@ -28,7 +28,7 @@ public final class ConstraintCheckerInstantiator implements IConstraintCheckerIn
 
 	@Override
 	@NonNull
-	public List<IConstraintChecker> instantiateConstraintCheckers(@NonNull final IConstraintCheckerRegistry registry, @NonNull final IOptimisationData optimisationData) {
+	public List<IConstraintChecker> instantiateConstraintCheckers(@NonNull final IConstraintCheckerRegistry registry, @NonNull final IPhaseOptimisationData optimisationData) {
 
 		final Collection<IConstraintCheckerFactory> factories = registry.getConstraintCheckerFactories();
 		final List<IConstraintChecker> checkers = new ArrayList<IConstraintChecker>(factories.size());
@@ -44,7 +44,7 @@ public final class ConstraintCheckerInstantiator implements IConstraintCheckerIn
 	@Override
 	@NonNull
 	public List<IConstraintChecker> instantiateConstraintCheckers(@NonNull final IConstraintCheckerRegistry registry, @NonNull final List<String> constraintNames,
-			@NonNull final IOptimisationData optimisationData) {
+			@NonNull final IPhaseOptimisationData optimisationData) {
 
 		final List<IConstraintChecker> checkers = new ArrayList<IConstraintChecker>(constraintNames.size());
 

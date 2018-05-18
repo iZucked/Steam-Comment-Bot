@@ -17,6 +17,7 @@ import org.junit.Test;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
+import com.mmxlabs.optimiser.common.scenario.PhaseOptimisationData;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
@@ -94,12 +95,14 @@ public class DefaultLocalSearchOptimiserTest {
 
 		final OptimisationData data = new OptimisationData();
 
-		final OptimisationContext context = new OptimisationContext(data, sequences, fitnessComponentNames, fitnessRegistry, constraintCheckerNames, checkerRegistry, evaluationProcessNames,
+		final PhaseOptimisationData pData = new PhaseOptimisationData();
+
+		final OptimisationContext context = new OptimisationContext(sequences, fitnessComponentNames, fitnessRegistry, constraintCheckerNames, checkerRegistry, evaluationProcessNames,
 				evaluationProcessRegistry, evaluatedStateConstraintCheckerNames, evaluatedStateConstraintCheckerRegistry);
 
 		final IOptimiserProgressMonitor monitor = new SystemOutProgressMonitor();
 
-		final LocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(context, data, random, numberOfIterations, 1, monitor);
+		final LocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(context, data, pData, random, numberOfIterations, 1, monitor);
 		lso.setLookupManager(new ILookupManager() {
 			@Override
 			public void createLookup(@NonNull ISequences sequences) {

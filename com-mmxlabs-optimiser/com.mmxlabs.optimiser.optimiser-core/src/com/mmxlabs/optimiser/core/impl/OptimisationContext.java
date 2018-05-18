@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Implementation of {@link IOptimisationContext}.
@@ -22,9 +22,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * @author Simon Goodall
  */
 public final class OptimisationContext implements IOptimisationContext {
-
-	@NonNull
-	private final IOptimisationData optimisationData;
 
 	@NonNull
 	private final ISequences initialSequences;
@@ -52,12 +49,11 @@ public final class OptimisationContext implements IOptimisationContext {
 	@NonNull
 	private final IEvaluationProcessRegistry evaluationProcessRegistry;
 
-	public OptimisationContext(@NonNull final IOptimisationData optimisationData, @NonNull final ISequences initialSequences, @NonNull final List<@NonNull String> fitnessComponents,
+	public OptimisationContext(@NonNull final ISequences initialSequences, @NonNull final List<@NonNull String> fitnessComponents,
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @NonNull final List<@NonNull String> constraintCheckers,
 			@NonNull final IConstraintCheckerRegistry constraintCheckerRegistry, @NonNull final List<@NonNull String> evaluationProcesses,
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry, @NonNull final List<@NonNull String> evaluatedStateConstraintCheckers,
 			@NonNull IEvaluatedStateConstraintCheckerRegistry evaluatedStateConstraintCheckerRegistry) {
-		this.optimisationData = optimisationData;
 		this.initialSequences = initialSequences;
 		this.fitnessComponents = fitnessComponents;
 		this.fitnessFunctionRegistry = fitnessFunctionRegistry;
@@ -80,12 +76,6 @@ public final class OptimisationContext implements IOptimisationContext {
 	public ISequences getInputSequences() {
 		return initialSequences;
 	}
-//
-//	@Override
-//	@NonNull
-//	public IOptimisationData getOptimisationData() {
-//		return optimisationData;
-//	}
 
 	@Override
 	@NonNull

@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * A {@link IConstraintChecker} implementation which enforces allocation of sequence elements to permitted {@link IResource}s. This implements an early break-out, meaning only the first violation of
@@ -91,7 +91,7 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
 	}
 
 	@Override

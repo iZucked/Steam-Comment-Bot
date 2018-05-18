@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public final class MockFitnessCore implements IFitnessCore {
 	@NonNull
@@ -53,7 +53,7 @@ public final class MockFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void init(@NonNull final IOptimisationData data) {
+	public void init(@NonNull final IPhaseOptimisationData data) {
 
 	}
 

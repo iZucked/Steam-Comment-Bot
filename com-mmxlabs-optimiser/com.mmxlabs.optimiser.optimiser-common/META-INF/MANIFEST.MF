@@ -20,5 +20,6 @@ Export-Package: com.mmxlabs.optimiser.common.components,
  com.mmxlabs.optimiser.common.dcproviders.impl,
  com.mmxlabs.optimiser.common.dcproviders.impl.indexed,
  com.mmxlabs.optimiser.common.logging,
- com.mmxlabs.optimiser.common.logging.impl
+ com.mmxlabs.optimiser.common.logging.impl,
+ com.mmxlabs.optimiser.common.scenario
 Bundle-ActivationPolicy: lazy

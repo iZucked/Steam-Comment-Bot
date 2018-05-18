@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * The {@link IFitnessCore} is the main fitness function object. A single {@link IFitnessCore} can represent multiple {@link IFitnessComponent}s. The {@link IFitnessCore} is used to evaluate
@@ -28,7 +28,7 @@ public interface IFitnessCore {
 	/**
 	 * Initialise or re-initialise the fitness core. This will reset the state associated with the {@link #evaluate(ISequences, List)} method.
 	 */
-	void init(@NonNull IOptimisationData data);
+	void init(@NonNull IPhaseOptimisationData data);
 
 	/**
 	 * Return a {@link Collection} of {@link IFitnessComponent} instances that are represented by this {@link IFitnessCore}.

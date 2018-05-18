@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public class ConstraintCheckerInstantiatorTest {
 
@@ -22,7 +23,7 @@ public class ConstraintCheckerInstantiatorTest {
 
 		final IConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, data);
 
 		Assert.assertTrue(checkers.isEmpty());
@@ -35,7 +36,7 @@ public class ConstraintCheckerInstantiatorTest {
 		registry.registerConstraintCheckerFactory(new MockConstraintCheckerFactory("Checker"));
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, data);
 
@@ -51,7 +52,7 @@ public class ConstraintCheckerInstantiatorTest {
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
 		final List<String> names = Collections.emptyList();
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, names, data);
 
@@ -64,7 +65,7 @@ public class ConstraintCheckerInstantiatorTest {
 		registry.registerConstraintCheckerFactory(new MockConstraintCheckerFactory("Checker"));
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, Collections.singletonList("Unknown"), data);
 
@@ -80,7 +81,7 @@ public class ConstraintCheckerInstantiatorTest {
 		registry.registerConstraintCheckerFactory(new MockConstraintCheckerFactory("Checker"));
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, Collections.singletonList("Checker"), data);
 

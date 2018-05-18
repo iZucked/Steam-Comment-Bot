@@ -12,7 +12,7 @@ import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Implementation of {@link IOptimisationContext}.
@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class EvaluationContext implements IEvaluationContext {
 
 	@NonNull
-	private final IOptimisationData optimisationData;
+	private final IPhaseOptimisationData optimisationData;
 
 	@NonNull
 	private final ISequences initialSequences;
@@ -33,7 +33,7 @@ public final class EvaluationContext implements IEvaluationContext {
 	@NonNull
 	private final IEvaluationProcessRegistry evaluationProcessRegistry;
 
-	public EvaluationContext(@NonNull final IOptimisationData optimisationData, @NonNull final ISequences initialSequences, @NonNull final List<@NonNull String> evaluationProcesses,
+	public EvaluationContext(@NonNull final IPhaseOptimisationData optimisationData, @NonNull final ISequences initialSequences, @NonNull final List<@NonNull String> evaluationProcesses,
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry) {
 		this.optimisationData = optimisationData;
 		this.initialSequences = initialSequences;
@@ -49,7 +49,7 @@ public final class EvaluationContext implements IEvaluationContext {
 
 //	@Override
 //	@NonNull
-//	public IOptimisationData getOptimisationData() {
+//	public IPhaseOptimisationData getOptimisationData() {
 //		return optimisationData;
 //	}
 

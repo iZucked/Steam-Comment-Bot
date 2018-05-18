@@ -16,7 +16,7 @@ import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessInstantiator;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public class EvaluationProcessInstantiatorModule extends AbstractModule {
 
@@ -29,7 +29,7 @@ public class EvaluationProcessInstantiatorModule extends AbstractModule {
 
 	@Provides
 	private List<IEvaluationProcess> provideEvaluationProcesses(@NonNull final Injector injector, @NonNull final IEvaluationProcessRegistry evaluationProcessRegistry,
-			@NonNull @Named(ENABLED_EVALUATION_PROCESS_NAMES) final List<String> enabledProcessNames, @NonNull final IOptimisationData optimisationData) {
+			@NonNull @Named(ENABLED_EVALUATION_PROCESS_NAMES) final List<String> enabledProcessNames, @NonNull final IPhaseOptimisationData optimisationData) {
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
 		final List<IEvaluationProcess> evaluationProcesses = evaluationProcessInstantiator.instantiateEvaluationProcesses(evaluationProcessRegistry, enabledProcessNames, optimisationData);
 

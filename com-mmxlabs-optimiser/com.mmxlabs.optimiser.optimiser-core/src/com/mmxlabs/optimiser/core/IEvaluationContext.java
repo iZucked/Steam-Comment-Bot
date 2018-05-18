@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Interface defining an evaluation context. This ties together static optimisation data and initial state.
@@ -26,7 +26,7 @@ public interface IEvaluationContext {
 	 * @return
 	 */
 //	@NonNull
-//	IOptimisationData getOptimisationData();
+//	IPhaseOptimisationData getOptimisationData();
 
 	/**
 	 * Returns the initial sequences state - i.e. the starting point of the optimisation process.
