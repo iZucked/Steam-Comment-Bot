@@ -48,6 +48,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
@@ -82,6 +83,12 @@ public class LNGParallelOptimiserTransformerUnit extends AbstractLNGOptimiserTra
 			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
 			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService) {
 		super(dataTransformer, stage, userSettings, stageSettings, initialSequences, inputSequences, hints, executorService);
+	}
+	
+	private static ISequences clearStuff(ISequences s) {
+		ModifiableSequences ms = new ModifiableSequences(s);
+		ms.getModifiableUnusedElements().clear();
+		return ms;
 	}
 
 	@Override
