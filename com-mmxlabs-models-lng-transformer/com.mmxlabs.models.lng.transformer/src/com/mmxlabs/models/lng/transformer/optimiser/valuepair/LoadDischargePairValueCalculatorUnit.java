@@ -33,7 +33,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -142,7 +142,7 @@ public class LoadDischargePairValueCalculatorUnit {
 	}
 
 	public void run(final @NonNull CharterInMarket nominalMarket, @NonNull final IProgressMonitor monitor, final ProfitAndLossExtractor recorder) {
-		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+		final IPhaseOptimisationData optimisationData = injector.getInstance(IPhaseOptimisationData.class);
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 
 		final List<ILoadOption> loads = LoadDischargePairValueCalculator.findPurchases(optimisationData, portSlotProvider);
@@ -155,7 +155,7 @@ public class LoadDischargePairValueCalculatorUnit {
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 			try {
-				final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+				final IPhaseOptimisationData optimisationData = injector.getInstance(IPhaseOptimisationData.class);
 				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
 				// final CharterInMarket nominalMarket = stageSettings.getCharterInMarket();

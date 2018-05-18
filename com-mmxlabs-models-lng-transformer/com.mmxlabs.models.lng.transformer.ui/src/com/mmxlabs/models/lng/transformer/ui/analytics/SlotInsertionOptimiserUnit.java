@@ -45,10 +45,10 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -60,6 +60,7 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.actionplan.ChangeChecker;
 import com.mmxlabs.scheduler.optimiser.actionplan.SimilarityState;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -116,6 +117,7 @@ public class SlotInsertionOptimiserUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
+		modules.add(new InitialPhaseOptimisationDataModule());
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, stage.getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
@@ -190,7 +192,7 @@ public class SlotInsertionOptimiserUnit {
 
 			final SlotInsertionOptimiserInitialState state = new SlotInsertionOptimiserInitialState();
 			{
-				final IOptionalElementsProvider optionalElementsProvider = injector.getInstance(IOptionalElementsProvider.class);
+				final IPhaseOptimisationData phaseOptimisationData = injector.getInstance(IPhaseOptimisationData.class);
 				final IMoveHandlerHelper moveHandlerHelper = injector.getInstance(IMoveHandlerHelper.class);
 				final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 
@@ -217,7 +219,7 @@ public class SlotInsertionOptimiserUnit {
 						final IModifiableSequences tmpRawSequences = new ModifiableSequences(state.originalRawSequences);
 
 						for (final ISequenceElement e : tmpRawSequences.getUnusedElements()) {
-							if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
+							if (phaseOptimisationData.isElementRequired(e) || phaseOptimisationData.getSoftRequiredElements().contains(e)) {
 								state.initiallyUnused.add(e);
 							}
 						}
@@ -240,7 +242,7 @@ public class SlotInsertionOptimiserUnit {
 									// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots
 									// at
 									// once.
-									if (optionalElementsProvider.isElementRequired(e)) {
+									if (phaseOptimisationData.isElementRequired(e)) {
 										++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
 									}
 								}

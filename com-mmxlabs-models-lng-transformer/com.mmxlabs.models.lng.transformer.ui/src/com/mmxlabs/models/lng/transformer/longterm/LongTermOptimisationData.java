@@ -12,7 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossRecorder;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  */
 public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	@Inject
-	IOptionalElementsProvider optionalElementsProvider;
+	IPhaseOptimisationData phaseOptimisationData;
 	@Inject
 	IPortSlotProvider portSlotProvider;
 	
@@ -106,13 +106,13 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	
 	private void setOptionalLoads() {
 		for (int i = 0; i < sortedLoads.length; i++) {
-			optionalLoads[i] = optionalElementsProvider.isElementOptional(portSlotProvider.getElement(sortedLoads[i])) && !optionalElementsProvider.getSoftRequiredElements().contains(portSlotProvider.getElement(sortedLoads[i]));
+			optionalLoads[i] = phaseOptimisationData.isElementOptional(portSlotProvider.getElement(sortedLoads[i])) && !phaseOptimisationData.getSoftRequiredElements().contains(portSlotProvider.getElement(sortedLoads[i]));
 		}
 	}
 
 	private void setOptionalDischarges() {
 		for (int i = 0; i < sortedDischarges.length; i++) {
-			optionalDischarges[i] = optionalElementsProvider.isElementOptional(portSlotProvider.getElement(sortedDischarges[i])) && !optionalElementsProvider.getSoftRequiredElements().contains(portSlotProvider.getElement(sortedDischarges[i]));
+			optionalDischarges[i] = phaseOptimisationData.isElementOptional(portSlotProvider.getElement(sortedDischarges[i])) && !phaseOptimisationData.getSoftRequiredElements().contains(portSlotProvider.getElement(sortedDischarges[i]));
 		}
 	}
 

@@ -38,7 +38,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
@@ -100,7 +100,7 @@ public class LNGInitialSequencesModule extends PrivateModule {
 	@Singleton
 	@Named(KEY_GENERATED_RAW_SEQUENCES)
 	@Exposed
-	private ISequences provideInitialSequences(@NonNull final IOptimisationTransformer optimisationTransformer, @NonNull final IOptimisationData data, @NonNull final ModelEntityMap modelEntityMap) {
+	private ISequences provideInitialSequences(@NonNull final IOptimisationTransformer optimisationTransformer, @NonNull final IPhaseOptimisationData data, @NonNull final ModelEntityMap modelEntityMap) {
 
 		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
 

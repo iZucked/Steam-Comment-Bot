@@ -30,7 +30,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -65,7 +65,7 @@ public class LoadDischargePairValueCalculator {
 	private Injector injector;
 
 	@Inject
-	private IOptimisationData optimisationData;
+	private IPhaseOptimisationData optimisationData;
 
 	@Inject
 	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
@@ -159,7 +159,7 @@ public class LoadDischargePairValueCalculator {
 		return vesselAvailability;
 	}
 
-	public static List<ILoadOption> findPurchases(final IOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
+	public static List<ILoadOption> findPurchases(final IPhaseOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
 
 		return optimisationData.getSequenceElements().stream() //
 				.map(e -> portSlotProvider.getPortSlot(e))//
@@ -168,7 +168,7 @@ public class LoadDischargePairValueCalculator {
 				.collect(Collectors.toList());
 	}
 
-	public static List<IDischargeOption> findSales(final IOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
+	public static List<IDischargeOption> findSales(final IPhaseOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
 
 		return optimisationData.getSequenceElements().stream() //
 				.map(e -> portSlotProvider.getPortSlot(e))//
