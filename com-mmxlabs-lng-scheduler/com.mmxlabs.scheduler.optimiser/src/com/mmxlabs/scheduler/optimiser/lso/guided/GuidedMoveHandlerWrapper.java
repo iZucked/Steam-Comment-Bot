@@ -24,7 +24,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.IGuidedMoveHandler;
 
@@ -74,7 +74,7 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 	}
 
 	@Inject
-	public void initPossibleTargets(final IOptimisationData optimisationData) {
+	public void initPossibleTargets(final IPhaseOptimisationData optimisationData) {
 		potentialElements = new LinkedList<>();
 		@NonNull
 		final Map<ISequenceElement, @NonNull Collection<@NonNull GuidedMoveTypes>> moveTypes = moveTypeHelper.getMoveTypes(optimisationData);

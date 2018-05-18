@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
@@ -99,7 +99,7 @@ public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker 
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
 
 	}
 

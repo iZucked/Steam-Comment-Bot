@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
@@ -32,7 +32,7 @@ public class BreakPointHelper implements IBreakPointHelper {
 
 	@Override
 	@Inject
-	public void init(final IOptimisationData data) {
+	public void init(final IPhaseOptimisationData data) {
 
 		for (final ISequenceElement e1 : data.getSequenceElements()) {
 

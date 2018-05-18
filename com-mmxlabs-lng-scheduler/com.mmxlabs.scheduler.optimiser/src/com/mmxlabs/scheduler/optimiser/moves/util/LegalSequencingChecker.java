@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 
 /**
@@ -37,7 +37,7 @@ public class LegalSequencingChecker {
 
 	private IPairwiseConstraintChecker resourceAllocationChecker;
 
-	public LegalSequencingChecker(final IOptimisationData data, final IOptimisationContext context) {
+	public LegalSequencingChecker(final IPhaseOptimisationData data, final IOptimisationContext context) {
 		this(data, createPairwiseCheckers(context));
 	}
 
@@ -63,7 +63,7 @@ public class LegalSequencingChecker {
 	}
 
 	@Inject
-	public LegalSequencingChecker(final IOptimisationData data, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
+	public LegalSequencingChecker(final IPhaseOptimisationData data, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
 		this.pairwiseCheckers = new ArrayList<>(pairwiseCheckers);
 		this.resources = data.getResources();
 

@@ -23,7 +23,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -39,7 +39,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	private final String name;
 
 	@Inject
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -53,12 +53,12 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
-	public void init(@NonNull final IOptimisationData data) {
+	public void init(@NonNull final IPhaseOptimisationData data) {
 
 		interestingElements.addAll(data.getSequenceElements());
-		interestingElements.removeAll(optionalElementsProvider.getOptionalElements());
+		interestingElements.removeAll(phaseOptimisationData.getOptionalElements());
 		// Make sure these are retained
-		interestingElements.addAll(optionalElementsProvider.getSoftRequiredElements());
+		interestingElements.addAll(phaseOptimisationData.getSoftRequiredElements());
 	}
 
 	@Override

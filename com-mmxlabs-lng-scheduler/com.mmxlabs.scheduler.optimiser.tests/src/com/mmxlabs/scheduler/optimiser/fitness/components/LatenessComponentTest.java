@@ -23,6 +23,7 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -87,7 +88,7 @@ public class LatenessComponentTest {
 		final String dcp = "dcp";
 		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(null);
 
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 
 		final IStartEndRequirementProvider startEndRequirementProvider = Mockito.mock(IStartEndRequirementProvider.class);
 		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);

@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -138,7 +138,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData data) {
+	public void setOptimisationData(@NonNull final IPhaseOptimisationData data) {
 	}
 
 	@Override

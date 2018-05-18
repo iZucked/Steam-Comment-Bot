@@ -9,7 +9,7 @@ import java.util.Map;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
  * Implementations should be able to create some sensible initial sequences from a given {@link IOptimisationData}. In future, the interface should be extended to include "advice" from the scenario,
@@ -32,6 +32,6 @@ public interface IInitialSequenceBuilder {
 	 *            a pairing of {@link ISequenceElement} to use for the initial sequences but do not need enforced by a constraint checker.
 	 * @return
 	 */
-	public ISequences createInitialSequences(IOptimisationData data, ISequences sequenceSuggestion, Map<ISequenceElement, IResource> resourceSuggestion,
+	public ISequences createInitialSequences(IPhaseOptimisationData data, ISequences sequenceSuggestion, Map<ISequenceElement, IResource> resourceSuggestion,
 			Map<ISequenceElement, ISequenceElement> pairingHints);
 }

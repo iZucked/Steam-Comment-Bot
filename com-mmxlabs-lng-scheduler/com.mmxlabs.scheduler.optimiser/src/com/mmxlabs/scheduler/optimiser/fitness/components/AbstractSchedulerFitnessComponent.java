@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 
@@ -96,7 +96,7 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 	}
 
 	@Override
-	public void init(@NonNull final IOptimisationData data) {
+	public void init(@NonNull final IPhaseOptimisationData data) {
 		IDiscountCurveProvider pDiscountCurveProvider = discountCurveProvider;
 		if (pDiscountCurveProvider != null) {
 			ICurve curve = pDiscountCurveProvider.getDiscountCurve(getName());

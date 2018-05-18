@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
@@ -62,7 +63,7 @@ public class EvaluationHelper {
 
 	@Inject
 	@NonNull
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	private final boolean isReevaluating;
 
@@ -160,7 +161,7 @@ public class EvaluationHelper {
 
 		int thisUnusedCompulsarySlotCount = 0;
 		for (final ISequenceElement e : rawSequences.getUnusedElements()) {
-			if (optionalElementsProvider.isElementRequired(e)) {
+			if (phaseOptimisationData.isElementRequired(e)) {
 				thisUnusedCompulsarySlotCount++;
 			}
 		}

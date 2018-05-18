@@ -26,7 +26,7 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -90,7 +90,7 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	}
 
 	@Override
-	public void init(@NonNull final IOptimisationData data) {
+	public void init(@NonNull final IPhaseOptimisationData data) {
 		resources = data.getResources();
 	}
 

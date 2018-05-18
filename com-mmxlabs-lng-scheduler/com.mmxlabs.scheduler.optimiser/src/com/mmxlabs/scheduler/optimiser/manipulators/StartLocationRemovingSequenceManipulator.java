@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -78,7 +78,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	/**
 	 */
 	@Inject
-	public void init(final IOptimisationData data) {
+	public void init(final IPhaseOptimisationData data) {
 
 		for (final IResource resource : data.getResources()) {
 			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();

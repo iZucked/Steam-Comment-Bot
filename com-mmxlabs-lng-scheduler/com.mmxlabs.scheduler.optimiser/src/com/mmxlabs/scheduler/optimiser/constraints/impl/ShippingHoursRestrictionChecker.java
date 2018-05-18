@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -110,7 +110,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
 
 	}
 

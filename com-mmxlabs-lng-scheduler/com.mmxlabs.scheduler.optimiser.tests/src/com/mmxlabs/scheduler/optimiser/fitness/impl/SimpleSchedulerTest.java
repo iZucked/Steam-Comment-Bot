@@ -24,6 +24,7 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
+import com.mmxlabs.optimiser.common.scenario.PhaseOptimisationData;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
@@ -39,6 +40,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -224,6 +226,12 @@ public class SimpleSchedulerTest {
 
 		return data;
 	}
+	
+	private IPhaseOptimisationData createPhaseOptimisationData(Injector injector, IOptimisationData optimisationData) {
+		PhaseOptimisationData phase = injector.getInstance(PhaseOptimisationData.class);
+		phase.setSequenceElements(optimisationData.getSequenceElements());
+		return phase;
+	}
 
 	@Test
 	public void testLSO() {
@@ -232,8 +240,9 @@ public class SimpleSchedulerTest {
 		final Injector parentInjector = createInjector();
 
 		final IOptimisationData data = createProblem(parentInjector);
+		final IPhaseOptimisationData pData = createPhaseOptimisationData(parentInjector, data);
 		// Build opt data
-		final ScheduleTestModule m = new ScheduleTestModule(data);
+		final ScheduleTestModule m = new ScheduleTestModule(data, pData);
 		final Injector injector = parentInjector.createChildInjector(m);
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
@@ -268,7 +277,7 @@ public class SimpleSchedulerTest {
 				}
 			};
 
-			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, data, new Random(seed), 1000, 5, monitor);
+			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, data, pData, new Random(seed), 1000, 5, monitor);
 
 			for (final IConstraintChecker c : optimiser.getConstraintCheckers()) {
 				injector.injectMembers(c);

@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.InsertOptionalElementMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.RemoveOptionalElementMoveHandler;
@@ -31,7 +32,7 @@ import com.mmxlabs.scheduler.optimiser.moves.handlers.RemoveOptionalElementMoveH
 public class OptionalConstrainedMoveGeneratorUnit implements IMoveGenerator {
 
 	@Inject
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
 	private RemoveOptionalElementMoveHandler removeHandler;
@@ -42,7 +43,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IMoveGenerator {
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
 		// select an optional element at random
-		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, optionalElementsProvider.getOptionalElements());
+		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getOptionalElements());
 		final Pair<IResource, Integer> location = lookupManager.lookup(optional);
 
 		if (location.getFirst() == null) {
