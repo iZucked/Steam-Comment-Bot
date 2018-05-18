@@ -278,7 +278,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	 * A label provider for the "Name" column
 	 * 
 	 */
-	private class FieldTypeNameLabelProvider extends ColumnLabelProvider {
+	private static class FieldTypeNameLabelProvider extends ColumnLabelProvider {
 
 		@Override
 		public Image getImage(final Object element) {
