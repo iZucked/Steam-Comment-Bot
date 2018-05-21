@@ -89,6 +89,19 @@ public class MigrateToV91 extends AbstractMigrationUnit {
 		updateObjects(spotMarketsModel.getRef("fobPurchasesSpotMarket").getRefAsList("markets"), "priceInfo", swap_MWh_factor);
 		updateObjects(spotMarketsModel.getRef("fobSalesSpotMarket").getRefAsList("markets"), "priceInfo", swap_MWh_factor);
 
+		for (EObjectWrapper idx : pricingModel.getRefAsList("currencyIndices")) {
+			EObjectWrapper indexData = idx.getRef("data");
+			if (indexData.hasFeature("expression")) {
+				update(indexData, "expression", swap_MWh_factor);
+			}
+		}
+		for (EObjectWrapper idx : pricingModel.getRefAsList("commodityIndices")) {
+			EObjectWrapper indexData = idx.getRef("data");
+			if (indexData.hasFeature("expression")) {
+				update(indexData, "expression", swap_MWh_factor);
+			}
+		}
+
 		// Include other costs? cooldown is a port -> price expression map
 		// updateObjects(costModel.getRefAsList("cooldownCosts"), null, swap_MWh_factor, "priceExpression", "cancellationExpression");
 
