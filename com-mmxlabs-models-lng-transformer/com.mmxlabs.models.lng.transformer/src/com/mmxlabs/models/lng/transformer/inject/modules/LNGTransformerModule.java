@@ -375,7 +375,7 @@ public class LNGTransformerModule extends AbstractModule {
 				@NonNull
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
 
-				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1);
+				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1).withHour(0);
 				@NonNull
 				final ZonedDateTime plusMonths = startOfYear.plusMonths(months);
 
@@ -388,7 +388,7 @@ public class LNGTransformerModule extends AbstractModule {
 				@NonNull
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
 
-				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1);
+				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1).withHour(0);
 				@NonNull
 				final ZonedDateTime plusMonths = dateTimeZero.plusHours(date).withDayOfMonth(1);
 
