@@ -141,14 +141,13 @@ public class Exposures {
 	 */
 
 	public static @Nullable Collection<ExposureDetail> calculateExposure(final @NonNull String priceExpression, final YearMonth date, final double volumeInMMBTu, final boolean isPurchase,
-			final @NonNull LookupData lookupData) {
+			final @NonNull LookupData lookupData, int dayOfMonth) {
 
 		// Parse the expression
 		final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
 		final Node p = parse.evaluate();
 		final Node node = expandNode(p, lookupData);
 		final MarkedUpNode markedUpNode = markupNodes(node, lookupData);
-		final int dayOfMonth = 15;
 		if (markedUpNode == null) {
 			return null;
 		}
@@ -290,7 +289,7 @@ public class Exposures {
 		} else if (parentNode.token.equalsIgnoreCase("MIN")) {
 			n = new MinFunctionNode();
 		} else if (parentNode.token.equalsIgnoreCase("SPLITMONTH")) {
-			final MarkedUpNode splitPoint = markupNodes(parentNode.children[3], lookupData);
+			final MarkedUpNode splitPoint = markupNodes(parentNode.children[2], lookupData);
 			double splitPointValue = -1;
 
 			if (splitPoint instanceof ConstantNode) {
@@ -587,7 +586,7 @@ public class Exposures {
 			return new Pair<>(constantNode.getConstant(), new Constant(constantNode.getConstant(), ""));
 		} else if (node instanceof SplitNode) {
 			final SplitNode splitNode = (SplitNode) node;
-			if (node.getChildren().size() != 2) {
+			if (node.getChildren().size() != 3) {
 				throw new IllegalStateException();
 			}
 
