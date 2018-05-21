@@ -86,7 +86,7 @@ public class SplitMonthSeries implements ISeries {
 			int monthStartPoint = mapper.mapMonthToChangePoint(i);
 
 			changePoints[++ic] = monthStartPoint;
-			changePoints[++ic] = monthStartPoint + daysToPoint(splitPoint);
+			changePoints[++ic] = monthStartPoint + daysToPoint(splitPoint - 1);
 		}
 
 		return changePoints;
@@ -102,7 +102,7 @@ public class SplitMonthSeries implements ISeries {
 		int monthStartPoint = mapper.mapMonthToChangePoint(currentMonth);
 
 		// Convert the 'days' to the point in the month
-		int actualSplitPoint = monthStartPoint + daysToPoint(splitPoint);
+		int actualSplitPoint = monthStartPoint + daysToPoint(splitPoint - 1);
 
 		// Use first curve
 		if (point < actualSplitPoint) {
