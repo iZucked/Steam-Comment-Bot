@@ -173,7 +173,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 				final String c = proposal.substring(contents.length());
 				list.add(new ContentProposal(c, proposal + "index,index,day)",
-						"Function switching between two index at a given point each monthd",
+						"Function switching between two index at a given point each month",
 						c.length()));
 			}
 		}
