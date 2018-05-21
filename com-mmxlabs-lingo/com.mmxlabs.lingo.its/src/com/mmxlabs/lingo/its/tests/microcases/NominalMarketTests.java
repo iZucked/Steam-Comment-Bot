@@ -22,6 +22,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Injector;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -38,6 +39,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
@@ -47,13 +49,16 @@ import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCore;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 
 @SuppressWarnings("unused")
 @RunWith(value = ShiroRunner.class)
@@ -399,8 +404,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			final NonOptionalSlotFitnessCore core = new NonOptionalSlotFitnessCore("");
-			scenarioToOptimiserBridge.getDataTransformer().getInjector().injectMembers(core);
-			core.init(scenarioToOptimiserBridge.getDataTransformer().getInjector().getInstance(IOptimisationData.class));
+			Injector cinjector = scenarioToOptimiserBridge.getInjector().createChildInjector(new InitialPhaseOptimisationDataModule());
+			cinjector.injectMembers(core);
+			core.init(cinjector.getInstance(IPhaseOptimisationData.class));
 			core.evaluate(initialRawSequences, new EvaluationState(), null);
 			Assert.assertTrue(core.getFitness() > 0);
 
@@ -463,8 +469,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			final NonOptionalSlotFitnessCore core = new NonOptionalSlotFitnessCore("");
-			scenarioToOptimiserBridge.getDataTransformer().getInjector().injectMembers(core);
-			core.init(scenarioToOptimiserBridge.getDataTransformer().getInjector().getInstance(IOptimisationData.class));
+			Injector cinjector = scenarioToOptimiserBridge.getInjector().createChildInjector(new InitialPhaseOptimisationDataModule());
+			cinjector.injectMembers(core);
+			core.init(cinjector.getInstance(IPhaseOptimisationData.class));
 			core.evaluate(initialRawSequences, new EvaluationState(), null);
 			Assert.assertTrue(core.getFitness() > 0);
 		});

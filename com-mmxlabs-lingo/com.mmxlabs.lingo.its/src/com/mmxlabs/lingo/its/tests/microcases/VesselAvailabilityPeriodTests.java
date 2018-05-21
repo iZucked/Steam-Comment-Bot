@@ -227,8 +227,8 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, vesselAvailabilities.size());
 			VesselAvailability va = vesselAvailabilities.get(0);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 12, 0), va.getStartAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 12, 0), va.getStartBy());
+			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartAfter());
+			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartBy());
 			Assert.assertEquals("", va.getRepositioningFee());
 			Assert.assertEquals("", va.getStartHeel().getPriceExpression());
 			Assert.assertEquals(500.0, va.getStartHeel().getMinVolumeAvailable(), 0.0);
@@ -310,8 +310,8 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 			Assert.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0);
 			Assert.assertEquals(22.6, va.getStartHeel().getCvValue(), 0.0);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 12, 0), va.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 12, 0), va.getEndBy());
+			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndAfter());
+			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndBy());
 			Assert.assertEquals("1000000", va.getRepositioningFee());
 			Assert.assertEquals("", va.getEndHeel().getPriceExpression());
 			Assert.assertEquals(500.0, va.getEndHeel().getMinimumEndHeel(), 0.0);
