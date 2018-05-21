@@ -42,7 +42,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -98,7 +98,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 	@Override
 	@NonNull
-	public ISequences createInitialSequences(@NonNull final IOptimisationData data, @NonNull final ModelEntityMap mem) {
+	public ISequences createInitialSequences(@NonNull final IPhaseOptimisationData data, @NonNull final ModelEntityMap mem) {
 		/**
 		 * This sequences is passed into the initial sequence builder as a starting point. Extra elements may be added to the sequence in any position, but the existing elements will not be removed or
 		 * reordered

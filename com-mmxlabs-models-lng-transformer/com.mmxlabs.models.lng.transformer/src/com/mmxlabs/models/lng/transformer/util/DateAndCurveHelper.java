@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -31,10 +30,7 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -46,10 +42,8 @@ import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
- * Small helper class which is intended to be injected into external
- * {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with
- * date and time conversion. This also has some routines for creating
- * {@link ICurve}s
+ * Small helper class which is intended to be injected into external {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with date and time conversion. This also has some routines
+ * for creating {@link ICurve}s
  * 
  */
 public class DateAndCurveHelper {
@@ -75,8 +69,7 @@ public class DateAndCurveHelper {
 	}
 
 	/**
-	 * Convert a date into relative hours; returns the number of hours between
-	 * windowStart and earliest.
+	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
 	 * 
 	 * @param earliest
 	 * @param windowStart
@@ -247,22 +240,20 @@ public class DateAndCurveHelper {
 	}
 
 	/**
-	 * Returns the minutes that need to be added to a date that has been rounded
-	 * down elsewhere in the application (e.g. in convertTime())
+	 * Returns the minutes that need to be added to a date that has been rounded down elsewhere in the application (e.g. in convertTime())
 	 * 
 	 * @param timeZone
 	 * @return
 	 */
-	public static int getOffsetInMinutesFromTimeZone(final String timeZone) {
-		return getOffsetMinutes(getOffsetInMsFromTimeZone(timeZone));
+	public static int getOffsetInMinutesFromDate(final ZonedDateTime date) {
+		return getOffsetMinutes(getOffsetInMsFromDate(date));
 	}
 
-	public static int getOffsetInMsFromTimeZone(final String timeZone) {
-		final int offset = TimeZone.getTimeZone(timeZone).getRawOffset();
-		return offset;
+	private static int getOffsetInMsFromDate(final ZonedDateTime date) {
+		return date.getOffset().getTotalSeconds() * 1000;
 	}
 
-	public static int getOffsetMinutes(final int offsetMs) {
+	private static int getOffsetMinutes(final int offsetMs) {
 		int correctedOffset = 0;
 		final int offsetInMinutes = (Math.abs(offsetMs) / 1000 / 60) % 60;
 		if (offsetInMinutes != 0) {

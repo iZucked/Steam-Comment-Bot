@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.PhaseOptimisationDataModule;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
@@ -73,6 +74,7 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputSequences));
+		modules.add(new PhaseOptimisationDataModule());
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {

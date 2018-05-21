@@ -58,6 +58,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
@@ -375,6 +376,7 @@ public class ScenarioTools {
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new InitialSequencesModule(dataTransformer.getInitialSequences()));
 			modules.add(new InputSequencesModule(dataTransformer.getInitialSequences()));
+			modules.add(new InitialPhaseOptimisationDataModule());
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
 					new LNGParameters_EvaluationSettingsModule(dataTransformer.getUserSettings(), ScenarioUtils.createDefaultConstraintAndFitnessSettings()), dataTransformer.getModuleServices(),
 					IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));

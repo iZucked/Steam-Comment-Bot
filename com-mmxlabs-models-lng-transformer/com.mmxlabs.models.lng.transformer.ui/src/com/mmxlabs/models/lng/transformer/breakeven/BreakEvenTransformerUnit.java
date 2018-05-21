@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.PhaseOptimisationDataModule;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -101,6 +102,7 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
+		modules.add(new PhaseOptimisationDataModule());
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()),
 				services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));

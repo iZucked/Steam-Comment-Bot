@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 
 /**
@@ -20,6 +20,6 @@ public interface IOptimisationTransformer {
 	 * @return
 	 */
 	@NonNull
-	ISequences createInitialSequences(@NonNull IOptimisationData data, @NonNull ModelEntityMap mem);
+	ISequences createInitialSequences(@NonNull IPhaseOptimisationData data, @NonNull ModelEntityMap mem);
 
 }

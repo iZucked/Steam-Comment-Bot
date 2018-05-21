@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
@@ -400,6 +401,7 @@ public class LNGScenarioToOptimiserBridge {
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new InitialSequencesModule(originalDataTransformer.getInitialSequences()));
 			modules.add(new InputSequencesModule(rawSequences));
+			modules.add(new InitialPhaseOptimisationDataModule());
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
 					new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getUserSettings(), originalDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
 					services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
@@ -445,6 +447,7 @@ public class LNGScenarioToOptimiserBridge {
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
 			modules.add(new InputSequencesModule(rawSequences));
+			modules.add(new InitialPhaseOptimisationDataModule());
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
 					new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(), optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
 					services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
