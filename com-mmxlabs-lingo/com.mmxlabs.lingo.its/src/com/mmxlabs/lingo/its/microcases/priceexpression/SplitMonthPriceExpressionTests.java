@@ -129,7 +129,11 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		pricingModelBuilder = null;
 		entity = null;
 	}
-
+	
+	private int daysToHours(int days) {
+		return (days - 1) * 24;
+	}
+	
 	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
@@ -159,12 +163,14 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 
 		// Construct the cargo scenario
 		// Create cargo 1, cargo 2
+		final int splitDay = 15;
+		
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "SPLITMONTH(1, 10, 15)", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, String.format("SPLITMONTH(1, 10, %d)", splitDay)) //
 				.withWindowStartTime(0) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowSize(30, TimePeriod.DAYS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPort("Dragon LNG"), null, entity, "SPLITMONTH(1, 10, 15)") //
+				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPort("Dragon LNG"), null, entity, String.format("SPLITMONTH(1, 10, %d)", splitDay)) //
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
 				.withVesselAssignment(vesselAvailability, 1).build();
@@ -206,8 +212,8 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 				System.out.println(ScheduleTools.getPrice(optimiserScenario, getDefaultEMFLoadSlot()));
 				Assert.assertEquals(1, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFLoadSlot()), 0.0001);
 				Assert.assertEquals(10, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
-				Assert.assertTrue(loadFeasibleTimeWindow.getInclusiveStart() < 15 * 24);
-				Assert.assertTrue(dischargeFeasibleTimeWindow.getInclusiveStart() > 15 * 24);
+				Assert.assertTrue(loadFeasibleTimeWindow.getInclusiveStart() < daysToHours(splitDay));
+				Assert.assertTrue(dischargeFeasibleTimeWindow.getInclusiveStart() > daysToHours(splitDay));
 			});
 		});
 	}
@@ -229,12 +235,15 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 
 		// Construct the cargo scenario
 		// Create cargo 1, cargo 2
+
+		final int splitDay = 15;
+		
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "SPLITMONTH(Henry_Hub, JCC, 15)", 23.4) //
+				.makeFOBPurchase(loadName, LocalDate.of(2018, 6, 1), portFinder.findPort("Bonny Nigeria"), null, entity, String.format("SPLITMONTH(Henry_Hub, JCC, %d)", splitDay), 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
-				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPort("Dragon LNG"), null, entity, "SPLITMONTH(Henry_Hub, JCC, 15)") //
+				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPort("Dragon LNG"), null, entity, String.format("SPLITMONTH(Henry_Hub, JCC, %d)", splitDay)) //
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
 				.withVesselAssignment(vesselAvailability, 1).build();
@@ -306,8 +315,8 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 				// tests
 				Assert.assertEquals(5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFLoadSlot()), 0.0001);
 				Assert.assertEquals(10, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
-				Assert.assertTrue(loadFeasibleTimeWindow.getInclusiveStart() < 15 * 24);
-				Assert.assertTrue(dischargeFeasibleTimeWindow.getInclusiveStart() > 15 * 24);
+				Assert.assertTrue(loadFeasibleTimeWindow.getInclusiveStart() < daysToHours(splitDay));
+				Assert.assertTrue(dischargeFeasibleTimeWindow.getInclusiveStart() > daysToHours(splitDay));
 			});
 		});
 	}
