@@ -29,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  */
 public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	@Inject
-	IOptionalElementsProvider optionalElementsProvider;
+	IPhaseOptimisationData phaseOptimisationData;
 	@Inject
 	IPortSlotProvider portSlotProvider;
 	@Inject
