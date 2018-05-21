@@ -138,11 +138,6 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
-
-	}
-
-	@Override
 	/**
 	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances, if using the given resource to service them
 	 * 
