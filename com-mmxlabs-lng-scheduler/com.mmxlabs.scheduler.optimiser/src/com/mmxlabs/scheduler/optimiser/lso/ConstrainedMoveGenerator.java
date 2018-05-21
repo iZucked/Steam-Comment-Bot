@@ -14,15 +14,11 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveTypes;
@@ -73,7 +69,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private final boolean enableSwapElementsMoveGenerator = false;
 
 	@com.google.inject.Inject(optional = true)
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
 	private Injector injector;
@@ -131,8 +127,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		this.elementSwapMoveGenerator = new ElementSwapMoveGenerator();
 		injector.injectMembers(elementSwapMoveGenerator);
 
-		if (optionalElementsProvider != null) {
-			if (optionalElementsProvider.getOptionalElements().size() > 0) {
+		if (phaseOptimisationData != null) {
+			if (phaseOptimisationData.getOptionalElements().size() > 0) {
 				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit();
 				injector.injectMembers(optionalMoveGenerator);
 			} else {

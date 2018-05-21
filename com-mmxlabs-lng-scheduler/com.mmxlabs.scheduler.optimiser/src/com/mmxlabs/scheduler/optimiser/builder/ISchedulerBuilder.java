@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
@@ -62,7 +63,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
- * A builder to create {@link IOptimisationData} instances for Scheduler problems.
+ * A builder to create {@link IPhaseOptimisationData} instances for Scheduler problems.
  * 
  * @author Simon Goodall
  * 
@@ -78,7 +79,7 @@ public interface ISchedulerBuilder {
 	void addBuilderExtension(@NonNull IBuilderExtension extension);
 
 	/**
-	 * Finalise build process and return an {@link IOptimisationData} instance. The builder should not be used after calling this method.
+	 * Finalise build process and return an {@link IPhaseOptimisationData} instance. The builder should not be used after calling this method.
 	 * 
 	 * @return
 	 */

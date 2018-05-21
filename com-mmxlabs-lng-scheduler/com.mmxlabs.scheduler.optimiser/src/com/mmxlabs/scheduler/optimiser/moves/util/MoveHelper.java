@@ -28,7 +28,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -64,14 +64,14 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class MoveHelper implements IMoveHelper {
 
 	@Inject
-	private IOptimisationData optimisationData;
+	private IPhaseOptimisationData optimisationData;
 
 	@Inject
 	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
 	private IResourceAllocationConstraintDataComponentProvider racDCP;
@@ -225,7 +225,7 @@ public class MoveHelper implements IMoveHelper {
 		}
 
 		if (resource == null) {
-			return optionalElementsProvider.isElementOptional(element);
+			return phaseOptimisationData.isElementOptional(element);
 		}
 
 		final Collection<@NonNull IResource> resources = cachedResult.computeIfAbsent(element, cacheComputeFunction);
@@ -239,7 +239,7 @@ public class MoveHelper implements IMoveHelper {
 	}
 
 	@Inject
-	private void processInformation(final IOptimisationData optimisationData) {
+	private void processInformation(final IPhaseOptimisationData optimisationData) {
 		for (final IResource resource : optimisationData.getResources()) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
@@ -378,7 +378,7 @@ public class MoveHelper implements IMoveHelper {
 
 	@Override
 	public boolean isOptional(@NonNull final ISequenceElement element) {
-		return optionalElementsProvider.isElementOptional(element);
+		return phaseOptimisationData.isElementOptional(element);
 	}
 
 	@Override

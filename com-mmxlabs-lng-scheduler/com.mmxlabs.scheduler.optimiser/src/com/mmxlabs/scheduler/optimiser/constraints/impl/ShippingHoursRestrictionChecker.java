@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -110,7 +110,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
 
 	}
 
@@ -177,14 +177,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 						ITimeWindow tw1 = fobPurchase.getTimeWindow();
 						ITimeWindow tw2 = fobSale.getTimeWindow();
 						if (tw1 != null && tw2 != null) {
-							// End is within
-							if (tw1.getExclusiveEnd() > tw2.getInclusiveStart() && tw1.getExclusiveEnd() - 1 < tw2.getExclusiveEnd()) {
-								return true;
-							}
-							// Start is within
-							if (tw1.getInclusiveStart() >= tw2.getInclusiveStart() && tw1.getInclusiveStart() < tw2.getExclusiveEnd()) {
-								return true;
-							}
+							return tw1.overlaps(tw2);
 						}
 						return false;
 					}

@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.Singleton;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
@@ -34,7 +34,7 @@ public class LazyFollowersAndPrecedersProviderImpl implements IFollowersAndPrece
 	private LegalSequencingChecker checker;
 
 	@Inject
-	private IOptimisationData optimisationData;
+	private IPhaseOptimisationData optimisationData;
 
 	@Inject
 	private IVesselProvider vesselProvider;

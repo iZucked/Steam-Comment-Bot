@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -42,7 +42,7 @@ public class RandomInitialSequenceBuilder implements IInitialSequenceBuilder {
 	private IPortTypeProvider portTypeProvider;
 
 	@Override
-	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, final Map<ISequenceElement, IResource> resourceSuggestion,
+	public ISequences createInitialSequences(final IPhaseOptimisationData data, final ISequences suggestion, final Map<ISequenceElement, IResource> resourceSuggestion,
 			final Map<ISequenceElement, ISequenceElement> pairingHints) {
 
 		final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>(data.getSequenceElements());

@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
@@ -41,7 +42,7 @@ public class SequencesHitchHikerHelper {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
 	private Provider<LookupManager> lookupManagerProvider;
@@ -204,7 +205,7 @@ public class SequencesHitchHikerHelper {
 		for (int i = 0; i < 4; ++i) {
 			final List<ISequenceElement> recheck = new LinkedList<>();
 			for (final ISequenceElement slot : revertedSeq.getUnusedElements()) {
-				if (optionalElementsProvider.isElementRequired(slot) || optionalElementsProvider.getSoftRequiredElements().contains(slot)) {
+				if (phaseOptimisationData.isElementRequired(slot) || phaseOptimisationData.getSoftRequiredElements().contains(slot)) {
 					if (!target.getUnusedElements().contains(slot)) {
 						recheck.add(slot);
 					}

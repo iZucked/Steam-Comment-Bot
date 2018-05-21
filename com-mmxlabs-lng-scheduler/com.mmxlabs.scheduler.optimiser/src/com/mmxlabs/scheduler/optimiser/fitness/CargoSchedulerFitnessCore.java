@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IdleTimeComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
@@ -110,7 +110,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void init(final IOptimisationData data) {
+	public void init(final IPhaseOptimisationData data) {
 		// scheduler = schedulerFactory.createScheduler(data, schedulerComponents);
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoFitnessComponent c : allComponents) {

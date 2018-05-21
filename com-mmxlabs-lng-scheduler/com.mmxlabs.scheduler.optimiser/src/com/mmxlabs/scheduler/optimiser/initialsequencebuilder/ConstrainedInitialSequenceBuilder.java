@@ -32,7 +32,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -75,7 +75,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 	@Inject
 	private IAlternativeElementProvider alternativeElementProvider;
 	@Inject
@@ -143,7 +143,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 	}
 
 	@Override
-	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, Map<ISequenceElement, IResource> resourceSuggestion,
+	public ISequences createInitialSequences(final IPhaseOptimisationData data, final ISequences suggestion, Map<ISequenceElement, IResource> resourceSuggestion,
 			final Map<ISequenceElement, ISequenceElement> pairingHints) {
 
 		if (resourceSuggestion == null) {
@@ -165,7 +165,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		final Set<@NonNull ISequenceElement> tails = new LinkedHashSet<>();
 
 		// Get the set of all optional elements...
-		final Collection<@NonNull ISequenceElement> optionalElements = new LinkedHashSet<>(optionalElementsProvider.getOptionalElements());
+		final Collection<@NonNull ISequenceElement> optionalElements = new LinkedHashSet<>(phaseOptimisationData.getOptionalElements());
 		// ...remove elements specified in the paringHints as these will be used and should not be considered optional for the builder
 		optionalElements.removeAll(pairingHints.keySet());
 		optionalElements.removeAll(pairingHints.values());

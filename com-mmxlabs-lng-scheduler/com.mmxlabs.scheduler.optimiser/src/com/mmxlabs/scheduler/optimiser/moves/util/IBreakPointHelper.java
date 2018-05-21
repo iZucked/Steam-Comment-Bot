@@ -8,12 +8,12 @@ import java.util.List;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public interface IBreakPointHelper {
 
 	List<Pair<ISequenceElement, ISequenceElement>> getValidBreaks();
 
-	void init(IOptimisationData data);
+	void init(IPhaseOptimisationData data);
 
 }

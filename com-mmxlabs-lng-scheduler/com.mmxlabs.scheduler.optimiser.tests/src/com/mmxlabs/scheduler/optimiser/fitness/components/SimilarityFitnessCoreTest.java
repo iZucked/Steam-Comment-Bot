@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
@@ -56,7 +57,7 @@ public class SimilarityFitnessCoreTest {
 	}
 
 	private SimilarityFitnessCore createSimilarityFitnessCore(final ISequences sequences) {
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 
 		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
 

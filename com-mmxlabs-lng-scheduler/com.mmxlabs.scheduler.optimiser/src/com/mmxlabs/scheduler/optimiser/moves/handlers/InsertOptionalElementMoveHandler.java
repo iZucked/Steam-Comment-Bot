@@ -24,6 +24,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -47,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  */
 public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 	@Inject
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
 	private IMoveHelper helper;
@@ -65,11 +66,11 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
 
-		if (optionalElementsProvider.getOptionalElements().isEmpty()) {
+		if (phaseOptimisationData.getOptionalElements().isEmpty()) {
 			return new NullMove("RemoveOptionalElementMoveHandler", "No optional elements");
 		}
 
-		final List<@NonNull ISequenceElement> optionalElements = new ArrayList<>(optionalElementsProvider.getOptionalElements());
+		final List<@NonNull ISequenceElement> optionalElements = new ArrayList<>(phaseOptimisationData.getOptionalElements());
 		Collections.shuffle(optionalElements, random);
 
 		// for (final ISequenceElement optional : optionalElements) {
@@ -79,11 +80,11 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 		// }
 		// }
 		
-		if(optionalElementsProvider.getOptionalElements().size() == 0){
+		if(phaseOptimisationData.getOptionalElements().size() == 0){
 			return new NullMove("InsertOptionalElement", "No Optional Elements");
 		}
 
-		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, optionalElementsProvider.getOptionalElements());
+		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getOptionalElements());
 		final Pair<IResource, Integer> location = lookupManager.lookup(optional);
 
 		if (location.getFirst() == null) {
@@ -133,7 +134,7 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 					}
 
 					final boolean canInsert = beforeFollowerFollowers.contains(orderedElements.get(0));
-					final boolean canSwap = optionalElementsProvider.getOptionalElements().contains(beforeFollower);
+					final boolean canSwap = phaseOptimisationData.getOptionalElements().contains(beforeFollower);
 
 					// TODO: Be able to activate code path manually 
 					// Create the possible choice set depending on insert and swap condition

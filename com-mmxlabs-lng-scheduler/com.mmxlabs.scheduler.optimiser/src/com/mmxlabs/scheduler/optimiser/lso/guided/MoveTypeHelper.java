@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 
 public class MoveTypeHelper {
@@ -31,13 +31,13 @@ public class MoveTypeHelper {
 	}
 
 	/**
-	 * Generate a map of possible move types for all elements in the given {@link IOptimisationData}. (Note this will currently exclude alternative elements). The list of move types should be further
+	 * Generate a map of possible move types for all elements in the given {@link IPhaseOptimisationData}. (Note this will currently exclude alternative elements). The list of move types should be further
 	 * checked once an element has been assigned a {@link IResource} (or to the unused list)
 	 * 
 	 * @param optimisationData
 	 * @return
 	 */
-	public @NonNull Map<ISequenceElement, @NonNull Collection<@NonNull GuidedMoveTypes>> getMoveTypes(@NonNull IOptimisationData optimisationData) {
+	public @NonNull Map<ISequenceElement, @NonNull Collection<@NonNull GuidedMoveTypes>> getMoveTypes(@NonNull IPhaseOptimisationData optimisationData) {
 		Map<ISequenceElement, @NonNull Collection<@NonNull GuidedMoveTypes>> map = new HashMap<>();
 		for (ISequenceElement element : optimisationData.getSequenceElements()) {
 			map.put(element, getMoveTypes(null, element, false));

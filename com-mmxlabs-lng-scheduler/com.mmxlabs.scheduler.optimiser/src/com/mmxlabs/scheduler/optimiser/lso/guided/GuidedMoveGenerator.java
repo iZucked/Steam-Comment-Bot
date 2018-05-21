@@ -30,7 +30,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.IGuidedMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.CompoundMove;
@@ -53,7 +53,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 	private MoveTypeHelper moveTypeHelper;
 
 	@Inject
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
 	private Provider<HintManager> hintManagerProvider;
@@ -78,7 +78,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 	private ISequencesManipulator sequenceManipulator;
 
 	@Inject
-	private void findAllTargetElements(@NonNull final IOptimisationData optimisationData) {
+	private void findAllTargetElements(@NonNull final IPhaseOptimisationData optimisationData) {
 
 		allTargetElements = optimisationData.getSequenceElements().stream() //
 				.filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))) //
@@ -154,7 +154,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		final IModifiableSequences currentRawSequences = new ModifiableSequences(providedRawSequences);
 
 		final long existingUnusedCompulsarySlotCount = currentRawSequences.getUnusedElements().stream() //
-				.filter(e -> optionalElementsProvider.isElementRequired(e)) //
+				.filter(e -> phaseOptimisationData.isElementRequired(e)) //
 				.count();
 		MoveResult checkPointResult = null;
 
@@ -188,7 +188,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 
 			// FIXME: This check does not work properly -- maybe soft required is kicking in?
 			final long newUnusedCompulsarySlotCount = currentRawSequences.getUnusedElements().stream() //
-					.filter(e -> optionalElementsProvider.isElementRequired(e)) //
+					.filter(e -> phaseOptimisationData.isElementRequired(e)) //
 					.count();
 			// If the current state passes the constraint checkers, then maybe return it.
 			if (

@@ -33,7 +33,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -64,7 +64,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	private static final String NULL_MOVE_NAME = "ShuffleElement";
 
 	@Inject
-	private IOptionalElementsProvider optionalElementsProvider;
+	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
 	private IPortTypeProvider portTypeProvider;
@@ -87,7 +87,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	private IFollowersAndPreceders followersAndPreceders;
 
 	@Inject
-	private IOptimisationData optimisationData;
+	private IPhaseOptimisationData optimisationData;
 
 	/**
 	 * Experimental parameter to limit the list of returned candidates.
@@ -104,7 +104,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			// TODO: check new API - null might be events or start/ends?
 			// TODO: Really need port type in here
 			final Collection<IResource> resources = racDCP.getAllowedResources(e);
-			if (resources == null || (resources.size() > 1) || optionalElementsProvider.isElementOptional(e)) {
+			if (resources == null || (resources.size() > 1) || phaseOptimisationData.isElementOptional(e)) {
 				final PortType portType = portTypeProvider.getPortType(e);
 
 				if (portType == PortType.Load || portType == PortType.Discharge) {
@@ -438,7 +438,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 		// something the the extra element
 		final Pair<IResource, Integer> targetPosition = lookupManager.lookup(target);
 		final IResource targetResource = targetPosition.getFirst();
-		if (optionalElementsProvider.isElementOptional(target) && random.nextBoolean()) {
+		if (phaseOptimisationData.isElementOptional(target) && random.nextBoolean()) {
 			// Can stick on unused elements list
 			builder.addFrom(targetResource, targetPosition.getSecond(), target);
 			builder.addTo(null, 0, 1);
@@ -490,7 +490,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 			// Did not find an option, so true to remove if optional (assumes
 			// the previous check resulted in false)
-			if (optionalElementsProvider.isElementOptional(target)) {
+			if (phaseOptimisationData.isElementOptional(target)) {
 				// Can stick on unused elements list
 				builder.addFrom(targetResource, targetPosition.getSecond(), target);
 				builder.addTo(null, 0, 1);
@@ -543,7 +543,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 			// Did not find an option, so true to remove if optional (assumes
 			// the previous check resulted in false)
-			if (optionalElementsProvider.isElementOptional(target)) {
+			if (phaseOptimisationData.isElementOptional(target)) {
 				// Can stick on unused elements list
 				builder.addFrom(targetResource, targetPosition.getSecond(), target);
 				builder.addTo(null, 0, 1);

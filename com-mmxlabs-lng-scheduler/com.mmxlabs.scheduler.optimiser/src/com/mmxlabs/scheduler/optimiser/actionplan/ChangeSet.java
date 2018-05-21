@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
 /**
@@ -100,7 +100,7 @@ public class ChangeSet implements Serializable {
 		// @see JobStateSerialiser
 	}
 
-	public static void fixStates(final IOptimisationData data, final Map<Integer, ISequenceElement> elementCache, ChangeSet obj) {
+	public static void fixStates(final IPhaseOptimisationData data, final Map<Integer, ISequenceElement> elementCache, ChangeSet obj) {
 		final int[][] persistedSequences = obj.persistedSequences;
 		// Could be null if this object has been saved twice to the same object stream. Second loading of the object will have already had the rawSequences recreated and the persistedSequences array
 		// nulled out.

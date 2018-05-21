@@ -41,6 +41,7 @@ import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
@@ -78,8 +79,11 @@ public class ScheduleTestModule extends AbstractModule {
 
 	private final @NonNull IOptimisationData data;
 
-	public ScheduleTestModule(final @NonNull IOptimisationData data) {
+	private IPhaseOptimisationData pData;
+
+	public ScheduleTestModule(final @NonNull IOptimisationData data, IPhaseOptimisationData pData) {
 		this.data = data;
+		this.pData = pData;
 	}
 
 	@Override
@@ -254,7 +258,7 @@ public class ScheduleTestModule extends AbstractModule {
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	private ISequences provideInitialSequences(final IInitialSequenceBuilder sequenceBuilder) {
 
-		final ISequences sequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
+		final ISequences sequences = sequenceBuilder.createInitialSequences(pData, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
 
 		return sequences;
 	}
@@ -305,5 +309,10 @@ public class ScheduleTestModule extends AbstractModule {
 	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
 	private boolean isVPOSpeedStepping() {
 		return true;
+	}
+	
+	@Provides
+	private IPhaseOptimisationData providePhaseOptimisationData() {
+		return this.pData;
 	}
 }

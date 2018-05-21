@@ -21,7 +21,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 public final class JobStateSerialiser {
 
@@ -36,7 +36,7 @@ public final class JobStateSerialiser {
 
 	}
 
-	public static List<JobState> load(final IOptimisationData data, final File f) throws Exception {
+	public static List<JobState> load(final IPhaseOptimisationData data, final File f) throws Exception {
 		// System.out.println("Loading state " + f.getAbsolutePath());
 		final Map<Integer, ISequenceElement> elementCache = new HashMap<>();
 		for (final ISequenceElement e : data.getSequenceElements()) {
@@ -58,7 +58,7 @@ public final class JobStateSerialiser {
 		return states;
 	}
 
-	private static void fixStates(final IOptimisationData data, final Map<Integer, ISequenceElement> elementCache, final JobState obj) {
+	private static void fixStates(final IPhaseOptimisationData data, final Map<Integer, ISequenceElement> elementCache, final JobState obj) {
 		final int[][] persistedSequences = obj.persistedSequences;
 		// Could be null if this object has been saved twice to the same object stream. Second loading of the object will have already had the rawSequences recreated and the persistedSequences array
 		// nulled out.
