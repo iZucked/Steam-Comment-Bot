@@ -66,13 +66,7 @@ public class LNGScenarioChainUnitFactory {
 		if (template instanceof CleanStateOptimisationStage) {
 			final CleanStateOptimisationStage stage = (CleanStateOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
-
-				final int[] seeds = new int[jobCount];
-				for (int i = 0; i < jobCount; ++i) {
-					seeds[i] = stage.getSeed() + i;
-				}
-
-				LightWeightSchedulerOptimiserUnit.chainPool(builder, scenarioToOptimiserBridge, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, seeds);
+				LightWeightSchedulerOptimiserUnit.chain(builder, scenarioToOptimiserBridge, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, stage.getSeed());
 			}
 			return null;
 		} else if (template instanceof MultiobjectiveSimilarityOptimisationStage) {
