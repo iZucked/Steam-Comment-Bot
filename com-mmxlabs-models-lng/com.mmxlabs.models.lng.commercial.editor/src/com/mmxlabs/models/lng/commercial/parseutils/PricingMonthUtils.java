@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -32,6 +33,11 @@ public class PricingMonthUtils {
 	 * @return
 	 */
 	public static @Nullable YearMonth getPricingDate(@NonNull final SlotAllocation slotAllocation) {
+		LocalDate localDate = getFullPricingDate(slotAllocation);
+		return YearMonth.of(localDate.getYear(), localDate.getMonth());
+	}
+	
+	public static @Nullable LocalDate getFullPricingDate(@NonNull final SlotAllocation slotAllocation) {
 		final Slot slot = slotAllocation.getSlot();
 
 		Optional<LocalDate> pricingDate = Optional.empty();
@@ -75,7 +81,7 @@ public class PricingMonthUtils {
 
 		}
 		if (pricingDate.isPresent()) {
-			return YearMonth.of(pricingDate.get().getYear(), pricingDate.get().getMonthValue());
+			return pricingDate.get();
 		}
 		return null;
 	}
