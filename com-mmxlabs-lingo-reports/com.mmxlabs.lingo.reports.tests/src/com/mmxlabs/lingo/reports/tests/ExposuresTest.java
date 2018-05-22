@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.tests;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,7 +52,8 @@ import com.mmxlabs.models.lng.schedule.ExposureDetail;
  */
 @RunWith(value = Parameterized.class)
 public class ExposuresTest {
-	private static final @NonNull YearMonth pricingDate = YearMonth.of(2016, 4);
+	private static @NonNull final YearMonth pricingDate = YearMonth.of(2016, 4);
+	private static final int pricingDay = 4;
 
 	private static final double defaultVolumeInMMBTU = 3_000_000.0;
 
@@ -198,6 +200,16 @@ public class ExposuresTest {
 				), //
 						indiciesOf(//
 								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+				{ "SplitMonth Exposure 1", "SPLITMONTH(HH, Brent, 15)", "HH", single(//
+						calcExpected("HH", YearMonth.of(2016, 4), 5.0, 1.0, LocalDate.of(2016, 4, 4)) //
+				), //
+						indiciesOf(//
+								makeHH(), makeBrent())}, //
+				{ "SplitMonth Exposure 2", "SPLITMONTH(HH, Brent, 2)", "HH", single(//
+						calcExpected("Brent", YearMonth.of(2016, 4), 90, 1.0, LocalDate.of(2016, 4, 4)) //
+				), //
+						indiciesOf(//
+								makeHH(), makeBrent())}, //
 
 				{ "Currency data - missing", "GAS_NBP_GBP*therm_to_mmBtu/p_to_USD", "GAS_NBP_GBP", //
 						single(calcExpected("GAS_NBP_GBP", pricingDate, 5, 10.0, 0.0)), //
@@ -271,7 +283,7 @@ public class ExposuresTest {
 		@NonNull
 		final LookupData lookupData = Exposures.createLookupData(pricingModel);
 
-		final Collection<ExposureDetail> details = Exposures.calculateExposure(expression, pricingDate, volume, isPurchase, lookupData);
+		final Collection<ExposureDetail> details = Exposures.calculateExposure(expression, pricingDate, volume, isPurchase, lookupData, pricingDay);
 		checker.validate(details, expression, lookupData);
 	}
 
@@ -416,6 +428,7 @@ public class ExposuresTest {
 				assert r.expectedDate != null;
 				m.put(new Pair<>(r.index, r.expectedDate), r);
 			}
+			
 			if (details != null) {
 				for (final ExposureDetail detail : details) {
 					final ExpectedResult r = m.remove(new Pair<>(detail.getIndexName(), detail.getDate()));
@@ -430,6 +443,7 @@ public class ExposuresTest {
 	private static class ExpectedResult {
 		private String index;
 		private YearMonth expectedDate = pricingDate;
+		private LocalDate pricingDateOverride = null;
 		private final OptionalDouble expectedVolume;
 		private final OptionalDouble expectedValue;
 		private final OptionalDouble expectedExpressionValue;
@@ -460,6 +474,16 @@ public class ExposuresTest {
 			this.expectedVolume = OptionalDouble.of(expectedVolume);
 			this.expectedValue = OptionalDouble.of(expectedValue);
 			this.expectedExpressionValue = OptionalDouble.empty();
+		}
+		
+		public ExpectedResult(String index, final YearMonth date, final double expectedVolume, final double expectedValue, LocalDate pricingDate) {
+			this.index = index;
+			expectedDate = date;
+			this.expectExposed = true;
+			this.expectedVolume = OptionalDouble.of(expectedVolume);
+			this.expectedValue = OptionalDouble.of(expectedValue);
+			this.expectedExpressionValue = OptionalDouble.empty();
+			this.pricingDateOverride = pricingDate;
 		}
 
 		public ExpectedResult(String index, final double expectedVolume, final double expectedValue, final double expectedExpressionValue) {
@@ -497,9 +521,15 @@ public class ExposuresTest {
 			if (expectedExpressionValue.isPresent()) {
 				final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
 				final ISeries series = p.parse(expression).evaluate();
+				
+				Number evaluate;
 				// "Magic" date constant used in PriceIndexUtils for date zero
-				final Number evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateZero, pricingDate));
-
+				if (pricingDateOverride != null) {
+					evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateTimeZero.toLocalDate(), pricingDateOverride));
+				} else {
+					evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateZero, pricingDate));
+				}
+				
 				final double val = evaluate.doubleValue() * defaultVolumeInMMBTU;
 				Assert.assertEquals("Expr Value", expectedExpressionValue.getAsDouble(), val, delta);
 			}
@@ -536,6 +566,10 @@ public class ExposuresTest {
 
 	private static ExpectedResult calcExpected(String index, final YearMonth date, final double unitPrice, final double factor) {
 		return new ExpectedResult(index, date, defaultVolumeInMMBTU * factor, defaultVolumeInMMBTU * factor * unitPrice);
+	}
+
+	private static ExpectedResult calcExpected(String index, final YearMonth date, final double unitPrice, final double factor, final LocalDate pricingDate) {
+		return new ExpectedResult(index, date, defaultVolumeInMMBTU * factor, defaultVolumeInMMBTU * factor * unitPrice, pricingDate);
 	}
 
 	private static ExpectedResult calcExpected(String index, final YearMonth date, final double unitPrice, final double factor, final double expressionUnitPrice) {
