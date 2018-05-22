@@ -132,6 +132,8 @@ import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -288,6 +290,10 @@ public class LNGScenarioTransformer {
 	@NonNull
 	private ILoadPriceCalculatorProviderEditor loadPriceCalculatorProvider;
 
+
+	@Inject
+	private IntegerIntervalCurveHelper integerIntervalCurveHelper;
+	
 	@Inject
 	@NonNull
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
@@ -1634,7 +1640,16 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				dischargePriceCalculator = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
+				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
+
+				final String splitMonthToken = "splitmonth(";
+				boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+
+				if (isSplitMonth) {
+					priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+				}
+
+				dischargePriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 				injector.injectMembers(dischargePriceCalculator);
 			}
 		} else if (dischargeSlot instanceof SpotSlot) {
@@ -1790,7 +1805,6 @@ public class LNGScenarioTransformer {
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
-
 		if (loadSlot.isSetPriceExpression()) {
 
 			final String priceExpression = loadSlot.getPriceExpression();
@@ -1804,7 +1818,8 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
-				final ISeries parsed = expression.evaluate();
+				Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime = LNGScenarioUtils.findEarliestAndLatestTimes(rootObject);
+				final ISeries parsed = expression.evaluate(earliestAndLatestTime);
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {
@@ -1816,7 +1831,16 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				loadPriceCalculator = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
+				
+				final String splitMonthToken = "splitmonth(";
+				boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+
+				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
+				if (isSplitMonth) {
+					priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+				}
+
+				loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 				injector.injectMembers(loadPriceCalculator);
 
 			}
