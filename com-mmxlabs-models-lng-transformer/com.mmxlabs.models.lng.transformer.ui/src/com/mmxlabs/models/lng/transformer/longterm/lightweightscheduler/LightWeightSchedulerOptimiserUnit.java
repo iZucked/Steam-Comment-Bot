@@ -4,19 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -48,10 +43,10 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.models.lng.transformer.inject.modules.PhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.longterm.SequencesToPortSlotsUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.transformerunits.TransformerUnitsHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -97,8 +92,8 @@ public class LightWeightSchedulerOptimiserUnit {
 	}
 
 	@NonNull
-	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final LNGScenarioToOptimiserBridge optimiserBridge, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService, final int... seeds) {
+	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final LNGScenarioToOptimiserBridge optimiserBridge, @NonNull final String stage, @NonNull final UserSettings userSettings,
+			@NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService, final int seed) {
 		final IChainLink link = new IChainLink() {
 
 			@Override
@@ -131,96 +126,33 @@ public class LightWeightSchedulerOptimiserUnit {
 				}
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
-				monitor.beginTask("", 100 * seeds.length);
-				final List<Future<IMultiStateResult>> results = new ArrayList<>(seeds.length);
+				monitor.beginTask("", 100);
 				try {
-					for (int i = 0; i < seeds.length; ++i) {
-						final CleanStateOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
-						copyStageSettings.setSeed(seeds[i]);
-						results.add(executorService.submit(() -> {
-							final LightWeightSchedulerOptimiserUnit t  = new LightWeightSchedulerOptimiserUnit(dataTransformer, userSettings, copyStageSettings.getConstraintAndFitnessSettings(), executorService, initialSequences.getSequences(), (LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), inputState, hints);
-							return t.run(new SubProgressMonitor(monitor, 100));
-						}));
-					}
-
-					final List<NonNullPair<ISequences, Map<String, Object>>> output = new LinkedList<>();
-					try {
-						for (final Future<IMultiStateResult> f : results) {
-							final IMultiStateResult r = f.get();
-							output.addAll(r.getSolutions());
-
-							// Check monitor state
-							if (monitor.isCanceled()) {
-								throw new OperationCanceledException();
-							}
-						}
-					} catch (Throwable e) {
-						// An exception occurred, abort!
-
-						// Unwrap exception
-						if (e instanceof ExecutionException) {
-							e = e.getCause();
-						}
-
-						// Abort any other running jobs
-						for (final Future<IMultiStateResult> f : results) {
-							try {
-								f.cancel(true);
-							} catch (final Exception e2) {
-								LOG.error(e2.getMessage(), e2);
-							}
-						}
-
-						if (e instanceof OperationCanceledException) {
-							throw (OperationCanceledException) e;
-						} else {
-							throw new RuntimeException(e);
-						}
-					}
-
+					final CleanStateOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
+					copyStageSettings.setSeed(seed);
+					final LightWeightSchedulerOptimiserUnit t  = new LightWeightSchedulerOptimiserUnit(dataTransformer, userSettings, 
+							copyStageSettings.getConstraintAndFitnessSettings(), executorService, initialSequences.getSequences(),
+							(LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), inputState, hints);
+					
+					IMultiStateResult result = t.run(new SubProgressMonitor(monitor, 100));
+					TransformerUnitsHelper.removeExcessSlots(result);
+					
 					// Check monitor state
 					if (monitor.isCanceled()) {
 						throw new OperationCanceledException();
 					}
 
-					// Sort results
-					Collections.sort(output, new Comparator<NonNullPair<ISequences, Map<String, Object>>>() {
-
-						@Override
-						public int compare(final NonNullPair<ISequences, Map<String, Object>> o1, final NonNullPair<ISequences, Map<String, Object>> o2) {
-							final long a = getTotal(o1.getSecond());
-							final long b = getTotal(o2.getSecond());
-							return Long.compare(a, b);
-						}
-
-						long getTotal(final Map<String, Object> m) {
-							if (m == null) {
-								return 0L;
-							}
-							final Map<String, Long> currentFitnesses = (Map<String, Long>) m.get(OptimiserConstants.G_AI_fitnessComponents);
-							if (currentFitnesses == null) {
-								return 0L;
-							}
-							long sum = 0L;
-							for (final Long l : currentFitnesses.values()) {
-								if (l != null) {
-									sum += l.longValue();
-								}
-							}
-							return sum;
-
-						}
-					});
-
-					if (output.isEmpty()) {
+					if (result == null) {
 						throw new IllegalStateException("No results generated");
 					}
+					
+					
 
 					if (runnerHook != null) {
-						runnerHook.reportSequences(stage, output.get(0).getFirst(), dataTransformer);
+						runnerHook.reportSequences(stage, result.getBestSolution().getFirst(), dataTransformer);
 					}
 
-					return new MultiStateResult(output.get(0), output);
+					return result;
 				} finally {
 					if (runnerHook != null) {
 						runnerHook.endStage(stage);

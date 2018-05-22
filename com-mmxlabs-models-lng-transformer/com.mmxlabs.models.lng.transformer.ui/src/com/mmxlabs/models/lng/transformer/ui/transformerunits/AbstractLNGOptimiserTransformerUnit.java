@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser;
+package com.mmxlabs.models.lng.transformer.ui.transformerunits;
 
 import java.util.Collection;
 import java.util.HashMap;
