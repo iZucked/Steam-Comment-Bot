@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.time.ZonedDateTime;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 
 public class SeriesOperatorExpression implements IExpression<ISeries> {
@@ -45,6 +47,11 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 		return new OpSeries(opImpl, lhs.evaluate(), rhs.evaluate());
 	}
 
+	@Override
+	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+		return evaluate();
+	}
+
 	private class OpSeries implements ISeries {
 		private final IOp op;
 		private final ISeries lhs;
@@ -67,6 +74,7 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 			final Number n2 = rhs.evaluate(point);
 			return op.evaluate(n1, n2);
 		}
+
 	}
 
 	private interface IOp {

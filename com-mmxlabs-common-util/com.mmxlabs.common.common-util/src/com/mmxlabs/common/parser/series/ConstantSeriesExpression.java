@@ -4,8 +4,11 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.time.ZonedDateTime;
+
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 
 public class ConstantSeriesExpression implements IExpression<ISeries> {
@@ -29,5 +32,10 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 				return constant;
 			}
 		};
+	}
+
+	@Override
+	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+		return evaluate();
 	}
 }
