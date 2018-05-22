@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
+package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.util.List;
 import java.util.Map;
