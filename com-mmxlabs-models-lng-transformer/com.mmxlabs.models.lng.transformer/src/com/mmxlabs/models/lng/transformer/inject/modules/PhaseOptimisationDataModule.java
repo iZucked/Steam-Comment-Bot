@@ -25,7 +25,7 @@ public class PhaseOptimisationDataModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IPhaseOptimisationData provideOptimisationData(Injector injector, @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) ISequences initialSequences) throws IncompleteScenarioException {
+	public IPhaseOptimisationData provideOptimisationData(Injector injector, @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) ISequences initialSequences) throws IncompleteScenarioException {
 		final PhaseOptimisationData phaseOptimisationData = injector.getInstance(PhaseOptimisationData.class);
 		List<@NonNull ISequence> sequences = initialSequences.getResources()
 				.stream()

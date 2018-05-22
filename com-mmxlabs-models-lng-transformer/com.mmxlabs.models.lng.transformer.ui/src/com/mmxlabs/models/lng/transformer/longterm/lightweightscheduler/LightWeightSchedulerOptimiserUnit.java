@@ -17,9 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-
-import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -29,15 +26,12 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Provides;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
-import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -51,15 +45,8 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.longterm.CargoVesselRestrictionsMatrixProducer;
-import com.mmxlabs.models.lng.transformer.longterm.ICargoToCargoCostCalculator;
-import com.mmxlabs.models.lng.transformer.longterm.ICargoVesselRestrictionsMatrixProducer;
-import com.mmxlabs.models.lng.transformer.longterm.ILongTermMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.inject.modules.PhaseOptimisationDataModule;
 import com.mmxlabs.models.lng.transformer.longterm.SequencesToPortSlotsUtils;
-import com.mmxlabs.models.lng.transformer.longterm.SimpleCargoToCargoCostCalculator;
-import com.mmxlabs.models.lng.transformer.longterm.metaheuristic.TabuLightWeightSequenceOptimiser;
-import com.mmxlabs.models.lng.transformer.longterm.webservice.WebserviceLongTermMatrixOptimiser;
-import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -67,14 +54,9 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
-import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
 public class LightWeightSchedulerOptimiserUnit {
 
@@ -104,6 +86,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
+		modules.add(new PhaseOptimisationDataModule());
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, constainAndFitnessSettings), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));

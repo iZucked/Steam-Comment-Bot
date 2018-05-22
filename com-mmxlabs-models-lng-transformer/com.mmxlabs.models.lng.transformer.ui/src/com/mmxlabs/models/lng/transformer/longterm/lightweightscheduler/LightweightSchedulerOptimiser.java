@@ -60,6 +60,8 @@ public class LightweightSchedulerOptimiser {
 	@interface NonLDD {
 		
 	}
+
+	private static final boolean DEBUG = false;
 	
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -97,13 +99,19 @@ public class LightweightSchedulerOptimiser {
 		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(),
 				lightWeightOptimisationData.getCargoPNL(), lightWeightOptimisationData.getCargoToCargoCostsOnAvailability(), lightWeightOptimisationData.getCargoVesselRestrictions(),
 				lightWeightOptimisationData.getCargoToCargoMinTravelTimes(), lightWeightOptimisationData.getCargoMinTravelTimes(), constraintCheckers, fitnessFunctions);
-
-//		try {
-//			sequences = getStoredSequences("/tmp/gurobiOutput.gb");
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		int totalCount = 0;
+		for (List<Integer> s : sequences) {
+			totalCount += s.size();
+		}
+		System.out.println("counts:"+totalCount);
+		
+		if (DEBUG) {
+			try {
+				sequences = getStoredSequences("/tmp/gurobiOutput.gb");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
 		// (5) Export the pairings matrix to the raw sequences
 		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());

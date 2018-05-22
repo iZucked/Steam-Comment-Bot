@@ -77,6 +77,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		bind(ICargoToCargoCostCalculator.class).to(SimpleCargoToCargoCostCalculator.class);
 		bind(ICargoVesselRestrictionsMatrixProducer.class).to(CargoVesselRestrictionsMatrixProducer.class);
 		bind(ILightWeightSequenceOptimiser.class).to(TabuLightWeightSequenceOptimiser.class);
+		bind(LongTermOptimisationData.class);
 	}
 
 	@Provides
@@ -237,6 +238,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	}
 	
 	@Provides
+	@Singleton
 	LightWeightConstraintCheckerRegistry getLightweightConstraintCheckerRegistry() {
 		LightWeightConstraintCheckerRegistry registry = new LightWeightConstraintCheckerRegistry();
 		registry.registerConstraintCheckerFactory(new LightWeightShippingRestrictionsConstraintCheckerFactory());
@@ -244,6 +246,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	}
 	
 	@Provides
+	@Singleton
 	LightWeightFitnessFunctionRegistry getLightweightFitnessFunctionRegistry() {
 		LightWeightFitnessFunctionRegistry registry = new LightWeightFitnessFunctionRegistry();
 		registry.registerFitnessFunctionFactory(new DefaultPNLLightWeightFitnessFunctionFactory());

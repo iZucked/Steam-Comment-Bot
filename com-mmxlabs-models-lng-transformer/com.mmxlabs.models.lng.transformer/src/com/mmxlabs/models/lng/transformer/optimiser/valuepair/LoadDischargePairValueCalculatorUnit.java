@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.PhaseOptimisationDataModule;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -43,41 +44,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class LoadDischargePairValueCalculatorUnit {
-
-//	@NonNull
-//	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull final LoadDischargePairStage stageSettings,
-//			@Nullable final ExecutorService executorService, final int progressTicks) {
-//		final IChainLink link = new IChainLink() {
-//
-//			@Override
-//			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-//				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-//
-//				@NonNull
-//				final Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-//				if (userSettings.isGenerateCharterOuts()) {
-//					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-//				} else {
-//					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-//				}
-//				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
-//
-//				final LoadDischargePairValueCalculatorUnit t = new LoadDischargePairValueCalculatorUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(),
-//						inputState, hints);
-//				t.run(monitor, new ProfitAndLossExtractor((loadOption, dischargeOption, value) -> {
-//					// Record the output
-//				}));
-//				return inputState;
-//			}
-//
-//			@Override
-//			public int getProgressTicks() {
-//				return progressTicks;
-//			}
-//		};
-//		chainBuilder.addLink(link);
-//		return link;
-//	}
 
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
@@ -110,6 +76,7 @@ public class LoadDischargePairValueCalculatorUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
+		modules.add(new PhaseOptimisationDataModule());
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, constraintAndFitnessSettings), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
@@ -130,7 +97,6 @@ public class LoadDischargePairValueCalculatorUnit {
 					bagMover = new LoadDischargePairValueCalculator();
 					injector.injectMembers(bagMover);
 					threadCache.put(Thread.currentThread(), bagMover);
-					// System.out.println("thread:" + Thread.currentThread().getId());
 				}
 				return bagMover;
 			}
@@ -158,7 +124,6 @@ public class LoadDischargePairValueCalculatorUnit {
 				final IPhaseOptimisationData optimisationData = injector.getInstance(IPhaseOptimisationData.class);
 				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-				// final CharterInMarket nominalMarket = stageSettings.getCharterInMarket();
 				final ISpotCharterInMarket o_nominalMarket = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(nominalMarket, ISpotCharterInMarket.class);
 				for (final IResource resource : optimisationData.getResources()) {
 					final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
