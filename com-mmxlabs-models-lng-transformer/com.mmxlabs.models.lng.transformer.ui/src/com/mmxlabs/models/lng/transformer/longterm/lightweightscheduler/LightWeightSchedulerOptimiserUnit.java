@@ -135,7 +135,9 @@ public class LightWeightSchedulerOptimiserUnit {
 							(LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), inputState, hints);
 					
 					IMultiStateResult result = t.run(new SubProgressMonitor(monitor, 100));
-					TransformerUnitsHelper.removeExcessSlots(result);
+					
+					// trim out excess slots (i.e. if we created a load that we let the MIP choose)
+					result = t.modifyResult(result);
 					
 					// Check monitor state
 					if (monitor.isCanceled()) {
@@ -173,7 +175,6 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
 			try {
-
 				@NonNull
 				ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 				ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
@@ -193,6 +194,11 @@ public class LightWeightSchedulerOptimiserUnit {
 				} finally {
 					monitor.done();
 				}
+	}
+	
+	public IMultiStateResult modifyResult(IMultiStateResult result) {
+		ISequenceElementFilter filter = injector.getInstance(ISequenceElementFilter.class);
+		return TransformerUnitsHelper.removeExcessSlots(result, filter);
 	}
 
 }
