@@ -109,7 +109,7 @@ public class PriceExpressionTests {
 		Assert.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 13, 0, 0, 0)), 0.001);
 
 		Assert.assertEquals(40.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 24, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 15, 23, 59, 0)), 0.001);
+		Assert.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 14, 23, 59, 0)), 0.001);
 	}
 	
 	private double parseExpression(final String expression, LocalDateTime time) {
