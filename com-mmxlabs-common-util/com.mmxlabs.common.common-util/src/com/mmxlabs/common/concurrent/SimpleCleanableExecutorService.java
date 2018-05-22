@@ -105,14 +105,16 @@ public class SimpleCleanableExecutorService implements CleanableExecutorService 
 		Iterator<Future> iterator = futures.iterator();
 		while (iterator.hasNext()) {
 			Future future = iterator.next();
-			try {
-				future.get();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}  catch (CancellationException e) {
-				e.printStackTrace();
+			if (!future.isCancelled()) {
+				try {
+					future.get();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}  catch (CancellationException e) {
+					e.printStackTrace();
+				}
 			}
 			iterator.remove();
 		}
