@@ -240,8 +240,15 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 				updateDisplay(getValue());
 				currentlySettingValue = false;
 			}
+
 		};
-		Display.getDefault().asyncExec(runnable);
+		if (Display.getDefault().getThread() == Thread.currentThread()) {
+			runnable.run();
+		} else {
+			Display.getDefault().asyncExec(runnable);
+
+		}
+
 	}
 
 	/**
