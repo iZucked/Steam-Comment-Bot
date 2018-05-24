@@ -577,7 +577,7 @@ public class Exposures {
 				final Pair<Double, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), lookupData, dayOfMonth);
 				ExposureRecords result = (ExposureRecords) p.getSecond();
 				price += p.getFirst();
-				result = modify(result, c -> new ExposureRecord(c.index, c.unitPrice, c.nativeVolume / months, c.nativeValue / months, -c.mmbtuVolume / months, c.date, c.volumeUnit));
+				result = modify(result, c -> new ExposureRecord(c.index, c.unitPrice, c.nativeVolume / months, c.nativeValue / months, c.mmbtuVolume / months, c.date, c.volumeUnit));
 				records.records.addAll(result.records);
 			}
 
