@@ -108,7 +108,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 				.filter(s -> (s instanceof IDischargeOption))
 				.map(m -> (IDischargeOption) m)
 				.collect(Collectors.toCollection(ArrayList::new));
-
+	
 		optimiserRecorder.init(longtermLoads, longTermDischarges);
 		
 		// (2) Generate S2S bindings matrix for LT slots
@@ -157,10 +157,17 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		double[] capacity = vessels.stream()
 				.mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000)
 				.toArray();
-
+		
+		((ILoadOption) shippedCargoes.get(0).get(0)).getMaxLoadVolume();
+		double[] cargoesVolumes = shippedCargoes.stream().mapToDouble(x -> {
+			double loadVolume = ((ILoadOption) x.get(0)).getMaxLoadVolume();
+			double dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
+			return Math.min(loadVolume, dischargeVolume);
+		}).toArray();
+		
 		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL,
 				cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel,
-				pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight);
+				pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes);
 		
 		return lightWeightOptimisationData;
 	}

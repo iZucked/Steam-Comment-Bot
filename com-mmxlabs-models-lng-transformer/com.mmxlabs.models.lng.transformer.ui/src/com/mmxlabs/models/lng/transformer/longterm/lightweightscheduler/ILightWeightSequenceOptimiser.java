@@ -18,6 +18,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
  */
 public interface ILightWeightSequenceOptimiser {
 	List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability,
-			List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, List<ILightWeightConstraintChecker> constraintCheckers,
+			List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, double[] volumes, List<ILightWeightConstraintChecker> constraintCheckers,
 			List<ILightWeightFitnessFunction> fitnessFunctions);
 }

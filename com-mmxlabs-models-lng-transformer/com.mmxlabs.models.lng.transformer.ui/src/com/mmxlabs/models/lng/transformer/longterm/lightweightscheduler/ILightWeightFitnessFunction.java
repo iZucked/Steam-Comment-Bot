@@ -7,5 +7,5 @@ import com.mmxlabs.models.lng.transformer.longterm.metaheuristic.TabuLightWeight
 public interface ILightWeightFitnessFunction {
 	void init();
 	Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges);
+			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, double[] volumes);
 }

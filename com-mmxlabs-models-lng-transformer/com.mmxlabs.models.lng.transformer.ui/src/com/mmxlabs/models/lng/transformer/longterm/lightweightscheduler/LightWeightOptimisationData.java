@@ -22,11 +22,23 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private Map<ILoadOption, IDischargeOption> pairingsMap;
 	private int[] desiredVesselCargoCount;
 	private long[] desiredVesselCargoWeight;
+	private List<IVesselAvailability> charterInVessels;
+	private double[] volumes;
+	
+	// x -> charter in vessel
+	// y -> cost per cargoes
+	// dim: charterInVessel * corgoes
+	private long[][] cargoCharterInCost;
+	
+	// Cargo volume
+	private double[] cargoesVolumes;
+	
+	
 	
 	public LightWeightOptimisationData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, double[] vesselCapacities,
 			long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions,
 			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Map<ILoadOption, IDischargeOption> pairingsMap,
-			int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight) {
+			int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, double[] cargoesVolumes) {
 				this.cargoes = cargoes;
 				this.vessels = vessels;
 				this.vesselCapacities = vesselCapacities;
@@ -38,6 +50,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 				this.pairingsMap = pairingsMap;
 				this.desiredVesselCargoCount = desiredVesselCargoCount;
 				this.setDesiredVesselCargoWeight(desiredVesselCargoWeight);
+				this.cargoesVolumes = cargoesVolumes;
 	}
 	
 	public List<IVesselAvailability> getVessels() {
@@ -126,4 +139,13 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	public void setDesiredVesselCargoWeight(long[] desiredVesselCargoWeight) {
 		this.desiredVesselCargoWeight = desiredVesselCargoWeight;
 	}
+
+	public double[] getCargoesVolumes() {
+		return cargoesVolumes;
+	}
+
+	public void setCargoesVolumes(double[] cargoesVolume) {
+		this.cargoesVolumes = cargoesVolume;
+	}
+	
 }

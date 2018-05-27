@@ -12,7 +12,7 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 
 	@Override
 	public Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges) {
+			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, double[] volumes) {
 		double totalCost = 0;
 		double totalPNL = 0;
 		long totalLateness = 0;
@@ -28,7 +28,7 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 			int lateness = calculateLatenessOnSequence(sequence, availability, loads, discharges, cargoToCargoMinTravelTimes, cargoMinTravelTimes);
 			totalLateness += lateness;
 			// calculate pnl
-			double profit = calculateProfitOnSequence(sequence, vesselCapacities[availability], cargoPNL);
+			double profit = calculateProfitOnSequence(sequence, vesselCapacities[availability], cargoPNL, volumes);
 			totalPNL += profit;
 		}
 
@@ -42,6 +42,7 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 			int nextIdx = sequence.get(i + 1);
 
 			total += cargoToCargoCostsOnAvailability[currIdx][nextIdx][availability];
+			
 		}
 		return total;
 	}
@@ -64,10 +65,10 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 		return lateness;
 	}
 
-	private double calculateProfitOnSequence(List<Integer> sequence, double capacity, double[] cargoPNL) {
+	private double calculateProfitOnSequence(List<Integer> sequence, double capacity, double[] cargoPNL, double[] volumes) {
 		double sum = 0.0f;
 		for (int i = 0; i < sequence.size(); i++) {
-			sum += cargoPNL[sequence.get(i)] * capacity;
+			sum += cargoPNL[sequence.get(i)] * Math.min(capacity, volumes[sequence.get(i)]);
 		}
 		return sum;
 	}

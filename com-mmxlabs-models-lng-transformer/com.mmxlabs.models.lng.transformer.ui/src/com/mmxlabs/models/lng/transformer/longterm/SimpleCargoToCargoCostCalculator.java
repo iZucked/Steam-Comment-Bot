@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -22,12 +23,14 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PricingEventHelper;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
@@ -56,6 +59,12 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	@Inject
 	private IVesselProvider vesselProvider;
 	
+	@Inject
+	IVesselCharterInRateProvider vesselCharterInRateProvider;
+	
+	@Inject
+	PricingEventHelper pricingEventHelper;
+	
 	@Override
 	public long calculateNonCharterVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final ILoadSlot loadB, final IDischargeSlot dischargeB, final IVessel vessel) {
 		final ITimeWindow startA = loadA.getTimeWindow();
@@ -66,6 +75,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		@NonNull
 		final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel, dischargeA.getPort(), loadB.getPort(), vessel.getMaxSpeed(),
 				AvailableRouteChoices.OPTIMAL);
+		
 		final int salesPrice = dischargeA.getDischargePriceCalculator().getEstimatedSalesPrice(loadA, dischargeB, endA.getInclusiveStart());
 		final int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, startA.getInclusiveStart());		
 		final long[] legFuelCosts = PriceIntervalProviderHelper.getLegFuelCosts(salesPrice, vessel.getNBORate(VesselState.Ballast), vessel, loadA.getCargoCVValue(),
@@ -75,6 +85,47 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 				portVisitDurationProvider.getVisitDuration(dischargeA.getPort(), PortType.Discharge), false);
 
 		return LongStream.of(legFuelCosts).sum() + routeCostProvider.getRouteCost(quickestTravelTimeAToB.getFirst(), vessel, endA.getInclusiveStart(), CostType.RoundTripBallast);
+	}
+	
+	@Override
+	public long calculateCharterInVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final ILoadSlot loadB, final IDischargeSlot dischargeB, final IVesselAvailability vesselAvailability) {
+		final ITimeWindow startA = loadA.getTimeWindow();
+		final ITimeWindow endA = dischargeA.getTimeWindow();
+		final ITimeWindow startB = loadB.getTimeWindow();
+		final ITimeWindow endB = dischargeB.getTimeWindow();
+		IVessel vessel = vesselAvailability.getVessel();
+		
+		@NonNull
+		final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel, dischargeA.getPort(), loadB.getPort(), vessel.getMaxSpeed(),
+				AvailableRouteChoices.OPTIMAL);
+		
+		// Review
+		// Use the provider or the class method (vesselAvailability.getDailyCharterRate) ?
+		ILongCurve charterInPrice = vesselCharterInRateProvider.getCharterInRatePerDay(vesselAvailability);
+		
+		// Is approximation of duration correct ?
+		long portVisitDuration = portVisitDurationProvider.getVisitDuration(dischargeA.getPort(), PortType.Discharge);
+		long routeTransitTime = routeCostProvider.getRouteTransitTime(quickestTravelTimeAToB.getFirst(), vessel);
+		long approximateDurationInHours = quickestTravelTimeAToB.getSecond() + portVisitDuration + routeTransitTime; 
+		long approximateDurationInDays = (long) Math.ceil((double) approximateDurationInHours / 24.0);
+		
+		long charterCost = 0;
+		
+		// What about this computation ? 
+		for(int i = 0; i < approximateDurationInDays; i++) {
+			charterCost += charterInPrice.getValueAtPoint(loadA.getPricingDate() + (i * 24));
+		}
+		
+		
+		final int salesPrice = dischargeA.getDischargePriceCalculator().getEstimatedSalesPrice(loadA, dischargeB, endA.getInclusiveStart());
+		final int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, startA.getInclusiveStart());		
+		final long[] legFuelCosts = PriceIntervalProviderHelper.getLegFuelCosts(salesPrice, vessel.getNBORate(VesselState.Ballast), vessel, loadA.getCargoCVValue(),
+				new int[] { endA.getInclusiveStart(), endA.getInclusiveStart() + quickestTravelTimeAToB.getSecond() },
+				distanceProvider.getDistance(quickestTravelTimeAToB.getFirst(), dischargeA.getPort(), loadB.getPort(), vessel), vessel.getTravelBaseFuel().getEquivalenceFactor(),
+				baseFuelPrices, routeCostProvider.getRouteTransitTime(quickestTravelTimeAToB.getFirst(), vessel),
+				portVisitDurationProvider.getVisitDuration(dischargeA.getPort(), PortType.Discharge), false);
+
+		return LongStream.of(legFuelCosts).sum() + routeCostProvider.getRouteCost(quickestTravelTimeAToB.getFirst(), vessel, endA.getInclusiveStart(), CostType.RoundTripBallast) + charterCost;
 	}
 
 	@Override
@@ -90,7 +141,17 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 					for (final IVesselAvailability vessel : vessels) {
 						final ILoadSlot loadB = getLoadSlot(cargoB);
 						final IDischargeSlot dischargeB = getDischargeSlot(cargoB);
-						final long cost = calculateNonCharterVariableCosts(loadA, dischargeA, loadB, dischargeB, vessel.getVessel());
+						long cost = -Long.MIN_VALUE;
+						
+						if ( vessel.isOptional()) {
+							cost = calculateCharterInVariableCosts(loadA, dischargeA, loadB, dischargeB, vessel);
+						} else {
+							cost = calculateNonCharterVariableCosts(loadA, dischargeA, loadB, dischargeB, vessel.getVessel());
+						}
+						
+						// Sanity check, should it be an exception ?
+						assert(cost != -Long.MIN_VALUE);
+						
 						costs[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = cost;
 					}
 				}

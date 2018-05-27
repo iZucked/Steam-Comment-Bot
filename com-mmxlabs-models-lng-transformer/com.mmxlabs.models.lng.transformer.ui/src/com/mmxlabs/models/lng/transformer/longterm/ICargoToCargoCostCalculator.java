@@ -17,4 +17,5 @@ public interface ICargoToCargoCostCalculator {
 	long calculateNonCharterVariableCosts(ILoadSlot loadA, IDischargeSlot dischargeA, ILoadSlot loadB, IDischargeSlot dischargeB, IVessel vessel);
 	int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
 	int[][][] getMinCargoToCargoTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
+	long calculateCharterInVariableCosts(ILoadSlot loadA, IDischargeSlot dischargeA, ILoadSlot loadB, IDischargeSlot dischargeB, IVesselAvailability vesselAvailability);
 }

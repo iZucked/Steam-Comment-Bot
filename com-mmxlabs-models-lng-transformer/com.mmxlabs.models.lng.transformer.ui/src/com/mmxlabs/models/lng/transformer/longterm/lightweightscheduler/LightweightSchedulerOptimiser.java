@@ -95,10 +95,10 @@ public class LightweightSchedulerOptimiser {
 	 * @return
 	 */
 	public Pair<ISequences, Long> optimise(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
-		
+		// TODO: get volumes per cargoes
 		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(),
 				lightWeightOptimisationData.getCargoPNL(), lightWeightOptimisationData.getCargoToCargoCostsOnAvailability(), lightWeightOptimisationData.getCargoVesselRestrictions(),
-				lightWeightOptimisationData.getCargoToCargoMinTravelTimes(), lightWeightOptimisationData.getCargoMinTravelTimes(), constraintCheckers, fitnessFunctions);
+				lightWeightOptimisationData.getCargoToCargoMinTravelTimes(), lightWeightOptimisationData.getCargoMinTravelTimes(), lightWeightOptimisationData.getCargoesVolumes(), constraintCheckers, fitnessFunctions);
 		int totalCount = 0;
 		for (List<Integer> s : sequences) {
 			totalCount += s.size();

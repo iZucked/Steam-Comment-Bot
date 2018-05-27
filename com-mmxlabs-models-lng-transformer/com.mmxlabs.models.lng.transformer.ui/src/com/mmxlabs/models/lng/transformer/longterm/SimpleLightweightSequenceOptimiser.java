@@ -30,7 +30,7 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 	@Override
 	public
 	List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability,
-			List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, List<ILightWeightConstraintChecker> constraintCheckers,
+			List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, double[] volumes, List<ILightWeightConstraintChecker> constraintCheckers,
 			List<ILightWeightFitnessFunction> fitnessFunctions) {
 		List<List<Integer>> sequences = createSequences(vessels);
 		sequences.get(0).add(0);

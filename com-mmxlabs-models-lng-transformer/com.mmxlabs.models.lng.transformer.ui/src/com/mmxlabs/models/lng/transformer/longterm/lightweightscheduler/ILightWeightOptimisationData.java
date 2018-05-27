@@ -32,5 +32,6 @@ public interface ILightWeightOptimisationData {
 	double[] getVesselCapacities();
 
 	long[] getDesiredVesselCargoWeight();
-
+	
+	double[] getCargoesVolumes();
 }

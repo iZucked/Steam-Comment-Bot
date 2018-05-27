@@ -97,7 +97,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 	@Override
 	public List<List<Integer>> optimise(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability,
-			List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
+			List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, double[] volumes, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
 		double[] capacity = vessels.stream().mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000).toArray();
 
 		double[] cargoPNLasDouble = new double[cargoPNL.length];
@@ -138,7 +138,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				cargoToCargoCostsProcessed, cargoVesselRestrictionAsList,
 				cargoToCargoMinTravelTimes, cargoMinTravelTimes,
 				loads, discharges,
-				constraintCheckers, fitnessFunctions);
+				constraintCheckers, fitnessFunctions, volumes);
 	}
 
 	private void createExternalData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, int[][][] cargoToCargoMinTravelTimes, List<List<Integer>> cargoVesselRestrictionAsList, int[][] cargoMinTravelTimes, double[] capacity,
@@ -173,7 +173,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	public List<List<Integer>> optimise(int id, boolean loggingFlag, int cargoCount, int vesselCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
+			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions, double[] volumes) {
         List<HashSet<Integer>> tabu = new LinkedList<>();
 
         List<List<Integer>> schedule = Arrays.stream(vesselCapacities, 0, vesselCount)
@@ -232,7 +232,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
             List<Integer> currentTabu = currentSolution.tabu;
 
             double currentFitness = evaluate(currentSchedules, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
-                    cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, constraintCheckers, fitnessFunctions);
+                    cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, volumes, constraintCheckers, fitnessFunctions);
 
 
             // Search the neighbourhood
@@ -248,7 +248,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
             // Evaluate solutions
             fitness = tabuSolutions.parallelStream().mapToDouble(s ->
                     evaluate(s.schedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
-                            cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, constraintCheckers, fitnessFunctions)).toArray();
+                            cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, volumes, constraintCheckers, fitnessFunctions)).toArray();
 
             // Set the new base solution for the next iteration
             for (int i = 0; i < search; i++) {
@@ -290,13 +290,13 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
         }
 
         Double bestScoreBest = evaluate(bestSchedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
-                cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, constraintCheckers, fitnessFunctions);
+                cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, volumes, constraintCheckers, fitnessFunctions);
 
         System.out.printf("\n\nFitness best : %f\n", bestScoreBest);
         System.out.printf("Iteration best: %d it\n", bestIteration);
 
         finalPrint(bestSchedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
-                cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, constraintCheckers, fitnessFunctions);
+                cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, volumes, constraintCheckers, fitnessFunctions);
 
         printSolution(bestSchedule);
 		return bestSchedule;
@@ -359,7 +359,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	public Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-	List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
+	List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, double[] volumes, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
 		
 		for (ILightWeightConstraintChecker constraintChecker : constraintCheckers) {
 			for (int availability = 0; availability < sequences.size(); availability++) {
@@ -373,7 +373,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		}
 		Double fitness = 0.;
 		for (ILightWeightFitnessFunction fitnessFunction : fitnessFunctions) {
-			Double evaluate = fitnessFunction.evaluate(sequences, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+			Double evaluate = fitnessFunction.evaluate(sequences, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, volumes);
 			fitness = fitness + evaluate;
 		}
 		
@@ -381,7 +381,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 	
 	public Double finalPrint(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-	List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
+	List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, double[] volumes, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
 		
 		for (ILightWeightConstraintChecker constraintChecker : constraintCheckers) {
 			for (int availability = 0; availability < sequences.size(); availability++) {
@@ -395,7 +395,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		}
 		Double fitness = 0.;
 		for (ILightWeightFitnessFunction fitnessFunction : fitnessFunctions) {
-			Double evaluate = fitnessFunction.evaluate(sequences, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+			Double evaluate = fitnessFunction.evaluate(sequences, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, volumes);
 			fitness = fitness + evaluate;
 		}
 		
