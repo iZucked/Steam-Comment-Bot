@@ -165,7 +165,8 @@ public class LightWeightSchedulerModule extends AbstractModule {
 			double dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
 			return Math.min(loadVolume, dischargeVolume);
 		}).toArray();
-
+		
+		// REVIEW: It is alright to only check the first element ?
 		List<PortType> cargoTypes = shippedCargoes.stream().map(x -> x.get(0).getPortType()).collect(Collectors.toList());
 		
 		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL,
