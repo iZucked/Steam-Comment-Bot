@@ -4,8 +4,11 @@
  */
 package com.mmxlabs.models.lng.pricing.parser;
 
+import java.time.ZonedDateTime;
+
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 
 /**
@@ -25,5 +28,10 @@ public final class NodeExpression implements IExpression<Node> {
 	@Override
 	public @NonNull Node evaluate() {
 		return node;
+	}
+	
+	@Override
+	public @NonNull Node evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+		return evaluate();
 	}
 }
