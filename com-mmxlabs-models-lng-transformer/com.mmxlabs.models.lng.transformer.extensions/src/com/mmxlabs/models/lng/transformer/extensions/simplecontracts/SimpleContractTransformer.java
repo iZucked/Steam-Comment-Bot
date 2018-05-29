@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
@@ -34,6 +35,7 @@ import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -66,6 +68,9 @@ public class SimpleContractTransformer implements IContractTransformer {
 
 	@Inject
 	private DateAndCurveHelper dateHelper;
+
+	@Inject
+	private LNGScenarioModel lngScenarioModel;
 
 	@Inject
 	@Named(LNGTransformerModule.MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
@@ -123,25 +128,50 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	/**
-	 * Create an internal representation of a PriceExpressionContract from the price expression string.
+	 * Create an internal representation of a PriceExpressionContract from the price
+	 * expression string.
 	 * 
 	 * @param priceExpression
-	 *            A string containing a valid price expression interpretable by a {@link SeriesParser}
-	 * @return An internal representation of a price expression contract for use by the optimiser
+	 *            A string containing a valid price expression interpretable by a
+	 *            {@link SeriesParser}
+	 * @return An internal representation of a price expression contract for use by
+	 *         the optimiser
 	 */
 	private PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
-		final ICurve curve = generateExpressionCurve(priceExpression);
-		final PriceExpressionContract contract = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
+
+		final String splitMonthToken = "splitmonth(";
+		boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+
+		IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
+		ICurve curve = null;
+
+		final IExpression<ISeries> expression = indices.parse(priceExpression);
+
+		if (isSplitMonth) {
+			Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime = LNGScenarioUtils.findEarliestAndLatestTimes(lngScenarioModel);
+			final ISeries parsed = expression.evaluate(earliestAndLatestTime);
+			
+			curve = generateExpressionCurve(priceExpression, parsed);
+			priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+		} else {
+			final ISeries parsed = expression.evaluate();
+			curve = generateExpressionCurve(priceExpression, parsed);
+		}
+		
+		final PriceExpressionContract contract = new PriceExpressionContract(curve, priceIntervals);
 		injector.injectMembers(contract);
 		return contract;
 	}
 
 	/**
-	 * Create an internal representation of a PriceExpressionContract from the price expression string.
+	 * Create an internal representation of a PriceExpressionContract from the price
+	 * expression string.
 	 * 
 	 * @param priceExpression
-	 *            A string containing a valid price expression interpretable by a {@link SeriesParser}
-	 * @return An internal representation of a price expression contract for use by the optimiser
+	 *            A string containing a valid price expression interpretable by a
+	 *            {@link SeriesParser}
+	 * @return An internal representation of a price expression contract for use by
+	 *         the optimiser
 	 */
 	private PriceExpressionContract createDateShiftExpressionContract(final String priceExpression, final boolean specificDate, final int shift) {
 		final IIntegerIntervalCurve priceIntervals;
@@ -196,9 +226,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 		return contract;
 	}
 
-	private StepwiseIntegerCurve generateExpressionCurve(final String priceExpression) {
-		final IExpression<ISeries> expression = indices.parse(priceExpression);
-		final ISeries parsed = expression.evaluate();
+	private ICurve generateExpressionCurve(final String priceExpression, ISeries parsed) {
 
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 		if (parsed.getChangePoints().length == 0) {

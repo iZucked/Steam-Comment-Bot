@@ -5,8 +5,10 @@
 package com.mmxlabs.models.lng.transformer.util;
 
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -64,6 +66,13 @@ public class IntegerIntervalCurveHelper {
 		return intervals;
 	}
 
+	@NonNull
+	public IIntegerIntervalCurve getSplitMonthDatesForChangePoint(int[] changePoints) {
+		IIntegerIntervalCurve intervals = new IntegerIntervalCurve();
+		intervals.addAll(Arrays.stream(changePoints).boxed().collect(Collectors.toList()));
+		return intervals;
+	}
+	
 	/**
 	 * Get the date in hours of the first day of the next month
 	 * @param hours
