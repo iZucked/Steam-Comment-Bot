@@ -9,8 +9,12 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class LightWeightOptimisationData implements ILightWeightOptimisationData {
+    
+	
+    private PortType[] cargoTypes;
 	private List<List<IPortSlot>> cargoes;
 	private List<IVesselAvailability> vessels;
 	private long[] cargoPNL;
@@ -22,23 +26,16 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private Map<ILoadOption, IDischargeOption> pairingsMap;
 	private int[] desiredVesselCargoCount;
 	private long[] desiredVesselCargoWeight;
-	private List<IVesselAvailability> charterInVessels;
-	private double[] volumes;
 	
-	// x -> charter in vessel
-	// y -> cost per cargoes
-	// dim: charterInVessel * corgoes
-	private long[][] cargoCharterInCost;
-	
-	// Cargo volume
+	// Cargo volumes in mmbtu
 	private double[] cargoesVolumes;
 	
-	
-	
+
+    
 	public LightWeightOptimisationData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, double[] vesselCapacities,
 			long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions,
 			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Map<ILoadOption, IDischargeOption> pairingsMap,
-			int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, double[] cargoesVolumes) {
+			int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, double[] cargoesVolumes, PortType[] cargoTypes) {
 				this.cargoes = cargoes;
 				this.vessels = vessels;
 				this.vesselCapacities = vesselCapacities;
@@ -51,6 +48,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 				this.desiredVesselCargoCount = desiredVesselCargoCount;
 				this.setDesiredVesselCargoWeight(desiredVesselCargoWeight);
 				this.cargoesVolumes = cargoesVolumes;
+				this.cargoTypes = cargoTypes;
 	}
 	
 	public List<IVesselAvailability> getVessels() {

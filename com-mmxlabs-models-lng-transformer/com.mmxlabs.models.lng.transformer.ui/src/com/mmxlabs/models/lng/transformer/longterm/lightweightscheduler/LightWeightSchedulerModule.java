@@ -47,6 +47,7 @@ import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProv
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
 public class LightWeightSchedulerModule extends AbstractModule {
@@ -164,10 +165,12 @@ public class LightWeightSchedulerModule extends AbstractModule {
 			double dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
 			return Math.min(loadVolume, dischargeVolume);
 		}).toArray();
+
+		List<PortType> cargoTypes = shippedCargoes.stream().map(x -> x.get(0).getPortType()).collect(Collectors.toList());
 		
 		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL,
 				cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel,
-				pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes);
+				pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes, cargoTypes.toArray(new PortType[cargoTypes.size()]));
 		
 		return lightWeightOptimisationData;
 	}
