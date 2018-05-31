@@ -1,0 +1,13 @@
+name,capacity,fillCapacity,minSpeed,maxSpeed,warmingTime,coolingVolume,pilotLightRate,inaccessiblePorts,baseFuel,ladenAttributes.nboRate,ladenAttributes.idleNBORate,ladenAttributes.idleBaseRate,ladenAttributes.inPortBaseRate,ladenAttributes.fuelConsumption,ladenAttributes.kind,ballastAttributes.nboRate,ballastAttributes.idleNBORate,ballastAttributes.idleBaseRate,ballastAttributes.inPortBaseRate,ballastAttributes.fuelConsumption,ballastAttributes.kind,routeParameters,Suez canal.parameters.extraTransitTime,Suez canal.parameters.ladenConsumptionRate,Suez canal.parameters.ladenNBORate,Suez canal.parameters.ballastConsumptionRate,Suez canal.parameters.ballastNBORate,Suez canal.parameters.kind,Suez canal.pricing.vesselClass,Suez canal.pricing.kind,kind,reference,baseFuel,minSpeed,maxSpeed,safetyHeel,warmingTime,pilotLightRate,minBaseFuelConsumption,coolingVolume,hasReliqCapability,shortName
+LNG Kano,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG Lagos,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG Lokoja,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG Ogun,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG Ondo,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG Oyo,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG Port Harcourt,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG River Niger,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG River Orashi,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG Rivers,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+LNG Sokoto,162000,1.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vessel,DFDE-162,,,,,,,,,,
+DFDE-162,162000,1.0,14.0,19.5,0,0,0,,MDO,200,100,20,10,,VesselStateAttributes,200,100,20,10,,VesselStateAttributes,,24,80,100,78,100,VesselClassRouteParameters,DFDE-162,RouteCost,VesselClass,,MDO,14.0,19.5,0,0,0,,0,,

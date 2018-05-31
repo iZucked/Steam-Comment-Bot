@@ -1,0 +1,129 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
+package com.mmxlabs.lingo.reports.views.changeset;
+
+import java.util.List;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetTransformerUtil.MappingModel;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
+
+public class ScheduleResultListTransformer {
+
+	// TODO: Split into diff to base and diff to previous
+	public ChangeSetRoot createDataModel(final List<ScenarioResult> stages, final IProgressMonitor monitor) {
+
+		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
+
+		try {
+			monitor.beginTask("Opening action sets", stages.size());
+			ScenarioResult prev = null;
+			for (final ScenarioResult current : stages) {
+				if (prev != null) {
+					root.getChangeSets().add(buildDiffToBaseChangeSet(stages.get(0), prev, current));
+				}
+				prev = current;
+				monitor.worked(1);
+
+			}
+		} finally {
+			monitor.done();
+		}
+
+		return root;
+
+	}
+
+	public ChangeSet buildSingleChangeChangeSet(final ScenarioResult base, final ScenarioResult current) {
+		return buildDiffToBaseChangeSet(null, base, current, null);
+	}
+	
+	public ChangeSet buildDiffToBaseChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current) {
+		return buildDiffToBaseChangeSet(base, prev, current, null);
+	}
+
+	public ChangeSet buildDiffToBaseChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, @Nullable NamedObject targetToSortFirst) {
+
+		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
+		changeSet.setBaseScenario(prev);
+		changeSet.setCurrentScenario(current);
+		generateDifferences(prev, current, changeSet, false, targetToSortFirst);
+
+		changeSet.setAltBaseScenario(base);
+		changeSet.setAltCurrentScenario(current);
+		generateDifferences(base, current, changeSet, true, targetToSortFirst);
+
+		return changeSet;
+	}
+
+	public ChangeSet buildParallelDiffChangeSet(final ScenarioResult base, final ScenarioResult current, final ScenarioResult altBase, final ScenarioResult altCurrent,
+			@Nullable NamedObject targetToSortFirst) {
+
+		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
+		changeSet.setBaseScenario(base);
+		changeSet.setCurrentScenario(current);
+
+		generateDifferences(base, current, changeSet, false, targetToSortFirst);
+		if (altBase != null && altCurrent != null) {
+			changeSet.setAltCurrentScenario(altCurrent);
+			changeSet.setAltBaseScenario(altBase);
+			generateDifferences(altBase, altCurrent, changeSet, true, targetToSortFirst);
+		}
+
+		return changeSet;
+	}
+
+	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isAlternative, @Nullable NamedObject targetToSortFirst) {
+
+		if (from == null || to == null) {
+			return;
+		}
+
+		final ScheduleModel beforeScheduleModel = from.getTypedResult(ScheduleModel.class);
+		final ScheduleModel afterScheduleModel = to.getTypedResult(ScheduleModel.class);
+		if (beforeScheduleModel == null || afterScheduleModel == null) {
+			return;
+		}
+
+		final Schedule beforeSchedule = beforeScheduleModel.getSchedule();
+		final Schedule afterSchedule = afterScheduleModel.getSchedule();
+		if (beforeSchedule == null || afterSchedule == null) {
+			return;
+		}
+
+		// Generate the row data
+		List<EObject> beforeTargets = ChangeSetTransformerUtil.extractTargets(beforeSchedule);
+		List<EObject> afterTargets = ChangeSetTransformerUtil.extractTargets(afterSchedule);
+		final MappingModel beforeDifferences = ChangeSetTransformerUtil.generateMappingModel(beforeTargets);
+		final MappingModel afterDifferences = ChangeSetTransformerUtil.generateMappingModel(afterTargets);
+
+		final List<ChangeSetRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
+		// //
+
+		// Add to data model
+		if (isAlternative) {
+			changeSet.getChangeSetRowsToAlternativeBase().addAll(rows);
+		} else {
+			changeSet.getChangeSetRowsToDefaultBase().addAll(rows);
+		}
+
+		ChangeSetTransformerUtil.setRowFlags(rows);
+		// // ChangeSetTransformerUtil.filterRows(rows);
+		// // ChangeSetTransformerUtil.sortRows(rows);
+		// Build metrics
+		ChangeSetTransformerUtil.calculateMetrics(changeSet, beforeSchedule, afterSchedule, isAlternative);
+	}
+
+}

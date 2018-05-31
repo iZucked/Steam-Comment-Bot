@@ -1,0 +1,8 @@
+*.orig
+*.rej
+*.swp
+bin/
+target/
+com.mmxlabs.lingo.doc/index/
+*~
+

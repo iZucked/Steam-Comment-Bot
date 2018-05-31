@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-DocURL: http://www.minimaxlabs.com/
+Bundle-ManifestVersion: 2
+Bundle-Name: Optimiser - Core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-core;singleton:=true
+Bundle-Vendor: Minimax Labs Ltd.
+Bundle-Version: 4.4.15.qualifier
+Import-Package: javax.inject;version="[1.0,2)"
+Service-Component: OSGI-INF/*.xml
+Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[4.4.15,5.0.0)",
+ com.google.guava;bundle-version="13.0.1",
+ com.google.inject;bundle-version="3.0.0",
+ org.eclipse.ui;bundle-version="3.109.0",
+ org.eclipse.ui.workbench
+Export-Package: com.mmxlabs.optimiser.core,
+ com.mmxlabs.optimiser.core.constraints,
+ com.mmxlabs.optimiser.core.constraints.impl,
+ com.mmxlabs.optimiser.core.evaluation,
+ com.mmxlabs.optimiser.core.evaluation.impl,
+ com.mmxlabs.optimiser.core.fitness,
+ com.mmxlabs.optimiser.core.fitness.impl,
+ com.mmxlabs.optimiser.core.impl,
+ com.mmxlabs.optimiser.core.inject.scopes,
+ com.mmxlabs.optimiser.core.modules,
+ com.mmxlabs.optimiser.core.moves,
+ com.mmxlabs.optimiser.core.scenario,
+ com.mmxlabs.optimiser.core.scenario.impl 
+Bundle-ActivationPolicy: lazy

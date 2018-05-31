@@ -1,0 +1,3 @@
+name,durationInDays,startAfter,startBy,allowedVessels,port,kind
+RO drydock,60,2011-06-01 22:00,2011-06-06 23:00,LNG River Orashi,Senboku,DryDockEvent
+Lagos,25,2011-05-01 16:00,2011-05-10 16:00,LNG Lagos,Montoir,DryDockEvent

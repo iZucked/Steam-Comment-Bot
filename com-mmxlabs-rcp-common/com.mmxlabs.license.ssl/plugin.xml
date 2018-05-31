@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.license.ssl.preferences.LicenseInformation"
+            id="com.mmxlabs.license.ssl.preferences.LicenseInformation"
+            name="License Information">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ecf.provider.filetransfer.retrieveFileTransferProtocolFactory">
+      <retrieveFileTransferProtocolFactory
+            class="com.mmxlabs.license.ssl.internal.HttpClientRetrieveFileTransferFactory"
+            protocol="https"
+            priority="10">
+      </retrieveFileTransferProtocolFactory>
+   </extension>
+   <extension
+         point="org.eclipse.ecf.provider.filetransfer.browseFileTransferProtocolFactory">
+      <browseFileTransferProtocolFactory
+            class="com.mmxlabs.license.ssl.internal.HttpClientBrowseFileTransferFactory"
+            priority="10"
+            protocol="https">
+      </browseFileTransferProtocolFactory>
+   </extension>
+</plugin>

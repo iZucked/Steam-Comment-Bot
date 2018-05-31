@@ -1,0 +1,96 @@
+/* // Originally based on example from http://www2.cs.tum.edu/projekte/cup/examples.php */
+import java_cup.runtime.*;
+import java.util.*;
+import java.time.ZonedDateTime;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.parser.*;
+import com.mmxlabs.common.parser.series.*;
+import com.mmxlabs.common.parser.series.functions.*;
+
+parser code {:
+    // Constructor, needed for call to scan later
+    private Lexer s;
+   public Parser(Lexer s){super(s,s.symbolFactory); this.s=s; }
+    
+    private ShiftFunctionMapper shiftMapper;
+    public ShiftFunctionMapper getShiftFunctionMapper() { return shiftMapper; }
+    public void setShiftFunctionMapper(ShiftFunctionMapper shiftMapper) { this.shiftMapper = shiftMapper; }
+    
+    private CalendarMonthMapper calendarMonthMapper;
+	public void setCalendarMonthMapper(CalendarMonthMapper calendarMonthMapper) {	this.calendarMonthMapper = calendarMonthMapper;	}
+	public CalendarMonthMapper getCalendarMonthMapper() { return calendarMonthMapper; }
+    
+    private SeriesParser seriesParser;
+    public SeriesParser getSeriesParser() { return seriesParser; }
+    public void setSeriesParser(SeriesParser seriesParser) { this.seriesParser = seriesParser; }
+    
+    // Error capturing
+    public List<Symbol> errors = new LinkedList<>();
+	public void syntax_error(Symbol s){	errors.add(s); }
+    
+:}
+
+/* define how to connect to the scanner! */
+/*init with {: s.init(); :};*/
+scan with {: return s.next_token(); :};
+
+/* Terminals (tokens returned by the scanner). */
+terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, COMMA, PERCENT, QUESTION;
+terminal			MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH;
+
+terminal Integer    INTEGER;
+terminal Double    NUMBER;
+terminal IExpression<ISeries>    SERIES;       
+terminal String NAMED_ELEMENT;
+
+/* Non terminals */
+non terminal IExpression<ISeries>    expr;      // used to store evaluated subexpressions
+
+/* Precedences */
+precedence left PLUS, MINUS;
+precedence left TIMES;
+precedence left DIVIDE;
+precedence left PERCENT;
+precedence left UPLUS;
+precedence left UMINUS;
+precedence left INTEGER;
+precedence left NUMBER;
+
+/* The grammar rules */
+
+
+expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpression('+', lhs, rhs);       :}
+             | expr:lhs MINUS expr:rhs        {: RESULT = new SeriesOperatorExpression('-', lhs, rhs);      :}
+             | expr:lhs TIMES expr:rhs        {: RESULT = new SeriesOperatorExpression('*', lhs, rhs);       :}
+             | expr:lhs DIVIDE expr:rhs        {: RESULT = new SeriesOperatorExpression('/', lhs, rhs);       :}
+             | MIN LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Min.class, e1, e2);       :}
+             | MAX LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Max.class, e1, e2);       :}
+             | INTEGER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
+             | NUMBER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
+             %prec PERCENT
+             | SHIFT LPAREN expr:e1 COMMA INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(shiftMapper, e1, i1);       :}
+             | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(shiftMapper,e1,  -i1);       :}
+             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionConstructor(calendarMonthMapper, lhs, n1, n2, n3); :}
+             | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionConstructor(calendarMonthMapper, e1, e2, s); :}
+             | MINUS expr:e                 {: RESULT = new IExpression<ISeries>() {
+						@Override
+						public ISeries evaluate() {
+							return new Minus(e.evaluate());
+						}
+						
+						@Override
+						public ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+							return evaluate();
+						}
+					};         :}
+  	     %prec UMINUS
+             | PLUS expr:e                 {: RESULT = e;         :}
+  	     %prec UPLUS
+       | LPAREN expr:e RPAREN	         {: RESULT = e;           :}
+       | SERIES:n	                     {: RESULT = n;           :}
+       | NAMED_ELEMENT:n	                     {: RESULT =  new NamedSeriesExpression(seriesParser.getSeries(n));           :}
+       | NUMBER:n	                     {: RESULT =  new ConstantSeriesExpression(n);           :}
+       | INTEGER:n	                     {: RESULT =  new ConstantSeriesExpression(n);           :}
+       | QUESTION:n	                     {: RESULT =  new ConstantSeriesExpression(0.0);           :}
+             ;     
+             

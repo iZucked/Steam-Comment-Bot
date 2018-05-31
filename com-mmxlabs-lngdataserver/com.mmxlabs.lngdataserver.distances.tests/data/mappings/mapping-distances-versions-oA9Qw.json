@@ -1,0 +1,17 @@
+{
+  "id" : "443214bd-c18c-3af1-b3b4-42ff71319ee9",
+  "request" : {
+    "url" : "/distances/versions",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-distances-versions-oA9Qw.json",
+    "headers" : {
+      "Date" : "Thu, 29 Jun 2017 14:16:37 GMT",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Transfer-Encoding" : "chunked"
+    }
+  },
+  "uuid" : "443214bd-c18c-3af1-b3b4-42ff71319ee9"
+}

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="spotmarkets" nsURI="http://www.mmxlabs.com/models/lng/spotmarkets/1/"
+    nsPrefix="lng.spotmarkets">
+  <eClassifiers xsi:type="ecore:EClass" name="SpotMarketsModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="desPurchaseSpotMarket"
+        lowerBound="1" eType="#//SpotMarketGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="desSalesSpotMarket" lowerBound="1"
+        eType="#//SpotMarketGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fobPurchasesSpotMarket"
+        lowerBound="1" eType="#//SpotMarketGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fobSalesSpotMarket" lowerBound="1"
+        eType="#//SpotMarketGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutStartDate" eType="#//CharterOutStartDate"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarkets" upperBound="-1"
+        eType="#//CharterInMarket" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutMarkets" upperBound="-1"
+        eType="#//CharterOutMarket" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SpotType">
+    <eLiterals name="FOBSale" literal="FOB Sale"/>
+    <eLiterals name="DESPurchase" value="1" literal="DES Purchase"/>
+    <eLiterals name="DESSale" value="2" literal="DES Sale"/>
+    <eLiterals name="FOBPurchase" value="3" literal="FOB Purchase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotMarketGroup" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="availability" lowerBound="1"
+        eType="#//SpotAvailability" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//SpotType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="markets" upperBound="-1"
+        eType="#//SpotMarket" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotMarket" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="availability" lowerBound="1"
+        eType="#//SpotAvailability" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeLimitsUnit" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="priceInfo" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//LNGPriceCalculatorParameters"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PricingEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedListsArePermissive"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedPorts" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedContracts" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DESPurchaseMarket" eSuperTypes="#//SpotMarket">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mmBtu/m³"/>
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destinationPorts" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DESSalesMarket" eSuperTypes="#//SpotMarket">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notionalPort" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FOBPurchasesMarket" eSuperTypes="#//SpotMarket">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notionalPort" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mmBtu/m³"/>
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="marketPorts" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FOBSalesMarket" eSuperTypes="#//SpotMarket">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originPorts" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotAvailability">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="curve" lowerBound="1" unsettable="true"
+        containment="true">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//DataIndex">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterOutStartDate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterOutMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCharterOutDuration"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="availablePorts" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterInMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterInRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotCharterCount" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="overrideInaccessibleRoutes"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessibleRoutes" upperBound="-1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotCharterMarket" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"/>
+  </eClassifiers>
+</ecore:EPackage>

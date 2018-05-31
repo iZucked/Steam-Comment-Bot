@@ -1,0 +1,27 @@
+class,state,14.00,15.00,16.00,17.00,18.00,19.00,19.50,20.00
+DFDE-162,laden,59,67,77,91,106,125,138,
+LNG Port Harcourt,laden,59,67,77,91,106,125,138,
+LNG River Orashi,laden,59,67,77,91,106,125,138,
+LNG Lagos,laden,59,67,77,91,106,125,138,
+LNG Sokoto,laden,59,67,77,91,106,125,138,
+LNG Ogun,laden,59,67,77,91,106,125,138,
+LNG Oyo,laden,59,67,77,91,106,125,138,
+LNG Lokoja,laden,59,67,77,91,106,125,138,
+LNG River Niger,laden,59,67,77,91,106,125,138,
+LNG Rivers,laden,59,67,77,91,106,125,138,
+LNG Kano,laden,59,67,77,91,106,125,138,
+LNG Ondo,laden,59,67,77,91,106,125,138,
+DFDE-162,laden,59,67,77,91,106,125,138,
+DFDE-162,ballast,59,68,78,90,104,120,,131
+LNG Port Harcourt,ballast,59,68,78,90,104,120,,131
+LNG River Orashi,ballast,59,68,78,90,104,120,,131
+LNG Lagos,ballast,59,68,78,90,104,120,,131
+LNG Sokoto,ballast,59,68,78,90,104,120,,131
+LNG Ogun,ballast,59,68,78,90,104,120,,131
+LNG Oyo,ballast,59,68,78,90,104,120,,131
+LNG Lokoja,ballast,59,68,78,90,104,120,,131
+LNG River Niger,ballast,59,68,78,90,104,120,,131
+LNG Rivers,ballast,59,68,78,90,104,120,,131
+LNG Kano,ballast,59,68,78,90,104,120,,131
+LNG Ondo,ballast,59,68,78,90,104,120,,131
+DFDE-162,ballast,59,68,78,90,104,120,,131

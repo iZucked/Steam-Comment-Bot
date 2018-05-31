@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="ReplaceableViewFactory" name="ReplaceableViewFactory" schema="schema/ReplaceableViewFactory.exsd"/>
+   <extension-point id="ReplaceableView" name="ReplaceableView" schema="schema/ReplaceableView.exsd"/>
+   <extension-point id="ViewPartRewrite" name="ViewPartRewrite" schema="schema/ViewPartRewrite.exsd"/>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="com.mmxlabs.rcp.common.viewContribution.CopyPropertySheetToClipboard"
+            targetID="org.eclipse.ui.views.PropertySheet">
+         <action
+               class="com.mmxlabs.rcp.common.actions.CopyPropertySheetToClipboardActionDelegate"
+               icon="icons/copy.gif"
+               id="com.mmxlabs.rcp.common.actions.CopyPropertySheetToClipboardActionDelegate"
+               label="Copy to Clipboard"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Copy to Clipboard">
+         </action>
+      </viewContribution>
+   </extension>
+   <extension
+         id="id3"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            apply="always"
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="com.mmxlabs.rcp.common.openview"
+            name="Open View">
+         <commandParameter
+               id="view.id"
+               name="ID of part to open"
+               optional="true">
+         </commandParameter>
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.rcp.common.os.MachineInformation"
+            id="com.mmxlabs.rcp.common.os.MachineInformation"
+            name="Machine Information">
+      </page>
+   </extension>
+
+</plugin>

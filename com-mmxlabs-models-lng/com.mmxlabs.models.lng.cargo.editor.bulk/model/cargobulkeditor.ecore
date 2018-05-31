@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cargobulkeditor" nsURI="http://www.mmxlabs.com/models/lng/cargobulkeditor/1/"
+    nsPrefix="lng.cargobulkeditor">
+  <eClassifiers xsi:type="ecore:EClass" name="Row">
+    <eOperations name="getAssignableObject" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//CargoAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openSlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputEquivalents" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlotContractParams"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SlotContractParams"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlotContractParams"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SlotContractParams"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.mmxlabs.models.util.import.attributes">
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.ui.capabilityImporter"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="PortCapability"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+         </dataType>
+      </attributeImporter>
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.ui.volumeUnitImporter"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="VolumeUnits"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+         </dataType>
+      </attributeImporter>
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.ui.TimePeriodImporter"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="TimePeriod"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+         </dataType>
+      </attributeImporter>
+      
+   </extension>
+   <extension
+         point="com.mmxlabs.models.ui.editorfactories">
+      <editorFactory
+            factoryClass="com.mmxlabs.models.ui.editors.VolumeLimitUnitsInlineEditorFactory"
+            id="com.mmxlabs.models.ui.dates.VolumeLimitUnitsInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="VolumeUnits"
+                  EDataTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+            </EDataTypeIs>
+         </FeatureAnyOf>         
+      </editorFactory>
+      <editorFactory
+            factoryClass="com.mmxlabs.models.ui.editors.TimePeriodUnitsInlineEditorFactory"
+            id="com.mmxlabs.models.ui.editors.TimePeriodUnitsInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="TimePeriod"
+                  EDataTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+            </EDataTypeIs>
+         </FeatureAnyOf>
+      </editorFactory>
+      
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="com.mmxlabs.models.lng.views.physical"
+            name="Physical Data">
+      </category>
+      <category
+            id="com.mmxlabs.models.lng.views.logical"
+            name="Logical Data">
+      </category>
+   </extension>
+
+</plugin>

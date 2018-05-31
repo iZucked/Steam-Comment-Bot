@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.product.product" application="com.mmxlabs.lingo.app.application" version="4.4.15.qualifier" useFeatures="true" includeLaunchers="true">
+
+   <aboutInfo>
+      <image path="icons/logo-square-16.png"/>
+      <text>
+         LiNGO Platform
+
+Version: {0}
+Build: {1}
+      </text>
+   </aboutInfo>
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <vmArgs>-ea -server
+         <argsX86>-Xmx768m</argsX86>
+         <argsX86_64>-Xmx3G</argsX86_64>
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
+   </launcherArgs>
+
+   <windowImages i16="icons/logo-square-16.png" i32="icons/logo-square-32.png" i48="icons/logo-square-48.png" i64="icons/logo-square-64.png" i128="icons/logo-square-128.png"/>
+
+   <splash
+      location="com.mmxlabs.lingo.app"
+      startupProgressRect="20,210,440,15"
+      startupMessageRect="0,0,0,0"
+      startupForegroundColor="FFFFFF" />
+   <launcher name="LiNGO">
+      <win useIco="true">
+         <ico path="icons/minimax_icon.ico"/>
+         <bmp/>
+      </win>
+   </launcher>
+
+   <intro introId="com.mmxlabs.shiplingo.platform.app.intro"/>
+
+   <vm>
+      <linux include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</linux>
+      <macos include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</macos>
+      <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</solaris>
+      <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
+   </vm>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="com.mmxlabs.lingo.feature"/>
+   </features>
+
+   <configurations>
+      <plugin id="com.mmxlabs.lingo.extensions" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.lng.liveevaluator" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.lng.transformer" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.lng.transformer.extensions" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.lng.transformer.ui" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.migration" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.migration.scenario" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.ui.validation" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.scenario.service.dirscan" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.scenario.service.util" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <plugin id="org.ops4j.peaberry.activation" autoStart="true" startLevel="1" />
+      <property name="applicationCSSResources" value="platform:/plugin/org.eclipse.ui.themes/images/" />
+      <property name="applicationXMI" value="org.eclipse.platform/LegacyIDE.e4xmi" />
+      <property name="cssTheme" value="org.eclipse.e4.ui.css.theme.e4_default" />
+      <property name="java.locale.providers" value="CLDR" />
+      <property name="org.eclipse.update.reconcile" value="false" />
+   </configurations>
+
+   <repositories>
+      <repository location="https://server1.mmxlabs.com/updates/LiNGO/" enabled="true" />
+   </repositories>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
+
+</product>

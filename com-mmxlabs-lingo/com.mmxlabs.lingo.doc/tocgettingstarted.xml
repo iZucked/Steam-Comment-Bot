@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Getting Started" link_to="toc.xml#gettingstarted">
+	<topic href="html/gettingstarted/overview/applicationoverview.html" label="Application Overview">
+		<topic label="Data Perspective" href="html/gettingstarted/overview/dataperspective.html" />
+  <topic href="html/gettingstarted/overview/analysisperspective.html" label="Analysis Perspective">
+  </topic>
+  <topic href="html/gettingstarted/overview/scenarionavigator.html" label="Scenario Navigator">
+  </topic>
+	</topic> 
+	<topic label="New Scenario"  href="html/gettingstarted/newscenario/newscenario.html"> 
+	</topic> 
+</toc>
