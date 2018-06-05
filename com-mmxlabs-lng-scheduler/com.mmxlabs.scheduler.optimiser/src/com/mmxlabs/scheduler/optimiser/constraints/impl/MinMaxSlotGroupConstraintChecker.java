@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  */
 public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChecker {
 	@Inject
-	private IMaxSlotCountConstraintProvider maxSlotCountConstraintProvider;
+	private IMaxSlotCountConstraintDataProvider maxSlotCountConstraintProvider;
 	
 	@Inject
 	private IPortSlotProvider portSlotProvider;
