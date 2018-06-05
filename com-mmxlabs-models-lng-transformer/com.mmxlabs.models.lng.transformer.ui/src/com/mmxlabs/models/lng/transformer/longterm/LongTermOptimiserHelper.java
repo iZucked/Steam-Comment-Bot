@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
@@ -194,6 +195,9 @@ public class LongTermOptimiserHelper {
 				iterator.remove();
 			}
 			if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+				iterator.remove();
+			}
+			if (constraint.getName().equals(MinMaxSlotGroupConstraintCheckerFactory.NAME)) {
 				iterator.remove();
 			}
 		}

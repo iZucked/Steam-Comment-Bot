@@ -2,10 +2,11 @@ package com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,7 +17,6 @@ import javax.inject.Singleton;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
@@ -29,13 +29,12 @@ import com.mmxlabs.models.lng.transformer.longterm.ICargoVesselRestrictionsMatri
 import com.mmxlabs.models.lng.transformer.longterm.ILongTermMatrixOptimiser;
 import com.mmxlabs.models.lng.transformer.longterm.ILongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimisationData;
-import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiser;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserHelper.ShippingType;
+import com.mmxlabs.models.lng.transformer.longterm.SimpleCargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.constraints.LightWeightShippingRestrictionsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.fitnessfunctions.DefaultPNLLightWeightFitnessFunctionFactory;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.fitnessfunctions.VesselCargoCountLightWeightFitnessFunctionFactory;
-import com.mmxlabs.models.lng.transformer.longterm.SimpleCargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.longterm.metaheuristic.TabuLightWeightSequenceOptimiser;
 import com.mmxlabs.models.lng.transformer.longterm.webservice.WebserviceLongTermMatrixOptimiser;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -55,6 +54,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	private static final String LIGHTWEIGHT_VESSELS = "LIGHTWEIGHT_VESSELS";
 	private static final String LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT = "LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT";
 	private static final String LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT = "LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT";
+	private static final boolean DEBUG = false;
 
 	Map<Thread, LightweightSchedulerOptimiser> threadCache;
 	private CharterInMarket nominalCharterInMarket;
@@ -78,6 +78,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		bind(ICargoVesselRestrictionsMatrixProducer.class).to(CargoVesselRestrictionsMatrixProducer.class);
 		bind(ILightWeightSequenceOptimiser.class).to(TabuLightWeightSequenceOptimiser.class);
 		bind(LongTermOptimisationData.class);
+		bind(ILightWeightPostOptimisationStateModifier.class).to(DefaultLightWeightPostOptimisationStateModifier.class);
 	}
 
 	@Provides
@@ -125,18 +126,23 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(),
 				optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
 				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(),
-				optimiserRecorder.getMinDischargeGroupCount());
+				optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(),
+				optimiserRecorder.getMinLoadGroupCount());
 		
 		if (pairingsMatrix == null) {
 			return null;
 		}
 		
 		// (4) Export the pairings matrix to a Map
-		Map<ILoadOption, IDischargeOption> pairingsMap = new HashMap<>();
+		Map<ILoadOption, IDischargeOption> pairingsMap = new LinkedHashMap<>();
 		for (ILoadOption load : optimiserRecorder.getSortedLoads()) {
 			pairingsMap.put(load, optimiserRecorder.getPairedDischarge(load, pairingsMatrix));
 		}
 
+		if (DEBUG) {
+			printPairings(pairingsMap);
+		}
+		
 		// create data for optimiser
 		List<List<IPortSlot>> shippedCargoes = LongTermOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(),
 				optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
@@ -263,6 +269,15 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	@Provides
 	@Named(LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES) List<String> getConstraintCheckerNames() {
 		return CollectionsUtil.makeLinkedList("LightWeightShippingRestrictionsConstraintChecker");
+	}
+
+	private void printPairings(Map<ILoadOption, IDischargeOption> pairingsMap) {
+		System.out.println("####Pairings####");
+		for (Entry<ILoadOption, IDischargeOption> entry : pairingsMap.entrySet()) {
+			if (entry.getValue() != null) {
+				System.out.println(String.format("%s -> %s", entry.getKey(), entry.getValue()));
+			}
+		}
 	}
 
 }

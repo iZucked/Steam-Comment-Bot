@@ -5,10 +5,10 @@
 package com.mmxlabs.models.lng.transformer.longterm;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,10 +16,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossRecorder;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
@@ -33,14 +35,14 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	@Inject
 	IPortSlotProvider portSlotProvider;
 	@Inject
-	ILongTermMaxSlotCountConstraintProvider maxSlotCountConstraint;
+	IMaxSlotCountConstraintProvider maxSlotCountConstraint;
 	@Inject(optional=true)
 	ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider;
 
 	Long[][] profit;
 	private boolean[][] valid;
-	@NonNull private List<ILoadOption> sortedLoads;
-	@NonNull private List<IDischargeOption> sortedDischarges;
+	private List<ILoadOption> sortedLoads;
+	private List<IDischargeOption> sortedDischarges;
 	Map<ILoadOption, Integer> loadMap = new HashMap<>();
 	Map<IDischargeOption, Integer> dischargeMap = new HashMap<>();
 	private boolean[] optionalLoads;
@@ -48,6 +50,8 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 
 	private List<Map<String, List<Integer>>> maxDischargeGroupCount;
 	private List<Map<String, List<Integer>>> minDischargeGroupCount;
+	private List<Map<String, List<Integer>>> maxLoadGroupCount;
+	private List<Map<String, List<Integer>>> minLoadGroupCount;
 	
 	private int[] vesselDesiredNumberSlots;
 
@@ -75,13 +79,14 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 		}
 		this.profit = new Long[getSortedLoads().size()][getSortedDischarges().size()];
 		this.valid = new boolean[getSortedLoads().size()][getSortedDischarges().size()];
-		this.setOptionalLoads(new boolean[this.getSortedLoads().size()]);
-		this.setOptionalDischarges(new boolean[this.getSortedDischarges().size()]);
+
 		setOptionalLoads();
 		setOptionalDischarges();
 		setContraints();
-		setMaxDischargeGroupCount(maxSlotCountConstraint);
-		setMinDischargeGroupCount(maxSlotCountConstraint);
+		setMaxDischargeGroupCount();
+		setMinDischargeGroupCount();
+		setMaxLoadGroupCount();
+		setMinLoadGroupCount();
 	}
 	
 	@Override
@@ -121,12 +126,14 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	}
 	
 	private void setOptionalLoads() {
+		optionalLoads = new boolean[this.getSortedLoads().size()];
 		for (int i = 0; i < getSortedLoads().size(); i++) {
 			optionalLoads[i] = phaseOptimisationData.isElementOptional(portSlotProvider.getElement(getSortedLoads().get(i))) && !phaseOptimisationData.getSoftRequiredElements().contains(portSlotProvider.getElement(getSortedLoads().get(i)));
 		}
 	}
 
 	private void setOptionalDischarges() {
+		optionalDischarges = new boolean[this.getSortedDischarges().size()];
 		for (int i = 0; i < getSortedDischarges().size(); i++) {
 			optionalDischarges[i] = phaseOptimisationData
 					.isElementOptional(portSlotProvider.getElement(getSortedDischarges().get(i)))
@@ -183,8 +190,8 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 		return maxDischargeGroupCount;
 	}
 
-	public void setMaxDischargeGroupCount(ILongTermMaxSlotCountConstraintProvider longTermMaxSlotCountConstraint) {
-		Map<Set<IDischargeOption>, Integer> allMaxDischargeGroupCounts = longTermMaxSlotCountConstraint.getAllMaxDischargeGroupCounts();
+	public void setMaxDischargeGroupCount() {
+		List<Pair<Set<IDischargeOption>, Integer>> allMaxDischargeGroupCounts = maxSlotCountConstraint.getAllMaxDischargeGroupCounts();
 		maxDischargeGroupCount = createJSONMapFromConstraint(allMaxDischargeGroupCounts);
 	}
 
@@ -192,19 +199,19 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 		return minDischargeGroupCount;
 	}
 
-	public void setMinDischargeGroupCount(ILongTermMaxSlotCountConstraintProvider longTermMaxSlotCountConstraint) {
-		Map<Set<IDischargeOption>, Integer> allMinDischargeGroupCounts = longTermMaxSlotCountConstraint.getAllMinDischargeGroupCounts();
+	public void setMinDischargeGroupCount() {
+		List<Pair<Set<IDischargeOption>, Integer>> allMinDischargeGroupCounts = maxSlotCountConstraint.getAllMinDischargeGroupCounts();
 		minDischargeGroupCount = createJSONMapFromConstraint(allMinDischargeGroupCounts);;
 	}
 
-	private List<Map<String, List<Integer>>> createJSONMapFromConstraint(Map<Set<IDischargeOption>, Integer> dischargeGroupCounts) {
+	private List<Map<String, List<Integer>>> createJSONMapFromConstraint(List<Pair<Set<IDischargeOption>, Integer>> allMaxDischargeGroupCounts) {
 		List<Map<String, List<Integer>>> dischargeCountConstraintJSON = new LinkedList<>();
-		for (Entry<Set<IDischargeOption>, Integer> entry : dischargeGroupCounts.entrySet()) {
-			List<Integer> slots = entry.getKey().stream()
+		for (Pair<Set<IDischargeOption>, Integer> entry : allMaxDischargeGroupCounts) {
+			List<Integer> slots = entry.getFirst().stream()
 					.map(dis -> (Integer) getIndex(dis))
 					.collect(Collectors.toList());
-			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getValue());
-			Map<String, List<Integer>> map = new HashMap<>();
+			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getSecond());
+			Map<String, List<Integer>> map = new LinkedHashMap<>();
 			map.put("discharges", slots);
 			map.put("count", count);
 			dischargeCountConstraintJSON.add(map);
@@ -212,6 +219,41 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 		return dischargeCountConstraintJSON;
 	}
 
+	public List<Map<String, List<Integer>>> getMaxLoadGroupCount() {
+		return maxLoadGroupCount;
+	}
+
+	public void setMaxLoadGroupCount() {
+		List<Pair<Set<ILoadOption>, Integer>> allMaxLoadGroupCounts = maxSlotCountConstraint.getAllMaxLoadGroupCounts();
+		maxLoadGroupCount = createLoadJSONMapFromConstraint(allMaxLoadGroupCounts);
+	}
+
+	public List<Map<String, List<Integer>>> getMinLoadGroupCount() {
+		return minLoadGroupCount;
+	}
+
+	public void setMinLoadGroupCount() {
+		List<Pair<Set<ILoadOption>, Integer>> allMinLoadGroupCounts = maxSlotCountConstraint.getAllMinLoadGroupCounts();
+		minLoadGroupCount = createLoadJSONMapFromConstraint(allMinLoadGroupCounts);;
+	}
+
+	private List<Map<String, List<Integer>>> createLoadJSONMapFromConstraint(List<Pair<Set<ILoadOption>, Integer>> allMaxLoadGroupCounts) {
+		List<Map<String, List<Integer>>> dischargeCountConstraintJSON = new LinkedList<>();
+		for (Pair<Set<ILoadOption>, Integer> entry : allMaxLoadGroupCounts) {
+			List<Integer> slots = entry.getFirst().stream()
+					.map(dis -> (Integer) getIndex(dis))
+					.collect(Collectors.toList());
+			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getSecond());
+			Map<String, List<Integer>> map = new LinkedHashMap<>();
+			map.put("loads", slots);
+			map.put("count", count);
+			dischargeCountConstraintJSON.add(map);
+		}
+		return dischargeCountConstraintJSON;
+	}
+	
+	
+	
 	public int[] getVesselDesiredNumberSlots() {
 		return vesselDesiredNumberSlots;
 	}

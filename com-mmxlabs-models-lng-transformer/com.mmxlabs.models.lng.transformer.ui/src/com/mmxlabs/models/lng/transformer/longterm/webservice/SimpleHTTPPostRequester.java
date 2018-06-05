@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 public class SimpleHTTPPostRequester {
+	private static final boolean DEBUG = false;
 	ObjectMapper mapper = new ObjectMapper();
 
     public SimpleHTTPPostRequester() {        
@@ -34,8 +35,9 @@ public class SimpleHTTPPostRequester {
      */
     protected String post(String url, Map<String, Object> map) throws IOException {
     	String jsonRequest = null;
-    		try {
+    	try {
 			jsonRequest = mapper.writeValueAsString(map);
+
 		} catch (JsonProcessingException e1) {
 			e1.printStackTrace();
 			throw new IOException();

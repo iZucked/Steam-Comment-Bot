@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.longterm.webservice;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,15 +19,17 @@ public class WebserviceLongTermMatrixOptimiser implements ILongTermMatrixOptimis
 	
 	@Override
 	public boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
-			List<Map<String, List<Integer>>> maxSlotsConstraints, List<Map<String, List<Integer>>> minSlotsConstraints) {
+			List<Map<String, List<Integer>>> maxDischargeSlotsConstraints, List<Map<String, List<Integer>>> minDischargeSlotsConstraints, List<Map<String, List<Integer>>> maxLoadSlotsConstraints, List<Map<String, List<Integer>>> minLoadSlotsConstraints) {
 		SimpleHTTPPostRequester requester = new SimpleHTTPPostRequester();
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new LinkedHashMap<>();
 		map.put("pnl", values);
 		map.put("optionalLoads", optionalLoads);
 		map.put("optionalDischarges", (optionalDischarges));
 		map.put("restricted", (valid));
-		map.put("maxSlots", (maxSlotsConstraints));
-		map.put("minSlots", (minSlotsConstraints));
+		map.put("maxDischargeSlots", (maxDischargeSlotsConstraints));
+		map.put("minDischargeSlots", (minDischargeSlotsConstraints));
+		map.put("maxLoadSlots", (maxLoadSlotsConstraints));
+		map.put("minLoadSlots", (minLoadSlotsConstraints));
 		
 		boolean[][] pairings = null;
 

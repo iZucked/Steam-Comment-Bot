@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.longterm;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +43,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class LongTermOptimiser {
 
+	private static final boolean DEBUG = false;
+
 	@Inject
 	private ILongTermSlotsProvider longTermSlotsProvider;
 
@@ -77,35 +77,28 @@ public class LongTermOptimiser {
 		List<ILoadOption> loads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
 		List<IDischargeOption> discharges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
 		optimiserRecorder.init(loads, discharges);
+		
 		// (2) Generate S2S bindings matrix for LT slots
 		ExecutorService es = Executors.newSingleThreadExecutor();
 		LongTermOptimiserHelper.getS2SBindings(loads, discharges, charterInMarket, es, dataTransformer, optimiserRecorder);
 		// now using our profits recorder we have a full matrix of constraints
 		// and pnl
 		Long[][] profit = optimiserRecorder.getProfit();
+		
 		// (3) Optimise matrix
-//		produceDataForGurobi(optimiserRecorder, "c:/dev/data/");
 		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
-				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount());
-		if (false) {
-			try {
-				pairingsMatrix = LongTermOptimiserHelper.getPrestoredData("c:/dev/data/gurobi_allocations.lt");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(1);
-			}
-		}
+				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(), optimiserRecorder.getMinLoadGroupCount());
 		if (pairingsMatrix == null) {
 			return null;
 		}
+		
 		// (4) Export the pairings matrix to a Map
 		Map<ILoadOption, IDischargeOption> pairingsMap = new HashMap<>();
 		for (ILoadOption load : loads) {
 			pairingsMap.put(load, optimiserRecorder.getPairedDischarge(load, pairingsMatrix));
 		}
 
-		if (false) {
+		if (DEBUG) {
 			// print pairings for debug
 			LongTermOptimiserHelper.printPairings(loads, pairingsMatrix, optimiserRecorder);
 		}
