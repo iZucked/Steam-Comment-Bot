@@ -139,6 +139,11 @@ public class LightWeightSchedulerOptimiserUnit {
 					// trim out excess slots (i.e. if we created a load that we let the MIP choose)
 					result = t.modifyResult(result);
 					
+					// change providers
+					t.injector
+						.getInstance(ILightWeightPostOptimisationStateModifier.class)
+						.modifyState(result.getBestSolution().getFirst());
+					
 					// Check monitor state
 					if (monitor.isCanceled()) {
 						throw new OperationCanceledException();
@@ -196,7 +201,7 @@ public class LightWeightSchedulerOptimiserUnit {
 				}
 	}
 	
-	public IMultiStateResult modifyResult(IMultiStateResult result) {
+	private IMultiStateResult modifyResult(IMultiStateResult result) {
 		ISequenceElementFilter filter = injector.getInstance(ISequenceElementFilter.class);
 		return TransformerUnitsHelper.removeExcessSlots(result, filter);
 	}

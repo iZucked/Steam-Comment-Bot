@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.transformer.longterm;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 
@@ -10,7 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
  * @author alex
  *
  */
-public interface IMaxSlotConstraintDataTransformer {
+public interface IMaxSlotConstraintDataProviderEditor extends IDataComponentProvider {
 	void addMinLoadSlotsPerMonth(List<ILoadOption> slots, int startMonth, int limit);
 	void addMaxLoadSlotsPerMonth(List<ILoadOption> slots, int startMonth, int limit);
 	

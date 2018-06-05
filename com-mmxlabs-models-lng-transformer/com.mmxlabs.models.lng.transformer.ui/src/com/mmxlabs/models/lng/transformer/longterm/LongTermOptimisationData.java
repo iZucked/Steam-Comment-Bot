@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossRecor
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
@@ -35,7 +35,7 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	@Inject
 	IPortSlotProvider portSlotProvider;
 	@Inject
-	IMaxSlotCountConstraintProvider maxSlotCountConstraint;
+	IMaxSlotCountConstraintDataProvider maxSlotCountConstraint;
 	@Inject(optional=true)
 	ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider;
 
