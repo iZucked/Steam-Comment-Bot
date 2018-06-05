@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConst
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
@@ -108,6 +109,9 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(MinMaxVolumeConstraintCheckerFactory.class.getCanonicalName()))
 		.toProvider(Peaberry.service(new MinMaxVolumeConstraintCheckerFactory()).export());
+		
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(MinMaxSlotGroupConstraintCheckerFactory.class.getCanonicalName()))
+		.toProvider(Peaberry.service(new MinMaxSlotGroupConstraintCheckerFactory()).export());
 
 	}
 }
