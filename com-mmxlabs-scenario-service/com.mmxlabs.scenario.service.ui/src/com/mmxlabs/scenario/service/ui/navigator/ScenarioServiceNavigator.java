@@ -129,7 +129,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
 			if (viewer != null) {
 				for (final ScenarioResult instance : deselected) {
-					viewer.refresh(instance.getScenarioInstance(), true);
+					RunnerHelper.runNowOrAsync(() -> viewer.refresh(instance.getScenarioInstance(), true));
 				}
 			}
 		}
