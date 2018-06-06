@@ -44,6 +44,25 @@ public class OptimiserInjectorServiceMaker {
 		return this;
 	}
 
+	/**
+	 * Create a new module to bind the instance type
+	 * 
+	 * @param moduleType
+	 * @param clz
+	 * @param object
+	 * @return
+	 */
+	public <T> OptimiserInjectorServiceMaker withModuleBindInstance(final ModuleType moduleType, final Class<T> clz, final @NonNull T object) {
+		moduleMap.computeIfAbsent(moduleType, t -> new LinkedList<>()).add(hints -> new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(clz).toInstance(object);
+			}
+		});
+		return this;
+	}
+
 	public OptimiserInjectorServiceMaker withModule(final ModuleType moduleType, final Module module) {
 		moduleMap.computeIfAbsent(moduleType, t -> new LinkedList<>()).add(hints -> module);
 		return this;
