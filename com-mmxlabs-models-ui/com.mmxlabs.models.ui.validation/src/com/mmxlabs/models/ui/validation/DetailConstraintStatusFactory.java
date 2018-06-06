@@ -66,6 +66,12 @@ public class DetailConstraintStatusFactory {
 		return this;
 	}
 
+	public DetailConstraintStatusFactory withFormattedMessage(@NonNull final String format, Object... args) {
+		this.message = String.format(format, args);
+
+		return this;
+	}
+
 	public DetailConstraintStatusFactory withName(@Nullable final String name) {
 		this.name = name;
 
