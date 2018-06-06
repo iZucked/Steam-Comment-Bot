@@ -101,6 +101,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.VOYAGE_SPECIFICATION: return createVoyageSpecification();
 			case CargoPackage.SLOT_SPECIFICATION: return createSlotSpecification();
 			case CargoPackage.CHARTER_IN_MARKET_OVERRIDE: return createCharterInMarketOverride();
+			case CargoPackage.BUY_PAPER_DEAL: return createBuyPaperDeal();
+			case CargoPackage.SELL_PAPER_DEAL: return createSellPaperDeal();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -416,6 +418,26 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public CharterInMarketOverride createCharterInMarketOverride() {
 		CharterInMarketOverrideImpl charterInMarketOverride = new CharterInMarketOverrideImpl();
 		return charterInMarketOverride;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BuyPaperDeal createBuyPaperDeal() {
+		BuyPaperDealImpl buyPaperDeal = new BuyPaperDealImpl();
+		return buyPaperDeal;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SellPaperDeal createSellPaperDeal() {
+		SellPaperDealImpl sellPaperDeal = new SellPaperDealImpl();
+		return sellPaperDeal;
 	}
 
 	/**

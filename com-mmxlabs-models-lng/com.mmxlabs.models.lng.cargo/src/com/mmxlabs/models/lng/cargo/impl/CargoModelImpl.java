@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getInventoryModels <em>Inventory Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCanalBookings <em>Canal Bookings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getPaperDeals <em>Paper Deals</em>}</li>
  * </ul>
  *
  * @generated
@@ -151,6 +153,16 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected EList<CharterInMarketOverride> charterInMarketOverrides;
+
+	/**
+	 * The cached value of the '{@link #getPaperDeals() <em>Paper Deals</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPaperDeals()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PaperDeal> paperDeals;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -350,6 +362,18 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<PaperDeal> getPaperDeals() {
+		if (paperDeals == null) {
+			paperDeals = new EObjectContainmentEList.Resolving<PaperDeal>(PaperDeal.class, this, CargoPackage.CARGO_MODEL__PAPER_DEALS);
+		}
+		return paperDeals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -373,6 +397,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return basicSetCanalBookings(null, msgs);
 			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:
 				return ((InternalEList<?>)getCharterInMarketOverrides()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
+				return ((InternalEList<?>)getPaperDeals()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -406,6 +432,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return basicGetCanalBookings();
 			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:
 				return getCharterInMarketOverrides();
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
+				return getPaperDeals();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -458,6 +486,10 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getCharterInMarketOverrides().clear();
 				getCharterInMarketOverrides().addAll((Collection<? extends CharterInMarketOverride>)newValue);
 				return;
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
+				getPaperDeals().clear();
+				getPaperDeals().addAll((Collection<? extends PaperDeal>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -500,6 +532,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:
 				getCharterInMarketOverrides().clear();
 				return;
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
+				getPaperDeals().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -532,6 +567,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return canalBookings != null;
 			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:
 				return charterInMarketOverrides != null && !charterInMarketOverrides.isEmpty();
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
+				return paperDeals != null && !paperDeals.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

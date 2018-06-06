@@ -56,7 +56,6 @@ public class InventoryExtraImporter implements IExtraModelImporter {
 	@Override
 	public @NonNull Map<String, String> getRequiredInputs() {
 		if (LicenseFeatures.isPermitted("features:inventory-model")) {
-
 			return inputs;
 		}
 		return Collections.emptyMap();

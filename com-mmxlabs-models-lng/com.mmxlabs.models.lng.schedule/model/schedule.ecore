@@ -24,6 +24,8 @@
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inventoryLevels" upperBound="-1"
         eType="#//InventoryEvents" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paperDealAllocations" upperBound="-1"
+        eType="#//PaperDealAllocation" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Fitness" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fitnessValue" lowerBound="1"
@@ -307,6 +309,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nativeValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currencyUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dealType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//DealType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SlotAllocationType">
     <eLiterals name="PURCHASE"/>
@@ -395,5 +398,19 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="openSlotAllocation" eType="#//OpenSlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="breachedMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="breachedMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PaperDealAllocation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paperDeal" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//PaperDeal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//PaperDealAllocationEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PaperDealAllocationEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="settled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exposures" upperBound="-1"
+        eType="#//ExposureDetail" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

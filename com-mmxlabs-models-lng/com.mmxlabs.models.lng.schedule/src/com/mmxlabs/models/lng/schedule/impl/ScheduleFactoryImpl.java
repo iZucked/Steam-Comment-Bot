@@ -145,6 +145,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.CANAL_BOOKING_EVENT: return createCanalBookingEvent();
 			case SchedulePackage.INVENTORY_EVENTS: return createInventoryEvents();
 			case SchedulePackage.INVENTORY_CHANGE_EVENT: return createInventoryChangeEvent();
+			case SchedulePackage.PAPER_DEAL_ALLOCATION: return createPaperDealAllocation();
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY: return createPaperDealAllocationEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -594,6 +596,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public InventoryChangeEvent createInventoryChangeEvent() {
 		InventoryChangeEventImpl inventoryChangeEvent = new InventoryChangeEventImpl();
 		return inventoryChangeEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PaperDealAllocation createPaperDealAllocation() {
+		PaperDealAllocationImpl paperDealAllocation = new PaperDealAllocationImpl();
+		return paperDealAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PaperDealAllocationEntry createPaperDealAllocationEntry() {
+		PaperDealAllocationEntryImpl paperDealAllocationEntry = new PaperDealAllocationEntryImpl();
+		return paperDealAllocationEntry;
 	}
 
 	/**

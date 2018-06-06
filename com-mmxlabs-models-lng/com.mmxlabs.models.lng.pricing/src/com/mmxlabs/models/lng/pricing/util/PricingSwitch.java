@@ -265,6 +265,21 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.DATE_POINT_CONTAINER: {
+				DatePointContainer datePointContainer = (DatePointContainer)theEObject;
+				T result = caseDatePointContainer(datePointContainer);
+				if (result == null) result = caseUUIDObject(datePointContainer);
+				if (result == null) result = caseNamedObject(datePointContainer);
+				if (result == null) result = caseMMXObject(datePointContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.DATE_POINT: {
+				DatePoint datePoint = (DatePoint)theEObject;
+				T result = caseDatePoint(datePoint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -626,6 +641,36 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseUnitConversion(UnitConversion object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Date Point Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Date Point Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDatePointContainer(DatePointContainer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Date Point</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Date Point</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDatePoint(DatePoint object) {
 		return null;
 	}
 

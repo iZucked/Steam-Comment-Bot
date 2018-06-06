@@ -185,6 +185,14 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createUnitConversionAdapter();
 			}
 			@Override
+			public Adapter caseDatePointContainer(DatePointContainer object) {
+				return createDatePointContainerAdapter();
+			}
+			@Override
+			public Adapter caseDatePoint(DatePoint object) {
+				return createDatePointAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -549,6 +557,34 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createUnitConversionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.DatePointContainer <em>Date Point Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.DatePointContainer
+	 * @generated
+	 */
+	public Adapter createDatePointContainerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.DatePoint <em>Date Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.DatePoint
+	 * @generated
+	 */
+	public Adapter createDatePointAdapter() {
 		return null;
 	}
 

@@ -15,10 +15,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;
+import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -40,12 +42,16 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public static final String BASEFUEL_PRICING_KEY = "BF_PRICING";
 	public static final String CURRENCY_CURVE_KEY = "CURRENCY_CURVES";
 	public static final String CONVERSION_FACTORS_KEY = "CONVERSION_FACTORS";
+	public static final String SETTLED_PRICES_KEY = "SETTLED_PRICES";
 
 	static {
 		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");
 		inputs.put(CHARTER_CURVE_KEY, "Charter Curves");
 		inputs.put(BASEFUEL_PRICING_KEY, "Base Fuel Curves");
 		inputs.put(CURRENCY_CURVE_KEY, "Currency Curves");
+		if (LicenseFeatures.isPermitted("features:paperdeals")) {
+			inputs.put(SETTLED_PRICES_KEY, "Settled Prices");
+		}
 		inputs.put(CONVERSION_FACTORS_KEY, "Conversion Factors");
 	}
 
@@ -57,6 +63,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private IClassImporter baseFuelIndexImporter;
 	private IClassImporter currencyIndexImporter;
 	private IClassImporter conversionFactorsImporter;
+	private IClassImporter settledPricesImporter;
 
 	/**
 	 */
@@ -77,6 +84,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 			baseFuelIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getBaseFuelIndex());
 			currencyIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCurrencyIndex());
 			conversionFactorsImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getUnitConversion());
+			settledPricesImporter = new DatePointImporter();
 		}
 	}
 
@@ -100,6 +108,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(CURRENCY_CURVE_KEY)) {
 			importCurrencyCurves(pricingModel, inputs.get(CURRENCY_CURVE_KEY), context);
 		}
+		if (inputs.containsKey(SETTLED_PRICES_KEY)) {
+			importSettledPrices(pricingModel, inputs.get(SETTLED_PRICES_KEY), context);
+		}
 		if (inputs.containsKey(CONVERSION_FACTORS_KEY)) {
 			importConversionFactors(pricingModel, inputs.get(CONVERSION_FACTORS_KEY), context);
 		}
@@ -118,6 +129,10 @@ public class PricingModelImporter implements ISubmodelImporter {
 
 	private void importCommodityCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getCommodityIndices().addAll((Collection<? extends CommodityIndex>) commodityIndexImporter.importObjects(PricingPackage.eINSTANCE.getCommodityIndex(), csvReader, context));
+	}
+
+	private void importSettledPrices(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
+		pricing.getSettledPrices().addAll((Collection<? extends DatePointContainer>) settledPricesImporter.importObjects(PricingPackage.eINSTANCE.getDatePointContainer(), csvReader, context));
 	}
 
 	private void importCurrencyCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
@@ -143,6 +158,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterIndices(), context));
 		output.put(BASEFUEL_PRICING_KEY, baseFuelIndexImporter.exportObjects(pricing.getBaseFuelPrices(), context));
 		output.put(CURRENCY_CURVE_KEY, currencyIndexImporter.exportObjects(pricing.getCurrencyIndices(), context));
+		output.put(SETTLED_PRICES_KEY, settledPricesImporter.exportObjects(pricing.getSettledPrices(), context));
 		output.put(CONVERSION_FACTORS_KEY, conversionFactorsImporter.exportObjects(pricing.getConversionFactors(), context));
 	}
 

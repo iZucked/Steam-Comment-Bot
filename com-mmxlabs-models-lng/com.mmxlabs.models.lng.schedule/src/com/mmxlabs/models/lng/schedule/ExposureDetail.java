@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
+import com.mmxlabs.models.lng.types.DealType;
 import java.time.YearMonth;
 
 import org.eclipse.emf.ecore.EObject;
@@ -27,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getNativeValue <em>Native Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeUnit <em>Volume Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getCurrencyUnit <em>Currency Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getDealType <em>Deal Type</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getExposureDetail()
@@ -241,5 +243,34 @@ public interface ExposureDetail extends EObject {
 	 * @generated
 	 */
 	void setCurrencyUnit(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Deal Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.DealType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Deal Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.DealType
+	 * @see #setDealType(DealType)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getExposureDetail_DealType()
+	 * @model
+	 * @generated
+	 */
+	DealType getDealType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getDealType <em>Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Deal Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.DealType
+	 * @see #getDealType()
+	 * @generated
+	 */
+	void setDealType(DealType value);
 
 } // ExposureDetail

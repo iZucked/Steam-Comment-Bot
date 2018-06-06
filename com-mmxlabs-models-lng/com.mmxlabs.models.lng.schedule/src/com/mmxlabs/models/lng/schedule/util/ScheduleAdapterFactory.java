@@ -269,6 +269,14 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createInventoryChangeEventAdapter();
 			}
 			@Override
+			public Adapter casePaperDealAllocation(PaperDealAllocation object) {
+				return createPaperDealAllocationAdapter();
+			}
+			@Override
+			public Adapter casePaperDealAllocationEntry(PaperDealAllocationEntry object) {
+				return createPaperDealAllocationEntryAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -865,6 +873,34 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createInventoryChangeEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocation <em>Paper Deal Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocation
+	 * @generated
+	 */
+	public Adapter createPaperDealAllocationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry <em>Paper Deal Allocation Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry
+	 * @generated
+	 */
+	public Adapter createPaperDealAllocationEntryAdapter() {
 		return null;
 	}
 

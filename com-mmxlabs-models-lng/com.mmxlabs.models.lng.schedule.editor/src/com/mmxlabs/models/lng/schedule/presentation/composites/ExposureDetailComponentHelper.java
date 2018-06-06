@@ -75,6 +75,7 @@ public class ExposureDetailComponentHelper extends BaseComponentHelper {
 		add_nativeValueEditor(detailComposite, topClass);
 		add_volumeUnitEditor(detailComposite, topClass);
 		add_currencyUnitEditor(detailComposite, topClass);
+		add_dealTypeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the indexName feature on ExposureDetail
@@ -140,5 +141,14 @@ public class ExposureDetailComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_currencyUnitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EXPOSURE_DETAIL__CURRENCY_UNIT));
+	}
+
+	/**
+	 * Create the editor for the dealType feature on ExposureDetail
+	 *
+	 * @generated
+	 */
+	protected void add_dealTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EXPOSURE_DETAIL__DEAL_TYPE));
 	}
 }

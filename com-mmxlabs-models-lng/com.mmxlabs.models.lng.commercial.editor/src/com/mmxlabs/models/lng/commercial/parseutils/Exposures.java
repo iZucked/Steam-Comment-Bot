@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -43,10 +44,13 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.rcp.common.ServiceHelper;
 
 /**
@@ -110,7 +114,8 @@ public class Exposures {
 					continue;
 				}
 
-				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, slot instanceof LoadSlot, lookupData, pricingFullDate.getDayOfMonth());
+				final boolean isPurchase = slot instanceof LoadSlot;
+				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
 				if (exposureDetail != null && !exposureDetail.isEmpty()) {
 
 					for (final ExposureDetail d : exposureDetail) {
@@ -130,6 +135,19 @@ public class Exposures {
 						}
 					}
 					slotAllocation.getExposures().addAll(exposureDetail);
+					{
+						final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
+						physical.setDealType(DealType.PHYSICAL);
+
+						physical.setVolumeInMMBTU((isPurchase ? 1 : -1) * slotAllocation.getEnergyTransferred());
+						physical.setVolumeInNativeUnits((isPurchase ? 1 : -1) * slotAllocation.getEnergyTransferred());
+						physical.setNativeValue((isPurchase ? -1 : 1) * slotAllocation.getVolumeValue());
+						physical.setVolumeUnit("mmBtu");
+						physical.setIndexName("Physical");
+						physical.setDate(YearMonth.from(slotAllocation.getSlotVisit().getStart().toLocalDate()));
+
+						slotAllocation.getExposures().add(physical);
+					}
 				}
 			}
 		}
@@ -434,6 +452,34 @@ public class Exposures {
 				}
 			}
 		}
+		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+			for (final PaperDealAllocationEntry paperDealAllocationEntry : paperDealAllocation.getEntries()) {
+				if (!filterOn.isEmpty()) {
+					final boolean include = false;
+					if (!include) {
+						continue;
+					}
+				}
+
+				for (final ExposureDetail detail : paperDealAllocationEntry.getExposures()) {
+					if (Objects.equals(detail.getIndexName(), index.getName())) {
+						switch (mode) {
+						case VOLUME_MMBTU:
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+							break;
+						case VOLUME_NATIVE:
+							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+							break;
+						case NATIVE_VALUE:
+							result.merge(detail.getDate(), detail.getNativeValue(), (a, b) -> (a + b));
+							break;
+						default:
+							throw new IllegalArgumentException();
+						}
+					}
+				}
+			}
+		}
 
 		return result;
 
@@ -450,6 +496,7 @@ public class Exposures {
 			final ExposureRecords exposureRecords = (ExposureRecords) enode;
 			for (final ExposureRecord record : exposureRecords.records) {
 				final ExposureDetail exposureDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
+				exposureDetail.setDealType(DealType.FINANCIAL);
 
 				exposureDetail.setIndexName(record.index.getName());
 				exposureDetail.setCurrencyUnit(record.index.getCurrencyUnit());
@@ -458,16 +505,16 @@ public class Exposures {
 				exposureDetail.setDate(record.date);
 				exposureDetail.setUnitPrice(record.unitPrice);
 
-				exposureDetail.setVolumeInMMBTU(isPurchase ? record.mmbtuVolume : -record.mmbtuVolume);
+				exposureDetail.setVolumeInMMBTU(isPurchase ? -record.mmbtuVolume : record.mmbtuVolume);
 
 				// Is the record unit in mmBtu? Then either it always was mmBtu OR we have
 				// converted the native units to mmBtu
 				if (record.volumeUnit == null || record.volumeUnit.isEmpty() || "mmbtu".equalsIgnoreCase(record.volumeUnit)) {
-					exposureDetail.setVolumeInNativeUnits(isPurchase ? record.nativeVolume : -record.nativeVolume);
-					exposureDetail.setNativeValue(isPurchase ? record.nativeValue : -record.nativeValue);
+					exposureDetail.setVolumeInNativeUnits(isPurchase ? -record.nativeVolume : record.nativeVolume);
+					exposureDetail.setNativeValue(isPurchase ? -record.nativeValue : record.nativeValue);
 				} else {
 					// Not mmBtu? then the mmBtu field is still really native units
-					exposureDetail.setVolumeInNativeUnits(isPurchase ? record.mmbtuVolume : -record.mmbtuVolume);
+					exposureDetail.setVolumeInNativeUnits(isPurchase ? -record.mmbtuVolume : record.mmbtuVolume);
 					// Perform units conversion - compute mmBtu equivalent of exposed native volume
 					double mmbtuVolume = record.mmbtuVolume;
 					for (final UnitConversion factor : lookupData.pricingModel.getConversionFactors()) {
@@ -478,7 +525,7 @@ public class Exposures {
 							}
 						}
 					}
-					exposureDetail.setVolumeInMMBTU(isPurchase ? mmbtuVolume : -mmbtuVolume);
+					exposureDetail.setVolumeInMMBTU(isPurchase ? -mmbtuVolume : mmbtuVolume);
 
 					final double nativeValue = exposureDetail.getVolumeInNativeUnits() * exposureDetail.getUnitPrice();
 					exposureDetail.setNativeValue(nativeValue);

@@ -155,6 +155,24 @@
                id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.Inventory">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.PaperDealComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.PaperDealComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.PaperDeal">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.BuyPaperDealComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.BuyPaperDealComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.BuyPaperDeal">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SellPaperDealComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.SellPaperDealComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.SellPaperDeal">
          </componentHelper>        
 	</extension>
  <extension
@@ -451,6 +469,20 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Storage Facility"
           targetEClass="com.mmxlabs.models.lng.cargo.Inventory">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.BuyPaperDealFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Buy"
+          outputEClass="com.mmxlabs.models.lng.cargo.BuyPaperDeal"
+          targetEClass="com.mmxlabs.models.lng.cargo.PaperDeal">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.SellPaperDealFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Sell"
+          outputEClass="com.mmxlabs.models.lng.cargo.SellPaperDeal"
+          targetEClass="com.mmxlabs.models.lng.cargo.PaperDeal">
     </factory>    
  </extension>
  <extension

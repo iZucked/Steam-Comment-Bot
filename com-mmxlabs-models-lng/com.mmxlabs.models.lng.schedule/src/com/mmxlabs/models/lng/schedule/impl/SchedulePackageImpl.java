@@ -54,6 +54,8 @@ import com.mmxlabs.models.lng.schedule.MatchingContractDetails;
 import com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
@@ -367,6 +369,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass paperDealAllocationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass paperDealAllocationEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum fuelUnitEEnum = null;
 
 	/**
@@ -610,6 +626,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EReference getSchedule_InventoryLevels() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSchedule_PaperDealAllocations() {
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -1995,6 +2020,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getExposureDetail_DealType() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getBallastBonusFeeDetails() {
 		return ballastBonusFeeDetailsEClass;
 	}
@@ -2310,6 +2344,96 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getPaperDealAllocation() {
+		return paperDealAllocationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPaperDealAllocation_PaperDeal() {
+		return (EReference)paperDealAllocationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPaperDealAllocation_Entries() {
+		return (EReference)paperDealAllocationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPaperDealAllocationEntry() {
+		return paperDealAllocationEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPaperDealAllocationEntry_Date() {
+		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPaperDealAllocationEntry_Quantity() {
+		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPaperDealAllocationEntry_Price() {
+		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPaperDealAllocationEntry_Value() {
+		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPaperDealAllocationEntry_Settled() {
+		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPaperDealAllocationEntry_Exposures() {
+		return (EReference)paperDealAllocationEntryEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -2436,6 +2560,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(scheduleEClass, SCHEDULE__FITNESSES);
 		createEReference(scheduleEClass, SCHEDULE__UNUSED_ELEMENTS);
 		createEReference(scheduleEClass, SCHEDULE__INVENTORY_LEVELS);
+		createEReference(scheduleEClass, SCHEDULE__PAPER_DEAL_ALLOCATIONS);
 
 		fitnessEClass = createEClass(FITNESS);
 		createEAttribute(fitnessEClass, FITNESS__FITNESS_VALUE);
@@ -2620,6 +2745,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__NATIVE_VALUE);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__VOLUME_UNIT);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__CURRENCY_UNIT);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__DEAL_TYPE);
 
 		ballastBonusFeeDetailsEClass = createEClass(BALLAST_BONUS_FEE_DETAILS);
 		createEAttribute(ballastBonusFeeDetailsEClass, BALLAST_BONUS_FEE_DETAILS__FEE);
@@ -2662,6 +2788,18 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__OPEN_SLOT_ALLOCATION);
 		createEAttribute(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__BREACHED_MIN);
 		createEAttribute(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__BREACHED_MAX);
+
+		paperDealAllocationEClass = createEClass(PAPER_DEAL_ALLOCATION);
+		createEReference(paperDealAllocationEClass, PAPER_DEAL_ALLOCATION__PAPER_DEAL);
+		createEReference(paperDealAllocationEClass, PAPER_DEAL_ALLOCATION__ENTRIES);
+
+		paperDealAllocationEntryEClass = createEClass(PAPER_DEAL_ALLOCATION_ENTRY);
+		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__DATE);
+		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__QUANTITY);
+		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__PRICE);
+		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
+		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__SETTLED);
+		createEReference(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES);
 
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
@@ -2784,6 +2922,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSchedule_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_UnusedElements(), ecorePackage.getEObject(), null, "unusedElements", null, 0, -1, Schedule.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_InventoryLevels(), this.getInventoryEvents(), null, "inventoryLevels", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSchedule_PaperDealAllocations(), this.getPaperDealAllocation(), null, "paperDealAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fitnessEClass, Fitness.class, "Fitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFitness_FitnessValue(), ecorePackage.getELong(), "fitnessValue", null, 1, 1, Fitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2980,6 +3119,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getExposureDetail_NativeValue(), ecorePackage.getEDouble(), "nativeValue", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_VolumeUnit(), ecorePackage.getEString(), "volumeUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_CurrencyUnit(), ecorePackage.getEString(), "currencyUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_DealType(), theTypesPackage.getDealType(), "dealType", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(ballastBonusFeeDetailsEClass, BallastBonusFeeDetails.class, "BallastBonusFeeDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBallastBonusFeeDetails_Fee(), ecorePackage.getEInt(), "fee", "0", 1, 1, BallastBonusFeeDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3022,6 +3162,18 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getInventoryChangeEvent_OpenSlotAllocation(), this.getOpenSlotAllocation(), null, "openSlotAllocation", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryChangeEvent_BreachedMin(), ecorePackage.getEBoolean(), "breachedMin", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryChangeEvent_BreachedMax(), ecorePackage.getEBoolean(), "breachedMax", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(paperDealAllocationEClass, PaperDealAllocation.class, "PaperDealAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPaperDealAllocation_PaperDeal(), theCargoPackage.getPaperDeal(), null, "paperDeal", null, 0, 1, PaperDealAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPaperDealAllocation_Entries(), this.getPaperDealAllocationEntry(), null, "entries", null, 0, -1, PaperDealAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(paperDealAllocationEntryEClass, PaperDealAllocationEntry.class, "PaperDealAllocationEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPaperDealAllocationEntry_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDealAllocationEntry_Quantity(), ecorePackage.getEDouble(), "quantity", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDealAllocationEntry_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDealAllocationEntry_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDealAllocationEntry_Settled(), ecorePackage.getEBoolean(), "settled", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPaperDealAllocationEntry_Exposures(), this.getExposureDetail(), null, "exposures", null, 0, -1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
