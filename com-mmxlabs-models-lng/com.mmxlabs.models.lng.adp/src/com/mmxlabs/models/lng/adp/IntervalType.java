@@ -50,7 +50,15 @@ public enum IntervalType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	WEEKLY(2, "WEEKLY", "WEEKLY");
+	WEEKLY(2, "WEEKLY", "WEEKLY"), /**
+	 * The '<em><b>YEARLY</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #YEARLY_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	YEARLY(3, "YEARLY", "YEARLY");
 
 	/**
 	 * The '<em><b>QUARTERLY</b></em>' literal value.
@@ -98,6 +106,21 @@ public enum IntervalType implements Enumerator {
 	public static final int WEEKLY_VALUE = 2;
 
 	/**
+	 * The '<em><b>YEARLY</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>YEARLY</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #YEARLY
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int YEARLY_VALUE = 3;
+
+	/**
 	 * An array of all the '<em><b>Interval Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -108,6 +131,7 @@ public enum IntervalType implements Enumerator {
 			QUARTERLY,
 			MONTHLY,
 			WEEKLY,
+			YEARLY,
 		};
 
 	/**
@@ -167,6 +191,7 @@ public enum IntervalType implements Enumerator {
 			case QUARTERLY_VALUE: return QUARTERLY;
 			case MONTHLY_VALUE: return MONTHLY;
 			case WEEKLY_VALUE: return WEEKLY;
+			case YEARLY_VALUE: return YEARLY;
 		}
 		return null;
 	}
@@ -209,6 +234,7 @@ public enum IntervalType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getValue() {
 	  return value;
 	}
@@ -218,6 +244,7 @@ public enum IntervalType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 	  return name;
 	}
@@ -227,6 +254,7 @@ public enum IntervalType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLiteral() {
 	  return literal;
 	}

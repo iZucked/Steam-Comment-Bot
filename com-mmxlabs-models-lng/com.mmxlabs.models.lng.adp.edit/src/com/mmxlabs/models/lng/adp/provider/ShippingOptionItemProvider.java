@@ -37,13 +37,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class ShippingOptionItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends SubProfileConstraintItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -68,7 +62,6 @@ public class ShippingOptionItemProvider
 			addVesselAssignmentTypePropertyDescriptor(object);
 			addSpotIndexPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
-			addMaxLadenIdleDaysPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -140,28 +133,6 @@ public class ShippingOptionItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Max Laden Idle Days feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMaxLadenIdleDaysPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ShippingOption_maxLadenIdleDays_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ShippingOption_maxLadenIdleDays_feature", "_UI_ShippingOption_type"),
-				 ADPPackage.Literals.SHIPPING_OPTION__MAX_LADEN_IDLE_DAYS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns ShippingOption.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -198,7 +169,6 @@ public class ShippingOptionItemProvider
 
 		switch (notification.getFeatureID(ShippingOption.class)) {
 			case ADPPackage.SHIPPING_OPTION__SPOT_INDEX:
-			case ADPPackage.SHIPPING_OPTION__MAX_LADEN_IDLE_DAYS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -215,17 +185,6 @@ public class ShippingOptionItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

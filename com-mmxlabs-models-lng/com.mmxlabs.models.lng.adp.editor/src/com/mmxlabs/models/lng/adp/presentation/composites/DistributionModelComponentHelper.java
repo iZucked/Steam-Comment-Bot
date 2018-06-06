@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.adp.presentation.composites;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 
@@ -66,5 +67,25 @@ public class DistributionModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_volumePerCargoEditor(detailComposite, topClass);
+		add_volumeUnitEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the volumePerCargo feature on DistributionModel
+	 *
+	 * @generated
+	 */
+	protected void add_volumePerCargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO));
+	}
+
+	/**
+	 * Create the editor for the volumeUnit feature on DistributionModel
+	 *
+	 * @generated
+	 */
+	protected void add_volumeUnitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT));
 	}
 }

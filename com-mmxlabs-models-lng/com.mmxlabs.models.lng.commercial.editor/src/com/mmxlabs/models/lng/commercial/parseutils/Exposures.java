@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.parseutils;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.HashMap;
@@ -49,7 +50,8 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.rcp.common.ServiceHelper;
 
 /**
- * Utility class to calculate schedule exposure to market indices. Provides static methods
+ * Utility class to calculate schedule exposure to market indices. Provides
+ * static methods
  * 
  * @author Simon McGregor
  */
@@ -97,7 +99,8 @@ public class Exposures {
 					continue;
 				}
 
-				final YearMonth pricingDate = PricingMonthUtils.getPricingDate(slotAllocation);
+				final LocalDate pricingFullDate = PricingMonthUtils.getFullPricingDate(slotAllocation);
+				final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
 				if (pricingDate == null) {
 					continue;
 				}
@@ -107,11 +110,12 @@ public class Exposures {
 					continue;
 				}
 
-				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, slot instanceof LoadSlot, lookupData);
+				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, slot instanceof LoadSlot, lookupData, pricingFullDate.getDayOfMonth());
 				if (exposureDetail != null && !exposureDetail.isEmpty()) {
 
 					for (final ExposureDetail d : exposureDetail) {
-						// This is only for unit test reload validation as -0.0 != 0.0 and we cannot persist/reload -0.0
+						// This is only for unit test reload validation as -0.0 != 0.0 and we cannot
+						// persist/reload -0.0
 						if (d.getNativeValue() == -0.0) {
 							d.setNativeValue(0.0);
 						}
@@ -137,7 +141,7 @@ public class Exposures {
 	 */
 
 	public static @Nullable Collection<ExposureDetail> calculateExposure(final @NonNull String priceExpression, final YearMonth date, final double volumeInMMBTu, final boolean isPurchase,
-			final @NonNull LookupData lookupData) {
+			final @NonNull LookupData lookupData, int dayOfMonth) {
 
 		// Parse the expression
 		final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
@@ -147,12 +151,13 @@ public class Exposures {
 		if (markedUpNode == null) {
 			return null;
 		}
-		return createExposureDetail(markedUpNode, date, volumeInMMBTu, isPurchase, lookupData);
+		return createExposureDetail(markedUpNode, date, volumeInMMBTu, isPurchase, lookupData, dayOfMonth);
 	}
 
 	/**
-	 * Expands the node tree. Returns a new node if the parentNode has change and needs to be replaced in the upper chain. Returns null if the node does not need replacing (note: the children may
-	 * still have changed).
+	 * Expands the node tree. Returns a new node if the parentNode has change and
+	 * needs to be replaced in the upper chain. Returns null if the node does not
+	 * need replacing (note: the children may still have changed).
 	 * 
 	 * @param exposedIndexToken
 	 * @param parentNode
@@ -207,7 +212,8 @@ public class Exposures {
 	}
 
 	/**
-	 * Determines the amount of exposure to a particular index which is created by a specific contract.
+	 * Determines the amount of exposure to a particular index which is created by a
+	 * specific contract.
 	 * 
 	 * @param contract
 	 * @param index
@@ -282,6 +288,18 @@ public class Exposures {
 			n = new MaxFunctionNode();
 		} else if (parentNode.token.equalsIgnoreCase("MIN")) {
 			n = new MinFunctionNode();
+		} else if (parentNode.token.equalsIgnoreCase("SPLITMONTH")) {
+			final MarkedUpNode splitPoint = markupNodes(parentNode.children[2], lookupData);
+			double splitPointValue = -1;
+
+			if (splitPoint instanceof ConstantNode) {
+				final ConstantNode constantNode = (ConstantNode) splitPoint;
+				splitPointValue = constantNode.getConstant();
+			} else {
+				throw new IllegalStateException();
+			}
+
+			n = new SplitNode((int) splitPointValue);
 		} else if (parentNode.token.equalsIgnoreCase("SHIFT")) {
 			final MarkedUpNode child = markupNodes(parentNode.children[0], lookupData);
 			final MarkedUpNode shiftValue = markupNodes(parentNode.children[1], lookupData);
@@ -290,7 +308,8 @@ public class Exposures {
 				final ConstantNode constantNode = (ConstantNode) shiftValue;
 				shift = constantNode.getConstant();
 			} else if (shiftValue instanceof OperatorNode) {
-				// FIXME: Only allow a specific operation here -- effectively the expression -x, generated as 0-x.
+				// FIXME: Only allow a specific operation here -- effectively the expression -x,
+				// generated as 0-x.
 				final OperatorNode operatorNode = (OperatorNode) shiftValue;
 				if (operatorNode.getOperator().equals("-") && operatorNode.getChildren().size() == 2 && operatorNode.getChildren().get(0) instanceof ConstantNode
 						&& operatorNode.getChildren().get(1) instanceof ConstantNode) {
@@ -304,7 +323,8 @@ public class Exposures {
 			// = Integer.parseInt(parentNode.children[1].token);
 			// for (final Node child : parentNode.children) {
 			// }
-			// n = new CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
+			// n = new
+			// CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
 			n = new ShiftNode(child, (int) Math.round(shift));
 			return n;
 		} else if (parentNode.token.equalsIgnoreCase("DATEDAVG")) {
@@ -371,8 +391,9 @@ public class Exposures {
 	}
 
 	/**
-	 * Calculates the exposure of a given schedule to a given index. Depends on the getExposureCoefficient method to correctly determine the exposure per cubic metre associated with a load or
-	 * discharge slot.
+	 * Calculates the exposure of a given schedule to a given index. Depends on the
+	 * getExposureCoefficient method to correctly determine the exposure per cubic
+	 * metre associated with a load or discharge slot.
 	 * 
 	 * @param schedule
 	 * @param index
@@ -419,12 +440,12 @@ public class Exposures {
 	}
 
 	private static Collection<ExposureDetail> createExposureDetail(final @NonNull MarkedUpNode node, final YearMonth pricingDate, final double volumeInMMBtu, final boolean isPurchase,
-			final LookupData lookupData) {
+			final LookupData lookupData, int dayOfMonth) {
 		final List<ExposureDetail> m = new LinkedList<>();
 
 		final InputRecord inputRecord = new InputRecord();
 		inputRecord.volumeInMMBTU = volumeInMMBtu;
-		final IExposureNode enode = getExposureNode(inputRecord, node, pricingDate, lookupData).getSecond();
+		final IExposureNode enode = getExposureNode(inputRecord, node, pricingDate, lookupData, dayOfMonth).getSecond();
 		if (enode instanceof ExposureRecords) {
 			final ExposureRecords exposureRecords = (ExposureRecords) enode;
 			for (final ExposureRecord record : exposureRecords.records) {
@@ -439,7 +460,8 @@ public class Exposures {
 
 				exposureDetail.setVolumeInMMBTU(isPurchase ? record.mmbtuVolume : -record.mmbtuVolume);
 
-				// Is the record unit in mmBtu? Then either it always was mmBtu OR we have converted the native units to mmBtu
+				// Is the record unit in mmBtu? Then either it always was mmBtu OR we have
+				// converted the native units to mmBtu
 				if (record.volumeUnit == null || record.volumeUnit.isEmpty() || "mmbtu".equalsIgnoreCase(record.volumeUnit)) {
 					exposureDetail.setVolumeInNativeUnits(isPurchase ? record.nativeVolume : -record.nativeVolume);
 					exposureDetail.setNativeValue(isPurchase ? record.nativeValue : -record.nativeValue);
@@ -535,10 +557,11 @@ public class Exposures {
 	}
 
 	// private void evaluate(MarkedUpNode node, String indexName, YearMonth date) {
-	private static @NonNull Pair<Double, IExposureNode> getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, final YearMonth date, final LookupData lookupData) {
+	private static @NonNull Pair<Double, IExposureNode> getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, final YearMonth date, final LookupData lookupData,
+			int dayOfMonth) {
 		if (node instanceof ShiftNode) {
 			final ShiftNode shiftNode = (ShiftNode) node;
-			return getExposureNode(inputRecord, shiftNode.getChild(), date.minusMonths(shiftNode.getMonths()), lookupData);
+			return getExposureNode(inputRecord, shiftNode.getChild(), date.minusMonths(shiftNode.getMonths()), lookupData, dayOfMonth);
 		} else if (node instanceof DatedAverageNode) {
 			final DatedAverageNode averageNode = (DatedAverageNode) node;
 
@@ -551,10 +574,10 @@ public class Exposures {
 			final ExposureRecords records = new ExposureRecords();
 			double price = 0.0;
 			for (int i = 0; i < averageNode.getMonths(); ++i) {
-				final Pair<Double, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), lookupData);
+				final Pair<Double, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), lookupData, dayOfMonth);
 				ExposureRecords result = (ExposureRecords) p.getSecond();
 				price += p.getFirst();
-				result = modify(result, c -> new ExposureRecord(c.index, c.unitPrice, c.nativeVolume / months, c.nativeValue / months, -c.mmbtuVolume / months, c.date, c.volumeUnit));
+				result = modify(result, c -> new ExposureRecord(c.index, c.unitPrice, c.nativeVolume / months, c.nativeValue / months, c.mmbtuVolume / months, c.date, c.volumeUnit));
 				records.records.addAll(result.records);
 			}
 
@@ -562,8 +585,21 @@ public class Exposures {
 		} else if (node instanceof ConstantNode) {
 			final ConstantNode constantNode = (ConstantNode) node;
 			return new Pair<>(constantNode.getConstant(), new Constant(constantNode.getConstant(), ""));
-		}
+		} else if (node instanceof SplitNode) {
+			final SplitNode splitNode = (SplitNode) node;
+			if (node.getChildren().size() != 3) {
+				throw new IllegalStateException();
+			}
 
+			final Pair<Double, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData, dayOfMonth);
+			final Pair<Double, IExposureNode> pc1 = getExposureNode(inputRecord, node.getChildren().get(1), date, lookupData, dayOfMonth);
+
+			if (dayOfMonth < splitNode.getSplitPointInDays()) {
+				return pc0;
+			} else {
+				return pc1;
+			}
+		}
 		// Arithmetic operator token
 		else if (node instanceof OperatorNode) {
 			final OperatorNode operatorNode = (OperatorNode) node;
@@ -572,8 +608,8 @@ public class Exposures {
 			}
 
 			final String operator = operatorNode.getOperator();
-			final Pair<Double, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
-			final Pair<Double, IExposureNode> pc1 = getExposureNode(inputRecord, node.getChildren().get(1), date, lookupData);
+			final Pair<Double, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData, dayOfMonth);
+			final Pair<Double, IExposureNode> pc1 = getExposureNode(inputRecord, node.getChildren().get(1), date, lookupData, dayOfMonth);
 			final IExposureNode c0 = pc0.getSecond();
 			final IExposureNode c1 = pc1.getSecond();
 			if (operator.equals("+")) {
@@ -592,7 +628,8 @@ public class Exposures {
 				if (c0 instanceof Constant && c1 instanceof Constant) {
 					return new Pair<>(pc0.getFirst() - pc1.getFirst(), new Constant(((Constant) c0).getConstant() - ((Constant) c1).getConstant(), ""));
 				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
-					return new Pair<>(pc0.getFirst() - pc1.getFirst(), c0);// modify((ExposureRecords) c0, c -> new ExposureRecord(c.index, c.unitPrice, -c.nativeVolume, -c.nativeValue,
+					return new Pair<>(pc0.getFirst() - pc1.getFirst(), c0);// modify((ExposureRecords) c0, c -> new ExposureRecord(c.index, c.unitPrice,
+																			// -c.nativeVolume, -c.nativeValue,
 																			// -c.mmbtuVolume, c.date));
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
 					return new Pair<>(pc0.getFirst() - pc1.getFirst(),
@@ -667,14 +704,17 @@ public class Exposures {
 				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
 					assert false;
 					throw new UnsupportedOperationException();
-					// return modify((ExposureRecords) c0, c -> new ExposureRecord(c.index, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date));
+					// return modify((ExposureRecords) c0, c -> new ExposureRecord(c.index,
+					// c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date));
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
 					final double constant = 0.01 * ((Constant) c0).getConstant();
 					return new Pair<>(0.01 * pc0.getFirst() * pc1.getFirst(), modify((ExposureRecords) c1,
 							c -> new ExposureRecord(c.index, c.unitPrice, constant * c.nativeVolume, constant * c.nativeValue, constant * c.mmbtuVolume, c.date, c.volumeUnit)));
 				} else {
-					// return merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.index, c_0.unitPrice, c_0.nativeVolume - c_1.nativeVolume,
-					// c_0.nativeValue - c_1.nativeValue, c_0.mmbtuVolume - c_1.mmbtuVolume, c_0.date));
+					// return merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new
+					// ExposureRecord(c_0.index, c_0.unitPrice, c_0.nativeVolume - c_1.nativeVolume,
+					// c_0.nativeValue - c_1.nativeValue, c_0.mmbtuVolume - c_1.mmbtuVolume,
+					// c_0.date));
 					throw new UnsupportedOperationException();
 				}
 			} else {
@@ -724,9 +764,9 @@ public class Exposures {
 			if (node.getChildren().size() == 0) {
 				throw new IllegalStateException();
 			}
-			Pair<Double, IExposureNode> best = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
+			Pair<Double, IExposureNode> best = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData, dayOfMonth);
 			for (int i = 1; i < node.getChildren().size(); ++i) {
-				final Pair<Double, IExposureNode> pc = getExposureNode(inputRecord, node.getChildren().get(i), date, lookupData);
+				final Pair<Double, IExposureNode> pc = getExposureNode(inputRecord, node.getChildren().get(i), date, lookupData, dayOfMonth);
 				if (pc.getFirst() > best.getFirst()) {
 					best = pc;
 				}
@@ -736,9 +776,9 @@ public class Exposures {
 			if (node.getChildren().size() == 0) {
 				throw new IllegalStateException();
 			}
-			Pair<Double, IExposureNode> best = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
+			Pair<Double, IExposureNode> best = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData, dayOfMonth);
 			for (int i = 1; i < node.getChildren().size(); ++i) {
-				final Pair<Double, IExposureNode> pc = getExposureNode(inputRecord, node.getChildren().get(i), date, lookupData);
+				final Pair<Double, IExposureNode> pc = getExposureNode(inputRecord, node.getChildren().get(i), date, lookupData, dayOfMonth);
 				if (pc.getFirst() < best.getFirst()) {
 					best = pc;
 				}

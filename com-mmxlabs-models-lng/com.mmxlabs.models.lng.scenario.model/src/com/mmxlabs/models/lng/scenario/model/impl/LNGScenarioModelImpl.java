@@ -8,13 +8,18 @@ package com.mmxlabs.models.lng.scenario.model.impl;
 
 import java.time.LocalDate;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -41,6 +46,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getReferenceModel <em>Reference Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAnalyticsModel <em>Analytics Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAdpModels <em>Adp Models</em>}</li>
  * </ul>
  *
  * @generated
@@ -174,6 +180,16 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected AnalyticsModel analyticsModel;
+
+	/**
+	 * The cached value of the '{@link #getAdpModels() <em>Adp Models</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdpModels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ADPModel> adpModels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -683,6 +699,18 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<ADPModel> getAdpModels() {
+		if (adpModels == null) {
+			adpModels = new EObjectContainmentEList.Resolving<ADPModel>(ADPModel.class, this, LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS);
+		}
+		return adpModels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -698,6 +726,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetUserSettings(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				return basicSetAnalyticsModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
+				return ((InternalEList<?>)getAdpModels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -734,6 +764,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				if (resolve) return getAnalyticsModel();
 				return basicGetAnalyticsModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
+				return getAdpModels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -774,6 +806,10 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				setAnalyticsModel((AnalyticsModel)newValue);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
+				getAdpModels().clear();
+				getAdpModels().addAll((Collection<? extends ADPModel>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -813,6 +849,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				setAnalyticsModel((AnalyticsModel)null);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
+				getAdpModels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -843,6 +882,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return userSettings != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				return analyticsModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
+				return adpModels != null && !adpModels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

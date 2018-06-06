@@ -4,24 +4,52 @@
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
     dynamicTemplates="true" redirection="" modelName="ADP" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
     containmentProxies="true" complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11"
-    usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
     operationReflection="true">
   <foreignModel>adp.ecore</foreignModel>
   <genPackages prefix="ADP" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
       childCreationExtenders="true" ecorePackage="adp.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="adp.ecore#//IntervalType">
+      <genEnumLiterals ecoreEnumLiteral="adp.ecore#//IntervalType/QUARTERLY"/>
+      <genEnumLiterals ecoreEnumLiteral="adp.ecore#//IntervalType/MONTHLY"/>
+      <genEnumLiterals ecoreEnumLiteral="adp.ecore#//IntervalType/WEEKLY"/>
+    </genEnums>
     <genClasses ecoreClass="adp.ecore#//ADPModel">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ADPModel/yearStart"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/purchaseContractProfiles"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/salesContractProfiles"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//ContractProfile">
+      <genTypeParameters ecoreTypeParameter="adp.ecore#//ContractProfile/T"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//ContractProfile/contract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ContractProfile/contractCode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ContractProfile/custom"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ContractProfile/enabled"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ContractProfile/totalVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ContractProfile/volumeUnit"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ContractProfile/distributionModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ContractProfile/subProfiles"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ContractProfile/constraints"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="adp.ecore#//DistributionModel">
-      <genOperations ecoreOperation="adp.ecore#//DistributionModel/generateSlots"/>
+    <genClasses ecoreClass="adp.ecore#//PurchaseContractProfile"/>
+    <genClasses ecoreClass="adp.ecore#//SalesContractProfile"/>
+    <genClasses ecoreClass="adp.ecore#//SubContractProfile">
+      <genTypeParameters ecoreTypeParameter="adp.ecore#//SubContractProfile/T"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/contractType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/totalVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/volumeUnit"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/distributionModel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/slotTemplateId"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/nominatedVessel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/shippingDays"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/customAttribs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/slots"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/constraints"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="adp.ecore#//CustomSubProfileAttributes"/>
+    <genClasses image="false" ecoreClass="adp.ecore#//DistributionModel"/>
     <genClasses ecoreClass="adp.ecore#//CargoSizeDistributionModel">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoSizeDistributionModel/cargoSize"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoSizeDistributionModel/exact"/>
@@ -29,8 +57,54 @@
     <genClasses ecoreClass="adp.ecore#//CargoNumberDistributionModel">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoNumberDistributionModel/numberOfCargoes"/>
     </genClasses>
-    <genClasses ecoreClass="adp.ecore#//SlotTemplate">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//SlotTemplate/port"/>
+    <genClasses ecoreClass="adp.ecore#//CargoByQuarterDistributionModel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoByQuarterDistributionModel/q1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoByQuarterDistributionModel/q2"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoByQuarterDistributionModel/q3"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoByQuarterDistributionModel/q4"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//CargoIntervalDistributionModel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoIntervalDistributionModel/quantity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoIntervalDistributionModel/intervalType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//CargoIntervalDistributionModel/spacing"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//PreDefinedDistributionModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//PreDefinedDistributionModel/dates"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//PreDefinedDate">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//PreDefinedDate/date"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//FlowType"/>
+    <genClasses ecoreClass="adp.ecore#//SupplyFromFlow"/>
+    <genClasses ecoreClass="adp.ecore#//DeliverToFlow"/>
+    <genClasses ecoreClass="adp.ecore#//SupplyFromProfileFlow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//SupplyFromProfileFlow/profile"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//SupplyFromProfileFlow/subProfile"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//DeliverToProfileFlow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DeliverToProfileFlow/profile"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DeliverToProfileFlow/subProfile"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//SupplyFromSpotFlow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//SupplyFromSpotFlow/market"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//DeliverToSpotFlow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DeliverToSpotFlow/market"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//ShippingOption">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//ShippingOption/vesselAssignmentType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ShippingOption/spotIndex"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//ShippingOption/vessel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ShippingOption/maxLadenIdleDays"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="adp.ecore#//ProfileConstraint"/>
+    <genClasses image="false" ecoreClass="adp.ecore#//SubProfileConstraint"/>
+    <genClasses ecoreClass="adp.ecore#//MaxCargoConstraint">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//MaxCargoConstraint/maxCargoes"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//ADPModelResult">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModelResult/extraSlots"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModelResult/scheduleModel"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

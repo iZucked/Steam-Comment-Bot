@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.adp.impl;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel;
+import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -21,6 +22,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl#getVolumePerCargo <em>Volume Per Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl#getVolumeUnit <em>Volume Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl#getQ1 <em>Q1</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl#getQ2 <em>Q2</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.CargoByQuarterDistributionModelImpl#getQ3 <em>Q3</em>}</li>
@@ -30,6 +33,46 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * @generated
  */
 public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements CargoByQuarterDistributionModel {
+	/**
+	 * The default value of the '{@link #getVolumePerCargo() <em>Volume Per Cargo</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumePerCargo()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double VOLUME_PER_CARGO_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getVolumePerCargo() <em>Volume Per Cargo</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumePerCargo()
+	 * @generated
+	 * @ordered
+	 */
+	protected double volumePerCargo = VOLUME_PER_CARGO_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LNGVolumeUnit VOLUME_UNIT_EDEFAULT = LNGVolumeUnit.M3;
+
+	/**
+	 * The cached value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected LNGVolumeUnit volumeUnit = VOLUME_UNIT_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getQ1() <em>Q1</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -134,6 +177,7 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getQ1() {
 		return q1;
 	}
@@ -143,6 +187,7 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setQ1(int newQ1) {
 		int oldQ1 = q1;
 		q1 = newQ1;
@@ -155,6 +200,7 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getQ2() {
 		return q2;
 	}
@@ -164,6 +210,7 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setQ2(int newQ2) {
 		int oldQ2 = q2;
 		q2 = newQ2;
@@ -176,6 +223,7 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getQ3() {
 		return q3;
 	}
@@ -185,6 +233,7 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setQ3(int newQ3) {
 		int oldQ3 = q3;
 		q3 = newQ3;
@@ -197,6 +246,7 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getQ4() {
 		return q4;
 	}
@@ -206,6 +256,7 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setQ4(int newQ4) {
 		int oldQ4 = q4;
 		q4 = newQ4;
@@ -218,9 +269,55 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getVolumePerCargo() {
+		return volumePerCargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumePerCargo(double newVolumePerCargo) {
+		double oldVolumePerCargo = volumePerCargo;
+		volumePerCargo = newVolumePerCargo;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_PER_CARGO, oldVolumePerCargo, volumePerCargo));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LNGVolumeUnit getVolumeUnit() {
+		return volumeUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeUnit(LNGVolumeUnit newVolumeUnit) {
+		LNGVolumeUnit oldVolumeUnit = volumeUnit;
+		volumeUnit = newVolumeUnit == null ? VOLUME_UNIT_EDEFAULT : newVolumeUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_UNIT, oldVolumeUnit, volumeUnit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+				return getVolumePerCargo();
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_UNIT:
+				return getVolumeUnit();
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q1:
 				return getQ1();
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q2:
@@ -242,6 +339,12 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+				setVolumePerCargo((Double)newValue);
+				return;
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_UNIT:
+				setVolumeUnit((LNGVolumeUnit)newValue);
+				return;
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q1:
 				setQ1((Integer)newValue);
 				return;
@@ -266,6 +369,12 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+				setVolumePerCargo(VOLUME_PER_CARGO_EDEFAULT);
+				return;
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_UNIT:
+				setVolumeUnit(VOLUME_UNIT_EDEFAULT);
+				return;
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q1:
 				setQ1(Q1_EDEFAULT);
 				return;
@@ -290,6 +399,10 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+				return volumePerCargo != VOLUME_PER_CARGO_EDEFAULT;
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_UNIT:
+				return volumeUnit != VOLUME_UNIT_EDEFAULT;
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q1:
 				return q1 != Q1_EDEFAULT;
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q2:
@@ -312,7 +425,11 @@ public class CargoByQuarterDistributionModelImpl extends EObjectImpl implements 
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (q1: ");
+		result.append(" (volumePerCargo: ");
+		result.append(volumePerCargo);
+		result.append(", volumeUnit: ");
+		result.append(volumeUnit);
+		result.append(", q1: ");
 		result.append(q1);
 		result.append(", q2: ");
 		result.append(q2);

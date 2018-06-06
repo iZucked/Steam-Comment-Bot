@@ -11,9 +11,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.BindingRule;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
 import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -43,9 +43,9 @@ public class SupplyFromProfileFlowConstraint extends AbstractModelMultiConstrain
 
 			if (flow.getProfile() != null) {
 				PurchaseContractProfile fromProfile = (PurchaseContractProfile) flow.getProfile();
-				BindingRule rule = (BindingRule) flow.eContainer();
+				SubContractProfile<?> rule = (SubContractProfile<?>) flow.eContainer();
 				if (rule != null) {
-					SalesContractProfile toProfile = (SalesContractProfile) rule.getProfile();
+					SalesContractProfile toProfile = (SalesContractProfile) rule.eContainer();
 
 					Contract purchaseContract = fromProfile.getContract();
 					Contract salesContract = toProfile.getContract();

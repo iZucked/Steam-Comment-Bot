@@ -47,6 +47,7 @@ public class ShippingOptionComponentHelper extends BaseComponentHelper {
 	 */
 	public ShippingOptionComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(ADPPackage.Literals.SUB_PROFILE_CONSTRAINT));
 	}
 	
 	/**
@@ -70,7 +71,6 @@ public class ShippingOptionComponentHelper extends BaseComponentHelper {
 		add_vesselAssignmentTypeEditor(detailComposite, topClass);
 		add_spotIndexEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
-		add_maxLadenIdleDaysEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vesselAssignmentType feature on ShippingOption
@@ -96,13 +96,5 @@ public class ShippingOptionComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SHIPPING_OPTION__VESSEL));
-	}
-	/**
-	 * Create the editor for the maxLadenIdleDays feature on ShippingOption
-	 *
-	 * @generated
-	 */
-	protected void add_maxLadenIdleDaysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SHIPPING_OPTION__MAX_LADEN_IDLE_DAYS));
 	}
 }

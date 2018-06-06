@@ -30,6 +30,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
+import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite.ChildCompositeContainer;
 
 /**
  * 
@@ -57,12 +58,14 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 			final Composite containerComposite = toolkit.createComposite(this, SWT.NONE);
 			containerComposite.setLayout(new GridLayout(2, true));
 			containerComposite.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, true));
+			ChildCompositeContainer childReferences = new ChildCompositeContainer();
+			childCompositeContainers.add(childReferences);
 
 			IDisplayComposite northEntranceComposite = null;
 			IDisplayComposite southEntranceComposite = null;
 			if (route.getRouteOption() != RouteOption.DIRECT) {
-				northEntranceComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__NORTH_ENTRANCE, route.getNorthEntrance(), "Northern Entrance");
-				southEntranceComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__SOUTH_ENTRANCE, route.getSouthEntrance(), "Southern Entrance");
+				northEntranceComposite = createChildArea(childReferences, root, route, containerComposite, PortPackage.Literals.ROUTE__NORTH_ENTRANCE, route.getNorthEntrance(), "Northern Entrance");
+				southEntranceComposite = createChildArea(childReferences, root, route, containerComposite, PortPackage.Literals.ROUTE__SOUTH_ENTRANCE, route.getSouthEntrance(), "Southern Entrance");
 			}
 
 			if (route.getRouteOption() != RouteOption.DIRECT) {
@@ -93,8 +96,9 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 			super.display(dialogContext, root, object, range, dbc);
 		}
 	}
-	
-	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, String groupName) {
+
+	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			final EObject value, String groupName) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
 			toolkit.adapt(g2);
@@ -107,9 +111,9 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);
-			childReferences.add(ref);
-			childComposites.add(sub);
-			childObjects.add(value);
+			childCompositeContainer.childReferences.add(ref);
+			childCompositeContainer.childComposites.add(sub);
+			childCompositeContainer.childObjects.add(value);
 
 			return sub;
 		}

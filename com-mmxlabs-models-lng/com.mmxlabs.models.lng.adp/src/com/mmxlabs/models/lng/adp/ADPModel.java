@@ -21,9 +21,12 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getYearStart <em>Year Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getYearEnd <em>Year End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getPurchaseContractProfiles <em>Purchase Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getBindingRules <em>Binding Rules</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getSpotMarketsProfile <em>Spot Markets Profile</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getFleetProfile <em>Fleet Profile</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getResult <em>Result</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel()
@@ -58,6 +61,32 @@ public interface ADPModel extends EObject {
 	void setYearStart(YearMonth value);
 
 	/**
+	 * Returns the value of the '<em><b>Year End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Year End</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Year End</em>' attribute.
+	 * @see #setYearEnd(YearMonth)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_YearEnd()
+	 * @model dataType="com.mmxlabs.models.datetime.YearMonth"
+	 * @generated
+	 */
+	YearMonth getYearEnd();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ADPModel#getYearEnd <em>Year End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Year End</em>' attribute.
+	 * @see #getYearEnd()
+	 * @generated
+	 */
+	void setYearEnd(YearMonth value);
+
+	/**
 	 * Returns the value of the '<em><b>Purchase Contract Profiles</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.PurchaseContractProfile}.
 	 * <!-- begin-user-doc -->
@@ -90,19 +119,81 @@ public interface ADPModel extends EObject {
 	EList<SalesContractProfile> getSalesContractProfiles();
 
 	/**
-	 * Returns the value of the '<em><b>Binding Rules</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.BindingRule}.
+	 * Returns the value of the '<em><b>Spot Markets Profile</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Binding Rules</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Spot Markets Profile</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Binding Rules</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_BindingRules()
+	 * @return the value of the '<em>Spot Markets Profile</em>' containment reference.
+	 * @see #setSpotMarketsProfile(SpotMarketsProfile)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_SpotMarketsProfile()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<BindingRule> getBindingRules();
+	SpotMarketsProfile getSpotMarketsProfile();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ADPModel#getSpotMarketsProfile <em>Spot Markets Profile</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Spot Markets Profile</em>' containment reference.
+	 * @see #getSpotMarketsProfile()
+	 * @generated
+	 */
+	void setSpotMarketsProfile(SpotMarketsProfile value);
+
+	/**
+	 * Returns the value of the '<em><b>Fleet Profile</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fleet Profile</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fleet Profile</em>' containment reference.
+	 * @see #setFleetProfile(FleetProfile)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_FleetProfile()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	FleetProfile getFleetProfile();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ADPModel#getFleetProfile <em>Fleet Profile</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fleet Profile</em>' containment reference.
+	 * @see #getFleetProfile()
+	 * @generated
+	 */
+	void setFleetProfile(FleetProfile value);
+
+	/**
+	 * Returns the value of the '<em><b>Result</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Result</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Result</em>' containment reference.
+	 * @see #setResult(ADPModelResult)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_Result()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	ADPModelResult getResult();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ADPModel#getResult <em>Result</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Result</em>' containment reference.
+	 * @see #getResult()
+	 * @generated
+	 */
+	void setResult(ADPModelResult value);
 
 } // ADPModel

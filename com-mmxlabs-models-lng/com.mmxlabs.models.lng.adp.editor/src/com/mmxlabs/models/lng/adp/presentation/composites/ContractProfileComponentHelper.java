@@ -73,8 +73,8 @@ public class ContractProfileComponentHelper extends BaseComponentHelper {
 		add_enabledEditor(detailComposite, topClass);
 		add_totalVolumeEditor(detailComposite, topClass);
 		add_volumeUnitEditor(detailComposite, topClass);
-		add_distributionModelEditor(detailComposite, topClass);
 		add_subProfilesEditor(detailComposite, topClass);
+		add_constraintsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the contract feature on ContractProfile
@@ -131,20 +131,20 @@ public class ContractProfileComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__VOLUME_UNIT));
 	}
 	/**
-	 * Create the editor for the distributionModel feature on ContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_distributionModelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__DISTRIBUTION_MODEL));
-	}
-
-	/**
 	 * Create the editor for the subProfiles feature on ContractProfile
 	 *
 	 * @generated
 	 */
 	protected void add_subProfilesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES));
+	}
+
+	/**
+	 * Create the editor for the constraints feature on ContractProfile
+	 *
+	 * @generated
+	 */
+	protected void add_constraintsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS));
 	}
 }

@@ -65,6 +65,8 @@ public class CargoIntervalDistributionModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addVolumePerCargoPropertyDescriptor(object);
+			addVolumeUnitPropertyDescriptor(object);
 			addQuantityPropertyDescriptor(object);
 			addIntervalTypePropertyDescriptor(object);
 			addSpacingPropertyDescriptor(object);
@@ -139,6 +141,50 @@ public class CargoIntervalDistributionModelItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Volume Per Cargo feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumePerCargoPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DistributionModel_volumePerCargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumePerCargo_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DistributionModel_volumeUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumeUnit_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CargoIntervalDistributionModel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -158,7 +204,7 @@ public class CargoIntervalDistributionModelItemProvider
 	@Override
 	public String getText(Object object) {
 		CargoIntervalDistributionModel cargoIntervalDistributionModel = (CargoIntervalDistributionModel)object;
-		return getString("_UI_CargoIntervalDistributionModel_type") + " " + cargoIntervalDistributionModel.getQuantity();
+		return getString("_UI_CargoIntervalDistributionModel_type") + " " + cargoIntervalDistributionModel.getVolumePerCargo();
 	}
 	
 
@@ -174,6 +220,8 @@ public class CargoIntervalDistributionModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoIntervalDistributionModel.class)) {
+			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__VOLUME_UNIT:
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__QUANTITY:
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__INTERVAL_TYPE:
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL__SPACING:

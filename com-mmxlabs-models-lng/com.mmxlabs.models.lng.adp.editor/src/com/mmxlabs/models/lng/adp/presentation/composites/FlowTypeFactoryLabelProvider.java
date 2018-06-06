@@ -8,7 +8,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 
-import com.mmxlabs.models.lng.adp.ext.IFlowTypeFactory;
+import com.mmxlabs.models.lng.adp.ext.ISubProfileConstraintFactory;
 
 public class FlowTypeFactoryLabelProvider implements ILabelProvider {
 
@@ -44,8 +44,8 @@ public class FlowTypeFactoryLabelProvider implements ILabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof IFlowTypeFactory) {
-			return ((IFlowTypeFactory) element).getName();
+		if (element instanceof ISubProfileConstraintFactory) {
+			return ((ISubProfileConstraintFactory) element).getName();
 		}
 		return null;
 	}

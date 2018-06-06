@@ -69,14 +69,13 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_nameEditor(detailComposite, topClass);
 		add_contractTypeEditor(detailComposite, topClass);
-		add_totalVolumeEditor(detailComposite, topClass);
-		add_volumeUnitEditor(detailComposite, topClass);
 		add_distributionModelEditor(detailComposite, topClass);
 		add_slotTemplateIdEditor(detailComposite, topClass);
 		add_nominatedVesselEditor(detailComposite, topClass);
 		add_shippingDaysEditor(detailComposite, topClass);
 		add_customAttribsEditor(detailComposite, topClass);
 		add_slotsEditor(detailComposite, topClass);
+		add_constraintsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the name feature on SubContractProfile
@@ -94,24 +93,6 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_contractTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONTRACT_TYPE));
-	}
-
-	/**
-	 * Create the editor for the totalVolume feature on SubContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_totalVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__TOTAL_VOLUME));
-	}
-
-	/**
-	 * Create the editor for the volumeUnit feature on SubContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_volumeUnitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__VOLUME_UNIT));
 	}
 
 	/**
@@ -147,7 +128,9 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_nominatedVesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new NominatedVesselEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL)));
+		NominatedVesselEditorWrapper editor = new NominatedVesselEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL));
+		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
@@ -168,5 +151,14 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_slotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 //		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS));
+	}
+
+	/**
+	 * Create the editor for the constraints feature on SubContractProfile
+	 *
+	 * @generated
+	 */
+	protected void add_constraintsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS));
 	}
 }

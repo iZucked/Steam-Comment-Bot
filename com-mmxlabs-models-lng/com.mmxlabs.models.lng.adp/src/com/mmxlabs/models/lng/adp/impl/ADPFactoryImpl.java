@@ -63,7 +63,9 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ADPPackage.ADP_MODEL: return createADPModel();
+			case ADPPackage.FLEET_PROFILE: return createFleetProfile();
 			case ADPPackage.CONTRACT_PROFILE: return createContractProfile();
+			case ADPPackage.SPOT_MARKETS_PROFILE: return createSpotMarketsProfile();
 			case ADPPackage.PURCHASE_CONTRACT_PROFILE: return createPurchaseContractProfile();
 			case ADPPackage.SALES_CONTRACT_PROFILE: return createSalesContractProfile();
 			case ADPPackage.SUB_CONTRACT_PROFILE: return createSubContractProfile();
@@ -71,7 +73,8 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.CARGO_NUMBER_DISTRIBUTION_MODEL: return createCargoNumberDistributionModel();
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL: return createCargoByQuarterDistributionModel();
 			case ADPPackage.CARGO_INTERVAL_DISTRIBUTION_MODEL: return createCargoIntervalDistributionModel();
-			case ADPPackage.BINDING_RULE: return createBindingRule();
+			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL: return createPreDefinedDistributionModel();
+			case ADPPackage.PRE_DEFINED_DATE: return createPreDefinedDate();
 			case ADPPackage.FLOW_TYPE: return createFlowType();
 			case ADPPackage.SUPPLY_FROM_FLOW: return createSupplyFromFlow();
 			case ADPPackage.DELIVER_TO_FLOW: return createDeliverToFlow();
@@ -79,7 +82,12 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.DELIVER_TO_PROFILE_FLOW: return createDeliverToProfileFlow();
 			case ADPPackage.SUPPLY_FROM_SPOT_FLOW: return createSupplyFromSpotFlow();
 			case ADPPackage.DELIVER_TO_SPOT_FLOW: return createDeliverToSpotFlow();
+			case ADPPackage.PROFILE_VESSEL_RESTRICTION: return createProfileVesselRestriction();
 			case ADPPackage.SHIPPING_OPTION: return createShippingOption();
+			case ADPPackage.MIN_CARGO_CONSTRAINT: return createMinCargoConstraint();
+			case ADPPackage.MAX_CARGO_CONSTRAINT: return createMaxCargoConstraint();
+			case ADPPackage.ADP_MODEL_RESULT: return createADPModelResult();
+			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: return createTargetCargoesOnVesselConstraint();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -95,6 +103,8 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 		switch (eDataType.getClassifierID()) {
 			case ADPPackage.INTERVAL_TYPE:
 				return createIntervalTypeFromString(eDataType, initialValue);
+			case ADPPackage.LNG_VOLUME_UNIT:
+				return createLNGVolumeUnitFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -110,6 +120,8 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 		switch (eDataType.getClassifierID()) {
 			case ADPPackage.INTERVAL_TYPE:
 				return convertIntervalTypeToString(eDataType, instanceValue);
+			case ADPPackage.LNG_VOLUME_UNIT:
+				return convertLNGVolumeUnitToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -131,10 +143,30 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public FleetProfile createFleetProfile() {
+		FleetProfileImpl fleetProfile = new FleetProfileImpl();
+		return fleetProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public <T extends Slot> ContractProfile<T> createContractProfile() {
 		ContractProfileImpl<T> contractProfile = new ContractProfileImpl<T>();
 		return contractProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SpotMarketsProfile createSpotMarketsProfile() {
+		SpotMarketsProfileImpl spotMarketsProfile = new SpotMarketsProfileImpl();
+		return spotMarketsProfile;
 	}
 
 	/**
@@ -186,6 +218,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public <T extends Slot> SubContractProfile<T> createSubContractProfile() {
 		SubContractProfileImpl<T> subContractProfile = new SubContractProfileImpl<T>();
 		return subContractProfile;
@@ -196,6 +229,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoByQuarterDistributionModel createCargoByQuarterDistributionModel() {
 		CargoByQuarterDistributionModelImpl cargoByQuarterDistributionModel = new CargoByQuarterDistributionModelImpl();
 		return cargoByQuarterDistributionModel;
@@ -206,6 +240,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoIntervalDistributionModel createCargoIntervalDistributionModel() {
 		CargoIntervalDistributionModelImpl cargoIntervalDistributionModel = new CargoIntervalDistributionModelImpl();
 		return cargoIntervalDistributionModel;
@@ -216,9 +251,9 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BindingRule createBindingRule() {
-		BindingRuleImpl bindingRule = new BindingRuleImpl();
-		return bindingRule;
+	public PreDefinedDistributionModel createPreDefinedDistributionModel() {
+		PreDefinedDistributionModelImpl preDefinedDistributionModel = new PreDefinedDistributionModelImpl();
+		return preDefinedDistributionModel;
 	}
 
 	/**
@@ -226,6 +261,17 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PreDefinedDate createPreDefinedDate() {
+		PreDefinedDateImpl preDefinedDate = new PreDefinedDateImpl();
+		return preDefinedDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public FlowType createFlowType() {
 		FlowTypeImpl flowType = new FlowTypeImpl();
 		return flowType;
@@ -236,6 +282,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SupplyFromFlow createSupplyFromFlow() {
 		SupplyFromFlowImpl supplyFromFlow = new SupplyFromFlowImpl();
 		return supplyFromFlow;
@@ -246,6 +293,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeliverToFlow createDeliverToFlow() {
 		DeliverToFlowImpl deliverToFlow = new DeliverToFlowImpl();
 		return deliverToFlow;
@@ -256,6 +304,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SupplyFromProfileFlow createSupplyFromProfileFlow() {
 		SupplyFromProfileFlowImpl supplyFromProfileFlow = new SupplyFromProfileFlowImpl();
 		return supplyFromProfileFlow;
@@ -266,6 +315,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeliverToProfileFlow createDeliverToProfileFlow() {
 		DeliverToProfileFlowImpl deliverToProfileFlow = new DeliverToProfileFlowImpl();
 		return deliverToProfileFlow;
@@ -276,6 +326,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SupplyFromSpotFlow createSupplyFromSpotFlow() {
 		SupplyFromSpotFlowImpl supplyFromSpotFlow = new SupplyFromSpotFlowImpl();
 		return supplyFromSpotFlow;
@@ -286,6 +337,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeliverToSpotFlow createDeliverToSpotFlow() {
 		DeliverToSpotFlowImpl deliverToSpotFlow = new DeliverToSpotFlowImpl();
 		return deliverToSpotFlow;
@@ -296,9 +348,60 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ProfileVesselRestriction createProfileVesselRestriction() {
+		ProfileVesselRestrictionImpl profileVesselRestriction = new ProfileVesselRestrictionImpl();
+		return profileVesselRestriction;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ShippingOption createShippingOption() {
 		ShippingOptionImpl shippingOption = new ShippingOptionImpl();
 		return shippingOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MinCargoConstraint createMinCargoConstraint() {
+		MinCargoConstraintImpl minCargoConstraint = new MinCargoConstraintImpl();
+		return minCargoConstraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MaxCargoConstraint createMaxCargoConstraint() {
+		MaxCargoConstraintImpl maxCargoConstraint = new MaxCargoConstraintImpl();
+		return maxCargoConstraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ADPModelResult createADPModelResult() {
+		ADPModelResultImpl adpModelResult = new ADPModelResultImpl();
+		return adpModelResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TargetCargoesOnVesselConstraint createTargetCargoesOnVesselConstraint() {
+		TargetCargoesOnVesselConstraintImpl targetCargoesOnVesselConstraint = new TargetCargoesOnVesselConstraintImpl();
+		return targetCargoesOnVesselConstraint;
 	}
 
 	/**
@@ -318,6 +421,26 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	 * @generated
 	 */
 	public String convertIntervalTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LNGVolumeUnit createLNGVolumeUnitFromString(EDataType eDataType, String initialValue) {
+		LNGVolumeUnit result = LNGVolumeUnit.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertLNGVolumeUnitToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

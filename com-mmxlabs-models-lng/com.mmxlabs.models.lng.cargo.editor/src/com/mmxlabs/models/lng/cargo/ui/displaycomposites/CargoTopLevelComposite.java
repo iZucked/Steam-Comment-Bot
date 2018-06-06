@@ -34,6 +34,7 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
+import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite.ChildCompositeContainer;
 
 /**
  * A display composite for the cargo editor; because the slots are not contained in the cargo any more we need some special-case editing behaviour.
@@ -98,9 +99,9 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		// Initialise middle composite
 		middle = toolkit.createComposite(this);
 
-		createChildComposites(root, object, eClass, middle);
+		ChildCompositeContainer childContainer = createChildComposites(root, object, eClass, middle);
 		// We know there are n slots, so n columns
-		middle.setLayout(new GridLayout(childObjects.size(), true));
+		middle.setLayout(new GridLayout(childContainer.childObjects.size(), true));
 		middle.setLayoutData(new GridData(GridData.FILL_BOTH));
 		middle.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
@@ -118,8 +119,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.display(dialogContext, root, object, range, dbc);
 		// bottomLevel.display(location, root, object, range);
 
-		final Iterator<IDisplayComposite> children = childComposites.iterator();
-		final Iterator<EObject> childObjectsItr = childObjects.iterator();
+		final Iterator<IDisplayComposite> children = childContainer.childComposites.iterator();
+		final Iterator<EObject> childObjectsItr = childContainer.childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
 			children.next().display(dialogContext, root, childObjectsItr.next(), range, dbc);
@@ -127,6 +128,9 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(1, true));
+
+		childCompositeContainers.add(childContainer);
+
 	}
 
 	@Override
@@ -149,7 +153,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	// }
 
 	@Override
-	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			final EObject value) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
 			if (value instanceof Slot) {
@@ -189,9 +194,9 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);
-			childReferences.add(ref);
-			childComposites.add(sub);
-			childObjects.add(value);
+			childCompositeContainer.childReferences.add(ref);
+			childCompositeContainer.childComposites.add(sub);
+			childCompositeContainer.childObjects.add(value);
 
 			return sub;
 		}

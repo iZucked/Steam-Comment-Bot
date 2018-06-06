@@ -18,5 +18,5 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface FlowType extends EObject {
+public interface FlowType extends SubProfileConstraint {
 } // FlowType

@@ -160,6 +160,7 @@ import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 
 import com.mmxlabs.models.lng.pricing.provider.PricingItemProviderAdapterFactory;
 
+import com.mmxlabs.models.lng.schedule.provider.ScheduleItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsItemProviderAdapterFactory;
 
 import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
@@ -669,6 +670,7 @@ public class ADPEditor
 		adapterFactory.addAdapterFactory(new MMXCoreItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PricingItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ScheduleItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new SpotMarketsItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 

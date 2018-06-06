@@ -70,6 +70,7 @@ public class ADPModelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addYearStartPropertyDescriptor(object);
+			addYearEndPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -97,6 +98,28 @@ public class ADPModelItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Year End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addYearEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ADPModel_yearEnd_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ADPModel_yearEnd_feature", "_UI_ADPModel_type"),
+				 ADPPackage.Literals.ADP_MODEL__YEAR_END,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -110,7 +133,9 @@ public class ADPModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__BINDING_RULES);
+			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SPOT_MARKETS_PROFILE);
+			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE);
+			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__RESULT);
 		}
 		return childrenFeatures;
 	}
@@ -168,11 +193,14 @@ public class ADPModelItemProvider
 
 		switch (notification.getFeatureID(ADPModel.class)) {
 			case ADPPackage.ADP_MODEL__YEAR_START:
+			case ADPPackage.ADP_MODEL__YEAR_END:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ADPPackage.ADP_MODEL__PURCHASE_CONTRACT_PROFILES:
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
-			case ADPPackage.ADP_MODEL__BINDING_RULES:
+			case ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE:
+			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
+			case ADPPackage.ADP_MODEL__RESULT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -202,8 +230,18 @@ public class ADPModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__BINDING_RULES,
-				 ADPFactory.eINSTANCE.createBindingRule()));
+				(ADPPackage.Literals.ADP_MODEL__SPOT_MARKETS_PROFILE,
+				 ADPFactory.eINSTANCE.createSpotMarketsProfile()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE,
+				 ADPFactory.eINSTANCE.createFleetProfile()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.ADP_MODEL__RESULT,
+				 ADPFactory.eINSTANCE.createADPModelResult()));
 	}
 
 	/**

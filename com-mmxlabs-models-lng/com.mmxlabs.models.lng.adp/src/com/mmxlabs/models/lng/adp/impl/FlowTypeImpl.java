@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class FlowTypeImpl extends EObjectImpl implements FlowType {
+public class FlowTypeImpl extends SubProfileConstraintImpl implements FlowType {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.BindingRule;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.DeliverToProfileFlow;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
@@ -32,9 +31,6 @@ public class SubContractProfileValueProviderFactory implements IReferenceValuePr
 		return new BaseReferenceValueProvider() {
 			@Override
 			public boolean updateOnChangeToFeature(Object changedFeature) {
-				if (changedFeature == ADPPackage.Literals.BINDING_RULE__PROFILE) {
-					return true;
-				}
 				if (changedFeature == ADPPackage.Literals.DELIVER_TO_PROFILE_FLOW__PROFILE) {
 					return true;
 				}
@@ -48,10 +44,7 @@ public class SubContractProfileValueProviderFactory implements IReferenceValuePr
 			@Override
 			public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
 
-				if (target instanceof BindingRule) {
-					BindingRule bindingRule = (BindingRule) target;
-					target = bindingRule.getProfile();
-				} else if (target instanceof DeliverToProfileFlow) {
+				if (target instanceof DeliverToProfileFlow) {
 					DeliverToProfileFlow deliverToProfileFlow = (DeliverToProfileFlow) target;
 					target = deliverToProfileFlow.getProfile();
 				} else if (target instanceof SupplyFromProfileFlow) {

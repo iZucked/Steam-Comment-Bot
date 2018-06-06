@@ -62,17 +62,9 @@ public class LoadSlotTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, dialogContext, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
-
-		createChildComposites(root, object, eClass, this);
-
 		topLevel.display(dialogContext, root, object, range, dbc);
-		final Iterator<IDisplayComposite> children = childComposites.iterator();
-		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
-		while (childObjectsItr.hasNext()) {
-			children.next().display(dialogContext, root, childObjectsItr.next(), range, dbc);
-		}
-
-		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
+		int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
+		setLayout(layoutProvider.createTopLevelLayout(root, object, numChildren + 1));
 	}
 }

@@ -29,8 +29,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.ContractProfile#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ContractProfile#getTotalVolume <em>Total Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ContractProfile#getVolumeUnit <em>Volume Unit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.ContractProfile#getDistributionModel <em>Distribution Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ContractProfile#getSubProfiles <em>Sub Profiles</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ContractProfile#getConstraints <em>Constraints</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getContractProfile()
@@ -151,12 +151,12 @@ public interface ContractProfile<T extends Slot> extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Total Volume</em>' attribute.
-	 * @see #setTotalVolume(int)
+	 * @see #setTotalVolume(double)
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getContractProfile_TotalVolume()
 	 * @model
 	 * @generated
 	 */
-	int getTotalVolume();
+	double getTotalVolume();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ContractProfile#getTotalVolume <em>Total Volume</em>}' attribute.
@@ -166,11 +166,11 @@ public interface ContractProfile<T extends Slot> extends EObject {
 	 * @see #getTotalVolume()
 	 * @generated
 	 */
-	void setTotalVolume(int value);
+	void setTotalVolume(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Volume Unit</b></em>' attribute.
-	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.VolumeUnits}.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.adp.LNGVolumeUnit}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Volume Unit</em>' attribute isn't clear,
@@ -178,54 +178,28 @@ public interface ContractProfile<T extends Slot> extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Volume Unit</em>' attribute.
-	 * @see com.mmxlabs.models.lng.types.VolumeUnits
-	 * @see #setVolumeUnit(VolumeUnits)
+	 * @see com.mmxlabs.models.lng.adp.LNGVolumeUnit
+	 * @see #setVolumeUnit(LNGVolumeUnit)
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getContractProfile_VolumeUnit()
 	 * @model
 	 * @generated
 	 */
-	VolumeUnits getVolumeUnit();
+	LNGVolumeUnit getVolumeUnit();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ContractProfile#getVolumeUnit <em>Volume Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Volume Unit</em>' attribute.
-	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @see com.mmxlabs.models.lng.adp.LNGVolumeUnit
 	 * @see #getVolumeUnit()
 	 * @generated
 	 */
-	void setVolumeUnit(VolumeUnits value);
-
-	/**
-	 * Returns the value of the '<em><b>Distribution Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Distribution Model</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Distribution Model</em>' containment reference.
-	 * @see #setDistributionModel(DistributionModel)
-	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getContractProfile_DistributionModel()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	DistributionModel getDistributionModel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ContractProfile#getDistributionModel <em>Distribution Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Distribution Model</em>' containment reference.
-	 * @see #getDistributionModel()
-	 * @generated
-	 */
-	void setDistributionModel(DistributionModel value);
+	void setVolumeUnit(LNGVolumeUnit value);
 
 	/**
 	 * Returns the value of the '<em><b>Sub Profiles</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.SubContractProfile}&lt;T>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.SubContractProfile}<code>&lt;T&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Sub Profiles</em>' containment reference list isn't clear,
@@ -238,5 +212,21 @@ public interface ContractProfile<T extends Slot> extends EObject {
 	 * @generated
 	 */
 	EList<SubContractProfile<T>> getSubProfiles();
+
+	/**
+	 * Returns the value of the '<em><b>Constraints</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.ProfileConstraint}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Constraints</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Constraints</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getContractProfile_Constraints()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<ProfileConstraint> getConstraints();
 
 } // ContractProfile

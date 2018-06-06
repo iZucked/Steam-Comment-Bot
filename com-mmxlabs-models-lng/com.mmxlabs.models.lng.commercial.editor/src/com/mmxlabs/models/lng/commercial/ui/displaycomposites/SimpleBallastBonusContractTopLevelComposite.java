@@ -68,15 +68,15 @@ public class SimpleBallastBonusContractTopLevelComposite extends DefaultTopLevel
 
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-		final Iterator<IDisplayComposite> children = childComposites.iterator();
-		final Iterator<EObject> childObjectsItr = childObjects.iterator();
-
-		while (childObjectsItr.hasNext()) {
-			EObject next = childObjectsItr.next();
-			if (!(next instanceof BallastBonusContract)) {
-				children.next().display(dialogContext, root, next, range, dbc);
-			}
-		}
+//		final Iterator<IDisplayComposite> children = childComposites.iterator();
+//		final Iterator<EObject> childObjectsItr = childObjects.iterator();
+//
+//		while (childObjectsItr.hasNext()) {
+//			EObject next = childObjectsItr.next();
+//			if (!(next instanceof BallastBonusContract)) {
+//				children.next().display(dialogContext, root, next, range, dbc);
+//			}
+//		}
 
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
 		bottomComposite.setLayout(new FillLayout());

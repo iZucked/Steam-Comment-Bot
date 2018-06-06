@@ -65,30 +65,53 @@ public class CargoSizeDistributionModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addCargoSizePropertyDescriptor(object);
+			addVolumePerCargoPropertyDescriptor(object);
+			addVolumeUnitPropertyDescriptor(object);
 			addExactPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Cargo Size feature.
+	 * This adds a property descriptor for the Volume Per Cargo feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCargoSizePropertyDescriptor(Object object) {
+	protected void addVolumePerCargoPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CargoSizeDistributionModel_cargoSize_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoSizeDistributionModel_cargoSize_feature", "_UI_CargoSizeDistributionModel_type"),
-				 ADPPackage.Literals.CARGO_SIZE_DISTRIBUTION_MODEL__CARGO_SIZE,
+				 getString("_UI_DistributionModel_volumePerCargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumePerCargo_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DistributionModel_volumeUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumeUnit_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -135,7 +158,7 @@ public class CargoSizeDistributionModelItemProvider
 	@Override
 	public String getText(Object object) {
 		CargoSizeDistributionModel cargoSizeDistributionModel = (CargoSizeDistributionModel)object;
-		return getString("_UI_CargoSizeDistributionModel_type") + " " + cargoSizeDistributionModel.getCargoSize();
+		return getString("_UI_CargoSizeDistributionModel_type") + " " + cargoSizeDistributionModel.getVolumePerCargo();
 	}
 	
 
@@ -151,7 +174,8 @@ public class CargoSizeDistributionModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoSizeDistributionModel.class)) {
-			case ADPPackage.CARGO_SIZE_DISTRIBUTION_MODEL__CARGO_SIZE:
+			case ADPPackage.CARGO_SIZE_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+			case ADPPackage.CARGO_SIZE_DISTRIBUTION_MODEL__VOLUME_UNIT:
 			case ADPPackage.CARGO_SIZE_DISTRIBUTION_MODEL__EXACT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

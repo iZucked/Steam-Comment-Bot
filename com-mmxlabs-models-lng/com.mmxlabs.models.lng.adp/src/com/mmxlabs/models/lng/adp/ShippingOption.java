@@ -24,14 +24,13 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.ShippingOption#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ShippingOption#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ShippingOption#getVessel <em>Vessel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.ShippingOption#getMaxLadenIdleDays <em>Max Laden Idle Days</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getShippingOption()
  * @model
  * @generated
  */
-public interface ShippingOption extends EObject {
+public interface ShippingOption extends SubProfileConstraint {
 	/**
 	 * Returns the value of the '<em><b>Vessel Assignment Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -109,31 +108,5 @@ public interface ShippingOption extends EObject {
 	 * @generated
 	 */
 	void setVessel(Vessel value);
-
-	/**
-	 * Returns the value of the '<em><b>Max Laden Idle Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Max Laden Idle Days</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Max Laden Idle Days</em>' attribute.
-	 * @see #setMaxLadenIdleDays(int)
-	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getShippingOption_MaxLadenIdleDays()
-	 * @model
-	 * @generated
-	 */
-	int getMaxLadenIdleDays();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ShippingOption#getMaxLadenIdleDays <em>Max Laden Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Max Laden Idle Days</em>' attribute.
-	 * @see #getMaxLadenIdleDays()
-	 * @generated
-	 */
-	void setMaxLadenIdleDays(int value);
 
 } // ShippingOption

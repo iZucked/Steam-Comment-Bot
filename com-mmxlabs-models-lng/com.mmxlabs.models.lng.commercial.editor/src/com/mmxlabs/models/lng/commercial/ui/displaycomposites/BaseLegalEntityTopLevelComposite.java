@@ -30,6 +30,7 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
+import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite.ChildCompositeContainer;
 
 public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 
@@ -76,20 +77,14 @@ public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 		// Initialise middle composite
 		middle = toolkit.createComposite(this);
 
-		createChildComposites(root, object, eClass, middle);
 		// We know there are n slots, so n columns
-		middle.setLayout(new GridLayout(childObjects.size(), true));
 		middle.setLayoutData(new GridData(GridData.FILL_BOTH));
 		middle.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-		final Iterator<IDisplayComposite> children = childComposites.iterator();
-		final Iterator<EObject> childObjectsItr = childObjects.iterator();
-
-		while (childObjectsItr.hasNext()) {
-			children.next().display(dialogContext, root, childObjectsItr.next(), range, dbc);
-		}
+		int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, middle);
+		middle.setLayout(new GridLayout(numChildren, true));
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(1, true));
@@ -100,37 +95,20 @@ public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 		return super.shouldDisplay(ref) || ref == CommercialPackage.eINSTANCE.getBaseLegalEntity_ShippingBook() || ref == CommercialPackage.eINSTANCE.getBaseLegalEntity_TradingBook();
 	}
 
-	@Override
-	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
-		if (value != null) {
-			final Group g2 = new Group(parent, SWT.NONE);
-			if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK) {
-				g2.setText("Shipping Book");
-			} else if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
-				g2.setText("Trading Book");
-			} else if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
-				g2.setText("Upstream Book");
-			} else {
-				// Unmangle the feature name (to avoid forking this class for client specific books - See FB)
-				final String groupName = EditorUtils.unmangle(ref.getName());
-				g2.setText(groupName);
-			}
-			g2.setLayout(new FillLayout());
-			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
-			g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-			toolkit.adapt(g2);
-
-			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(),
-					dialogContext, toolkit);
-
-			sub.setCommandHandler(commandHandler);
-			sub.setEditorWrapper(editorWrapper);
-			childReferences.add(ref);
-			childComposites.add(sub);
-			childObjects.add(value);
-			
-			return sub;
+	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			final EObject value) {
+		final String label;
+		if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK) {
+			label = "Shipping Book";
+		} else if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+			label = "Trading Book";
+		} else if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
+			label = "Upstream Book";
+		} else {
+			// Unmangle the feature name (to avoid forking this class for client specific books - See FB)
+			label = EditorUtils.unmangle(ref.getName());
 		}
-		return null;
+		return createChildArea(childCompositeContainer, root, object, parent, ref, label, value);
 	}
+
 }

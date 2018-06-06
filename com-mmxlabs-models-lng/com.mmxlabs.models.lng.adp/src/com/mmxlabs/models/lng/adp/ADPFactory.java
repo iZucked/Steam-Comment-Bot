@@ -36,6 +36,15 @@ public interface ADPFactory extends EFactory {
 	ADPModel createADPModel();
 
 	/**
+	 * Returns a new object of class '<em>Fleet Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fleet Profile</em>'.
+	 * @generated
+	 */
+	FleetProfile createFleetProfile();
+
+	/**
 	 * Returns a new object of class '<em>Contract Profile</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -43,6 +52,15 @@ public interface ADPFactory extends EFactory {
 	 * @generated
 	 */
 	<T extends Slot> ContractProfile<T> createContractProfile();
+
+	/**
+	 * Returns a new object of class '<em>Spot Markets Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Spot Markets Profile</em>'.
+	 * @generated
+	 */
+	SpotMarketsProfile createSpotMarketsProfile();
 
 	/**
 	 * Returns a new object of class '<em>Cargo Size Distribution Model</em>'.
@@ -108,13 +126,22 @@ public interface ADPFactory extends EFactory {
 	CargoIntervalDistributionModel createCargoIntervalDistributionModel();
 
 	/**
-	 * Returns a new object of class '<em>Binding Rule</em>'.
+	 * Returns a new object of class '<em>Pre Defined Distribution Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Binding Rule</em>'.
+	 * @return a new object of class '<em>Pre Defined Distribution Model</em>'.
 	 * @generated
 	 */
-	BindingRule createBindingRule();
+	PreDefinedDistributionModel createPreDefinedDistributionModel();
+
+	/**
+	 * Returns a new object of class '<em>Pre Defined Date</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Pre Defined Date</em>'.
+	 * @generated
+	 */
+	PreDefinedDate createPreDefinedDate();
 
 	/**
 	 * Returns a new object of class '<em>Flow Type</em>'.
@@ -180,6 +207,15 @@ public interface ADPFactory extends EFactory {
 	DeliverToSpotFlow createDeliverToSpotFlow();
 
 	/**
+	 * Returns a new object of class '<em>Profile Vessel Restriction</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Profile Vessel Restriction</em>'.
+	 * @generated
+	 */
+	ProfileVesselRestriction createProfileVesselRestriction();
+
+	/**
 	 * Returns a new object of class '<em>Shipping Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -187,6 +223,42 @@ public interface ADPFactory extends EFactory {
 	 * @generated
 	 */
 	ShippingOption createShippingOption();
+
+	/**
+	 * Returns a new object of class '<em>Min Cargo Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Min Cargo Constraint</em>'.
+	 * @generated
+	 */
+	MinCargoConstraint createMinCargoConstraint();
+
+	/**
+	 * Returns a new object of class '<em>Max Cargo Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Max Cargo Constraint</em>'.
+	 * @generated
+	 */
+	MaxCargoConstraint createMaxCargoConstraint();
+
+	/**
+	 * Returns a new object of class '<em>Model Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Model Result</em>'.
+	 * @generated
+	 */
+	ADPModelResult createADPModelResult();
+
+	/**
+	 * Returns a new object of class '<em>Target Cargoes On Vessel Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Target Cargoes On Vessel Constraint</em>'.
+	 * @generated
+	 */
+	TargetCargoesOnVesselConstraint createTargetCargoesOnVesselConstraint();
 
 	/**
 	 * Returns the package supported by this factory.

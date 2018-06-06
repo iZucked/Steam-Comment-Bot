@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 
 import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
 
+import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
 import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
 
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
@@ -67,6 +68,7 @@ public final class ADPEditorPlugin extends EMFPlugin {
 				MmxcoreEditPlugin.INSTANCE,
 				PortEditPlugin.INSTANCE,
 				PricingEditPlugin.INSTANCE,
+				ScheduleEditPlugin.INSTANCE,
 				SpotMarketsEditPlugin.INSTANCE,
 			});
 	}

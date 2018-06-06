@@ -1036,20 +1036,19 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		if (SecurityUtils.getSubject().isPermitted("features:report-counterparty")) {
-			addTradesColumn(dischargeColumns, "Counterparty",
-					new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(pkg.getSlot_Counterparty(), editingDomain) {
+			addTradesColumn(dischargeColumns, "Counterparty", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(pkg.getSlot_Counterparty(), editingDomain) {
 
-						@Override
-						protected String renderSetValue(final Object container, final Object setValue) {
-							return setValue == null ? "" : setValue.toString();
-						}
-						
-						@Override
-						public boolean isValueUnset(Object object) {
-							return false;
-						}
+				@Override
+				protected String renderSetValue(final Object container, final Object setValue) {
+					return setValue == null ? "" : setValue.toString();
+				}
 
-					}), new RowDataEMFPath(false, Type.DISCHARGE));
+				@Override
+				public boolean isValueUnset(Object object) {
+					return false;
+				}
+
+			}), new RowDataEMFPath(false, Type.DISCHARGE));
 		}
 		addTradesColumn(dischargeColumns, "Price",
 				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain) {
@@ -1379,27 +1378,27 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 									final Point mousePoint = grid.toControl(cursorLocation);
 									if (assignmentColumn.getColumn() == grid.getColumn(mousePoint)) {
-
-										final Iterator<?> itr = structuredSelection.iterator();
-										final Object obj = itr.next();
-										final EObject target = null;
-										if (obj instanceof RowData) {
-											final RowData rd = (RowData) obj;
-											if (rd.cargo != null && rd.cargo.getCargoType() == CargoType.FLEET) {
-												helper.clearActions();
-												assignToHelper.createAssignmentMenus(helper, rd.cargo);
-												helper.open();
-											} else if (rd.loadSlot != null && rd.loadSlot.isDESPurchase()) {
-												helper.clearActions();
-												assignToHelper.createAssignmentMenus(helper, rd.loadSlot);
-												helper.open();
-											} else if (rd.dischargeSlot != null && rd.dischargeSlot.isFOBSale()) {
-												helper.clearActions();
-												assignToHelper.createAssignmentMenus(helper, rd.dischargeSlot);
-												helper.open();
+										if (scenarioViewer.isLocked() == false) {
+											final Iterator<?> itr = structuredSelection.iterator();
+											final Object obj = itr.next();
+											final EObject target = null;
+											if (obj instanceof RowData) {
+												final RowData rd = (RowData) obj;
+												if (rd.cargo != null && rd.cargo.getCargoType() == CargoType.FLEET) {
+													helper.clearActions();
+													assignToHelper.createAssignmentMenus(helper, rd.cargo);
+													helper.open();
+												} else if (rd.loadSlot != null && rd.loadSlot.isDESPurchase()) {
+													helper.clearActions();
+													assignToHelper.createAssignmentMenus(helper, rd.loadSlot);
+													helper.open();
+												} else if (rd.dischargeSlot != null && rd.dischargeSlot.isFOBSale()) {
+													helper.clearActions();
+													assignToHelper.createAssignmentMenus(helper, rd.dischargeSlot);
+													helper.open();
+												}
 											}
 										}
-
 										return;
 									}
 								}

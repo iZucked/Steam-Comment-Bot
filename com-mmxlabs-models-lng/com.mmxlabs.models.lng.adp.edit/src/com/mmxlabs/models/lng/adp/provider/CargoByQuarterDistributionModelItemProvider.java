@@ -65,6 +65,8 @@ public class CargoByQuarterDistributionModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addVolumePerCargoPropertyDescriptor(object);
+			addVolumeUnitPropertyDescriptor(object);
 			addQ1PropertyDescriptor(object);
 			addQ2PropertyDescriptor(object);
 			addQ3PropertyDescriptor(object);
@@ -162,6 +164,50 @@ public class CargoByQuarterDistributionModelItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Volume Per Cargo feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumePerCargoPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DistributionModel_volumePerCargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumePerCargo_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DistributionModel_volumeUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumeUnit_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CargoByQuarterDistributionModel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -181,7 +227,7 @@ public class CargoByQuarterDistributionModelItemProvider
 	@Override
 	public String getText(Object object) {
 		CargoByQuarterDistributionModel cargoByQuarterDistributionModel = (CargoByQuarterDistributionModel)object;
-		return getString("_UI_CargoByQuarterDistributionModel_type") + " " + cargoByQuarterDistributionModel.getQ1();
+		return getString("_UI_CargoByQuarterDistributionModel_type") + " " + cargoByQuarterDistributionModel.getVolumePerCargo();
 	}
 	
 
@@ -197,6 +243,8 @@ public class CargoByQuarterDistributionModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoByQuarterDistributionModel.class)) {
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__VOLUME_UNIT:
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q1:
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q2:
 			case ADPPackage.CARGO_BY_QUARTER_DISTRIBUTION_MODEL__Q3:
