@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -20,8 +22,11 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -43,17 +48,19 @@ import com.mmxlabs.models.ui.editors.util.EditorUtils;
  */
 public class DefaultTopLevelComposite extends Composite implements IDisplayComposite {
 
+	public static class ChildCompositeContainer {
+		public List<EReference> childReferences = new LinkedList<>();
+		public List<IDisplayComposite> childComposites = new LinkedList<>();
+		public List<EObject> childObjects = new LinkedList<>();
+	}
+
 	/**
 	 * Adapter factory instance. This contains all factories registered in the global registry.
 	 */
 	protected final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	protected IDisplayComposite topLevel = null;
-	protected List<EReference> childReferences = new LinkedList<EReference>();
-	protected List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
-	/**
-	 */
-	protected List<EObject> childObjects = new LinkedList<EObject>();
+	protected List<ChildCompositeContainer> childCompositeContainers = new LinkedList<>();
 	protected ICommandHandler commandHandler;
 	protected IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 	protected IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
@@ -82,17 +89,33 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
-		createChildComposites(root, object, eClass, this);
-
 		topLevel.display(dialogContext, root, object, range, dbc);
-		final Iterator<IDisplayComposite> children = childComposites.iterator();
-		final Iterator<EObject> childObjectsItr = childObjects.iterator();
+
+		int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
+		setLayout(layoutProvider.createTopLevelLayout(root, object, numChildren + 1));
+	}
+
+	protected int createDefaultChildCompsiteSection(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range,
+			final EMFDataBindingContext dbc, final EClass eClass, Composite parent) {
+		ChildCompositeContainer childContainer = createChildComposites(root, object, eClass, parent);
+
+		final Iterator<IDisplayComposite> children = childContainer.childComposites.iterator();
+		final Iterator<EObject> childObjectsItr = childContainer.childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			children.next().display(dialogContext, root, childObjectsItr.next(), range, dbc);
+			IDisplayComposite next = children.next();
+			GridData gridData = (GridData) next.getComposite().getLayoutData();
+			if (gridData == null) {
+				gridData = GridDataFactory.swtDefaults().create();
+			}
+			gridData.verticalAlignment = GridData.BEGINNING;
+			next.getComposite().setLayoutData(gridData);
+
+			next.display(dialogContext, root, childObjectsItr.next(), range, dbc);
 		}
 
-		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
+		childCompositeContainers.add(childContainer);
+		return childContainer.childComposites.size();
 	}
 
 	/**
@@ -111,23 +134,32 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	 * @param parent
 	 *            The GUI component to add sub-components to
 	 */
-	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
+	protected ChildCompositeContainer createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
+		ChildCompositeContainer childReferences = new ChildCompositeContainer();
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
 				if (ref.isMany()) {
 					final List values = (List) object.eGet(ref);
 					for (final Object o : values) {
 						if (o instanceof EObject) {
-							createChildArea(root, object, parent, ref, (EObject) o);
+							createChildArea(childReferences, root, object, parent, ref, (EObject) o);
 						}
 					}
 				} else {
 					final EObject value = (EObject) object.eGet(ref);
 
-					createChildArea(root, object, parent, ref, value);
+					createChildArea(childReferences, root, object, parent, ref, value);
 				}
 			}
 		}
+		return childReferences;
+	}
+
+	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			final EObject value) {
+		String label = EditorUtils.unmangle(ref.getName());
+		return createChildArea(childCompositeContainer, root, object, parent, ref, label, value);
+
 	}
 
 	/**
@@ -149,45 +181,67 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	 *            The object's sub-component value (which may be one of many, if the field is a list)
 	 * @return
 	 */
-	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			String groupLabel, final EObject value) {
+		BiFunction<EObject, Composite, IDisplayComposite> factory = (v, g) -> Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(v.eClass())
+				.createSublevelComposite(g, v.eClass(), dialogContext, toolkit);
+		return createChildArea(childCompositeContainer, root, object, parent, ref, groupLabel, value, factory, null);
+	}
+
+	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			String groupLabel, final EObject value, Consumer<Composite> compositeAction) {
+		BiFunction<EObject, Composite, IDisplayComposite> factory = (v, g) -> Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(v.eClass())
+				.createSublevelComposite(g, v.eClass(), dialogContext, toolkit);
+		return createChildArea(childCompositeContainer, root, object, parent, ref, groupLabel, value, factory, compositeAction);
+
+	}
+
+	protected IDisplayComposite createChildArea(ChildCompositeContainer childCompositeContainer, final MMXRootObject root, final EObject object, final Composite parent, final EReference ref,
+			String groupLabel, final EObject value, BiFunction<EObject, Composite, IDisplayComposite> factory, Consumer<Composite> compositeAction) {
 		if (value != null) {
-			final Group g2 = new Group(parent, SWT.NONE);
-			toolkit.adapt(g2);
-			g2.setText(EditorUtils.unmangle(ref.getName()));
-			g2.setLayout(new FillLayout());
-			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
+			Composite p = parent;
+			if (groupLabel != null) {
+				final Group g2 = new Group(parent, SWT.NONE);
+				toolkit.adapt(g2);
+				g2.setText(groupLabel);
+				g2.setLayout(new GridLayout(1, true));
+				g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
 
-			// Tooltips
-			if (object != null) {
-				// Set to blank by default - and replace below if the feature is
-				// found
-				String toolTip = "";
-				// This will fetch the property source of the input object
-				final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY.adapt(object, IItemPropertySource.class);
+				// Tooltips
+				if (object != null) {
+					// Set to blank by default - and replace below if the feature is
+					// found
+					String toolTip = "";
+					// This will fetch the property source of the input object
+					final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY.adapt(object, IItemPropertySource.class);
 
-				// Iterate through the property descriptors to find a matching
-				// descriptor for the feature
-				for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(object)) {
+					// Iterate through the property descriptors to find a matching
+					// descriptor for the feature
+					for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(object)) {
 
-					Object feature = descriptor.getFeature(object);
-					if (ref.equals(feature)) {
-						// Found match
-						toolTip = descriptor.getDescription(value).replace("{0}", EditorUtils.unmangle(object.eClass().getName()).toLowerCase());
-						break;
+						Object feature = descriptor.getFeature(object);
+						if (ref.equals(feature)) {
+							// Found match
+							toolTip = descriptor.getDescription(value).replace("{0}", EditorUtils.unmangle(object.eClass().getName()).toLowerCase());
+							break;
+						}
 					}
-				}
 
-				g2.setToolTipText(toolTip);
+					g2.setToolTipText(toolTip);
+				}
+				p = g2;
 			}
 
-			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(),
-					dialogContext, toolkit);
-
+			final IDisplayComposite sub = factory.apply(value, p);
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);
-			childReferences.add(ref);
-			childComposites.add(sub);
-			childObjects.add(value);
+			childCompositeContainer.childReferences.add(ref);
+			childCompositeContainer.childComposites.add(sub);
+			childCompositeContainer.childObjects.add(value);
+
+			if (compositeAction != null) {
+				compositeAction.accept(p);
+			}
 
 			return sub;
 		}
@@ -213,18 +267,23 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		if (topLevel != null) {
 			topLevel.displayValidationStatus(status);
 		}
-		for (final IDisplayComposite child : childComposites) {
-			child.displayValidationStatus(status);
+		for (ChildCompositeContainer childContainer : childCompositeContainers) {
+			for (final IDisplayComposite child : childContainer.childComposites) {
+				child.displayValidationStatus(status);
+			}
 		}
 	}
 
 	@Override
 	public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
 		this.editorWrapper = wrapper;
-		if (topLevel != null)
+		if (topLevel != null) {
 			topLevel.setEditorWrapper(editorWrapper);
-		for (final IDisplayComposite child : childComposites) {
-			child.setEditorWrapper(editorWrapper);
+		}
+		for (ChildCompositeContainer childContainer : childCompositeContainers) {
+			for (final IDisplayComposite child : childContainer.childComposites) {
+				child.setEditorWrapper(editorWrapper);
+			}
 		}
 	}
 
@@ -243,8 +302,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		if (topLevel != null) {
 			topLevel.checkVisibility(context);
 		}
-		for (final IDisplayComposite child : childComposites) {
-			changed |= child.checkVisibility(context);
+		for (ChildCompositeContainer childContainer : childCompositeContainers) {
+			for (final IDisplayComposite child : childContainer.childComposites) {
+				changed |= child.checkVisibility(context);
+			}
 		}
 		return changed;
 	}

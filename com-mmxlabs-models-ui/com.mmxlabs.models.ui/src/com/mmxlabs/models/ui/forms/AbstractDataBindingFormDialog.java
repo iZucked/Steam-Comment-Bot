@@ -152,7 +152,9 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 		observablesManager.addObservable(aggregateStatus);
 
 		// Set initial state
-		RunnerHelper.asyncExec(() -> handleStateChange(aggregateStatus.getValue(), dbc));
+		if (getContents() != null && !getContents().isDisposed()) {
+			RunnerHelper.runNowOrAsync(() -> handleStateChange(aggregateStatus.getValue(), dbc));
+		}
 	}
 
 	/**

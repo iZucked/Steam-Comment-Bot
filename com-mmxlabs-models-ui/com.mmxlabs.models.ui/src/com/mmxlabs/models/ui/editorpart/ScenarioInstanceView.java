@@ -67,7 +67,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 		@Override
 		public void lockStateChanged(@NonNull ModelRecord modelRecord, boolean writeLocked) {
-			RunnerHelper.asyncExec(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
+			RunnerHelper.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
 		};
 	};
 	private IPartListener partListener;

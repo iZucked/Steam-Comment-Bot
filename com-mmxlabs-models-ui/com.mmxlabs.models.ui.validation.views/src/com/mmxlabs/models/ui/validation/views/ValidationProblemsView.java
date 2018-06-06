@@ -388,11 +388,8 @@ public class ValidationProblemsView extends ViewPart {
 	}
 
 	private void refreshViewer() {
-		RunnerHelper.asyncExec(() -> {
+		RunnerHelper.runNowOrAsync(() -> {
 			if (!viewer.getControl().isDisposed()) {
-
-				// viewer.refresh();
-				// viewer.expandAll();
 				viewer.setInput(null);
 				viewer.setInput(statusMap);
 			}

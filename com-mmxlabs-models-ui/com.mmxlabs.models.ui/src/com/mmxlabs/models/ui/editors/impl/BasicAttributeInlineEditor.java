@@ -48,6 +48,7 @@ import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * 
@@ -240,8 +241,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 				updateDisplay(getValue());
 				currentlySettingValue = false;
 			}
+
 		};
-		Display.getDefault().asyncExec(runnable);
+		RunnerHelper.runNowOrAsync(runnable);
 	}
 
 	/**
@@ -316,6 +318,10 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	@Override
 	public void processValidation(final IStatus status) {
+		if (validationDecoration.getControl().isDisposed()) {
+			return;
+		}
+		
 		if (status.isOK()) {
 			// No problems, so hide decoration
 			if (validationDecoration != null) {

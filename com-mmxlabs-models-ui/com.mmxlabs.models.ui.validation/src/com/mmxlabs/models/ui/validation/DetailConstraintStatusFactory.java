@@ -33,19 +33,21 @@ public class DetailConstraintStatusFactory {
 	private @NonNull String message = "";
 	private @Nullable String name;
 	private @Nullable String prefix;
+	private @Nullable Object tag;
 
 	private DetailConstraintStatusFactory() {
 
 	}
 
 	/**
-	 * Create new {@link DetailConstraintStatusFactory} with the same name details. Useful in a validation constraint with multiple conditions, we can avoid duplicating the name component.
+	 * Create new {@link DetailConstraintStatusFactory} with the same name and tag details. Useful in a validation constraint with multiple conditions, we can avoid duplicating the name component.
 	 * 
 	 * @return
 	 */
 	public DetailConstraintStatusFactory copyName() {
 		final DetailConstraintStatusFactory f = new DetailConstraintStatusFactory();
 		f.withName(this.name);
+		f.withTag(this.tag);
 		return f;
 	}
 
@@ -91,8 +93,8 @@ public class DetailConstraintStatusFactory {
 		return this;
 	}
 
-	public DetailConstraintStatusFactory withObjectAndFeatures(Pair<EObject, EStructuralFeature>... extraFeatures) {
-		for (Pair<EObject, EStructuralFeature> f : extraFeatures) {
+	public DetailConstraintStatusFactory withObjectAndFeatures(final Pair<EObject, EStructuralFeature>... extraFeatures) {
+		for (final Pair<EObject, EStructuralFeature> f : extraFeatures) {
 			this.features.add(f);
 		}
 
@@ -126,6 +128,10 @@ public class DetailConstraintStatusFactory {
 		}
 		decorator.setBaseMessage(message);
 
+		if (tag != null) {
+			decorator.setTag(tag);
+		}
+
 		return decorator;
 	}
 
@@ -147,5 +153,11 @@ public class DetailConstraintStatusFactory {
 			}
 		}
 		return defaultName;
+	}
+
+	public DetailConstraintStatusFactory withTag(final Object tag) {
+		this.tag = tag;
+
+		return this;
 	}
 }

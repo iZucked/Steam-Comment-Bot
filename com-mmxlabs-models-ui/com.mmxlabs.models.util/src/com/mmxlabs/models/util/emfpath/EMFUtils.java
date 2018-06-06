@@ -349,7 +349,7 @@ public class EMFUtils {
 
 		final int uncontainedElementCount = referredToElements.size();
 
-		if (false && uncontainedElementCount > 0) {
+		if (true && uncontainedElementCount > 0) {
 			// For debugging.
 			final Map<EObject, Collection<Setting>> findAll = EcoreUtil.UsageCrossReferencer.findAll(referredToElements, root);
 			for (final EObject obj : referredToElements) {

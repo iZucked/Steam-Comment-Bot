@@ -40,7 +40,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
@@ -219,6 +218,10 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
 		return addColumn(columnName, null, renderer, manipulator, path);
+	}
+
+	public <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTypicalColumn(final String columnName, GridColumnGroup group, final T manipulatorAndRenderer, final ETypedElement... path) {
+		return this.addColumn(columnName, group, manipulatorAndRenderer, manipulatorAndRenderer, new EMFPath(true, path));
 	}
 
 	public GridViewerColumn addColumn(final String columnName, GridColumnGroup group, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
@@ -441,7 +444,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 						if (isAutoResizeable()) {
 							if (oldInput == null) {
-								Display.getDefault().asyncExec(new Runnable() {
+								RunnerHelper.runNowOrAsync(new Runnable() {
 									@Override
 									public void run() {
 										if (!viewer.getControl().isDisposed()) {

@@ -36,6 +36,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	private final Map<EObject, Collection<EStructuralFeature>> objectMap = new HashMap<EObject, Collection<EStructuralFeature>>();
 	private @Nullable String name;
 	private @Nullable String baseMessage;
+	private @Nullable Object tag;
 
 	public DetailConstraintStatusDecorator(final IConstraintStatus status) {
 		this(status, status.getSeverity());
@@ -147,5 +148,18 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 			return getMessage();
 		}
 		return baseMessage;
+	}
+
+	public void setTag(@Nullable Object tag) {
+		this.tag = tag;
+	}
+
+	/**
+	 * An arbitrary object tag to "classify" validation messages for types which can be located in multiple places.
+	 * 
+	 * @return
+	 */
+	public @Nullable Object getTag() {
+		return tag;
 	}
 }
