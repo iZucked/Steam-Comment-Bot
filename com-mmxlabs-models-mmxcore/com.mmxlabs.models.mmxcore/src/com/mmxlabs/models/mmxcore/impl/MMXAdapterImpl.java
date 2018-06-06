@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -17,36 +18,45 @@ import com.mmxlabs.models.mmxcore.IMMXAdapter;
 
 public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter {
 	private List<Notification> missedNotifications = new LinkedList<Notification>();
-	
+
 	/**
 	 * @since 2.2
 	 */
 	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
-	
+
 	public MMXAdapterImpl() {
 	}
-	
+
 	@Override
 	public void notifyChanged(final Notification notification) {
-		if (ignoredFeatures.contains(notification.getFeature())) return;
-		if (enabled) reallyNotifyChanged(notification);
-		else missedNotifications.add(notification);
+		if (ignoredFeatures.contains(notification.getFeature())) {
+			return;
+		}
+		if (enabled) {
+			reallyNotifyChanged(notification);
+		} else {
+			synchronized (missedNotifications) {
+				missedNotifications.add(notification);
+			}
+		}
 	}
-	
+
 	public abstract void reallyNotifyChanged(final Notification notification);
-	
-	
+
 	/**
 	 * @since 2.2
 	 */
 	protected void missedNotifications(final List<Notification> missed) {
-		
+
 	}
-	
+
 	boolean enabled = true;
+
 	@Override
 	public void disable() {
-		missedNotifications.clear();
+		synchronized (missedNotifications) {
+			missedNotifications.clear();
+		}
 		enabled = false;
 	}
 
@@ -54,14 +64,24 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	public void enable() {
 		enable(false);
 	}
-	
+
 	/**
 	 * @since 2.2
 	 */
 	public void enable(final boolean skip) {
-		if (missedNotifications.isEmpty() == false) {
-			if (!skip) missedNotifications(Collections.unmodifiableList(missedNotifications));
+		final List<Notification> copy;
+		synchronized (missedNotifications) {
+			if (!skip) {
+				copy = new ArrayList<>(missedNotifications);
+			} else {
+				copy = Collections.emptyList();
+			}
 			missedNotifications.clear();
+		}
+		if (copy.isEmpty() == false) {
+			if (!skip) {
+				missedNotifications(copy);
+			}
 		}
 		enabled = true;
 	}
