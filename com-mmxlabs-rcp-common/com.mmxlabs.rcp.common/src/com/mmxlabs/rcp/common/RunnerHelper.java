@@ -131,9 +131,9 @@ public final class RunnerHelper {
 		display.asyncExec(() -> consumer.accept(display));
 		return true;
 	}
-	
+
 	public static boolean syncExec(@NonNull final Consumer<@NonNull Display> consumer) {
-		
+
 		final Display display = getWorkbenchDisplay();
 		if (display == null) {
 			return false;
@@ -148,5 +148,26 @@ public final class RunnerHelper {
 		} else {
 			return asyncExec(runnable);
 		}
+	}
+
+	/**
+	 * Run now if already in the display thread, otherwise run async
+	 * 
+	 * @param runnable
+	 * @param syncExec
+	 * @return
+	 */
+	public static boolean runNowOrAsync(@NonNull final Runnable runnable) {
+		final Display display = getWorkbenchDisplay();
+		if (display == null) {
+			return false;
+		}
+
+		if (display.getThread() == Thread.currentThread()) {
+			runnable.run();
+		} else {
+			display.asyncExec(runnable);
+		}
+		return true;
 	}
 }
