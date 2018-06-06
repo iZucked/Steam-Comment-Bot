@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 
 public class FunctionConstructor implements IExpression<ISeries> {
@@ -44,6 +46,11 @@ public class FunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public @NonNull ISeries evaluate() {
+		return construct();
+	}
+
+	@Override
+	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
 		return construct();
 	}
 }
