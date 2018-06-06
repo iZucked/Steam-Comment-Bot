@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Record class for holding information on the sequences in a Schedule. Provides the following fields:
@@ -52,11 +53,11 @@ public class ScheduleSequenceData {
 	public IScenarioDataProvider scenarioDataProvider;
 
 	/** Extracts the relevant information from the model */
-	public ScheduleSequenceData(final IScenarioDataProvider scenarioDataProvider, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+	public ScheduleSequenceData(final ScenarioResult scenarioResult, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		this.scenarioDataProvider = scenarioDataProvider;
-		this.model = scenarioDataProvider == null ? null : scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		this.model = scenarioResult == null ? null : scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		this.verticalReportVisualiser = verticalReportVisualiser;
-		final ScheduleModel scheduleModel = (model == null ? null : model.getScheduleModel());
+		final ScheduleModel scheduleModel = (scenarioResult == null ? null : scenarioResult.getTypedResult(ScheduleModel.class));
 		final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
 
 		verticalReportVisualiser.setData(this);

@@ -26,6 +26,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Class that makes the relevant API calls to the nebula Grid widget viewer framework.
@@ -46,7 +47,7 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 	protected final Map<LocalDate, Integer> rowCache = new HashMap<>();
 	protected final AbstractVerticalCalendarReportView verticalReport;
 
-	protected IScenarioDataProvider scenarioDataProvider = null;
+	protected ScenarioResult scenarioResult = null;
 
 	private boolean collapseEvents = false;
 
@@ -93,22 +94,25 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		scenarioDataProvider = null;
+		scenarioResult = null;
 		rowCache.clear();
 		verticalReportVisualiser.inputChanged();
-		if (newInput instanceof IScenarioDataProvider) {
-			scenarioDataProvider = (IScenarioDataProvider) newInput;
+		if (newInput instanceof ScenarioResult) {
+			scenarioResult = (ScenarioResult) newInput;
 		} else if (newInput instanceof Collection<?>) {
 
 			Collection<?> collection = (Collection<?>) newInput;
 			// svso.getCollectedElements in this case returns a singleton list containing the root object
 			for (final Object element : collection) {
-				scenarioDataProvider = (IScenarioDataProvider) element;
-				break;
+				if (element instanceof ScenarioResult) {
+					scenarioResult = (ScenarioResult) element;
+					break;
+				}
 			}
 		}
+
 		// extract the relevant data from the root object
-		final ScheduleSequenceData data = new ScheduleSequenceData(scenarioDataProvider, verticalReportVisualiser);
+		final ScheduleSequenceData data = new ScheduleSequenceData(scenarioResult, verticalReportVisualiser);
 
 		verticalReport.setData(data);
 		// setup table columns and rows
@@ -187,8 +191,8 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 		}
 	}
 
-	public IScenarioDataProvider getRoot() {
-		return scenarioDataProvider;
+	public ScenarioResult getRoot() {
+		return scenarioResult;
 	}
 
 	public CalendarColumn getCalendarColumn(final int columnIdx) {
