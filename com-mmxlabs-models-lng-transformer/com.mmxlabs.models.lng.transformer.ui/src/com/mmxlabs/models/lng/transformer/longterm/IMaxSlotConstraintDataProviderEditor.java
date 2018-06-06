@@ -5,13 +5,14 @@ import java.util.List;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
 
 /**
  * Provides groups of slots to apply count restrictions to.
  * @author alex
  *
  */
-public interface IMaxSlotConstraintDataProviderEditor extends IDataComponentProvider {
+public interface IMaxSlotConstraintDataProviderEditor extends IMaxSlotCountConstraintDataProvider {
 	void addMinLoadSlotsPerMonth(List<ILoadOption> slots, int startMonth, int limit);
 	void addMaxLoadSlotsPerMonth(List<ILoadOption> slots, int startMonth, int limit);
 	

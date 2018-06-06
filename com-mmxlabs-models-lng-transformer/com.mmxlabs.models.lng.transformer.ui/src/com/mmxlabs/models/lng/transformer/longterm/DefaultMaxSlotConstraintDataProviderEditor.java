@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
-public class DefaultMaxSlotConstraintDataTransformer implements IMaxSlotConstraintDataProviderEditor, IMaxSlotCountConstraintDataProvider {
+public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConstraintDataProviderEditor {
 	@Inject
 	CalendarMonthMapper calendarMonthMapper;
 	@Inject
