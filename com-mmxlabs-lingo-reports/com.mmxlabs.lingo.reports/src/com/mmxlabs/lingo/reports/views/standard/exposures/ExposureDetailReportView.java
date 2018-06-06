@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.standard;
+package com.mmxlabs.lingo.reports.views.standard.exposures;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -41,10 +41,12 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -73,14 +75,13 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
-		final GridViewerColumn gvc0 = createColumn("Slot", SchedulePackage.Literals.SLOT_ALLOCATION__SLOT);
-		// gvc0.getColumn().setTree(true);
+		final GridViewerColumn gvc0 = createDealColumn("Deal");
 
 		final GridViewerColumn gvc1 = createColumn("Index", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME);
 		final GridViewerColumn gvc2 = createColumn("Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
 		final GridColumnGroup volumeGroup = createGroup("Volume");
 
-//		final GridViewerColumn gvc3 = createColumn("mmBtu", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_MMBTU);
+		// final GridViewerColumn gvc3 = createColumn("mmBtu", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_MMBTU);
 		final GridViewerColumn gvc4 = createColumn("Native", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS);
 		final GridViewerColumn gvc5 = createColumn("Unit", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT);
 
@@ -110,6 +111,10 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 					final SlotAllocation slotAllocation = (SlotAllocation) element;
 					return !slotAllocation.getExposures().isEmpty();
 				}
+				if (element instanceof PaperDealAllocation) {
+					final PaperDealAllocation slotAllocation = (PaperDealAllocation) element;
+					return !slotAllocation.getEntries().isEmpty();
+				}
 				return false;
 			}
 
@@ -134,6 +139,10 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 					final SlotAllocation slotAllocation = (SlotAllocation) inputElement;
 					return slotAllocation.getExposures().toArray();
 				}
+				if (inputElement instanceof PaperDealAllocation) {
+					final PaperDealAllocation slotAllocation = (PaperDealAllocation) inputElement;
+					return slotAllocation.getEntries().stream().flatMap(e -> e.getExposures().stream()).toArray();
+				}
 				return new Object[0];
 			}
 
@@ -150,6 +159,10 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 					final SlotAllocation slotAllocation = (SlotAllocation) parentElement;
 					return slotAllocation.getExposures().toArray();
 				}
+				if (parentElement instanceof PaperDealAllocation) {
+					final PaperDealAllocation slotAllocation = (PaperDealAllocation) parentElement;
+					return slotAllocation.getEntries().stream().flatMap(e -> e.getExposures().stream()).toArray();
+				}
 				return new Object[0];
 			}
 		});
@@ -159,9 +172,10 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 				List<Object> selected = (selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
-				selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation).collect(Collectors.toList());
-				// selected = selected.stream().filter(s -> s instanceof SlotAllocation).collect(Collectors.toList());
-
+				selected = selected.stream().filter(
+						s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDealAllocation || s instanceof PaperDeal)
+						.collect(Collectors.toList());
+				//
 				if (selected.isEmpty()) {
 					return false;
 				}
@@ -172,6 +186,12 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 					final SlotAllocation slotAllocation = (SlotAllocation) element;
 					return selected.contains(element) || selected.contains(slotAllocation.getSlot()) || selected.contains(slotAllocation.getCargoAllocation());
 
+				} else if (element instanceof PaperDeal) {
+					final PaperDeal paperDeal = (PaperDeal) element;
+					return selected.contains(paperDeal);
+				} else if (element instanceof PaperDealAllocation) {
+					final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) element;
+					return selected.contains(paperDealAllocation) || selected.contains(paperDealAllocation.getPaperDeal());
 				}
 				return true;
 			}
@@ -214,6 +234,31 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 
 		group.setText(title);
 		return group;
+	}
+
+	private GridViewerColumn createDealColumn(final String title) {
+		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
+		GridViewerHelper.configureLookAndFeel(col);
+		col.getColumn().setText(title);
+
+		col.setLabelProvider(new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				cell.setText("");
+				final Object element = cell.getElement();
+				if (element instanceof SlotAllocation) {
+					SlotAllocation slotAllocation = (SlotAllocation) element;
+					cell.setText(slotAllocation.getName());
+				} else if (element instanceof PaperDealAllocation) {
+					PaperDealAllocation paperDealAllocation = (PaperDealAllocation) element;
+					cell.setText(paperDealAllocation.getPaperDeal().getName());
+				}
+			}
+		});
+
+		col.getColumn().setWidth(120);
+		return col;
 	}
 
 	private GridViewerColumn createColumn(final String title, final EStructuralFeature reference) {
@@ -303,7 +348,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 				@Override
 				public void run() {
 
-					final List<SlotAllocation> slotAllocations = new LinkedList<>();
+					final List<EObject> slotAllocations = new LinkedList<>();
 
 					if (pinned != null) {
 						@Nullable
@@ -312,6 +357,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
 								schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
+								schedule.getPaperDealAllocations().forEach(ca -> slotAllocations.add(ca));
 							}
 						}
 					}
@@ -322,6 +368,8 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
 								schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
+								schedule.getPaperDealAllocations().forEach(ca -> slotAllocations.add(ca));
+
 							}
 						}
 					}

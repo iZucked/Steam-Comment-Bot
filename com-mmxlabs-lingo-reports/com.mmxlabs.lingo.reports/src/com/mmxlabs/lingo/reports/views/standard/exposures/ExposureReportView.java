@@ -2,13 +2,15 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.standard;
+package com.mmxlabs.lingo.reports.views.standard.exposures;
 
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +34,9 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.ValueMode;
@@ -88,6 +92,46 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 			}
+
+			@Override
+			public Object[] getElements(final Object inputElement) {
+
+				if (inputElement instanceof Collection<?>) {
+					Collection<?> collection = (Collection<?>) inputElement;
+					return collection.toArray();
+				}
+				return new Object[0];
+			}
+
+			@Override
+			public void dispose() {
+
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				if (parentElement instanceof Collection<?>) {
+					Collection<?> collection = (Collection<?>) parentElement;
+					return collection.toArray();
+				}
+				if (parentElement instanceof IndexExposureData) {
+					IndexExposureData indexExposureData = (IndexExposureData) parentElement;
+					if (indexExposureData.children != null) {
+						return indexExposureData.children.toArray();
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				return null;
+			}
+
+			@Override
+			public boolean hasChildren(Object element) {
+				return element instanceof Collection<?> || (element instanceof IndexExposureData && ((IndexExposureData) element).children != null);
+			}
 		};
 	}
 
@@ -99,7 +143,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
 				final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
 
-				if (selectedDataProvider.getScenarioResults().size() > 1) {
+				if (selectedDataProvider.getScenarioResults().size() > 1 && selectedDataProvider.getPinnedScenarioResult() == null) {
 					result.add(new ColumnManager<IndexExposureData>("Scenario") {
 
 						@Override
@@ -143,6 +187,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					@Override
 					public int compare(final IndexExposureData o1, final IndexExposureData o2) {
 						return o1.indexName.compareTo(o2.indexName);
+					}
+
+					@Override
+					public boolean isTree() {
+						return true;
 					}
 				});
 
@@ -209,7 +258,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
 				dateRange.setBoth(null, null);
 
-				final List<@NonNull IndexExposureData> output = new LinkedList<>();
+				final List<IndexExposureData> output = new LinkedList<>();
 
 				if (pinnedPair != null && otherPairs.size() == 1) {
 					// Pin/Diff mode
@@ -258,8 +307,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				return output;
 			}
 
-			public List<@NonNull IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull ScenarioResult scenarioResult) {
-				final List<@NonNull IndexExposureData> output = new LinkedList<>();
+			public List<IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull ScenarioResult scenarioResult) {
+				final List<IndexExposureData> output = new LinkedList<>();
 
 				final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 				if (rootObject == null) {
@@ -269,16 +318,19 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				final EList<CommodityIndex> indices = pm.getCommodityIndices();
 
 				List<Object> selected = (!selectionMode || selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
-				selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation).collect(Collectors.toList());
+				selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal)
+						.collect(Collectors.toList());
 
 				for (final CommodityIndex index : indices) {
 					assert index != null;
-					final Map<YearMonth, Double> exposures = Exposures.getExposuresByMonth(schedule, index, ScenarioModelUtil.getPricingModel(rootObject), mode, selected);
-					if (exposures.size() != 0.0) {
-						final String currencyUnit = index.getCurrencyUnit();
-						final String volumeUnit = index.getVolumeUnit();
-						output.add(new IndexExposureData(scenarioResult, schedule, index.getName(), index, exposures, currencyUnit, volumeUnit));
+					IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, index, ScenarioModelUtil.getPricingModel(rootObject), mode, selected);
+					if (exposuresByMonth.exposures.size() != 0.0) {
+						output.add(exposuresByMonth);
 					}
+				}
+				IndexExposureData exposuresByMonth = ExposuresTransformer.getPhysicalExposuresByMonth(scenarioResult, schedule, ScenarioModelUtil.getPricingModel(rootObject), mode, selected);
+				if (exposuresByMonth.exposures.size() != 0.0) {
+					output.add(exposuresByMonth);
 				}
 				return output;
 			}
@@ -290,12 +342,20 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		final IndexExposureData modelData = pinData != null ? pinData : otherData;
 		final Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
-		final IndexExposureData newData = new IndexExposureData(null, null, modelData.indexName, null, exposuresByMonth, modelData.currencyUnit, modelData.volumeUnit);
 
+		Collection<String> keys = new LinkedHashSet<>();
+		Map<String, IndexExposureData> pinChildren = new HashMap<>();
+		Map<String, IndexExposureData> otherChildren = new HashMap<>();
 		if (pinData != null) {
 			for (final Map.Entry<YearMonth, Double> e : pinData.exposures.entrySet()) {
 				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
 				exposuresByMonth.put(e.getKey(), val + e.getValue());
+			}
+			if (pinData.children != null) {
+				for (IndexExposureData d : pinData.children) {
+					keys.add(d.indexName);
+					pinChildren.put(d.indexName, d);
+				}
 			}
 		}
 		if (otherData != null) {
@@ -303,7 +363,29 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
 				exposuresByMonth.put(e.getKey(), val - e.getValue());
 			}
+			if (otherData.children != null) {
+				for (IndexExposureData d : otherData.children) {
+					keys.add(d.indexName);
+					otherChildren.put(d.indexName, d);
+				}
+			}
 		}
+
+		List<IndexExposureData> newChildren = null;
+		if (!keys.isEmpty()) {
+			newChildren = new ArrayList<>(keys.size());
+			for (String key : keys) {
+				IndexExposureData childDiffData = createDiffData(pinChildren.get(key), otherChildren.get(key));
+				for (Double value : childDiffData.exposures.values()) {
+					if (value.doubleValue() != 0.0) {
+						newChildren.add(childDiffData);
+						break;
+					}
+				}
+
+			}
+		}
+		final IndexExposureData newData = new IndexExposureData(null, null, modelData.indexName, null, exposuresByMonth, newChildren, modelData.currencyUnit, modelData.volumeUnit);
 
 		return newData;
 	}
