@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.extensions.modules;
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.mmxlabs.models.lng.transformer.extensions.actuals.ActualsTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.adp.ADPTransformerModule;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
@@ -32,6 +33,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 	protected void configure() {
 		install(new RestrictedElementsModule());
 		install(new PanamaSlotsModule());
+		install(new ADPTransformerModule());
 		install(new ShippingTypeRequirementModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();

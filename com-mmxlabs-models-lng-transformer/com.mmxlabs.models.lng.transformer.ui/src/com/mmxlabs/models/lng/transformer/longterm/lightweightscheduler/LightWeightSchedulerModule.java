@@ -23,11 +23,12 @@ import com.google.inject.name.Named;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.extensions.longterm.DefaultLongTermVesselSlotCountFitnessProvider;
+import com.mmxlabs.models.lng.transformer.extensions.longterm.ILongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.models.lng.transformer.longterm.CargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.models.lng.transformer.longterm.ICargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.longterm.ICargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.models.lng.transformer.longterm.ILongTermMatrixOptimiser;
-import com.mmxlabs.models.lng.transformer.longterm.ILongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimisationData;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserHelper.ShippingType;
@@ -59,26 +60,35 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	Map<Thread, LightweightSchedulerOptimiser> threadCache;
 	private CharterInMarket nominalCharterInMarket;
 	private LNGDataTransformer dataTransformer;
-	
+
 	public LightWeightSchedulerModule(Map<Thread, LightweightSchedulerOptimiser> threadCache, CharterInMarket nominalCharterInMarket, LNGDataTransformer dataTransformer) {
 		this.threadCache = threadCache;
 		this.nominalCharterInMarket = nominalCharterInMarket;
 		this.dataTransformer = dataTransformer;
 	}
-	
+
 	@Override
 	protected void configure() {
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
-		HashSetLongTermSlotsEditor longTermSlotEditor = new HashSetLongTermSlotsEditor();
-		bind(ILongTermSlotsProvider.class).toInstance(longTermSlotEditor);
-		bind(ILongTermSlotsProviderEditor.class).toInstance(longTermSlotEditor);
-		WebserviceLongTermMatrixOptimiser matrixOptimiser = new WebserviceLongTermMatrixOptimiser();
-		bind(ILongTermMatrixOptimiser.class).toInstance(matrixOptimiser);
+
+		bind(DefaultLongTermVesselSlotCountFitnessProvider.class).in(Singleton.class);
+		bind(ILongTermVesselSlotCountFitnessProvider.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
+
+		bind(HashSetLongTermSlotsEditor.class).in(Singleton.class);
+		bind(ILongTermSlotsProvider.class).to(HashSetLongTermSlotsEditor.class);
+		bind(ILongTermSlotsProviderEditor.class).to(HashSetLongTermSlotsEditor.class);
+
+		bind(ILongTermMatrixOptimiser.class).to(WebserviceLongTermMatrixOptimiser.class);
+
 		bind(ICargoToCargoCostCalculator.class).to(SimpleCargoToCargoCostCalculator.class);
 		bind(ICargoVesselRestrictionsMatrixProducer.class).to(CargoVesselRestrictionsMatrixProducer.class);
 		bind(ILightWeightSequenceOptimiser.class).to(TabuLightWeightSequenceOptimiser.class);
+
 		bind(LongTermOptimisationData.class);
 		bind(ILightWeightPostOptimisationStateModifier.class).to(DefaultLightWeightPostOptimisationStateModifier.class);
+		
+		
+		bind(ISequenceElementFilter.class).to(DefaultLongTermSequenceElementFilter.class);
 	}
 
 	@Provides
@@ -92,47 +102,38 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		}
 		return lightweightSchedulerOptimiser;
 	}
-	
+
 	@Provides
 	@Singleton
-	private ILightWeightOptimisationData provideLightWeightOptimisationData(LongTermOptimisationData optimiserRecorder, ILongTermSlotsProvider longTermSlotsProvider, ILongTermMatrixOptimiser matrixOptimiser,
-			IVesselProvider vesselProvider, ICargoToCargoCostCalculator cargoToCargoCostCalculator, ICargoVesselRestrictionsMatrixProducer cargoVesselRestrictionsMatrixProducer,
-			@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT) int[] desiredVesselCargoCount, @Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT) long[] desiredVesselCargoWeight) {
+	private ILightWeightOptimisationData provideLightWeightOptimisationData(LongTermOptimisationData optimiserRecorder, ILongTermSlotsProvider longTermSlotsProvider,
+			ILongTermMatrixOptimiser matrixOptimiser, IVesselProvider vesselProvider, ICargoToCargoCostCalculator cargoToCargoCostCalculator,
+			ICargoVesselRestrictionsMatrixProducer cargoVesselRestrictionsMatrixProducer, @Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT) int[] desiredVesselCargoCount,
+			@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT) long[] desiredVesselCargoWeight) {
 		// (1) Identify LT slots
 		@NonNull
 		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
-		List<ILoadOption> longtermLoads = longTermSlots.stream()
-				.filter(s -> (s instanceof ILoadOption))
-				.map(m -> (ILoadOption) m)
-				.collect(Collectors.toCollection(ArrayList::new));
-		List<IDischargeOption> longTermDischarges = longTermSlots.stream()
-				.filter(s -> (s instanceof IDischargeOption))
-				.map(m -> (IDischargeOption) m)
-				.collect(Collectors.toCollection(ArrayList::new));
+		List<ILoadOption> longtermLoads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
+		List<IDischargeOption> longTermDischarges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
 
 		optimiserRecorder.init(longtermLoads, longTermDischarges);
-		
+
 		// (2) Generate S2S bindings matrix for LT slots
 		ExecutorService es = Executors.newSingleThreadExecutor();
-		LongTermOptimiserHelper.getS2SBindings(optimiserRecorder.getSortedLoads(),
-				optimiserRecorder.getSortedDischarges(), nominalCharterInMarket, es,
-				dataTransformer, optimiserRecorder);
-		
+		LongTermOptimiserHelper.getS2SBindings(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), nominalCharterInMarket, es, dataTransformer, optimiserRecorder);
+
 		// now using our profits recorder we have a full matrix of constraints and pnl
 		Long[][] profit = optimiserRecorder.getProfit();
 
-		LongTermOptimiserHelper.produceDataForGurobi(optimiserRecorder, "/tmp/");
+//		LongTermOptimiserHelper.produceDataForGurobi(optimiserRecorder, "/tmp/");
 		// (3) Optimise matrix
-		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(),
-				optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
-				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(),
-				optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(),
+		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
+				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(),
 				optimiserRecorder.getMinLoadGroupCount());
-		
+
 		if (pairingsMatrix == null) {
 			return null;
 		}
-		
+
 		// (4) Export the pairings matrix to a Map
 		Map<ILoadOption, IDischargeOption> pairingsMap = new LinkedHashMap<>();
 		for (ILoadOption load : optimiserRecorder.getSortedLoads()) {
@@ -142,46 +143,33 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		if (DEBUG) {
 			printPairings(pairingsMap);
 		}
-		
+
 		// create data for optimiser
-		List<List<IPortSlot>> shippedCargoes = LongTermOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(),
-				optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
-		List<@NonNull IVesselAvailability> vessels = vesselProvider.getSortedResources().stream()
-				.map(v -> vesselProvider.getVesselAvailability(v))
-				.filter(v -> LongTermOptimiserHelper.isShippedVessel(v))
-				.collect(Collectors.toList());
+		List<List<IPortSlot>> shippedCargoes = LongTermOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
+		List<@NonNull IVesselAvailability> vessels = vesselProvider.getSortedResources().stream().map(v -> vesselProvider.getVesselAvailability(v))
+				.filter(v -> LongTermOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
 		@NonNull
-		IVesselAvailability pnlVessel = LongTermOptimiserHelper.getPNLVessel(dataTransformer,
-				nominalCharterInMarket, vesselProvider);
+		IVesselAvailability pnlVessel = LongTermOptimiserHelper.getPNLVessel(dataTransformer, nominalCharterInMarket, vesselProvider);
 		Long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
 		ArrayList<Set<Integer>> cargoVesselRestrictions = cargoVesselRestrictionsMatrixProducer.getIntegerCargoVesselRestrictions(shippedCargoes, vessels,
 				cargoVesselRestrictionsMatrixProducer.getCargoVesselRestrictions(shippedCargoes, vessels));
-		long[] cargoPNL = LongTermOptimiserHelper.getCargoPNL(profit, shippedCargoes, optimiserRecorder.getSortedLoads(),
-				optimiserRecorder.getSortedDischarges(), pnlVessel);
+		long[] cargoPNL = LongTermOptimiserHelper.getCargoPNL(profit, shippedCargoes, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pnlVessel);
 		int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
 		int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
-		double[] capacity = vessels.stream()
-				.mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000)
-				.toArray();
+		double[] capacity = vessels.stream().mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000).toArray();
 
-		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL,
-				cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel,
-				pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight);
-		
+		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
+				minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight);
+
 		return lightWeightOptimisationData;
 	}
-	
+
 	@Provides
 	@Named(LIGHTWEIGHT_VESSELS)
 	private List<@NonNull IVesselAvailability> getVessels(IVesselProvider vesselProvider) {
-		return vesselProvider
-				.getSortedResources()
-				.stream()
-				.map(v -> vesselProvider.getVesselAvailability(v))
-				.filter(v -> LongTermOptimiserHelper.isShippedVessel(v))
-				.collect(Collectors.toList());
+		return vesselProvider.getSortedResources().stream().map(v -> vesselProvider.getVesselAvailability(v)).filter(v -> LongTermOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
 	}
-	
+
 	@Provides
 	@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT)
 	private int[] getDesiredNumberSlotsPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels, ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
@@ -193,10 +181,11 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		}
 		return desiredVesselCargoCount;
 	}
-	
+
 	@Provides
 	@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT)
-	private long[] getDesiredNumberSlotsWeightingPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels, ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
+	private long[] getDesiredNumberSlotsWeightingPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels,
+			ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
 		long[] vesselReward = new long[vessels.size()];
 		if (vesselSlotCountFitnessProvider != null) {
 			for (int i = 0; i < vessels.size(); i++) {
@@ -223,11 +212,10 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		}
 		return constraintCheckers;
 	}
-	
+
 	@Provides
 	@Singleton
-	private List<ILightWeightFitnessFunction> getFitnessFunctions(Injector injector, LightWeightFitnessFunctionRegistry registry,
-			@Named(LIGHTWEIGHT_FITNESS_FUNCTION_NAMES) List<String> names) {
+	private List<ILightWeightFitnessFunction> getFitnessFunctions(Injector injector, LightWeightFitnessFunctionRegistry registry, @Named(LIGHTWEIGHT_FITNESS_FUNCTION_NAMES) List<String> names) {
 		List<ILightWeightFitnessFunction> fitnessFunctions = new LinkedList<>();
 		Collection<ILightWeightFitnessFunctionFactory> fitnessFunctionFactories = registry.getFitnessFunctionFactories();
 		for (String name : names) {
@@ -242,7 +230,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		}
 		return fitnessFunctions;
 	}
-	
+
 	@Provides
 	@Singleton
 	LightWeightConstraintCheckerRegistry getLightweightConstraintCheckerRegistry() {
@@ -250,7 +238,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		registry.registerConstraintCheckerFactory(new LightWeightShippingRestrictionsConstraintCheckerFactory());
 		return registry;
 	}
-	
+
 	@Provides
 	@Singleton
 	LightWeightFitnessFunctionRegistry getLightweightFitnessFunctionRegistry() {
@@ -261,13 +249,14 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(LIGHTWEIGHT_FITNESS_FUNCTION_NAMES) List<String> getFitnessFunctionNames() {
-		return CollectionsUtil.makeLinkedList("DefaultPNLLightWeightFitnessFunction",
-				"VesselCargoCountLightWeightFitnessFunction");
+	@Named(LIGHTWEIGHT_FITNESS_FUNCTION_NAMES)
+	List<String> getFitnessFunctionNames() {
+		return CollectionsUtil.makeLinkedList("DefaultPNLLightWeightFitnessFunction", "VesselCargoCountLightWeightFitnessFunction");
 	}
-	
+
 	@Provides
-	@Named(LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES) List<String> getConstraintCheckerNames() {
+	@Named(LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES)
+	List<String> getConstraintCheckerNames() {
 		return CollectionsUtil.makeLinkedList("LightWeightShippingRestrictionsConstraintChecker");
 	}
 

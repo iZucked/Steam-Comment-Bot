@@ -132,6 +132,8 @@ import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -226,6 +228,7 @@ public class LNGScenarioTransformer {
 
 	public static final String EXTRA_CHARTER_IN_MARKET_OVERRIDES = "extra_charter_in_market_overrides";
 	public static final String EXTRA_CHARTER_IN_MARKETS = "extra_charter_in_markets";
+	public static final String EXTRA_SPOT_CARGO_MARKETS = "extra_spot_cargo_markets";
 	public static final String EXTRA_VESSEL_AVAILABILITIES = "extra_vessel_availabilities";
 	public static final String EXTRA_LOAD_SLOTS = "extra_load_slots";
 	public static final String EXTRA_DISCHARGE_SLOTS = "extra_discharge_slots";
@@ -239,6 +242,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(EXTRA_CHARTER_IN_MARKETS)
 	private List<CharterInMarket> extraCharterInMarkets;
+
+	@Inject
+	@Named(EXTRA_SPOT_CARGO_MARKETS)
+	private List<SpotMarket> extraSpotMarkets;
 
 	@Inject
 	@Named(EXTRA_CHARTER_IN_MARKET_OVERRIDES)
@@ -287,6 +294,9 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private ILoadPriceCalculatorProviderEditor loadPriceCalculatorProvider;
+
+	@Inject
+	private IntegerIntervalCurveHelper integerIntervalCurveHelper;
 
 	@Inject
 	@NonNull
@@ -887,7 +897,8 @@ public class LNGScenarioTransformer {
 
 		buildSpotCargoMarkets(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap);
 
-		buildMarkToMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
+		// Disable this completely as MTM mapping clashes with spot market mapping in modelEntityMap
+		// buildMarkToMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
 
 		setNominatedVessels(builder, modelEntityMap);
 
@@ -1509,7 +1520,7 @@ public class LNGScenarioTransformer {
 				}
 
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
-				
+
 				final List<ERouteOption> allowedRoutes = new LinkedList<>();
 				if (shippingDaysRestrictionSpeedProvider != null) {
 					for (final Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(ScenarioModelUtil.getPortModel(rootObject), dischargeSlot)) {
@@ -1517,7 +1528,7 @@ public class LNGScenarioTransformer {
 					}
 				}
 				builder.setDivertableFOBAllowedRoute(discharge, allowedRoutes);
-				
+
 			} else {
 				// Bind to current port only
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
@@ -1525,7 +1536,7 @@ public class LNGScenarioTransformer {
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
 			}
 		}
-		
+
 	}
 
 	public void configureLoadSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Set<IPort> allDischargePorts,
@@ -1634,7 +1645,16 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				dischargePriceCalculator = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
+				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
+
+				final String splitMonthToken = "splitmonth(";
+				boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+
+				if (isSplitMonth) {
+					priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+				}
+
+				dischargePriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 				injector.injectMembers(dischargePriceCalculator);
 			}
 		} else if (dischargeSlot instanceof SpotSlot) {
@@ -1790,7 +1810,6 @@ public class LNGScenarioTransformer {
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
-
 		if (loadSlot.isSetPriceExpression()) {
 
 			final String priceExpression = loadSlot.getPriceExpression();
@@ -1804,7 +1823,8 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
-				final ISeries parsed = expression.evaluate();
+				Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime = LNGScenarioUtils.findEarliestAndLatestTimes(rootObject);
+				final ISeries parsed = expression.evaluate(earliestAndLatestTime);
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {
@@ -1816,7 +1836,16 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				loadPriceCalculator = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
+
+				final String splitMonthToken = "splitmonth(";
+				boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+
+				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
+				if (isSplitMonth) {
+					priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+				}
+
+				loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 				injector.injectMembers(loadPriceCalculator);
 
 			}
@@ -2583,8 +2612,8 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrDelegateDuration(), fobSlot.isArriveCold(), true,
-										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrDelegateDuration(),
+										fobSlot.isArriveCold(), true, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);

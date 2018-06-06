@@ -9,8 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.ui.IMarkerResolution;
 
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 /**
  * A helper class to construct a {@link ChainRunner} from a set of {@link IChainLink}s
@@ -42,5 +44,10 @@ public class ChainBuilder {
 	@NonNull
 	public ChainRunner build() {
 		return new ChainRunner(dataTransformer, new ArrayList<>(chain));
+	}
+
+	@NonNull
+	public ChainRunner build(IMultiStateResult initialState) {
+		return new ChainRunner(dataTransformer, new ArrayList<>(chain), initialState);
 	}
 }

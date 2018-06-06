@@ -83,8 +83,7 @@ public class SequenceHelper {
 		return makeSequence(dataTransformer, resource, o_vesselAvailability, cargoes);
 	}
 
-	public static @NonNull IModifiableSequence makeSequence(final @NonNull LNGDataTransformer dataTransformer, final CharterInMarketOverride charterInMarketOverride,
-			final EObject... cargoes) {
+	public static @NonNull IModifiableSequence makeSequence(final @NonNull LNGDataTransformer dataTransformer, final CharterInMarketOverride charterInMarketOverride, final EObject... cargoes) {
 
 		@NonNull
 		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
@@ -111,8 +110,8 @@ public class SequenceHelper {
 		return makeSequence(dataTransformer, resource, o_vesselAvailability, cargoes);
 	}
 
-	public static @NonNull Pair<IResource, IModifiableSequence> makeSequence(final @NonNull LNGDataTransformer dataTransformer,
-			final CharterInMarketOverride charterInMarketOverride, final Collection<? extends EObject> cargoes) {
+	public static @NonNull Pair<IResource, IModifiableSequence> makeSequence(final @NonNull LNGDataTransformer dataTransformer, final CharterInMarketOverride charterInMarketOverride,
+			final Collection<? extends EObject> cargoes) {
 
 		@NonNull
 		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
@@ -446,5 +445,21 @@ public class SequenceHelper {
 		modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
 
 		return new Pair<>(o_resource, modifiableSequence);
+	}
+
+	public static @NonNull IModifiableSequences createEmptySequences(final @NonNull LNGDataTransformer dataTransformer, @NonNull List<@NonNull IResource> resources) {
+		final ModifiableSequences sequences = new ModifiableSequences(resources);
+
+		final IStartEndRequirementProvider startEndRequirementProvider = dataTransformer.getInjector().getInstance(IStartEndRequirementProvider.class);
+
+		for (@NonNull
+		IResource o_resource : resources) {
+			@NonNull
+			final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
+			modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+			modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
+		}
+		return sequences;
+
 	}
 }

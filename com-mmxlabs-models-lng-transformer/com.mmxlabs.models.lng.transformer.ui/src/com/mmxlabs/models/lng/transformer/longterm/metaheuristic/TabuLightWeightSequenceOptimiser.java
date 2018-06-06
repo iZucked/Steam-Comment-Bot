@@ -130,7 +130,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 			discharges[i] = new Interval(dischargeTW.getInclusiveStart(), dischargeTW.getExclusiveEnd());
 		}
 		
-		createExternalData(cargoes, vessels, cargoToCargoMinTravelTimes, cargoVesselRestrictionAsList, cargoMinTravelTimes, capacity, cargoPNLasDouble, cargoToCargoCostsProcessed, loads, discharges);
+//		createExternalData(cargoes, vessels, cargoToCargoMinTravelTimes, cargoVesselRestrictionAsList, cargoMinTravelTimes, capacity, cargoPNLasDouble, cargoToCargoCostsProcessed, loads, discharges);
 		
 		return optimise(0, false,
 				cargoes.size(), vessels.size(),

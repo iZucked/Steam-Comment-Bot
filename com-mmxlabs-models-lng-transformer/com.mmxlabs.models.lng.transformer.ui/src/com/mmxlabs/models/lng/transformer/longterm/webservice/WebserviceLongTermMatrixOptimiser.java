@@ -16,10 +16,10 @@ import com.mmxlabs.models.lng.transformer.longterm.ILongTermMatrixOptimiser;
 public class WebserviceLongTermMatrixOptimiser implements ILongTermMatrixOptimiser {
 	public static final String OPTIMISER_URL = "http://localhost:8080/api/optimise";
 	ObjectMapper mapper = new ObjectMapper();
-	
+
 	@Override
-	public boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid,
-			List<Map<String, List<Integer>>> maxDischargeSlotsConstraints, List<Map<String, List<Integer>>> minDischargeSlotsConstraints, List<Map<String, List<Integer>>> maxLoadSlotsConstraints, List<Map<String, List<Integer>>> minLoadSlotsConstraints) {
+	public boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid, List<Map<String, List<Integer>>> maxDischargeSlotsConstraints,
+			List<Map<String, List<Integer>>> minDischargeSlotsConstraints, List<Map<String, List<Integer>>> maxLoadSlotsConstraints, List<Map<String, List<Integer>>> minLoadSlotsConstraints) {
 		SimpleHTTPPostRequester requester = new SimpleHTTPPostRequester();
 		Map<String, Object> map = new LinkedHashMap<>();
 		map.put("pnl", values);
@@ -30,7 +30,7 @@ public class WebserviceLongTermMatrixOptimiser implements ILongTermMatrixOptimis
 		map.put("minDischargeSlots", (minDischargeSlotsConstraints));
 		map.put("maxLoadSlots", (maxLoadSlotsConstraints));
 		map.put("minLoadSlots", (minLoadSlotsConstraints));
-		
+
 		boolean[][] pairings = null;
 
 		try {
@@ -42,7 +42,7 @@ public class WebserviceLongTermMatrixOptimiser implements ILongTermMatrixOptimis
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return pairings;
 	}
 

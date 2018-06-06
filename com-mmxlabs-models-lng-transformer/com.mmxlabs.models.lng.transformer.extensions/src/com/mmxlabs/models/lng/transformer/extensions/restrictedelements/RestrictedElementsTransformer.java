@@ -258,7 +258,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		{
 			Collection<ISequenceElement> slotElements;
 			if (slotMap.containsKey(modelSlot)) {
-				slotElements = contractMap.get(modelSlot);
+				slotElements = slotMap.get(modelSlot);
 			} else {
 				slotElements = new HashSet<ISequenceElement>();
 				slotMap.put(modelSlot, slotElements);

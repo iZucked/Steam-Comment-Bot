@@ -77,8 +77,8 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 	@Override
-	public void evaluateBaseCase(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final ScenarioInstance parentForFork, final boolean fork,
-			final String forkName) {
+	public void evaluateBaseCase(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final ScenarioInstance parentForFork,
+			final boolean fork, final String forkName) {
 
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, scenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
@@ -106,10 +106,10 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		}
 
 	}
-	
+
 	@Override
-	public void multiEvaluate(ScenarioInstance scenarioInstance, EditingDomain editingDomain, @NonNull  IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, long targetProfitAndLoss,
-			BreakEvenMode breakEvenMode, List<Pair<BaseCase, ScheduleSpecification>> baseCases, IMapperClass mapper, BiConsumer<BaseCase, Schedule> resultHandler) {
+	public void multiEvaluate(ScenarioInstance scenarioInstance, EditingDomain editingDomain, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings,
+			long targetProfitAndLoss, BreakEvenMode breakEvenMode, List<Pair<BaseCase, ScheduleSpecification>> baseCases, IMapperClass mapper, BiConsumer<BaseCase, Schedule> resultHandler) {
 
 		ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());
@@ -217,6 +217,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						l_itr.remove();
 					}
 				}
+				for (LoadSlot slot : usedLoadSlots) {
+					if (!cargoModel.getLoadSlots().contains(slot)) {
+						cargoModel.getLoadSlots().add(slot);
+					}
+				}
 			}
 			{
 				final Iterator<DischargeSlot> l_itr = cargoModel.getDischargeSlots().iterator();
@@ -226,6 +231,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						dischargeSlot.setCargo(null);
 						objectsToDelete.add(dischargeSlot);
 						l_itr.remove();
+					}
+				}
+				for (DischargeSlot slot : usedDischargeSlots) {
+					if (!cargoModel.getDischargeSlots().contains(slot)) {
+						cargoModel.getDischargeSlots().add(slot);
 					}
 				}
 			}
@@ -240,6 +250,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						l_itr.remove();
 					}
 				}
+				for (Cargo cargo : usedCargoes) {
+					if (!cargoModel.getCargoes().contains(cargo)) {
+						cargoModel.getCargoes().add(cargo);
+					}
+				}
 			}
 			{
 				final Iterator<VesselEvent> l_itr = cargoModel.getVesselEvents().iterator();
@@ -249,6 +264,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						objectsToDelete.add(vesselEvent);
 
 						l_itr.remove();
+					}
+				}
+				for (VesselEvent vesselEvent : usedVesselEvents) {
+					if (!cargoModel.getVesselEvents().contains(vesselEvent)) {
+						cargoModel.getVesselEvents().add(vesselEvent);
 					}
 				}
 			}
@@ -261,13 +281,13 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						l_itr.remove();
 					}
 				}
-			}
-
-			for (final VesselAvailability vesselAvailability : usedVesselAvailabilites) {
-				if (!cargoModel.getVesselAvailabilities().contains(vesselAvailability)) {
-					cargoModel.getVesselAvailabilities().add(vesselAvailability);
+				for (VesselAvailability vesselAvailability : usedVesselAvailabilites) {
+					if (!cargoModel.getVesselAvailabilities().contains(vesselAvailability)) {
+						cargoModel.getVesselAvailabilities().add(vesselAvailability);
+					}
 				}
 			}
+
 			cargoModel.getCharterInMarketOverrides().clear();
 			cargoModel.getCharterInMarketOverrides().addAll(usedCharterInMarketOverrides);
 

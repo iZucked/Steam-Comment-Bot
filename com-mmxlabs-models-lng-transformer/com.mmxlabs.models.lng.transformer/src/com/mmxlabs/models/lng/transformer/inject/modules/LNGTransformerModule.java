@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -374,7 +375,7 @@ public class LNGTransformerModule extends AbstractModule {
 				@NonNull
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
 
-				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1);
+				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1).withHour(0);
 				@NonNull
 				final ZonedDateTime plusMonths = startOfYear.plusMonths(months);
 
@@ -387,7 +388,7 @@ public class LNGTransformerModule extends AbstractModule {
 				@NonNull
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
 
-				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1);
+				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1).withHour(0);
 				@NonNull
 				final ZonedDateTime plusMonths = dateTimeZero.plusHours(date).withDayOfMonth(1);
 
@@ -438,6 +439,12 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Named(LNGScenarioTransformer.EXTRA_VESSEL_AVAILABILITIES)
 	private List<VesselAvailability> provideExtraAvailabilities() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_SPOT_CARGO_MARKETS)
+	private List<SpotMarket> provideSpotCargoMarkets() {
 		return Collections.emptyList();
 	}
 
