@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 
@@ -101,7 +102,12 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 
 				@Override
 				public String getName(final EObject referer, final EReference feature, final EObject referenceValue) {
-					throw new UnsupportedOperationException();
+					if (referenceValue instanceof NamedObject) {
+						NamedObject namedObject = (NamedObject) referenceValue;
+						return namedObject.getName();
+
+					}
+					return "<unknown object>";
 				}
 
 				@Override
