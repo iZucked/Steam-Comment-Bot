@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2018 All rights reserved. -->
+<?eclipse version="3.0"?>
+
+<!-- <copyright> </copyright> $Id$ -->
+
+<plugin>
+	<extension point="org.eclipse.ui.views">
+		<view category="com.mmxlabs.models.lng.views.physical"
+			class="com.mmxlabs.models.lng.pricing.ui.views.SettledPricesView"
+			id="com.mmxlabs.models.lng.pricing.editor.SettledPricesView"
+			name="Settled Prices" restorable="true">
+		</view>
+	</extension>
+</plugin>

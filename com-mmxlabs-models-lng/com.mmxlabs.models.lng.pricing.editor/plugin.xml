@@ -376,4 +376,11 @@
             class="com.mmxlabs.models.lng.pricing.ui.commands.MarketCurvesVersionCommandWrapper">
       </WrappedCommandExtension>
    </extension>
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="paperdeals"
+            plugin.xml="paperdeals.plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
 </plugin>
