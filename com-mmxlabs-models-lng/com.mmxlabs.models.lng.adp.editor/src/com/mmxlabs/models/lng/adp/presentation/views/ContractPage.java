@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -151,7 +151,7 @@ public class ContractPage extends ADPComposite {
 							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
 							for (final SubContractProfile<?> sub : profile.getSubProfiles()) {
 								if (!sub.getSlots().isEmpty()) {
-									cmd.append(RemoveCommand.create(editorData.getEditingDomain(), sub.getSlots()));
+									cmd.append(DeleteCommand.create(editorData.getEditingDomain(), sub.getSlots()));
 								}
 							}
 							final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), editorData.scenarioModel, editorData.adpModel, profile);
@@ -166,7 +166,7 @@ public class ContractPage extends ADPComposite {
 
 							for (final SubContractProfile<?> sub : profile.getSubProfiles()) {
 								if (!sub.getSlots().isEmpty()) {
-									cmd.append(RemoveCommand.create(editorData.getEditingDomain(), sub.getSlots()));
+									cmd.append(DeleteCommand.create(editorData.getEditingDomain(), sub.getSlots()));
 								}
 							}
 							final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), editorData.scenarioModel, editorData.adpModel, profile);
@@ -251,7 +251,7 @@ public class ContractPage extends ADPComposite {
 									Iterator<Object> itr = iStructuredSelection.iterator();
 									while (itr.hasNext()) {
 										Object o = itr.next();
-										c.append(RemoveCommand.create(editorData.getEditingDomain(), o));
+										c.append(DeleteCommand.create(editorData.getEditingDomain(), o));
 									}
 									editorData.getEditingDomain().getCommandStack().execute(c);
 									updatePreviewPaneInput(detailComposite.getInput());

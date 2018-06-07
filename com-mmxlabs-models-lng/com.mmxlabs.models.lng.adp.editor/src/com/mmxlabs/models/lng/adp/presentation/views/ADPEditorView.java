@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -59,6 +60,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -273,6 +275,7 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 			});
 		}
+
 		{
 			btn_exportResult = new Button(bottomBar, SWT.PUSH);
 			btn_exportResult.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
@@ -334,6 +337,8 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 	private Button btn_displayResult;
 
+	private Runnable releaseAdaptersRunnable;
+
 	private void refreshValidation(final IStatus status) {
 		editorData.validationErrors.clear();
 		DialogValidationSupport.processStatus(status, editorData.validationErrors);
@@ -385,6 +390,11 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 	private void updateRootModel(@Nullable final LNGScenarioModel scenarioModel, @Nullable final ADPModel adpModel) {
 
+		if (releaseAdaptersRunnable != null) {
+			releaseAdaptersRunnable.run();
+			releaseAdaptersRunnable = null;
+		}
+
 		final boolean changed = this.editorData.adpModel != adpModel;
 
 		this.editorData.adpModel = adpModel;
@@ -419,11 +429,31 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 		btn_optimise.setEnabled(adpModel != null);
 		btn_exportResult.setEnabled(adpModel != null && adpModel.getResult() != null);
 		btn_displayResult.setEnabled(adpModel != null && adpModel.getResult() != null);
+
+		if (adpModel != null) {
+			adpModel.eAdapters().add(adpModelAdapter);
+			releaseAdaptersRunnable = () -> adpModel.eAdapters().remove(adpModelAdapter);
+		}
 	}
+
+	private final AdapterImpl adpModelAdapter = new AdapterImpl() {
+		public void notifyChanged(org.eclipse.emf.common.notify.Notification msg) {
+			if (msg.isTouch()) {
+				return;
+			}
+			if (msg.getFeature() == ADPPackage.Literals.ADP_MODEL__RESULT) {
+				btn_exportResult.setEnabled(msg.getNewValue() != null);
+				btn_displayResult.setEnabled(msg.getNewValue() != null);
+			}
+		};
+	};
 
 	@Override
 	public void dispose() {
-
+		if (releaseAdaptersRunnable != null) {
+			releaseAdaptersRunnable.run();
+			releaseAdaptersRunnable = null;
+		}
 		final IStatusProvider statusProvider = getStatusProvider();
 		if (statusProvider != null) {
 			statusProvider.removeStatusChangedListener(statusChangedListener);
