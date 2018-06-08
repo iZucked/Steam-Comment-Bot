@@ -165,7 +165,9 @@ public class ContractPage extends ADPComposite {
 							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
 
 							for (final SubContractProfile<?> sub : profile.getSubProfiles()) {
-								cmd.append(RemoveCommand.create(editorData.getEditingDomain(), sub.getSlots()));
+								if (!sub.getSlots().isEmpty()) {
+									cmd.append(RemoveCommand.create(editorData.getEditingDomain(), sub.getSlots()));
+								}
 							}
 							final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), editorData.scenarioModel, editorData.adpModel, profile);
 							if (populateModelCommand != null) {

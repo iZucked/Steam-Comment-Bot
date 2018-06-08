@@ -68,6 +68,7 @@ public class DistributionModelGeneratorUtil {
 		if (slot instanceof LoadSlot) {
 			LoadSlot loadSlot = (LoadSlot) slot;
 			loadSlot.setDESPurchase(subProfile.getContractType() == ContractType.DES);
+			loadSlot.setArriveCold(false); //ALEXTODO: undo
 		} else if (slot instanceof DischargeSlot) {
 			DischargeSlot dischargeSlot = (DischargeSlot) slot;
 			dischargeSlot.setFOBSale(subProfile.getContractType() == ContractType.FOB);

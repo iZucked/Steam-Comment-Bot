@@ -34,10 +34,12 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
+import com.mmxlabs.models.lng.adp.ProfileVesselRestriction;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SpotMarketsProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
+import com.mmxlabs.models.lng.adp.SubProfileConstraint;
 import com.mmxlabs.models.lng.adp.ext.IADPBindingRuleProvider;
 import com.mmxlabs.models.lng.adp.ext.IADPProfileProvider;
 import com.mmxlabs.models.lng.adp.ext.IProfileGenerator;
@@ -245,6 +247,14 @@ public class ADPModelUtil {
 						for (final IProfileGenerator g : generators) {
 							if (g.canGenerate(profile, subProfile)) {
 								final List<LoadSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
+								for (SubProfileConstraint subProfileConstraint : subProfile.getConstraints()) {
+									if (subProfileConstraint instanceof ProfileVesselRestriction) {
+										slots.stream().forEach(s -> {
+											s.getAllowedVessels().clear();
+											s.getAllowedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+										});
+									}
+								}
 								if (!slots.isEmpty()) {
 									cmd.append(AddCommand.create(editingDomain, subProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS, slots));
 								}
@@ -290,6 +300,17 @@ public class ADPModelUtil {
 						for (final IProfileGenerator g : generators) {
 							if (g.canGenerate(profile, subProfile)) {
 								final List<DischargeSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
+								for (SubProfileConstraint subProfileConstraint : subProfile.getConstraints()) {
+									if (subProfileConstraint instanceof ProfileVesselRestriction) {
+										slots.stream().forEach(s -> {
+											s.getAllowedVessels().clear();
+											s.getAllowedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+										});
+									}
+								}
+								if (profile.getContractCode().contains("G")) {
+									slots.stream().forEach(s -> s.setOptional(true)); //ALEXTODO: undo
+								}
 								if (!slots.isEmpty()) {
 									cmd.append(AddCommand.create(editingDomain, subProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS, slots));
 								}
@@ -410,19 +431,19 @@ public class ADPModelUtil {
 		switch (volumeUnit) {
 		case M3:
 			slot.setVolumeLimitsUnit(VolumeUnits.M3);
-			slot.setMinQuantity((int) Math.round(volume));
+			slot.setMinQuantity((int) Math.round(0));
 			slot.setMaxQuantity((int) Math.round(volume));
 			break;
 		case MMBTU:
 			slot.setVolumeLimitsUnit(VolumeUnits.MMBTU);
-			slot.setMinQuantity((int) Math.round(volume));
+			slot.setMinQuantity((int) Math.round(0));
 			slot.setMaxQuantity((int) Math.round(volume));
 			break;
 		case MT:
 			slot.setVolumeLimitsUnit(VolumeUnits.M3);
 			// Rough MT to m3 conversion
 			int volumeInM3 = convertMTtoM3(volume);
-			slot.setMinQuantity(volumeInM3);
+			slot.setMinQuantity(0);
 			slot.setMaxQuantity(volumeInM3);
 			break;
 		default:
