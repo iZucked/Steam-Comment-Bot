@@ -8,6 +8,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -145,7 +146,7 @@ public class FleetPage extends ADPComposite {
 
 							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP fleet");
 							if (!fleetProfile.getVesselAvailabilities().isEmpty()) {
-								cmd.append(RemoveCommand.create(editorData.getEditingDomain(), fleetProfile.getVesselAvailabilities()));
+								cmd.append(DeleteCommand.create(editorData.getEditingDomain(), fleetProfile.getVesselAvailabilities()));
 							}
 							if (!newAvailabilities.isEmpty()) {
 								cmd.append(AddCommand.create(editorData.getEditingDomain(), fleetProfile, ADPPackage.Literals.FLEET_PROFILE__VESSEL_AVAILABILITIES, newAvailabilities));
