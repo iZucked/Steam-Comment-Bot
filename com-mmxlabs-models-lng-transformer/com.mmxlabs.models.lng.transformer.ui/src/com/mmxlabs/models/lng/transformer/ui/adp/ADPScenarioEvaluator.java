@@ -84,6 +84,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 
@@ -135,13 +136,65 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			final List<IResource> resources = new LinkedList<>();
 			final ModelEntityMap modelEntityMap = bridge.getDataTransformer().getModelEntityMap();
 
+			final List<ISequenceElement> allSequenceElements = new LinkedList<>();
+
+			final IPortSlotProvider portSlotProvider = bridge.getDataTransformer().getInjector().getInstance(IPortSlotProvider.class);
+			for (final PurchaseContractProfile p : adpModel.getPurchaseContractProfiles()) {
+				if (p.isEnabled()) {
+					for (final SubContractProfile<LoadSlot> sp : p.getSubProfiles()) {
+						for (final Slot s : sp.getSlots()) {
+							final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class);
+//							initialSequences.getModifiableUnusedElements().add(portSlotProvider.getElement(portSlot));
+							allSequenceElements.add(portSlotProvider.getElement(portSlot));
+						}
+					}
+				}
+			}
+			for (final SalesContractProfile p : adpModel.getSalesContractProfiles()) {
+				if (p.isEnabled()) {
+					for (final SubContractProfile<DischargeSlot> sp : p.getSubProfiles()) {
+						for (final Slot s : sp.getSlots()) {
+							final IPortSlot portSlot = bridge.getDataTransformer().getModelEntityMap().getOptimiserObjectNullChecked(s, IPortSlot.class);
+//							initialSequences.getModifiableUnusedElements().add(portSlotProvider.getElement(portSlot));
+							allSequenceElements.add(portSlotProvider.getElement(portSlot));
+						}
+					}
+				}
+			}
+
 			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioDataProvider);
+
+			if (adpModel.getSpotMarketsProfile().isIncludeEnabledSpotMarkets()) {
+				final List<SpotMarketGroup> groups = Lists.newArrayList( //
+						spotMarketsModel.getFobPurchasesSpotMarket(), //
+						spotMarketsModel.getDesPurchaseSpotMarket(), //
+						spotMarketsModel.getDesSalesSpotMarket(), //
+						spotMarketsModel.getFobSalesSpotMarket() //
+				);
+				for (final SpotMarketGroup group : groups) {
+					for (final SpotMarket market : group.getMarkets()) {
+						if (market.isEnabled()) {
+							final ISpotMarket o_market = modelEntityMap.getOptimiserObjectNullChecked(market, ISpotMarket.class);
+							final ISpotMarketSlotsProvider spotMarketSlotsProvider = bridge.getInjector().getInstance(ISpotMarketSlotsProvider.class);
+							final List<@NonNull ISequenceElement> elements = spotMarketSlotsProvider.getElementsFor(o_market);
+//							initialSequences.getModifiableUnusedElements().addAll(elements);
+							allSequenceElements.addAll(elements);
+						}
+					}
+				}
+			}
+
 			final FleetProfile fleetProfile = adpModel.getFleetProfile();
 			if (fleetProfile.isIncludeEnabledCharterMarkets()) {
 				final List<CharterInMarket> charterInMarkets = spotMarketsModel.getCharterInMarkets();
 				final ISpotCharterInMarketProvider spotCharterInMarketProvider = bridge.getDataTransformer().getInjector().getInstance(ISpotCharterInMarketProvider.class);
 
 				for (final CharterInMarket charterInMarket : charterInMarkets) {
+					if (charterInMarket.isNominal()) {
+						final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
+						final IVesselAvailability o_availability = spotCharterInMarketProvider.getSpotMarketAvailability(market, -1);
+						resources.add(vesselProvider.getResource(o_availability));
+					}
 					if (charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
 						final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
 						final int spotCharterInMarketCount = spotCharterInMarketProvider.getSpotCharterInMarketCount(market);
@@ -157,50 +210,20 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 				final IVesselAvailability o_availability = bridge.getDataTransformer().getModelEntityMap().getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
 				resources.add(vesselProvider.getResource(o_availability));
 			}
+			
+			final IVirtualVesselSlotProvider virtualVesselSlotProvider = bridge.getDataTransformer().getInjector().getInstance(IVirtualVesselSlotProvider.class);
 
+			for (ISequenceElement e : allSequenceElements) {
+				final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
+				if (vesselAvailability != null) {
+				     IResource o_resource = vesselProvider.getResource(vesselAvailability);
+				     resources.add(o_resource);
+				}
+			}
+			
 			final IModifiableSequences initialSequences = SequenceHelper.createEmptySequences(bridge.getDataTransformer(), resources);
-
-			final IPortSlotProvider portSlotProvider = bridge.getDataTransformer().getInjector().getInstance(IPortSlotProvider.class);
-			for (final PurchaseContractProfile p : adpModel.getPurchaseContractProfiles()) {
-				if (p.isEnabled()) {
-					for (final SubContractProfile<LoadSlot> sp : p.getSubProfiles()) {
-						for (final Slot s : sp.getSlots()) {
-							final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class);
-							initialSequences.getModifiableUnusedElements().add(portSlotProvider.getElement(portSlot));
-						}
-					}
-				}
-			}
-			for (final SalesContractProfile p : adpModel.getSalesContractProfiles()) {
-				if (p.isEnabled()) {
-					for (final SubContractProfile<DischargeSlot> sp : p.getSubProfiles()) {
-						for (final Slot s : sp.getSlots()) {
-							final IPortSlot portSlot = bridge.getDataTransformer().getModelEntityMap().getOptimiserObjectNullChecked(s, IPortSlot.class);
-							initialSequences.getModifiableUnusedElements().add(portSlotProvider.getElement(portSlot));
-						}
-					}
-				}
-			}
-
-			if (adpModel.getSpotMarketsProfile().isIncludeEnabledSpotMarkets()) {
-				final List<SpotMarketGroup> groups = Lists.newArrayList( //
-						spotMarketsModel.getFobPurchasesSpotMarket(), //
-						spotMarketsModel.getDesPurchaseSpotMarket(), //
-						spotMarketsModel.getDesSalesSpotMarket(), //
-						spotMarketsModel.getFobSalesSpotMarket() //
-				);
-				for (final SpotMarketGroup group : groups) {
-					for (final SpotMarket market : group.getMarkets()) {
-						if (market.isEnabled()) {
-							final ISpotMarket o_market = modelEntityMap.getOptimiserObjectNullChecked(market, ISpotMarket.class);
-							final ISpotMarketSlotsProvider spotMarketSlotsProvider = bridge.getInjector().getInstance(ISpotMarketSlotsProvider.class);
-							final List<@NonNull ISequenceElement> elements = spotMarketSlotsProvider.getElementsFor(o_market);
-							initialSequences.getModifiableUnusedElements().addAll(elements);
-						}
-					}
-				}
-			}
-
+			initialSequences.getModifiableUnusedElements().addAll(allSequenceElements);
+			
 			// FIXME: Create ADP chain
 			final IChainRunner chainRunner = LNGScenarioChainBuilder.createADPOptimisationChain(optimisationPlan.getResultName(), bridge.getDataTransformer(), bridge, optimisationPlan,
 					executorService, new MultiStateResult(initialSequences, new HashMap<>()), initialHints);

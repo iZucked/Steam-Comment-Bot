@@ -16,34 +16,27 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.minimaxlabs.rnd.representation.LightWeightOutputData;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.longterm.ICargoToCargoCostCalculator;
-import com.mmxlabs.models.lng.transformer.longterm.ICargoVesselRestrictionsMatrixProducer;
-import com.mmxlabs.models.lng.transformer.longterm.ILongTermMatrixOptimiser;
-import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimisationData;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.longterm.LongTermOptimiserHelper.ShippingType;
-import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
@@ -84,6 +77,10 @@ public class LightweightSchedulerOptimiser {
 	@Inject
 	private List<ILightWeightFitnessFunction> fitnessFunctions;
 
+	@Inject
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
+	ISequences initialSequences;
+	
 	private static Set<VesselInstanceType> ALLOWED_VESSEL_TYPES = Sets.newHashSet(VesselInstanceType.FLEET, VesselInstanceType.SPOT_CHARTER, VesselInstanceType.TIME_CHARTER);
 
 	/**
@@ -114,7 +111,7 @@ public class LightweightSchedulerOptimiser {
 		}
 
 		// (5) Export the pairings matrix to the raw sequences
-		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
+		ModifiableSequences rawSequences = new ModifiableSequences(initialSequences);
 		
 		@NonNull
 		IVesselAvailability pnlVessel = LongTermOptimiserHelper.getPNLVessel(dataTransformer, charterInMarket, vesselProvider);

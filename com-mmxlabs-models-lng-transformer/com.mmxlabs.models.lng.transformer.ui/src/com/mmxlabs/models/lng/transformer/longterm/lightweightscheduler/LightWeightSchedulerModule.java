@@ -38,6 +38,8 @@ import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.fitnessf
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.fitnessfunctions.VesselCargoCountLightWeightFitnessFunctionFactory;
 import com.mmxlabs.models.lng.transformer.longterm.metaheuristic.TabuLightWeightSequenceOptimiser;
 import com.mmxlabs.models.lng.transformer.longterm.webservice.WebserviceLongTermMatrixOptimiser;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -108,7 +110,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	private ILightWeightOptimisationData provideLightWeightOptimisationData(LongTermOptimisationData optimiserRecorder, ILongTermSlotsProvider longTermSlotsProvider,
 			ILongTermMatrixOptimiser matrixOptimiser, IVesselProvider vesselProvider, ICargoToCargoCostCalculator cargoToCargoCostCalculator,
 			ICargoVesselRestrictionsMatrixProducer cargoVesselRestrictionsMatrixProducer, @Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT) int[] desiredVesselCargoCount,
-			@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT) long[] desiredVesselCargoWeight) {
+			@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT) long[] desiredVesselCargoWeight, @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences) {
 		// (1) Identify LT slots
 		@NonNull
 		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
@@ -146,7 +148,9 @@ public class LightWeightSchedulerModule extends AbstractModule {
 
 		// create data for optimiser
 		List<List<IPortSlot>> shippedCargoes = LongTermOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
-		List<@NonNull IVesselAvailability> vessels = vesselProvider.getSortedResources().stream().map(v -> vesselProvider.getVesselAvailability(v))
+		List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
+				.sorted((a,b) -> a.getName().compareTo(b.getName())) //
+				.map(v -> vesselProvider.getVesselAvailability(v)) //
 				.filter(v -> LongTermOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
 		@NonNull
 		IVesselAvailability pnlVessel = LongTermOptimiserHelper.getPNLVessel(dataTransformer, nominalCharterInMarket, vesselProvider);

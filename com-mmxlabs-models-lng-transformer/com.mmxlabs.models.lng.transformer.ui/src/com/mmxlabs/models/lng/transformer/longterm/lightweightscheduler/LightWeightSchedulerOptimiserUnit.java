@@ -67,11 +67,14 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	private LNGScenarioModel initialScenario;
 
+	private @NonNull ISequences initialSequences;
+
 	@SuppressWarnings("null")
 	public LightWeightSchedulerOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings,
 			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
 			LNGScenarioModel initialScenario, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
+		this.initialSequences = initialSequences;
 		this.initialScenario = initialScenario;
 		
 		CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
@@ -184,7 +187,7 @@ public class LightWeightSchedulerOptimiserUnit {
 				ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 				ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
 				IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-				Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
+				Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(initialSequences.getUnusedElements(), portSlotProvider);
 				allPortSlots.forEach(e -> longTermSlotsProviderEditor.addLongTermSlot(e));
 				monitor.beginTask("Generate solutions", 100);
 				CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);

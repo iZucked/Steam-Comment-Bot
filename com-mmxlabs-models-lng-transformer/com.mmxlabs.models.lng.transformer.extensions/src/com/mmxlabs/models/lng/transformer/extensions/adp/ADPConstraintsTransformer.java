@@ -62,13 +62,13 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 		}
 
 		final YearMonth end = adpModel.getYearEnd();
-		final YearMonth start = adpModel.getYearStart();
-		final int startMonth = calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
 
 		for (final PurchaseContractProfile contractProfile : adpModel.getPurchaseContractProfiles()) {
 			if (!contractProfile.isEnabled()) {
 				continue;
 			}
+			final YearMonth start = contractProfile.getContract().getStartDate();
+			final int startMonth = calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
 			final List<LoadSlot> slots = new LinkedList<>();
 			for (final SubContractProfile<LoadSlot> subProfile : contractProfile.getSubProfiles()) {
 				slots.addAll(subProfile.getSlots());
@@ -118,6 +118,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			if (!contractProfile.isEnabled()) {
 				continue;
 			}
+			final YearMonth start = contractProfile.getContract().getStartDate();
+			final int startMonth = calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
+
 			final List<DischargeSlot> slots = new LinkedList<>();
 			for (final SubContractProfile<DischargeSlot> subProfile : contractProfile.getSubProfiles()) {
 				slots.addAll(subProfile.getSlots());

@@ -60,7 +60,8 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	private final Map<Port, Collection<ISequenceElement>> portMap = new HashMap<>();
 	private final Map<Slot, Collection<ISequenceElement>> slotMap = new HashMap<>();
 
-	private final List<Slot> spotSlots = new LinkedList<>();
+	private final List<LoadSlot> loadSlots = new LinkedList<>();
+	private final List<DischargeSlot> dischargeSlots = new LinkedList<>();
 
 	private enum RestrictionType {
 		FOLLOWER, PRECEDENT
@@ -199,20 +200,13 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 
 			};
 			// Process purchase contract restrictions - these are the follower restrictions
-			for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+			for (final LoadSlot slot : loadSlots) {
 				applyRestrictions.accept(slot, RestrictionType.FOLLOWER);
 			}
 
 			// Process sales contract restrictions - these are the preceding restrictions
-			for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+			for (final DischargeSlot slot : dischargeSlots) {
 				applyRestrictions.accept(slot, RestrictionType.PRECEDENT);
-			}
-			for (final Slot slot : spotSlots) {
-				if (slot instanceof LoadSlot) {
-					applyRestrictions.accept(slot, RestrictionType.FOLLOWER);
-				} else if (slot instanceof DischargeSlot) {
-					applyRestrictions.accept(slot, RestrictionType.PRECEDENT);
-				}
 			}
 		}
 
@@ -228,8 +222,11 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
 		// Record spot slots as not all of them are attached to the model
-		if (modelSlot instanceof SpotSlot) {
-			spotSlots.add(modelSlot);
+		if (modelSlot instanceof LoadSlot) {
+			loadSlots.add((LoadSlot) modelSlot);
+		}
+		if (modelSlot instanceof DischargeSlot) {
+			dischargeSlots.add((DischargeSlot) modelSlot);
 		}
 
 		allElements.add(sequenceElement);
