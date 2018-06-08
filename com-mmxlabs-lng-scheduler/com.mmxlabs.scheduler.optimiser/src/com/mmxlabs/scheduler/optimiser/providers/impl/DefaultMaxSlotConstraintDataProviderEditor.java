@@ -130,7 +130,7 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 					slotsSet.add(slot);
 				}
 			}
-			if (slotsSet.size() > 1) {
+			if (slotsSet.size() > 0) {
 				slotsSets.add(new Pair<>(slotsSet, limit));
 			}
 		}

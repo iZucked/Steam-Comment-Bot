@@ -49,7 +49,7 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 	/**
 	 * Max allowable idle time
 	 */
-	private static final int MAX_IDLE_TIME_HOURS = 5*24;
+	private static final int MAX_IDLE_TIME_HOURS = 9*24;
 	/**
 	 * Nominal speed
 	 */

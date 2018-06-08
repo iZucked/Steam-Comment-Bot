@@ -36,7 +36,7 @@ public final class CachingEntityValueCalculator implements IEntityValueCalculato
 	private final @NonNull AbstractCache<@NonNull CacheKey<@NonNull CargoPNLCacheRecord>, @Nullable Pair<@NonNull CargoValueAnnotation, @NonNull Long>> cache;
 
 	public CachingEntityValueCalculator(final @NonNull IEntityValueCalculator delegate) {
-		this(delegate, 100_000);
+		this(delegate, 1000); //ALEXTODO: undo
 	}
 
 	public CachingEntityValueCalculator(final @NonNull IEntityValueCalculator delegate, final int cacheSize) {

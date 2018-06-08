@@ -25,7 +25,7 @@ public final class CachingVolumeAllocator implements IVolumeAllocator {
 	private final @NonNull AbstractCache<CacheKey<@NonNull CargoVolumeCacheRecord>, @Nullable IAllocationAnnotation> cache;
 
 	public CachingVolumeAllocator(final @NonNull IVolumeAllocator delegate) {
-		this(delegate, 100_000);
+		this(delegate, 1_000); //ALEXTODO: undo
 	}
 
 	public CachingVolumeAllocator(final @NonNull IVolumeAllocator delegate, final int cacheSize) {
