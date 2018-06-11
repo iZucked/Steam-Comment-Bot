@@ -11,7 +11,7 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.apache.httpcomponents.httpclient,
  org.apache.httpcomponents.httpcore,
  com.googlecode.json-simple,
- com.mmxlabs.lngdataserver.lib;bundle-version="4.5.0",
+ com.mmxlabs.lngdataserver.lib;bundle-version="4.5.1",
  com.mmxlabs.lngdataserver.lib.test,
  com.mmxlabs.lngdataserver.integration.distances,
  com.mmxlabs.lngdataserver.server
