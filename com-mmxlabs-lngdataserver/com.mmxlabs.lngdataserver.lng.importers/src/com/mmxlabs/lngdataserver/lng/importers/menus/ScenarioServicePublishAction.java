@@ -188,7 +188,7 @@ public class ScenarioServicePublishAction {
 			SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
 				// response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, portsVersionUUID, fleetVersionUUID, pricingVersionUUID, distancesVersionUUID);
-				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, pricingVersionUUID, wrapMonitor(uploadMonitor));
+				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, pricingVersionUUID, scenarioInstance.getName(), wrapMonitor(uploadMonitor));
 			} catch (IOException e) {
 				System.out.println("Error uploading the basecase scenario");
 				e.printStackTrace();
