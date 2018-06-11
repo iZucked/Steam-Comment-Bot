@@ -1,0 +1,13 @@
+#MongoDB
+com.mmxlabs.lngdataserver.server/mongo_data/diagnostic.data/
+com.mmxlabs.lngdataserver.server/mongod.lock
+
+com.mmxlabs.lngdataserver.ui.*/web_files/
+
+*.orig
+*.rej
+*.swp
+bin/
+target/
+*~
+

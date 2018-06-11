@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.cargo/src" modelPluginID="com.mmxlabs.models.lng.cargo"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
+    dynamicTemplates="true" redirection="" modelName="Cargo" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
+    containmentProxies="true" complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11"
+    usedGenPackages="../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    operationReflection="true">
+  <foreignModel>cargo.ecore</foreignModel>
+  <genPackages prefix="Cargo" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="cargo.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//CargoType">
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//CargoType/FLEET"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//CargoType/FOB"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//CargoType/DES"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//VesselType">
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//VesselType/Owned"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//VesselType/Time_Chartered"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//EVesselTankState">
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/EITHER"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/MUST_BE_COLD"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/MUST_BE_WARM"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//InventoryFrequency">
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Cargo"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Hourly"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Daily"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Monthly"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Level"/>
+    </genEnums>
+    <genClasses ecoreClass="cargo.ecore#//CargoModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dischargeSlots"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoGroups"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/vesselAvailabilities"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/vesselEvents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/vesselTypeGroups"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/inventoryModels"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/canalBookings"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/charterInMarketOverrides"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//Cargo">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Cargo/allowRewiring"/>
+      <genFeatures children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference cargo.ecore#//Cargo/slots"/>
+      <genOperations ecoreOperation="cargo.ecore#//Cargo/getCargoType"/>
+      <genOperations ecoreOperation="cargo.ecore#//Cargo/getSortedSlots"/>
+      <genOperations ecoreOperation="cargo.ecore#//Cargo/getLoadName"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//Slot">
+      <genFeatures notify="false" createChild="false" propertyDescription="The contract, if any, for this deal"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/contract"/>
+      <genFeatures createChild="false" propertyDescription="The name of the counterparty for this deal"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/counterparty"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The load or discharge port for this trade"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/port"/>
+      <genFeatures createChild="false" propertyDescription="Arrival window start date"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStart"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="Arrival window start time (local time)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStartTime"/>
+      <genFeatures createChild="false" propertyDescription="The length of the arrival window"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSize"/>
+      <genFeatures createChild="false" propertyDescription="The units of the arrival window"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSizeUnits"/>
+      <genFeatures createChild="false" propertyDescription="Number of hours flexibility on the slot time window. Positive values increase the window end, negative values decrease the window start."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowFlex"/>
+      <genFeatures createChild="false" propertyDescription="The units of the window flex"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowFlexUnits"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="The duration of the slot in hours"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/duration"/>
+      <genFeatures createChild="false" propertyDescription="The volume units for min/max quantity bounds"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/volumeLimitsUnit"/>
+      <genFeatures createChild="false" propertyDescription="Minimum quantity" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/minQuantity"/>
+      <genFeatures createChild="false" propertyDescription="Minimum quantity" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/maxQuantity"/>
+      <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/optional"/>
+      <genFeatures createChild="false" propertyDescription="The price expression, if any, for this deal"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/priceExpression"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/cargo"/>
+      <genFeatures createChild="false" propertyDescription="The dating event to use to look up pricing"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingEvent"/>
+      <genFeatures createChild="false" propertyDescription="An explicit date to use for pricing lookups"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingDate"/>
+      <genFeatures createChild="false" propertyDescription="Free-text field for note taking"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/notes"/>
+      <genFeatures createChild="false" propertyDescription="Is this non-shipped slot divertible to a different market?"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/divertible"/>
+      <genFeatures createChild="false" propertyDescription="Maximum number of notional round trip days allocated to this trade"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/shippingDaysRestriction"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Group entity this trade falls under"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/entity"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If specified, the list of contracts that may or may not serve deals linked to this trade"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedContracts"/>
+      <genFeatures notify="false" createChild="false" propertyCategory="" propertyDescription="If specified, the list of ports that may or may not serve deals linked to this trade"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedPorts"/>
+      <genFeatures createChild="false" propertyDescription="If checked, restrictions are permitted values only. If unchecked restrictions are forbidden values."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/restrictedListsArePermissive"/>
+      <genFeatures createChild="false" propertyDescription="Postive or negative hedge value"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/hedges"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/miscCosts"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If specified, the list of vessel and/or classes that may or may not serve this trade"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedVessels"/>
+      <genFeatures createChild="false" propertyDescription="Price expression defining cancellation cost"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationExpression"/>
+      <genFeatures createChild="false" propertyDescription="Check to enable slot specific restrictions"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/overrideRestrictions"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Vessel nominated for this trade."
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/nominatedVessel"/>
+      <genFeatures createChild="false" propertyDescription="If selected, an open slot will be unable to form a cargo"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateDuration"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateVolumeLimitsUnit"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTimeWithFlex"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTimeWithFlex"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSize"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateWindowSizeUnits"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowSizeInHours"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateEntity"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateRestrictedListsArePermissive"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCancellationExpression"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatePricingEvent"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getPricingDateAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotContractParams"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateCounterparty"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//LoadSlot">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/arriveCold"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/DESPurchase"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//LoadSlot/transferFrom"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/salesDeliveryType"/>
+      <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateCV"/>
+      <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateDeliveryType"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//DischargeSlot">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/FOBSale"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/PurchaseDeliveryType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//DischargeSlot/transferTo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/minCvValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/maxCvValue"/>
+      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateMinCv"/>
+      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateMaxCv"/>
+      <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateDeliveryType"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//SpotSlot">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//SpotSlot/market"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//SpotLoadSlot"/>
+    <genClasses ecoreClass="cargo.ecore#//SpotDischargeSlot"/>
+    <genClasses ecoreClass="cargo.ecore#//CargoGroup">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoGroup/cargoes"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//VesselAvailability">
+      <genFeatures createChild="false" propertyDescription="Flag indicates vessel is owned or on a long term charter"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/fleet"/>
+      <genFeatures createChild="false" propertyDescription="Is this availability optional?"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/optional"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The vessel"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/vessel"/>
+      <genFeatures createChild="false" propertyDescription="The vessel charter number. Only needed if there are multiple charters of the same vessel"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/charterNumber"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The legal entity who is the owner or charterer"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/entity"/>
+      <genFeatures createChild="false" propertyDescription="Cost per day for using the vessel"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/timeCharterRate"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The port the vessel starts at. May be blank and starts at the first event."
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startAt"/>
+      <genFeatures createChild="false" propertyDescription="The vessel is not available before this date (UTC)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/startAfter"/>
+      <genFeatures createChild="false" propertyDescription="The vessel must be in use from this date (UTC)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/startBy"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The vessel must be returned to one of these ports"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/endAt"/>
+      <genFeatures createChild="false" propertyDescription="The vessel must not end before this date (UTC)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/endAfter"/>
+      <genFeatures createChild="false" propertyDescription="The vessel must have finished use by this date (UTC)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/endBy"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startHeel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/endHeel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/forceHireCostOnlyEndRule"/>
+      <genFeatures createChild="false" propertyDescription="The cost to reposition the vessel before use"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/repositioningFee"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/ballastBonusContract"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/charterContract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/minDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/maxDuration"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getStartByAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getStartAfterAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getEndByAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getEndAfterAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrCharterContractBallastBonusContract"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrContractMinDuration"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrContractMaxDuration"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="cargo.ecore#//VesselEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/durationInDays"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselEvent/allowedVessels"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselEvent/port"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/startAfter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/startBy"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getStartByAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getStartAfterAsDateTime"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//MaintenanceEvent"/>
+    <genClasses ecoreClass="cargo.ecore#//DryDockEvent"/>
+    <genClasses ecoreClass="cargo.ecore#//CharterOutEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterOutEvent/optional"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If set, the vessel will be relocated to this port after the charter out is finished"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CharterOutEvent/relocateTo"/>
+      <genFeatures createChild="false" propertyDescription="The daily hire rate returned by this charter out"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//CharterOutEvent/hireRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterOutEvent/ballastBonus"/>
+      <genFeatures createChild="false" propertyDescription="A fixed cost paid for repositioning this charter out"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//CharterOutEvent/repositioningFee"/>
+      <genFeatures property="Readonly" children="true" createChild="true" propertyCategory=""
+          propertyDescription="This is the heel range required to be sold to the charter out counterparty. Any heel in excess will be free."
+          ecoreFeature="ecore:EReference cargo.ecore#//CharterOutEvent/requiredHeel"/>
+      <genFeatures property="Readonly" children="true" createChild="true" propertyCategory=""
+          propertyDescription="This is the heel range available at the end of the charter to buy back."
+          ecoreFeature="ecore:EReference cargo.ecore#//CharterOutEvent/availableHeel"/>
+      <genOperations ecoreOperation="cargo.ecore#//CharterOutEvent/getEndPort"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="cargo.ecore#//AssignableElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//AssignableElement/sequenceHint"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//AssignableElement/vesselAssignmentType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//AssignableElement/spotIndex"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//AssignableElement/locked"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//VesselTypeGroup">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselTypeGroup/vesselType"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//EndHeelOptions">
+      <genFeatures createChild="false" propertyDescription="The required state of the vessel tanks"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/tankState"/>
+      <genFeatures createChild="false" propertyDescription="If the vessel arrives cold, the minimum heel required"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/minimumEndHeel"/>
+      <genFeatures createChild="false" propertyDescription="If the vessel arrives cold, the maximum heel required"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/maximumEndHeel"/>
+      <genFeatures createChild="false" propertyDescription="The sale price of the heel (up to maximum quantity). Over delivery is not priced."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//StartHeelOptions">
+      <genFeatures createChild="false" propertyDescription="The CV of the available heel"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/cvValue"/>
+      <genFeatures createChild="false" propertyDescription="The minimum quantity of heel available"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/minVolumeAvailable"/>
+      <genFeatures createChild="false" propertyDescription="The maximum quantity of heel available"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/maxVolumeAvailable"/>
+      <genFeatures createChild="false" propertyDescription="Purchase price per unit of heel."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//InventoryEventRow">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/startDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/endDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/period"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/counterParty"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/reliability"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/volume"/>
+      <genOperations ecoreOperation="cargo.ecore#//InventoryEventRow/getReliableVolume"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//InventoryCapacityRow">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/minVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/maxVolume"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//Inventory">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/port"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/feeds"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/offtakes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/capacities"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//CanalBookingSlot">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookingSlot/routeOption"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookingSlot/canalEntrance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookingSlot/bookingDate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookingSlot/slot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookingSlot/notes"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//CanalBookings">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/canalBookingSlots"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/strictBoundaryOffsetDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/relaxedBoundaryOffsetDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/arrivalMarginHours"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountNorthbound"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountSouthbound"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/northboundMaxIdleDays"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//ScheduleSpecification">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/vesselScheduleSpecifications"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/nonShippedCargoSpecifications"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/openEvents"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//NonShippedCargoSpecification">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//NonShippedCargoSpecification/slotSpecifications"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//VesselScheduleSpecification">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselScheduleSpecification/vesselAllocation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselScheduleSpecification/spotIndex"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselScheduleSpecification/events"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//ScheduleSpecificationEvent"/>
+    <genClasses ecoreClass="cargo.ecore#//VesselEventSpecification">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselEventSpecification/vesselEvent"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//VoyageSpecification"/>
+    <genClasses ecoreClass="cargo.ecore#//SlotSpecification">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//SlotSpecification/slot"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//CharterInMarketOverride">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CharterInMarketOverride/charterInMarket"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterInMarketOverride/spotIndex"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CharterInMarketOverride/startHeel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterInMarketOverride/startDate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CharterInMarketOverride/endPort"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterInMarketOverride/endDate"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CharterInMarketOverride/endHeel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterInMarketOverride/includeBallastBonus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterInMarketOverride/minDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CharterInMarketOverride/maxDuration"/>
+      <genOperations ecoreOperation="cargo.ecore#//CharterInMarketOverride/getStartDateAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//CharterInMarketOverride/getEndDateAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//CharterInMarketOverride/getLocalOrDelegateMinDuration"/>
+      <genOperations ecoreOperation="cargo.ecore#//CharterInMarketOverride/getLocalOrDelegateMaxDuration"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

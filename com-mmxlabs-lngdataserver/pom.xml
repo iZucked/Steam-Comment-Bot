@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mmxlabs.lngdataserver</groupId>
+	<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
+	<version>4.5.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>com.mmxlabs.parent</groupId>
+		<artifactId>tycho-parent</artifactId>
+		<relativePath />
+		<version>36</version>
+	</parent>
+
+	<scm>
+		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lngdataserver.git</connection>
+		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lngdataserver.git</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-lngdataserver</url>
+	</scm>
+
+	<modules>
+		<module>com.mmxlabs.lngdataserver.lib</module>
+		<module>com.mmxlabs.lngdataserver.lib.test</module>
+		<module>com.mmxlabs.lngdataserver.commons</module>
+		<module>com.mmxlabs.lngdataserver.server</module>
+		<module>com.mmxlabs.lngdataserver.vessels</module>
+		<module>com.mmxlabs.lngdataserver.ports</module>
+		<module>com.mmxlabs.lngdataserver.distances</module>
+		<module>com.mmxlabs.lngdataserver.distances.tests</module>
+		<module>com.mmxlabs.lngdataserver.lng.importers</module>
+		<module>com.mmxlabs.lngdataserver.lng.importers.tests</module>
+
+		<module>com.mmxlabs.lngdataserver.pricing</module>
+		<module>com.mmxlabs.lngdataserver.pricing.tests</module>
+
+		<module>com.mmxlabs.lngdataserver.ui</module>
+		<module>com.mmxlabs.lngdataserver.ui.scenarios</module>
+		<module>com.mmxlabs.lngdataserver.browser</module>
+		<module>com.mmxlabs.lngdataserver.browser.edit</module>
+		<module>com.mmxlabs.lngdataserver.browser.ui</module>
+
+		<module>com.mmxlabs.lngdataserver.feature</module>
+	</modules>
+
+	<build>
+		<!-- Required for some tycho workaround - may no longer be needed -->
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<!-- Enable tycho packaging types -->
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+
+					<resolver>p2</resolver>
+
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+					</target>
+
+					<environments>
+
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+	</build>
+
+</project>

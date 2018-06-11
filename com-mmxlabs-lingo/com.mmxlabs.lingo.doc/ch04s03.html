@@ -1,0 +1,70 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>The Pricing Section</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="LiNGO User Manual"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Data Model Reference"><link rel="prev" href="ch04s02.html" title="Slot Editors"><link rel="next" href="ch04s04.html" title="The Window Section"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="DataModel_lng_cargo_Slot_Pricing"></a>
+			The Pricing Section
+		</h2></div></div></div><p>
+			<img src="resources/datamodel/slot-pricing-dialog.png" height="150">
+		</p><p>This section allows the pricing structure of the transaction
+			to
+			be specified, with inputs being:
+		</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><td>
+							<p>Contract</p>
+						</td><td>
+							<p>If the &#8220;Contract&#8221; checkbox is checked, you can determine
+								the transaction price by choosing a particular contract,
+								which
+								will calculate price based on
+								various factors.
+							</p>
+						</td></tr><tr><td>
+							<p>Expression</p>
+						</td><td>
+							<p>If the &#8220;Expression&#8221; checkbox is checked, you can
+								determine
+								the price for this transaction directly, either as
+								a
+								given number
+								of USD per mmBtu, or as a
+								mathematical expression
+								involving one
+								or more industry indices. You must specify
+								either a contract or
+								a
+								price expression.
+							</p>
+						</td></tr><tr><td>
+							<p>Pricing Date</p>
+						</td><td>
+							<p>If this checkbox is checked, you can specify a date on
+								which the price for the transaction is based, which is
+								different
+								from the date the transaction
+								actually occurs on.
+								If
+								the checkbox
+								is unchecked, the date for calculating the price
+								will be the
+								actual date of the transaction.
+							</p>
+						</td></tr><tr><td>
+							<p>Hedges</p>
+						</td><td>
+							<p>This field allows you to specify a profit &amp; loss
+								term
+								which is linked to the selected slot (whether it is used or
+								not); the value may be either
+								positive (profit) or negative
+								(loss). This term will not affect the decisions made by the
+								optimiser, but will be reflected in profit &amp; loss
+								reports.
+							</p>
+						</td></tr><tr><td>
+							<p>Cancellation Fee</p>
+						</td><td>
+							<p>This field allows you to specify a cost which must be
+								paid
+								if the slot is not used.
+							</p>
+						</td></tr></tbody></table></div><p></p><p>NOTE: This section will also include any contract-specific
+			options for the slot.
+		</p><p></p></div></body></html>

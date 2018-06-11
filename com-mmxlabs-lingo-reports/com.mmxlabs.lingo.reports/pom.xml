@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mmxlabs.lingo.reports</groupId>
+		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
+		<version>4.5.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>com.mmxlabs.lingo.reports</artifactId>
+	<version>4.5.1-SNAPSHOT</version>
+	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<!-- Skipping files causing exceptions in sonar analysis and generated code -->
+		<sonar.exclusions>file:**/com/mmxlabs/lingo/reports/views/changeset/actions/CreateSandboxAction.java,file:**/com/mmxlabs/lingo/reports/views/changeset/model/*.java,file:**/com/mmxlabs/lingo/reports/views/changeset/model/impl/*.java,file:**/com/mmxlabs/lingo/reports/views/changeset/model/util/*.java,file:**/com/mmxlabs/lingo/reports/views/schedule/model/*.java,file:**/com/mmxlabs/lingo/reports/views/schedule/model/impl/*.java,file:**/com/mmxlabs/lingo/reports/views/schedule/model/util/*.java</sonar.exclusions>
+	</properties>
+</project>

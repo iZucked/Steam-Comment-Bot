@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="com.mmxlabs.models.ui" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="com.mmxlabs.models.ui" id="com.mmxlabs.models.ui.editorfactories" name="Inline Editor Factories"/>
+      </appinfo>
+      <documentation>
+         Elements in this extension point connect up MMX labs UI parts for models.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+         <documentation>
+            Register MMX Labs UI components through this extension point.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="editorFactory" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="editorFactory">
+      <annotation>
+         <documentation>
+            editorFactory extensions correspond to IInlineEditorFactory instances. The extension attributes determine which factory is bound to a particular feature on a particular object.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="FeatureAnyOf" minOccurs="0" maxOccurs="1"/>
+            <element ref="OwnerAnyOf" minOccurs="0" maxOccurs="1"/>
+         </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="factoryClass" type="string">
+            <annotation>
+               <documentation>
+                  The factory which will be used to construct the editor.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":com.mmxlabs.models.ui.editors.IInlineEditorFactory"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="featureNameEquals" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="FeatureAnyOf">
+      <complexType>
+         <choice>
+            <element ref="EDataTypeIs" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="EClassExtends" minOccurs="1" maxOccurs="unbounded"/>
+         </choice>
+      </complexType>
+   </element>
+
+   <element name="EDataTypeIs">
+      <complexType>
+         <attribute name="EDataTypeURI" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="EDataTypeName" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="EClassExtends">
+      <complexType>
+         <attribute name="EClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.ecore.EObject"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="OwnerAnyOf">
+      <complexType>
+         <sequence>
+            <element ref="EClassExtends" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>

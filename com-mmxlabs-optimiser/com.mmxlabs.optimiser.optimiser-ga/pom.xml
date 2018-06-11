@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.mmxlabs.optimiser</groupId>
+		<artifactId>optimiser-parent</artifactId>
+		<version>4.5.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>com.mmxlabs.optimiser.optimiser-ga</artifactId>
+	<version>4.5.1-SNAPSHOT</version>
+	<packaging>eclipse-plugin</packaging>
+	<properties>
+		<sonar.junit.reportPaths>
+			../${project.artifactId}.tests/target/surefire-reports
+		</sonar.junit.reportPaths>
+	</properties>
+</project>

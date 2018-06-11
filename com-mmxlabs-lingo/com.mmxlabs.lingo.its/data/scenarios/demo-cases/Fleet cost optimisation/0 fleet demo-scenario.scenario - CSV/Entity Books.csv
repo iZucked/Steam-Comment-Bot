@@ -1,0 +1,5 @@
+entity,type,kind,01/01/1970
+Shipping,Shipping,SimpleEntityBook,0
+Others,Shipping,SimpleEntityBook,0
+Shipping,Trading,SimpleEntityBook,0
+Others,Trading,SimpleEntityBook,0

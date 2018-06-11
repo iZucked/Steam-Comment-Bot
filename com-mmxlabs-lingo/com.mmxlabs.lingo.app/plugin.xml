@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.mmxlabs.lingo.app.intro.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.mmxlabs.lingo.app.intro.EditingPerspective"
+            icon="icons/editor_area.gif"
+            id="com.mmxlabs.lingo.app.perspective.editing"
+            name="Data">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            introId="com.mmxlabs.lingo.app.intro"
+            content="introContent.xml"
+            id="com.mmxlabs.lingo.app.configId">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+            content="ext.xml"
+            configId="com.mmxlabs.lingo.app.configId">
+      </configExtension>
+   </extension>
+      <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+          locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+            <toolbar
+                  id="undoredo.toolbar"
+                  label="Undo/Redo">
+            <command
+                  commandId="org.eclipse.ui.edit.undo"
+                  id="undoredo.undo"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.edit.redo"
+                  id="undoredo.redo"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.activities">
+      <defaultEnablement
+            id="com.mmxlabs.lingo.app.default.activity">
+      </defaultEnablement>
+      <activity
+            id="com.mmxlabs.lingo.app.default.activity"
+            name="Default Enablements">
+      </activity>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.default.activity"
+            isEqualityPattern="false"
+            pattern="com.mmxlabs.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.default.activity"
+            isEqualityPattern="false"
+            pattern="org.eclipse.*update.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.default.activity"
+            pattern="org.eclipse.*p2.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.default.activity"
+            isEqualityPattern="true"
+            pattern="org.eclipse.ui.views/org.eclipse.ui.views.PropertySheet">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.default.activity"
+            isEqualityPattern="false"
+            pattern=".*/org.eclipse.ui">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.default.activity"
+            isEqualityPattern="true"
+            pattern="org.eclipse.ui.views.log/org.eclipse.pde.runtime.LogView">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.default.activity"
+            isEqualityPattern="false"
+            pattern="org.eclipse.ui.*/org.eclipse.ui.net.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.default.activity"
+            isEqualityPattern="true"
+            pattern="org.eclipse.ui.ide/org.eclipse.ui.preferencePages.Workbench">
+      </activityPatternBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.activities">
+      <activity
+            id="com.mmxlabs.lingo.app.eclipse.activity"
+            name="Suppressed Eclipse Bindings">
+      </activity>
+      <activityPatternBinding
+            activityId="com.mmxlabs.lingo.app.eclipse.activity"
+            isEqualityPattern="false"
+            pattern="org.eclipse.*/.*">
+      </activityPatternBinding>
+   </extension>
+   <extension
+         id="com.mmxlabs.lingo.app.workbench.1"
+         point="org.eclipse.e4.workbench.model">
+      <processor
+            apply="always"
+            beforefragment="false"
+            class="com.mmxlabs.lingo.app.e4.WorkbenchChangeProcessor">
+      </processor>
+   </extension>
+ 
+
+
+</plugin>

@@ -1,0 +1,9 @@
+entity,type,kind,1970-01-01
+Europe,Shipping,SimpleEntityBook,0.0000
+US,Shipping,SimpleEntityBook,0.0000
+Asia,Shipping,SimpleEntityBook,0.0000
+Shipping,Shipping,SimpleEntityBook,0.0000
+Europe,Trading,SimpleEntityBook,0.0000
+US,Trading,SimpleEntityBook,0.0000
+Asia,Trading,SimpleEntityBook,0.0000
+Shipping,Trading,SimpleEntityBook,0.0000

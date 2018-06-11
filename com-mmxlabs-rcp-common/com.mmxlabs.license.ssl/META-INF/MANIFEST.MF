@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SSL License Manager
+Bundle-SymbolicName: com.mmxlabs.license.ssl;singleton:=true
+Bundle-Version: 4.5.1.qualifier
+Bundle-Activator: com.mmxlabs.license.ssl.internal.Activator
+Bundle-Vendor: Minimax Labs Ltd.
+Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)",
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ org.eclipse.ecf.filetransfer,
+ org.apache.httpcomponents.httpclient,
+ org.eclipse.ecf.provider.filetransfer.httpclient4,
+ org.eclipse.ecf.provider.filetransfer;bundle-version="3.2.200",
+ org.apache.httpcomponents.httpcore;bundle-version="4.3.3",
+ org.eclipse.ecf;bundle-version="3.4.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.license.ssl
+Eclipse-BundleShape: dir
+Import-Package: org.slf4j;version="1.6.4"
