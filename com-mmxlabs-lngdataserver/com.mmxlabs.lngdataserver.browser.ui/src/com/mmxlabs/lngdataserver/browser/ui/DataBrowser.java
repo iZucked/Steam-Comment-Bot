@@ -160,7 +160,7 @@ public class DataBrowser extends ViewPart {
 										for (final ModelArtifact modelArtifact : mf.getModelDependencies()) {
 											final String v = modelArtifact.getDataVersion();
 											if (Objects.equals(modelArtifact.getKey(), compositeNode.getType())) {
-												if (Objects.equals(leaf.getDisplayName(), v)) {
+												if (Objects.equals(leaf.getVersionIdentifier(), v)) {
 													return true;
 												}
 											}
@@ -265,6 +265,7 @@ public class DataBrowser extends ViewPart {
 
 										if (actionHandler.rename(selectedNode.getVersionIdentifier(), dialog.getValue())) {
 											selectedNode.setDisplayName(dialog.getValue());
+											selectedNode.setVersionIdentifier(dialog.getValue());
 										}
 									}));
 									itemsAdded = true;
