@@ -1,0 +1,16 @@
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<plugin><extension point="org.eclipse.help.toc"><toc primary="true" file="toc.xml"></toc>
+                                                <index
+                                                      path="index">
+                                                </index></extension><extension point="org.eclipse.help.index"><index file="index.xml"></index></extension>
+                                                                                                     <extension
+                                                                                                           point="org.eclipse.help.contexts">
+                                                                                                        <contexts
+                                                                                                              file="contexts.xml">
+                                                                                                        </contexts>
+                                                                                                     </extension></plugin>

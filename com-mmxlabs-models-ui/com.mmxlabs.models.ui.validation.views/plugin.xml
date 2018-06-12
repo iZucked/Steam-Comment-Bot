@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="org.eclipse.ui"
+            class="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
+            icon="icons/problems_view.gif"
+            id="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
+            name="Validation"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>

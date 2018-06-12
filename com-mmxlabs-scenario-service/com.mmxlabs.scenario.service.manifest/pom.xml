@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
+		<groupId>com.mmxlabs.scenario.service</groupId>
+		<version>4.4.15-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>com.mmxlabs.scenario.service.manifest</artifactId>
+	<version>4.4.15-SNAPSHOT</version>
+	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/scenario/service/manifest/*.java,file:**/com/mmxlabs/scenario/service/manifest/impl/*.java,file:**/com/mmxlabs/scenario/service/manifest/util/*.java</sonar.exclusions>
+	</properties>
+</project>

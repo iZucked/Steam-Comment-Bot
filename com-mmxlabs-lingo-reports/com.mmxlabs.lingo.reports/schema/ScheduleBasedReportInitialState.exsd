@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="com.mmxlabs.lingo.reports" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="com.mmxlabs.lingo.reports" id="ScheduleBasedReportInitialState" name="ScheduleBasedReportInitialState"/>
+      </appinfo>
+      <documentation>
+         [Enter description of this extension point.]
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="ScheduleBasedReportInitialState" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="ScheduleBasedReportInitialState">
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="InitialColumn" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="InitialRowType" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="InitialDiffOption" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.ui.views/view/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="customisable" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="true">
+                  </enumeration>
+                  <enumeration value="false">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="InitialColumn">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.lingo.reports.ScheduleBasedColumn/ScheduleBasedColumn/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="InitialRowType">
+      <complexType>
+         <attribute name="rowType">
+            <annotation>
+               <documentation>
+                  One of;
+
+cargo - Include all cargoes (including spot market cargoes)
+long - Include long positions (open buys)
+short - Include short positions (open sales)
+event - Include pre-defined vessel events
+virtualcharters - Include generated charter out events.
+orphanlegs - Include orphan ballast legs
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="cargo">
+                  </enumeration>
+                  <enumeration value="long">
+                  </enumeration>
+                  <enumeration value="short">
+                  </enumeration>
+                  <enumeration value="event">
+                  </enumeration>
+                  <enumeration value="orphanlegs">
+                  </enumeration>
+                  <enumeration value="virtualcharters">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="InitialDiffOption">
+      <complexType>
+         <attribute name="option">
+            <annotation>
+               <documentation>
+                  One of;
+
+scenario  - Show pinned scenario data
+vessel - Include vessel assignment changes
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="scenario">
+                  </enumeration>
+                  <enumeration value="vessel">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>

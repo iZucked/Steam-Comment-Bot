@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mmxlabs.lingo</groupId>
+		<artifactId>com.mmxlabs.lingo.parent</artifactId>
+		<version>4.4.15-SNAPSHOT</version>
+	</parent>
+	<artifactId>com.mmxlabs.lingo.its</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<properties>
+		<sonar.exclusions>file:**/*.java</sonar.exclusions>
+	</properties>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+
+					<environments>
+
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>com.mmxlabs.lingo.feature</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+
+					<!-- Include non-standard test suffix -->
+					<includes>
+						<include>**/*Tests.*</include>
+						<include>**/Test*.*</include>
+						<include>**/*Test.*</include>
+					</includes>
+
+					<product>com.mmxlabs.lingo.product.product</product>
+					<application>com.mmxlabs.lingo.app.application</application>
+
+					<useUIHarness>true</useUIHarness>
+					<useUIThread>true</useUIThread>
+
+					<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile}</argLine>
+
+					<!-- Automatically start these bundles at specified run level. These 
+						contain the services required for test execution -->
+					<bundleStartLevel>
+
+						<bundle>
+							<id>org.eclipse.core.runtime</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.equinox.common</id>
+							<level>2</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.equinox.ds</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.equinox.event</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.ops4j.peaberry.activation</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.optimiser.optimiser-common</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.optimiser.optimiser-core</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+
+						<bundle>
+							<id>com.mmxlabs.optimiser.optimiser-lso</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.migration</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.migration.scenario</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.lng.liveevaluator</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.lng.transformer</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.lng.transformer.ui</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.scheduler.optimiser</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.lingo.extensions</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.lingo.its</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+					</bundleStartLevel>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<!-- The quickTests profile skips the long running scenario tests -->
+		<profile>
+			<id>quickTests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<providerHint>junit47</providerHint>
+							<providerProperties>
+								<groups>com.mmxlabs.lingo.its.tests.category.QuickTest</groups>
+							</providerProperties>
+							<failIfNoTests>false</failIfNoTests>
+							<!-- Only run Tests marked with the Quick Test annotation -->
+							<group>com.mmxlabs.lingo.its.tests.category.QuickTest</group>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+		<profile>
+			<id>skipITS</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+		<profile>
+			<id>excludeCategoryBasedTests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<providerHint>junit47</providerHint>
+							<providerProperties>
+								<excludegroups>${test.excludeCategories}</excludegroups>
+							</providerProperties>
+							<failIfNoTests>false</failIfNoTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+		<profile>
+			<id>categoryBasedTests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<providerHint>junit47</providerHint>
+							<providerProperties>
+								<groups>com.mmxlabs.lingo.its.tests.category.${test.category}</groups>
+							</providerProperties>
+							<failIfNoTests>false</failIfNoTests>
+							<!-- Only run Tests marked with the Quick Test annotation -->
+							<group>com.mmxlabs.lingo.its.tests.category.${test.category}</group>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+
+		<!-- Enable this profile to run the its test independently of the full 
+			build. -->
+		<profile>
+			<id>useBuildRepos</id>
+			<repositories>
+				<repository>
+					<id>lingo-p2</id>
+					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/lingo/com.mmxlabs.lingo.product-definition/${project.version}/com.mmxlabs.lingo.product-definition-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+			</repositories>
+		</profile>
+		<profile>
+			<id>useProvidedRepo</id>
+			<repositories>
+				<repository>
+					<id>lingo-p2</id>
+					<url>${env.LINGO_P2_REPO}</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>lingo-its-p2</id>
+					<url>${env.LINGO_ITS_P2_REPO}</url>
+					<layout>p2</layout>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
+</project>

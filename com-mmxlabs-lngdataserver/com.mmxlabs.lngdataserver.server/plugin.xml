@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="DataServerEndPoint" name="DataServerEndPoint" schema="schema/DataServerEndPoint.exsd"/>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.lngdataserver.server.preferences.DataserverPreferencePage"
+            id="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
+            name="Data Server">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.mmxlabs.lngdataserver.server.preferences.DatahubPreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.lngdataserver.server.internal.PluginStartup">
+      </startup>
+   </extension>
+
+</plugin>

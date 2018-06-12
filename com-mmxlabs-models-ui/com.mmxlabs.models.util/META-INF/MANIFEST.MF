@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model Utils
+Bundle-SymbolicName: com.mmxlabs.models.util;singleton:=true
+Bundle-Version: 4.4.15.qualifier
+Bundle-Activator: com.mmxlabs.models.util.Activator
+Bundle-Vendor: Minimax Labs Ltd.
+Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
+ org.eclipse.core.runtime;bundle-version="3.7.0",
+ org.eclipse.emf.ecore;bundle-version="2.7.0",
+ org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
+ org.ops4j.peaberry.eclipse;bundle-version="1.1.1",
+ com.google.inject;bundle-version="3.0.0",
+ org.ops4j.peaberry;bundle-version="1.2.0",
+ org.eclipse.ui.views;bundle-version="3.6.0",
+ org.eclipse.emf.edit.ui;bundle-version="2.8.0",
+ com.google.guava;bundle-version="13.0.1",
+ com.mmxlabs.common.common-util;bundle-version="[4.4.15,5.0.0)",
+ com.mmxlabs.models.mmxcore;bundle-version="[4.4.15,5.0.0)",
+ com.mmxlabs.models.migration;bundle-version="[4.4.15,5.0.0)",
+ org.objectweb.asm;bundle-version="3.3.1",
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.models.datetime.ui;bundle-version="[2.1.0,3.0.0)",
+ com.mmxlabs.license.features,
+ com.mmxlabs.scenario.service.model
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.models.util,
+ com.mmxlabs.models.util.emfpath,
+ com.mmxlabs.models.util.importer,
+ com.mmxlabs.models.util.importer.impl,
+ com.mmxlabs.models.util.importer.registry,
+ com.mmxlabs.models.util.importer.registry.impl
+Import-Package: javax.inject;version="1.0.0",
+ org.slf4j;version="1.6.4"
