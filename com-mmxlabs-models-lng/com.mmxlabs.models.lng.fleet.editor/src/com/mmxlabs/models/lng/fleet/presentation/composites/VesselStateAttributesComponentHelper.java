@@ -109,10 +109,11 @@ public class VesselStateAttributesComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the fuelConsumptionOverride feature on VesselStateAttributes
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_fuelConsumptionOverrideEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE));
+		// Control managed explicity in VSADetailComposite
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE));
 	}
 
 	/**
