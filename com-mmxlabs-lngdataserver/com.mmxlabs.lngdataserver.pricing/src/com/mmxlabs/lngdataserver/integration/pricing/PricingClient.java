@@ -1,0 +1,242 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
+package com.mmxlabs.lngdataserver.integration.pricing;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Curve;
+import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
+import com.mmxlabs.lngdataserver.commons.model.PublishRequest;
+import com.mmxlabs.lngdataserver.commons.model.RenameRequest;
+
+import okhttp3.Credentials;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Request.Builder;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class PricingClient {
+
+	private static final String SYNC_VERSION_ENDPOINT = "/pricing/sync/versions/";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PricingClient.class);
+	private static final OkHttpClient CLIENT = new OkHttpClient();
+	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+	public static List<PricingVersion> getVersions(String baseUrl) throws IOException {
+		Request pricingRequest = new Request.Builder().url(baseUrl + "/pricing/versions").build();
+		try (Response pricingResponse = CLIENT.newCall(pricingRequest).execute()) {
+
+			List<Version> pricingVersions = new ObjectMapper().readValue(pricingResponse.body().byteStream(), new TypeReference<List<Version>>() {
+			});
+
+			return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
+					.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished(), v.isCurrent())).collect(Collectors.toList());
+		}
+	}
+
+	public static boolean publishVersion(String version, String baseUrl, String upstreamUrl) throws IOException {
+
+		PublishRequest publishRequest = new PublishRequest();
+		publishRequest.setVersion(version);
+		publishRequest.setUpstreamUrl(upstreamUrl + SYNC_VERSION_ENDPOINT);
+
+		String json = new ObjectMapper().writeValueAsString(publishRequest);
+
+		RequestBody body = RequestBody.create(JSON, json);
+		Request request = new Request.Builder().url(baseUrl + "/pricing/sync/publish").post(body).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error publishing version: " + response.message());
+				return false;
+			}
+			return true;
+		}
+	}
+
+	public static List<PricingVersion> getVersions(String baseUrl, String username, String password) throws IOException {
+		Request pricingRequest = new Request.Builder().url(baseUrl + "/pricing/versions") //
+				.addHeader("Authorization", Credentials.basic(username, password)) //
+				.build();
+		try (Response pricingResponse = CLIENT.newCall(pricingRequest).execute()) {
+
+			List<Version> pricingVersions = new ObjectMapper().readValue(pricingResponse.body().byteStream(), new TypeReference<List<Version>>() {
+			});
+
+			return pricingVersions.stream().filter(v -> v.getIdentifier() != null).sorted((v1, v2) -> v2.getCreatedAt().compareTo(v1.getCreatedAt()))
+					.map(v -> new PricingVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished(), v.isCurrent())).collect(Collectors.toList());
+		}
+	}
+
+	public static boolean getUpstreamVersion(String baseUrl, String upstreamUrl, String version) throws IOException {
+		final String json;
+		// Pull down the version data
+		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
+		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
+			if (!pullResponse.isSuccessful()) {
+				return false;
+			}
+			json = pullResponse.body().string();
+		}
+		// Post the data to local repo
+		final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+		final Request postRequest = new Request.Builder().url(baseUrl + SYNC_VERSION_ENDPOINT).post(body).build();
+		try (final Response postResponse = CLIENT.newCall(postRequest).execute()) {
+			return postResponse.isSuccessful();
+		}
+	}
+
+	public static PricingVersion pullUpstreamVersion(String upstreamUrl, String version) throws IOException {
+
+		// Pull down the version data
+		final Request pullRequest = new Request.Builder().url(upstreamUrl + SYNC_VERSION_ENDPOINT + version).get().build();
+		try (final Response pullResponse = CLIENT.newCall(pullRequest).execute()) {
+			if (!pullResponse.isSuccessful()) {
+				return null;
+			}
+
+			Version v = new ObjectMapper().readValue(pullResponse.body().byteStream(), new TypeReference<Version>() {
+			});
+
+			return new PricingVersion(v.getIdentifier(), v.getCreatedAt(), true, v.isCurrent());
+		}
+	}
+
+	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
+
+		String json = new ObjectMapper().writeValueAsString(version);
+
+		RequestBody body = RequestBody.create(JSON, json);
+		Request request = new Request.Builder().url(baseUrl + SYNC_VERSION_ENDPOINT).post(body).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error publishing version: " + response.message());
+				return false;
+			}
+			return true;
+		}
+	}
+
+	public static boolean deleteVersion(String baseUrl, String version) throws IOException {
+
+		Request request = new Request.Builder().url(baseUrl + "/pricing/version/" + version).delete().build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error deleting version: " + response.message());
+				return false;
+			}
+			return true;
+		}
+	}
+
+	public static boolean renameVersion(String baseUrl, String oldVersion, String newVersion) throws IOException {
+		RenameRequest renameRequest = new RenameRequest();
+		renameRequest.setName(newVersion);
+		renameRequest.setVersion(oldVersion);
+
+		String json = new ObjectMapper().writeValueAsString(renameRequest);
+
+		RequestBody body = RequestBody.create(JSON, json);
+		Request request = new Request.Builder().url(baseUrl + "/pricing/version/rename/").patch(body).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error renaming version: " + response.message());
+				return false;
+			}
+			return true;
+		}
+	}
+
+	public static boolean setCurrentVersion(String baseUrl, String version) throws IOException {
+
+		RequestBody body = RequestBody.create(JSON, "{}");
+		Request request = new Request.Builder().url(baseUrl + "/pricing/version/current/" + version).patch(body).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+
+			if (!response.isSuccessful()) {
+				LOGGER.error("Error setting current version: " + response.message());
+				return false;
+			}
+			return true;
+		}
+	}
+
+	public static CompletableFuture<String> notifyOnNewVersion(String baseUrl, String username, String password) {
+		OkHttpClient longPollingClient = CLIENT.newBuilder().readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS).build();
+		String url = baseUrl + "/pricing/version_notification";
+		LOGGER.debug("Calling url {}", url);
+		CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+			Builder builder = new Request.Builder().url(url);
+			if (username != null && !username.isEmpty()) {
+				builder = builder.addHeader("Authorization", Credentials.basic(username, password));
+			}
+			Request request = builder.build();
+			Response response = null;
+			try {
+				response = longPollingClient.newCall(request).execute();
+				Version newVersion = new ObjectMapper().readValue(response.body().byteStream(), Version.class);
+				return newVersion.getIdentifier();
+			} catch (IOException e) {
+				LOGGER.error("Error waiting for new version");
+				throw new RuntimeException("Error waiting for new version");
+			} finally {
+				if (response != null) {
+					response.close();
+				}
+			}
+		});
+		return completableFuture;
+	}
+
+	public static List<Curve> getCommodityCurves(String baseUrl, String version) throws IOException {
+		return getCurves(baseUrl, version, "/commodities");
+	}
+
+	public static List<Curve> getFuelCurves(String baseUrl, String version) throws IOException {
+		return getCurves(baseUrl, version, "/basefuel");
+	}
+
+	public static List<Curve> getCurrencyCurves(String baseUrl, String version) throws IOException {
+		return getCurves(baseUrl, version, "/currencies");
+	}
+
+	public static List<Curve> getCharterCurves(String baseUrl, String version) throws IOException {
+		return getCurves(baseUrl, version, "/charter");
+	}
+
+	public static List<Curve> getCurves(String baseUrl, String version, String group) throws IOException {
+		String url = baseUrl + group + "?v=" + version;
+		LOGGER.debug("Calling url {}", url);
+		Request request = new Request.Builder().url(url).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+			return new ObjectMapper().readValue(response.body().byteStream(), new TypeReference<List<Curve>>() {
+			});
+		}
+	}
+
+	public static <T> T getCurve(String baseUrl, String version, String curve, Class<T> type) throws IOException {
+		Request request = new Request.Builder().url(baseUrl + "/curves/" + curve + "?v=" + version).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+			T result = new ObjectMapper().readValue(response.body().byteStream(), type);
+			return result;
+		}
+	}
+
+}

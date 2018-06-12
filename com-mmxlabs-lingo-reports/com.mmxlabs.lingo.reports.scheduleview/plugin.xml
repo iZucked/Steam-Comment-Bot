@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="schedulerViewColourScheme" name="Scheduler View Colour Scheme" schema="schema/schedulerViewColourScheme.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Schedule Chart"
+            icon="icons/schedule_view.gif"
+            category="com.mmxlabs.scheduleview"
+            class="com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView"
+            id="com.mmxlabs.scheduleview.views.SchedulerView">
+      </view>
+   </extension>
+   <extension
+         point="com.mmxlabs.lingo.reports.scheduleview.schedulerViewColourScheme">
+      <ColourScheme
+            class="com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.VesselStateColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme"
+            isHighlighter="false"
+            name="Vessel State">
+      </ColourScheme>
+      <ColourScheme
+            class="com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ShippingRiskHighlighter"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ShippingRiskHighlighter"
+            isHighlighter="true"
+            name="Shipping Risk">
+      </ColourScheme>
+   </extension>
+
+</plugin>

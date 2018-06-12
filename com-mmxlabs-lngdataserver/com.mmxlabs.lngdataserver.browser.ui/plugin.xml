@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+	<extension-point id="DataBrowserExtension" name="DataBrowserExtension" schema="schema/DataBrowserExtension.exsd"/>
+ <extension-point id="DataBrowserContextMenuExtension" name="DataBrowserContextMenuExtension" schema="schema/DataBrowserContextMenuExtension.exsd"/>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="com.mmxlabs.lngdataserver.views.dataserver"
+            class="com.mmxlabs.lngdataserver.browser.ui.DataBrowser"
+            id="com.mmxlabs.lngdataserver.browser.ui.DataBrowser"
+            name="Data Browser"
+            restorable="true">
+      </view>
+      <category
+            id="com.mmxlabs.lngdataserver.views.dataserver"
+            name="Data">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
+            id="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
+            name="Hub">
+      </perspective>
+   </extension>
+</plugin>

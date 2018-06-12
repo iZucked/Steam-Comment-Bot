@@ -1,0 +1,16 @@
+{
+  "id" : "21cfc6af-5b87-3852-aa94-b214d00d4005",
+  "request" : {
+    "url" : "/distances?open=PAN",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-distances-peGvQ.json",
+    "headers" : {
+      "Date" : "Thu, 29 Jun 2017 15:40:33 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "21cfc6af-5b87-3852-aa94-b214d00d4005"
+}

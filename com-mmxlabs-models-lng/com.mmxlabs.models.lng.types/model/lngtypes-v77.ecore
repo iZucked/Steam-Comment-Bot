@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="types" nsURI="http://www.mmxlabs.com/models/lng/types/1/" nsPrefix="lng.types">
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectSet" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//ObjectSet">
+        <eTypeArguments eTypeParameter="#//ObjectSet/T"/>
+        <eTypeArguments eTypeParameter="#//ObjectSet/U"/>
+      </eBounds>
+    </eTypeParameters>
+    <eTypeParameters name="U"/>
+    <eOperations name="collect" upperBound="-1">
+      <eGenericType eTypeParameter="#//ObjectSet/U"/>
+      <eParameters name="marked" upperBound="-1">
+        <eGenericType eTypeParameter="#//ObjectSet/T"/>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="APortSet" abstract="true">
+    <eTypeParameters name="U"/>
+    <eGenericSuperTypes eClassifier="#//ObjectSet">
+      <eTypeArguments eClassifier="#//APortSet">
+        <eTypeArguments eTypeParameter="#//APortSet/U"/>
+      </eTypeArguments>
+      <eTypeArguments eTypeParameter="#//APortSet/U"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AVesselSet" abstract="true">
+    <eTypeParameters name="U"/>
+    <eGenericSuperTypes eClassifier="#//ObjectSet">
+      <eTypeArguments eClassifier="#//AVesselSet">
+        <eTypeArguments eTypeParameter="#//AVesselSet/U"/>
+      </eTypeArguments>
+      <eTypeArguments eTypeParameter="#//AVesselSet/U"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ITimezoneProvider" abstract="true" interface="true">
+    <eOperations name="getTimeZone" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="attribute" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PortCapability">
+    <eLiterals name="LOAD" literal="LOAD"/>
+    <eLiterals name="DISCHARGE" value="1" literal="DISCHARGE"/>
+    <eLiterals name="DRYDOCK" value="2" literal="DRYDOCK"/>
+    <eLiterals name="MAINTENANCE" value="3" literal="MAINTENANCE"/>
+    <eLiterals name="TRANSFER" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CargoDeliveryType">
+    <eLiterals name="Any">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Any possible delivery method is permitted"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Shipped" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The cargo must be shipped directly by the first party."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="NotShipped" value="2">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The cargo must be delivered by a third party."/>
+        </eAnnotations>
+        <details key="documentation" value="The cargo must be delivered by a third party."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselAssignmentType" abstract="true"
+      interface="true"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="VolumeUnits">
+    <eLiterals name="M3"/>
+    <eLiterals name="MMBTU" value="1" literal="MMBTU"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TimePeriod">
+    <eLiterals name="HOURS"/>
+    <eLiterals name="DAYS" value="1"/>
+    <eLiterals name="MONTHS" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,6 @@
+type,availability.constant,availability.kind,markets,kind,name,minQuantity,maxQuantity,cv,priceInfo.priceExpression,priceInfo.kind,entity,destinationPorts
+DES Purchase,,SpotAvailability,DESPurcahseMarket,SpotMarketGroup,,,,,,,,
+DES Sale,,SpotAvailability,,SpotMarketGroup,,,,,,,,
+FOB Purchase,,SpotAvailability,,SpotMarketGroup,,,,,,,,
+FOB Sale,,SpotAvailability,,SpotMarketGroup,,,,,,,,
+,2,SpotAvailability,,DESPurchaseMarket,DESPurchaseMarket,125000,150000,23.000,10,ExpressionPriceParameters,CorpEntity,"Canaport,Futtsu"

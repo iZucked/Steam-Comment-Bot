@@ -1,0 +1,474 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
+package com.mmxlabs.models.lng.transformer.inject.modules;
+
+import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.inject.Singleton;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.parser.series.CalendarMonthMapper;
+import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
+import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.common.time.Months;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
+import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
+import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
+import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
+import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.CachingEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.CheckingEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CachingVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CheckingVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.CheckingVPO;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.PortTimesRecordMaker;
+import com.mmxlabs.scheduler.optimiser.scheduling.PriceBasedWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
+import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
+
+/**
+ * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
+ * 
+ */
+public class LNGTransformerModule extends AbstractModule {
+
+	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
+
+	private final static int DEFAULT_VPO_CACHE_SIZE = 5_000; //ALEXTODO: undo
+
+	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
+
+	/**
+	 */
+	public static final String Parser_Commodity = "Commodity";
+	/**
+	 */
+	public static final String Parser_BaseFuel = "BaseFuel";
+	/**
+	 */
+	public static final String Parser_Charter = "Charter";
+	/**
+	 */
+	public static final String Parser_Currency = "Currency";
+
+	private final @NonNull LNGScenarioModel scenario;
+
+	public final static String MONTH_ALIGNED_INTEGER_INTERVAL_CURVE = "MonthAlignedIntegerCurve";
+
+	private final boolean shippingOnly;
+
+	private final boolean withSpotCargoMarkets;
+
+	private final boolean hintEnableCache;
+
+	private final boolean withNoNominalsInPrompt;
+
+	private @NonNull UserSettings userSettings;
+
+	private @NonNull IScenarioDataProvider scenarioDataProvider;
+
+	/**
+	 */
+	public LNGTransformerModule(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, @NonNull final Collection<@NonNull String> hints) {
+		this.scenarioDataProvider = scenarioDataProvider;
+		this.scenario = (LNGScenarioModel) scenarioDataProvider.getScenario();
+		this.userSettings = userSettings;
+		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
+		this.hintEnableCache = !hints.contains(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		this.withSpotCargoMarkets = hints.contains(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS);
+		this.withNoNominalsInPrompt = hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT);
+		assert scenario != null;
+	}
+
+	@Override
+	protected void configure() {
+		install(new ScheduleBuilderModule());
+
+		bind(UserSettings.class).toInstance(userSettings);
+
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_DISABLE_CACHES)).toInstance(hintEnableCache);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)).toInstance(!hintEnableCache);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)).toInstance(withSpotCargoMarkets);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)).toInstance(withNoNominalsInPrompt);
+
+		// Default binding - no limit
+		bind(int.class).annotatedWith(Names.named(LNGScenarioTransformer.LIMIT_SPOT_SLOT_CREATION)).toInstance(-1);
+
+		bind(long.class).annotatedWith(Names.named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)).toInstance(OptimiserUnitConvertor.convertToInternalVolume(140_000));
+
+		bind(LNGScenarioModel.class).toInstance(scenario);
+		bind(IScenarioDataProvider.class).toInstance(scenarioDataProvider);
+		// bind(OptimiserSettings.class).toInstance(optimiserSettings);
+
+		bind(LNGScenarioTransformer.class).in(Singleton.class);
+
+		bind(DateAndCurveHelper.class).in(Singleton.class);
+
+		bind(ModelEntityMap.class).to(DefaultModelEntityMap.class).in(Singleton.class);
+
+		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
+		bind(LNGVoyageCalculator.class).in(Singleton.class);
+
+		bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
+		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
+
+		// <--- Time windows
+
+		bind(SchedulerCalculationUtils.class);
+
+		bind(FeasibleTimeWindowTrimmer.class);
+		bind(PriceBasedWindowTrimmer.class);
+
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+
+		bind(PriceIntervalProviderHelper.class);
+		bind(PriceIntervalProducer.class);
+
+		bind(IArrivalTimeScheduler.class).to(ArrivalTimeScheduler.class);
+		bind(TimeWindowScheduler.class);
+		bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class);
+
+		bind(PortTimesRecordMaker.class);
+
+		// --->
+
+		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
+		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
+
+		bind(IDivertableDESShippingTimesCalculator.class).to(DefaultDivertableDESShippingTimesCalculator.class);
+		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
+
+		bind(IDivertableFOBShippingTimesCalculator.class).to(DefaultDivertableFOBShippingTimesCalculator.class);
+		bind(DefaultDivertableFOBShippingTimesCalculator.class).in(Singleton.class);
+
+		// Register default implementations
+		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
+
+		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
+		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
+
+		bind(IVolumeAllocator.class).annotatedWith(NotCaching.class).to(UnconstrainedVolumeAllocator.class);
+		bind(IEntityValueCalculator.class).annotatedWith(NotCaching.class).to(DefaultEntityValueCalculator.class);
+
+		// Default bindings for caches
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.On);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanOptimiserCache)).toInstance(CacheMode.On);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
+
+	}
+
+	@Provides
+	@Named(COMMERCIAL_VOLUME_OVERCAPACITY)
+	private boolean commercialVolumeOverCapacity() {
+		return false;
+	}
+
+	@Provides
+	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle) {
+		final InPortBoilOffHelper helper = new InPortBoilOffHelper(toggle);
+		// injector.injectMembers(helper);
+
+		return helper;
+	}
+
+	@Provides
+	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
+	private boolean isVPOSpeedStepping() {
+		return true;
+	}
+
+	@Provides
+	@PerChainUnitScope
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate, @Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
+
+		if (cacheMode == CacheMode.Off || !hintEnableCache) {
+			return delegate;
+		} else {
+			final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
+			if (cacheMode == CacheMode.On) {
+				return cachingVoyagePlanOptimiser;
+			} else {
+				assert cacheMode == CacheMode.Verify;
+				return new CheckingVPO(delegate, cachingVoyagePlanOptimiser);
+			}
+		}
+	}
+
+	@Provides
+	@PerChainUnitScope
+	private IVolumeAllocator provideVolumeAllocator(@NonNull final Injector injector, final @NonNull @NotCaching IVolumeAllocator reference,
+			@Named(SchedulerConstants.Key_VolumeAllocationCache) final CacheMode cacheMode) {
+		if (cacheMode != CacheMode.Off && hintEnableCache) {
+			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
+			injector.injectMembers(cacher);
+			if (cacheMode == CacheMode.Verify) {
+				return new CheckingVolumeAllocator(reference, cacher);
+			}
+			return cacher;
+		} else {
+			return reference;
+		}
+
+	}
+
+	@Provides
+	@PerChainUnitScope
+	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, final @NonNull @NotCaching IEntityValueCalculator reference,
+			@Named(SchedulerConstants.Key_ProfitandLossCache) final CacheMode cacheMode) {
+
+		if (cacheMode != CacheMode.Off && hintEnableCache) {
+			final CachingEntityValueCalculator cacher = new CachingEntityValueCalculator(reference);
+			injector.injectMembers(cacher);
+			if (cacheMode == CacheMode.Verify) {
+				return new CheckingEntityValueCalculator(reference, cacher);
+			} else {
+				return cacher;
+			}
+		} else {
+			return reference;
+		}
+
+	}
+
+	@Provides
+	@Singleton
+	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
+		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(modelEntityMap);
+
+		return optimisationData;
+	}
+
+	@Singleton
+	@Provides
+	@Named(EARLIEST_AND_LATEST_TIMES)
+	private Pair<ZonedDateTime, ZonedDateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario) {
+		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
+	}
+
+	@Provides
+	@PerChainUnitScope
+	private IPriceIntervalProducer providePriceIntervalProducer(final PriceIntervalProducer delegate, @NonNull final Injector injector) {
+		final CachingPriceIntervalProducer cachingPriceIntervalProducer = new CachingPriceIntervalProducer(delegate);
+		injector.injectMembers(cachingPriceIntervalProducer);
+		return cachingPriceIntervalProducer;
+	}
+
+	@Provides
+	@PerChainUnitScope
+	private ITimeWindowSchedulingCanalDistanceProvider provideTimeWindowSchedulingCanalDistanceProvider(@NonNull final Injector injector) {
+		final TimeWindowSchedulingCanalDistanceProvider delegate = new TimeWindowSchedulingCanalDistanceProvider();
+		injector.injectMembers(delegate);
+		final CachingTimeWindowSchedulingCanalDistanceProvider cachingTimeWindowSchedulingCanalDistanceProvider = new CachingTimeWindowSchedulingCanalDistanceProvider(delegate);
+		return cachingTimeWindowSchedulingCanalDistanceProvider;
+	}
+
+	@Provides
+	@Singleton
+	@Named(MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
+	private IIntegerIntervalCurve provideMonthAlignedIIntegerIntervalCurve(@NonNull final DateAndCurveHelper dateAndCurveHelper, @NonNull final IntegerIntervalCurveHelper integerIntervalCurveHelper) {
+
+		final IIntegerIntervalCurve months = integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(
+				integerIntervalCurveHelper.getPreviousMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getEarliestTime())),
+				integerIntervalCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())), 0);
+
+		return months;
+	}
+
+	@Provides
+	private ShiftFunctionMapper getMapperFunction(final ModelEntityMap map, final DateAndCurveHelper helper) {
+		return new ShiftFunctionMapper() {
+
+			@Override
+			public int mapChangePoint(final int currentChangePoint, final int shiftAmount) {
+				// Convert internal time units back into UTC date/time
+				@NonNull
+				final ZonedDateTime dateFromHours = map.getDateFromHours(currentChangePoint, "Etc/UTC");
+				// Shift the time by number of months
+				@NonNull
+				final ZonedDateTime shiftedTime = dateFromHours.minusMonths(shiftAmount);
+				// Convert back to internal time units.
+				final int result = helper.convertTime(shiftedTime);
+				return result;
+			}
+		};
+	}
+
+	@Provides
+	private CalendarMonthMapper getMonthMapperFunction(final ModelEntityMap map, final DateAndCurveHelper helper) {
+		return new CalendarMonthMapper() {
+
+			@Override
+			public int mapMonthToChangePoint(int months) {
+
+				// Convert internal time units back into UTC date/time
+				@NonNull
+				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
+
+				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1).withHour(0);
+				@NonNull
+				final ZonedDateTime plusMonths = startOfYear.plusMonths(months);
+
+				return Hours.between(dateTimeZero, plusMonths);
+			}
+
+			@Override
+			public int mapChangePointToMonth(int date) {
+				// Convert internal time units back into UTC date/time
+				@NonNull
+				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
+
+				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1).withHour(0);
+				@NonNull
+				final ZonedDateTime plusMonths = dateTimeZero.plusHours(date).withDayOfMonth(1);
+
+				int m = Months.between(startOfYear, plusMonths);
+
+				return m;
+			}
+		};
+	}
+
+	@Provides
+	@Named(Parser_Commodity)
+	@Singleton
+	private SeriesParser provideCommodityParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
+		final SeriesParser parser = new SeriesParser();
+		parser.setShiftMapper(shiftMapper);
+		parser.setCalendarMonthMapper(monthMapper);
+		return parser;
+	}
+
+	@Provides
+	@Named(Parser_Charter)
+	@Singleton
+	private SeriesParser provideCharterParser(final ShiftFunctionMapper shiftMapper) {
+		final SeriesParser parser = new SeriesParser();
+		parser.setShiftMapper(shiftMapper);
+		return parser;
+	}
+
+	@Provides
+	@Named(Parser_BaseFuel)
+	@Singleton
+	private SeriesParser provideBaseFuelParser(final ShiftFunctionMapper shiftMapper) {
+		final SeriesParser parser = new SeriesParser();
+		parser.setShiftMapper(shiftMapper);
+		return parser;
+	}
+
+	@Provides
+	@Named(Parser_Currency)
+	@Singleton
+	private SeriesParser provideCurrencyParser(final ShiftFunctionMapper shiftMapper) {
+		final SeriesParser parser = new SeriesParser();
+		parser.setShiftMapper(shiftMapper);
+		return parser;
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_VESSEL_AVAILABILITIES)
+	private List<VesselAvailability> provideExtraAvailabilities() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_SPOT_CARGO_MARKETS)
+	private List<SpotMarket> provideSpotCargoMarkets() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKETS)
+	private List<CharterInMarket> provideCharterInMarkets() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKET_OVERRIDES)
+	private List<CharterInMarketOverride> provideCharterInMarketOverrides() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_LOAD_SLOTS)
+	private List<LoadSlot> provideExtraLoadSlots() {
+		return Collections.emptyList();
+	}
+
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_DISCHARGE_SLOTS)
+	private List<DischargeSlot> provideExtraDischargeSlots() {
+		return Collections.emptyList();
+	}
+}

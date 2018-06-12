@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.analytics/src" modelPluginID="com.mmxlabs.models.lng.analytics"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
+    dynamicTemplates="true" modelName="Analytics" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.parameters/model/parameters.genmodel#//parameters ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets">
+  <foreignModel>analytics.ecore</foreignModel>
+  <genPackages prefix="Analytics" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="analytics.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="analytics.ecore#//VolumeMode">
+      <genEnumLiterals ecoreEnumLiteral="analytics.ecore#//VolumeMode/NOT_SPECIFIED"/>
+      <genEnumLiterals ecoreEnumLiteral="analytics.ecore#//VolumeMode/FIXED"/>
+      <genEnumLiterals ecoreEnumLiteral="analytics.ecore#//VolumeMode/RANGE"/>
+    </genEnums>
+    <genClasses ecoreClass="analytics.ecore#//AnalyticsModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/optionModels"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/optimisations"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BuyOption"/>
+    <genClasses ecoreClass="analytics.ecore#//SellOption"/>
+    <genClasses ecoreClass="analytics.ecore#//BuyOpportunity">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/desPurchase"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/port"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/contract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/priceExpression"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/cv"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/cancellationExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/miscCosts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/volumeMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/volumeUnits"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/minVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/maxVolume"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SellOpportunity">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/fobSale"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/port"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/contract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/priceExpression"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/cancellationExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/miscCosts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/volumeMode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/volumeUnits"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/minVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/maxVolume"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BuyMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyMarket/market"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SellMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellMarket/market"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BuyReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyReference/slot"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SellReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellReference/slot"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BaseCaseRow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/buyOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/sellOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/shipping"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//PartialCaseRow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/buyOptions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/sellOptions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/shipping"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//ShippingOption"/>
+    <genClasses ecoreClass="analytics.ecore#//FleetShippingOption">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//FleetShippingOption/vessel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//FleetShippingOption/hireCost"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//FleetShippingOption/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//FleetShippingOption/useSafetyHeel"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//OptionalAvailabilityShippingOption">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalAvailabilityShippingOption/ballastBonus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalAvailabilityShippingOption/repositioningFee"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalAvailabilityShippingOption/start"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionalAvailabilityShippingOption/end"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionalAvailabilityShippingOption/startPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionalAvailabilityShippingOption/endPort"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//RoundTripShippingOption">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//RoundTripShippingOption/vesselClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//RoundTripShippingOption/hireCost"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//NominatedShippingOption">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//NominatedShippingOption/nominatedVessel"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//AnalysisResultRow">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/buyOption"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/sellOption"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/resultDetail"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/shipping"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/resultDetails"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//ResultContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultContainer/cargoAllocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultContainer/openSlotAllocations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultContainer/slotAllocations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultContainer/events"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//AnalysisResultDetail"/>
+    <genClasses ecoreClass="analytics.ecore#//ProfitAndLossResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ProfitAndLossResult/value"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BreakEvenResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenResult/price"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenResult/priceString"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenResult/cargoPNL"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//OptionAnalysisModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/buys"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/sells"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/baseCase"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/shippingTemplates"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/partialCase"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/resultSets"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//OptionAnalysisModel/useTargetPNL"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/children"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//ResultSet">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ResultSet/rows"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ResultSet/profitAndLoss"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BaseCase">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCase/baseCase"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCase/profitAndLoss"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCase/keepExistingScenario"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//PartialCase">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCase/partialCase"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//PartialCase/keepExistingScenario"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//ExistingVesselAvailability">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ExistingVesselAvailability/vesselAvailability"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//ExistingCharterMarketOption">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ExistingCharterMarketOption/charterInMarket"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ExistingCharterMarketOption/spotIndex"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//AbstractSolutionSet">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/userSettings"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/options"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/extraSlots"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//ActionableSetPlan"/>
+    <genClasses ecoreClass="analytics.ecore#//SlotInsertionOptions">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SlotInsertionOptions/slotsInserted"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SlotInsertionOptions/eventsInserted"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SlotInsertionOption"/>
+    <genClasses ecoreClass="analytics.ecore#//BaseResult">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseResult/scheduleModel"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SolutionOption">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SolutionOption/scheduleModel"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//OptimisationResult"/>
+  </genPackages>
+</genmodel:GenModel>

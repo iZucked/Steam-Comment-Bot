@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+   <extension-point id="WrappedCommandExtension" name="WrappedCommandExtension" schema="schema/WrappedCommandExtension.exsd"/>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://com.mmxlabs.scenario.service/model/1"
+            class="com.mmxlabs.scenario.service.model.ScenarioServicePackage"
+            genModel="model/scenario.service.genmodel"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="com.mmxlabs.scenario.service.ReloadScenarioException"
+            class="com.mmxlabs.scenario.service.model.util.internal.ReloadScenarioExceptionReasonProviderApaterFactory">
+         <adapter
+               type="com.mmxlabs.rcp.common.editors.IReasonProvider">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException"
+            class="com.mmxlabs.scenario.service.model.util.internal.ScenarioEncryptionExceptionReasonProviderApaterFactory">
+         <adapter
+               type="com.mmxlabs.rcp.common.editors.IReasonProvider">
+         </adapter>
+      </factory>
+   </extension>
+</plugin>

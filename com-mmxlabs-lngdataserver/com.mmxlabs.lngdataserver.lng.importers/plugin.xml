@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+ 
+   <!-- DISTANCES -->
+      
+      <!-- PRICES -->
+      <extension point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserContextMenuExtension">
+         <DataBrowserContextMenuExtension
+               class="com.mmxlabs.lngdataserver.lng.importers.menus.DataBrowserContentMenuContribution">
+         </DataBrowserContextMenuExtension>
+      </extension>
+</plugin>

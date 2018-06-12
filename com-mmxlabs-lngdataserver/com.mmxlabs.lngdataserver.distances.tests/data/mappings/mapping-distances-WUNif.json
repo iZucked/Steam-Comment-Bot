@@ -1,0 +1,16 @@
+{
+  "id" : "897a6ab7-0009-3acf-bff6-ab9f21b9ebce",
+  "request" : {
+    "url" : "/distances",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-distances-WUNif.json",
+    "headers" : {
+      "Date" : "Thu, 29 Jun 2017 15:32:42 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "897a6ab7-0009-3acf-bff6-ab9f21b9ebce"
+}

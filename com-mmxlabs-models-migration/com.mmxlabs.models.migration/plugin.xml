@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="DefaultMigrationContext" name="DefaultMigrationContext" schema="schema/DefaultMigrationContext.exsd"/>
+   <extension-point id="MigrationContext" name="MigrationContext" schema="schema/MigrationContext.exsd"/>
+   <extension-point id="MigrationUnit" name="MigrationUnit" schema="schema/MigrationUnit.exsd"/>
+   <extension-point id="MigrationUnitExtension" name="MigrationUnitExtension" schema="schema/MigrationUnitExtension.exsd"/>
+
+   <extension-point id="DefaultClientMigrationContext" name="DefaultClientMigrationContext" schema="schema/DefaultClientMigrationContext.exsd"/>
+   <extension-point id="ClientMigrationContext" name="ClientMigrationContext" schema="schema/ClientMigrationContext.exsd"/>
+   <extension-point id="ClientMigrationUnit" name="ClientMigrationUnit" schema="schema/ClientMigrationUnit.exsd"/>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.models.migration.internal.PluginStartup">
+      </startup>
+   </extension>
+
+</plugin>

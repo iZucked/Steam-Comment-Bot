@@ -1,0 +1,16 @@
+entity,type,kind,01/04/2000
+Europe,Shipping,SimpleEntityBook,0
+US,Shipping,SimpleEntityBook,0
+Asia,Shipping,SimpleEntityBook,0
+Third-parties,Shipping,SimpleEntityBook,0
+Shipping,Shipping,SimpleEntityBook,0
+Europe,Trading,SimpleEntityBook,0
+US,Trading,SimpleEntityBook,0
+Asia,Trading,SimpleEntityBook,0
+Third-parties,Trading,SimpleEntityBook,0
+Shipping,Trading,SimpleEntityBook,0
+Europe,Upstream,SimpleEntityBook,0
+US,Upstream,SimpleEntityBook,0
+Asia,Upstream,SimpleEntityBook,0
+Third-parties,Upstream,SimpleEntityBook,0
+Shipping,Upstream,SimpleEntityBook,0

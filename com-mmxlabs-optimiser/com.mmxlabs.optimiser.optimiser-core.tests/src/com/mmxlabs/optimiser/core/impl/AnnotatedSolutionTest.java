@@ -1,0 +1,50 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
+package com.mmxlabs.optimiser.core.impl;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+
+public class AnnotatedSolutionTest {
+
+	@Test
+	public void testGetSetSequences() {
+		final ISequences sequences = Mockito.mock(ISequences.class);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+		final AnnotatedSolution solution = new AnnotatedSolution(sequences, state);
+		Assert.assertSame(sequences, solution.getFullSequences());
+		Assert.assertSame(state, solution.getEvaluationState());
+	}
+
+	@Test
+	public void getSetGeneralAnnotaion() {
+		final Object annotation = new Object();
+		final String key = "key";
+
+		final ISequences sequences = Mockito.mock(ISequences.class);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+		final AnnotatedSolution solution = new AnnotatedSolution(sequences, state);
+
+		solution.setGeneralAnnotation(key, annotation);
+
+		Assert.assertSame(annotation, solution.getGeneralAnnotation(key, Object.class));
+	}
+
+	@Test
+	public void getElementAnnotations() {
+
+		final ISequences sequences = Mockito.mock(ISequences.class);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+		final AnnotatedSolution solution = new AnnotatedSolution(sequences, state);
+		final IElementAnnotationsMap elementAnnotations = solution.getElementAnnotations();
+
+		Assert.assertNotNull(elementAnnotations);
+	}
+}

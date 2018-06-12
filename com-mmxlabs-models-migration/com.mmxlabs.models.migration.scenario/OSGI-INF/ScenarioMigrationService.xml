@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2018
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="false" name="com.mmxlabs.models.migration.scenario.ScenarioMigrationService">
+   <implementation class="com.mmxlabs.models.migration.scenario.ScenarioMigrationService"/>
+   <reference bind="setMigrationRegistry" cardinality="1..1" interface="com.mmxlabs.models.migration.IMigrationRegistry" name="IMigrationRegistry" policy="static"/>
+   <service>
+      <provide interface="com.mmxlabs.scenario.service.model.manager.IScenarioMigrationService"/>
+   </service>
+   <reference bind="setScenarioCipherProvider" cardinality="0..1" interface="com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider" name="IScenarioCipherProvider" policy="dynamic"/>
+</scr:component>
