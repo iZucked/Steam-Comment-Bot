@@ -57,7 +57,7 @@ public class LNGScenarioRunner {
 	@Nullable
 	private final ScenarioInstance scenarioInstance;
 
-	private @NonNull final ExecutorService executorService;
+	private final @NonNull ExecutorService executorService;
 
 	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
@@ -150,17 +150,16 @@ public class LNGScenarioRunner {
 
 	@NonNull
 	public IMultiStateResult runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
-		// assert createOptimiser;
 
-		// TODO: Replace with originalScenario.getScheduleModel().getSchedule()
 		if (schedule == null) {
 			evaluateInitialState();
 		}
 
 		final IMultiStateResult result = chainRunner.run(progressMonitor);
 
-		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
-
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
+		}
 		return result;
 	}
 
