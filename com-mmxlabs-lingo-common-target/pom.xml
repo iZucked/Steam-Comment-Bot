@@ -14,17 +14,6 @@
 		<relativePath />
 	</parent>
 
-	<scm>
-		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lingo-common-target.git</connection>
-		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lingo-common-target.git</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-lingo-common-target</url>
-	</scm>
-
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.lingo.common.target/</url>
-	</ciManagement>
-
 	<modules>
 		<module>com.mmxlabs.lingo.common.target-definition</module>
 	</modules>

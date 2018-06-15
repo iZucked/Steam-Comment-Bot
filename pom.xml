@@ -8,6 +8,17 @@
 	<version>4.5.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<scm>
+		<connection>scm:git:git@gitlab.com:mmxlabs/LiNGO/LiNGO.git</connection>
+		<developerConnection>scm:git:git@gitlab.com:mmxlabs/LiNGO/LiNGO.git</developerConnection>
+		<url>https://gitlab.com/mmxlabs/LiNGO/LiNGO</url>
+	</scm>
+
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://kubera.mmxlabs.lan/jenkins/job/master/job/LiNGO-master/</url>
+	</ciManagement>
+
 	<modules>
 		<module>com-mmxlabs-lingo-common-target</module>
 		<module>com-mmxlabs-common-util</module>

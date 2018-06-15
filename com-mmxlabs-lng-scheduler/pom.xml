@@ -17,17 +17,6 @@
 		<version>36</version>
 	</parent>
 
-	<scm>
-		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lng-scheduler.git</connection>
-		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lng-scheduler.git</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-lng-scheduler/</url>
-	</scm>
-
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.lng.scheduler/</url>
-	</ciManagement>
-
 	<modules>
 		<module>com.mmxlabs.scheduler.optimiser</module>
 		<module>com.mmxlabs.scheduler.optimiser.tests</module>

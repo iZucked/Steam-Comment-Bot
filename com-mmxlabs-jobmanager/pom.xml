@@ -15,17 +15,6 @@
 		<relativePath />
 	</parent>
 
-	<scm>
-		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-jobmanager.git</connection>
-		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-jobmanager.git</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-jobmanager</url>
-	</scm>
-
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.jobmanager/</url>
-	</ciManagement>
-
 	<modules>
 		<module>com.mmxlabs.jobmanager</module>
 		<module>com.mmxlabs.jobmanager.ui</module>
