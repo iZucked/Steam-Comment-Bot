@@ -9,14 +9,12 @@ import java.util.concurrent.Callable;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
-import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IProgressReporter;
-import com.mmxlabs.optimiser.core.ISequences;
 
 public final class ActionableSetJob implements Callable<ActionableSetJobState> {
 	private final long seed;
-	private @NonNull final Injector injector;
-	private @NonNull final ActionableSetJobState baseState;
+	private final @NonNull Injector injector;
+	private final @NonNull ActionableSetJobState baseState;
 	private final IProgressReporter progressReporter;
 
 	public ActionableSetJob(@NonNull final Injector injector, @NonNull final ActionableSetJobState baseState, final long seed, final IProgressReporter progressReporter) {
@@ -30,12 +28,7 @@ public final class ActionableSetJob implements Callable<ActionableSetJobState> {
 	public ActionableSetJobState call() {
 		try {
 			final ActionableSetMover mover = injector.getInstance(ActionableSetMover.class);
-			try {
-				return mover.search(baseState, seed);
-			} catch (final Throwable e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
+			return mover.search(baseState, seed);
 		} catch (final Throwable e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

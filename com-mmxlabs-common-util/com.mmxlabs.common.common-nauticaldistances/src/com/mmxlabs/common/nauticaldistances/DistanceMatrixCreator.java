@@ -31,13 +31,10 @@ import com.mmxlabs.common.options.OptionsException;
 /**
  * Command-line interface for {@link AccurateNauticalDistanceCalculator}.
  * 
- * Sample inputs are in the data/nauticaldistances directory; the program
- * requires two input files:
+ * Sample inputs are in the data/nauticaldistances directory; the program requires two input files:
  * <ol>
- * <li>a picture of the earth, as a mercator projection, in which pure blue is
- * terrain passable by vessels, and non-blue is impassable.</li>
- * <li>a list of ports, as a CSV file, whose first three columns are port name,
- * port latitude and port longitude in that order</li>
+ * <li>a picture of the earth, as a mercator projection, in which pure blue is terrain passable by vessels, and non-blue is impassable.</li>
+ * <li>a list of ports, as a CSV file, whose first three columns are port name, port latitude and port longitude in that order</li>
  * </ol>
  * Run with --help argument for more help.
  * 
@@ -102,31 +99,19 @@ public class DistanceMatrixCreator {
 		// loslog.close();
 
 		{
-			BufferedWriter coast = null;
-			try {
-				coast = new BufferedWriter(new FileWriter("./coast.txt"));
+			try (BufferedWriter coast = new BufferedWriter(new FileWriter("./coast.txt"))) {
 				calculator.writeCoastalPoints(coast);
-			} finally {
-				if (coast != null) {
-					coast.close();
-				}
 			}
 			log.info("Coastal points written to coast.txt (cartesian)");
 		}
 
-		BufferedReader portReader = null;
-		final List<Pair<String, Pair<Double, Double>>> ports = new ArrayList<Pair<String, Pair<Double, Double>>>();
-		try {
-			portReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(getCoordinatesFilePath())));
+		final List<Pair<String, Pair<Double, Double>>> ports = new ArrayList<>();
+		try (BufferedReader portReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(getCoordinatesFilePath())))) {
 
 			String line;
 			while ((line = portReader.readLine()) != null) {
 				final String[] parts = line.split(",");
 				ports.add(new Pair<String, Pair<Double, Double>>(parts[0], new Pair<>(Double.parseDouble(parts[1].trim()), Double.parseDouble(parts[2].trim()))));
-			}
-		} finally {
-			if (portReader != null) {
-				portReader.close();
 			}
 		}
 
@@ -141,7 +126,7 @@ public class DistanceMatrixCreator {
 		log.info("Computing full distance matrix");
 
 		final int[][] matrix = new int[ports.size()][ports.size()];
-		final ArrayList<Pair<Double, Double>> otherPorts = new ArrayList<Pair<Double, Double>>();
+		final ArrayList<Pair<Double, Double>> otherPorts = new ArrayList<>();
 		for (int i = 0; i < matrix.length; i++) {
 			final Pair<Double, Double> startPort = ports.get(i).getSecond();
 
@@ -156,30 +141,16 @@ public class DistanceMatrixCreator {
 		}
 
 		{
-			BufferedWriter snap = null;
-			BufferedWriter real = null;
-			try {
-				snap = new BufferedWriter(new FileWriter(
-
-						"./snapports.txt"));
-				real = new BufferedWriter(new FileWriter("./realports.txt"));
-
-				calculator.writeSnappedPoints(snap, real, otherPorts);
-			} finally {
-				if (snap != null) {
-					snap.close();
-				}
-				if (real != null) {
-					real.close();
+			try (BufferedWriter snap = new BufferedWriter(new FileWriter("./snapports.txt"))) {
+				try (BufferedWriter real = new BufferedWriter(new FileWriter("./realports.txt"))) {
+					calculator.writeSnappedPoints(snap, real, otherPorts);
 				}
 			}
 			log.info("Ports written to realports.txt and snapports.txt");
 		}
 
 		// write matrix out
-		BufferedWriter distanceWriter = null;
-		try {
-			distanceWriter = new BufferedWriter(new FileWriter(getOutputFilePath()));
+		try (BufferedWriter distanceWriter = new BufferedWriter(new FileWriter(getOutputFilePath()))) {
 			for (final Pair<String, Pair<Double, Double>> x : ports) {
 				distanceWriter.write(",");
 				distanceWriter.write(x.getFirst());
@@ -198,10 +169,6 @@ public class DistanceMatrixCreator {
 				}
 			}
 			distanceWriter.flush();
-		} finally {
-			if (distanceWriter != null) {
-				distanceWriter.close();
-			}
 		}
 		log.info("Distance matrix written to " + getOutputFilePath());
 		// plot all paths;

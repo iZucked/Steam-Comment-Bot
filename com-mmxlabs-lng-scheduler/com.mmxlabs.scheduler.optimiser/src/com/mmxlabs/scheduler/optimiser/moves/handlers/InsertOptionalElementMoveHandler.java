@@ -80,7 +80,7 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 		// }
 		// }
 		
-		if(phaseOptimisationData.getOptionalElements().size() == 0){
+		if(phaseOptimisationData.getOptionalElements().isEmpty()){
 			return new NullMove("InsertOptionalElement", "No Optional Elements");
 		}
 

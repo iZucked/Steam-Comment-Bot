@@ -53,7 +53,7 @@ public class AccurateNauticalDistanceCalculator {
 
 		final double maxProjectedLat = Math.log(Math.tan(maxLatitude) + (1 / Math.cos(maxLatitude)));
 
-		coast = new ArrayList<double[]>();
+		coast = new ArrayList<>();
 		for (final Pair<Integer, Integer> coastxy : findCoastalPixels(mercatorLandMatrix)) {
 			coast.add(pixelTo3dPoint(coastxy, width, height, maxLatitude, maxProjectedLat));
 		}
@@ -169,7 +169,7 @@ public class AccurateNauticalDistanceCalculator {
 
 	private boolean allTrue(final boolean[] marks, final int[] endPoints) {
 		for (final int p : endPoints) {
-			if (marks[p] == false) {
+			if (!marks[p]) {
 				return false;
 			}
 		}
@@ -177,7 +177,7 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	public List<double[]> shortestPath(final Pair<Double, Double> from, final Pair<Double, Double> to) {
-		final ArrayList<double[]> result = new ArrayList<double[]>();
+		final ArrayList<double[]> result = new ArrayList<>();
 
 		final int before[] = new int[coast.size()];
 
@@ -438,12 +438,11 @@ public class AccurateNauticalDistanceCalculator {
 		) * -1) // upside down
 				+ 1) / 2; // all positive, scaled to fit in unit
 
-		final boolean answer = mercatorLandMatrix[(int) Math.floor(px * mapWidth)][(int) Math.floor(py * mapHeight)];
 
 		// System.err.println(lat + ", " + lon + " => " + px + ", " + px
 		// * mapWidth + ", " + py * mapHeight + " = " + answer);
 
-		return answer;
+		return mercatorLandMatrix[(int) Math.floor(px * mapWidth)][(int) Math.floor(py * mapHeight)];
 	}
 
 	/**
@@ -542,7 +541,7 @@ public class AccurateNauticalDistanceCalculator {
 
 		for (int x = 0; x < landMatrix.length; x++) {
 			for (int y = 0; y < landMatrix[0].length; y++) {
-				if ((landMatrix[x][y] == false) && hasLandNeighbour(landMatrix, x, y)) {
+				if ((!landMatrix[x][y]) && hasLandNeighbour(landMatrix, x, y)) {
 					result.add(new Pair<>(x, y));
 				}
 			}
@@ -581,7 +580,7 @@ public class AccurateNauticalDistanceCalculator {
 		}
 	}
 
-	public void writeSnappedPoints(final BufferedWriter output, final BufferedWriter realValues, final ArrayList<Pair<Double, Double>> otherPorts) throws IOException {
+	public void writeSnappedPoints(final BufferedWriter output, final BufferedWriter realValues, final List<Pair<Double, Double>> otherPorts) throws IOException {
 		for (final Pair<Double, Double> pt : otherPorts) {
 			final double[] ptxyz = coast.get(snap(pt));
 			final double lat = (pt.getFirst() * Math.PI) / 180;

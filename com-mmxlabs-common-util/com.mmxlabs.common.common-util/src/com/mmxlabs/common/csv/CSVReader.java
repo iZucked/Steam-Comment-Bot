@@ -72,13 +72,13 @@ public class CSVReader implements Closeable {
 			return null;
 		}
 		final LinkedList<String> fields = new LinkedList<>();
-		StringBuffer temp = new StringBuffer();
+		StringBuilder temp = new StringBuilder();
 		State state = State.NORMAL;
 		boolean firstTry = true;
 
 		// Loop round when a newline occurs within a quoted string (ESCAPED)
 		while (firstTry || state == State.ESCAPED) {
-			if (firstTry == false) {
+			if (!firstTry) {
 				line = reader.readLine();
 				temp.append("\n");
 				if (line == null) {
@@ -93,7 +93,7 @@ public class CSVReader implements Closeable {
 				case NORMAL:
 					if (c == separator) {
 						fields.add(temp.toString().trim());
-						temp = new StringBuffer();
+						temp = new StringBuilder();
 					} else if (c == '"') {
 						state = State.ESCAPED;
 					} else {
@@ -114,7 +114,7 @@ public class CSVReader implements Closeable {
 						state = State.NORMAL;
 						if (c == separator) {
 							fields.add(temp.toString().trim());
-							temp = new StringBuffer();
+							temp = new StringBuilder();
 						}
 					}
 					break;
@@ -164,7 +164,6 @@ public class CSVReader implements Closeable {
 			}
 		}
 		return row;
-		// return (currentLine = new FieldMap(row));
 	}
 
 	/**
@@ -179,7 +178,7 @@ public class CSVReader implements Closeable {
 		Map<String, String> result;
 		while ((result = readRowFields()) != null) {
 			for (final String value : result.values()) {
-				if (value.equals("") == false || ignoreBlankRows == false) {
+				if (!value.equals("") || !ignoreBlankRows) {
 					return (currentLine = new FieldMap(result));
 				}
 			}

@@ -137,7 +137,7 @@ public class CharSequenceCompiler<T> {
 	 *             <var>types</var>.
 	 */
 	public synchronized Class<T> compile(final String qualifiedClassName, final CharSequence javaSource, final DiagnosticCollector<JavaFileObject> diagnosticsList, final Class<?>... types)
-			throws CharSequenceCompilerException, ClassCastException {
+			throws CharSequenceCompilerException {
 		if (diagnosticsList != null) {
 			diagnostics = diagnosticsList;
 		} else {
@@ -198,17 +198,13 @@ public class CharSequenceCompiler<T> {
 		try {
 			// For each class name in the input map, get its compiled
 			// class and put it in the output map
-			final Map<String, Class<T>> compiled = new HashMap<String, Class<T>>();
+			final Map<String, Class<T>> compiled = new HashMap<>();
 			for (final String qualifiedClassName : classes.keySet()) {
 				final Class<T> newClass = loadClass(qualifiedClassName);
 				compiled.put(qualifiedClassName, newClass);
 			}
 			return compiled;
-		} catch (final ClassNotFoundException e) {
-			throw new CharSequenceCompilerException(classes.keySet(), e, diagnostics);
-		} catch (final IllegalArgumentException e) {
-			throw new CharSequenceCompilerException(classes.keySet(), e, diagnostics);
-		} catch (final SecurityException e) {
+		} catch (final ClassNotFoundException | IllegalArgumentException | SecurityException e) {
 			throw new CharSequenceCompilerException(classes.keySet(), e, diagnostics);
 		}
 	}
@@ -243,7 +239,7 @@ public class CharSequenceCompiler<T> {
 	 * @throws ClassCastException
 	 *             if <var>newClass</var> is not castable to all the types.
 	 */
-	private Class<T> castable(final Class<T> newClass, final Class<?>... types) throws ClassCastException {
+	private Class<T> castable(final Class<T> newClass, final Class<?>... types) {
 		for (final Class<?> type : types) {
 			if (!type.isAssignableFrom(newClass)) {
 				throw new ClassCastException(type.getName());
@@ -473,7 +469,7 @@ final class JavaFileObjectImpl extends SimpleJavaFileObject {
 	 * @see javax.tools.SimpleJavaFileObject#getCharContent(boolean)
 	 */
 	@Override
-	public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws UnsupportedOperationException {
+	public CharSequence getCharContent(final boolean ignoreEncodingErrors) {
 		if (source == null) {
 			throw new UnsupportedOperationException("getCharContent()");
 		}
@@ -537,8 +533,7 @@ final class ClassLoaderImpl extends ClassLoader {
 		// Workaround for "feature" in Java 6
 		// see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6434149
 		try {
-			final Class<?> c = Class.forName(qualifiedClassName);
-			return c;
+			return Class.forName(qualifiedClassName);
 		} catch (final ClassNotFoundException nf) {
 			// Ignore and fall through
 		}

@@ -106,12 +106,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 
 					@Override
 					public boolean hasNext() {
-
-						if ((index < isSet.length) && isSet[index]) {
-							return true;
-						} else {
-							return false;
-						}
+						return ((index < isSet.length) && isSet[index]);
 					}
 
 					@Override
