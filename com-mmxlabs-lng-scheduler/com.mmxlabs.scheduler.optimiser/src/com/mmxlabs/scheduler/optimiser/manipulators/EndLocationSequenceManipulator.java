@@ -87,7 +87,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	@Inject
 	private IElementPortProvider portProvider;
 
-	private final Map<IResource, EndLocationRule> ruleMap = new HashMap<IResource, EndLocationSequenceManipulator.EndLocationRule>();
+	private final Map<IResource, EndLocationRule> ruleMap = new HashMap<>();
 
 	@Inject
 	private IReturnElementProvider returnElementProvider;
@@ -148,7 +148,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		boolean returnToLastPort = true;
 		if (charterOutEvaluator != null && !(charterOutEvaluator instanceof NullGeneratedCharterOutEvaluator)) {
 			final Set<@NonNull IPort> charteringPorts = getCharterMarketPortsForResource(resource);
-			if (charteringPorts.size() > 0) {
+			if (!charteringPorts.isEmpty()) {
 				returnToLastPort = false;
 			}
 		}

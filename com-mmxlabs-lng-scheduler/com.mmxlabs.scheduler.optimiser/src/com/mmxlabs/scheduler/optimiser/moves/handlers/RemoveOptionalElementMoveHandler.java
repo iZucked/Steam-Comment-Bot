@@ -51,10 +51,10 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-	
+
 	@Inject
 	private @NonNull IMoveHelper helper;
-	
+
 	@Override
 	public IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager lookupManager, @NonNull final Random random) {
 
@@ -64,7 +64,7 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 
 		// select an optional element at random
 
-		if(phaseOptimisationData.getOptionalElements().size() == 0){
+		if (phaseOptimisationData.getOptionalElements().isEmpty()) {
 			return new NullMove("RemoveOptionalElement", "No Optional Elements");
 		}
 		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getOptionalElements());
@@ -87,34 +87,34 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 	public IMove generateRemovingMove(final ISequenceElement element, final Pair<IResource, Integer> location, @NonNull final ILookupManager lookupManager, @NonNull final Random random) {
 		final Integer locationIndex = location.getSecond();
 		final ISequence locationSequence = lookupManager.getRawSequences().getSequence(location.getFirst());
-		
+
 		List<ISequenceElement> orderedElements = new ArrayList<>(1);
 		orderedElements.add(element);
-		
+
 		IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		if (portSlot instanceof IVesselEventPortSlot) {
-			IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) portSlot; 
+			IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) portSlot;
 			orderedElements = vesselEventPortSlot.getEventSequenceElements();
 		}
-		
+
 		final ISequenceElement beforeElement = locationSequence.get(lookupManager.lookup(orderedElements.get(0)).getSecond() - 1);
 		final ISequenceElement afterElement = locationSequence.get(lookupManager.lookup(orderedElements.get(orderedElements.size() - 1)).getSecond() + 1);
-		
+
 		// check whether beforeElement can be before afterElement
 		if (random.nextBoolean() && followersAndPreceders.getValidFollowers(beforeElement).contains(afterElement)) {
 			// we can just cut out the optional elements
-			
+
 			final RemoveElementsMove.Builder builder = RemoveElementsMove.Builder.newMove();
 			for (final ISequenceElement e : orderedElements) {
 				if (!helper.isOptional(e)) {
 					return null;
 				}
-				
+
 				builder.removeElement(location.getFirst(), e);
 			}
 
 			return builder.create();
-			//return new RemoveOptionalElement(location.getFirst(), orderedElementsIndices);
+			// return new RemoveOptionalElement(location.getFirst(), orderedElementsIndices);
 		} else {
 			// we need to do something to make the solution valid after removing this element
 			// either we can pop in another unused element, or we can patch something else in instead,
@@ -124,7 +124,7 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 
 			// first check whether either neighbour is optional, and if so whether we can
 			// take it out as well and get a good answer
-			
+
 			if (phaseOptimisationData.isElementOptional(beforeElement)) {
 				// check whether we can skip out both
 				final ISequenceElement beforeBeforeElement = locationSequence.get(locationIndex - 2);
@@ -141,7 +141,7 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 					return new RemoveOptionalElement(location.getFirst(), locationIndex + 1, locationIndex);
 				}
 			}
-			
+
 			final ISequenceElement another = RandomHelper.chooseElementFrom(random, phaseOptimisationData.getOptionalElements());
 			final Pair<IResource, Integer> location2 = lookupManager.lookup(another);
 			if (location2.getFirst() == null) {

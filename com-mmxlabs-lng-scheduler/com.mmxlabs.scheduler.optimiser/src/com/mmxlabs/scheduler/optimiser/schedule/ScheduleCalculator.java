@@ -248,7 +248,7 @@ public class ScheduleCalculator {
 
 			@Nullable
 			IPortTimesRecord portTimesRecord = null;
-			if (records != null && records.size() > 0) {
+			if (records != null && !records.isEmpty()) {
 				portTimesRecord = records.get(0);
 			}
 
