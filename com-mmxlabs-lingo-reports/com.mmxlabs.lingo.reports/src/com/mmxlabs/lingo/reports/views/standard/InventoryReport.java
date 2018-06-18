@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -325,10 +326,13 @@ public class InventoryReport extends ViewPart {
 			}
 			names.forEach(s -> seriesSet.deleteSeries(s));
 		}
+		
 		LocalDate minDate = null;
 		LocalDate maxDate = null;
-		final List<InventoryLevel> tableLevels = new LinkedList<>();
 
+		final List<InventoryLevel> tableLevels = new LinkedList<>();
+		Optional<InventoryChangeEvent> firstInventoryData = null;
+		
 		if (toDisplay != null) {
 			final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
 			if (scheduleModel != null) {
@@ -336,6 +340,19 @@ public class InventoryReport extends ViewPart {
 				if (schedule != null) {
 					for (final InventoryEvents inventoryEvents : schedule.getInventoryLevels()) {
 						final Inventory inventory = inventoryEvents.getFacility();
+						
+						// Find the date of the latest position/cargo
+						final Optional<LocalDateTime> latestLoad = inventoryEvents.getEvents().stream() //
+									.filter(evt -> evt.getSlotAllocation() != null || evt.getOpenSlotAllocation() != null)
+									.map(x -> x.getDate())
+									.reduce((a, b) -> a.isAfter(b)? a: b);
+						
+						// Find the first inventory feed event
+						firstInventoryData = inventoryEvents.getEvents().stream() //
+									.filter(evt -> evt.getSlotAllocation() == null && evt.getOpenSlotAllocation() == null)
+									//.map(x -> x.getDate())
+									.reduce((a, b) -> a.getDate().isAfter(b.getDate())? b: a);
+						
 						if (!inventoryModels.contains(inventory)) {
 							continue;
 						}
@@ -343,8 +360,9 @@ public class InventoryReport extends ViewPart {
 						if (inventory.getName() == null) {
 							continue;
 						}
+						
 						{
-
+							final Optional<InventoryChangeEvent> firstInventoryDataFinal = firstInventoryData;
 							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
 									.collect(Collectors.toMap( //
 											InventoryChangeEvent::getDate, //
@@ -352,6 +370,12 @@ public class InventoryReport extends ViewPart {
 											(a, b) -> (b), // Take latest value
 											LinkedHashMap::new))
 									.entrySet().stream() //
+									.filter(x -> {
+										if (latestLoad.isPresent() && firstInventoryDataFinal.isPresent()) {
+											return x.getKey().isBefore(latestLoad.get()) && x.getKey().isAfter(firstInventoryDataFinal.get().getDate());
+										}
+										return false;
+									})
 									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
@@ -503,8 +527,10 @@ public class InventoryReport extends ViewPart {
 		Collections.sort(tableLevels, (a, b) -> a.date.compareTo(b.date));
 
 		// inventoryLevels.sort((a,b) -> a.getFirst().compareTo(b.getFirst()));
-
 		int total = 0;
+		if (firstInventoryData != null && firstInventoryData.isPresent()) {
+			total = firstInventoryData.get().getCurrentLevel();
+		}
 		for (final InventoryLevel lvl : tableLevels) {
 			lvl.runningTotal = total + lvl.changeInM3;
 			total = lvl.runningTotal;

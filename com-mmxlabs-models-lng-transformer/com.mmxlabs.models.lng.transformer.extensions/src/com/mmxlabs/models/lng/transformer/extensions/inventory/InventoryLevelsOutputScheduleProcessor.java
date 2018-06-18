@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -34,20 +35,31 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.IOutputScheduleProcessor;
 import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 public class InventoryLevelsOutputScheduleProcessor implements IOutputScheduleProcessor {
 
 	@Inject
 	private LNGScenarioModel scenarioModel;
 
+	@Inject
+	private DateAndCurveHelper dateAndCurveHelper;
+	
+	@Inject
+	private IScenarioDataProvider scenarioDataProvider;
+	
 	@Override
 	public void process(final Schedule schedule) {
 		if (LicenseFeatures.isPermitted("features:inventory-model")) {
-
+			
+			
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
-
+			
+			
 			for (final Inventory facility : cargoModel.getInventoryModels()) {
 				final InventoryEvents inventoryChangeEvents = ScheduleFactory.eINSTANCE.createInventoryEvents();
 				inventoryChangeEvents.setFacility(facility);
@@ -125,11 +137,15 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 				}
+				
+				// Start of the inventory data
+				final LocalDate startOfInventoryData = minDate;
+				
 				for (final InventoryEventRow r : facility.getOfftakes()) {
 
 					minDate = f_minDate.apply(minDate, r.getStartDate());
 					maxDate = f_maxDate.apply(maxDate, r.getStartDate());
-
+					
 					if (r.getPeriod() == InventoryFrequency.LEVEL || r.getPeriod() == InventoryFrequency.CARGO) {
 						final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 						evt.setEvent(r);
@@ -172,7 +188,10 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 				}
-
+				
+				// Date of the latest slot/load
+				LocalDate latestLoad = null;
+				
 				if (maxDate != null && schedule != null) {
 					for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 						final Slot slot = slotAllocation.getSlot();
@@ -199,6 +218,13 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							}
 
 							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
+							
+							if (latestLoad == null) {
+								latestLoad = start.toLocalDate();
+							} else {
+								latestLoad = f_maxDate.apply(latestLoad, start.toLocalDate());
+							}
+							
 							evt.setSlotAllocation(slotAllocation);
 							evt.setDate(start.toLocalDateTime());
 							evt.setChangeQuantity(change);
@@ -232,6 +258,13 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							}
 
 							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
+
+							if (latestLoad == null) {
+								latestLoad = slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().toLocalDate();
+							} else {
+								latestLoad = f_maxDate.apply(latestLoad, slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().toLocalDate());
+							}
+							
 							evt.setOpenSlotAllocation(slotAllocation);
 							evt.setDate(slotAllocation.getSlot().getWindowStartWithSlotOrPortTime().toLocalDateTime());
 							evt.setChangeQuantity(change);
@@ -287,8 +320,18 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 
 				// Sort before storing
 				events.sort((a, b) -> a.getDate().compareTo(b.getDate()));
+				
+				final LocalDate latestLoadFinal = latestLoad;
+				
+				// Filter InventoryChangeEvent given the effective bounds of the inventory scenario
+				List<InventoryChangeEvent> res = events.stream()
+						.filter(x -> {	
+							LocalDate eventDate = x.getDate().toLocalDate();
+							return eventDate.isAfter(startOfInventoryData) && eventDate.isBefore(latestLoadFinal);
+						})
+						.collect(Collectors.toList());
 
-				inventoryChangeEvents.getEvents().addAll(events);
+				inventoryChangeEvents.getEvents().addAll(res);
 			}
 		}
 	}
