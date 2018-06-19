@@ -73,5 +73,6 @@ Export-Package: com.mmxlabs.models.lng.transformer.actionplan,
  com.mmxlabs.models.lng.transformer.ui.actionablesets,
  com.mmxlabs.models.lng.transformer.ui.analytics,
  com.mmxlabs.models.lng.transformer.ui.analytics.spec,
+ com.mmxlabs.models.lng.transformer.ui.inventory,
  com.mmxlabs.models.lng.transformer.ui.parametermodes,
  com.mmxlabs.models.lng.transformer.ui.parametermodes.impl
