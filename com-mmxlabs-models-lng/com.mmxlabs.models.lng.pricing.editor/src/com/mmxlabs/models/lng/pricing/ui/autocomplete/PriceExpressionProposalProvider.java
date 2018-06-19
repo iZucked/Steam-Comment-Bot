@@ -177,6 +177,15 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 						c.length()));
 			}
 		}
+		{
+			final String proposal = "DATEDAVG(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal + "index,window,delay,period)",
+						"Function to use the average of a month window with delay and application period",
+						c.length()));
+			}
+		}
 		return list.toArray(new IContentProposal[list.size()]);
 
 	}
