@@ -68,9 +68,6 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		final List<EStructuralFeature> list = new ArrayList<EStructuralFeature>();
 		final List<EStructuralFeature> features = c.getEAllStructuralFeatures();
 		for (final EStructuralFeature f : features) {
-			if (f.getName().equals("contract")) {
-				int z = 0;
-			}
 			if (f instanceof EAttribute) {
 				if (f.getEType() == EcorePackage.Literals.EINT || f.getEType() == EcorePackage.Literals.EINTEGER_OBJECT || f.getEType() == EcorePackage.Literals.EDOUBLE
 						|| f.getEType() == EcorePackage.Literals.EDOUBLE_OBJECT || f.getEType() == EcorePackage.Literals.EBOOLEAN || f.getEType() == EcorePackage.Literals.EBOOLEAN_OBJECT

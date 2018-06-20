@@ -79,9 +79,6 @@ public class TabuLightWeightSequenceOptimiserMoves {
 
 
 	static private TabuSolution removeUsedCargo(List<List<Integer>> sequences, List<Integer> usedCargoes, Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping, Random random) {
-		if (usedCargoes.size() < 1) {
-			int z = 0;
-		}
 		final int choiceIndex = random.nextInt(usedCargoes.size());
 		final int cargo = usedCargoes.get(choiceIndex);
 

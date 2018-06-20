@@ -308,9 +308,6 @@ public class ADPModelUtil {
 										});
 									}
 								}
-								if (profile.getContractCode().contains("G")) {
-									slots.stream().forEach(s -> s.setOptional(true)); //ALEXTODO: undo
-								}
 								if (!slots.isEmpty()) {
 									cmd.append(AddCommand.create(editingDomain, subProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS, slots));
 								}

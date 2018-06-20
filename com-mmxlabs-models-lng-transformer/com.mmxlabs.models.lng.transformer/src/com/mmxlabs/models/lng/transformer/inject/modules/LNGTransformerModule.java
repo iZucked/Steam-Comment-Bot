@@ -101,7 +101,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
 
-	private final static int DEFAULT_VPO_CACHE_SIZE = 5_000; //ALEXTODO: undo
+	private final static int DEFAULT_VPO_CACHE_SIZE = 20_000;
 
 	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
 

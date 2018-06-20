@@ -107,7 +107,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 				final ISequence sequence = sequences.getSequence(resource);
 				for (final ISequenceElement element : sequence) {
 					if (interestingElements.contains(element)) {
-						fitness = fitness + 4; //ALEXTODO: undo
+						++fitness;
 					}
 				}
 			}

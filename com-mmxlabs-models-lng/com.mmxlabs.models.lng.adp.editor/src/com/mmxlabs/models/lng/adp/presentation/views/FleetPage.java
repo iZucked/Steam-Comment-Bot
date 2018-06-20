@@ -138,8 +138,8 @@ public class FleetPage extends ADPComposite {
 								newAvailability.setStartAfter(adpModel.getYearStart().atDay(1).atStartOfDay());
 								newAvailability.setStartBy(adpModel.getYearStart().atDay(1).atStartOfDay());
 
-								newAvailability.setEndAfter(adpModel.getYearEnd().atDay(1).atStartOfDay().plusMonths(3)); //ALEXTODO:undo
-								newAvailability.setEndBy(adpModel.getYearEnd().atDay(1).atStartOfDay().plusMonths(3)); //ALEXTODO:undo
+								newAvailability.setEndAfter(adpModel.getYearEnd().atDay(1).atStartOfDay());
+								newAvailability.setEndBy(adpModel.getYearEnd().atDay(1).atStartOfDay());
 
 								newAvailabilities.add(newAvailability);
 							}

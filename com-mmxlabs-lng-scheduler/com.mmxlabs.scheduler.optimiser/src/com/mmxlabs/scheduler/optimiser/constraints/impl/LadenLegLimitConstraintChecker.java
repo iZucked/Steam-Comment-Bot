@@ -52,7 +52,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
-	private final int maxLadenDuration = 28 * 24; //ALEXTODO: undo
+	private final int maxLadenDuration = 60 * 24;
 
 	public LadenLegLimitConstraintChecker(@NonNull final String name) {
 		this.name = name;
