@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 @NonNullByDefault
 public abstract class AbstractADPProfileProvider implements IADPProfileProvider {
 	@Override
-	public final void createProfiles(final LNGScenarioModel scenarioModel, final CommercialModel commercialModel, final ADPModel existingModel) {
+	public void createProfiles(final LNGScenarioModel scenarioModel, final CommercialModel commercialModel, final ADPModel existingModel) {
 		for (final PurchaseContract contract : commercialModel.getPurchaseContracts()) {
 			PurchaseContractProfile profile = createProfile(scenarioModel, commercialModel, existingModel, contract);
 			if (profile != null) {
@@ -44,8 +44,8 @@ public abstract class AbstractADPProfileProvider implements IADPProfileProvider 
 			if (profile != null) {
 				existingModel.getSalesContractProfiles().add(profile);
 			}
-
 		}
+
 	}
 
 	public abstract @Nullable PurchaseContractProfile createProfile(final LNGScenarioModel scenarioModel, final CommercialModel commercialModel, final ADPModel existingModel,

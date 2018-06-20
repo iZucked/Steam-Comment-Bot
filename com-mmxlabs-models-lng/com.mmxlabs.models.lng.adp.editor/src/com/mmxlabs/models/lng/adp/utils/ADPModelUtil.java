@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SpotMarketsProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SubProfileConstraint;
-import com.mmxlabs.models.lng.adp.ext.IADPBindingRuleProvider;
 import com.mmxlabs.models.lng.adp.ext.IADPProfileProvider;
 import com.mmxlabs.models.lng.adp.ext.IProfileGenerator;
 import com.mmxlabs.models.lng.adp.ext.impl.DistributionModelGeneratorUtil;
@@ -337,22 +336,6 @@ public class ADPModelUtil {
 		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
 		factories.add(new ReflectiveItemProviderAdapterFactory());
 		return new ComposedAdapterFactory(factories);
-	}
-
-	public static void createBindings(final LNGScenarioModel scenarioModel, final ADPModel adpModel) {
-
-		final Bundle bundle = FrameworkUtil.getBundle(ADPModelUtil.class);
-		final BundleContext bundleContext = bundle.getBundleContext();
-		final ServiceReference<IADPBindingRuleProvider> serviceReference = bundleContext.getServiceReference(IADPBindingRuleProvider.class);
-		if (serviceReference == null) {
-			return;
-		}
-		try {
-			final IADPBindingRuleProvider provider = bundleContext.getService(serviceReference);
-			provider.generateBindingRules(adpModel, scenarioModel);
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
 	}
 
 	private static class SeenCargoIterator<T extends Slot> implements Iterator<T> {
