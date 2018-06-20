@@ -36,7 +36,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
@@ -67,6 +66,8 @@ import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
 public class DirScanScenarioService extends AbstractScenarioService {
 
+	private static final String LINGO_FILE_EXTENSION = ".lingo";
+
 	private static final Logger log = LoggerFactory.getLogger(DirScanScenarioService.class);
 
 	/**
@@ -79,9 +80,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	 */
 	private String serviceName;
 
-	private final Map<String, WeakReference<Container>> folderMap = new HashMap<String, WeakReference<Container>>();
-	private final Map<String, WeakReference<ScenarioInstance>> scenarioMap = new HashMap<String, WeakReference<ScenarioInstance>>();
-	private final Map<Container, Path> modelToFilesystemMap = new WeakHashMap<Container, Path>();
+	private final Map<String, WeakReference<Container>> folderMap = new HashMap<>();
+	private final Map<String, WeakReference<ScenarioInstance>> scenarioMap = new HashMap<>();
+	private final Map<Container, Path> modelToFilesystemMap = new WeakHashMap<>();
 
 	private Thread watchThread;
 	private volatile boolean watchThreadRunning;
@@ -106,7 +107,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				final Path path = modelToFilesystemMap.get(c);
 				if (path != null) {
 					// Append .lingo if it is a scenario
-					final String ext = c instanceof ScenarioInstance ? ".lingo" : "";
+					final String ext = c instanceof ScenarioInstance ? LINGO_FILE_EXTENSION : "";
 					final Path newName = path.getParent().resolve(notification.getNewStringValue() + ext);
 					lock.readLock().lock();
 					try {
@@ -132,7 +133,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
+	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @NonNull IProgressMonitor progressMonitor) throws Exception {
 		try {
 			progressMonitor.beginTask("Copy", 1);
 			final String uuid = EcoreUtil.generateUUID();
@@ -148,28 +149,21 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			//
 			lock.readLock().lock();
 			try {
-				final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + ".lingo");
+				final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + LINGO_FILE_EXTENSION);
 				URI archiveURI = URI.createFileURI(target.getAbsolutePath());
 
 				if (target.exists()) {
 					final boolean[] response = new boolean[1];
 					final Display display = PlatformUI.getWorkbench().getDisplay();
-					display.syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
-									String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
-
-						}
-					});
+					display.syncExec(() -> response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
+							String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile())));
 					if (!response[0]) {
 						return null;
 					}
 				}
 				tmpRecord.saveCopyTo(uuid, archiveURI);
 
-				log.debug("Inserting scenario into " + parent);
+				log.debug("Inserting scenario into {}", parent);
 
 				// Create new model nodes
 				final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -197,7 +191,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
+	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name, @NonNull IProgressMonitor progressMonitor) throws Exception {
 		try {
 			progressMonitor.beginTask("Copy", 1);
 			final String uuid = EcoreUtil.generateUUID();
@@ -213,36 +207,27 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			//
 			lock.readLock().lock();
 			try {
-				final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + ".lingo");
+				final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + LINGO_FILE_EXTENSION);
 				URI archiveURI = URI.createFileURI(target.getAbsolutePath());
 
 				if (target.exists()) {
 					final boolean[] response = new boolean[1];
 					final Display display = PlatformUI.getWorkbench().getDisplay();
-					display.syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
-									String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
-
-						}
-					});
+					display.syncExec(() -> response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
+							String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile())));
 					if (!response[0]) {
 						return null;
 					}
 				}
 				{
-					{
-						final EObject rootObject = EcoreUtil.copy(scenarioDataProvider.getScenario());
-						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-							final Map<String, EObject> extraDataObjects = ScenarioStorageUtil.createCopyOfExtraData(scenarioDataProvider);
-							ScenarioStorageUtil.storeToURI(uuid, rootObject, extraDataObjects, scenarioDataProvider.getManifest(), archiveURI, scenarioCipherProvider);
-						});
-					}
+					final EObject rootObject = EcoreUtil.copy(scenarioDataProvider.getScenario());
+					ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+						final Map<String, EObject> extraDataObjects = ScenarioStorageUtil.createCopyOfExtraData(scenarioDataProvider);
+						ScenarioStorageUtil.storeToURI(uuid, rootObject, extraDataObjects, scenarioDataProvider.getManifest(), archiveURI, scenarioCipherProvider);
+					});
 				}
 
-				log.debug("Inserting scenario into " + parent);
+				log.debug("Inserting scenario into {}", parent);
 
 				// Create new model nodes
 				final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -304,7 +289,11 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				log.error("Error deleting: " + f.getName(), e);
 			}
 		} else {
-			f.delete();
+			try {
+				Files.delete(f.toPath());
+			} catch (final Exception e) {
+				log.error("Error deleting: " + f.getName(), e);
+			}
 		}
 	}
 
@@ -371,7 +360,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 						// Perform initial scan
 						try {
-							scanDirectory(getServiceModel(), dataPath.toPath(), monitor);
+							scanDirectory(dataPath.toPath(), monitor);
 						} catch (final Exception e) {
 							log.error(e.getMessage(), e);
 						}
@@ -405,7 +394,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				while (watchThreadRunning) {
 					lock.writeLock().lock();
 					try {
-						scanDirectory(getServiceModel(), dataPath.toPath(), new NullProgressMonitor());
+						scanDirectory(dataPath.toPath(), new NullProgressMonitor());
 					} catch (final Exception e) {
 						log.error(e.getMessage(), e);
 					} finally {
@@ -417,8 +406,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						// ignore
 					}
 				}
-			};
-
+			}
 		};
 
 	}
@@ -443,7 +431,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	}
 
-	private void scanDirectory(final Container root, final Path dataPath, final IProgressMonitor monitor) throws IOException {
+	private void scanDirectory(final Path dataPath, final IProgressMonitor monitor) throws IOException {
 
 		monitor.beginTask("Scanning dir " + dataPath, IProgressMonitor.UNKNOWN);
 		try {
@@ -458,7 +446,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						if (!watchThreadRunning) {
 							return FileVisitResult.TERMINATE;
 						}
-						log.debug("preVisitDirectory: " + dir.normalize());
+						log.debug("preVisitDirectory: {}", dir.normalize());
 						monitor.subTask("Scanning " + dir.normalize());
 						addFolder(dir);
 						newFolders.add(dir.normalize().toString());
@@ -472,7 +460,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 							return FileVisitResult.TERMINATE;
 						}
 						monitor.subTask("Scanning " + file.normalize());
-						log.debug("visitFile: " + file.normalize());
+						log.debug("visitFile: {}", file.normalize());
 						try {
 							addFile(file);
 							newFiles.add(file.normalize().toString());
@@ -516,7 +504,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void removeFolder(final Path dir) {
-		log.debug("removeFolder: " + dir.normalize());
+		log.debug("removeFolder: {}", dir.normalize());
 
 		final WeakReference<Container> remove = folderMap.remove(dir.normalize().toString());
 		if (remove == null) {
@@ -536,8 +524,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 	}
 
-	protected void addFolder(final Path dir) throws IOException {
-		log.debug("addFolder: " + dir.normalize());
+	protected void addFolder(final Path dir) {
+		log.debug("addFolder: {}", dir.normalize());
 
 		final String pathKey = dir.normalize().toString();
 		if (!folderMap.containsKey(pathKey)) {
@@ -573,10 +561,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void addFile(final Path file) {
-		log.debug("addFile: " + file.normalize());
+		log.debug("addFile: {}", file.normalize());
 
 		// Filter based on file extension
-		if (!(file.toString().endsWith(".lingo"))) {
+		if (!(file.toString().endsWith(LINGO_FILE_EXTENSION))) {
 			return;
 		}
 
@@ -591,7 +579,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				scenarioInstance.setReadonly(true);
 				scenarioInstance.setUuid(manifest.getUUID());
 
-				final URI fileURI = URI.createFileURI(f.getAbsolutePath());
 				scenarioInstance.setRootObjectURI(archiveURI.toString());
 
 				final String scenarioname = f.getName().replaceFirst("\\.lingo$", "").replace("\\.scenario$", "");
@@ -630,7 +617,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		if (file == null) {
 			return;
 		}
-		log.debug("removeFile: " + file.normalize());
+		log.debug("removeFile: {}", file.normalize());
 		final Path normal = file.normalize();
 		if (normal == null) {
 			return;
@@ -663,7 +650,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	 * @param c
 	 */
 	private void detachSubTree(final Container c) {
-		log.debug("detachSubTree: " + c.getName());
+		log.debug("detachSubTree: {}", c.getName());
 
 		for (final Container cc : c.getElements()) {
 			detachSubTree(cc);
@@ -673,22 +660,17 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
 
 			final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-					final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
-					activePage.closeEditors(editorReferences, false);
-				}
+			Display.getDefault().asyncExec(() -> {
+				final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+				activePage.closeEditors(editorReferences, false);
 			});
 		}
 	}
 
 	@Override
 	public void moveInto(final List<Container> elements, final Container destination) {
-		log.debug("moveInto -> " + destination.getName());
+		log.debug("moveInto -> {}", destination.getName());
 
 		lock.readLock().lock();
 		try {
@@ -716,7 +698,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						final Path destLoc = destPath.resolve(path.getFileName());
 
 						moveFileTree(path, destLoc);
-						// Files.move(path, destLoc);
 						// Remove from tree as file system watcher will re-add.
 						// We do this after the move as errors will leave the file in place (TODO: What about folder moves?)
 						if (c instanceof ScenarioInstance) {
@@ -736,7 +717,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	private void moveFileTree(final Path source, final Path dest) throws IOException {
-		log.debug("moveFileTree: " + source.normalize() + " -> " + dest.normalize());
+		log.debug("moveFileTree: {} -> {}", source.normalize(), dest.normalize());
 
 		// Maps the old file tree to the new file tree
 		final Map<String, Path> oldToNewMap = new HashMap<>();
@@ -802,7 +783,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			return;
 		}
 
-		log.debug("makeFolder: " + parent.getName() + " ::  " + name);
+		log.debug("makeFolder: {} :: {}", parent.getName(), name);
 
 		lock.readLock().lock();
 		try {

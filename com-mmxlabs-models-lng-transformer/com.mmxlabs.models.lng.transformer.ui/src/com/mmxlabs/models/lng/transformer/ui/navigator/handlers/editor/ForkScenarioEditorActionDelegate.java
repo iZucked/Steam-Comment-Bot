@@ -28,16 +28,14 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 	@Override
 	public void run(final IAction action) {
 
-		if (editor != null) {
-			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
-				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
-				if (instance != null) {
-					try {
-						ScenarioServiceModelUtils.createAndOpenFork(instance, false);
-					} catch (final Exception e) {
-						throw new RuntimeException("Unable to fork scenario", e);
-					}
+		if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+			final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
+			if (instance != null) {
+				try {
+					ScenarioServiceModelUtils.createAndOpenFork(instance, false);
+				} catch (final Exception e) {
+					throw new RuntimeException("Unable to fork scenario", e);
 				}
 			}
 		}

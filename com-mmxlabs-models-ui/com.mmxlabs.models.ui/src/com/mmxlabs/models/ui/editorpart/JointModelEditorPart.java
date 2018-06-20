@@ -54,7 +54,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -94,7 +93,6 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDirtyListener;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -123,29 +121,23 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private Throwable initException = null;
 
-	private final Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
+	private final Stack<IExtraValidationContext> validationContextStack = new Stack<>();
 
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 
-	private final @NonNull IScenarioDirtyListener scenarioDirtyListener = new IScenarioDirtyListener() {
-
-		@Override
-		public void dirtyStatusChanged(@NonNull ModelRecord modelRecord, boolean isDirty) {
-			RunnerHelper.asyncExec(() -> firePropertyChange(PROP_DIRTY));
-		}
-	};
+	private final @NonNull IScenarioDirtyListener scenarioDirtyListener = (unusedModelRecord, unusedIsDirty) -> RunnerHelper.asyncExec(() -> firePropertyChange(PROP_DIRTY));
 
 	/**
 	 * This caches reference value provider providers.
 	 */
 	private IReferenceValueProviderProvider referenceValueProviderCache = null;
-	private final Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
+	private final Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<>();
 	/**
 	 * This holds the selection of the active viewer.
 	 */
 	private ISelection editorSelection = StructuredSelection.EMPTY;
 
-	private List<IJointModelEditorContribution> contributions = new LinkedList<IJointModelEditorContribution>();
+	private List<IJointModelEditorContribution> contributions = new LinkedList<>();
 
 	private final ICommandHandler defaultCommandHandler = new ICommandHandler() {
 		@Override
@@ -166,17 +158,13 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		@Override
 		public ModelReference getModelReference() {
 			return JointModelEditorPart.this.getModelReference();
-		};
+		}
 	};
 
-	private final IPartGotoTarget partGotoTarget = new IPartGotoTarget() {
-
-		@Override
-		public void gotoTarget(final Object object) {
-			for (final IJointModelEditorContribution contrib : contributions) {
-				if (contrib instanceof IPartGotoTarget) {
-					((IPartGotoTarget) contrib).gotoTarget(object);
-				}
+	private final IPartGotoTarget partGotoTarget = object -> {
+		for (final IJointModelEditorContribution contrib : contributions) {
+			if (contrib instanceof IPartGotoTarget) {
+				((IPartGotoTarget) contrib).gotoTarget(object);
 			}
 		}
 	};
@@ -192,21 +180,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	private ScenarioInstance scenarioInstance;
 	private IScenarioDataProvider scenarioDataProvider;
 
-	private final @NonNull IScenarioLockListener lockedAdapter = (modelRecord, writeLocked) -> updateLocked();
+	private final @NonNull IScenarioLockListener lockedAdapter = (unusedModelRecord, unusedWriteLocked) -> updateLocked();
 
 	private final @NonNull AdapterImpl scenarioNameAttributeAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification msg) {
-			if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
-				updateLocked();
+			if (msg.isTouch()) {
+				return;
 			}
-			if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
-				RunnerHelper.asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						setPartName(msg.getNewStringValue());
-					}
-				});
+			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
+				updateLocked();
+			} else if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
+				RunnerHelper.asyncExec(() -> setPartName(msg.getNewStringValue()));
 			}
 		}
 	};
@@ -215,9 +200,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private Image editorTitleImage;
 
-	// private ScenarioLock editorLock;
-
-	private ScenarioInstance referenceInstance;
 	private ScenarioModelRecord modelRecord;
 	private ModelReference modelReference;
 
@@ -230,9 +212,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	 */
 	private CommandProviderAwareEditingDomain editingDomain;
 	private AdapterFactory adapterFactory;
-
-	public JointModelEditorPart() {
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -342,11 +321,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 							selectionViewer.setSelection(new StructuredSelection(selection));
 							JointModelEditorPart.this.setFocus();
 						}
-
-						@Override
-						public void setActionBars(final IActionBars actionBars) {
-							super.setActionBars(actionBars);
-						}
 					};
 				propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
 			}
@@ -390,7 +364,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 			modelRecord = SSDataManager.Instance.getModelRecord(instance);
 			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
-			dialog.run(false, false, (monitor) -> modelReference = modelRecord.aquireReference("JointModelEditorPart", monitor));
+			dialog.run(false, false, monitor -> modelReference = modelRecord.aquireReference("JointModelEditorPart", monitor));
 
 			final EObject ro = modelReference.getInstance();
 			if (ro == null) {
@@ -429,7 +403,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			validationContextStack.clear();
 
 			boolean relaxedValidation = false;
-			final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
 			if (scenarioInstance != null) {
 				relaxedValidation = "Period Scenario".equals(scenarioInstance.getName());
 			}
@@ -512,14 +485,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) ei;
 					final ScenarioInstance instance = ssInput.getScenarioInstance();
 
-					sw.append(String.format("Name: %s\n", instance.getName()));
-					sw.append(String.format("UUID: %s\n", instance.getUuid()));
-					sw.append(String.format("Scenario Version: %s - %d\n", instance.getVersionContext(), instance.getScenarioVersion()));
-					sw.append(String.format("Client Version: %s - %d\n", instance.getClientVersionContext(), instance.getClientScenarioVersion()));
-					sw.append("\n");
+					sw.append(String.format("Name: %s%n", instance.getName()));
+					sw.append(String.format("UUID: %s%n", instance.getUuid()));
+					sw.append(String.format("Scenario Version: %s - %d%n", instance.getVersionContext(), instance.getScenarioVersion()));
+					sw.append(String.format("Client Version: %s - %d%n", instance.getClientVersionContext(), instance.getClientScenarioVersion()));
+					sw.append(String.format("%n"));
 				}
 			}
-			sw.append(String.format("Message %s\n", throwable.getMessage()));
+			sw.append(String.format("Message %s%n", throwable.getMessage()));
 			sw.append("\nStackTrace:\n");
 			throwable.printStackTrace(new PrintWriter(sw));
 			final Text detailsText = toolkit.createText(technicalDetails, sw.toString(), SWT.MULTI | SWT.READ_ONLY);
@@ -690,8 +663,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				@Override
 				public Viewer createViewer(final Composite composite) {
 					final Tree tree = new Tree(composite, SWT.MULTI);
-					final TreeViewer newTreeViewer = new TreeViewer(tree);
-					return newTreeViewer;
+					return new TreeViewer(tree);
 				}
 
 				@Override

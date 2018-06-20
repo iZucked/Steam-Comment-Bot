@@ -184,7 +184,7 @@
                locationURI="menu:data?after=additions">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
-                  label="Import Cargoes"
+                  label="Import cargoes"
                   style="push">
             </command>
             <command
