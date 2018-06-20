@@ -29,11 +29,6 @@ public class OpenSlotExporter extends BaseAnnotationExporter {
 	private IPortSlotProvider portSlotProvider;
 
 	@Override
-	public void init() {
-
-	}
-
-	@Override
 	public Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
 
 		if (element == null) {
@@ -46,50 +41,17 @@ public class OpenSlotExporter extends BaseAnnotationExporter {
 		if (slot == null) {
 			return null;
 		}
-		//
-		// final Port ePort = modelEntityMap.getModelObject(slot.getPort(), Port.class);
-		// if (ePort == null) {
-		// // Port maybe null for e.g. DES Purchases.
-		// // return null;
-		// }
-		//
 		if (slot instanceof IDischargeOption || slot instanceof ILoadOption) {
-			//
-			// final IMarkToMarket market = marketProvider.getMarketForElement(element);
-			// if (market == null) {
-			// return null;
-			// }
 
-			// TODO this will have to look at market-generated slots.
 			final Slot optSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			if (optSlot instanceof SpotSlot) {
 				// Skip spot slots
 				return null;
 			}
 
-			// final SlotVisit sv = factory.createSlotVisit();
-			// final SlotAllocation slotAllocation = factory.createSlotAllocation();
-			// sv.setSlotAllocation(slotAllocation);
-			//
-			// output.getSlotAllocations().add(slotAllocation);
-			// slotAllocation.setSlot(optSlot);
-
-			// Output allocation info
-			// final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
-
 			final OpenSlotAllocation eAllocation = scheduleFactory.createOpenSlotAllocation();
 			eAllocation.setSlot(optSlot);
-//			allocations.put(slot, eAllocation);
 			output.getOpenSlotAllocations().add(eAllocation);
-			// eAllocation.setSlot(slot);
-			// sv.setStart(modelEntityMap.getDateFromHours(slot.getTimeWindow().getStart()));
-			// sv.setEnd(modelEntityMap.getDateFromHours(slot.getTimeWindow().getStart()));
-			//
-			// sv.setSlotAllocation(slotAllocation);
-			//
-			// sv.setPort(ePort);
-			// return sv;
-
 		}
 
 		return null;

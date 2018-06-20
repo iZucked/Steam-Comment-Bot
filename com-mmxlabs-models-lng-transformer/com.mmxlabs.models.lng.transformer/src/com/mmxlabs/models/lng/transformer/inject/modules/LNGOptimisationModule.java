@@ -23,7 +23,6 @@ import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveGeneratorModule;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
@@ -43,7 +42,6 @@ public class LNGOptimisationModule extends AbstractModule {
 		}
 		install(new FitnessFunctionInstantiatorModule());
 
-//		install(new LocalSearchOptimiserModule());
 		install(new LinearFitnessEvaluatorModule());
 
 		install(new MoveGeneratorModule());

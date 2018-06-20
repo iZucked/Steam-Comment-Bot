@@ -15,7 +15,6 @@ import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
@@ -37,7 +36,7 @@ public class UpstreamUrlProvider {
 	private final Set<IUpstreamServiceChangedListener> workspaceListeners = new HashSet<>();
 
 	private boolean hasDetails = false;
-	private AtomicBoolean dialogOpen = new AtomicBoolean(false);
+	private final AtomicBoolean dialogOpen = new AtomicBoolean(false);
 
 	private boolean baseCaseServiceEnabled = false;
 	private boolean teamServiceEnabled = false;
@@ -53,26 +52,24 @@ public class UpstreamUrlProvider {
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
 	}
 
-	private final IPropertyChangeListener listener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(final PropertyChangeEvent event) {
-			switch (event.getProperty()) {
-			case StandardDateRepositoryPreferenceConstants.P_URL_KEY:
-				// case StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY:
-				// case StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY:
-				fireChangedListeners();
-				break;
-			case StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY:
-				baseCaseServiceEnabled = Boolean.TRUE.equals(event.getNewValue());
-				fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.BaseCaseWorkspace);
-				break;
-			case StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY:
-				teamServiceEnabled = Boolean.TRUE.equals(event.getNewValue());
-				fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.TeamWorkspace);
-				break;
-			}
+	private final IPropertyChangeListener listener = event -> {
+		switch (event.getProperty()) {
+		case StandardDateRepositoryPreferenceConstants.P_URL_KEY:
+			// case StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY:
+			// case StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY:
+			fireChangedListeners();
+			break;
+		case StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY:
+			baseCaseServiceEnabled = Boolean.TRUE.equals(event.getNewValue());
+			fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.BaseCaseWorkspace);
+			break;
+		case StandardDateRepositoryPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY:
+			teamServiceEnabled = Boolean.TRUE.equals(event.getNewValue());
+			fireServiceChangedListeners(IUpstreamServiceChangedListener.Service.TeamWorkspace);
+			break;
+		default:
+			break;
 		}
-
 	};
 
 	protected String username;
@@ -80,16 +77,16 @@ public class UpstreamUrlProvider {
 	protected String password;
 
 	public String getBaseURL() {
-		String base_url = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
-		if (base_url == null || base_url.isEmpty()) {
+		String baseUrl = preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_URL_KEY);
+		if (baseUrl == null || baseUrl.isEmpty()) {
 			return "";
 		}
 
 		// Strip trailing forward slash if present
-		if (base_url.charAt(base_url.length() - 1) == '/') {
-			base_url = base_url.substring(0, base_url.length() - 1);
+		if (baseUrl.charAt(baseUrl.length() - 1) == '/') {
+			baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
 		}
-		final String url = base_url;
+		final String url = baseUrl;
 		if (!testUpstreamAvailability(url)) {
 			return "";
 		}
@@ -99,18 +96,18 @@ public class UpstreamUrlProvider {
 		}
 
 		if (!hasDetails) {
-			ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
+			final ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
 			if (preferences.nodeExists("upstream")) {
-				ISecurePreferences node = preferences.node("upstream");
+				final ISecurePreferences node = preferences.node("upstream");
 				try {
-					String storedUsername = node.get("username", "n/a");
-					String storedPassword = node.get("password", "n/a");
+					final String storedUsername = node.get("username", "n/a");
+					final String storedPassword = node.get("password", "n/a");
 					UpstreamUrlProvider.this.username = storedUsername;
 					UpstreamUrlProvider.this.password = storedPassword;
 					if (checkCredentials(url, username, password)) {
 						hasDetails = true;
 					}
-				} catch (StorageException e1) {
+				} catch (final StorageException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -135,7 +132,7 @@ public class UpstreamUrlProvider {
 					hasDetails = true;
 				});
 				// Fire change listener without further blocking this call
-				ForkJoinPool.commonPool().submit(() -> fireChangedListeners());
+				ForkJoinPool.commonPool().submit(this::fireChangedListeners);
 			}
 		}
 
@@ -147,11 +144,11 @@ public class UpstreamUrlProvider {
 	}
 
 	public String getUsername() {
-		return username;// preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY);
+		return username;
 	}
 
 	public String getPassword() {
-		return password;// preferenceStore.getString(StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY);
+		return password;
 	}
 
 	public void registerDetailsChangedLister(final IUpstreamDetailChangedListener listener) {
@@ -170,7 +167,7 @@ public class UpstreamUrlProvider {
 		workspaceListeners.remove(listener);
 	}
 
-	static public boolean checkCredentials(String url, String username, String password) {
+	public static boolean checkCredentials(final String url, final String username, final String password) {
 
 		if (username == null || username.isEmpty()) {
 			return false;
@@ -180,9 +177,7 @@ public class UpstreamUrlProvider {
 			return false;
 		}
 
-		// final OkHttpClient httpClient = new okhttp3.OkHttpClient();
-
-		Request loginRequest = new Request.Builder().url(url + "/api/login") //
+		final Request loginRequest = new Request.Builder().url(url + "/api/login") //
 				.addHeader("Authorization", Credentials.basic(username, password)) //
 				.build();
 
@@ -191,18 +186,18 @@ public class UpstreamUrlProvider {
 				System.out.println("Bad credentials");
 				return false;
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
 		return true;
 	}
 
-	static public boolean testUpstreamAvailability(String url) {
+	public static boolean testUpstreamAvailability(final String url) {
 		Request pingRequest = null;
 		try {
 			pingRequest = new Request.Builder().url(url + "/ping").get().build();
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			System.out.println("No valid url anymore");
 			return false;
 		}
@@ -215,8 +210,7 @@ public class UpstreamUrlProvider {
 			if (!pingResponse.isSuccessful()) {
 				return false;
 			}
-		} catch (IOException e) {
-			// e.printStackTrace();
+		} catch (final IOException e) {
 			System.out.println("No reachable upstream server");
 			return false;
 		}
@@ -250,17 +244,17 @@ public class UpstreamUrlProvider {
 			try {
 				l.changed();
 			} catch (final Exception e) {
-
+				// Ignore
 			}
 		}
 	}
 
-	private void fireServiceChangedListeners(IUpstreamServiceChangedListener.Service serviceType) {
+	private void fireServiceChangedListeners(final IUpstreamServiceChangedListener.Service serviceType) {
 		for (final IUpstreamServiceChangedListener l : workspaceListeners) {
 			try {
 				l.changed(serviceType);
 			} catch (final Exception e) {
-
+				// Ignore
 			}
 		}
 	}

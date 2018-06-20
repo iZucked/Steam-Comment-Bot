@@ -43,7 +43,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 	@Inject
 	private IMarkToMarketProvider marketProvider;
 
-	private final HashMap<IPortSlot, MarketAllocation> allocations = new HashMap<IPortSlot, MarketAllocation>();
+	private final HashMap<IPortSlot, MarketAllocation> allocations = new HashMap<>();
 
 	@Override
 	public void init() {
@@ -117,7 +117,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			{
 				// /// Get the "fake" mtm slot data
 				// Get all the allocation slots
-				final Set<IPortSlot> slots = new HashSet<IPortSlot>(cargoValueAnnotation.getSlots());
+				final Set<IPortSlot> slots = new HashSet<>(cargoValueAnnotation.getSlots());
 				if (slots.size() != 2) {
 					throw new IllegalStateException("Expected 2 slots - got " + slots.size());
 				}

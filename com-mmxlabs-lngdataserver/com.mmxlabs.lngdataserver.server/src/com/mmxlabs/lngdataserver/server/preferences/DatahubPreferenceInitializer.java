@@ -8,15 +8,13 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 
 public class DatahubPreferenceInitializer extends AbstractPreferenceInitializer {
-
-	public DatahubPreferenceInitializer() {
-	}
+	private static final String NODE = "com.mmxlabs.lngdataserver.server";
 
 	@Override
 	public void initializeDefaultPreferences() {
-		DefaultScope.INSTANCE.getNode("com.mmxlabs.lngdataserver.server").put(StandardDateRepositoryPreferenceConstants.P_URL_KEY, "");
-		DefaultScope.INSTANCE.getNode("com.mmxlabs.lngdataserver.server").put(StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY, "");
-		DefaultScope.INSTANCE.getNode("com.mmxlabs.lngdataserver.server").put(StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY, "");
+		DefaultScope.INSTANCE.getNode(NODE).put(StandardDateRepositoryPreferenceConstants.P_URL_KEY, "");
+		DefaultScope.INSTANCE.getNode(NODE).put(StandardDateRepositoryPreferenceConstants.P_USERNAME_KEY, "");
+		DefaultScope.INSTANCE.getNode(NODE).put(StandardDateRepositoryPreferenceConstants.P_PASSWORD_KEY, "");
 
 	}
 

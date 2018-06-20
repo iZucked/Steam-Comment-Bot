@@ -239,7 +239,7 @@ public class ExporterExtensionUtils {
 					}
 
 					if (correctVessel) {
-						if (sequence.getEvents().size() > 0) {
+						if (!sequence.getEvents().isEmpty()) {
 							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
 							if (evt instanceof EndEvent) {
 								endEvent = (EndEvent) evt;
@@ -304,7 +304,7 @@ public class ExporterExtensionUtils {
 
 					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
 					if (correctVessel) {
-						if (sequence.getEvents().size() > 0) {
+						if (!sequence.getEvents().isEmpty()) {
 							final Event evt = sequence.getEvents().get(0);
 							if (evt instanceof StartEvent) {
 								startEvent = (StartEvent) evt;
