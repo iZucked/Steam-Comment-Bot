@@ -1034,7 +1034,7 @@ public class LNGScenarioTransformer {
 						builder.freezeSlotToVesselAvailability(portSlot, vesselAvailability);
 					}
 
-					if ((prevSlot != null) & (freeze || (lockedSlots.contains(slot) && lockedSlots.contains(prevSlot)))) {
+					if ((prevSlot != null) && (freeze || (lockedSlots.contains(slot) && lockedSlots.contains(prevSlot)))) {
 						// bind sequencing as well - this forces
 						// previousSlot to come before currentSlot.
 						builder.constrainSlotAdjacency(prevPortSlot, portSlot);

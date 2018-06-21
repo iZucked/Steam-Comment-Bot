@@ -76,28 +76,26 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 				@Override
 				protected void configure() {
 					if (!Platform.isRunning()) {
-						final List<IBuilderExtensionFactory> builderExtensionFactories = new ArrayList<IBuilderExtensionFactory>();
+						final List<@NonNull IBuilderExtensionFactory> builderExtensionFactories = new ArrayList<>();
 						bind(TypeLiterals.iterable(IBuilderExtensionFactory.class)).toInstance(builderExtensionFactories);
 
-						final List<ITransformerExtensionFactory> transformerExtensionFactories = new ArrayList<ITransformerExtensionFactory>();
+						final List<@NonNull ITransformerExtensionFactory> transformerExtensionFactories = new ArrayList<>();
 						transformerExtensionFactories.add(new EntityTransformerExtensionFactory());
 						transformerExtensionFactories.add(new SimpleContractTransformerFactory());
-						// transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 						transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 						transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
 						transformerExtensionFactories.add(new PanamaSlotsTransformerFactory());
 						bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
-						// TODO - Remove once we have explicit use of export stage
-						final List<IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<IExporterExtensionFactory>();
+						final List<@NonNull IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<>();
 						exporterExtensionFactories.add(new TradingExporterExtensionFactory());
 						exporterExtensionFactories.add(new BasicSlotPNLExporterExtensionFactory());
 						bind(TypeLiterals.iterable(IExporterExtensionFactory.class)).toInstance(exporterExtensionFactories);
 
-						final List<IPostExportProcessorFactory> postExportExtensionFactories = new ArrayList<IPostExportProcessorFactory>();
+						final List<@NonNull IPostExportProcessorFactory> postExportExtensionFactories = new ArrayList<>();
 						bind(TypeLiterals.iterable(IPostExportProcessorFactory.class)).toInstance(postExportExtensionFactories);
-						
-						final List<IOutputScheduleProcessorFactory> outputProcessorFactories = new ArrayList<IOutputScheduleProcessorFactory>();
+
+						final List<@NonNull IOutputScheduleProcessorFactory> outputProcessorFactories = new ArrayList<>();
 						bind(TypeLiterals.iterable(IOutputScheduleProcessorFactory.class)).toInstance(outputProcessorFactories);
 					}
 				}
@@ -113,9 +111,6 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 						bind(IEvaluatedStateConstraintCheckerRegistry.class).toInstance(createEvaluatedStateConstraintCheckerRegistry());
 						bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
 					}
-					// This bit is always needed for LiNGO ITS
-					// TODO: Split this into two classes, one for transformer ITS and one for LiNGO ITS
-					// bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 				}
 			};
 		} else if (moduleType == ModuleType.Module_InitialSolution) {
@@ -144,12 +139,12 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 				@Override
 				protected void configure() {
 
-					final List<IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<IExporterExtensionFactory>();
+					final List<@NonNull IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<>();
 					exporterExtensionFactories.add(new TradingExporterExtensionFactory());
 					exporterExtensionFactories.add(new BasicSlotPNLExporterExtensionFactory());
 					bind(TypeLiterals.iterable(IExporterExtensionFactory.class)).toInstance(exporterExtensionFactories);
 
-					final List<IPostExportProcessorFactory> postExportExtensionFactories = new ArrayList<IPostExportProcessorFactory>();
+					final List<@NonNull IPostExportProcessorFactory> postExportExtensionFactories = new ArrayList<>();
 					bind(TypeLiterals.iterable(IPostExportProcessorFactory.class)).toInstance(postExportExtensionFactories);
 
 				}
@@ -158,7 +153,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 		return null;
 	}
 
-	private IEvaluationProcessRegistry createEvaluationProcessRegistry() {
+	private @NonNull IEvaluationProcessRegistry createEvaluationProcessRegistry() {
 		final EvaluationProcessRegistry registry = new EvaluationProcessRegistry();
 
 		registry.registerEvaluationProcessFactory(new SchedulerEvaluationProcessFactory());
@@ -172,19 +167,19 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 	 * @param data
 	 * @return
 	 */
-	public IFitnessFunctionRegistry createFitnessFunctionRegistry() {
+	public @NonNull IFitnessFunctionRegistry createFitnessFunctionRegistry() {
 		final FitnessFunctionRegistry fitnessFunctionRegistry = new FitnessFunctionRegistry();
 
 		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
-		// factory.setExternalComponentProviders(Collections.<ICargoFitnessComponentProvider> singleton(new ProfitAndLossAllocationComponentProvider()));
 		fitnessFunctionRegistry.registerFitnessCoreFactory(factory);
 		fitnessFunctionRegistry.registerFitnessCoreFactory(new NonOptionalSlotFitnessCoreFactory());
 
 		return fitnessFunctionRegistry;
 	}
 
-	public IEvaluatedStateConstraintCheckerRegistry createEvaluatedStateConstraintCheckerRegistry() {
+	public @NonNull IEvaluatedStateConstraintCheckerRegistry createEvaluatedStateConstraintCheckerRegistry() {
 		final EvaluatedStateConstraintCheckerRegistry registry = new EvaluatedStateConstraintCheckerRegistry();
+
 		return registry;
 	}
 
@@ -194,7 +189,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 	 * @param data
 	 * @return
 	 */
-	public IConstraintCheckerRegistry createConstraintCheckerRegistry() {
+	public @NonNull IConstraintCheckerRegistry createConstraintCheckerRegistry() {
 		final ConstraintCheckerRegistry constraintCheckerRegistry = new ConstraintCheckerRegistry();
 		{
 			final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory();

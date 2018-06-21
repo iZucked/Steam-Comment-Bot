@@ -50,14 +50,14 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class LongTermOptimiserHelper {
 	public static enum ShippingType {
-		SHIPPED,
-		NON_SHIPPED,
-		ALL
+		SHIPPED, NON_SHIPPED, ALL
 	}
+
 	/**
 	 * Moves everything to the unused list
+	 * 
 	 * @param sequences
-	 * @param portSlotProvider 
+	 * @param portSlotProvider
 	 */
 	public static void moveElementsToUnusedList(IModifiableSequences sequences, IPortSlotProvider portSlotProvider) {
 		@NonNull
@@ -74,14 +74,15 @@ public class LongTermOptimiserHelper {
 			}
 		}
 	}
-	
+
 	public static IResource getVirtualResource(IPortSlot portSlot, IPortSlotProvider portSlotProvider, IVirtualVesselSlotProvider virtualVesselSlotProvider, IVesselProvider vesselProvider) {
 		IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(portSlot));
 		IResource resource = vesselProvider.getResource(vesselAvailability);
 		return resource;
 	}
 
-	public static void insertCargo(List<ISequenceElement> unusedElements, ILoadOption loadOption, IDischargeOption dischargeOption, IModifiableSequence desPurchase, IPortSlotProvider portSlotProvider) {
+	public static void insertCargo(List<ISequenceElement> unusedElements, ILoadOption loadOption, IDischargeOption dischargeOption, IModifiableSequence desPurchase,
+			IPortSlotProvider portSlotProvider) {
 		desPurchase.insert(1, portSlotProvider.getElement(loadOption));
 		unusedElements.remove(portSlotProvider.getElement(loadOption));
 		desPurchase.insert(2, portSlotProvider.getElement(dischargeOption));
@@ -91,15 +92,17 @@ public class LongTermOptimiserHelper {
 	public static IResource getNominal(ModifiableSequences rawSequences, CharterInMarket charterInMarket, IVesselProvider vesselProvider) {
 		for (IResource resource : rawSequences.getResources()) {
 			IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && vesselAvailability.getSpotCharterInMarket() != null && vesselAvailability.getSpotCharterInMarket().getName().contains(charterInMarket.getName())) {
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && vesselAvailability.getSpotCharterInMarket() != null
+					&& vesselAvailability.getSpotCharterInMarket().getName().contains(charterInMarket.getName())) {
 				return resource;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Produces serialized data that can be used by Gurobi
+	 * 
 	 * @param longTermOptimisationData
 	 * @param path
 	 */
@@ -121,22 +124,10 @@ public class LongTermOptimiserHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		ObjectOutputStream oos = null;
-		FileOutputStream fout = null;
-		try {
-			fout = new FileOutputStream(path, false);
-			oos = new ObjectOutputStream(fout);
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path, false))) {
 			oos.writeObject(serializable);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		} finally {
-			if (oos != null) {
-				try {
-					oos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -146,24 +137,17 @@ public class LongTermOptimiserHelper {
 					optimiserRecorder.getPairedDischarge(load, pairingsMatrix) == null ? "null" : optimiserRecorder.getPairedDischarge(load, pairingsMatrix).getId()));
 		}
 	}
-	
+
 	public static <T> T getPrestoredData(String path) throws IOException {
-		ObjectInputStream objectinputstream = null;
 		T readCase = null;
-		try {
-			FileInputStream streamIn = new FileInputStream(path);
-			objectinputstream = new ObjectInputStream(streamIn);
+		try (ObjectInputStream objectinputstream = new ObjectInputStream(new FileInputStream(path))) {
 			readCase = (T) objectinputstream.readObject();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (objectinputstream != null) {
-				objectinputstream.close();
-			}
 		}
 		return readCase;
 	}
-	
+
 	/**
 	 * Create a slot 2 slot value matrix
 	 * 
@@ -197,16 +181,17 @@ public class LongTermOptimiserHelper {
 	}
 
 	/**
-	 * Updates the raw sequences given an allocations matrix
-	 * Note: Assumes that elements are on unused list already
+	 * Updates the raw sequences given an allocations matrix Note: Assumes that elements are on unused list already
+	 * 
 	 * @param rawSequences
 	 * @param pairingsMap
 	 * @param nominal
-	 * @param portSlotProvider 
-	 * @param virtualVesselSlotProvider 
-	 * @param vesselProvider 
+	 * @param portSlotProvider
+	 * @param virtualVesselSlotProvider
+	 * @param vesselProvider
 	 */
-	public static void updateVirtualSequences(@NonNull IModifiableSequences rawSequences, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal, IPortSlotProvider portSlotProvider, IVirtualVesselSlotProvider virtualVesselSlotProvider, IVesselProvider vesselProvider, ShippingType shippingType) {
+	public static void updateVirtualSequences(@NonNull IModifiableSequences rawSequences, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal,
+			IPortSlotProvider portSlotProvider, IVirtualVesselSlotProvider virtualVesselSlotProvider, IVesselProvider vesselProvider, ShippingType shippingType) {
 		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
 		int insertIndex = 0;
 		for (int i = 0; i < modifiableSequence.size(); i++) {
@@ -250,6 +235,5 @@ public class LongTermOptimiserHelper {
 			}
 		}
 	}
-
 
 }

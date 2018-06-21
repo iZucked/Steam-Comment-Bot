@@ -11,6 +11,8 @@ import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 
 public final class TimeWindowMaker {
+	private TimeWindowMaker() {
+	}
 
 	@NonNull
 	public static ITimeWindow createInclusiveExclusive(final int inclusiveStart, final int exclusiveEnd) {
@@ -40,7 +42,7 @@ public final class TimeWindowMaker {
 	@NonNull
 	public static ITimeWindow createInclusiveExclusive(final int inclusiveStart, final int exclusiveEnd, final int endFlex, boolean mutable) {
 
-		if (exclusiveEnd != Integer.MIN_VALUE && !(inclusiveStart < exclusiveEnd)) {
+		if (exclusiveEnd != Integer.MIN_VALUE && inclusiveStart >= exclusiveEnd) {
 			throw new IllegalArgumentException("Start time is greater than end time!");
 		}
 

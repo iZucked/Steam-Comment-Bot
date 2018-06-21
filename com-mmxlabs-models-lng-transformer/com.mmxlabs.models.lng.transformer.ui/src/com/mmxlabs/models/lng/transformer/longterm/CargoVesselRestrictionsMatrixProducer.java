@@ -66,7 +66,7 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 		
 		ArrayList<Set<Integer>> cargoMap = new ArrayList<>();
 		for (List<IPortSlot> cargo : cargoes) {
-			Set<Integer> set = new LinkedHashSet<Integer>(vessels.size());
+			Set<Integer> set = new LinkedHashSet<>(vessels.size());
 //			for (IPortSlot slot : cargo) {
 //			set.addAll(restrictions.get(cargo).stream().map(v -> vesselMap.get(v)).collect(Collectors.toList()));
 			set = restrictions.get(cargo).stream().map(v -> vesselMap.get(v)).collect(Collectors.toCollection(LinkedHashSet::new));

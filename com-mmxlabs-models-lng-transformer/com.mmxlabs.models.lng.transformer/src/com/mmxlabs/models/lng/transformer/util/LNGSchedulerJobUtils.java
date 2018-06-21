@@ -152,7 +152,7 @@ public class LNGSchedulerJobUtils {
 			// Mark schedule as clean
 			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
 
-			return new Pair<Command, Schedule>(command, schedule);
+			return new Pair<>(command, schedule);
 		}
 	}
 
@@ -297,7 +297,7 @@ public class LNGSchedulerJobUtils {
 		// Maintain a list of used cargo objects.
 		final Set<Cargo> usedCargoes = new HashSet<>();
 		// Maintain a list of potentially unused cargoes - once this next step is complete, we need to remove the used cargoes to get the real list
-		final Set<Cargo> possibleUnusedCargoes = new HashSet<Cargo>(cargoModel.getCargoes());
+		final Set<Cargo> possibleUnusedCargoes = new HashSet<>(cargoModel.getCargoes());
 
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
 
@@ -307,7 +307,7 @@ public class LNGSchedulerJobUtils {
 			Cargo loadCargo = null;
 
 			// The list of slots this cargo now uses
-			final List<Slot> cargoSlots = new ArrayList<Slot>(allocation.getSlotAllocations().size());
+			final List<Slot> cargoSlots = new ArrayList<>(allocation.getSlotAllocations().size());
 
 			// Treat the first load slot as the cargo defining slot
 			boolean firstLoad = true;

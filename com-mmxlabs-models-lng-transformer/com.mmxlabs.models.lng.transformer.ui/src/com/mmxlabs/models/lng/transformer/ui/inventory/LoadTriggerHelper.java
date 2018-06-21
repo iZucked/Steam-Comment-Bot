@@ -154,7 +154,7 @@ public class LoadTriggerHelper {
 		int i = 0;
 		for (LocalDate slotDate : dates) {
 			assert port != null;
-			SlotMaker<LoadSlot> loadMaker = new SlotMaker<LoadSlot>(builder);
+			SlotMaker<LoadSlot> loadMaker = new SlotMaker<>(builder);
 			loadMaker.withFOBPurchase(String.format("%s_%s","load", ++i), slotDate, port, null,
 					scenario.getReferenceModel().getCommercialModel().getEntities().get(0), "10%BRENT_ICE", null);
 			loadMaker.withVolumeLimits(0, cargoVolume, VolumeUnits.M3);

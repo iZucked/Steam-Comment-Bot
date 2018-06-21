@@ -19,7 +19,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -85,8 +84,8 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
-		ISequenceElement prev, cur;
-		prev = cur = null;
+		ISequenceElement prev = null;
+		ISequenceElement cur = null;
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final int maxSpeed = vesselAvailability.getVessel().getMaxSpeed();
@@ -106,11 +105,6 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 		return checkConstraints(sequences, changedResources);
-	}
-
-	@Override
-	public void setOptimisationData(@NonNull final IPhaseOptimisationData optimisationData) {
-
 	}
 
 	@Override

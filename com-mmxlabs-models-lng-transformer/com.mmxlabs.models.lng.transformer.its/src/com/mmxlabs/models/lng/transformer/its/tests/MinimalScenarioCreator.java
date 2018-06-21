@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
@@ -47,11 +46,6 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	 */
 	public MinimalScenarioCreator() {
 		super();
-
-		// // need to create a legal entity for contracts
-		// contractEntity = addEntity("Third-parties");
-		// // need to create a legal entity for shipping
-		// shippingEntity = addEntity("Shipping");
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
@@ -154,14 +148,6 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		return result;
 	}
 
-	/*
-	 * public Slot getFirstCargoSlot() { final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes(); if (cargoes.isEmpty()) { return null; } final EList<Slot> slots =
-	 * cargoes.get(0).getSortedSlots(); return slots.get(0); }
-	 * 
-	 * public Slot getLastCargoSlot() { final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes(); if (cargoes.isEmpty()) { return null; } final EList<Slot> slots =
-	 * cargoes.get(cargoes.size() - 1).getSortedSlots(); return slots.get(slots.size()-1); }
-	 */
-
 	public Pair<Port, ZonedDateTime> getLastAppointment() {
 		ZonedDateTime date = null;
 		Port port = null;
@@ -198,7 +184,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			return null;
 		}
 
-		return new Pair<Port, ZonedDateTime>(port, date);
+		return new Pair<>(port, date);
 	}
 
 	public Pair<Port, ZonedDateTime> getFirstAppointment() {
@@ -235,7 +221,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			return null;
 		}
 
-		return new Pair<Port, ZonedDateTime>(port, date);
+		return new Pair<>(port, date);
 	}
 
 	/**

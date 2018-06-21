@@ -144,7 +144,7 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 	}
 	
 	private List<String> checkModel(LNGScenarioModel model) {
-		List<String> errors = new LinkedList<String>();
+		List<String> errors = new LinkedList<>();
 		if (model.getScheduleModel() == null || model.getScheduleModel().getSchedule() == null) {
 			errors.add("scenario not evaluated");
 		}

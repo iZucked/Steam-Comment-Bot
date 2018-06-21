@@ -149,13 +149,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private IBaseFuelProviderEditor baseFuelProvider;
 
 	@NonNull
-	private final List<IBuilderExtension> extensions = new LinkedList<IBuilderExtension>();
+	private final List<IBuilderExtension> extensions = new LinkedList<>();
 
 	@NonNull
-	private final List<IResource> resources = new ArrayList<IResource>();
+	private final List<IResource> resources = new ArrayList<>();
 
 	@NonNull
-	private final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>();
+	private final List<ISequenceElement> sequenceElements = new ArrayList<>();
 
 	@NonNull
 	private final List<IVessel> vessels = new LinkedList<>();
@@ -167,13 +167,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<IVesselAvailability> realVesselAvailabilities = new LinkedList<>();
 
 	@NonNull
-	private final List<ICargo> cargoes = new LinkedList<ICargo>();
+	private final List<ICargo> cargoes = new LinkedList<>();
 
 	@NonNull
-	private final List<ILoadOption> loadSlots = new LinkedList<ILoadOption>();
+	private final List<ILoadOption> loadSlots = new LinkedList<>();
 
 	@NonNull
-	private final List<IDischargeOption> dischargeSlots = new LinkedList<IDischargeOption>();
+	private final List<IDischargeOption> dischargeSlots = new LinkedList<>();
 
 	/**
 	 * Mutable windows which need the upper bound setting.
@@ -194,7 +194,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private IPort ANYWHERE;
 
 	// @NonNull
-	// private final List<IPort> ports = new LinkedList<IPort>();
+	// private final List<IPort> ports = new LinkedList<>();
 
 	/**
 	 * A field for tracking the time at which the last time window closes
@@ -205,7 +205,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Tracks elements that are not shipped.
 	 */
 	@NonNull
-	private final List<ISequenceElement> unshippedElements = new ArrayList<ISequenceElement>();
+	private final List<ISequenceElement> unshippedElements = new ArrayList<>();
 
 	/*
 	 * Constraint-tracking data structures; constraints created through the builder are applied at the very end, in case they affect things created after them.
@@ -215,19 +215,19 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Tracks forward adjacency constraints; value must follow key. The reverse of {@link #reverseAdjacencyConstraints}
 	 */
 	@NonNull
-	private final Map<IPortSlot, IPortSlot> forwardAdjacencyConstraints = new HashMap<IPortSlot, IPortSlot>();
+	private final Map<IPortSlot, IPortSlot> forwardAdjacencyConstraints = new HashMap<>();
 
 	/**
 	 * Tracks forward adjacency constraints; key must follow value. The reverse of {@link #forwardAdjacencyConstraints}
 	 */
 	@NonNull
-	private final Map<IPortSlot, IPortSlot> reverseAdjacencyConstraints = new HashMap<IPortSlot, IPortSlot>();
+	private final Map<IPortSlot, IPortSlot> reverseAdjacencyConstraints = new HashMap<>();
 
 	@NonNull
-	private final Map<IPort, List<TotalVolumeLimit>> loadLimits = new HashMap<IPort, List<TotalVolumeLimit>>();
+	private final Map<IPort, List<TotalVolumeLimit>> loadLimits = new HashMap<>();
 
 	@NonNull
-	private final Map<IPort, List<TotalVolumeLimit>> dischargeLimits = new HashMap<IPort, List<TotalVolumeLimit>>();
+	private final Map<IPort, List<TotalVolumeLimit>> dischargeLimits = new HashMap<>();
 
 	/**
 	 * The slots for vessel events which have been generated; these are stored so that in {@link #buildVesselEvents()} they can have some extra post-processing done to set up any constraints
@@ -385,16 +385,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<@NonNull IPortSlot> permittedRoundTripVesselSlots = new LinkedList<>();
 
 	@NonNull
-	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<>();
 
 	@NonNull
-	private final Map<IPort, MarkToMarket> desSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> desSaleMTMPortMap = new HashMap<>();
 
 	@NonNull
-	private final Map<IPort, MarkToMarket> fobSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> fobSaleMTMPortMap = new HashMap<>();
 
 	@NonNull
-	private final Map<IPort, MarkToMarket> fobPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> fobPurchaseMTMPortMap = new HashMap<>();
 
 	@Inject
 	@NonNull
@@ -415,7 +415,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Map between a virtual sequence element and the virtual {@link IVesselEvent} instance representing it.
 	 */
 	@NonNull
-	private final Map<ISequenceElement, IVesselAvailability> virtualVesselAvailabilityMap = new HashMap<ISequenceElement, IVesselAvailability>();
+	private final Map<ISequenceElement, IVesselAvailability> virtualVesselAvailabilityMap = new HashMap<>();
 
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
@@ -1438,7 +1438,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			if (loads) {
 				List<TotalVolumeLimit> limits = loadLimits.get(port);
 				if (limits == null) {
-					limits = new ArrayList<TotalVolumeLimit>();
+					limits = new ArrayList<>();
 				}
 				limits.add(limit);
 				loadLimits.put(port, limits);
@@ -1447,7 +1447,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			if (discharges) {
 				List<TotalVolumeLimit> limits = dischargeLimits.get(port);
 				if (limits == null) {
-					limits = new ArrayList<TotalVolumeLimit>();
+					limits = new ArrayList<>();
 				}
 				limits.add(limit);
 				dischargeLimits.put(port, limits);

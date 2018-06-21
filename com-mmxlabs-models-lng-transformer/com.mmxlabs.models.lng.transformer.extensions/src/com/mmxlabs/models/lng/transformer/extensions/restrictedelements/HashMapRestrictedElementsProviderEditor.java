@@ -19,8 +19,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public class HashMapRestrictedElementsProviderEditor implements IRestrictedElementsProviderEditor {
 
-	private final Map<ISequenceElement, Collection<ISequenceElement>> followerMap = new HashMap<ISequenceElement, Collection<ISequenceElement>>();
-	private final Map<ISequenceElement, Collection<ISequenceElement>> precedingMap = new HashMap<ISequenceElement, Collection<ISequenceElement>>();
+	private final Map<ISequenceElement, Collection<ISequenceElement>> followerMap = new HashMap<>();
+	private final Map<ISequenceElement, Collection<ISequenceElement>> precedingMap = new HashMap<>();
 
 	@Override
 	public Collection<ISequenceElement> getRestrictedFollowerElements(final ISequenceElement element) {

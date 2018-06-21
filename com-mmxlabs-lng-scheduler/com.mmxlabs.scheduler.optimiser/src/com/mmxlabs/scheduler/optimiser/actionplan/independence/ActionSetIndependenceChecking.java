@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -65,13 +64,9 @@ public class ActionSetIndependenceChecking {
 	protected List<IEvaluationProcess> evaluationProcesses;
 
 	@Inject
-	@NonNull
-	private IOptionalElementsProvider optionalElementsProvider;
-
-	@Inject
 	protected EvaluationHelper evaluationHelper;
 
-	private final boolean DEBUG = true;
+	private static final boolean DEBUG = true;
 
 	/**
 	 * Get dependancy information for each individual change set. This can be used to create a dependency graph
@@ -86,7 +81,7 @@ public class ActionSetIndependenceChecking {
 			@NonNull final SimilarityState similarityState, final long @NonNull [] currentMetrics) {
 		final Map<ChangeSet, Set<List<ChangeSet>>> relationships = new HashMap<>();
 		final Deque<List<ChangeSet>> perms = createPermutations(changeSets);
-		while (perms.size() > 0) {
+		while (!perms.isEmpty()) {
 			final List<ChangeSet> dependency = perms.pop();
 			assert dependency != null;
 			final ISequences applied = applyChanges(baseSequences, dependency, similarityState, currentMetrics);
@@ -113,15 +108,15 @@ public class ActionSetIndependenceChecking {
 				System.out.println("---------");
 				final Set<List<ChangeSet>> rels = relationships.get(cs);
 				for (final List<ChangeSet> lcs : rels) {
-					String output = "";
+					StringBuilder output = new StringBuilder();
 					for (final ChangeSet _cs : lcs) {
 						for (int i = 0; i < changeSets.size(); i++) {
 							if (changeSets.get(i) == _cs) {
-								output += " --> " + i;
+								output.append(" --> " + i);
 							}
 						}
 					}
-					System.out.println(output);
+					System.out.println(output.toString());
 				}
 			}
 		}
@@ -177,7 +172,7 @@ public class ActionSetIndependenceChecking {
 				} else {
 					assert false;
 				}
-				if (result == null || result.getFirst() == false) {
+				if (result == null || !result.getFirst()) {
 					return null;
 				} else {
 					currentSequences = result.getSecond();
@@ -254,9 +249,7 @@ public class ActionSetIndependenceChecking {
 
 	private Pair<Boolean, ISequences> applyDischargeRewireChange(@NonNull final ISequences currentSequences, @NonNull final DischargeRewireChange change) {
 		final int[] indexes = getDualCargoIndexes(currentSequences, change);
-		final int loadAIdx = indexes[0];
 		final int dischargeAIdx = indexes[1];
-		final int loadBIdx = indexes[2];
 		final int dischargeBIdx = indexes[3];
 		for (final int index : indexes) {
 			if (index == -1) {
@@ -270,15 +263,13 @@ public class ActionSetIndependenceChecking {
 		resourceB.remove(change.getElement2B());
 		resourceA.insert(dischargeAIdx, change.getElement2B());
 		resourceB.insert(dischargeBIdx, change.getElement2A());
-		return new Pair<Boolean, ISequences>(true, copy);
+		return new Pair<>(true, copy);
 	}
 
 	private Pair<Boolean, ISequences> applyLoadRewireChange(@NonNull final ISequences currentSequences, @NonNull final LoadRewireChange change) {
 		final int[] indexes = getDualCargoIndexes(currentSequences, change);
 		final int loadAIdx = indexes[0];
-		final int dischargeAIdx = indexes[1];
 		final int loadBIdx = indexes[2];
-		final int dischargeBIdx = indexes[3];
 		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
@@ -295,7 +286,7 @@ public class ActionSetIndependenceChecking {
 		// insert loads
 		resourceA.insert(loadAIdx, change.getElement1B());
 		resourceB.insert(loadBIdx, change.getElement1A());
-		return new Pair<Boolean, ISequences>(true, copy);
+		return new Pair<>(true, copy);
 	}
 
 	private Pair<Boolean, ISequences> applyUnusedDischargeRewireChange(final ISequences currentSequences, final UnusedToUsedDischargeChange change) {
@@ -305,7 +296,6 @@ public class ActionSetIndependenceChecking {
 		}
 		// check other elements are in order
 		final int[] indexes = getSingleCargoIndexes(currentSequences, change.getLoadA(), change.getDischargeA(), change.getResourceA());
-		final int loadAIdx = indexes[0];
 		final int dischargeAIdx = indexes[1];
 		for (final int index : indexes) {
 			if (index == -1) {
@@ -319,7 +309,7 @@ public class ActionSetIndependenceChecking {
 		copy.getModifiableUnusedElements().add(change.getDischargeA());
 		copy.getModifiableUnusedElements().remove(change.getUnusedDischarge());
 		resource.insert(dischargeAIdx, change.getUnusedDischarge());
-		return new Pair<Boolean, ISequences>(true, copy);
+		return new Pair<>(true, copy);
 	}
 
 	private Pair<Boolean, ISequences> applyRemoveCargoChange(@NonNull final ISequences currentSequences, @NonNull final RemoveCargoChange change) {
@@ -337,7 +327,7 @@ public class ActionSetIndependenceChecking {
 		resource.remove(change.getDischargeA());
 		copy.getModifiableUnusedElements().add(change.getLoadA());
 		copy.getModifiableUnusedElements().add(change.getDischargeA());
-		return new Pair<Boolean, ISequences>(true, copy);
+		return new Pair<>(true, copy);
 	}
 
 	private Pair<Boolean, ISequences> applyUnusedLoadRewireChange(@NonNull final ISequences currentSequences, @NonNull final UnusedToUsedLoadChange change) {
@@ -348,7 +338,6 @@ public class ActionSetIndependenceChecking {
 		// check other elements are in order
 		final int[] indexes = getSingleCargoIndexes(currentSequences, change.getUsedLoad(), change.getDischarge(), change.getResource());
 		final int loadAIdx = indexes[0];
-		final int dischargeAIdx = indexes[1];
 		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
@@ -361,7 +350,7 @@ public class ActionSetIndependenceChecking {
 		copy.getModifiableUnusedElements().add(change.getUsedLoad());
 		copy.getModifiableUnusedElements().remove(change.getUnusedLoad());
 		resource.insert(loadAIdx, change.getUnusedLoad());
-		return new Pair<Boolean, ISequences>(true, copy);
+		return new Pair<>(true, copy);
 	}
 
 	private Pair<Boolean, ISequences> applyInsertUnusedCargoChange(@NonNull final ISequences currentSequences, @NonNull final InsertUnusedCargoChange change) {
@@ -372,7 +361,6 @@ public class ActionSetIndependenceChecking {
 		// check other elements are in order
 		final int[] indexes = getSingleCargoIndexes(currentSequences, change.getLoadA(), change.getDischargeA(), change.getResourceA());
 		final int loadAIdx = indexes[0];
-		final int dischargeAIdx = indexes[1];
 		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
@@ -385,13 +373,11 @@ public class ActionSetIndependenceChecking {
 		copy.getModifiableUnusedElements().remove(change.getUnusedDischarge());
 		resource.insert(loadAIdx + 1, change.getUnusedDischarge()); // insert after previous load: loadA ---> new load ---> new discharge ---> dischargeA
 		resource.insert(loadAIdx + 1, change.getUnusedLoad());
-		return new Pair<Boolean, ISequences>(true, copy);
+		return new Pair<>(true, copy);
 	}
 
 	private Pair<Boolean, ISequences> applyVesselChange(@NonNull final ISequences currentSequences, @NonNull final VesselChange change) {
 		final int[] indexes = getDualCargoIndexes(currentSequences, change);
-		final int loadAIdx = indexes[0];
-		final int dischargeAIdx = indexes[1];
 		final int element1BIdx = indexes[2];
 		final int element2BIdx = indexes[3];
 		for (final int index : indexes) {
@@ -415,7 +401,7 @@ public class ActionSetIndependenceChecking {
 		// insert cargo
 		resourceB.insert(element1BIdx + 1, change.getElement2A()); // discharge
 		resourceB.insert(element1BIdx + 1, change.getElement1A()); // load
-		return new Pair<Boolean, ISequences>(true, copy);
+		return new Pair<>(true, copy);
 	}
 
 	private int[] getSingleCargoIndexes(@NonNull final ISequences currentSequences, @NonNull final ISequenceElement load, @NonNull final ISequenceElement discharge,

@@ -299,7 +299,7 @@ public class CSVImporter {
 					return importerRegistry;
 				} else {
 
-					final Map<EClass, ISubmodelImporter> subModelImporters = new HashMap<EClass, ISubmodelImporter>();
+					final Map<EClass, ISubmodelImporter> subModelImporters = new HashMap<>();
 					subModelImporters.put(CargoPackage.eINSTANCE.getCargoModel(), new CargoModelImporter());
 					subModelImporters.put(CommercialPackage.eINSTANCE.getCommercialModel(), new CommercialModelImporter());
 					subModelImporters.put(FleetPackage.eINSTANCE.getFleetModel(), new FleetModelImporter());
@@ -312,7 +312,7 @@ public class CSVImporter {
 					subModelImporters.put(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel(), new SpotMarketsModelImporter());
 					// subModelImporters.put(ActualsPackage.eINSTANCE.getActualsModel(), new ActualsModelImporter());
 
-					final Map<EClass, IClassImporter> classImporters = new HashMap<EClass, IClassImporter>();
+					final Map<EClass, IClassImporter> classImporters = new HashMap<>();
 					classImporters.put(FleetPackage.eINSTANCE.getBaseFuel(), new BaseFuelImporter());
 					classImporters.put(CargoPackage.eINSTANCE.getCargo(), new CargoImporter());
 					classImporters.put(CargoPackage.eINSTANCE.getDischargeSlot(), new DischargeSlotImporter());
@@ -406,7 +406,7 @@ public class CSVImporter {
 			return null;
 		}
 		final Map<String, String> parts = importer.getRequiredInputs();
-		final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
+		final Map<String, CSVReader> readers = new HashMap<>();
 		try {
 			for (final String key : parts.keySet()) {
 				try {
@@ -445,7 +445,7 @@ public class CSVImporter {
 				continue;
 			}
 			final Map<String, String> parts = importer.getRequiredInputs();
-			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
+			final Map<String, CSVReader> readers = new HashMap<>();
 			try {
 				for (final String key : parts.keySet()) {
 					try {

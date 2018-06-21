@@ -338,17 +338,6 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		return false;
 	}
 
-	private boolean scenarioFleetModelContainsVessel(final Vessel vessel) {
-
-		for (final Vessel v : scenarioModelBuilder.getFleetModelBuilder().getFleetModel().getVessels()) {
-			if (v.equals(vessel)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	/**
 	 * Each cargo has a list of vessels that has all vessels that are allowed to carry the cargo. (If empty there are no restrictions.) This method can add to that list. Note that no checks are made
 	 * to see if the given vessels are already in the scenario.

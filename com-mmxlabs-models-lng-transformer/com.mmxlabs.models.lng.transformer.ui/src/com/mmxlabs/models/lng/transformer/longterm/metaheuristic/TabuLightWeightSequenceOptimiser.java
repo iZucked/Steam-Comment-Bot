@@ -109,7 +109,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		for (Set<Integer> restriction : cargoVesselRestrictions) {
 			cargoVesselRestrictionAsList.add(restriction.stream().collect(Collectors.toList()));
 		}
-		
+
 		double[][][] cargoToCargoCostsProcessed = new double[cargoToCargoCostsOnAvailability.length][cargoToCargoCostsOnAvailability[0].length][cargoToCargoCostsOnAvailability[0][0].length];
 		for (int j = 0; j < cargoToCargoCostsOnAvailability.length; j++) {
 			for (int j2 = 0; j2 < cargoToCargoCostsOnAvailability[j].length; j2++) {
@@ -125,25 +125,23 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		for (int i = 0; i < cargoes.size(); i++) {
 			ITimeWindow loadTW = cargoes.get(i).get(0).getTimeWindow();
 			ITimeWindow dischargeTW = cargoes.get(i).get(1).getTimeWindow();
-			
+
 			loads[i] = new Interval(loadTW.getInclusiveStart(), loadTW.getExclusiveEnd());
 			discharges[i] = new Interval(dischargeTW.getInclusiveStart(), dischargeTW.getExclusiveEnd());
 		}
-		
+
 		createExternalData(cargoes, vessels, cargoToCargoMinTravelTimes, cargoVesselRestrictionAsList, cargoMinTravelTimes, capacity, cargoPNLasDouble, cargoToCargoCostsProcessed, loads, discharges);
-		
-		return optimise(0, false,
-				cargoes.size(), vessels.size(),
-				cargoPNLasDouble, capacity,
-				cargoToCargoCostsProcessed, cargoVesselRestrictionAsList,
-				cargoToCargoMinTravelTimes, cargoMinTravelTimes,
+
+		return optimise(0, false, cargoes.size(), vessels.size(), cargoPNLasDouble, capacity, cargoToCargoCostsProcessed, cargoVesselRestrictionAsList, cargoToCargoMinTravelTimes, cargoMinTravelTimes,
 				loads, discharges);
 	}
 
-	private void createExternalData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, int[][][] cargoToCargoMinTravelTimes, List<List<Integer>> cargoVesselRestrictionAsList, int[][] cargoMinTravelTimes, double[] capacity,
-			double[] cargoPNLasDouble, double[][][] cargoToCargoCostsProcessed, Interval[] loads, Interval[] discharges) {
-		com.minimaxlabs.rnd.representation.Interval[] arrivals = Arrays.stream(loads).map(a -> new com.minimaxlabs.rnd.representation.Interval((int) a.start, (int) a.end)).toArray(size -> new com.minimaxlabs.rnd.representation.Interval[size]);
-		com.minimaxlabs.rnd.representation.Interval[] departures = Arrays.stream(discharges).map(a -> new com.minimaxlabs.rnd.representation.Interval((int) a.start, (int) a.end)).toArray(size -> new com.minimaxlabs.rnd.representation.Interval[size]);
+	private void createExternalData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, int[][][] cargoToCargoMinTravelTimes, List<List<Integer>> cargoVesselRestrictionAsList,
+			int[][] cargoMinTravelTimes, double[] capacity, double[] cargoPNLasDouble, double[][][] cargoToCargoCostsProcessed, Interval[] loads, Interval[] discharges) {
+		com.minimaxlabs.rnd.representation.Interval[] arrivals = Arrays.stream(loads).map(a -> new com.minimaxlabs.rnd.representation.Interval((int) a.start, (int) a.end))
+				.toArray(size -> new com.minimaxlabs.rnd.representation.Interval[size]);
+		com.minimaxlabs.rnd.representation.Interval[] departures = Arrays.stream(discharges).map(a -> new com.minimaxlabs.rnd.representation.Interval((int) a.start, (int) a.end))
+				.toArray(size -> new com.minimaxlabs.rnd.representation.Interval[size]);
 		// transform restrictions
 		boolean[][] cargoVesselRestrictionsMatrix = new boolean[cargoes.size()][vessels.size()];
 		for (int cargoId = 0; cargoId < cargoes.size(); cargoId++) {
@@ -156,173 +154,164 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				cargoVesselRestrictionsMatrix[cargoId][vesselId] = false;
 			}
 		}
-		ShipmentData sd = new ShipmentData(cargoes.size(), vessels.size(), cargoPNLasDouble, capacity, cargoToCargoMinTravelTimes, cargoVesselRestrictionsMatrix, cargoToCargoCostsProcessed, cargoMinTravelTimes, arrivals, departures);
+		ShipmentData sd = new ShipmentData(cargoes.size(), vessels.size(), cargoPNLasDouble, capacity, cargoToCargoMinTravelTimes, cargoVesselRestrictionsMatrix, cargoToCargoCostsProcessed,
+				cargoMinTravelTimes, arrivals, departures);
 
-	      try {
-	          FileOutputStream fileOut =
-	          new FileOutputStream("/tmp/shippedData.sd");
-	          ObjectOutputStream out = new ObjectOutputStream(fileOut);
-	          out.writeObject(sd);
-	          out.close();
-	          fileOut.close();
-	          System.out.printf("Serialized data is saved in /tmp/shippedData.sd");
-	       }catch(IOException iff) {
-	          iff.printStackTrace();
-	       }
+		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("/tmp/shippedData.sd"))) {
+			out.writeObject(sd);
+			System.out.println("Serialized data is saved in /tmp/shippedData.sd");
+		} catch (IOException iff) {
+			iff.printStackTrace();
+		}
 	}
 
 	public List<List<Integer>> optimise(int id, boolean loggingFlag, int cargoCount, int vesselCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
 			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges) {
 
-        List<HashSet<Integer>> tabu = new LinkedList<>();
+		List<HashSet<Integer>> tabu = new LinkedList<>();
 
-        List<List<Integer>> schedule = Arrays.stream(vesselCapacities, 0, vesselCount)
-                .mapToObj(v -> (List<Integer>) new LinkedList<Integer>())
-                .collect(Collectors.toList());
+		List<List<Integer>> schedule = Arrays.stream(vesselCapacities, 0, vesselCount).mapToObj(v -> (List<Integer>) new LinkedList<Integer>()).collect(Collectors.toList());
 
-        List<List<Integer>> bestSchedule = null;
+		List<List<Integer>> bestSchedule = null;
 
-        List<Integer> cargoes = IntStream.range(0, cargoCount).boxed().collect(Collectors.toList());
-        List<Integer> unusedCargoes = new ArrayList<>(cargoes);
-        List<Integer> usedCargoes = new ArrayList<>();
+		List<Integer> cargoes = IntStream.range(0, cargoCount).boxed().collect(Collectors.toList());
+		List<Integer> unusedCargoes = new ArrayList<>(cargoes);
+		List<Integer> usedCargoes = new ArrayList<>();
 
-        List<Integer> tabuFlat;
+		List<Integer> tabuFlat;
 
-        Random random = new Random(this.seed);
+		Random random = new Random(this.seed);
 
-        double[] fitness = new double[search];
-        Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping = getMapping(schedule);
-        List<TabuLightWeightSequenceOptimiserMoves.TabuSolution> tabuSolutions = new ArrayList<>(search);
+		double[] fitness = new double[search];
+		Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping = getMapping(schedule);
+		List<TabuLightWeightSequenceOptimiserMoves.TabuSolution> tabuSolutions = new ArrayList<>(search);
 
-        int bestIteration = 0;
+		int bestIteration = 0;
 
-        Double bestFitness = -Double.MAX_VALUE;
+		Double bestFitness = -Double.MAX_VALUE;
 
-        for (int j = 0; j < search; j++) {
-            tabuSolutions.add(new TabuLightWeightSequenceOptimiserMoves.TabuSolution(null, null));
-        }
+		for (int j = 0; j < search; j++) {
+			tabuSolutions.add(new TabuLightWeightSequenceOptimiserMoves.TabuSolution(null, null));
+		}
 
-        for (int i = 0; i < iterations; i++) {
+		for (int i = 0; i < iterations; i++) {
 
-            int currentIndex = -1;
+			int currentIndex = -1;
 
-            // Remove tabu element from the list of "movable" element
-            HashSet<Integer> tabuSet = new HashSet<>();
-            tabuFlat = tabu.stream().flatMap(HashSet::stream).collect(Collectors.toList());
+			// Remove tabu element from the list of "movable" element
+			HashSet<Integer> tabuSet = new HashSet<>();
+			tabuFlat = tabu.stream().flatMap(HashSet::stream).collect(Collectors.toList());
 
-            unusedCargoes.removeAll(tabuFlat);
-            usedCargoes.removeAll(tabuFlat);
+			unusedCargoes.removeAll(tabuFlat);
+			usedCargoes.removeAll(tabuFlat);
 
-            // Print progess
-            if (i % (iterations / 10) == 0) {
-                System.out.print(i * 100 / iterations + "% ");
-            }
+			// Print progess
+			if (i % (iterations / 10) == 0) {
+				System.out.print(i * 100 / iterations + "% ");
+			}
 
-            // add back tabu elements
-            if (tabu.size() > maxAge) {
-                HashSet<Integer> old = tabu.remove(0);
-            }
+			// add back tabu elements
+			if (tabu.size() > maxAge) {
+				HashSet<Integer> old = tabu.remove(0);
+			}
 
+			// Forced first move
+			TabuLightWeightSequenceOptimiserMoves.TabuSolution currentSolution = TabuLightWeightSequenceOptimiserMoves.move(copySolution(schedule), unusedCargoes, usedCargoes, mapping, random);
+			List<List<Integer>> currentSchedules = currentSolution.schedule;
+			List<Integer> currentTabu = currentSolution.tabu;
 
-            // Forced first move
-            TabuLightWeightSequenceOptimiserMoves.TabuSolution currentSolution = TabuLightWeightSequenceOptimiserMoves.move(copySolution(schedule), unusedCargoes, usedCargoes, mapping, random);
-            List<List<Integer>> currentSchedules = currentSolution.schedule;
-            List<Integer> currentTabu = currentSolution.tabu;
+			double currentFitness = evaluate(currentSchedules, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes,
+					cargoMinTravelTimes, loads, discharges);
 
-            double currentFitness = evaluate(currentSchedules, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
-                    cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
+			// Search the neighbourhood
+			final List<List<Integer>> lambdaSchedule = schedule;
+			final List<Integer> lambdaUnusedCargoes = unusedCargoes;
+			final List<Integer> lambdaUsedCargoes = usedCargoes;
+			final Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> lambdaMapping = mapping;
 
+			tabuSolutions = tabuSolutions.stream().map(t -> {
+				return TabuLightWeightSequenceOptimiserMoves.move(copySolution(lambdaSchedule), lambdaUnusedCargoes, lambdaUsedCargoes, lambdaMapping, random);
+			}).collect(Collectors.toList());
 
-            // Search the neighbourhood
-            final List<List<Integer>> lambdaSchedule = schedule;
-            final List<Integer> lambdaUnusedCargoes = unusedCargoes;
-            final List<Integer> lambdaUsedCargoes = usedCargoes;
-            final Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> lambdaMapping = mapping;
+			// Evaluate solutions
+			fitness = tabuSolutions.parallelStream().mapToDouble(s -> evaluate(s.schedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
+					cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges)).toArray();
 
-            tabuSolutions = tabuSolutions.stream().map(t -> {
-                    return TabuLightWeightSequenceOptimiserMoves.move(copySolution(lambdaSchedule), lambdaUnusedCargoes, lambdaUsedCargoes, lambdaMapping, random);
-            }).collect(Collectors.toList());
+			// Set the new base solution for the next iteration
+			for (int j = 0; j < search; j++) {
+				if (fitness[j] > currentFitness) {
+					currentFitness = fitness[j];
+					currentIndex = j;
+				}
+			}
 
-            // Evaluate solutions
-            fitness = tabuSolutions.parallelStream().mapToDouble(s ->
-                    evaluate(s.schedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
-                            cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges)).toArray();
+			if (currentIndex == -1) {
+				schedule = copySolution(currentSchedules);
+				tabuSet.addAll(currentTabu);
+			} else {
+				schedule = copySolution(tabuSolutions.get(currentIndex).schedule);
+				tabuSet.addAll(tabuSolutions.get(currentIndex).tabu);
+			}
 
-            // Set the new base solution for the next iteration
-            for (int j = 0; j < search; j++) {
-                if (fitness[j] > currentFitness) {
-                    currentFitness = fitness[j];
-                    currentIndex = j;
-                }
-            }
+			mapping = getMapping(schedule);
+			unusedCargoes = updateUnusedList(schedule, cargoes);
+			usedCargoes = updateUsedList(schedule);
 
-            if (currentIndex == -1) {
-                schedule = copySolution(currentSchedules);
-                tabuSet.addAll(currentTabu);
-            } else {
-                schedule = copySolution(tabuSolutions.get(currentIndex).schedule);
-                tabuSet.addAll(tabuSolutions.get(currentIndex).tabu);
-            }
+			// Add the tabuList to the master set
+			if (tabuSet.size() > 0) {
+				tabu.add(tabuSet);
+			}
 
-            mapping = getMapping(schedule);
-            unusedCargoes = updateUnusedList(schedule, cargoes);
-            usedCargoes = updateUsedList(schedule);
+			// Elitism: keep the overall best solution
+			if (currentFitness > bestFitness) {
+				bestSchedule = copySolution(schedule);
+				bestFitness = currentFitness;
+				bestIteration = i;
+			}
+		}
 
-            // Add the tabuList to the master set
-            if (tabuSet.size() > 0) {
-                tabu.add(tabuSet);
-            }
+		// Print final result
+		if (unusedCargoes.size() > 0) {
+			System.out.println(" Uncomplete solution :" + unusedCargoes.size());
+		}
 
-            // Elitism: keep the overall best solution
-            if (currentFitness > bestFitness) {
-                bestSchedule = copySolution(schedule);
-                bestFitness = currentFitness;
-                bestIteration = i;
-            }
-        }
+		Double bestScoreBest = evaluate(bestSchedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes,
+				loads, discharges);
 
-        // Print final result
-        if (unusedCargoes.size() > 0) {
-            System.out.println(" Uncomplete solution :"+ unusedCargoes.size());
-        }
+		System.out.printf("\n\nFitness best : %f\n", bestScoreBest);
+		System.out.printf("Iteration best: %d it\n", bestIteration);
 
-        Double bestScoreBest = evaluate(bestSchedule, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability,
-                cargoVesselRestrictions, cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges);
-
-        System.out.printf("\n\nFitness best : %f\n", bestScoreBest);
-        System.out.printf("Iteration best: %d it\n", bestIteration);
-
-        printSolution(bestSchedule);
+		printSolution(bestSchedule);
 		return bestSchedule;
 	}
 
-    Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> getMapping (List<List<Integer>> solution) {
-        Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping = new HashMap<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>>();
+	Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> getMapping(List<List<Integer>> solution) {
+		Map<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>> mapping = new HashMap<Integer, AbstractMap.SimpleImmutableEntry<Integer, Integer>>();
 
-        for (List<Integer> vessel: solution) {
-            for (Integer cargo: vessel) {
-                mapping.put(cargo, new AbstractMap.SimpleImmutableEntry<Integer, Integer>(solution.indexOf(vessel), vessel.indexOf(cargo)));
-            }
-        }
-        return mapping;
-    }
+		for (List<Integer> vessel : solution) {
+			for (Integer cargo : vessel) {
+				mapping.put(cargo, new AbstractMap.SimpleImmutableEntry<Integer, Integer>(solution.indexOf(vessel), vessel.indexOf(cargo)));
+			}
+		}
+		return mapping;
+	}
 
-    void printSolution(List<List<Integer>> solution) {
+	void printSolution(List<List<Integer>> solution) {
 
-        System.out.println("\nOrdering");
-        for (List vessel : solution) {
-            System.out.print("Ship " + solution.indexOf(vessel) + ": ");
-            if (vessel.isEmpty()) {
-                System.out.print("empty");
-            }
-            else {
-                for (Object i : vessel) {
-                    System.out.print( i + " ");
-                }
-            }
-            System.out.println();
-        }
-    }
+		System.out.println("\nOrdering");
+		for (List vessel : solution) {
+			System.out.print("Ship " + solution.indexOf(vessel) + ": ");
+			if (vessel.isEmpty()) {
+				System.out.print("empty");
+			} else {
+				for (Object i : vessel) {
+					System.out.print(i + " ");
+				}
+			}
+			System.out.println();
+		}
+	}
+
 	List<Integer> updateUsedList(List<List<Integer>> solution) {
 		Set used = new HashSet();
 
@@ -372,9 +361,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		return true;
 	}
 
-	private int calculateLatenessOnSequence(List<Integer> sequence, int availability,
-			Interval[] loads, Interval[] discharges,
-			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
+	private int calculateLatenessOnSequence(List<Integer> sequence, int availability, Interval[] loads, Interval[] discharges, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
 		int current = 0;
 		int lateness = 0;
 		for (int i = 0; i < sequence.size(); i++) {
@@ -412,12 +399,11 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		for (int availability = 0; availability < sequences.size(); availability++) {
 			List<Integer> sequence = sequences.get(availability);
 			used += sequence.size();
-//			 calculate restrictions
-			 boolean checkRestrictions = checkRestrictions(sequences.get(availability),
-			 availability, cargoVesselRestrictions);
-			 if (!checkRestrictions) {
-				 return -Double.MAX_VALUE;
-			 }
+			// calculate restrictions
+			boolean checkRestrictions = checkRestrictions(sequences.get(availability), availability, cargoVesselRestrictions);
+			if (!checkRestrictions) {
+				return -Double.MAX_VALUE;
+			}
 			// calculate costs
 			double cost = calculateCostOnSequence(sequence, availability, cargoToCargoCostsOnAvailability);
 			totalCost += cost;

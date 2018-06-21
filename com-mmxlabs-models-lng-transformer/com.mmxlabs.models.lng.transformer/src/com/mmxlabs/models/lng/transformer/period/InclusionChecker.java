@@ -256,7 +256,7 @@ public class InclusionChecker {
 		final Slot lastSlot = sortedSlots.get(sortedSlots.size() - 1);
 		assert lastSlot != null;
 
-		return new NonNullPair<Slot, Slot>(firstSlot, lastSlot);
+		return new NonNullPair<>(firstSlot, lastSlot);
 	}
 
 	@NonNull

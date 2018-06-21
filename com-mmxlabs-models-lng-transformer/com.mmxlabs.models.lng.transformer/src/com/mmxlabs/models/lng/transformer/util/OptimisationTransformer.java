@@ -118,7 +118,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		final Collection<@NonNull Slot> modelSlots = mem.getAllModelObjects(Slot.class);
 
-		final Map<ISequenceElement, ISequenceElement> cargoSlotPairing = new HashMap<ISequenceElement, ISequenceElement>();
+		final Map<ISequenceElement, ISequenceElement> cargoSlotPairing = new HashMap<>();
 		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
 		for (final Slot slot : modelSlots) {
 			if (slot instanceof LoadSlot) {
@@ -199,8 +199,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			}
 		}
 
-		// IVesselAvailability roundTripCargoVesselAvailability = null;
-
 		// Build up spot vessel maps
 		final Map<ISpotCharterInMarket, Map<Integer, IVesselAvailability>> spotAvailabilitiesByMarket = new HashMap<>();
 
@@ -224,15 +222,10 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		}
 
-		// final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
 		final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
-		// for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
-		// vesselAvailabilityMap.put(va.getVessel(), va);
-		// }
 
 		// Process initial vessel assignments list
-
 		ModelDistanceProvider modelDistanceProvider = ScenarioModelUtil.getModelDistanceProvider(scenarioDataProvider);
 		final List<CollectedAssignment> assignments;
 		if (assignableElementComparator != null) {
@@ -280,7 +273,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 				}
 			} else {
 				continue;
-				// assert false;
 			}
 		}
 
