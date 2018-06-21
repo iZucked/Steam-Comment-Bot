@@ -1836,7 +1836,7 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-
+				
 				final String splitMonthToken = "splitmonth(";
 				boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
 
