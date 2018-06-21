@@ -7,6 +7,8 @@ package com.mmxlabs.models.ui.editorpart;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -104,6 +106,13 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	@Override
 	public void contributeToToolBar(final IToolBarManager toolBarManager) {
 		super.contributeToToolBar(toolBarManager);
+	}
+	
+	@Override
+	public void contributeToCoolBar(ICoolBarManager coolBarManager) {
+		coolBarManager.add(new GroupMarker("additions"));
+		coolBarManager.add(new GroupMarker("additions-end"));
+		super.contributeToCoolBar(coolBarManager);
 	}
 
 	public void shareGlobalActions(final IPage page, final IActionBars actionBars) {
