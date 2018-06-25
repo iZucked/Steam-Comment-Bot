@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.adp.FleetProfile;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -35,6 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#isIncludeEnabledCharterMarkets <em>Include Enabled Charter Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#getConstraints <em>Constraints</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#getVesselEvents <em>Vessel Events</em>}</li>
  * </ul>
  *
  * @generated
@@ -78,6 +80,16 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 	 * @ordered
 	 */
 	protected EList<FleetConstraint> constraints;
+
+	/**
+	 * The cached value of the '{@link #getVesselEvents() <em>Vessel Events</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselEvents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselEvent> vesselEvents;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -148,6 +160,18 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<VesselEvent> getVesselEvents() {
+		if (vesselEvents == null) {
+			vesselEvents = new EObjectContainmentEList.Resolving<VesselEvent>(VesselEvent.class, this, ADPPackage.FLEET_PROFILE__VESSEL_EVENTS);
+		}
+		return vesselEvents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -155,6 +179,8 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 				return ((InternalEList<?>)getVesselAvailabilities()).basicRemove(otherEnd, msgs);
 			case ADPPackage.FLEET_PROFILE__CONSTRAINTS:
 				return ((InternalEList<?>)getConstraints()).basicRemove(otherEnd, msgs);
+			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
+				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -173,6 +199,8 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 				return isIncludeEnabledCharterMarkets();
 			case ADPPackage.FLEET_PROFILE__CONSTRAINTS:
 				return getConstraints();
+			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
+				return getVesselEvents();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -197,6 +225,10 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 				getConstraints().clear();
 				getConstraints().addAll((Collection<? extends FleetConstraint>)newValue);
 				return;
+			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
+				getVesselEvents().clear();
+				getVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -218,6 +250,9 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 			case ADPPackage.FLEET_PROFILE__CONSTRAINTS:
 				getConstraints().clear();
 				return;
+			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
+				getVesselEvents().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -236,6 +271,8 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 				return includeEnabledCharterMarkets != INCLUDE_ENABLED_CHARTER_MARKETS_EDEFAULT;
 			case ADPPackage.FLEET_PROFILE__CONSTRAINTS:
 				return constraints != null && !constraints.isEmpty();
+			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
+				return vesselEvents != null && !vesselEvents.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -387,8 +387,8 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Create the sequence to export
-			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer());
-			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, charterOutEvent);
+			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector());
+			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, charterOutEvent);
 
 			final Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
@@ -437,8 +437,8 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Create the sequence to export
-			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer());
-			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, charterOutEvent);
+			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector());
+			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, charterOutEvent);
 
 			final Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
@@ -487,9 +487,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Create the sequence to export
-			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer());
+			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector());
 
-			SequenceHelper.addToUnused(result, scenarioToOptimiserBridge.getDataTransformer(), charterOutEvent);
+			SequenceHelper.addToUnused(result, scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterOutEvent);
 
 			final Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 

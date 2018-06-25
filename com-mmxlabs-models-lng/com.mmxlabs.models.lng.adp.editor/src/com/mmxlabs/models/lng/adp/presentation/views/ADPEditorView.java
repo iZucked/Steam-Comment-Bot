@@ -60,7 +60,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -518,6 +517,7 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 					}
 				}
 				cargoModel.getVesselAvailabilities().addAll(copyADP.getFleetProfile().getVesselAvailabilities());
+				cargoModel.getVesselEvents().addAll(copyADP.getFleetProfile().getVesselEvents());
 
 				SpotMarketsModel marketsModel = ScenarioModelUtil.getSpotMarketsModel(copy);
 				for (SpotMarket m : new LinkedList<>(copyADP.getSpotMarketsProfile().getSpotMarkets())) {

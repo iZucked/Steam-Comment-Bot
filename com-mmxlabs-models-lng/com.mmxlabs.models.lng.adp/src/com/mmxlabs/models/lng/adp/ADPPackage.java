@@ -190,13 +190,22 @@ public interface ADPPackage extends EPackage {
 	int FLEET_PROFILE__CONSTRAINTS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_PROFILE__VESSEL_EVENTS = 3;
+
+	/**
 	 * The number of structural features of the '<em>Fleet Profile</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_PROFILE_FEATURE_COUNT = 3;
+	int FLEET_PROFILE_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Fleet Profile</em>' class.
@@ -1895,6 +1904,17 @@ public interface ADPPackage extends EPackage {
 	EReference getFleetProfile_Constraints();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.FleetProfile#getVesselEvents <em>Vessel Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FleetProfile#getVesselEvents()
+	 * @see #getFleetProfile()
+	 * @generated
+	 */
+	EReference getFleetProfile_VesselEvents();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ContractProfile <em>Contract Profile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2920,6 +2940,14 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_PROFILE__CONSTRAINTS = eINSTANCE.getFleetProfile_Constraints();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_PROFILE__VESSEL_EVENTS = eINSTANCE.getFleetProfile_VesselEvents();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl <em>Contract Profile</em>}' class.

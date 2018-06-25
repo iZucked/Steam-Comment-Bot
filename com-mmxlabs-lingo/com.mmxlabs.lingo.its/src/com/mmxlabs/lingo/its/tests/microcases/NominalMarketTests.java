@@ -269,8 +269,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Validate the initial sequences are valid
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(dataTransformer, initialRawSequences));
 
-			final IModifiableSequences lsoSolution = SequenceHelper.createSequences(dataTransformer);
-			SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_1, -1, l1, d2, l2, d1);
+			final IModifiableSequences lsoSolution = SequenceHelper.createSequences(dataTransformer.getInjector());
+			SequenceHelper.addSequence(lsoSolution, dataTransformer.getInjector(), charterInMarket_1, -1, l1, d2, l2, d1);
 
 			// Validate the swapped discharges are invalid
 			final List<IConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateConstraintCheckers(dataTransformer, lsoSolution);
@@ -788,18 +788,18 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 						// Ensure all sequences has been created!
 
-						final IModifiableSequences lsoSolution = SequenceHelper.createSequences(dataTransformer);
+						final IModifiableSequences lsoSolution = SequenceHelper.createSequences(dataTransformer.getInjector());
 						// Cargo should be unpaired
-						SequenceHelper.addToUnused(lsoSolution, dataTransformer, cargo1);
+						SequenceHelper.addToUnused(lsoSolution, dataTransformer.getInjector(), cargo1);
 						// Cargo should move to cheaper vessel
-						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_2b, 0, cargo2);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer.getInjector(), charterInMarket_2b, 0, cargo2);
 
 						// Sequences are now empty, but still need start/end events
-						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_2a, 0);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer.getInjector(), charterInMarket_2a, 0);
 						// Nothing left on nominals
-						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_1, -1);
-						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_2a, -1);
-						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_2b, -1);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer.getInjector(), charterInMarket_1, -1);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer.getInjector(), charterInMarket_2a, -1);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer.getInjector(), charterInMarket_2b, -1);
 
 						return lsoSolution;
 					}

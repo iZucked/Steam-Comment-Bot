@@ -40,10 +40,15 @@ import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.VesselEventVesselsManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -54,9 +59,11 @@ import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.editors.EmbeddedDetailComposite;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 
@@ -70,13 +77,16 @@ public class FleetPage extends ADPComposite {
 	private EmbeddedDetailComposite detailComposite;
 	private Runnable releaseAdaptersRunnable = null;
 
-	private ScenarioTableViewer previewViewer;
+	private ScenarioTableViewer availabilityViewer;
+	private ScenarioTableViewer eventsViewer;
 
 	private Button generateButton;
 
-	private Group previewGroup;
+	private Group availabilityGroup;
+	private Group eventsGroup;
 
-	private Action deleteSlotAction;
+	private Action deleteAvailabilityAction;
+	private Action deleteEventAction;
 
 	public FleetPage(final Composite parent, final int style, final ADPEditorData editorData) {
 		super(parent, style);
@@ -203,18 +213,18 @@ public class FleetPage extends ADPComposite {
 				// Preview Table with generated options
 				{
 
-					previewGroup = new Group(rhsComposite, SWT.NONE);
-					previewGroup.setLayout(new GridLayout(1, false));
-					previewGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
+					availabilityGroup = new Group(rhsComposite, SWT.NONE);
+					availabilityGroup.setLayout(new GridLayout(1, false));
+					availabilityGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 
-					previewGroup.setText("Preview");
+					availabilityGroup.setText("Fleet");
 					// toolkit.adapt(previewGroup);
 
 					if (editorData.getEditingDomain() != null) {
 						// constructPreviewViewer(editorData, previewGroup);
 					}
 
-					final DetailToolbarManager buttonManager = new DetailToolbarManager(previewGroup, SWT.TOP);
+					final DetailToolbarManager buttonManager = new DetailToolbarManager(availabilityGroup, SWT.TOP);
 					{
 						final Action action = new Action("New") {
 
@@ -231,8 +241,8 @@ public class FleetPage extends ADPComposite {
 										availability);
 								editorData.getEditingDomain().getCommandStack().execute(c);
 								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, availability, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
-								if (previewViewer != null) {
-									previewViewer.refresh();
+								if (availabilityViewer != null) {
+									availabilityViewer.refresh();
 								}
 							}
 						};
@@ -241,11 +251,11 @@ public class FleetPage extends ADPComposite {
 					}
 					{
 
-						deleteSlotAction = new Action("Delete") {
+						deleteAvailabilityAction = new Action("Delete") {
 							@Override
 							public void run() {
-								if (previewViewer != null) {
-									ISelection selection = previewViewer.getSelection();
+								if (availabilityViewer != null) {
+									ISelection selection = availabilityViewer.getSelection();
 									if (selection instanceof IStructuredSelection) {
 										IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 										CompoundCommand c = new CompoundCommand();
@@ -255,15 +265,113 @@ public class FleetPage extends ADPComposite {
 											c.append(RemoveCommand.create(editorData.getEditingDomain(), o));
 										}
 										editorData.getEditingDomain().getCommandStack().execute(c);
-										previewViewer.refresh();
+										availabilityViewer.refresh();
 									}
 								}
 								;
 
 							}
 						};
-						deleteSlotAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
-						buttonManager.getToolbarManager().add(deleteSlotAction);
+						deleteAvailabilityAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+						buttonManager.getToolbarManager().add(deleteAvailabilityAction);
+					}
+					buttonManager.getToolbarManager().update(true);
+					// toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
+				}
+				// Events
+				{
+
+					eventsGroup = new Group(rhsComposite, SWT.NONE);
+					eventsGroup.setLayout(new GridLayout(1, false));
+					eventsGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
+
+					eventsGroup.setText("Events");
+					// toolkit.adapt(previewGroup);
+
+					if (editorData.getEditingDomain() != null) {
+						// constructPreviewViewer(editorData, previewGroup);
+					}
+
+					final DetailToolbarManager buttonManager = new DetailToolbarManager(eventsGroup, SWT.TOP);
+					{
+						final Action action = new Action("Charter out") {
+
+							@Override
+							public void run() {
+								CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
+								event.setAvailableHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+								event.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+
+								Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getFleetProfile(), ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS, event);
+								editorData.getEditingDomain().getCommandStack().execute(c);
+								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, event, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+								if (eventsViewer != null) {
+									eventsViewer.refresh();
+								}
+							}
+						};
+						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+						buttonManager.getToolbarManager().add(action);
+					}
+					{
+						final Action action = new Action("Drydock") {
+
+							@Override
+							public void run() {
+								DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
+								Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getFleetProfile(), ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS, event);
+								editorData.getEditingDomain().getCommandStack().execute(c);
+								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, event, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+								if (eventsViewer != null) {
+									eventsViewer.refresh();
+								}
+							}
+						};
+						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+						buttonManager.getToolbarManager().add(action);
+					}
+					{
+						final Action action = new Action("Maintenence") {
+
+							@Override
+							public void run() {
+								MaintenanceEvent event = CargoFactory.eINSTANCE.createMaintenanceEvent();
+								Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getFleetProfile(), ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS, event);
+								editorData.getEditingDomain().getCommandStack().execute(c);
+								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, event, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+								if (eventsViewer != null) {
+									eventsViewer.refresh();
+								}
+							}
+						};
+						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+						buttonManager.getToolbarManager().add(action);
+					}
+					{
+
+						deleteEventAction = new Action("Delete") {
+							@Override
+							public void run() {
+								if (eventsViewer != null) {
+									ISelection selection = eventsViewer.getSelection();
+									if (selection instanceof IStructuredSelection) {
+										IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
+										CompoundCommand c = new CompoundCommand();
+										Iterator<Object> itr = iStructuredSelection.iterator();
+										while (itr.hasNext()) {
+											Object o = itr.next();
+											c.append(RemoveCommand.create(editorData.getEditingDomain(), o));
+										}
+										editorData.getEditingDomain().getCommandStack().execute(c);
+										eventsViewer.refresh();
+									}
+								}
+								;
+
+							}
+						};
+						deleteEventAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+						buttonManager.getToolbarManager().add(deleteEventAction);
 					}
 					buttonManager.getToolbarManager().update(true);
 					// toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
@@ -272,7 +380,7 @@ public class FleetPage extends ADPComposite {
 		}
 	}
 
-	private ScenarioTableViewer constructPreviewViewer(final ADPEditorData editorData, final Group previewGroup) {
+	private ScenarioTableViewer constructFleetViewer(final ADPEditorData editorData, final Group previewGroup) {
 
 		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.NONE, editorData);
 		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), ADPPackage.Literals.FLEET_PROFILE__VESSEL_AVAILABILITIES);
@@ -345,17 +453,87 @@ public class FleetPage extends ADPComposite {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				deleteSlotAction.setEnabled(!event.getSelection().isEmpty());
+				deleteAvailabilityAction.setEnabled(!event.getSelection().isEmpty());
 			}
 		});
-		deleteSlotAction.setEnabled(false);
+		deleteAvailabilityAction.setEnabled(false);
+		return previewViewer;
+	}
+
+	private ScenarioTableViewer constructEventsViewer(final ADPEditorData editorData, final Group previewGroup) {
+
+		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.NONE, editorData);
+		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS);
+		GridViewerHelper.configureLookAndFeel(previewViewer);
+
+		previewViewer.setStatusProvider(editorData.getStatusProvider());
+
+		previewViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+		// Enable tooltip support
+		ColumnViewerToolTipSupport.enableFor(previewViewer);
+
+		previewViewer.getGrid().setHeaderVisible(true);
+
+		// previewViewer.setContentProvider(new ArrayContentProvider());
+		ReadOnlyManipulatorWrapper<BasicAttributeManipulator> nameManipulator = new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
+				new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editorData.getEditingDomain()));
+
+		previewViewer.addTypicalColumn("Type", new NonEditableColumn() {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof CharterOutEvent) {
+					return "Charter Out";
+				} else if (object instanceof DryDockEvent) {
+					return "Dry Dock";
+				} else if (object instanceof MaintenanceEvent) {
+					return "Maintenance Event";
+				} else {
+					return "Unknown Event";
+				}
+			}
+		});
+
+		previewViewer.addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editorData.getEditingDomain()));
+		previewViewer.addTypicalColumn("Earliest Start", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartAfter(), editorData.getEditingDomain()));
+		previewViewer.addTypicalColumn("Latest Start", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartBy(), editorData.getEditingDomain()));
+		previewViewer.addTypicalColumn("Port",
+				new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselEvent_Port(), editorData.getReferenceValueProviderCache(), editorData.getEditingDomain()));
+		previewViewer.addTypicalColumn("Duration", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_DurationInDays(), editorData.getEditingDomain()));
+		previewViewer.addTypicalColumn("Vessel", new AssignmentManipulator(editorData));
+		previewViewer.addTypicalColumn("Allowed Vessels", new VesselEventVesselsManipulator(CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels(), editorData.getReferenceValueProviderCache(),
+				editorData.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		previewViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(final DoubleClickEvent event) {
+				final ISelection selection = event.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection ss = (IStructuredSelection) selection;
+					DetailCompositeDialogUtil.editSelection(editorData, ss);
+					if (previewViewer != null) {
+						previewViewer.refresh();
+					}
+				}
+			}
+		});
+		previewViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				deleteEventAction.setEnabled(!event.getSelection().isEmpty());
+			}
+		});
+		deleteEventAction.setEnabled(false);
 		return previewViewer;
 	}
 
 	@Override
 	public void refresh() {
-		if (previewViewer != null) {
-			previewViewer.refresh();
+		if (availabilityViewer != null) {
+			availabilityViewer.refresh();
+		}
+		if (eventsViewer != null) {
+			eventsViewer.refresh();
 		}
 	}
 
@@ -366,14 +544,22 @@ public class FleetPage extends ADPComposite {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
 		}
-		if (previewViewer != null) {
-			previewViewer.getControl().dispose();
-			previewViewer.dispose();
-			previewViewer = null;
+		if (availabilityViewer != null) {
+			availabilityViewer.getControl().dispose();
+			availabilityViewer.dispose();
+			availabilityViewer = null;
+		}
+		if (eventsViewer != null) {
+			eventsViewer.getControl().dispose();
+			eventsViewer.dispose();
+			eventsViewer = null;
 		}
 		if (scenarioModel != null) {
-			previewViewer = constructPreviewViewer(editorData, previewGroup);
-			previewGroup.layout();
+			availabilityViewer = constructFleetViewer(editorData, availabilityGroup);
+			availabilityGroup.layout();
+
+			eventsViewer = constructEventsViewer(editorData, eventsGroup);
+			eventsGroup.layout();
 		}
 
 		// TODO: Attach adapter if needed.
@@ -402,7 +588,8 @@ public class FleetPage extends ADPComposite {
 		EObject target = null;
 		if (editorData.getAdpModel() != null) {
 			target = editorData.getAdpModel().getFleetProfile();
-			previewViewer.setInput(editorData.getAdpModel().getFleetProfile());
+			availabilityViewer.setInput(editorData.getAdpModel().getFleetProfile());
+			eventsViewer.setInput(editorData.getAdpModel().getFleetProfile());
 		}
 
 		detailComposite.setInput(target);
