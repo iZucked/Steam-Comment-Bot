@@ -95,11 +95,8 @@ public class InventoryReport extends ViewPart {
 				selectedInventory = null;
 
 				currentResult = pinned;
-				if (currentResult == null) {
-					for (final ScenarioResult other : others) {
-						currentResult = other;
-						break;
-					}
+				if (currentResult == null && !others.isEmpty()) {
+					currentResult = others.iterator().next();
 				}
 
 				if (currentResult != null) {
@@ -111,11 +108,12 @@ public class InventoryReport extends ViewPart {
 					comboViewer.setInput(models);
 					if (!models.isEmpty()) {
 						if (lastFacility != null) {
-							for (final Inventory inventory : cargoModel.getInventoryModels()) {
-								if (lastFacility.equals(inventory.getName())) {
-									selectedInventory = inventory;
-									break;
-								}
+							final Optional<Inventory> match = cargoModel.getInventoryModels().stream() //
+									.filter(inventory -> lastFacility.equals(inventory.getName())) //
+									.findFirst();
+
+							if (match.isPresent()) {
+								selectedInventory = match.get();
 							}
 						}
 						if (selectedInventory == null) {
