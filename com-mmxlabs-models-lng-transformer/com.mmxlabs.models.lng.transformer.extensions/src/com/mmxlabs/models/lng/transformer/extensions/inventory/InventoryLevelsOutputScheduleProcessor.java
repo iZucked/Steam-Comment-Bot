@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -35,31 +37,20 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
-import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.IOutputScheduleProcessor;
 import com.mmxlabs.models.lng.types.VolumeUnits;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 public class InventoryLevelsOutputScheduleProcessor implements IOutputScheduleProcessor {
 
 	@Inject
-	private LNGScenarioModel scenarioModel;
+	private @NonNull LNGScenarioModel scenarioModel;
 
-	@Inject
-	private DateAndCurveHelper dateAndCurveHelper;
-	
-	@Inject
-	private IScenarioDataProvider scenarioDataProvider;
-	
 	@Override
 	public void process(final Schedule schedule) {
 		if (LicenseFeatures.isPermitted("features:inventory-model")) {
-			
-			
+
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
-			
-			
+
 			for (final Inventory facility : cargoModel.getInventoryModels()) {
 				final InventoryEvents inventoryChangeEvents = ScheduleFactory.eINSTANCE.createInventoryEvents();
 				inventoryChangeEvents.setFacility(facility);
@@ -85,7 +76,6 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 					return b;
 				};
 
-				// int colour = 2;
 				LocalDate minDate = null;
 				LocalDate maxDate = null;
 				LocalDate maxLevelDate = null;
@@ -137,15 +127,15 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 				}
-				
+
 				// Start of the inventory data
 				final LocalDate startOfInventoryData = minDate;
-				
+
 				for (final InventoryEventRow r : facility.getOfftakes()) {
 
 					minDate = f_minDate.apply(minDate, r.getStartDate());
 					maxDate = f_maxDate.apply(maxDate, r.getStartDate());
-					
+
 					if (r.getPeriod() == InventoryFrequency.LEVEL || r.getPeriod() == InventoryFrequency.CARGO) {
 						final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 						evt.setEvent(r);
@@ -166,7 +156,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							evt.setChangeQuantity(-r.getReliableVolume());
 							events.add(evt);
 						} else {
-							LocalDateTime end = r.getEndDate().atStartOfDay();
+							final LocalDateTime end = r.getEndDate().atStartOfDay();
 							while (start.isBefore(end)) {
 
 								final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
@@ -188,10 +178,10 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 				}
-				
+
 				// Date of the latest slot/load
 				LocalDate latestLoad = null;
-				
+
 				if (maxDate != null && schedule != null) {
 					for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 						final Slot slot = slotAllocation.getSlot();
@@ -218,13 +208,13 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							}
 
 							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
-							
+
 							if (latestLoad == null) {
 								latestLoad = start.toLocalDate();
 							} else {
 								latestLoad = f_maxDate.apply(latestLoad, start.toLocalDate());
 							}
-							
+
 							evt.setSlotAllocation(slotAllocation);
 							evt.setDate(start.toLocalDateTime());
 							evt.setChangeQuantity(change);
@@ -264,7 +254,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							} else {
 								latestLoad = f_maxDate.apply(latestLoad, slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().toLocalDate());
 							}
-							
+
 							evt.setOpenSlotAllocation(slotAllocation);
 							evt.setDate(slotAllocation.getSlot().getWindowStartWithSlotOrPortTime().toLocalDateTime());
 							evt.setChangeQuantity(change);
@@ -273,12 +263,12 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 					}
 				}
 
-				final TreeMap<LocalDate, Integer> min_levels = new TreeMap<>();
-				final TreeMap<LocalDate, Integer> max_levels = new TreeMap<>();
+				final TreeMap<LocalDate, Integer> minLevels = new TreeMap<>();
+				final TreeMap<LocalDate, Integer> maxLevels = new TreeMap<>();
 
 				for (final InventoryCapacityRow r : facility.getCapacities()) {
-					min_levels.put(r.getDate(), r.getMinVolume());
-					max_levels.put(r.getDate(), r.getMaxVolume());
+					minLevels.put(r.getDate(), r.getMinVolume());
+					maxLevels.put(r.getDate(), r.getMaxVolume());
 				}
 
 				Collections.sort(events, (a, b) -> a.getDate().compareTo(b.getDate()));
@@ -287,7 +277,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 				for (final InventoryChangeEvent evt : events) {
 					boolean isLevel = false;
 					if (evt.getEvent() instanceof InventoryEventRow) {
-						final InventoryEventRow inventoryEventRow = (InventoryEventRow) evt.getEvent();
+						final InventoryEventRow inventoryEventRow = evt.getEvent();
 						if (inventoryEventRow.getPeriod() == InventoryFrequency.LEVEL) {
 							isLevel = true;
 						}
@@ -299,7 +289,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 					}
 					evt.setCurrentLevel(inventoryLevel);
 					{
-						final Entry<LocalDate, Integer> minLevel = min_levels.floorEntry(evt.getDate().toLocalDate());
+						final Entry<LocalDate, Integer> minLevel = minLevels.floorEntry(evt.getDate().toLocalDate());
 						if (minLevel != null) {
 							evt.setCurrentMin(minLevel.getValue());
 							if (evt.getCurrentLevel() < evt.getCurrentMin()) {
@@ -308,7 +298,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 					{
-						final Entry<LocalDate, Integer> maxLevel = max_levels.floorEntry(evt.getDate().toLocalDate());
+						final Entry<LocalDate, Integer> maxLevel = maxLevels.floorEntry(evt.getDate().toLocalDate());
 						if (maxLevel != null) {
 							evt.setCurrentMax(maxLevel.getValue());
 							if (evt.getCurrentLevel() > evt.getCurrentMax()) {
@@ -320,16 +310,14 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 
 				// Sort before storing
 				events.sort((a, b) -> a.getDate().compareTo(b.getDate()));
-				
+
 				final LocalDate latestLoadFinal = latestLoad;
-				
+
 				// Filter InventoryChangeEvent given the effective bounds of the inventory scenario
-				List<InventoryChangeEvent> res = events.stream()
-						.filter(x -> {	
-							LocalDate eventDate = x.getDate().toLocalDate();
-							return eventDate.isAfter(startOfInventoryData) && eventDate.isBefore(latestLoadFinal);
-						})
-						.collect(Collectors.toList());
+				final List<InventoryChangeEvent> res = events.stream().filter(x -> {
+					final LocalDate eventDate = x.getDate().toLocalDate();
+					return eventDate.isAfter(startOfInventoryData) && (latestLoadFinal == null || eventDate.isBefore(latestLoadFinal));
+				}).collect(Collectors.toList());
 
 				inventoryChangeEvents.getEvents().addAll(res);
 			}
