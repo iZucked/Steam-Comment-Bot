@@ -232,7 +232,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			protected @NonNull VolumeData createDiffData(final VolumeData pinData, final VolumeData otherData) {
 
 				final VolumeData modelData = pinData != null ? pinData : otherData;
-				final Map<Year, Long> volumes = new HashMap<Year, Long>();
+				final Map<Year, Long> volumes = new HashMap<>();
 				final VolumeData newData = new VolumeData(null, null, modelData.purchase, modelData.contract, volumes);
 
 				if (pinData != null) {
@@ -253,7 +253,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 			@Override
 			public List<ColumnManager<VolumeData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
-				final ArrayList<ColumnManager<VolumeData>> result = new ArrayList<ColumnManager<VolumeData>>();
+				final ArrayList<ColumnManager<VolumeData>> result = new ArrayList<>();
 
 				if (selectedDataProvider.getScenarioResults().size() > 1) {
 					result.add(new ColumnManager<VolumeData>("Scenario") {
