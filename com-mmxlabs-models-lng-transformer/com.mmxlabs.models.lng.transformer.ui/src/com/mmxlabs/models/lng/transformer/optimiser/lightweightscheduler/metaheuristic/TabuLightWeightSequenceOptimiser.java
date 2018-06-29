@@ -44,12 +44,12 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	private Random r;
 
 	public static class Interval {
-		private final double start;
-		private final double end;
+		private final int start;
+		private final int end;
 
 		public Interval(ZonedDateTime startDateTime, ZonedDateTime endDateTime) {
-			this.start = startDateTime.toEpochSecond() * HOURS;
-			this.end = endDateTime.toEpochSecond() * HOURS;
+			this.start = (int) (startDateTime.toEpochSecond() * HOURS);
+			this.end = (int) (endDateTime.toEpochSecond() * HOURS);
 		}
 
 		public Interval(int start, int end) {
@@ -57,11 +57,11 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 			this.end = end;
 		}
 
-		public double getEnd() {
+		public int getEnd() {
 			return end;
 		}
 
-		public double getStart() {
+		public int getStart() {
 			return start;
 		}
 	}
@@ -287,14 +287,15 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 		int[][] cargoMinTravelTimes = lightWeightOptimisationData.getCargoMinTravelTimes();
 		int[][][] cargoToCargoMinTravelTimes = lightWeightOptimisationData.getCargoToCargoMinTravelTimes();
-		double[] volumes = lightWeightOptimisationData.getCargoesVolumes();
+		double[] volumes = dataTransformer.getCargoesVolumesProcessed();
 		LightWeightCargoDetails[] cargoDetails = lightWeightOptimisationData.getCargoDetails();
 
 		List<List<Integer>> cargoVesselRestrictions = dataTransformer.getCargoVesselRestrictionAsList();
 		double[] cargoPNL = dataTransformer.getCargoPNLasDouble();
 		double[] vesselCapacities = dataTransformer.getCapacity();
 		double[][][] cargoToCargoCostsOnAvailability = dataTransformer.getCargoToCargoCostsProcessed();
-
+		double[][] cargoDailyCharterCostPerAvailabilityProcessed = dataTransformer.getCargoDailyCharterCostPerAvailabilityProcessed();
+		
 		for (ILightWeightConstraintChecker constraintChecker : constraintCheckers) {
 			for (int availability = 0; availability < sequences.size(); availability++) {
 				List<Integer> sequence = sequences.get(availability);
@@ -313,7 +314,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 					cargoToCargoCostsOnAvailability, cargoVesselRestrictions, //
 					cargoToCargoMinTravelTimes, cargoMinTravelTimes, //
 					loads, discharges, //
-					volumes, cargoDetails);
+					volumes, cargoDetails, cargoDailyCharterCostPerAvailabilityProcessed);
 
 			fitness = fitness + evaluate;
 		}
@@ -329,14 +330,14 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 		int[][] cargoMinTravelTimes = lightWeightOptimisationData.getCargoMinTravelTimes();
 		int[][][] cargoToCargoMinTravelTimes = lightWeightOptimisationData.getCargoToCargoMinTravelTimes();
-		double[] volumes = lightWeightOptimisationData.getCargoesVolumes();
+		double[] volumes = dataTransformer.getCargoesVolumesProcessed();
 		LightWeightCargoDetails[] cargoDetails = lightWeightOptimisationData.getCargoDetails();
 
 		List<List<Integer>> cargoVesselRestrictions = dataTransformer.getCargoVesselRestrictionAsList();
 		double[] cargoPNL = dataTransformer.getCargoPNLasDouble();
 		double[] vesselCapacities = dataTransformer.getCapacity();
 		double[][][] cargoToCargoCostsOnAvailability = dataTransformer.getCargoToCargoCostsProcessed();
-
+		double[][] cargoDailyCharterCostPerAvailabilityProcessed = dataTransformer.getCargoDailyCharterCostPerAvailabilityProcessed();
 		for (ILightWeightConstraintChecker constraintChecker : constraintCheckers) {
 			for (int availability = 0; availability < sequences.size(); availability++) {
 				List<Integer> sequence = sequences.get(availability);
@@ -353,7 +354,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 					cargoPNL, vesselCapacities, //
 					cargoToCargoCostsOnAvailability, cargoVesselRestrictions, //
 					cargoToCargoMinTravelTimes, cargoMinTravelTimes, loads, discharges, //
-					volumes, cargoDetails);
+					volumes, cargoDetails, cargoDailyCharterCostPerAvailabilityProcessed);
 
 			fitness = fitness + evaluate;
 		}

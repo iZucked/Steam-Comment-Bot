@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -21,6 +22,7 @@ import javax.inject.Singleton;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -50,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
 public class LongTermOptimiserUnit {
@@ -131,6 +134,8 @@ public class LongTermOptimiserUnit {
 				IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 				Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
 				allPortSlots.forEach(e -> longTermSlotsProviderEditor.addLongTermSlot(e));
+				addLongTermOptimiserEvents(longTermSlotsProviderEditor, allPortSlots);
+
 				monitor.beginTask("Generate solutions", 100);
 				CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
 				final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
@@ -188,27 +193,12 @@ public class LongTermOptimiserUnit {
 			}
 	}
 
-//	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
-//		return LNGExporterUnit.exportMultiple(chainBuilder, progressTicks, runner, containerProvider, "Saving insertion plans", parent -> {
-//
-//			final List<Container> elementsToRemove = new LinkedList<>();
-//			for (final Container c : parent.getElements()) {
-//				if (c.getName().startsWith("InsertionPlan-")) {
-//					elementsToRemove.add(c);
-//				}
-//			}
-//			for (final Container c : elementsToRemove) {
-//				SSDataManager.Instance.findScenarioService(parent).delete(c);
-//			}
-//		}, changeSetIdx -> {
-//			String newName;
-//			if (changeSetIdx == 0) {
-//				newName = "InsertionPlan-base";
-//				changeSetIdx++;
-//			} else {
-//				newName = String.format("InsertionPlan-%s", (changeSetIdx++));
-//			}
-//			return newName;
-//		});
-//	}
+	private void addLongTermOptimiserEvents(ILongTermSlotsProviderEditor longTermSlotsProviderEditor, Collection<IPortSlot> allPortSlots) {
+		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.CharterOut);
+		allPortSlots.forEach(e -> {
+			if (eventsPortType.contains(e.getPortType())) {
+				longTermSlotsProviderEditor.addEvent(e);
+			}
+		});
+	}
 }

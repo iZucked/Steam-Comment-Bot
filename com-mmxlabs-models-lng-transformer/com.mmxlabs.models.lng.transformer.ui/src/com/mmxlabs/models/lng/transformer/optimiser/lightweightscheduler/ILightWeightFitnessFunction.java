@@ -7,5 +7,6 @@ import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.metaheu
 public interface ILightWeightFitnessFunction {
 	void init();
 	Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, double[] volumes, LightWeightCargoDetails[] cargoDetails);
+			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges,
+			double[] volumes, LightWeightCargoDetails[] cargoDetails, double[][] cargoDailyCharterCostPerAvailabilityProcessed);
 }

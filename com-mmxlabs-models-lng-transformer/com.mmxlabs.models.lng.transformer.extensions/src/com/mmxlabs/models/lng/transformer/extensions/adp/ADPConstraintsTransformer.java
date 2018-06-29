@@ -9,10 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
+import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
 import com.mmxlabs.models.lng.adp.MinCargoConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
@@ -163,6 +167,17 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					// Not handled here.
 				}
 
+			}
+		}
+	}
+	
+	public void handleVesselConstraints(@NonNull ADPModel model) {
+		if (model.getFleetProfile() != null && model.getFleetProfile().getConstraints() != null) {
+			for (FleetConstraint fleetConstraint : model.getFleetProfile().getConstraints()) {
+				if (fleetConstraint instanceof TargetCargoesOnVesselConstraint) {
+					
+				}
+				
 			}
 		}
 	}

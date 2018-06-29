@@ -80,11 +80,6 @@ public class LightWeightSchedulerMoves {
 	private static void insertCargo(List<List<Integer>> sequences, Random random, int newCargo) {
 		List<Integer> sequence = sequences.get(random.nextInt(sequences.size()));
 		sequence.add(random.nextInt(sequence.size() + 1), newCargo);
-		
-		//} catch(Exception e) {
-			// REVIEW: What is that ?
-		//	int z = 0;
-		//}
 	}
 
 	private static List<Integer> getUsedSequences(List<List<Integer>> sequences) {

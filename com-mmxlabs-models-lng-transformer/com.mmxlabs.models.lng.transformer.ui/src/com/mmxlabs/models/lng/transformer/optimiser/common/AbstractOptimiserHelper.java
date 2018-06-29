@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -51,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstrain
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
@@ -78,7 +80,8 @@ abstract public class AbstractOptimiserHelper {
 			IModifiableSequence modifiableSequence = sequences.getModifiableSequence(resource);
 			List<ISequenceElement> modifiableUnusedElements = sequences.getModifiableUnusedElements();
 			for (int i = modifiableSequence.size() - 1; i > -1; i--) {
-				if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) instanceof IDischargeOption || portSlotProvider.getPortSlot(modifiableSequence.get(i)) instanceof ILoadOption) {
+				if (portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() ==  PortType.Load || portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() ==  PortType.Discharge
+						|| portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() ==  PortType.CharterOut || portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() == PortType.DryDock) {
 					ISequenceElement removed = modifiableSequence.remove(i);
 					modifiableUnusedElements.add(removed);
 				}
@@ -313,6 +316,23 @@ abstract public class AbstractOptimiserHelper {
 		return pnl;
 	}
 
+	public static void addTargetEventsToProvider(ILongTermSlotsProviderEditor longTermSlotsProviderEditor, Collection<IPortSlot> allPortSlots) {
+		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.CharterOut);
+		allPortSlots.forEach(e -> {
+			if (eventsPortType.contains(e.getPortType())) {
+				longTermSlotsProviderEditor.addEvent(e);
+			}
+		});
+	}
 
+	public static void addTargetSlotsToProvider(ILongTermSlotsProviderEditor longTermSlotsProviderEditor, Collection<IPortSlot> allPortSlots) {
+		Set<PortType> salesPortType = Sets.newHashSet(PortType.Load, PortType.Discharge);
+
+		allPortSlots.forEach(e -> {
+			if (salesPortType.contains(e.getPortType())) {
+				longTermSlotsProviderEditor.addLongTermSlot(e);
+			}
+		});
+	}
 
 }

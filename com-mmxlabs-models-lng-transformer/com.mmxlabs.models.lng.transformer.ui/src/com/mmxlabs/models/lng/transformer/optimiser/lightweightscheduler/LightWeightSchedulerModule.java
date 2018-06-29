@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,8 +24,6 @@ import com.google.inject.name.Named;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.extensions.longterm.DefaultLongTermVesselSlotCountFitnessProvider;
-import com.mmxlabs.models.lng.transformer.extensions.longterm.ILongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.DefaultLightWeightPostOptimisationStateModifier;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.DefaultLongTermSequenceElementFilter;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightPostOptimisationStateModifier;
@@ -46,13 +45,17 @@ import com.mmxlabs.models.lng.transformer.optimiser.longterm.webservice.Webservi
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
 public class LightWeightSchedulerModule extends AbstractModule {
@@ -114,7 +117,8 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	private ILightWeightOptimisationData provideLightWeightOptimisationData(LongTermOptimisationData optimiserRecorder, ILongTermSlotsProvider longTermSlotsProvider,
 			ILongTermMatrixOptimiser matrixOptimiser, IVesselProvider vesselProvider, ICargoToCargoCostCalculator cargoToCargoCostCalculator,
 			ICargoVesselRestrictionsMatrixProducer cargoVesselRestrictionsMatrixProducer, @Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT) int[] desiredVesselCargoCount,
-			@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT) long[] desiredVesselCargoWeight, @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences) {
+			@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT) long[] desiredVesselCargoWeight, @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences,
+			IAllowedVesselProvider allowedVesselProvider) {
 		// (1) Identify LT slots
 		@NonNull
 		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
@@ -160,9 +164,23 @@ public class LightWeightSchedulerModule extends AbstractModule {
 			printPairings(pairingsMap);
 		}
 
+		Set<Integer> cargoIndexes = new HashSet<>();
+		Set<Integer> eventIndexes = new HashSet<>();
+		
 		// create data for optimiser
 		// Cargoes
 		List<List<IPortSlot>> shippedCargoes = LongTermOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
+		for (int i = 0; i < shippedCargoes.size(); i++) {
+			cargoIndexes.add(i);
+		}
+		// add events
+		longTermSlotsProvider.getLongTermEvents().forEach(e -> {
+			shippedCargoes.add(CollectionsUtil.makeLinkedList(e));
+			eventIndexes.add(shippedCargoes.size()-1);
+		});
+		
+		// Now we add vessel events 
+		
 		
 		// Vessel
 		List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
@@ -187,12 +205,23 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		LightWeightCargoDetails[] cargoDetails = shippedCargoes.stream().map(x -> { 
 
 			// REVIEW: It is alright to only check the first element ?
+			// ALEX_NOTE: not sure this is necessary
 			PortType portType = x.get(0).getPortType();
 
-			if (portType == PortType.CharterOut || portType == PortType.Discharge) {
-				return new LightWeightCargoDetails(x.get(0).getPortType(), 0);
-			} 
-				
+			if (portType == PortType.CharterOut || portType == PortType.DryDock) {
+				Collection<IVessel> permittedVessels = allowedVesselProvider.getPermittedVessels(x.get(0));
+				int index = -1;
+				for (int i = 0; i < vessels.size(); i++) {
+					if (permittedVessels.contains(vessels.get(i).getVessel())) {
+						index = i;
+					}
+				}
+				if (index != -1) {
+					return new LightWeightCargoDetails(x.get(0).getPortType(), index);
+				} else {
+					return new LightWeightCargoDetails(x.get(0).getPortType());
+				}
+			}
 			return new LightWeightCargoDetails(x.get(0).getPortType());
 		}).toArray(LightWeightCargoDetails[]::new);
 		
@@ -206,22 +235,31 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		// Time window
 		int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
 		
+		// Charter costs
+		long[][] cargoCharterCostPerAvailability = cargoToCargoCostCalculator.getCargoCharterCostPerAvailability(shippedCargoes, vessels);
+
 		// Vessel Capacity
 		double[] capacity = vessels.stream()
 				.mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000)
 				.toArray();
 		
 		// Cargo Volume
-		double[] cargoesVolumes = shippedCargoes.stream().mapToDouble(x -> {
-			double loadVolume = ((ILoadOption) x.get(0)).getMaxLoadVolume();
-			double dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
+		long[] cargoesVolumes = shippedCargoes.stream().mapToLong(x -> {
+			if (!(x.get(0) instanceof ILoadOption)) {
+				// volume of 1
+				return 1;
+			}
+			long loadVolume = ((ILoadOption) x.get(0)).getMaxLoadVolume();
+			long dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
 			return Math.min(loadVolume, dischargeVolume);
 		}).toArray();
+		
 		
 
 		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL,
 				cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel,
-				pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes, cargoDetails);
+				pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes, cargoDetails, cargoCharterCostPerAvailability,
+				cargoIndexes, eventIndexes);
 		
 		return lightWeightOptimisationData;
 	}

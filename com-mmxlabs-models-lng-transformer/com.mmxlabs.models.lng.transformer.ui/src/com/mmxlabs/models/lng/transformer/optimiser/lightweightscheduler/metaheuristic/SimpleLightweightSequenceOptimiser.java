@@ -43,7 +43,7 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 	     List<Set<Integer>> cargoVesselRestrictions = lightWeightOptimisationData.getCargoVesselRestrictions();
 	     int[][][] cargoToCargoMinTravelTimes = lightWeightOptimisationData.getCargoToCargoMinTravelTimes();
 	     int[][] cargoMinTravelTimes = lightWeightOptimisationData.getCargoMinTravelTimes();
-	     double[] volumes = lightWeightOptimisationData.getCargoesVolumes();
+	     long[] volumes = lightWeightOptimisationData.getCargoesVolumes();
 	     LightWeightCargoDetails[] cargoDetails = lightWeightOptimisationData.getCargoDetails();
 		
 		

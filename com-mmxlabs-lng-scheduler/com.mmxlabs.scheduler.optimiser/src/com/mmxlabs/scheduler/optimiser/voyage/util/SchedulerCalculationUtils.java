@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -36,5 +37,20 @@ public class SchedulerCalculationUtils {
 	public long getVesselCharterInRatePerDay(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
 		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, voyagePlanStartTime);
 		return vesselCharterInRatePerDay;
+	}
+	
+	/**
+	 * Determines whether the vessel should be considered optional, and consequently the charter
+	 * cost may not be sunk.
+	 * @param vesselAvailability
+	 * @return
+	 */
+	public static boolean isVesselAvailabilityOptional(IVesselAvailability vesselAvailability) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER
+				|| vesselAvailability.isOptional()) {
+			return true;
+		}
+		return false;
 	}
 }

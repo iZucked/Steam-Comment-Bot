@@ -14,8 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 public interface ICargoToCargoCostCalculator {
 	Long[][][] createCargoToCargoCostMatrix(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
-	long calculateNonCharterVariableCosts(ILoadSlot loadA, IDischargeSlot dischargeA, ILoadSlot loadB, IDischargeSlot dischargeB, IVessel vessel);
 	int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
 	int[][][] getMinCargoToCargoTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
-	long calculateCharterInVariableCosts(ILoadSlot loadA, IDischargeSlot dischargeA, ILoadSlot loadB, IDischargeSlot dischargeB, IVesselAvailability vesselAvailability);
+	long[][] getCargoCharterCostPerAvailability(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
 }

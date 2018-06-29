@@ -33,7 +33,13 @@ public interface ILightWeightOptimisationData {
 
 	long[] getDesiredVesselCargoWeight();
 	
-	double[] getCargoesVolumes();
+	long[] getCargoesVolumes();
 	
 	LightWeightCargoDetails[] getCargoDetails();
+
+	long[][] getCargoCharterCostPerAvailability();
+
+	Set<Integer> getCargoIndexes();
+
+	Set<Integer> getEventIndexes();
 }

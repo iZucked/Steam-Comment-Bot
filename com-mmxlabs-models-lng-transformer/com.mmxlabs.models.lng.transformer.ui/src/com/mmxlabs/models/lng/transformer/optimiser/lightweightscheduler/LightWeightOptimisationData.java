@@ -27,14 +27,17 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private long[] desiredVesselCargoWeight;
 	
 	// Cargo volumes in mmbtu
-	private double[] cargoesVolumes;
+	private long[] cargoesVolumes;
 	
-
-    
+	private long[][] cargoCharterCostPerAvailability;
+	private Set<Integer> cargoIndexes;
+	private Set<Integer> eventIndexes;
+	
 	public LightWeightOptimisationData(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, double[] vesselCapacities,
 			long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, ArrayList<Set<Integer>> cargoVesselRestrictions,
 			int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Map<ILoadOption, IDischargeOption> pairingsMap,
-			int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, double[] cargoesVolumes, LightWeightCargoDetails[] cargoDetails) {
+			int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, long[] cargoesVolumes, LightWeightCargoDetails[] cargoDetails,
+			long[][] cargoCharterCostPerAvailability, Set<Integer> cargoIndexes, Set<Integer> eventIndexes) {
 				this.cargoes = cargoes;
 				this.vessels = vessels;
 				this.vesselCapacities = vesselCapacities;
@@ -45,6 +48,9 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 				this.cargoMinTravelTimes = cargoMinTravelTimes;
 				this.pairingsMap = pairingsMap;
 				this.desiredVesselCargoCount = desiredVesselCargoCount;
+				this.cargoCharterCostPerAvailability = cargoCharterCostPerAvailability;
+				this.cargoIndexes = cargoIndexes;
+				this.eventIndexes = eventIndexes;
 				this.setDesiredVesselCargoWeight(desiredVesselCargoWeight);
 				this.cargoesVolumes = cargoesVolumes;
 				this.cargoDetails = cargoDetails;
@@ -111,6 +117,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 		this.cargoes = cargoes;
 	}
 
+	@Override
 	public Map<ILoadOption, IDischargeOption> getPairingsMap() {
 		return pairingsMap;
 	}
@@ -119,6 +126,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 		this.pairingsMap = pairingsMap;
 	}
 
+	@Override
 	public int[] getDesiredVesselCargoCount() {
 		return desiredVesselCargoCount;
 	}
@@ -127,6 +135,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 		this.desiredVesselCargoCount = desiredVesselCargoCount;
 	}
 
+	@Override
 	public double[] getVesselCapacities() {
 		return vesselCapacities;
 	}
@@ -135,6 +144,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 		this.vesselCapacities = vesselCapacities;
 	}
 
+	@Override
 	public long[] getDesiredVesselCargoWeight() {
 		return desiredVesselCargoWeight;
 	}
@@ -143,12 +153,31 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 		this.desiredVesselCargoWeight = desiredVesselCargoWeight;
 	}
 
-	public double[] getCargoesVolumes() {
+	@Override
+	public long[] getCargoesVolumes() {
 		return cargoesVolumes;
 	}
 
-	public void setCargoesVolumes(double[] cargoesVolume) {
+	public void setCargoesVolumes(long[] cargoesVolume) {
 		this.cargoesVolumes = cargoesVolume;
 	}
+
+	@Override
+	public long[][] getCargoCharterCostPerAvailability() {
+		return cargoCharterCostPerAvailability;
+	}
+
+	public void setCargoCharterCostPerAvailability(long[][] cargoCharterCostPerAvailability) {
+		this.cargoCharterCostPerAvailability = cargoCharterCostPerAvailability;
+	}
 	
+	@Override
+	public Set<Integer> getCargoIndexes() {
+		return cargoIndexes;
+	}
+
+	@Override
+	public Set<Integer> getEventIndexes() {
+		return eventIndexes;
+	}
 }

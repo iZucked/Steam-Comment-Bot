@@ -11,5 +11,5 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 public interface ILongTermSlotsProviderEditor extends ILongTermSlotsProvider {
 
 	public void addLongTermSlot(@NonNull IPortSlot element);
-
+	public void addEvent(@NonNull IPortSlot event);
 }

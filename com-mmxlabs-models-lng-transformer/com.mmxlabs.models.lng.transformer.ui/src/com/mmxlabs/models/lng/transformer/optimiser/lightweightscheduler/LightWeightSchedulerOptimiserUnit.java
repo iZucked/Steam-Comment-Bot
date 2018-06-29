@@ -189,8 +189,9 @@ public class LightWeightSchedulerOptimiserUnit {
 				ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 				ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
 				IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-				Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(initialSequences.getUnusedElements(), portSlotProvider);
-				allPortSlots.forEach(e -> longTermSlotsProviderEditor.addLongTermSlot(e));
+				Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(initialSequences, portSlotProvider);
+				LightWeightOptimiserHelper.addTargetSlotsToProvider(longTermSlotsProviderEditor, allPortSlots);
+				LightWeightOptimiserHelper.addTargetEventsToProvider(longTermSlotsProviderEditor, allPortSlots);
 				monitor.beginTask("Generate solutions", 100);
 				CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
 
@@ -205,7 +206,7 @@ public class LightWeightSchedulerOptimiserUnit {
 					monitor.done();
 				}
 	}
-	
+
 	private IMultiStateResult modifyResult(IMultiStateResult result) {
 		ISequenceElementFilter filter = injector.getInstance(ISequenceElementFilter.class);
 		return TransformerUnitsHelper.removeExcessSlots(result, filter);

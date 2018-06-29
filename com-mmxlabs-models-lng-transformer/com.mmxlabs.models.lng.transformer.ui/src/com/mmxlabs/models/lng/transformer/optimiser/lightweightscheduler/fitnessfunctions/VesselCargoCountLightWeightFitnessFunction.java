@@ -16,7 +16,8 @@ public class VesselCargoCountLightWeightFitnessFunction implements ILightWeightF
 	
 	@Override
 	public Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges, double volume[], LightWeightCargoDetails[] cargoDetails) {
+			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges,
+			double[] volumes, LightWeightCargoDetails[] cargoDetails, double[][] cargoDailyCharterCostPerAvailabilityProcessed) {
 		double fitness = 0.0;
 		int idx = 0;
 		for (List<Integer> sequence : sequences) {

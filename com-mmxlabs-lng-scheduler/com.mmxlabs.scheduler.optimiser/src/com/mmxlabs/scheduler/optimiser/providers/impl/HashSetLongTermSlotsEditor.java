@@ -18,6 +18,9 @@ public final class HashSetLongTermSlotsEditor implements ILongTermSlotsProviderE
 	@NonNull
 	private final Set<IPortSlot> portSlotMap = new LinkedHashSet<>();
 
+	@NonNull
+	private final Set<IPortSlot> eventMap = new LinkedHashSet<>();
+
 	@Override
 	public @NonNull Collection<IPortSlot> getLongTermSlots() {
 		return this.portSlotMap;
@@ -31,6 +34,17 @@ public final class HashSetLongTermSlotsEditor implements ILongTermSlotsProviderE
 	@Override
 	public void addLongTermSlot(@NonNull IPortSlot element) {
 		portSlotMap.add(element);
+	}
+
+	@Override
+	public @NonNull Collection<IPortSlot> getLongTermEvents() {
+		// TODO Auto-generated method stub
+		return this.eventMap;
+	}
+
+	@Override
+	public void addEvent(@NonNull IPortSlot event) {
+		eventMap.add(event);
 	}
 
 }

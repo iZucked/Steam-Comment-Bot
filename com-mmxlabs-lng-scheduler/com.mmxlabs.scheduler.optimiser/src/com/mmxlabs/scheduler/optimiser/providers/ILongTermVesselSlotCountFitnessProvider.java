@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.transformer.extensions.longterm;
+package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 

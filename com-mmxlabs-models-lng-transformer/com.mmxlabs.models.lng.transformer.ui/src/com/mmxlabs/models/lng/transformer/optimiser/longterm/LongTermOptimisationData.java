@@ -17,11 +17,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.transformer.extensions.longterm.ILongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossRecorder;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 

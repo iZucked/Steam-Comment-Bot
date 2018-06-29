@@ -168,12 +168,15 @@ public class LightweightSchedulerOptimiser {
 			List<Integer> cargoIndexes = sequences.get(vesselIndex);
 			for (int cargoIndex : cargoIndexes) {
 				List<IPortSlot> cargo = cargoes.get(cargoIndex);
-				ILoadOption loadOption = (ILoadOption) cargo.get(0);
-				IDischargeOption dischargeOption = (IDischargeOption) cargo.get(1);
-				// skip if unallocated
-				if (dischargeOption == null)
+				ILoadOption loadOption = LightWeightOptimiserHelper.getLoadOption(cargo);
+				IDischargeOption dischargeOption = LightWeightOptimiserHelper.getDischargeOption(cargo);
+				IPortSlot vesselEvent = LightWeightOptimiserHelper.getVesselEvent(cargo);
+				if (vesselEvent != null) {
+					modifiableSequence.insert(insertIndex++, portSlotProvider.getElement(vesselEvent));
+					unusedElements.remove(portSlotProvider.getElement(vesselEvent));
+				} else if (dischargeOption == null) { // skip if unallocated
 					continue;
-				if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
+				} else if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
 					// FOB-DES
 					modifiableSequence.insert(insertIndex++, portSlotProvider.getElement(loadOption));
 					modifiableSequence.insert(insertIndex++, portSlotProvider.getElement(dischargeOption));
