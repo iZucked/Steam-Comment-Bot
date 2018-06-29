@@ -494,6 +494,15 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getFleetProfile_VesselEvents() {
+		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getContractProfile() {
 		return contractProfileEClass;
@@ -1348,6 +1357,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEReference(fleetProfileEClass, FLEET_PROFILE__VESSEL_AVAILABILITIES);
 		createEAttribute(fleetProfileEClass, FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS);
 		createEReference(fleetProfileEClass, FLEET_PROFILE__CONSTRAINTS);
+		createEReference(fleetProfileEClass, FLEET_PROFILE__VESSEL_EVENTS);
 
 		contractProfileEClass = createEClass(CONTRACT_PROFILE);
 		createEReference(contractProfileEClass, CONTRACT_PROFILE__CONTRACT);
@@ -1549,6 +1559,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEReference(getFleetProfile_VesselAvailabilities(), theCargoPackage.getVesselAvailability(), null, "vesselAvailabilities", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFleetProfile_IncludeEnabledCharterMarkets(), ecorePackage.getEBoolean(), "includeEnabledCharterMarkets", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFleetProfile_Constraints(), this.getFleetConstraint(), null, "constraints", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFleetProfile_VesselEvents(), theCargoPackage.getVesselEvent(), null, "vesselEvents", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(contractProfileEClass, ContractProfile.class, "ContractProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContractProfile_Contract(), theCommercialPackage.getContract(), null, "contract", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

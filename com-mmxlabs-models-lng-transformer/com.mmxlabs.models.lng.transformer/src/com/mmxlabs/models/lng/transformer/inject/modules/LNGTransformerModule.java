@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -439,6 +440,12 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Named(LNGScenarioTransformer.EXTRA_VESSEL_AVAILABILITIES)
 	private List<VesselAvailability> provideExtraAvailabilities() {
+		return Collections.emptyList();
+	}
+	
+	@Provides
+	@Named(LNGScenarioTransformer.EXTRA_VESSEL_EVENTS)
+	private List<VesselEvent> provideExtraVesselEvents() {
 		return Collections.emptyList();
 	}
 

@@ -70,6 +70,7 @@ public class FleetProfileComponentHelper extends BaseComponentHelper {
 		add_vesselAvailabilitiesEditor(detailComposite, topClass);
 		add_includeEnabledCharterMarketsEditor(detailComposite, topClass);
 		add_constraintsEditor(detailComposite, topClass);
+		add_vesselEventsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vesselAvailabilities feature on FleetProfile
@@ -96,5 +97,14 @@ public class FleetProfileComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_constraintsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__CONSTRAINTS));
+	}
+
+	/**
+	 * Create the editor for the vesselEvents feature on FleetProfile
+	 *
+	 * @generated
+	 */
+	protected void add_vesselEventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS));
 	}
 }

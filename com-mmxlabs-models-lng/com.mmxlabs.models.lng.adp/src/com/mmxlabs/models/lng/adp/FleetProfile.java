@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.adp;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -20,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.FleetProfile#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.FleetProfile#isIncludeEnabledCharterMarkets <em>Include Enabled Charter Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.FleetProfile#getConstraints <em>Constraints</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.FleetProfile#getVesselEvents <em>Vessel Events</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getFleetProfile()
@@ -84,5 +86,21 @@ public interface FleetProfile extends EObject {
 	 * @generated
 	 */
 	EList<FleetConstraint> getConstraints();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselEvent}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Events</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Events</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getFleetProfile_VesselEvents()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<VesselEvent> getVesselEvents();
 
 } // FleetProfile

@@ -33,7 +33,6 @@ import javax.inject.Named;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -230,6 +229,7 @@ public class LNGScenarioTransformer {
 	public static final String EXTRA_CHARTER_IN_MARKETS = "extra_charter_in_markets";
 	public static final String EXTRA_SPOT_CARGO_MARKETS = "extra_spot_cargo_markets";
 	public static final String EXTRA_VESSEL_AVAILABILITIES = "extra_vessel_availabilities";
+	public static final String EXTRA_VESSEL_EVENTS = "extra_vessel_events";
 	public static final String EXTRA_LOAD_SLOTS = "extra_load_slots";
 	public static final String EXTRA_DISCHARGE_SLOTS = "extra_discharge_slots";
 
@@ -238,6 +238,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(EXTRA_VESSEL_AVAILABILITIES)
 	private List<VesselAvailability> extraVesselAvailabilities;
+
+	@Inject
+	@Named(EXTRA_VESSEL_EVENTS)
+	private List<VesselEvent> extraVesselEvents;
 
 	@Inject
 	@Named(EXTRA_CHARTER_IN_MARKETS)
@@ -1110,10 +1114,16 @@ public class LNGScenarioTransformer {
 
 		final CargoModel cargoModel = rootObject.getCargoModel();
 
-		for (final VesselEvent event : cargoModel.getVesselEvents()) {
+		List<VesselEvent> vesselEvents = new LinkedList<>();
+		vesselEvents.addAll(cargoModel.getVesselEvents());
+		if (extraVesselEvents != null) {
+			vesselEvents.addAll(extraVesselEvents);
+		}
+
+		for (final VesselEvent event : vesselEvents) {
 
 			if (event.getStartAfterAsDateTime().isAfter(latestDate)) {
-				continue;
+//				continue;
 			}
 
 			final ITimeWindow window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(event.getStartAfterAsDateTime()), dateHelper.convertTime(event.getStartByAsDateTime()), false);
@@ -1836,7 +1846,7 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				
+
 				final String splitMonthToken = "splitmonth(";
 				boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
 
@@ -2012,8 +2022,8 @@ public class LNGScenarioTransformer {
 
 	}
 
-	private void buildSpotCargoMarkets(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
-			Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
+	private void buildSpotCargoMarkets(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, Association<Vessel, IVessel> vesselAssociation,
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
 
 		// Not needed for a shipping only optimisation
 		if (shippingOnly) {
@@ -2483,9 +2493,8 @@ public class LNGScenarioTransformer {
 								marketGroupSlots.add(desSalesSlot);
 
 								registerSpotMarketSlot(modelEntityMap, desSlot, desSalesSlot);
-								
-								applySlotVesselRestrictions(desSlot.getAllowedVessels(), desSalesSlot, vesselAssociation);
 
+								applySlotVesselRestrictions(desSlot.getAllowedVessels(), desSalesSlot, vesselAssociation);
 
 							}
 						}

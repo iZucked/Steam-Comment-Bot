@@ -107,6 +107,7 @@ public class FleetProfileItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.FLEET_PROFILE__VESSEL_AVAILABILITIES);
 			childrenFeatures.add(ADPPackage.Literals.FLEET_PROFILE__CONSTRAINTS);
+			childrenFeatures.add(ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS);
 		}
 		return childrenFeatures;
 	}
@@ -165,6 +166,7 @@ public class FleetProfileItemProvider
 				return;
 			case ADPPackage.FLEET_PROFILE__VESSEL_AVAILABILITIES:
 			case ADPPackage.FLEET_PROFILE__CONSTRAINTS:
+			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -191,6 +193,21 @@ public class FleetProfileItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.FLEET_PROFILE__CONSTRAINTS,
 				 ADPFactory.eINSTANCE.createTargetCargoesOnVesselConstraint()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createMaintenanceEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createDryDockEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createCharterOutEvent()));
 	}
 
 	/**
