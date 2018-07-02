@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
  */
 public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	private int availableTime;
+	private int extraIdleTime;
 	private int distance;
 	private long routeCost;
 	private IVessel vessel;
@@ -84,6 +85,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		this.fromPortSlot = options.getFromPortSlot();
 		this.toPortSlot = options.getToPortSlot();
 		setAvailableTime(options.getAvailableTime());
+		setExtraIdleTime(options.getExtraIdleTime());
 		setVessel(options.getVessel());
 		setNBOSpeed(options.getNBOSpeed());
 		setTravelFuelChoice(options.getTravelFuelChoice());
@@ -99,6 +101,10 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 
 	public final int getAvailableTime() {
 		return availableTime;
+	}
+
+	public int getExtraIdleTime() {
+		return extraIdleTime;
 	}
 
 	public final int getDistance() {
@@ -138,7 +144,13 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	}
 
 	public final void setAvailableTime(final int availableTime) {
+		assert availableTime != Integer.MAX_VALUE;
+		assert availableTime >= 0;
 		this.availableTime = availableTime;
+	}
+
+	public final void setExtraIdleTime(int extraIdleTime) {
+		this.extraIdleTime = extraIdleTime;
 	}
 
 	public final void setVessel(final IVessel vessel) {
@@ -205,6 +217,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 				&& Objects.equal(travelFuelChoice, vo.travelFuelChoice)
 				&& Objects.equal(idleFuelChoice, vo.idleFuelChoice)
 				&& Objects.equal(availableTime, vo.availableTime)
+				&& Objects.equal(extraIdleTime, vo.extraIdleTime)
 				&& Objects.equal(distance, vo.distance)
 				&& Objects.equal(routeCost, vo.routeCost)
 				&& Objects.equal(nboSpeed, vo.nboSpeed)
@@ -233,6 +246,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		// @formatter:off
 		return MoreObjects.toStringHelper(VoyageOptions.class)
 				.add("availableTime", availableTime)
+				.add("extraIdleTime", extraIdleTime)
 				.add("charterOutIdleTime", charterOutIdleTime)
 				.add("charterOutDailyRate", charterOutDailyRate)
 				.add("distance", distance)

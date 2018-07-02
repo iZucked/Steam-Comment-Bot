@@ -456,7 +456,7 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (otherNames: ");
 		result.append(otherNames);
 		result.append(", mmxId: ");

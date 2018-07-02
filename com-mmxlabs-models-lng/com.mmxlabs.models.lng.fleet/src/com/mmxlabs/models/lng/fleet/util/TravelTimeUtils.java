@@ -17,9 +17,13 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 
-public class TravelTimeUtils {
+public final class TravelTimeUtils {
 
-	public static int getMinTimeFromAllowedRoutes(final Port fromPort, final Port toPort, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes, ModelDistanceProvider modelDistanceProvider) {
+	private TravelTimeUtils() {
+	}
+
+	public static int getMinTimeFromAllowedRoutes(final Port fromPort, final Port toPort, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
+			ModelDistanceProvider modelDistanceProvider) {
 		int minDuration = Integer.MAX_VALUE;
 		if (fromPort != null && toPort != null) {
 			for (final Route route : allowedRoutes) {
@@ -38,6 +42,7 @@ public class TravelTimeUtils {
 		for (final Route route : portModel.getRoutes()) {
 			if (route.getRouteOption() == routeOption) {
 				final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
+				final int extraIdleTime = getContingencyIdleTimeInHours(route, fromPort, toPort, modelDistanceProvider);
 
 				int extraTime = 0;
 				if (vessel != null) {
@@ -52,16 +57,18 @@ public class TravelTimeUtils {
 				}
 
 				final double travelTime = distance / referenceSpeed;
-				final int totalTime = (int) (Math.floor(travelTime) + extraTime);
+				final int totalTime = (int) (Math.floor(travelTime) + extraTime + extraIdleTime);
 				return totalTime;
 			}
 		}
 		return Integer.MAX_VALUE;
 	}
 
-	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull Route route, final @NonNull Port fromPort, final @NonNull Port toPort, ModelDistanceProvider modelDistanceProvider) {
+	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull Route route, final @NonNull Port fromPort, final @NonNull Port toPort,
+			ModelDistanceProvider modelDistanceProvider) {
 
 		final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
+		final int extraIdleTime = getContingencyIdleTimeInHours(route, fromPort, toPort, modelDistanceProvider);
 
 		int extraTime = 0;
 		if (vessel != null) {
@@ -76,13 +83,19 @@ public class TravelTimeUtils {
 		}
 
 		final double travelTime = distance / referenceSpeed;
-		final int totalTime = (int) (Math.floor(travelTime) + extraTime);
+		final int totalTime = (int) (Math.floor(travelTime) + extraTime) + extraIdleTime;
+
 		return totalTime;
 	}
 
 	public static int getDistance(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
 
 		return modelDistanceProvider.getDistance(from, to, route.getRouteOption());
+	}
+
+	public static int getContingencyIdleTimeInHours(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
+
+		return 4;// modelDistanceProvider.getDistance(from, to, route.getRouteOption());
 	}
 
 	public static String formatHours(final long hours) {

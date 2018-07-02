@@ -247,6 +247,8 @@ public class ProfitAndLossCalculator {
 			portTimesRecord.setSlotTime(dischargeOption, time);
 			portTimesRecord.setSlotDuration(loadOption, 0);
 			portTimesRecord.setSlotDuration(dischargeOption, 0);
+			portTimesRecord.setSlotExtraIdleTime(loadOption, 0);
+			portTimesRecord.setSlotExtraIdleTime(dischargeOption, 0);
 
 			// Create voyage plan
 			final VoyagePlan voyagePlan = new VoyagePlan();

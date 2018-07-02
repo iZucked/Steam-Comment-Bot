@@ -517,13 +517,22 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL__DISTANCE_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Contingency Matrix</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__CONTINGENCY_MATRIX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.
@@ -764,6 +773,89 @@ public interface PortPackage extends EPackage {
 	int ENTRY_POINT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.ContingencyMatrixImpl <em>Contingency Matrix</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.impl.ContingencyMatrixImpl
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getContingencyMatrix()
+	 * @generated
+	 */
+	int CONTINGENCY_MATRIX = 9;
+
+	/**
+	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX__ENTRIES = 0;
+
+	/**
+	 * The feature id for the '<em><b>Default Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX__DEFAULT_DURATION = 1;
+
+	/**
+	 * The number of structural features of the '<em>Contingency Matrix</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.ContingencyMatrixEntryImpl <em>Contingency Matrix Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.impl.ContingencyMatrixEntryImpl
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getContingencyMatrixEntry()
+	 * @generated
+	 */
+	int CONTINGENCY_MATRIX_ENTRY = 10;
+
+	/**
+	 * The feature id for the '<em><b>From Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX_ENTRY__FROM_PORT = 0;
+
+	/**
+	 * The feature id for the '<em><b>To Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX_ENTRY__TO_PORT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX_ENTRY__DURATION = 2;
+
+	/**
+	 * The number of structural features of the '<em>Contingency Matrix Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTINGENCY_MATRIX_ENTRY_FEATURE_COUNT = 3;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -771,7 +863,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
 	 * @generated
 	 */
-	int ROUTE_OPTION = 9;
+	int ROUTE_OPTION = 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.CanalEntry <em>Canal Entry</em>}' enum.
@@ -781,7 +873,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getCanalEntry()
 	 * @generated
 	 */
-	int CANAL_ENTRY = 10;
+	int CANAL_ENTRY = 12;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
@@ -1153,6 +1245,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getPortModel_DistanceDataVersion();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.PortModel#getContingencyMatrix <em>Contingency Matrix</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Contingency Matrix</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getContingencyMatrix()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_ContingencyMatrix();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.CapabilityGroup <em>Capability Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1268,6 +1371,81 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getEntryPoint_Port();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.ContingencyMatrix <em>Contingency Matrix</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Contingency Matrix</em>'.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrix
+	 * @generated
+	 */
+	EClass getContingencyMatrix();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.port.ContingencyMatrix#getEntries <em>Entries</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entries</em>'.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrix#getEntries()
+	 * @see #getContingencyMatrix()
+	 * @generated
+	 */
+	EReference getContingencyMatrix_Entries();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.ContingencyMatrix#getDefaultDuration <em>Default Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Duration</em>'.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrix#getDefaultDuration()
+	 * @see #getContingencyMatrix()
+	 * @generated
+	 */
+	EAttribute getContingencyMatrix_DefaultDuration();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.ContingencyMatrixEntry <em>Contingency Matrix Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Contingency Matrix Entry</em>'.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrixEntry
+	 * @generated
+	 */
+	EClass getContingencyMatrixEntry();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.port.ContingencyMatrixEntry#getFromPort <em>From Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>From Port</em>'.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrixEntry#getFromPort()
+	 * @see #getContingencyMatrixEntry()
+	 * @generated
+	 */
+	EReference getContingencyMatrixEntry_FromPort();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.port.ContingencyMatrixEntry#getToPort <em>To Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>To Port</em>'.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrixEntry#getToPort()
+	 * @see #getContingencyMatrixEntry()
+	 * @generated
+	 */
+	EReference getContingencyMatrixEntry_ToPort();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.ContingencyMatrixEntry#getDuration <em>Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Duration</em>'.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrixEntry#getDuration()
+	 * @see #getContingencyMatrixEntry()
+	 * @generated
+	 */
+	EAttribute getContingencyMatrixEntry_Duration();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}'.
@@ -1594,6 +1772,14 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT_MODEL__DISTANCE_DATA_VERSION = eINSTANCE.getPortModel_DistanceDataVersion();
 
 		/**
+		 * The meta object literal for the '<em><b>Contingency Matrix</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__CONTINGENCY_MATRIX = eINSTANCE.getPortModel_ContingencyMatrix();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1688,6 +1874,66 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ENTRY_POINT__PORT = eINSTANCE.getEntryPoint_Port();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.ContingencyMatrixImpl <em>Contingency Matrix</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.impl.ContingencyMatrixImpl
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getContingencyMatrix()
+		 * @generated
+		 */
+		EClass CONTINGENCY_MATRIX = eINSTANCE.getContingencyMatrix();
+
+		/**
+		 * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTINGENCY_MATRIX__ENTRIES = eINSTANCE.getContingencyMatrix_Entries();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTINGENCY_MATRIX__DEFAULT_DURATION = eINSTANCE.getContingencyMatrix_DefaultDuration();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.ContingencyMatrixEntryImpl <em>Contingency Matrix Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.impl.ContingencyMatrixEntryImpl
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getContingencyMatrixEntry()
+		 * @generated
+		 */
+		EClass CONTINGENCY_MATRIX_ENTRY = eINSTANCE.getContingencyMatrixEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>From Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTINGENCY_MATRIX_ENTRY__FROM_PORT = eINSTANCE.getContingencyMatrixEntry_FromPort();
+
+		/**
+		 * The meta object literal for the '<em><b>To Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTINGENCY_MATRIX_ENTRY__TO_PORT = eINSTANCE.getContingencyMatrixEntry_ToPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTINGENCY_MATRIX_ENTRY__DURATION = eINSTANCE.getContingencyMatrixEntry_Duration();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.

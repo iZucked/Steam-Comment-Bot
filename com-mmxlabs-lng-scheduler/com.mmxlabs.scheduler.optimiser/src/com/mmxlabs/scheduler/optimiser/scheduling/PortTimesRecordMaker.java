@@ -93,6 +93,7 @@ public class PortTimesRecordMaker {
 
 			// Set duration to get correct slot order in port times
 			portTimesRecord.setSlotDuration(thisPortSlot, 0);
+			portTimesRecord.setSlotExtraIdleTime(thisPortSlot, 0);
 
 			// Determine transfer time
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
@@ -173,7 +174,6 @@ public class PortTimesRecordMaker {
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
-		boolean updateEndEvent = false;
 
 		final List<@NonNull IPortTimesRecord> portTimesRecords = new LinkedList<>();
 
@@ -287,17 +287,21 @@ public class PortTimesRecordMaker {
 				portTimesRecord.setRouteOptionBooking(slot, record.getRouteOptionBooking(slot));
 				portTimesRecord.setSlotNextVoyageOptions(slot, record.getSlotNextVoyageOptions(slot), record.getSlotNextVoyagePanamaPeriod(slot));
 
-				final ITimeWindow window = record.getSlotFeasibleTimeWindow(slot);
 				final int visitDuration = record.getSlotDuration(slot);
+				final int extraIdleTime = record.getSlotExtraIdleTime(slot);
+				
+				if (extraIdleTime > 0) {
+					int ii = 0 ;
+				}
+				
 				// Pick based on earliest time
-				// TODO: Extract into injectable component
 				final int arrivalTime = timeScheduler.scheduleSlot(resource, slot, record, portTimesRecord, lastNextExpectedArrivalTime);
 
-				assert actualsDataProvider.hasActuals(slot) == false || actualsDataProvider.getArrivalTime(slot) == arrivalTime;
+				assert !actualsDataProvider.hasActuals(slot) || actualsDataProvider.getArrivalTime(slot) == arrivalTime;
 
 				portTimesRecord.setSlotTime(slot, arrivalTime);
-
 				portTimesRecord.setSlotDuration(slot, visitDuration);
+				portTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
 				// What is the next travel time?
 				lastNextExpectedArrivalTime = arrivalTime + /* visitDuration already included in min travel time + */travelTimeData.getMinTravelTime(record.getIndex(slot));
 
@@ -327,7 +331,7 @@ public class PortTimesRecordMaker {
 							vesselAvailability.getVessel().getMaxSpeed(), //
 							record.getSlotNextVoyageOptions(prevPortSlot) //
 					).getSecond();
-					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
+					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime + record.getSlotExtraIdleTime(prevPortSlot);
 
 					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);
 
@@ -373,12 +377,10 @@ public class PortTimesRecordMaker {
 					// FIXME: There is a conflict with this code and the min/max duration code (which assumes end event duration is 0).
 					// Delegate to the end event schedule to determine correct end time.
 					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTime, returnSlot));
-					updateEndEvent = true;
 
 					// We need to update the start time after the end event is scheduled, to make the min/max duration adjustments
 					recordUpdate.run();
 				} else {
-					// portTimesRecord.setReturnSlotTime(thisPortSlot, list[idx]);
 					recordToUpdateReturnTime = portTimesRecord;
 				}
 			}

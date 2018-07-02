@@ -26,6 +26,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	private static class SlotWindowRecord {
 		public ITimeWindow feasibleWindow = null;
 		public int duration;
+		public int extraIdleTime;
 		public int index;
 		private IRouteOptionBooking routeOptionBooking = null;
 		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
@@ -41,6 +42,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 			if (obj instanceof SlotWindowRecord) {
 				final SlotWindowRecord other = (SlotWindowRecord) obj;
 				return duration == other.duration //
+						&& extraIdleTime == other.extraIdleTime //
 						&& index == other.index //
 						&& nextVoyageRoute == other.nextVoyageRoute //
 						&& routeOptionBooking == other.routeOptionBooking //
@@ -69,10 +71,6 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	private ITimeWindow firstSlotFeasibleTimeWindow = null;
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnSlot;
-
-	public PortTimeWindowsRecord() {
-
-	}
 
 	@Override
 	public String toString() {
@@ -162,6 +160,20 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	@Override
 	public void setSlotDuration(final IPortSlot slot, final int duration) {
 		getOrCreateSlotRecord(slot).duration = duration;
+	}
+
+	@Override
+	public int getSlotExtraIdleTime(final IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.extraIdleTime;
+		}
+		return 0;
+	}
+
+	@Override
+	public void setSlotExtraIdleTime(final IPortSlot slot, final int extraIdleTime) {
+		getOrCreateSlotRecord(slot).extraIdleTime = extraIdleTime;
 	}
 
 	@Override

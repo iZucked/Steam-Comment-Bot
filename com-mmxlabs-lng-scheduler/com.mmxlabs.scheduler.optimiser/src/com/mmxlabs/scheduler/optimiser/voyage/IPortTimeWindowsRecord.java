@@ -39,6 +39,10 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 
 	void setSlotDuration(@NonNull IPortSlot slot, int duration);
 
+	int getSlotExtraIdleTime(@NonNull IPortSlot slot);
+
+	void setSlotExtraIdleTime(@NonNull IPortSlot slot, int extraIdleTime);
+
 	/**
 	 * Should be expected to do equivalent of "ptr.getSlotTime(ptr.getFirstSlot())"
 	 * 

@@ -7,10 +7,14 @@ package com.mmxlabs.models.lng.port.util;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.port.ContingencyMatrix;
+import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -54,7 +58,7 @@ public class PortModelBuilder {
 
 	@NonNull
 	public Port createPort(@NonNull final String name, @NonNull final String mmxId, @NonNull final String timezoneId, final int defaultWindowStartHourOfDay, final int defaultWindowSize) {
-		Location location = PortFactory.eINSTANCE.createLocation();
+		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setName(name);
 		location.setMmxId(mmxId);
 		location.setTimeZone(timezoneId);
@@ -138,5 +142,55 @@ public class PortModelBuilder {
 		portGroup.getContents().addAll(ports);
 		portModel.getPortGroups().add(portGroup);
 		return portGroup;
+	}
+
+	public ContingencyMatrixEntry setContingencyDelay(final Port from, final Port to, final int duration) {
+		ContingencyMatrix matrix = portModel.getContingencyMatrix();
+		if (matrix == null) {
+			matrix = PortFactory.eINSTANCE.createContingencyMatrix();
+			portModel.setContingencyMatrix(matrix);
+		}
+
+		for (final ContingencyMatrixEntry e : matrix.getEntries()) {
+			if (Objects.equals(e.getFromPort(), from) && Objects.equals(e.getToPort(), to)) {
+				e.setDuration(duration);
+				return e;
+			}
+		}
+
+		final ContingencyMatrixEntry e = PortFactory.eINSTANCE.createContingencyMatrixEntry();
+		e.setFromPort(from);
+		e.setToPort(to);
+		e.setDuration(duration);
+
+		matrix.getEntries().add(e);
+
+		return e;
+
+	}
+
+	public void setContingencyDelayForAllVoyages(final int duration) {
+
+		ContingencyMatrix matrix = portModel.getContingencyMatrix();
+		if (matrix == null) {
+			matrix = PortFactory.eINSTANCE.createContingencyMatrix();
+			portModel.setContingencyMatrix(matrix);
+		} else {
+			matrix.getEntries().clear();
+		}
+
+		final EList<Port> ports = portModel.getPorts();
+		for (final Port from : ports) {
+			for (final Port to : ports) {
+				if (from != to) {
+					final ContingencyMatrixEntry e = PortFactory.eINSTANCE.createContingencyMatrixEntry();
+					e.setFromPort(from);
+					e.setToPort(to);
+					e.setDuration(duration);
+
+					matrix.getEntries().add(e);
+				}
+			}
+		}
 	}
 }

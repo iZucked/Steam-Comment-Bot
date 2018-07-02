@@ -187,7 +187,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			TradesBasedColumnFactory.LOAD_END_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_START_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_PORT_GROUP, //
-			TradesBasedColumnFactory.DISCHARGE_DIVERSION_GROUP, //			
+			TradesBasedColumnFactory.DISCHARGE_DIVERSION_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_PRICING_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_PRICING_EXTRA_GROUP, //
 			TradesBasedColumnFactory.DISCHARGE_VOLUME_GROUP, //
@@ -962,7 +962,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection originalSelection = (IStructuredSelection) selection;
 
-					final List<Object> selectedObjects = new LinkedList<Object>();
+					final List<Object> selectedObjects = new LinkedList<>();
 
 					final Iterator<?> itr = originalSelection.iterator();
 					while (itr.hasNext()) {
@@ -1173,7 +1173,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				if (selection.size() <= 1) {
 					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
 				} else {
-					final Set<Cargo> cargoes = new HashSet<Cargo>();
+					final Set<Cargo> cargoes = new HashSet<>();
 					for (final Object item : selection.toList()) {
 						final Cargo cargo = ((Row) item).getCargo();
 						if (cargo != null) {
@@ -1358,7 +1358,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			{
 				final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
 				// Translate into real objects, not just row object!
-				final List<Object> selectedObjects = new LinkedList<Object>();
+				final List<Object> selectedObjects = new LinkedList<>();
 				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 
@@ -1402,7 +1402,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final Action newLoad = new Action("Cargo") {
 					public void run() {
 
-						final List<Command> setCommands = new LinkedList<Command>();
+						final List<Command> setCommands = new LinkedList<>();
 
 						final Cargo newCargo = cec.createNewCargo(setCommands, cargoModel);
 
@@ -1430,7 +1430,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final Action newLoad = new Action("FOB Purchase") {
 					public void run() {
 
-						final List<Command> setCommands = new LinkedList<Command>();
+						final List<Command> setCommands = new LinkedList<>();
 
 						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, false);
 						initialiseSlot(newLoad, true, referenceRowData);
@@ -1448,7 +1448,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final Action newDESPurchase = new Action("DES Purchase") {
 					public void run() {
 
-						final List<Command> setCommands = new LinkedList<Command>();
+						final List<Command> setCommands = new LinkedList<>();
 
 						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, true);
 						initialiseSlot(newLoad, true, referenceRowData);
@@ -1465,7 +1465,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final Action newDischarge = new Action("DES Sale") {
 					public void run() {
 
-						final List<Command> setCommands = new LinkedList<Command>();
+						final List<Command> setCommands = new LinkedList<>();
 
 						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, false);
 						initialiseSlot(newDischarge, false, referenceRowData);
@@ -1484,7 +1484,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				final Action newFOBSale = new Action("FOB Sale") {
 					public void run() {
 
-						final List<Command> setCommands = new LinkedList<Command>();
+						final List<Command> setCommands = new LinkedList<>();
 
 						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, true);
 						initialiseSlot(newDischarge, false, referenceRowData);

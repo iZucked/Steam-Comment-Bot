@@ -15,6 +15,7 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
@@ -85,6 +86,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 						transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 						transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
 						transformerExtensionFactories.add(new PanamaSlotsTransformerFactory());
+						transformerExtensionFactories.add(new ContingencyIdleTimeTransformerFactory());
 						bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 						final List<@NonNull IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<>();

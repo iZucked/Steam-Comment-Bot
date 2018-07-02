@@ -8,7 +8,7 @@ import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 
 /**
- */
+ */ 
 public class RestrictedElementsTransformerFactory implements ITransformerExtensionFactory {
 
 	@Override

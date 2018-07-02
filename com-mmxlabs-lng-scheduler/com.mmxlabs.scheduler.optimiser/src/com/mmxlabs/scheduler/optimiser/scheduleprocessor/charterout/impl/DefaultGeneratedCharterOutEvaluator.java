@@ -488,11 +488,13 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		for (int i = 0; i < existing.getSlots().size(); i++) {
 			newPortsTimeRecord.setSlotTime(existing.getSlots().get(i), existing.getSlotTime(existing.getSlots().get(i)));
 			newPortsTimeRecord.setSlotDuration(existing.getSlots().get(i), existing.getSlotDuration(existing.getSlots().get(i)));
+			newPortsTimeRecord.setSlotExtraIdleTime(existing.getSlots().get(i), existing.getSlotExtraIdleTime(existing.getSlots().get(i)));
 		}
 		// new
 		for (final Triple<IPortSlot, Integer, Integer> slotToAdd : slotsToAdd) {
 			newPortsTimeRecord.setSlotTime(slotToAdd.getFirst(), slotToAdd.getSecond());
 			newPortsTimeRecord.setSlotDuration(slotToAdd.getFirst(), slotToAdd.getThird());
+			newPortsTimeRecord.setSlotExtraIdleTime(slotToAdd.getFirst(), 0);
 		}
 		// existing return
 		final IPortSlot returnSlot = existing.getReturnSlot();

@@ -586,7 +586,7 @@ public class PriceIntervalProviderHelperTest {
 			}
 		});
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
-		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(OptimiserUnitConvertor.convertToInternalDailyRate(220));		
+		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(OptimiserUnitConvertor.convertToInternalDailyRate(220));
 		when(vesselBaseFuelCalculator.getBaseFuelPrices(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(baseFuels);
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
@@ -688,7 +688,7 @@ public class PriceIntervalProviderHelperTest {
 		});
 
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
-		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(0);		
+		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(0);
 		when(vesselBaseFuelCalculator.getBaseFuelPrices(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(baseFuels);
 
 		final Injector injector = Guice.createInjector(new AbstractModule() {

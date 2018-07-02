@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.ContingencyMatrix;
+import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
@@ -104,6 +106,20 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass contingencyMatrixEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass contingencyMatrixEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum routeOptionEEnum = null;
 
 	/**
@@ -141,7 +157,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 *
+	 * 
 	 * <p>This method is used to initialize {@link PortPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -155,8 +171,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		if (isInited) return (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 
 		// Obtain or create and register package
-		Object registeredPortPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		PortPackageImpl thePortPackage = registeredPortPackage instanceof PortPackageImpl ? (PortPackageImpl)registeredPortPackage : new PortPackageImpl();
+		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new PortPackageImpl());
 
 		isInited = true;
 
@@ -174,6 +189,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Mark meta-data to indicate it can't be changed
 		thePortPackage.freeze();
 
+  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(PortPackage.eNS_URI, thePortPackage);
 		return thePortPackage;
@@ -490,6 +506,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getPortModel_ContingencyMatrix() {
+		return (EReference)portModelEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCapabilityGroup() {
 		return capabilityGroupEClass;
 	}
@@ -589,6 +614,69 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getContingencyMatrix() {
+		return contingencyMatrixEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getContingencyMatrix_Entries() {
+		return (EReference)contingencyMatrixEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getContingencyMatrix_DefaultDuration() {
+		return (EAttribute)contingencyMatrixEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getContingencyMatrixEntry() {
+		return contingencyMatrixEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getContingencyMatrixEntry_FromPort() {
+		return (EReference)contingencyMatrixEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getContingencyMatrixEntry_ToPort() {
+		return (EReference)contingencyMatrixEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getContingencyMatrixEntry_Duration() {
+		return (EAttribute)contingencyMatrixEntryEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getRouteOption() {
 		return routeOptionEEnum;
 	}
@@ -668,6 +756,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(portModelEClass, PORT_MODEL__PORT_COUNTRY_GROUPS);
 		createEAttribute(portModelEClass, PORT_MODEL__PORT_DATA_VERSION);
 		createEAttribute(portModelEClass, PORT_MODEL__DISTANCE_DATA_VERSION);
+		createEReference(portModelEClass, PORT_MODEL__CONTINGENCY_MATRIX);
 
 		capabilityGroupEClass = createEClass(CAPABILITY_GROUP);
 		createEAttribute(capabilityGroupEClass, CAPABILITY_GROUP__CAPABILITY);
@@ -683,6 +772,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		entryPointEClass = createEClass(ENTRY_POINT);
 		createEReference(entryPointEClass, ENTRY_POINT__PORT);
+
+		contingencyMatrixEClass = createEClass(CONTINGENCY_MATRIX);
+		createEReference(contingencyMatrixEClass, CONTINGENCY_MATRIX__ENTRIES);
+		createEAttribute(contingencyMatrixEClass, CONTINGENCY_MATRIX__DEFAULT_DURATION);
+
+		contingencyMatrixEntryEClass = createEClass(CONTINGENCY_MATRIX_ENTRY);
+		createEReference(contingencyMatrixEntryEClass, CONTINGENCY_MATRIX_ENTRY__FROM_PORT);
+		createEReference(contingencyMatrixEntryEClass, CONTINGENCY_MATRIX_ENTRY__TO_PORT);
+		createEAttribute(contingencyMatrixEntryEClass, CONTINGENCY_MATRIX_ENTRY__DURATION);
 
 		// Create enums
 		routeOptionEEnum = createEEnum(ROUTE_OPTION);
@@ -794,6 +892,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getPortModel_PortCountryGroups(), this.getPortCountryGroup(), null, "portCountryGroups", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortModel_PortDataVersion(), ecorePackage.getEString(), "portDataVersion", null, 0, 1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortModel_DistanceDataVersion(), ecorePackage.getEString(), "distanceDataVersion", null, 0, 1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortModel_ContingencyMatrix(), this.getContingencyMatrix(), null, "contingencyMatrix", null, 0, 1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(capabilityGroupEClass, CapabilityGroup.class, "CapabilityGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCapabilityGroup_Capability(), theTypesPackage.getPortCapability(), "capability", null, 1, 1, CapabilityGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -813,6 +912,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		initEClass(entryPointEClass, EntryPoint.class, "EntryPoint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEntryPoint_Port(), this.getPort(), null, "port", null, 0, 1, EntryPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(contingencyMatrixEClass, ContingencyMatrix.class, "ContingencyMatrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getContingencyMatrix_Entries(), this.getContingencyMatrixEntry(), null, "entries", null, 0, -1, ContingencyMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContingencyMatrix_DefaultDuration(), ecorePackage.getEInt(), "defaultDuration", null, 0, 1, ContingencyMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(contingencyMatrixEntryEClass, ContingencyMatrixEntry.class, "ContingencyMatrixEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getContingencyMatrixEntry_FromPort(), this.getPort(), null, "fromPort", null, 0, 1, ContingencyMatrixEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContingencyMatrixEntry_ToPort(), this.getPort(), null, "toPort", null, 0, 1, ContingencyMatrixEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContingencyMatrixEntry_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, ContingencyMatrixEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(routeOptionEEnum, RouteOption.class, "RouteOption");
@@ -843,12 +951,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	protected void createNamedobjectAnnotations() {
-		String source = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";
+		String source = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";	
 		addAnnotation
-		  (locationEClass,
-		   source,
+		  (locationEClass, 
+		   source, 
 		   new String[] {
-			   "showOtherNames", "true"
+			 "showOtherNames", "true"
 		   });
 	}
 
@@ -859,66 +967,80 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
 		addAnnotation
-		  (getPort_LoadDuration(),
-		   source,
+		  (getPort_LoadDuration(), 
+		   source, 
 		   new String[] {
-			   "unit", "hours",
-			   "formatString", "##,##0"
-		   });
+			 "unit", "hours",
+			 "formatString", "##,##0"
+		   });	
 		addAnnotation
-		  (getPort_DischargeDuration(),
-		   source,
+		  (getPort_DischargeDuration(), 
+		   source, 
 		   new String[] {
-			   "unit", "hours",
-			   "formatString", "##,##0"
-		   });
+			 "unit", "hours",
+			 "formatString", "##,##0"
+		   });	
 		addAnnotation
-		  (getPort_CvValue(),
-		   source,
+		  (getPort_CvValue(), 
+		   source, 
 		   new String[] {
-			   "unit", "mmBtu/m\u00b3",
-			   "formatString", "#0.###"
-		   });
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "#0.###"
+		   });	
 		addAnnotation
-		  (getPort_DefaultWindowSize(),
-		   source,
+		  (getPort_DefaultWindowSize(), 
+		   source, 
 		   new String[] {
-			   "formatString", "##,##0"
-		   });
+			 "formatString", "##,##0"
+		   });	
 		addAnnotation
-		  (getPort_DefaultWindowSizeUnits(),
-		   source,
+		  (getPort_DefaultWindowSizeUnits(), 
+		   source, 
 		   new String[] {
-			   "unit", "hours",
-			   "formatString", "##,##0"
-		   });
+			 "unit", "hours",
+			 "formatString", "##,##0"
+		   });	
 		addAnnotation
-		  (getPort_MinCvValue(),
-		   source,
+		  (getPort_MinCvValue(), 
+		   source, 
 		   new String[] {
-			   "formatString", "#0.###"
-		   });
+			 "formatString", "#0.###"
+		   });	
 		addAnnotation
-		  (getPort_MaxCvValue(),
-		   source,
+		  (getPort_MaxCvValue(), 
+		   source, 
 		   new String[] {
-			   "formatString", "#0.###"
-		   });
+			 "formatString", "#0.###"
+		   });	
 		addAnnotation
-		  (getLocation_Lat(),
-		   source,
+		  (getLocation_Lat(), 
+		   source, 
 		   new String[] {
-			   "formatString", "-##0.###",
-			   "exportFormatString", "##0.###"
-		   });
+			 "formatString", "-##0.###",
+			 "exportFormatString", "##0.###"
+		   });	
 		addAnnotation
-		  (getLocation_Lon(),
-		   source,
+		  (getLocation_Lon(), 
+		   source, 
 		   new String[] {
-			   "formatString", "-##0.###",
-			   "exportFormatString", "##0.###"
+			 "formatString", "-##0.###",
+			 "exportFormatString", "##0.###"
+		   });	
+		addAnnotation
+		  (getContingencyMatrix_DefaultDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "#0"
+		   });	
+		addAnnotation
+		  (getContingencyMatrixEntry_Duration(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "#0"
 		   });
 	}
 
@@ -929,24 +1051,24 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	protected void createCsvAnnotations() {
-		String source = "http://www.mmxlabs.com/models/csv";
+		String source = "http://www.mmxlabs.com/models/csv";	
 		addAnnotation
-		  (portGroupEClass,
-		   source,
+		  (portGroupEClass, 
+		   source, 
 		   new String[] {
-			   "namePrefix", "Group"
-		   });
+			 "namePrefix", "Group"
+		   });	
 		addAnnotation
-		  (capabilityGroupEClass,
-		   source,
+		  (capabilityGroupEClass, 
+		   source, 
 		   new String[] {
-			   "namePrefix", "CapGroup"
-		   });
+			 "namePrefix", "CapGroup"
+		   });	
 		addAnnotation
-		  (portCountryGroupEClass,
-		   source,
+		  (portCountryGroupEClass, 
+		   source, 
 		   new String[] {
-			   "namePrefix", "CountryGroup"
+			 "namePrefix", "CountryGroup"
 		   });
 	}
 

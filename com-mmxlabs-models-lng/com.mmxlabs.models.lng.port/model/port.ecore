@@ -108,6 +108,8 @@
         eType="#//PortCountryGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portDataVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distanceDataVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contingencyMatrix" eType="#//ContingencyMatrix"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CapabilityGroup">
     <eAnnotations source="http://www.mmxlabs.com/models/csv">
@@ -162,5 +164,25 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EntryPoint" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//Port"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContingencyMatrix">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//ContingencyMatrixEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="#0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContingencyMatrixEntry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromPort" eType="#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toPort" eType="#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="days"/>
+        <details key="formatString" value="#0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

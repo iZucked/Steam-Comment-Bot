@@ -36,6 +36,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		public int cargoCV;
 		public int startTime;
 		public int duration;
+		public int extraIdleTime;
 		public IRouteOptionBooking routeOptionBooking;
 		public AvailableRouteChoices nextVoyageRouteChoice;
 		public PanamaPeriod panamaPeriod;
@@ -53,6 +54,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 						&& cargoCV == other.cargoCV //
 						&& startTime == other.startTime //
 						&& duration == other.duration //
+						&& extraIdleTime == other.extraIdleTime //
 						&& nextVoyageRouteChoice == other.nextVoyageRouteChoice //
 						&& Objects.equal(routeOptionBooking, other.routeOptionBooking);
 			}
@@ -98,7 +100,6 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 
 			final String action = (slot instanceof IDischargeOption) ? "discharged" : (slot instanceof ILoadOption ? "loaded" : "???");
 			final long volume = getCommercialSlotVolumeInM3(slot);
-			// long volume = (slot instanceof IDischargeOption) ? getDischargeVolumeInM3() : (slot instanceof ILoadOption ? getLoadVolumeInM3() : -1);
 			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.startTime, action, volume));
 		}
 
@@ -150,6 +151,21 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 			firstSlotTime = time;
 			firstPortSlot = slot;
 		}
+	}
+
+	@Override
+	public int getSlotExtraIdleTime(final @NonNull IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+		if (allocation != null) {
+			return allocation.extraIdleTime;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
+	@Override
+	public void setSlotExtraIdleTime(final @NonNull IPortSlot slot, final int extraIdleTime) {
+		assert !locked;
+		getOrCreateSlotAllocation(slot).extraIdleTime = extraIdleTime;
 	}
 
 	public void setReturnSlotTime(final @NonNull IPortSlot slot, final int time) {

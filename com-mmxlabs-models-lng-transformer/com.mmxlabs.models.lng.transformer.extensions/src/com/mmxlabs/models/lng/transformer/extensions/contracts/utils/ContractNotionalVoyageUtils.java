@@ -128,6 +128,9 @@ public class ContractNotionalVoyageUtils {
 
 		portTimesRecord.setSlotDuration(buy, loadDuration);
 		portTimesRecord.setSlotDuration(sell, dischargeDuration);
+		
+		portTimesRecord.setSlotDuration(buy, 0);
+		portTimesRecord.setSlotDuration(sell, 0);
 
 		voyageCalculator.calculateVoyagePlan(newVP, calculationVessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelCostPerMT, portTimesRecord, notionalSequence);
 		newVP.setCharterInRatePerDay(vesselCharterInRatePerDay);

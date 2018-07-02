@@ -159,7 +159,7 @@ public class CapabilityGroupImpl extends APortSetImpl<Port> implements Capabilit
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (capability: ");
 		result.append(capability);
 		result.append(')');

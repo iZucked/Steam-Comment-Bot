@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -26,6 +27,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.lng.port.ContingencyMatrix;
+import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
@@ -58,12 +61,13 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		addNameManipulator("Name");
 
 		addTypicalColumn("Country", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getEditingDomain()), PortPackage.eINSTANCE.getPort_Location());
-//		addTypicalColumn("MMX ID ", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_MmxId(), getEditingDomain()), PortPackage.eINSTANCE.getPort_Location());
+		// addTypicalColumn("MMX ID ", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_MmxId(), getEditingDomain()), PortPackage.eINSTANCE.getPort_Location());
 
 		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getJointModelEditorPart().getEditingDomain()));
 		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE, getJointModelEditorPart().getEditingDomain()));
 		addTypicalColumn("Other Names",
-				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(), getEditingDomain())), PortPackage.eINSTANCE.getPort_Location());
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(), getEditingDomain())),
+				PortPackage.eINSTANCE.getPort_Location());
 
 		// addTypicalColumn("Timezone", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_TimeZone(), getJointModelEditorPart().getEditingDomain()));
 		// addTypicalColumn("Port Code", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_PortCode(), getJointModelEditorPart().getEditingDomain()));
@@ -110,7 +114,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					final Action canalEditor = new AbstractMenuLockableAction(canal.getName()) {
 						@Override
 						protected void populate(final Menu menu2) {
-							final Action editCanal = createMatrixEditor(canal.getName(), canal);
+							final Action editCanal = createMatrixEditor(canal);
 							addActionToMenu(editCanal, menu2);
 							final Action renameCanal = new Action("Rename...") {
 								@Override
@@ -123,17 +127,17 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 									}
 									final InputDialog input = new InputDialog(part.getSite().getShell(), "Rename canal " + canal.getName(), "Enter a new name for the canal " + canal.getName(),
 											canal.getName(), new IInputValidator() {
-										@Override
-										public String isValid(final String newText) {
-											if (newText.trim().isEmpty()) {
-												return "The canal must have a name";
-											}
-											if (existingNames.contains(newText)) {
-												return "Another canal already has the name " + newText;
-											}
-											return null;
-										}
-									});
+												@Override
+												public String isValid(final String newText) {
+													if (newText.trim().isEmpty()) {
+														return "The canal must have a name";
+													}
+													if (existingNames.contains(newText)) {
+														return "Another canal already has the name " + newText;
+													}
+													return null;
+												}
+											});
 									if (input.open() == Window.OK) {
 										final String newName = input.getValue();
 										getJointModelEditorPart().getEditingDomain().getCommandStack()
@@ -142,104 +146,53 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								}
 							};
 							addActionToMenu(renameCanal, menu2);
-							// if (canal.isCanal()) {
-							// final Action deleteCanal = new Action("Delete...") {
-							// @Override
-							// public void run() {
-							// if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
-							// + "\"?")) {
-							// getJointModelEditorPart().getEditingDomain().getCommandStack()
-							// .execute(DeleteCommand.create(getJointModelEditorPart().getEditingDomain(), Collections.singleton(canal)));
-							// }
-							// }
-							// };
-							// addActionToMenu(deleteCanal, menu2);
-							// }
-
 						}
 					};
 					addActionToMenu(canalEditor, menu);
 				}
-
-				// new MenuItem(menu, SWT.SEPARATOR);
-				//
-				// addActionToMenu(new LockableAction("Add new canal...") {
-				// @Override
-				// public void run() {
-				// final HashSet<String> existingNames = new HashSet<String>();
-				// for (final Route c : portModel.getRoutes()) {
-				// existingNames.add(c.getName());
-				// }
-				// final InputDialog input = new InputDialog(part.getSite().getShell(), "Create canal", "Enter a name for the new canal", "", new IInputValidator() {
-				// @Override
-				// public String isValid(final String newText) {
-				// if (newText.trim().isEmpty()) {
-				// return "The canal must have a name";
-				// }
-				// if (existingNames.contains(newText)) {
-				// return "Another canal already has the name " + newText;
-				// }
-				// return null;
-				// }
-				// });
-				// if (input.open() == Window.OK) {
-				// final CompoundCommand cc = new CompoundCommand();
-				// final String newName = input.getValue();
-				// Route dm = PortFactory.eINSTANCE.createRoute();
-				// dm.setName(newName);
-				// dm.setCanal(true);
-				// final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
-				// if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), dm) == Window.OK) {
-				// dm = ded.getResult();
-				// }
-				//
-				// cc.append(AddCommand.create(getJointModelEditorPart().getEditingDomain(), portModel, PortPackage.eINSTANCE.getPortModel_Routes(), dm));
-				// getJointModelEditorPart().getEditingDomain().getCommandStack().execute(cc);
-				//
-				// }
-				// }
-				// }, menu);
-			}
-		}
-
-		protected Action createMatrixEditor(final String name, final Route distanceModel) {
-			return new LockableAction("Edit distances...") {
-				@Override
-				public void run() {
-//					// STick in menu
-//					PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel)getRootObject());
-//					for (Route route : portModel.getRoutes()) {
-//						if (route.isCanal()) {
-//							pane.getToolBarManager().appendToGroup("edit", new RunnableAction("Edit " + route.getName(), () -> {
-								DetailCompositeDialogUtil.editSingleObject(PortEditorPane.this.getJointModelEditorPart(), distanceModel);	
-//							}));
-//						}
-//					}
-//					final Route newModel = edit(distanceModel);
-//					if (newModel == null) {
-//						return;
-//					}
-//
-//					final EditingDomain ed = getJointModelEditorPart().getEditingDomain();
-//					final CompoundCommand cc = new CompoundCommand("Edit distances");
-//					cc.append(DeleteCommand.create(ed, new ArrayList<>(distanceModel.getLines())));
-//					cc.append(AddCommand.create(ed, distanceModel, PortPackage.eINSTANCE.getRoute_Lines(), new ArrayList<>(newModel.getLines())));
-//					getJointModelEditorPart().setDisableUpdates(true);
-//					ed.getCommandStack().execute(cc);
-//					getJointModelEditorPart().setDisableUpdates(false);
-					// display error
+				// if (LicenseFeatures.isPermitted("features:contingency-time"))
+				{
+					addActionToMenu(new ContingencyMatrixEditorAction(portModel), menu);
 
 				}
+			}
+		};
+	}
 
-//				private Route edit(final Route distanceModel) {
-//					final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
-//
-//					if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), distanceModel) == Window.OK) {
-//						return ded.getResult();
-//					}
-//					return null;
-//				}
-			};
+	protected Action createMatrixEditor(final Route distanceModel) {
+		return new LockableAction("Edit distances...") {
+			@Override
+			public void run() {
+				DetailCompositeDialogUtil.editSingleObject(PortEditorPane.this.getJointModelEditorPart(), distanceModel);
+			}
+		};
+	}
+
+	private class ContingencyMatrixEditorAction extends LockableAction {
+		private final PortModel portModel;
+
+		public ContingencyMatrixEditorAction(final PortModel portModel) {
+			super("Edit contingency matrix");
+			this.portModel = portModel;
+			try {
+				setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.port.editor/icons/earth.gif")));
+			} catch (final MalformedURLException e) {
+			}
+			setToolTipText("Edit contingency delay matrix");
+		}
+
+		@Override
+		public void run() {
+
+			if (portModel.getContingencyMatrix() == null) {
+				final CompoundCommand cmd = new CompoundCommand("Create contingency matrix");
+				final ContingencyMatrix matrix = PortFactory.eINSTANCE.createContingencyMatrix();
+				cmd.append(SetCommand.create(getEditingDomain(), portModel, PortPackage.Literals.PORT_MODEL__CONTINGENCY_MATRIX, matrix));
+				DetailCompositeDialogUtil.editNewObjectWithUndoOnCancel(getJointModelEditorPart(), matrix, cmd);
+			} else {
+				DetailCompositeDialogUtil.editSingleObject(PortEditorPane.this.getJointModelEditorPart(), portModel.getContingencyMatrix());
+			}
 		}
 	}
+
 }

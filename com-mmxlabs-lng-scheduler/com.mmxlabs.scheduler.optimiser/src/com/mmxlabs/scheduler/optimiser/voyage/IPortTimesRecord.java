@@ -38,7 +38,11 @@ public interface IPortTimesRecord extends IElementAnnotation {
 
 	int getSlotTime(@NonNull IPortSlot slot);
 
+	int getSlotExtraIdleTime(@NonNull IPortSlot slot);
+
 	void setSlotTime(@NonNull IPortSlot slot, int time);
+
+	void setSlotExtraIdleTime(@NonNull IPortSlot slot, int time);
 
 	int getSlotDuration(@NonNull IPortSlot slot);
 

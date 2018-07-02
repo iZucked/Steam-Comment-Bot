@@ -105,6 +105,24 @@ public interface PortFactory extends EFactory {
 	EntryPoint createEntryPoint();
 
 	/**
+	 * Returns a new object of class '<em>Contingency Matrix</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Contingency Matrix</em>'.
+	 * @generated
+	 */
+	ContingencyMatrix createContingencyMatrix();
+
+	/**
+	 * Returns a new object of class '<em>Contingency Matrix Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Contingency Matrix Entry</em>'.
+	 * @generated
+	 */
+	ContingencyMatrixEntry createContingencyMatrixEntry();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

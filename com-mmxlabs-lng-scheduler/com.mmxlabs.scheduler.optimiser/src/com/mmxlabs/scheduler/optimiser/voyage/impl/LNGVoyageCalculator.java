@@ -93,11 +93,16 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 * How much of the time given to us by the scheduler has to be spent travelling by an alternative route.
 		 */
 		final int additionalRouteTimeInHours = routeCostProvider.getRouteTransitTime(options.getRoute(), vessel);
+		int extraIdleTime = options.getExtraIdleTime();
 
+		if (extraIdleTime > 0) {
+			int ii = 0;
+		}
+		
 		/**
 		 * How much time is available to cover the distance, excluding time which must be spent traversing any canals
 		 */
-		final int availableTimeInHours = options.getAvailableTime() - additionalRouteTimeInHours;
+		final int availableTimeInHours = options.getAvailableTime() - additionalRouteTimeInHours - extraIdleTime;
 
 		// Calculate the appropriate speed
 		final int speed = calculateSpeed(options, availableTimeInHours);
@@ -107,13 +112,15 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// May be longer than available time
 		final int travelTimeInHours = speed == 0 ? 0 : Calculator.getTimeFromSpeedDistance(speed, distance);
 		// If idle time is negative, then there is not enough time for this voyage! This should be caught by the caller
-		final int idleTimeInHours = Math.max(0, availableTimeInHours - travelTimeInHours);
+		final int idleTimeInHours = extraIdleTime + Math.max(0, availableTimeInHours  - travelTimeInHours);
 
 		// We output travel time + canal time, but the calculations
 		// below only need to care about travel time
 		output.setTravelTime(travelTimeInHours + additionalRouteTimeInHours);
 		output.setIdleTime(idleTimeInHours);
 
+		
+//		assert travelTimeInHours + additionalRouteTimeInHours + idleTimeInHours == options.getAvailableTime();
 		// Route Additional Consumption
 		/**
 		 * Base fuel requirement for canal traversal

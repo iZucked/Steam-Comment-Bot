@@ -5,6 +5,9 @@
 package com.mmxlabs.models.ui.editors.dialogs;
 
 import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.IntSupplier;
 
 import org.eclipse.core.runtime.IStatus;
@@ -21,8 +24,56 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class DetailCompositeDialogUtil {
 
+	private DetailCompositeDialogUtil() {
+
+	}
+
 	public static int editSingleObject(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final EObject target) {
 		return editSingleObject(scenarioEditingLocation, target, null);
+	}
+
+	public static int editNewObjectWithUndoOnCancel(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final EObject target, @NonNull Command setCommand) {
+
+		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		try {
+			Future<Boolean> locked = executor.submit(() -> editorLock.tryLock(500));
+			if (locked.get() == Boolean.TRUE) {
+				try {
+					scenarioEditingLocation.setDisableUpdates(true);
+					try {
+						
+						final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
+						commandStack.execute(setCommand);
+						Command undoCommand = commandStack.getMostRecentCommand();
+						
+						final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
+						final int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(target), scenarioEditingLocation.isLocked());
+						if (ret != Window.OK) {
+							if (undoCommand != null) {
+								// If not ok, revert state
+								if (commandStack.getUndoCommand() != undoCommand) {
+									throw new IllegalStateException("Command stack has changed");
+								}
+								commandStack.undo();
+							}
+						}
+						return ret;
+					} finally {
+						scenarioEditingLocation.setDisableUpdates(false);
+					}
+				} finally {
+					Future<?> unlocked = executor.submit(editorLock::unlock);
+					unlocked.get();
+				}
+			}
+			return Window.CANCEL;
+		} catch (Exception e) {
+			return Window.CANCEL;
+
+		} finally {
+			executor.shutdownNow();
+		}
 	}
 
 	public static int editSingleObjectWithUndoOnCancel(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final EObject target, @Nullable Command undoCommand) {
@@ -101,5 +152,32 @@ public class DetailCompositeDialogUtil {
 			}
 		}
 		return Window.CANCEL;
+	}
+
+	public static int editInLockWithNewThread(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final IntSupplier editFunc) {
+		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		try {
+			Future<Boolean> locked = executor.submit(() -> editorLock.tryLock(500));
+			if (locked.get() == Boolean.TRUE) {
+				try {
+					scenarioEditingLocation.setDisableUpdates(true);
+					try {
+						return editFunc.getAsInt();
+					} finally {
+						scenarioEditingLocation.setDisableUpdates(false);
+					}
+				} finally {
+					Future<?> unlocked = executor.submit(editorLock::unlock);
+					unlocked.get();
+				}
+			}
+			return Window.CANCEL;
+		} catch (Exception e) {
+			return Window.CANCEL;
+
+		} finally {
+			executor.shutdownNow();
+		}
 	}
 }
