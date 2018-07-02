@@ -10,8 +10,8 @@ import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.migration.utils.EcoreHelper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
@@ -24,7 +24,7 @@ public class EcoreHelperTest {
 		final URI uri = URI.createURI(getClass().getResource("/models/model-v1.ecore").toString());
 		assert uri != null;
 
-		Assert.assertEquals("http://com.mmxlabs.models.migration.tests/model", EcoreHelper.getPackageNS(uri));
+		Assertions.assertEquals("http://com.mmxlabs.models.migration.tests/model", EcoreHelper.getPackageNS(uri));
 	}
 
 	@Test
@@ -36,10 +36,10 @@ public class EcoreHelperTest {
 		final MetamodelLoader loader = new MetamodelLoader();
 
 		final EPackage pkgA = loader.loadEPackage(uriModelA);
-		Assert.assertNotNull(pkgA);
+		Assertions.assertNotNull(pkgA);
 
 		final EPackage pkgB = loader.loadEPackage(uriModelB);
-		Assert.assertNotNull(pkgB);
+		Assertions.assertNotNull(pkgB);
 
 		// Create the test model A instance.
 		EObject modelA;
@@ -76,11 +76,11 @@ public class EcoreHelperTest {
 			final EStructuralFeature feature_attributeB = MetamodelUtils.getStructuralFeature(class_ClassB, "attributeB");
 
 			final EObject refA = (EObject) modelB.eGet(feature_referenceA);
-			Assert.assertNotNull(refA);
-			Assert.assertTrue(class_ClassB.isInstance(refA));
+			Assertions.assertNotNull(refA);
+			Assertions.assertTrue(class_ClassB.isInstance(refA));
 
-			Assert.assertEquals(1, (int) (Integer) refA.eGet(feature_attributeA));
-			Assert.assertEquals(2, (int) (Integer) refA.eGet(feature_attributeB));
+			Assertions.assertEquals(1, (int) (Integer) refA.eGet(feature_attributeA));
+			Assertions.assertEquals(2, (int) (Integer) refA.eGet(feature_attributeB));
 		}
 	}
 }

@@ -11,8 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
@@ -63,12 +63,12 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo2);
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -116,12 +116,12 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo2);
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, dateProvider);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -148,12 +148,12 @@ public class CollectedAssignmentTest {
 		for (@NonNull
 		final List<@NonNull AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -177,12 +177,12 @@ public class CollectedAssignmentTest {
 		assignments.add(event2);
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -206,12 +206,12 @@ public class CollectedAssignmentTest {
 		assignments.add(event1);
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -239,12 +239,12 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -270,12 +270,12 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -307,15 +307,15 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 			if (!expectedSortOrder.equals(collectedAssignment.getAssignedObjects())) {
 
 				new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
 			}
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -341,12 +341,12 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -374,12 +374,12 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -407,12 +407,12 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -453,11 +453,11 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -509,11 +509,11 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -559,11 +559,11 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -577,7 +577,7 @@ public class CollectedAssignmentTest {
 					} else if (e instanceof VesselEvent) {
 						values.add(((VesselEvent) e).getName());
 					} else {
-						Assert.fail("unknown element");
+						Assertions.fail("unknown element");
 					}
 				}
 				System.out.println("Input:     " + Joiner.on(", ").join(values));
@@ -590,7 +590,7 @@ public class CollectedAssignmentTest {
 					} else if (e instanceof VesselEvent) {
 						values.add(((VesselEvent) e).getName());
 					} else {
-						Assert.fail("unknown element");
+						Assertions.fail("unknown element");
 					}
 				}
 				System.out.println("Sorted As: " + Joiner.on(", ").join(values));
@@ -603,7 +603,7 @@ public class CollectedAssignmentTest {
 					} else if (e instanceof VesselEvent) {
 						values.add(((VesselEvent) e).getName());
 					} else {
-						Assert.fail("unknown element");
+						Assertions.fail("unknown element");
 					}
 				}
 				System.out.println("Expected:  " + Joiner.on(", ").join(values));
@@ -675,12 +675,12 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -714,12 +714,12 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 
@@ -744,12 +744,12 @@ public class CollectedAssignmentTest {
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
 			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
-			Assert.assertNotNull(collectedAssignment);
-			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
-			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			Assertions.assertNotNull(collectedAssignment);
+			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
-			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
 	}
 }

@@ -4,14 +4,14 @@
  */
 package com.mmxlabs.lingo.its.tests.mmbtuvolumelimits;
 
-import org.junit.Assume;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.uat.suite.cases.UATMultiCargoCase;
 import com.mmxlabs.lingo.its.uat.suite.cases.UATTypedCase;
 import com.mmxlabs.lingo.its.uat.suite.testers.MultiCargoTester;
@@ -22,10 +22,10 @@ public class VolumeLimitTests extends AbstractOptimisationResultTester {
 	private FeatureBasedUAT features = new DefaultUATFeatures();
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void MMBTU_TESTS() throws Exception {
 
-		Assume.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
 
 		String scenarioFilePath = "/scenarios/mmbtu-volumes/mmbtu-tests.lingo";
 		UATTypedCase[] cargoes = new UATTypedCase[] { new UATTypedCase(scenarioFilePath, "L-res-fob-des-mmbtu-mmbtu", features), new UATTypedCase(scenarioFilePath, "L-fob-des-mmbtu-mmbtu", features),
@@ -45,10 +45,10 @@ public class VolumeLimitTests extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void MMBTU_SPOT_TESTS() throws Exception {
 
-		Assume.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
 
 		String scenarioFilePath = "/scenarios/mmbtu-volumes/mmbtu-spot-tests.lingo";
 		UATTypedCase[] cargoes = new UATTypedCase[] { new UATTypedCase(scenarioFilePath, "Spot-Load-SpotWithRestriction", features),

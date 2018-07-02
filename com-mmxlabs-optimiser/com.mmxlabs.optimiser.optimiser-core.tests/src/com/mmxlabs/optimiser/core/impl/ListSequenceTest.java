@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -34,12 +34,12 @@ public class ListSequenceTest {
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
-		Assert.assertSame(object1, sequence.get(0));
-		Assert.assertSame(object2, sequence.get(1));
+		Assertions.assertSame(object1, sequence.get(0));
+		Assertions.assertSame(object2, sequence.get(1));
 
 		final ListSequence sequence2 = new ListSequence(sequence);
-		Assert.assertSame(object1, sequence2.get(0));
-		Assert.assertSame(object2, sequence2.get(1));
+		Assertions.assertSame(object1, sequence2.get(0));
+		Assertions.assertSame(object2, sequence2.get(1));
 	}
 
 	/**
@@ -55,19 +55,19 @@ public class ListSequenceTest {
 		final ListSequence sequence = new ListSequence(l);
 
 		final Iterator<ISequenceElement> iterator = sequence.iterator();
-		Assert.assertTrue(iterator.hasNext());
+		Assertions.assertTrue(iterator.hasNext());
 		final ISequenceElement iterObject1 = iterator.next();
-		Assert.assertSame(object1, iterObject1);
+		Assertions.assertSame(object1, iterObject1);
 
-		Assert.assertTrue(iterator.hasNext());
+		Assertions.assertTrue(iterator.hasNext());
 		final ISequenceElement iterObject2 = iterator.next();
-		Assert.assertSame(object2, iterObject2);
+		Assertions.assertSame(object2, iterObject2);
 	}
 
 	/**
 	 * Test sequence iterator remove method
 	 */
-	@Test(expected = UnsupportedOperationException.class)
+	@Test
 	public void testIterator_2() {
 
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
@@ -77,12 +77,12 @@ public class ListSequenceTest {
 		final ListSequence sequence = new ListSequence(l);
 
 		final Iterator<ISequenceElement> iterator = sequence.iterator();
-		Assert.assertTrue(iterator.hasNext());
+		Assertions.assertTrue(iterator.hasNext());
 		final Object iterObject1 = iterator.next();
-		Assert.assertSame(object1, iterObject1);
+		Assertions.assertSame(object1, iterObject1);
 
 		// Expect to fail here
-		iterator.remove();
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
 	}
 
 	@Test()
@@ -93,25 +93,25 @@ public class ListSequenceTest {
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(element);
 		final ListSequence sequence = new ListSequence(l);
 
-		Assert.assertEquals(1, sequence.size());
-		Assert.assertEquals(element, sequence.get(0));
+		Assertions.assertEquals(1, sequence.size());
+		Assertions.assertEquals(element, sequence.get(0));
 
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test
 	public void testGet_2() {
 		final List<@NonNull ISequenceElement> emptyList = Collections.emptyList();
 		final ListSequence sequence = new ListSequence(emptyList);
 
-		sequence.get(0);
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> sequence.get(0));
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test
 	public void testGet_3() {
 		final List<@NonNull ISequenceElement> emptyList = Collections.emptyList();
 		final ListSequence sequence = new ListSequence(emptyList);
 
-		sequence.get(-1);
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> sequence.get(-1));
 	}
 
 	@Test
@@ -125,38 +125,38 @@ public class ListSequenceTest {
 
 		final ISegment segment = sequence.getSegment(0, 2);
 
-		Assert.assertEquals(2, segment.size());
+		Assertions.assertEquals(2, segment.size());
 
-		Assert.assertEquals(0, segment.getSequenceStart());
-		Assert.assertEquals(2, segment.getSequenceEnd());
+		Assertions.assertEquals(0, segment.getSequenceStart());
+		Assertions.assertEquals(2, segment.getSequenceEnd());
 
-		Assert.assertSame(sequence, segment.getSequence());
+		Assertions.assertSame(sequence, segment.getSequence());
 
-		Assert.assertSame(object1, segment.get(0));
-		Assert.assertSame(object2, segment.get(1));
+		Assertions.assertSame(object1, segment.get(0));
+		Assertions.assertSame(object2, segment.get(1));
 
 		final Iterator<ISequenceElement> iterator = segment.iterator();
 
-		Assert.assertTrue(iterator.hasNext());
+		Assertions.assertTrue(iterator.hasNext());
 		final Object iterObject1 = iterator.next();
-		Assert.assertSame(object1, iterObject1);
+		Assertions.assertSame(object1, iterObject1);
 
-		Assert.assertTrue(iterator.hasNext());
+		Assertions.assertTrue(iterator.hasNext());
 		final Object iterObject2 = iterator.next();
-		Assert.assertSame(object2, iterObject2);
+		Assertions.assertSame(object2, iterObject2);
 
 		iterator.remove();
 
-		Assert.assertEquals(1, segment.size());
-		Assert.assertEquals(2, sequence.size());
+		Assertions.assertEquals(1, segment.size());
+		Assertions.assertEquals(2, sequence.size());
 
-		Assert.assertSame(object1, segment.get(0));
+		Assertions.assertSame(object1, segment.get(0));
 
-		Assert.assertSame(object1, sequence.get(0));
-		Assert.assertSame(object2, sequence.get(1));
+		Assertions.assertSame(object1, sequence.get(0));
+		Assertions.assertSame(object2, sequence.get(1));
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test
 	public void testGetSegment_2() {
 
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
@@ -165,10 +165,10 @@ public class ListSequenceTest {
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
-		sequence.getSegment(-1, 2);
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> sequence.getSegment(-1, 2));
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test
 	public void testGetSegment_3() {
 
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
@@ -177,7 +177,7 @@ public class ListSequenceTest {
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
-		sequence.getSegment(0, 3);
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> sequence.getSegment(0, 3));
 	}
 
 	@Test
@@ -187,14 +187,14 @@ public class ListSequenceTest {
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(element);
 		final ListSequence sequence = new ListSequence(l);
 
-		Assert.assertEquals(1, sequence.size());
+		Assertions.assertEquals(1, sequence.size());
 	}
 
 	@Test
 	public void testToString() {
 		final List<@NonNull ISequenceElement> l = Collections.emptyList();
 		final ListSequence sequence = new ListSequence(l);
-		Assert.assertNotNull(sequence.toString());
+		Assertions.assertNotNull(sequence.toString());
 	}
 
 	@Test
@@ -206,16 +206,16 @@ public class ListSequenceTest {
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
-		Assert.assertSame(object1, sequence.first());
+		Assertions.assertSame(object1, sequence.first());
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test
 	public void testFirst2() {
 
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList();
 		final ListSequence sequence = new ListSequence(l);
 
-		sequence.first();
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> sequence.first());
 	}
 
 	@Test
@@ -227,16 +227,16 @@ public class ListSequenceTest {
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
-		Assert.assertSame(object2, sequence.last());
+		Assertions.assertSame(object2, sequence.last());
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test
 	public void testLast2() {
 
 		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList();
 		final ListSequence sequence = new ListSequence(l);
 
-		sequence.last();
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> sequence.last());
 	}
 
 	@Test
@@ -259,17 +259,17 @@ public class ListSequenceTest {
 		final ListSequence sequence3 = new ListSequence(l3);
 		final ListSequence sequence4 = new ListSequence(l4);
 
-		Assert.assertTrue(sequence0.equals(sequence0));
-		Assert.assertTrue(sequence0.equals(sequence1));
-		Assert.assertTrue(sequence0.equals(sequence2));
-		Assert.assertFalse(sequence0.equals(sequence3));
-		Assert.assertFalse(sequence0.equals(sequence4));
+		Assertions.assertTrue(sequence0.equals(sequence0));
+		Assertions.assertTrue(sequence0.equals(sequence1));
+		Assertions.assertTrue(sequence0.equals(sequence2));
+		Assertions.assertFalse(sequence0.equals(sequence3));
+		Assertions.assertFalse(sequence0.equals(sequence4));
 
-		Assert.assertTrue(sequence0.equals(sequence0));
-		Assert.assertTrue(sequence1.equals(sequence0));
-		Assert.assertTrue(sequence2.equals(sequence0));
-		Assert.assertFalse(sequence3.equals(sequence0));
-		Assert.assertFalse(sequence4.equals(sequence0));
+		Assertions.assertTrue(sequence0.equals(sequence0));
+		Assertions.assertTrue(sequence1.equals(sequence0));
+		Assertions.assertTrue(sequence2.equals(sequence0));
+		Assertions.assertFalse(sequence3.equals(sequence0));
+		Assertions.assertFalse(sequence4.equals(sequence0));
 	}
 
 }

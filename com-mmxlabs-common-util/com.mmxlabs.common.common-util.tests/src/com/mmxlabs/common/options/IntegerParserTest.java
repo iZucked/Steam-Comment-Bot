@@ -7,8 +7,8 @@ package com.mmxlabs.common.options;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class IntegerParserTest {
 
@@ -16,24 +16,24 @@ public class IntegerParserTest {
 	public void testIntegerParserInteger() {
 		final Integer i = new Integer(0);
 		final IntegerParser parser = new IntegerParser(i);
-		Assert.assertTrue(parser.hasDefaultValue());
-		Assert.assertSame(i, parser.getDefaultValue());
+		Assertions.assertTrue(parser.hasDefaultValue());
+		Assertions.assertSame(i, parser.getDefaultValue());
 	}
 
 	@Test
 	public void testIntegerParserString() {
 		final String str = "0";
 		final IntegerParser parser = new IntegerParser(str);
-		Assert.assertTrue(parser.hasDefaultValue());
-		Assert.assertEquals(Integer.valueOf(0), parser.getDefaultValue());
+		Assertions.assertTrue(parser.hasDefaultValue());
+		Assertions.assertEquals(Integer.valueOf(0), parser.getDefaultValue());
 	}
 
 	@Test
 	public void testIntegerParser() {
 
 		final IntegerParser parser = new IntegerParser();
-		Assert.assertFalse(parser.hasDefaultValue());
-		Assert.assertNull(parser.getDefaultValue());
+		Assertions.assertFalse(parser.hasDefaultValue());
+		Assertions.assertNull(parser.getDefaultValue());
 	}
 
 	@Test
@@ -47,7 +47,7 @@ public class IntegerParserTest {
 		strings.add(str1);
 		strings.add(str2);
 
-		Assert.assertEquals(Integer.valueOf(0), parser.parse(null, strings.iterator()));
+		Assertions.assertEquals(Integer.valueOf(0), parser.parse(null, strings.iterator()));
 	}
 
 }

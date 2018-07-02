@@ -11,9 +11,9 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -147,7 +147,7 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 	}
 
 	@Test
-	@Ignore("Vessel name changes do not pass up chain. Enable once BugzId: 1444 is fixed.")
+	@Disabled("Vessel name changes do not pass up chain. Enable once BugzId: 1444 is fixed.")
 	public void changeAll() {
 		final MinimalScenario minimalScenario = createDefaultMinimalScenario();
 
@@ -209,7 +209,7 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 	private void testNamesInValueProvider(final CargoModel cargoModel, final Cargo cargo, final IReferenceValueProvider valueProvider) {
 		final List<Pair<String, EObject>> t = valueProvider.getAllowedValues(cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 		for (final Pair<String, EObject> p : t) {
-			Assert.assertTrue(getNamesFromModel(cargoModel.getVesselAvailabilities()).contains(p.getFirst()));
+			Assertions.assertTrue(getNamesFromModel(cargoModel.getVesselAvailabilities()).contains(p.getFirst()));
 		}
 	}
 

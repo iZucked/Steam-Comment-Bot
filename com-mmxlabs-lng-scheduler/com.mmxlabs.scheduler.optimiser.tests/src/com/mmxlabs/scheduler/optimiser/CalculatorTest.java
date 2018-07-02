@@ -4,25 +4,25 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class CalculatorTest {
 
-	@Test(expected = ArithmeticException.class)
+	@Test
 	public void testSpeedFromDistanceTimeForDivideByZero() {
 
 		// Testing for divide by zero error for a non-zero distance.
-		Calculator.speedFromDistanceTime(1, 0);
+		Assertions.assertThrows(ArithmeticException.class, () -> Calculator.speedFromDistanceTime(1, 0));
 	}
 
 	/**
 	 * A division by zero should throw an exception even if the distance is invalid.
 	 */
-	@Test(expected = ArithmeticException.class)
+	@Test
 	public void testSpeedFromDistanceTimeForNegDistanceAndDivideByZero() {
 
-		Calculator.speedFromDistanceTime(-1, 0);
+		Assertions.assertThrows(ArithmeticException.class, () -> Calculator.speedFromDistanceTime(-1, 0));
 	}
 
 	@Test
@@ -36,7 +36,7 @@ public class CalculatorTest {
 				final int expected = (int) ((1000L * distance) / speed);
 				final int actual = Calculator.getTimeFromSpeedDistance(speed, distance);
 
-				Assert.assertEquals("Distance: " + distance + ", speed: " + speed, expected, actual);
+				Assertions.assertEquals(expected, actual, "Distance: " + distance + ", speed: " + speed);
 			}
 		}
 	}
@@ -52,7 +52,7 @@ public class CalculatorTest {
 				final long expectedQuantity = rate * time;
 				final long actualQuantity = Calculator.quantityFromRateTime(rate, time);
 
-				Assert.assertEquals("Rate: " + rate + ", time: " + time, expectedQuantity, actualQuantity);
+				Assertions.assertEquals(expectedQuantity, actualQuantity, "Rate: " + rate + ", time: " + time);
 			}
 		}
 	}
@@ -68,7 +68,7 @@ public class CalculatorTest {
 				final int expectedTime = (int) (quantity / rate);
 				final int actualTime = Calculator.getTimeFromRateQuantity(rate, quantity);
 
-				Assert.assertEquals("Quantity: " + quantity + ", rate: " + rate, expectedTime, actualTime);
+				Assertions.assertEquals(expectedTime, actualTime, "Quantity: " + quantity + ", rate: " + rate);
 			}
 		}
 

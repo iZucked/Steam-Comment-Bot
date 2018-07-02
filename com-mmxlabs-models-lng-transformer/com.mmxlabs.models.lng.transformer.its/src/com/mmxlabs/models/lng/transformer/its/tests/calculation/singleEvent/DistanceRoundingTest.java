@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -23,7 +23,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam Semenenko
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class DistanceRoundingTest {
 
 	/**
@@ -43,11 +43,11 @@ public class DistanceRoundingTest {
 		final int expectedDuration = distanceBetweenPorts / speed;
 
 		// check actual distances match the set distance
-		Assert.assertSame("Laden leg same distance", distanceBetweenPorts, a.getLadenLeg().getDistance());
-		Assert.assertSame("Ballast leg same distance", distanceBetweenPorts, a.getBallastLeg().getDistance());
+		Assertions.assertSame(distanceBetweenPorts, a.getLadenLeg().getDistance(), "Laden leg same distance");
+		Assertions.assertSame(distanceBetweenPorts, a.getBallastLeg().getDistance(), "Ballast leg same distance");
 
-		Assert.assertSame(expectedDuration, a.getLadenLeg().getDuration());
-		Assert.assertSame(expectedDuration, a.getBallastLeg().getDuration());
+		Assertions.assertSame(expectedDuration, a.getLadenLeg().getDuration());
+		Assertions.assertSame(expectedDuration, a.getBallastLeg().getDuration());
 
 		/*
 		 * At the moment the expected result is that the duration is rounded to zero. These tests are for if this isn't the case.
@@ -57,15 +57,15 @@ public class DistanceRoundingTest {
 		 * 
 		 * final int ladenDuration = a.getLadenLeg().getEventDuration(); final int ballastDuration = a.getBallastLeg().getEventDuration();//
 		 * 
-		 * Assert.assertTrue("Expect non-zero duration for laden leg (expected " + expectedDuration + ", got " + ladenDuration + ").", ladenDuration > 0);//
+		 * Assertions.assertTrue("Expect non-zero duration for laden leg (expected " + expectedDuration + ", got " + ladenDuration + ").", ladenDuration > 0);//
 		 * 
-		 * Assert.assertTrue("Expect non-zero duration for ballast leg (expected " + expectedDuration + ", got " + ballastDuration + ").", ballastDuration > 0);//
+		 * Assertions.assertTrue("Expect non-zero duration for ballast leg (expected " + expectedDuration + ", got " + ballastDuration + ").", ballastDuration > 0);//
 		 * 
 		 * // the cost of the route should be non-zero
 		 * 
-		 * Assert.assertTrue("Non-zero cost of laden leg", a.getLadenLeg().getTotalCost() > 0);
+		 * Assertions.assertTrue("Non-zero cost of laden leg", a.getLadenLeg().getTotalCost() > 0);
 		 * 
-		 * Assert.assertTrue("Non-zero cost of ballast leg", a.getBallastLeg().getTotalCost() > 0);
+		 * Assertions.assertTrue("Non-zero cost of ballast leg", a.getBallastLeg().getTotalCost() > 0);
 		 */
 	}
 

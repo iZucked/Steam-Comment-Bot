@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class EndEventTests extends AbstractShippingCalculationsTestClass {
 	@Test
 	public void testUseDefaultFinalIdlingWhenEndTimeUnspecified() {

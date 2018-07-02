@@ -11,8 +11,8 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -153,7 +153,7 @@ public class VesselValueProviderFactoryTest {
 	private void testNamesInValueProvider(FleetModel fleetModel, IReferenceValueProvider valueProvider) {
 		List<Pair<String, EObject>>  t = valueProvider.getAllowedValues(fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS);
 		for (Pair<String, EObject> p : t) {
-			Assert.assertTrue(getNamesFromModel(fleetModel.getVessels()).contains(p.getFirst()));
+			Assertions.assertTrue(getNamesFromModel(fleetModel.getVessels()).contains(p.getFirst()));
 		}
 	}
 	

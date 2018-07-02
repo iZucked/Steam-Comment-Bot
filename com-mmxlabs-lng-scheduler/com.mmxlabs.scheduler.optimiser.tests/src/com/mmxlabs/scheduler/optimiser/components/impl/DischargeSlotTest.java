@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -27,13 +27,13 @@ public class DischargeSlotTest {
 		final ISalesPriceCalculator calculator = Mockito.mock(ISalesPriceCalculator.class);
 
 		final DischargeSlot slot = new DischargeSlot(id, port, tw, true, minDischargeVolume, maxDischargeVolume, calculator, minCvValue, maxCvValue);
-		Assert.assertSame(id, slot.getId());
-		Assert.assertSame(port, slot.getPort());
-		Assert.assertSame(tw, slot.getTimeWindow());
+		Assertions.assertSame(id, slot.getId());
+		Assertions.assertSame(port, slot.getPort());
+		Assertions.assertSame(tw, slot.getTimeWindow());
 
-		Assert.assertEquals(minDischargeVolume, slot.getMinDischargeVolume(-1));
-		Assert.assertEquals(maxDischargeVolume, slot.getMaxDischargeVolume(-1));
-		Assert.assertSame(calculator, slot.getDischargePriceCalculator());
+		Assertions.assertEquals(minDischargeVolume, slot.getMinDischargeVolume(-1));
+		Assertions.assertEquals(maxDischargeVolume, slot.getMaxDischargeVolume(-1));
+		Assertions.assertSame(calculator, slot.getDischargePriceCalculator());
 
 	}
 
@@ -44,10 +44,10 @@ public class DischargeSlotTest {
 		slot.setVolumeLimits(true, 5_000_000, 10_000_000);
 		int cv1 = 20_000_000;
 
-		Assert.assertEquals(5_000_000, slot.getMinDischargeVolume(cv1));
-		Assert.assertEquals(10_000_000, slot.getMaxDischargeVolume(cv1));
-		Assert.assertEquals(20 * 5_000_000, slot.getMinDischargeVolumeMMBTU(cv1));
-		Assert.assertEquals(20 * 10_000_000, slot.getMaxDischargeVolumeMMBTU(cv1));
+		Assertions.assertEquals(5_000_000, slot.getMinDischargeVolume(cv1));
+		Assertions.assertEquals(10_000_000, slot.getMaxDischargeVolume(cv1));
+		Assertions.assertEquals(20 * 5_000_000, slot.getMinDischargeVolumeMMBTU(cv1));
+		Assertions.assertEquals(20 * 10_000_000, slot.getMaxDischargeVolumeMMBTU(cv1));
 	}
 
 	@Test
@@ -57,10 +57,10 @@ public class DischargeSlotTest {
 		slot.setVolumeLimits(true, 5_000_000, Long.MAX_VALUE);
 		int cv1 = 20_000_000;
 
-		Assert.assertEquals(5_000_000, slot.getMinDischargeVolume(cv1));
-		Assert.assertEquals(Long.MAX_VALUE, slot.getMaxDischargeVolume(cv1));
-		Assert.assertEquals(20 * 5_000_000, slot.getMinDischargeVolumeMMBTU(cv1));
-		Assert.assertEquals(Long.MAX_VALUE, slot.getMaxDischargeVolumeMMBTU(cv1));
+		Assertions.assertEquals(5_000_000, slot.getMinDischargeVolume(cv1));
+		Assertions.assertEquals(Long.MAX_VALUE, slot.getMaxDischargeVolume(cv1));
+		Assertions.assertEquals(20 * 5_000_000, slot.getMinDischargeVolumeMMBTU(cv1));
+		Assertions.assertEquals(Long.MAX_VALUE, slot.getMaxDischargeVolumeMMBTU(cv1));
 	}
 
 	private DischargeSlot instantiateSlot() {
@@ -71,9 +71,9 @@ public class DischargeSlotTest {
 	public void testGetSetSalesPriceCurve() {
 		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
 		final DischargeSlot slot = instantiateSlot();
-		Assert.assertNotNull(slot.getDischargePriceCalculator());
+		Assertions.assertNotNull(slot.getDischargePriceCalculator());
 		slot.setDischargePriceCalculator(curve);
-		Assert.assertSame(curve, slot.getDischargePriceCalculator());
+		Assertions.assertSame(curve, slot.getDischargePriceCalculator());
 	}
 
 	@Test
@@ -99,25 +99,25 @@ public class DischargeSlotTest {
 		final NotionalDischargeSlot slot8 = new NotionalDischargeSlot(id1, port1, tw1, true, 10L, 20L, curve2, 30L, 40L);
 		final NotionalDischargeSlot slot9 = new NotionalDischargeSlot(id1, port1, tw1, false, 10L, 20L, curve1, 30L, 40L);
 
-		Assert.assertTrue(slot1.equals(slot1));
-		Assert.assertTrue(slot1.equals(slot2));
-		Assert.assertTrue(slot2.equals(slot1));
+		Assertions.assertTrue(slot1.equals(slot1));
+		Assertions.assertTrue(slot1.equals(slot2));
+		Assertions.assertTrue(slot2.equals(slot1));
 
-		Assert.assertFalse(slot1.equals(slot3));
-		Assert.assertFalse(slot1.equals(slot4));
-		Assert.assertFalse(slot1.equals(slot5));
-		Assert.assertFalse(slot1.equals(slot6));
-		Assert.assertFalse(slot1.equals(slot7));
-		Assert.assertFalse(slot1.equals(slot8));
+		Assertions.assertFalse(slot1.equals(slot3));
+		Assertions.assertFalse(slot1.equals(slot4));
+		Assertions.assertFalse(slot1.equals(slot5));
+		Assertions.assertFalse(slot1.equals(slot6));
+		Assertions.assertFalse(slot1.equals(slot7));
+		Assertions.assertFalse(slot1.equals(slot8));
 
-		Assert.assertFalse(slot3.equals(slot1));
-		Assert.assertFalse(slot4.equals(slot1));
-		Assert.assertFalse(slot5.equals(slot1));
-		Assert.assertFalse(slot6.equals(slot1));
-		Assert.assertFalse(slot7.equals(slot1));
-		Assert.assertFalse(slot8.equals(slot1));
-		Assert.assertFalse(slot9.equals(slot1));
+		Assertions.assertFalse(slot3.equals(slot1));
+		Assertions.assertFalse(slot4.equals(slot1));
+		Assertions.assertFalse(slot5.equals(slot1));
+		Assertions.assertFalse(slot6.equals(slot1));
+		Assertions.assertFalse(slot7.equals(slot1));
+		Assertions.assertFalse(slot8.equals(slot1));
+		Assertions.assertFalse(slot9.equals(slot1));
 
-		Assert.assertFalse(slot1.equals(new Object()));
+		Assertions.assertFalse(slot1.equals(new Object()));
 	}
 }

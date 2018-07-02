@@ -7,8 +7,8 @@ package com.mmxlabs.lingo.its.tests.microcases.adp.tests;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests;
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
@@ -74,9 +74,9 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 
@@ -98,7 +98,7 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 					verifier.withAnySolutionResultChecker().withUsedLoad(loadSlot.getName()).onFleetVessel(targetVessel).build();
 				}
 				verifier.withAnySolutionResultChecker().withCargoCount(12, false).build();
-				verifier.verifySingleOptimisationResult(result, msg -> Assert.fail(msg));
+				verifier.verifySingleOptimisationResult(result, msg -> Assertions.fail(msg));
 			});
 		} finally {
 			runnerBuilder.dispose();

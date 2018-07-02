@@ -9,16 +9,17 @@ import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -35,13 +36,13 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList();
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -51,7 +52,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -59,6 +60,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
+	@BeforeEach
 	@Override
 	public void constructor() throws Exception {
 
@@ -71,7 +73,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	 * Test the initial case with no restrictions
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testUnrestrictedCase() throws Exception {
 
 		// Create the required basic elements
@@ -97,12 +99,12 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotDischarge_Port() throws Exception {
 
 		// Create the required basic elements
@@ -132,14 +134,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotDischarge_Port_Unshipped() throws Exception {
 		// Create the required basic elements
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -166,14 +168,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotLoad_Port() throws Exception {
 
 		// Create the required basic elements
@@ -203,14 +205,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotLoad_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
@@ -237,14 +239,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotPurchaseContract_Port() throws Exception {
 
 		// Create the required basic elements
@@ -275,14 +277,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotPurchaseContract_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
@@ -311,14 +313,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotSalesContract_Port() throws Exception {
 
 		// Create the required basic elements
@@ -349,14 +351,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotSalesContract_PortGroup() throws Exception {
 
 		// Create the required basic elements
@@ -389,14 +391,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotSalesContract_Port_Unshipped() throws Exception {
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
@@ -421,14 +423,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SpotFOBPurchase_Port() throws Exception {
 
 		// Create the required basic elements
@@ -461,14 +463,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SpotFOBPurchase_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
@@ -501,14 +503,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SpotDESSale_Port() throws Exception {
 
 		// Create the required basic elements
@@ -541,14 +543,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SpotDESSale_PortGroup() throws Exception {
 
 		// Create the required basic elements
@@ -583,14 +585,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SpotDESSale_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
@@ -624,14 +626,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotDischarge_Contract() throws Exception {
 
 		// Create the required basic elements
@@ -664,14 +666,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotDischarge_Contract_Unshipped() throws Exception {
 
 		// Create the required basic elements
@@ -703,14 +705,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotLoad_Contract() throws Exception {
 
 		// Create the required basic elements
@@ -742,14 +744,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotLoad_Contract_Unshipped() throws Exception {
 
 		// Create the required basic elements
@@ -780,14 +782,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotPurchaseContract_Contract() throws Exception {
 
 		// Create the required basic elements
@@ -820,14 +822,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SlotSalesContract_Contract() throws Exception {
 
 		// Create the required basic elements
@@ -861,14 +863,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SpotFOBPurchase_Contract() throws Exception {
 
 		// Create the required basic elements
@@ -903,14 +905,14 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRestricted_SpotDESSale_Contract() throws Exception {
 
 		// Create the required basic elements
@@ -945,9 +947,9 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedCheckers);
-			Assert.assertEquals(1, failedCheckers.size());
-			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+			Assertions.assertNotNull(failedCheckers);
+			Assertions.assertEquals(1, failedCheckers.size());
+			Assertions.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
 		});
 	}
 

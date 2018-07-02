@@ -10,8 +10,8 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class DaysTest {
 
@@ -21,7 +21,7 @@ public class DaysTest {
 		final LocalDate start = LocalDate.of(2015, 1, 1);
 		final LocalDate end = LocalDate.of(2015, 1, 2);
 
-		Assert.assertEquals(1, Days.between(start, end));
+		Assertions.assertEquals(1, Days.between(start, end));
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class DaysTest {
 		final YearMonth start = YearMonth.of(2015, 1);
 		final YearMonth end = YearMonth.of(2015, 2);
 
-		Assert.assertEquals(31, Days.between(start, end));
+		Assertions.assertEquals(31, Days.between(start, end));
 	}
 
 	@Test
@@ -39,13 +39,13 @@ public class DaysTest {
 			final LocalDateTime start = LocalDateTime.of(2015, 1, 1, 0, 0, 0);
 			final LocalDateTime end = LocalDateTime.of(2015, 1, 2, 0, 0, 0);
 
-			Assert.assertEquals(1, Days.between(start, end));
+			Assertions.assertEquals(1, Days.between(start, end));
 		}
 		{
 			final LocalDateTime start = LocalDateTime.of(2015, 1, 1, 0, 0, 0);
 			final LocalDateTime end = LocalDateTime.of(2015, 1, 2, 12, 0, 0);
 
-			Assert.assertEquals(1, Days.between(start, end));
+			Assertions.assertEquals(1, Days.between(start, end));
 		}
 	}
 
@@ -55,14 +55,14 @@ public class DaysTest {
 			final ZonedDateTime start = ZonedDateTime.of(2015, 1, 1, 0, 0, 0, 0, ZoneId.of("Europe/London"));
 			final ZonedDateTime end = ZonedDateTime.of(2015, 1, 2, 0, 0, 0, 0, ZoneId.of("Europe/London"));
 
-			Assert.assertEquals(1, Days.between(start, end));
+			Assertions.assertEquals(1, Days.between(start, end));
 		}
 		{
 			// UK Clock change
 			final ZonedDateTime start = ZonedDateTime.of(2015, 10, 24, 0, 0, 0, 0, ZoneId.of("Europe/London"));
 			final ZonedDateTime end = ZonedDateTime.of(2015, 10, 26, 0, 0, 0, 0, ZoneId.of("Europe/London"));
 
-			Assert.assertEquals(2, Days.between(start, end));
+			Assertions.assertEquals(2, Days.between(start, end));
 		}
 	}
 }

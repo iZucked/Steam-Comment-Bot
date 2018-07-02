@@ -12,10 +12,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -61,7 +61,7 @@ public class PriceIntervalProviderHelperTest {
 	 * Test that the cheapest option is to go direct meaning: load {0, 0} and discharge {40, 45}
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void testCanalTrimming_MinTimeGreaterThanCheapestOption_NewMethod() {
 		final List<int[]> purchaseIntervals = new ArrayList<>();
 		purchaseIntervals.add(new int[] { 0, 20 });
@@ -90,14 +90,14 @@ public class PriceIntervalProviderHelperTest {
 		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 
 		final IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
-		Mockito.when(portTimesWindowsRecord.getSlotDuration(Matchers.eq(loadSlot))).thenReturn(0);
-		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
+		Mockito.when(portTimesWindowsRecord.getSlotDuration(ArgumentMatchers.eq(loadSlot))).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(ArgumentMatchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 
 		final IVessel vessel = getIVessel(null);
 		final long charterRate = 0;
 		final int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals,
 				salesIntervals, charterRate, false);
-		Assert.assertArrayEquals(new int[] { 0, 0, 40, 40 }, times);
+		Assertions.assertArrayEquals(new int[] { 0, 0, 40, 40 }, times);
 	}
 
 	@SuppressWarnings("null")
@@ -140,7 +140,7 @@ public class PriceIntervalProviderHelperTest {
 
 	static IConsumptionRateCalculator getMockedFixedConsumptionRateCalculator(final int fixedSpeedValue) {
 		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
-		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyLong())).thenReturn(fixedSpeedValue);
+		Mockito.when(consumptionRateCalculator.getSpeed(ArgumentMatchers.anyLong())).thenReturn(fixedSpeedValue);
 		return consumptionRateCalculator;
 	}
 
@@ -167,7 +167,7 @@ public class PriceIntervalProviderHelperTest {
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
-		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
+		when(loadPriceCalculator.getEstimatedPurchasePrice(ArgumentMatchers.<ILoadOption> any(), ArgumentMatchers.<IDischargeOption> any(), ArgumentMatchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -193,8 +193,8 @@ public class PriceIntervalProviderHelperTest {
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
 		for (int i = 0; i < expected.size(); i++) {
-			Assert.assertTrue(String.format("Expected %s got %s", Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))),
-					expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1]);
+			Assertions.assertTrue(expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1],
+					String.format("Expected %s got %s", Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))));
 		}
 	}
 
@@ -225,7 +225,7 @@ public class PriceIntervalProviderHelperTest {
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
-		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
+		when(loadPriceCalculator.getEstimatedPurchasePrice(ArgumentMatchers.<ILoadOption> any(), ArgumentMatchers.<IDischargeOption> any(), ArgumentMatchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -251,8 +251,8 @@ public class PriceIntervalProviderHelperTest {
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
 		for (int i = 0; i < expected.size(); i++) {
-			Assert.assertTrue(String.format("Expected %s got %s", Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))),
-					expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1]);
+			Assertions.assertTrue(expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1],
+					String.format("Expected %s got %s", Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))));
 		}
 	}
 
@@ -283,7 +283,7 @@ public class PriceIntervalProviderHelperTest {
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
-		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
+		when(loadPriceCalculator.getEstimatedPurchasePrice(ArgumentMatchers.<ILoadOption> any(), ArgumentMatchers.<IDischargeOption> any(), ArgumentMatchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -307,8 +307,8 @@ public class PriceIntervalProviderHelperTest {
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
 		for (int i = 0; i < expected.size(); i++) {
-			Assert.assertTrue(String.format("Expected %s got %s", Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))),
-					expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1]);
+			Assertions.assertTrue(expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1],
+					String.format("Expected %s got %s", Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))));
 		}
 	}
 
@@ -335,7 +335,7 @@ public class PriceIntervalProviderHelperTest {
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
-		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
+		when(loadPriceCalculator.getEstimatedPurchasePrice(ArgumentMatchers.<ILoadOption> any(), ArgumentMatchers.<IDischargeOption> any(), ArgumentMatchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -359,8 +359,8 @@ public class PriceIntervalProviderHelperTest {
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
 		for (int i = 0; i < expected.size(); i++) {
-			Assert.assertTrue(String.format("Expected %s got %s", Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))),
-					expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1]);
+			Assertions.assertTrue(expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1],
+					String.format("Expected %s got %s", Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))));
 		}
 	}
 
@@ -402,7 +402,7 @@ public class PriceIntervalProviderHelperTest {
 		portTimeWindowsRecord.setSlot(dischargeSlot, new TimeWindow(20, 30), 24, 0);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
-		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
+		when(loadPriceCalculator.getEstimatedPurchasePrice(ArgumentMatchers.<ILoadOption> any(), ArgumentMatchers.<IDischargeOption> any(), ArgumentMatchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -413,7 +413,7 @@ public class PriceIntervalProviderHelperTest {
 		when(loadSlot.getLoadPriceCalculator()).thenReturn(loadPriceCalculator);
 
 		final ISalesPriceCalculator salesPriceCalculator = Mockito.mock(ISalesPriceCalculator.class);
-		when(salesPriceCalculator.getEstimatedSalesPrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
+		when(salesPriceCalculator.getEstimatedSalesPrice(ArgumentMatchers.<ILoadOption> any(), ArgumentMatchers.<IDischargeOption> any(), ArgumentMatchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -424,10 +424,10 @@ public class PriceIntervalProviderHelperTest {
 		when(dischargeSlot.getDischargePriceCalculator()).thenReturn(salesPriceCalculator);
 
 		final IPriceIntervalProvider loadPriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
-		when(loadPriceIntervalProvider.getPriceHourIntervals(Matchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), Matchers.<IPortTimeWindowsRecord> any()))
+		when(loadPriceIntervalProvider.getPriceHourIntervals(ArgumentMatchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), ArgumentMatchers.<IPortTimeWindowsRecord> any()))
 				.thenReturn(Arrays.asList(0, 10, 20, 30, 40, 50));
 		final IPriceIntervalProvider dischargePriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
-		when(dischargePriceIntervalProvider.getPriceHourIntervals(Matchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), Matchers.<IPortTimeWindowsRecord> any()))
+		when(dischargePriceIntervalProvider.getPriceHourIntervals(ArgumentMatchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), ArgumentMatchers.<IPortTimeWindowsRecord> any()))
 				.thenReturn(Arrays.asList(0 + 5, 10 + 5, 20 + 5, 30 + 5, 40 + 5, 50 + 5));
 
 		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
@@ -436,17 +436,17 @@ public class PriceIntervalProviderHelperTest {
 				portTimeWindowsRecord);
 		final int[][] expected = new int[][] { { 0, 5 }, { 5, 10 }, { 10, 15 }, { 15, 20 }, { 20, 25 }, { 25, 30 }, { 30, 35 }, { 35, 40 }, { 40, 45 }, { 45, 50 }, };
 		for (int i = 0; i < expected.length; i++) {
-			Assert.assertTrue(String.format("Expected %s got %s", Arrays.toString(expected[i]), Arrays.toString(overlappingIntervals[i])),
-					expected[i][0] == overlappingIntervals[i][0] && expected[i][1] == overlappingIntervals[i][1]);
+			Assertions.assertTrue(expected[i][0] == overlappingIntervals[i][0] && expected[i][1] == overlappingIntervals[i][1],
+					String.format("Expected %s got %s", Arrays.toString(expected[i]), Arrays.toString(overlappingIntervals[i])));
 		}
 
 		final List<int[]> priceDiffs = priceIntervalProviderHelper.buildComplexPriceIntervals(0, 50, loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider,
 				portTimeWindowsRecord);
 		for (int i = 0; i < priceDiffs.size() - 1; i++) {
 			final int[] d = priceDiffs.get(i);
-			Assert.assertTrue(d[1] == -5);
+			Assertions.assertTrue(d[1] == -5);
 		}
-		Assert.assertTrue(priceDiffs.get(priceDiffs.size() - 1)[0] == 50 && priceDiffs.get(priceDiffs.size() - 1)[1] == Integer.MIN_VALUE);
+		Assertions.assertTrue(priceDiffs.get(priceDiffs.size() - 1)[0] == 50 && priceDiffs.get(priceDiffs.size() - 1)[1] == Integer.MIN_VALUE);
 	}
 
 	@Test
@@ -500,7 +500,7 @@ public class PriceIntervalProviderHelperTest {
 		when(dischargeSlot.getPort()).thenReturn(portD);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
-		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
+		when(loadPriceCalculator.getEstimatedPurchasePrice(ArgumentMatchers.<ILoadOption> any(), ArgumentMatchers.<IDischargeOption> any(), ArgumentMatchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -512,7 +512,7 @@ public class PriceIntervalProviderHelperTest {
 		when(loadSlot.getLoadPriceCalculator()).thenReturn(loadPriceCalculator);
 
 		final ISalesPriceCalculator salesPriceCalculator = Mockito.mock(ISalesPriceCalculator.class);
-		when(salesPriceCalculator.getEstimatedSalesPrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
+		when(salesPriceCalculator.getEstimatedSalesPrice(ArgumentMatchers.<ILoadOption> any(), ArgumentMatchers.<IDischargeOption> any(), ArgumentMatchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -525,7 +525,7 @@ public class PriceIntervalProviderHelperTest {
 		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(2, 0);
 
 		final IPriceIntervalProvider loadPriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
-		when(loadPriceIntervalProvider.getPriceHourIntervals(Matchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), Matchers.<IPortTimeWindowsRecord> any()))
+		when(loadPriceIntervalProvider.getPriceHourIntervals(ArgumentMatchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), ArgumentMatchers.<IPortTimeWindowsRecord> any()))
 				.thenAnswer(new Answer<List<Integer>>() {
 					@Override
 					public List<Integer> answer(final InvocationOnMock invocation) throws Throwable {
@@ -536,7 +536,7 @@ public class PriceIntervalProviderHelperTest {
 				});
 
 		final IPriceIntervalProvider dischargePriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
-		when(dischargePriceIntervalProvider.getPriceHourIntervals(Matchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), Matchers.<IPortTimeWindowsRecord> any()))
+		when(dischargePriceIntervalProvider.getPriceHourIntervals(ArgumentMatchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), ArgumentMatchers.<IPortTimeWindowsRecord> any()))
 				.thenAnswer(new Answer<List<Integer>>() {
 					@Override
 					public List<Integer> answer(final InvocationOnMock invocation) throws Throwable {
@@ -550,23 +550,23 @@ public class PriceIntervalProviderHelperTest {
 				portTimeWindowsRecord);
 		final int[][] expected = new int[][] { { 0, 8 }, { 8, 13 }, { 13, 18 }, { 18, 23 }, { 23, 28 }, { 28, 33 }, { 33, 38 }, { 38, 43 }, { 43, 48 }, };
 		for (int i = 0; i < expected.length; i++) {
-			Assert.assertTrue(String.format("Expected %s got %s", Arrays.toString(expected[i]), Arrays.toString(overlappingIntervals[i])),
-					expected[i][0] == overlappingIntervals[i][0] && expected[i][1] == overlappingIntervals[i][1]);
+			Assertions.assertTrue(expected[i][0] == overlappingIntervals[i][0] && expected[i][1] == overlappingIntervals[i][1],
+					String.format("Expected %s got %s", Arrays.toString(expected[i]), Arrays.toString(overlappingIntervals[i])));
 		}
 
 		final List<int[]> priceDiffs = priceIntervalProviderHelper.buildComplexPriceIntervals(0, 50, loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider,
 				portTimeWindowsRecord);
 		for (int i = 0; i < priceDiffs.size() - 1; i++) {
 			final int[] d = priceDiffs.get(i);
-			Assert.assertTrue(d[1] == -5);
+			Assertions.assertTrue(d[1] == -5);
 		}
-		Assert.assertTrue(priceDiffs.get(priceDiffs.size() - 1)[0] == 50 && priceDiffs.get(priceDiffs.size() - 1)[1] == Integer.MIN_VALUE);
+		Assertions.assertTrue(priceDiffs.get(priceDiffs.size() - 1)[0] == 50 && priceDiffs.get(priceDiffs.size() - 1)[1] == Integer.MIN_VALUE);
 	}
 
 	static PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiff) {
 		final PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
-		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(t.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -574,7 +574,7 @@ public class PriceIntervalProviderHelperTest {
 				return input;
 			}
 		});
-		when(t.localTime(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(t.localTime(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -582,7 +582,7 @@ public class PriceIntervalProviderHelperTest {
 				return input;
 			}
 		});
-		when(t.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
+		when(t.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -592,7 +592,7 @@ public class PriceIntervalProviderHelperTest {
 		});
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
 		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(OptimiserUnitConvertor.convertToInternalDailyRate(220));
-		when(vesselBaseFuelCalculator.getBaseFuelPrices(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(baseFuels);
+		when(vesselBaseFuelCalculator.getBaseFuelPrices(ArgumentMatchers.<IVessel> any(), Mockito.anyInt())).thenReturn(baseFuels);
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -613,7 +613,7 @@ public class PriceIntervalProviderHelperTest {
 		final PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
 		final IVesselBaseFuelCalculator vbfc = Mockito.mock(IVesselBaseFuelCalculator.class);
-		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(t.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -622,7 +622,7 @@ public class PriceIntervalProviderHelperTest {
 				return input;
 			}
 		});
-		when(t.localTime(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(t.localTime(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -669,7 +669,7 @@ public class PriceIntervalProviderHelperTest {
 		final TimeWindowsTrimming timeWindowsTrimming = new TimeWindowsTrimming();
 
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
-		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(t.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -677,7 +677,7 @@ public class PriceIntervalProviderHelperTest {
 				return input;
 			}
 		});
-		when(t.localTime(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(t.localTime(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -685,7 +685,7 @@ public class PriceIntervalProviderHelperTest {
 				return input;
 			}
 		});
-		when(t.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
+		when(t.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -696,7 +696,7 @@ public class PriceIntervalProviderHelperTest {
 
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
 		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(0);
-		when(vesselBaseFuelCalculator.getBaseFuelPrices(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(baseFuels);
+		when(vesselBaseFuelCalculator.getBaseFuelPrices(ArgumentMatchers.<IVessel> any(), Mockito.anyInt())).thenReturn(baseFuels);
 
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 

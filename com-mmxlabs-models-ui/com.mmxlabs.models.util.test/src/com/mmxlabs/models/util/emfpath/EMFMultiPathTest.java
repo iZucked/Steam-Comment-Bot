@@ -9,8 +9,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class EMFMultiPathTest {
 
@@ -21,8 +21,8 @@ public class EMFMultiPathTest {
 
 		EMFMultiPath path = new EMFMultiPath(true);
 
-		Assert.assertNull(path.get(object));
-		Assert.assertNull(path.get(object, 0));
+		Assertions.assertNull(path.get(object));
+		Assertions.assertNull(path.get(object, 0));
 	}
 
 	@Test
@@ -32,8 +32,8 @@ public class EMFMultiPathTest {
 
 		EMFMultiPath path = new EMFMultiPath(false);
 
-		Assert.assertNull(path.get(object));
-		Assert.assertNull(path.get(object, 0));
+		Assertions.assertNull(path.get(object));
+		Assertions.assertNull(path.get(object, 0));
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class EMFMultiPathTest {
 
 		EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, EcorePackage.Literals.ENAMED_ELEMENT__NAME));
 
-		Assert.assertEquals("Name", path.get(testClass));
+		Assertions.assertEquals("Name", path.get(testClass));
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class EMFMultiPathTest {
 
 		EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, EcorePackage.Literals.ENAMED_ELEMENT__NAME));
 
-		Assert.assertNull(path.get(object));
+		Assertions.assertNull(path.get(object));
 	}
 
 	@Test
@@ -64,17 +64,17 @@ public class EMFMultiPathTest {
 
 		EMFMultiPath path = new EMFMultiPath(false, new EMFPath(true, EcorePackage.Literals.ENAMED_ELEMENT__NAME));
 
-		Assert.assertNull(path.get(object));
+		Assertions.assertNull(path.get(object));
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void testSinglePath_2B() {
 
 		EObject object = EcoreFactory.eINSTANCE.createEObject();
 
 		EMFMultiPath path = new EMFMultiPath(false, new EMFPath(false, EcorePackage.Literals.ENAMED_ELEMENT__NAME));
 
-		Assert.assertNull(path.get(object));
+		Assertions.assertThrows(RuntimeException.class, () -> path.get(object));
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class EMFMultiPathTest {
 
 		EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, EcorePackage.Literals.ECLASSIFIER__INSTANCE_TYPE_NAME), new EMFPath(true, EcorePackage.Literals.EPACKAGE__NS_PREFIX));
 
-		Assert.assertEquals("instance_name", path.get(testClass));
-		Assert.assertEquals("prefix", path.get(testPackage));
+		Assertions.assertEquals("instance_name", path.get(testClass));
+		Assertions.assertEquals("prefix", path.get(testPackage));
 	}
 }

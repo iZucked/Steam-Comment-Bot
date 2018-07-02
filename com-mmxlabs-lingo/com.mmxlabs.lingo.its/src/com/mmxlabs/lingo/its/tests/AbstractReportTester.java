@@ -4,16 +4,18 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assume;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.DynamicTest;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.ReportTest;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
@@ -33,88 +35,87 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
  */
 public abstract class AbstractReportTester extends AbstractOptimisationResultTester {
 
+	protected abstract void init(final String scenarioPath) throws Exception;
+
 	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
 		testReports(reportID, shortName, extension, null);
 	}
 
 	protected abstract void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception;
 
-	@Test
-	@Category(ReportTest.class)
-	public void reportTest_VerticalReport() throws Exception {
-		testReports(ReportTesterHelper.VERTICAL_REPORT_ID, ReportTesterHelper.VERTICAL_REPORT_SHORTNAME, "html");
-	}
+	public List<DynamicNode> makeTests(@NonNull final String scenarioURL) {
+		final List<DynamicNode> tests = new LinkedList<>();
 
-	@Test
-	@Category(ReportTest.class)
-	public void reportTest_ScheduleSummary() throws Exception {
-		testReports(ReportTesterHelper.SCHEDULE_SUMMARY_ID, ReportTesterHelper.SCHEDULE_SUMMARY_SHORTNAME, "html");
-	}
+		tests.add(DynamicTest.dynamicTest("VerticalReport", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.VERTICAL_REPORT_ID, ReportTesterHelper.VERTICAL_REPORT_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("ScheduleSummary", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.SCHEDULE_SUMMARY_ID, ReportTesterHelper.SCHEDULE_SUMMARY_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("PortRotations", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.PORT_ROTATIONS_ID, ReportTesterHelper.PORT_ROTATIONS_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("LatenessReport", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.LATENESS_REPORT_ID, ReportTesterHelper.LATENESS_REPORT_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("CapacityReport", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("VesselReport", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("CooldownReport", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.COOLDOWN_REPORT_ID, ReportTesterHelper.COOLDOWN_REPORT_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("HeadlineReport", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.HEADLINE_REPORT_ID, ReportTesterHelper.HEADLINE_REPORT_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("KPIReport", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.KPI_REPORT_ID, ReportTesterHelper.KPI_REPORT_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("CanalBookingsReport", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.CANAL_BOOKINGS_REPORT_ID, ReportTesterHelper.CANAL_BOOKINGS_REPORT_SHORTNAME, "html");
+		}));
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
+			tests.add(DynamicTest.dynamicTest("ExposuresReport", () -> {
+				Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
-	@Test
-	@Category(ReportTest.class)
-	public void reportTest_PortRotations() throws Exception {
-		testReports(ReportTesterHelper.PORT_ROTATIONS_ID, ReportTesterHelper.PORT_ROTATIONS_SHORTNAME, "html");
-	}
+				init(scenarioURL);
+				testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html");
+			}));
+		}
+		tests.add(DynamicTest.dynamicTest("IncomeStatementRegion", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+			init(scenarioURL);
+			testReports(ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_SHORTNAME, "html");
+		}));
+		tests.add(DynamicTest.dynamicTest("IncomeStatementContract", () -> {
+			Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
-	@Test
-	@Category(ReportTest.class)
-	public void testLatenessReport() throws Exception {
-		testReports(ReportTesterHelper.LATENESS_REPORT_ID, ReportTesterHelper.LATENESS_REPORT_SHORTNAME, "html");
-	}
+			init(scenarioURL);
+			testReports(ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME, "html");
+		}));
 
-	@Test
-	@Category(ReportTest.class)
-	public void testCapacityReport() throws Exception {
-		testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testVesselReport() throws Exception {
-		testReports(ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testCooldownReport() throws Exception {
-		testReports(ReportTesterHelper.COOLDOWN_REPORT_ID, ReportTesterHelper.COOLDOWN_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testHeadlineReport() throws Exception {
-		testReports(ReportTesterHelper.HEADLINE_REPORT_ID, ReportTesterHelper.HEADLINE_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testKPIReport() throws Exception {
-		testReports(ReportTesterHelper.KPI_REPORT_ID, ReportTesterHelper.KPI_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testCanalBookingsReport() throws Exception {
-		testReports(ReportTesterHelper.CANAL_BOOKINGS_REPORT_ID, ReportTesterHelper.CANAL_BOOKINGS_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testExposuresReport() throws Exception {
-		Assume.assumeTrue(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES));
-		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testIncomeStatementRegion() throws Exception {
-		testReports(ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testIncomeStatementContract() throws Exception {
-		testReports(ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME, "html");
+		return tests;
 	}
 }

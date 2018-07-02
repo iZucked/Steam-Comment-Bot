@@ -7,8 +7,8 @@ package com.mmxlabs.scheduler.optimiser.annotations.impl;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 
@@ -21,7 +21,7 @@ public class ProfitAndLossAnnotationTest {
 
 		final ProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(entries);
 
-		Assert.assertSame(entries, annotation.getEntries());
+		Assertions.assertSame(entries, annotation.getEntries());
 	}
 
 }

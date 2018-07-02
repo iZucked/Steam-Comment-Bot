@@ -13,7 +13,7 @@ import java.util.Calendar;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.port.Port;
@@ -150,7 +150,7 @@ public class PricingTimesScenario {
 			runner.evaluateInitialState();
 
 			final Schedule schedule = runner.getScenarioRunner().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working
 			final String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
@@ -164,7 +164,7 @@ public class PricingTimesScenario {
 				final double expectedPrice = prices[i];
 				System.out.println("Sale price: " + salePrice);
 				System.out.println("Expected price:" + expectedPrice);
-				Assert.assertEquals(String.format(errorMsg, i, expectedPrice, salePrice), expectedPrice, salePrice, 0.0001);
+				Assertions.assertEquals(expectedPrice, salePrice, 0.0001, String.format(errorMsg, i, expectedPrice, salePrice));
 			}
 
 		} finally {

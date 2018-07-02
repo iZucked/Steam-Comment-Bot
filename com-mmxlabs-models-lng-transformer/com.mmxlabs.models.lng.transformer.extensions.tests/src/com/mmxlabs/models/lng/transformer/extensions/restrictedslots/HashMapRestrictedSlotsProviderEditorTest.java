@@ -8,8 +8,8 @@ import static org.mockito.Mockito.mock;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
@@ -26,13 +26,13 @@ public class HashMapRestrictedSlotsProviderEditorTest {
 
 		provider.addRestrictedElements(element1, Collections.singleton(element2), null);
 
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element1));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element1));
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element2));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element1));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element1));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element2));
 
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element2));
-		Assert.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element2));
+		Assertions.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element2));
 	}
 
 	@Test
@@ -47,17 +47,17 @@ public class HashMapRestrictedSlotsProviderEditorTest {
 
 		provider.addRestrictedElements(element1, Collections.singleton(element2), null);
 
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element2));
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
-		Assert.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element2));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element3));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
+		Assertions.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element3));
 
 		provider.addRestrictedElements(element1, Collections.singleton(element3), null);
 
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element2));
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
-		Assert.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element2));
-		Assert.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element3));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
+		Assertions.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element2));
+		Assertions.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element3));
 	}
 
 	@Test
@@ -71,13 +71,13 @@ public class HashMapRestrictedSlotsProviderEditorTest {
 
 		provider.addRestrictedElements(element1, null, Collections.singleton(element2));
 
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element1));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element1));
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element2));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element1));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element1));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element2));
 
-		Assert.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element2));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element2));
+		Assertions.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element2));
 	}
 
 	@Test
@@ -91,16 +91,16 @@ public class HashMapRestrictedSlotsProviderEditorTest {
 
 		provider.addRestrictedElements(element1, null, Collections.singleton(element2));
 
-		Assert.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element2));
-		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element2));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element3));
+		Assertions.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element3));
 
 		provider.addRestrictedElements(element1, null, Collections.singleton(element3));
 
-		Assert.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element2));
-		Assert.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element3));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element2));
-		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element3));
+		Assertions.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element2));
+		Assertions.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element3));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element2));
+		Assertions.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element3));
 	}
 }

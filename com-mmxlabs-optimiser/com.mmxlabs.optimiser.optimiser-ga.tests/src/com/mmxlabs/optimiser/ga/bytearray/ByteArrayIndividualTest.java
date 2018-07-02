@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.optimiser.ga.bytearray;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ByteArrayIndividualTest {
 
@@ -15,15 +15,15 @@ public class ByteArrayIndividualTest {
 		final ByteArrayIndividual original = new ByteArrayIndividual(bytes);
 
 		final ByteArrayIndividual clone = original.clone();
-		Assert.assertNotNull(clone);
+		Assertions.assertNotNull(clone);
 
 		// Ensure equals & hashcode are the same
-		Assert.assertEquals(original, clone);
-		Assert.assertArrayEquals(original.bytes, clone.bytes);
-		Assert.assertEquals(original.hashCode(), clone.hashCode());
-		Assert.assertEquals(original.hashBytes(), clone.hashBytes());
+		Assertions.assertEquals(original, clone);
+		Assertions.assertArrayEquals(original.bytes, clone.bytes);
+		Assertions.assertEquals(original.hashCode(), clone.hashCode());
+		Assertions.assertEquals(original.hashBytes(), clone.hashBytes());
 
 		// However, arrays should be different instances
-		Assert.assertNotSame(original.bytes, clone.bytes);
+		Assertions.assertNotSame(original.bytes, clone.bytes);
 	}
 }

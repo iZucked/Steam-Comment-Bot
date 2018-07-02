@@ -6,9 +6,7 @@ package com.mmxlabs.lingo.its.tests;
 
 import java.net.URL;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Test;
 
 /**
  * Abstract class to run parameterised tests on optimisation results. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
@@ -25,7 +23,6 @@ import org.junit.runners.Parameterized;
  * 
  * 
  */
-@RunWith(value = Parameterized.class)
 public abstract class AbstractOptimisationTester_CSV extends AbstractOptimisationResultTester {
 
 	// Used by annotation before getting to constructor

@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -128,7 +128,7 @@ public class SuboptimalScenarioTester {
 	 *            A list of discharge ports for the expected wiring, in the same order as the load ports they should be wired to.
 	 */
 	public void testExpectedWiringProduced(final Port[] loadPorts, final Port[] dischargePorts) {
-		Assert.assertEquals("Load port and discharge port lists should have same length", loadPorts.length, dischargePorts.length);
+		Assertions.assertEquals(loadPorts.length, dischargePorts.length, "Load port and discharge port lists should have same length");
 
 		final int n = loadPorts.length;
 
@@ -153,7 +153,7 @@ public class SuboptimalScenarioTester {
 			runner.run(true);
 
 			final Schedule schedule = runner.getScenarioRunner().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// set up an array storing whether load ports are assigned at all
 			final boolean[] found = new boolean[n];
@@ -167,20 +167,19 @@ public class SuboptimalScenarioTester {
 				final Port dischargePort = ca.getSlotAllocations().get(1).getPort();
 
 				final int index = Arrays.asList(loadPorts).indexOf(loadPort);
-				Assert.assertTrue(String.format("Load port '%s' was assigned a wiring but the expected wiring does not contain it.", loadPort.getName()), index >= 0);
+				Assertions.assertTrue(index >= 0, String.format("Load port '%s' was assigned a wiring but the expected wiring does not contain it.", loadPort.getName()));
 
 				if (index >= 0) {
 					found[index] = true;
-					Assert.assertTrue(
+					Assertions.assertTrue(dischargePorts[index].equals(dischargePort),
 							String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f", loadPort.getName(),
-									dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
-							dischargePorts[index].equals(dischargePort));
+									dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()));
 				}
 			}
 
 			// check that all expected load ports were assigned
 			for (int i = 0; i < n; i++) {
-				Assert.assertTrue(String.format("Expected a wiring for load port '%s' but none assigned in solution.", loadPorts[i].getName()), found[i]);
+				Assertions.assertTrue(found[i], String.format("Expected a wiring for load port '%s' but none assigned in solution.", loadPorts[i].getName()));
 			}
 		} finally {
 			runner.dispose();
@@ -222,7 +221,7 @@ public class SuboptimalScenarioTester {
 	 * final boolean result = checker.checkSequence(sequence, null, errors);
 	 * 
 	 * final String format = "Constraint checker %s should %s on this scenario."; String failureMessage = String.format(format, checker.getName(), (expectedResult ? "pass" : "fail")); if (!result) {
-	 * failureMessage = failureMessage + String.format(" Failed with %d error(s) (beginning '%s').", errors.size(), errors.get(0)); } Assert.assertEquals(failureMessage, expectedResult, result);
+	 * failureMessage = failureMessage + String.format(" Failed with %d error(s) (beginning '%s').", errors.size(), errors.get(0)); } Assertions.assertEquals(failureMessage, expectedResult, result);
 	 * 
 	 * }
 	 */
@@ -259,7 +258,7 @@ public class SuboptimalScenarioTester {
 		if (!result) {
 			failureMessage = failureMessage + String.format(" Failed with %d error(s) (beginning '%s').", errors.size(), errors.get(0));
 		}
-		Assert.assertEquals(failureMessage, expectedResult, result);
+		Assertions.assertEquals(expectedResult, result, failureMessage);
 
 	}
 

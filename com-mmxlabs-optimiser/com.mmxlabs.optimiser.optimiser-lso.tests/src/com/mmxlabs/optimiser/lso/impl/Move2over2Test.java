@@ -7,8 +7,8 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -48,13 +48,13 @@ public class Move2over2Test {
 		move.setResource1Position(resource1Position);
 		move.setResource2Position(resource2Position);
 
-		Assert.assertTrue(move.validate(sequences));
+		Assertions.assertTrue(move.validate(sequences));
 
 		move.setResource1Position(0);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setResource1Position(4);
-		Assert.assertTrue(move.validate(sequences));
+		Assertions.assertTrue(move.validate(sequences));
 	}
 
 	@Test
@@ -92,15 +92,15 @@ public class Move2over2Test {
 		final List<ISequenceElement> expectedSequence2 = CollectionsUtil.makeArrayList2(ISequenceElement.class, new IntegerElement(6), new IntegerElement(7), new IntegerElement(8),
 				new IntegerElement(9), new IntegerElement(4), new IntegerElement(11));
 
-		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
-		Assert.assertEquals(expectedSequence2.size(), sequence2.size());
+		Assertions.assertEquals(expectedSequence1.size(), sequence1.size());
+		Assertions.assertEquals(expectedSequence2.size(), sequence2.size());
 
 		for (int i = 0; i < expectedSequence1.size(); i++) {
-			Assert.assertEquals(expectedSequence1.get(i), sequence1.get(i));
+			Assertions.assertEquals(expectedSequence1.get(i), sequence1.get(i));
 		}
 
 		for (int i = 0; i < expectedSequence2.size(); i++) {
-			Assert.assertEquals(expectedSequence2.get(i), sequence2.get(i));
+			Assertions.assertEquals(expectedSequence2.get(i), sequence2.get(i));
 		}
 	}
 }

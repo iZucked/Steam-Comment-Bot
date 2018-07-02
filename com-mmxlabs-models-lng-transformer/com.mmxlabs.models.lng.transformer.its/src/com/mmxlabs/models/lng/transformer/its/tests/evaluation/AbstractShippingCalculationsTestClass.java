@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.opentest4j.AssertionFailedError;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -39,8 +40,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
-import junit.framework.AssertionFailedError;
-
 public class AbstractShippingCalculationsTestClass {
 
 	/**
@@ -64,7 +63,7 @@ public class AbstractShippingCalculationsTestClass {
 	}
 
 	public void checkClasses(final EList<? extends Object> objects, final Class<?>[] classes) {
-		Assert.assertEquals("Unexpected number of events in sequence", classes.length, objects.size());
+		Assertions.assertEquals(classes.length, objects.size(), "Unexpected number of events in sequence");
 		for (int i = 0; i < classes.length; i++) {
 			if (i >= objects.size()) {
 				return;
@@ -72,7 +71,7 @@ public class AbstractShippingCalculationsTestClass {
 			final Object object = objects.get(i);
 			final Class<?> clazz = classes[i];
 			final String format = "Event #%d of schedule should be instance of %s not %s.";
-			Assert.assertTrue(String.format(format, i, clazz.toString(), object.getClass().toString()), clazz.isInstance(object));
+			Assertions.assertTrue(clazz.isInstance(object), String.format(format, i, clazz.toString(), object.getClass().toString()));
 		}
 	}
 
@@ -192,7 +191,7 @@ public class AbstractShippingCalculationsTestClass {
 	 * @return A
 	 */
 	public List<String> checkValues(final Expectations field, final List<? extends Event> events, final Integer[] values) {
-		Assert.assertEquals(values.length, events.size());
+		Assertions.assertEquals(values.length, events.size());
 
 		final List<String> result = new ArrayList<>();
 
@@ -307,7 +306,7 @@ public class AbstractShippingCalculationsTestClass {
 		final List<String> failures = new ArrayList<>();
 
 		if (pnls != null) {
-			Assert.assertEquals(indices.length, pnls.length);
+			Assertions.assertEquals(indices.length, pnls.length);
 			// each pnl value corresponds to a particular cargo
 			for (int i = 0; i < pnls.length; i++) {
 				if (pnls[i] != null) {

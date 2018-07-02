@@ -24,8 +24,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -75,7 +75,7 @@ public class CopyPricingToScenarioTests {
 		final EditingDomain editingDomain = createLocalEditingDomain(pricingModel);
 
 		final Command updateCommand = PricingToScenarioCopier.getUpdateCommand(editingDomain, pricingModel, originalVersion);
-		Assert.assertTrue(updateCommand.canExecute());
+		Assertions.assertTrue(updateCommand.canExecute());
 		editingDomain.getCommandStack().execute(updateCommand);
 
 		final PricingVersion derivedVersion = PricingFromScenarioCopier.generateVersion(pricingModel);
@@ -88,7 +88,7 @@ public class CopyPricingToScenarioTests {
 
 		String derivedJSON = serialise(mapper, derivedVersion);
 
-		Assert.assertEquals(expectedResult, derivedJSON);
+		Assertions.assertEquals(expectedResult, derivedJSON);
 
 	}
 
@@ -136,34 +136,34 @@ public class CopyPricingToScenarioTests {
 		pricingModel.getCommodityCurves().addAll(commodityIndices);
 		pricingModel.getCurrencyCurves().addAll(currencyIndices);
 
-		Assert.assertFalse(pricingModel.getCurrencyCurves().isEmpty());
+		Assertions.assertFalse(pricingModel.getCurrencyCurves().isEmpty());
 
 		final EditingDomain ed = createLocalEditingDomain(pricingModel);
 
 		final PricingVersion pricingVersion = createDefaultPricingVersion();
 		final Command updatePricingCommand = PricingToScenarioCopier.getUpdateCommand(ed, pricingModel, pricingVersion);
 
-		Assert.assertNotNull(updatePricingCommand);
+		Assertions.assertNotNull(updatePricingCommand);
 
-		Assert.assertTrue(updatePricingCommand.canExecute());
+		Assertions.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
 		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH")).findAny();
-		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals("USD", potentialHH.get().getCurrencyUnit());
-		Assert.assertEquals("m3", potentialHH.get().getVolumeUnit());
-		Assert.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertEquals(7.2, potentialHH.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
+		Assertions.assertTrue(potentialHH.isPresent());
+		Assertions.assertEquals("USD", potentialHH.get().getCurrencyUnit());
+		Assertions.assertEquals("m3", potentialHH.get().getVolumeUnit());
+		Assertions.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assertions.assertEquals(7.2, potentialHH.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
 
 		final Optional<CommodityCurve> potentialII = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("II")).findAny();
-		Assert.assertTrue(potentialII.isPresent());
-		Assert.assertEquals("USD", potentialII.get().getCurrencyUnit());
-		Assert.assertEquals("m3", potentialII.get().getVolumeUnit());
-		Assert.assertEquals(7.3, potentialII.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertEquals(7.4, potentialII.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
+		Assertions.assertTrue(potentialII.isPresent());
+		Assertions.assertEquals("USD", potentialII.get().getCurrencyUnit());
+		Assertions.assertEquals("m3", potentialII.get().getVolumeUnit());
+		Assertions.assertEquals(7.3, potentialII.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assertions.assertEquals(7.4, potentialII.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
 
 		// Currency curve is no longer present
-		Assert.assertTrue(pricingModel.getCurrencyCurves().isEmpty());
+		Assertions.assertTrue(pricingModel.getCurrencyCurves().isEmpty());
 
 	}
 
@@ -197,7 +197,7 @@ public class CopyPricingToScenarioTests {
 		pricingModel.getCommodityCurves().addAll(commodityIndices);
 		pricingModel.getCurrencyCurves().addAll(currencyIndices);
 
-		Assert.assertFalse(pricingModel.getCurrencyCurves().isEmpty());
+		Assertions.assertFalse(pricingModel.getCurrencyCurves().isEmpty());
 
 		final PricingVersion derivedVersion = PricingFromScenarioCopier.generateVersion(pricingModel);
 
@@ -207,27 +207,27 @@ public class CopyPricingToScenarioTests {
 
 		final Command updatePricingCommand = PricingToScenarioCopier.getUpdateCommand(ed, pricingModel, pricingVersion);
 
-		Assert.assertNotNull(updatePricingCommand);
+		Assertions.assertNotNull(updatePricingCommand);
 
-		Assert.assertTrue(updatePricingCommand.canExecute());
+		Assertions.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
 		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH.extra")).findAny();
-		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals("USD", potentialHH.get().getCurrencyUnit());
-		Assert.assertEquals("m3", potentialHH.get().getVolumeUnit());
-		Assert.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertEquals(7.2, potentialHH.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
+		Assertions.assertTrue(potentialHH.isPresent());
+		Assertions.assertEquals("USD", potentialHH.get().getCurrencyUnit());
+		Assertions.assertEquals("m3", potentialHH.get().getVolumeUnit());
+		Assertions.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assertions.assertEquals(7.2, potentialHH.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
 
 		final Optional<CommodityCurve> potentialII = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("II.extra")).findAny();
-		Assert.assertTrue(potentialII.isPresent());
-		Assert.assertEquals("USD", potentialII.get().getCurrencyUnit());
-		Assert.assertEquals("m3", potentialII.get().getVolumeUnit());
-		Assert.assertEquals(7.3, potentialII.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertEquals(7.4, potentialII.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
+		Assertions.assertTrue(potentialII.isPresent());
+		Assertions.assertEquals("USD", potentialII.get().getCurrencyUnit());
+		Assertions.assertEquals("m3", potentialII.get().getVolumeUnit());
+		Assertions.assertEquals(7.3, potentialII.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assertions.assertEquals(7.4, potentialII.get().valueForMonth(YearMonth.of(2017, 2)), 0.01);
 
 		// Currency curve is no longer present
-		Assert.assertTrue(pricingModel.getCurrencyCurves().isEmpty());
+		Assertions.assertTrue(pricingModel.getCurrencyCurves().isEmpty());
 
 	}
 
@@ -243,8 +243,8 @@ public class CopyPricingToScenarioTests {
 		ed.getCommandStack().execute(updatePricingCommand);
 
 		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH")).findAny();
-		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assertions.assertTrue(potentialHH.isPresent());
+		Assertions.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
 	}
 
 	@Test
@@ -291,17 +291,17 @@ public class CopyPricingToScenarioTests {
 		final Command updatePricingCommand = PricingToScenarioCopier.getUpdateCommand(ed, pricingModel, pricingVersion);
 
 		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH")).findAny();
-		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals(6.9, potentialHH.get().valueForMonth(YearMonth.of(2016, 12)), 0.01);
+		Assertions.assertTrue(potentialHH.isPresent());
+		Assertions.assertEquals(6.9, potentialHH.get().valueForMonth(YearMonth.of(2016, 12)), 0.01);
 
-		Assert.assertNotNull(updatePricingCommand);
+		Assertions.assertNotNull(updatePricingCommand);
 
-		Assert.assertTrue(updatePricingCommand.canExecute());
+		Assertions.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
-		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
-		Assert.assertNull(potentialHH.get().valueForMonth(YearMonth.of(2016, 12)));
+		Assertions.assertTrue(potentialHH.isPresent());
+		Assertions.assertEquals(7.1, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)), 0.01);
+		Assertions.assertNull(potentialHH.get().valueForMonth(YearMonth.of(2016, 12)));
 	}
 
 	@Test
@@ -318,12 +318,12 @@ public class CopyPricingToScenarioTests {
 
 		final Command updatePricingCommand = PricingToScenarioCopier.getUpdateCommand(ed, pricingModel, pricingVersion);
 
-		Assert.assertTrue(updatePricingCommand.canExecute());
+		Assertions.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
 		final Optional<CommodityCurve> potentialRel = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("REL_HH")).findAny();
-		Assert.assertTrue(potentialRel.isPresent());
-		Assert.assertEquals("105%HH", potentialRel.get().getExpression());
+		Assertions.assertTrue(potentialRel.isPresent());
+		Assertions.assertEquals("105%HH", potentialRel.get().getExpression());
 	}
 
 	@Test
@@ -342,16 +342,16 @@ public class CopyPricingToScenarioTests {
 
 		final Command updatePricingCommand = PricingToScenarioCopier.getUpdateCommand(ed, pricingModel, pricingVersion);
 
-		Assert.assertTrue(updatePricingCommand.canExecute());
+		Assertions.assertTrue(updatePricingCommand.canExecute());
 		ed.getCommandStack().execute(updatePricingCommand);
 
 		final Optional<CharterCurve> potentialCool = pricingModel.getCharterCurves().stream().filter(i -> i.getName().equals("COOL")).findAny();
-		Assert.assertTrue(potentialCool.isPresent());
-		Assert.assertEquals(8000, potentialCool.get().valueForMonth(YearMonth.of(2017, 1)).intValue());
+		Assertions.assertTrue(potentialCool.isPresent());
+		Assertions.assertEquals(8000, potentialCool.get().valueForMonth(YearMonth.of(2017, 1)).intValue());
 
 		final Optional<CommodityCurve> potentialHH = pricingModel.getCommodityCurves().stream().filter(i -> i.getName().equals("HH")).findAny();
-		Assert.assertTrue(potentialHH.isPresent());
-		Assert.assertEquals(7.1d, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)).doubleValue(), 0.01);
+		Assertions.assertTrue(potentialHH.isPresent());
+		Assertions.assertEquals(7.1d, potentialHH.get().valueForMonth(YearMonth.of(2017, 1)).doubleValue(), 0.01);
 	}
 
 	private static PricingVersion createDefaultPricingVersion() {

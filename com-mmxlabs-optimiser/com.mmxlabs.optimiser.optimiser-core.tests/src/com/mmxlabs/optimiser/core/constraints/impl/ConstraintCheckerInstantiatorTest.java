@@ -7,8 +7,8 @@ package com.mmxlabs.optimiser.core.constraints.impl;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -26,7 +26,7 @@ public class ConstraintCheckerInstantiatorTest {
 		final IPhaseOptimisationData data = Mockito.mock(IPhaseOptimisationData.class);
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, data);
 
-		Assert.assertTrue(checkers.isEmpty());
+		Assertions.assertTrue(checkers.isEmpty());
 	}
 
 	@Test
@@ -40,9 +40,9 @@ public class ConstraintCheckerInstantiatorTest {
 
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, data);
 
-		Assert.assertEquals(1, checkers.size());
+		Assertions.assertEquals(1, checkers.size());
 
-		Assert.assertTrue(checkers.get(0) instanceof MockConstraintChecker);
+		Assertions.assertTrue(checkers.get(0) instanceof MockConstraintChecker);
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class ConstraintCheckerInstantiatorTest {
 
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, names, data);
 
-		Assert.assertTrue(checkers.isEmpty());
+		Assertions.assertTrue(checkers.isEmpty());
 	}
 
 	@Test
@@ -69,9 +69,9 @@ public class ConstraintCheckerInstantiatorTest {
 
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, Collections.singletonList("Unknown"), data);
 
-		Assert.assertEquals(1, checkers.size());
+		Assertions.assertEquals(1, checkers.size());
 
-		Assert.assertNull(checkers.get(0));
+		Assertions.assertNull(checkers.get(0));
 
 	}
 
@@ -85,8 +85,8 @@ public class ConstraintCheckerInstantiatorTest {
 
 		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, Collections.singletonList("Checker"), data);
 
-		Assert.assertEquals(1, checkers.size());
+		Assertions.assertEquals(1, checkers.size());
 
-		Assert.assertTrue(checkers.get(0) instanceof MockConstraintChecker);
+		Assertions.assertTrue(checkers.get(0) instanceof MockConstraintChecker);
 	}
 }

@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
@@ -43,7 +43,7 @@ public class LoadSlotCVConstraintTest {
 		final LoadSlotCVConstraint constraint = new LoadSlotCVConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertTrue(status.isOK());
+		Assertions.assertTrue(status.isOK());
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class LoadSlotCVConstraintTest {
 		final LoadSlotCVConstraint constraint = new LoadSlotCVConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertFalse(status.isOK());
+		Assertions.assertFalse(status.isOK());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class LoadSlotCVConstraintTest {
 		final LoadSlotCVConstraint constraint = new LoadSlotCVConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertFalse(status.isOK());
+		Assertions.assertFalse(status.isOK());
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class LoadSlotCVConstraintTest {
 		final LoadSlotCVConstraint constraint = new LoadSlotCVConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertTrue(status.isOK());
+		Assertions.assertTrue(status.isOK());
 	}
 
 }

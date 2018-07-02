@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common.curves;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author hinton
@@ -17,14 +17,14 @@ public class StepwiseIntegerCurveTest {
 		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
 		c.setDefaultValue(12);
 
-		Assert.assertEquals(12, c.getDefaultValue());
+		Assertions.assertEquals(12, c.getDefaultValue());
 
-		Assert.assertEquals(12, c.getValueAtPoint(123));
+		Assertions.assertEquals(12, c.getValueAtPoint(123));
 		c.setValueAfter(10, 44);
 
-		Assert.assertEquals(12, c.getValueAtPoint(9));
+		Assertions.assertEquals(12, c.getValueAtPoint(9));
 
-		Assert.assertEquals(44, c.getValueAtPoint(10));
+		Assertions.assertEquals(44, c.getValueAtPoint(10));
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class StepwiseIntegerCurveTest {
 		}
 
 		for (int i = 0; i < 100; i++) {
-			Assert.assertEquals(c.getValueAtPoint(i), i * 2L);
+			Assertions.assertEquals(c.getValueAtPoint(i), i * 2L);
 		}
 	}
 }

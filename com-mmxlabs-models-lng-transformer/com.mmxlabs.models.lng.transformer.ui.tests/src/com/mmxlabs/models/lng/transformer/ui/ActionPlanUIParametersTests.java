@@ -7,8 +7,8 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -23,9 +23,9 @@ public class ActionPlanUIParametersTests {
 		YearMonth end = YearMonth.parse("2015-12");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.LOW, start, end, s);
-		Assert.assertEquals(30_000_000, settings.getTotalEvaluations());
-		Assert.assertEquals(2_000_000, settings.getInRunEvaluations());
-		Assert.assertEquals(5_000, settings.getSearchDepth());
+		Assertions.assertEquals(30_000_000, settings.getTotalEvaluations());
+		Assertions.assertEquals(2_000_000, settings.getInRunEvaluations());
+		Assertions.assertEquals(5_000, settings.getSearchDepth());
 	}
 
 	@Test
@@ -34,10 +34,10 @@ public class ActionPlanUIParametersTests {
 		YearMonth end = YearMonth.parse("2015-12");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.MEDIUM, start, end, s);
-		Assert.assertEquals(5_000_000, settings.getTotalEvaluations());
-		Assert.assertEquals(1_500_000, settings.getInRunEvaluations());
-		Assert.assertEquals(5_000, settings.getSearchDepth());
-		Assert.assertSame(s, settings.getConstraintAndFitnessSettings());
+		Assertions.assertEquals(5_000_000, settings.getTotalEvaluations());
+		Assertions.assertEquals(1_500_000, settings.getInRunEvaluations());
+		Assertions.assertEquals(5_000, settings.getSearchDepth());
+		Assertions.assertSame(s, settings.getConstraintAndFitnessSettings());
 	}
 
 	@Test
@@ -46,10 +46,10 @@ public class ActionPlanUIParametersTests {
 		YearMonth end = YearMonth.parse("2015-12");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.HIGH, start, end, s);
-		Assert.assertEquals(3_000_000, settings.getTotalEvaluations());
-		Assert.assertEquals(1_000_000, settings.getInRunEvaluations());
-		Assert.assertEquals(5_000, settings.getSearchDepth());
-		Assert.assertSame(s, settings.getConstraintAndFitnessSettings());
+		Assertions.assertEquals(3_000_000, settings.getTotalEvaluations());
+		Assertions.assertEquals(1_000_000, settings.getInRunEvaluations());
+		Assertions.assertEquals(5_000, settings.getSearchDepth());
+		Assertions.assertSame(s, settings.getConstraintAndFitnessSettings());
 	}
 
 	@Test
@@ -59,10 +59,10 @@ public class ActionPlanUIParametersTests {
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.LOW, start, end, s);
-		Assert.assertEquals(60_000_000, settings.getTotalEvaluations());
-		Assert.assertEquals(2_000_000, settings.getInRunEvaluations());
-		Assert.assertEquals(5_000, settings.getSearchDepth());
-		Assert.assertSame(s, settings.getConstraintAndFitnessSettings());
+		Assertions.assertEquals(60_000_000, settings.getTotalEvaluations());
+		Assertions.assertEquals(2_000_000, settings.getInRunEvaluations());
+		Assertions.assertEquals(5_000, settings.getSearchDepth());
+		Assertions.assertSame(s, settings.getConstraintAndFitnessSettings());
 	}
 
 	@Test
@@ -71,10 +71,10 @@ public class ActionPlanUIParametersTests {
 		YearMonth end = YearMonth.parse("2016-03");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.MEDIUM, start, end, s);
-		Assert.assertEquals(30_000_000, settings.getTotalEvaluations());
-		Assert.assertEquals(2_000_000, settings.getInRunEvaluations());
-		Assert.assertEquals(5_000, settings.getSearchDepth());
-		Assert.assertSame(s, settings.getConstraintAndFitnessSettings());
+		Assertions.assertEquals(30_000_000, settings.getTotalEvaluations());
+		Assertions.assertEquals(2_000_000, settings.getInRunEvaluations());
+		Assertions.assertEquals(5_000, settings.getSearchDepth());
+		Assertions.assertSame(s, settings.getConstraintAndFitnessSettings());
 	}
 
 	@Test
@@ -83,9 +83,9 @@ public class ActionPlanUIParametersTests {
 		YearMonth end = YearMonth.parse("2016-03");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.HIGH, start, end, s);
-		Assert.assertEquals(6_000_000, settings.getTotalEvaluations());
-		Assert.assertEquals(2_000_000, settings.getInRunEvaluations());
-		Assert.assertEquals(5_000, settings.getSearchDepth());
-		Assert.assertSame(s, settings.getConstraintAndFitnessSettings());
+		Assertions.assertEquals(6_000_000, settings.getTotalEvaluations());
+		Assertions.assertEquals(2_000_000, settings.getInRunEvaluations());
+		Assertions.assertEquals(5_000, settings.getSearchDepth());
+		Assertions.assertSame(s, settings.getConstraintAndFitnessSettings());
 	}
 }

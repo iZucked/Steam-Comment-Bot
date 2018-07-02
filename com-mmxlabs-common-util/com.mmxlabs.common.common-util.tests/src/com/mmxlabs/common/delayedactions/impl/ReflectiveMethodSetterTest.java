@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.common.delayedactions.impl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.ITransformer;

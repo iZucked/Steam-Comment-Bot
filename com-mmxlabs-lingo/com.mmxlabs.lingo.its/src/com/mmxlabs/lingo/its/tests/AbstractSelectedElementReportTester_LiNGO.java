@@ -8,8 +8,6 @@ import java.net.URL;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -31,17 +29,17 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
  * 
  * 
  */
-@RunWith(value = Parameterized.class)
 public abstract class AbstractSelectedElementReportTester_LiNGO extends AbstractSelectedElementReportTester {
 
-	private final Pair<String, String> key;
+	private Pair<String, String> key;
 
-	private final String elementID;
+	private String elementID;
 
-	public AbstractSelectedElementReportTester_LiNGO(final String name, final String scenarioPath, String elementID) throws Exception {
+	@Override
+	public void init(final String scenarioPath, String elementID) throws Exception {
 
 		this.elementID = elementID;
-		key = new Pair<>(name, scenarioPath);
+		key = new Pair<>(scenarioPath, scenarioPath);
 	}
 
 	@Override

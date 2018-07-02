@@ -13,8 +13,8 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -72,22 +72,22 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			final EList<Event> events = cargoAllocation.getSequence().getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
-			Assert.assertEquals(horizon, lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
+			Assertions.assertEquals(horizon, lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 		});
 	}
@@ -116,9 +116,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
-			Assert.assertEquals(0, schedule.getSequences().size());
+			Assertions.assertEquals(0, schedule.getSequences().size());
 		});
 	}
 
@@ -152,28 +152,28 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			final EList<Event> events = cargoAllocation.getSequence().getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// End near early window bound
 			// As we can finish any time, there is no need to keep going until schedule end date
-			Assert.assertTrue(lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate().isBefore(horizon));
+			Assertions.assertTrue(lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate().isBefore(horizon));
 
 			// TODO: Not sure if we need +1 here...
-			Assert.assertFalse(LocalDateTime.of(2016, 1, 1, 0, 0, 0).isAfter(lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+			Assertions.assertFalse(LocalDateTime.of(2016, 1, 1, 0, 0, 0).isAfter(lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
 		});
 	}
 
@@ -207,28 +207,28 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			final EList<Event> events = cargoAllocation.getSequence().getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// End near early window bound
 			// As we can finish any time, there is no need to keep going until schedule end date
-			// Assert.assertTrue(lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate().isBefore(horizon));
+			// Assertions.assertTrue(lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate().isBefore(horizon));
 
 			// TODO: Not sure if we need +1 here...
-			Assert.assertEquals(LocalDateTime.of(2016, 3, 1, 0, 0, 0), lastEvent.getEnd().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+			Assertions.assertEquals(LocalDateTime.of(2016, 3, 1, 0, 0, 0), lastEvent.getEnd().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 		});
 	}
 
@@ -262,24 +262,24 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			final EList<Event> events = cargoAllocation.getSequence().getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// As we can finish any time, there is no need to keep going until schedule end date
-			Assert.assertTrue(lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate().isBefore(horizon));
+			Assertions.assertTrue(lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate().isBefore(horizon));
 
 		});
 	}
@@ -330,29 +330,29 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			Assert.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
 
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			final EList<Event> events = cargoAllocation.getSequence().getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
-			Assert.assertEquals(horizon, lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
+			Assertions.assertEquals(horizon, lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assert.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
-			Assert.assertEquals(horizon, period_vesselAvailability.getEndAfter().plusHours(1).toLocalDate());
-			Assert.assertEquals(LocalDate.of(2016, 7, 1), period_vesselAvailability.getEndBy().plusHours(1).toLocalDate());
+			Assertions.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
+			Assertions.assertEquals(horizon, period_vesselAvailability.getEndAfter().plusHours(1).toLocalDate());
+			Assertions.assertEquals(LocalDate.of(2016, 7, 1), period_vesselAvailability.getEndBy().plusHours(1).toLocalDate());
 
 		}, null);
 	}
@@ -415,31 +415,31 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			Sequence sequence = cargoAllocation.getSequence();
 			final List<Event> events = sequence.getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Expect to end in time for cargo 2 loading which has been stripped out
-			Assert.assertEquals(LocalDate.of(2016, 1, 5), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
+			Assertions.assertEquals(LocalDate.of(2016, 1, 5), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assert.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
-			Assert.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndBy());
+			Assertions.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndBy());
 
-			Assert.assertNull(optimiserScenario.getSchedulingEndDate());
+			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
 	}
 
@@ -501,31 +501,31 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			Sequence sequence = cargoAllocation.getSequence();
 			final List<Event> events = sequence.getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Expect to end in time for cargo 2 loading which has been stripped out
-			Assert.assertEquals(LocalDate.of(2016, 1, 5), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
+			Assertions.assertEquals(LocalDate.of(2016, 1, 5), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assert.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
-			Assert.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndBy());
+			Assertions.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndBy());
 
-			Assert.assertNull(optimiserScenario.getSchedulingEndDate());
+			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
 	}
 
@@ -588,31 +588,31 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			Sequence sequence = cargoAllocation.getSequence();
 			final List<Event> events = sequence.getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Expect to end in time for cargo 2 loading which has been stripped out
-			Assert.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
+			Assertions.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assert.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
-			Assert.assertEquals(LocalDateTime.of(2016, 4, 16, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselAvailability.getEndBy());
+			Assertions.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
+			Assertions.assertEquals(LocalDateTime.of(2016, 4, 16, 0, 0, 0), period_vesselAvailability.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselAvailability.getEndBy());
 
-			Assert.assertNull(optimiserScenario.getSchedulingEndDate());
+			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
 	}
 
@@ -678,31 +678,31 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			Sequence sequence = cargoAllocation.getSequence();
 			final List<Event> events = sequence.getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Expect to end in time for cargo 2 loading which has been stripped out
-			// Assert.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
+			// Assertions.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assert.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
-			Assert.assertEquals(LocalDateTime.of(2016, 1, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselAvailability.getEndBy());
+			Assertions.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselAvailability.getEndBy());
 
-			Assert.assertNull(optimiserScenario.getSchedulingEndDate());
+			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
 	}
 
@@ -759,27 +759,27 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			@Nullable
 			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			Sequence sequence = cargoAllocation.getSequence();
 			final List<Event> events = sequence.getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Expect to end in time for cargo 2 loading which has been stripped out
-			// Assert.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
+			// Assertions.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assert.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
-			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2021, 9, 1, 0, 0, 0), period_vesselAvailability.getEndBy());
+			Assertions.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
+			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2021, 9, 1, 0, 0, 0), period_vesselAvailability.getEndBy());
 
-			Assert.assertNull(optimiserScenario.getSchedulingEndDate());
+			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
 	}
 }

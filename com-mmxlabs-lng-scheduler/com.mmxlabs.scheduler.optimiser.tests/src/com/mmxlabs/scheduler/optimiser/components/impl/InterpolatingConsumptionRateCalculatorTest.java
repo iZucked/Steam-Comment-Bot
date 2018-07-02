@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import java.util.TreeMap;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class InterpolatingConsumptionRateCalculatorTest {
 
@@ -21,17 +21,17 @@ public class InterpolatingConsumptionRateCalculatorTest {
 		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		// Test exact values
-		Assert.assertEquals(500L, calc.getRate(5));
-		Assert.assertEquals(1000L, calc.getRate(10));
+		Assertions.assertEquals(500L, calc.getRate(5));
+		Assertions.assertEquals(1000L, calc.getRate(10));
 
 		// Test interpolation
-		Assert.assertEquals(600L, calc.getRate(6));
-		Assert.assertEquals(700L, calc.getRate(7));
-		Assert.assertEquals(800L, calc.getRate(8));
-		Assert.assertEquals(900L, calc.getRate(9));
+		Assertions.assertEquals(600L, calc.getRate(6));
+		Assertions.assertEquals(700L, calc.getRate(7));
+		Assertions.assertEquals(800L, calc.getRate(8));
+		Assertions.assertEquals(900L, calc.getRate(9));
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void testInterpolatingConsumptionRateCalculator2() {
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
@@ -41,10 +41,10 @@ public class InterpolatingConsumptionRateCalculatorTest {
 		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		// Lower bound check
-		calc.getRate(4);
+		Assertions.assertThrows(RuntimeException.class, () -> calc.getRate(4));
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void testInterpolatingConsumptionRateCalculator3() {
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
@@ -54,6 +54,6 @@ public class InterpolatingConsumptionRateCalculatorTest {
 		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		// Upper bound check
-		calc.getRate(11);
+		Assertions.assertThrows(RuntimeException.class, () -> calc.getRate(11));
 	}
 }

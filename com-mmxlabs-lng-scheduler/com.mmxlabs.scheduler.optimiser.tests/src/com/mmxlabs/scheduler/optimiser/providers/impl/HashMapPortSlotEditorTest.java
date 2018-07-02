@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,26 +22,26 @@ public class HashMapPortSlotEditorTest {
 
 		editor.setPortSlot(element, portSlot);
 
-		Assert.assertSame(portSlot, editor.getPortSlot(element));
-		Assert.assertSame(element, editor.getElement(portSlot));
+		Assertions.assertSame(portSlot, editor.getPortSlot(element));
+		Assertions.assertSame(element, editor.getElement(portSlot));
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testGetUnknownSequenceElement() {
 
 		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor();
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
 
-		editor.getPortSlot(element);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getPortSlot(element));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testGetUnknownPortSlot() {
 
 		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor();
 		final IPortSlot portSlot = Mockito.mock(IPortSlot.class);
 
-		editor.getElement(portSlot);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getElement(portSlot));
 	}
 }

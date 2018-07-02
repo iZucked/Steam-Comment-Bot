@@ -7,8 +7,8 @@ package com.mmxlabs.scheduler.optimiser.lso.moves;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -44,15 +44,15 @@ public class SwapSingleSequenceElementsTest {
 
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(resource, 0, 1);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resource));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resource));
 
 		move.apply(sequences);
 
-		Assert.assertEquals(elementB, seq.get(0));
-		Assert.assertEquals(elementA, seq.get(1));
-		Assert.assertEquals(elementC, seq.get(2));
-		Assert.assertEquals(elementD, seq.get(3));
+		Assertions.assertEquals(elementB, seq.get(0));
+		Assertions.assertEquals(elementA, seq.get(1));
+		Assertions.assertEquals(elementC, seq.get(2));
+		Assertions.assertEquals(elementD, seq.get(3));
 	}
 
 	@Test
@@ -80,15 +80,15 @@ public class SwapSingleSequenceElementsTest {
 
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(resource, 2, 1);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resource));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resource));
 
 		move.apply(sequences);
 
-		Assert.assertEquals(elementA, seq.get(0));
-		Assert.assertEquals(elementC, seq.get(1));
-		Assert.assertEquals(elementB, seq.get(2));
-		Assert.assertEquals(elementD, seq.get(3));
+		Assertions.assertEquals(elementA, seq.get(0));
+		Assertions.assertEquals(elementC, seq.get(1));
+		Assertions.assertEquals(elementB, seq.get(2));
+		Assertions.assertEquals(elementD, seq.get(3));
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class SwapSingleSequenceElementsTest {
 
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(resource, 0, 1);
 
-		Assert.assertTrue(move.validate(sequences));
+		Assertions.assertTrue(move.validate(sequences));
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class SwapSingleSequenceElementsTest {
 		// Fail - both indexes are the same
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(resource, 1, 1);
 
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class SwapSingleSequenceElementsTest {
 		// Fail - both index is negative
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(resource, -1, 1);
 
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 	}
 
 	@Test
@@ -171,7 +171,7 @@ public class SwapSingleSequenceElementsTest {
 		// Fail - both index is negative
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(resource, 1, -1);
 
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 	}
 
 	@Test
@@ -192,7 +192,7 @@ public class SwapSingleSequenceElementsTest {
 		// Fail - both index is too large
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(resource, 2, 1);
 
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 	}
 
 	@Test
@@ -213,7 +213,7 @@ public class SwapSingleSequenceElementsTest {
 		// Fail - both index is too large
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(resource, 1, 6);
 
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 	}
 
 	@Test
@@ -234,6 +234,6 @@ public class SwapSingleSequenceElementsTest {
 		// Fail - resource is null
 		final SwapSingleSequenceElements move = new SwapSingleSequenceElements(null, 1, 0);
 
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 	}
 }

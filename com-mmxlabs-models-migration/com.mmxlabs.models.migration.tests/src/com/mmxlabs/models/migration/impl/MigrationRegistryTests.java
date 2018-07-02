@@ -7,14 +7,16 @@ package com.mmxlabs.models.migration.impl;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.migration.DataManifest;
@@ -25,31 +27,31 @@ import com.mmxlabs.models.migration.PackageData;
 
 public class MigrationRegistryTests {
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testMissingContext1() {
 		final MigrationRegistry registry = new MigrationRegistry();
 
 		final String context = "context";
-		Assert.assertFalse(registry.isContextRegistered(context));
-		registry.getLatestContextVersion(context);
+		Assertions.assertFalse(registry.isContextRegistered(context));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> registry.getLatestContextVersion(context));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testMissingContext2() {
 		final MigrationRegistry registry = new MigrationRegistry();
 
 		final String context = "context";
 
-		Assert.assertFalse(registry.isContextRegistered(context));
-		registry.getMigrationChain(context, -1, -1, null, 0, 0);
+		Assertions.assertFalse(registry.isContextRegistered(context));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> registry.getMigrationChain(context, -1, -1, null, 0, 0));
 	}
 
 	public void testMissingClientContext1() {
 		final MigrationRegistry registry = new MigrationRegistry();
 
 		final String context = "context";
-		Assert.assertFalse(registry.isClientContextRegistered(context));
-		Assert.assertEquals(0, registry.getLatestClientContextVersion(context));
+		Assertions.assertFalse(registry.isClientContextRegistered(context));
+		Assertions.assertEquals(0, registry.getLatestClientContextVersion(context));
 	}
 
 	@Test
@@ -59,13 +61,13 @@ public class MigrationRegistryTests {
 		final String context = "context";
 		final int latestVersion = 10;
 
-		Assert.assertFalse(registry.isContextRegistered(context));
+		Assertions.assertFalse(registry.isContextRegistered(context));
 		registry.registerContext(context, latestVersion);
 
-		Assert.assertTrue(registry.isContextRegistered(context));
+		Assertions.assertTrue(registry.isContextRegistered(context));
 
-		Assert.assertEquals(latestVersion, registry.getLatestContextVersion(context));
-		Assert.assertNotNull(registry.getMigrationChain(context, -1, -1, null, 0, 0));
+		Assertions.assertEquals(latestVersion, registry.getLatestContextVersion(context));
+		Assertions.assertNotNull(registry.getMigrationChain(context, -1, -1, null, 0, 0));
 	}
 
 	@Test
@@ -98,17 +100,17 @@ public class MigrationRegistryTests {
 		registry.registerMigrationUnit(unit1);
 
 		final List<IMigrationUnit> chain0 = registry.getMigrationChain(context, 1, 1, null, 0, 0);
-		Assert.assertTrue(chain0.isEmpty());
+		Assertions.assertTrue(chain0.isEmpty());
 
 		final List<IMigrationUnit> chain1 = registry.getMigrationChain(context, 1, 2, null, 0, 0);
-		Assert.assertEquals(1, chain1.size());
-		Assert.assertSame(unit1, chain1.get(0));
+		Assertions.assertEquals(1, chain1.size());
+		Assertions.assertSame(unit1, chain1.get(0));
 
 		final List<IMigrationUnit> chain2 = registry.getMigrationChain(context, 1, 10, null, 0, 0);
-		Assert.assertEquals(3, chain2.size());
-		Assert.assertSame(unit1, chain2.get(0));
-		Assert.assertSame(unit2, chain2.get(1));
-		Assert.assertSame(unit3, chain2.get(2));
+		Assertions.assertEquals(3, chain2.size());
+		Assertions.assertSame(unit1, chain2.get(0));
+		Assertions.assertSame(unit2, chain2.get(1));
+		Assertions.assertSame(unit3, chain2.get(2));
 	}
 
 	@Test
@@ -154,17 +156,17 @@ public class MigrationRegistryTests {
 		registry.registerMigrationUnitExtension(unit1ID, ext1);
 
 		final List<IMigrationUnit> chain0 = registry.getMigrationChain(context, 1, 1, null, 0, 0);
-		Assert.assertTrue(chain0.isEmpty());
+		Assertions.assertTrue(chain0.isEmpty());
 
 		final List<IMigrationUnit> chain1 = registry.getMigrationChain(context, 1, 2, null, 0, 0);
-		Assert.assertEquals(1, chain1.size());
-		Assert.assertSame(ext1, chain1.get(0));
+		Assertions.assertEquals(1, chain1.size());
+		Assertions.assertSame(ext1, chain1.get(0));
 
 		final List<IMigrationUnit> chain2 = registry.getMigrationChain(context, 1, 10, null, 0, 0);
-		Assert.assertEquals(3, chain2.size());
-		Assert.assertSame(ext1, chain2.get(0));
-		Assert.assertSame(unit2, chain2.get(1));
-		Assert.assertSame(unit3, chain2.get(2));
+		Assertions.assertEquals(3, chain2.size());
+		Assertions.assertSame(ext1, chain2.get(0));
+		Assertions.assertSame(unit2, chain2.get(1));
+		Assertions.assertSame(unit3, chain2.get(2));
 	}
 
 	/**
@@ -241,12 +243,12 @@ public class MigrationRegistryTests {
 		registry.registerClientMigrationUnit("client3", clientUnit3);
 
 		final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion);
-		Assert.assertEquals(5, chain.size());
-		Assert.assertSame(clientUnit1, chain.get(0));
-		Assert.assertSame(ext1, chain.get(1));
-		Assert.assertSame(clientUnit2, chain.get(2));
-		Assert.assertSame(clientUnit3, chain.get(3));
-		Assert.assertSame(unit2, chain.get(4));
+		Assertions.assertEquals(5, chain.size());
+		Assertions.assertSame(clientUnit1, chain.get(0));
+		Assertions.assertSame(ext1, chain.get(1));
+		Assertions.assertSame(clientUnit2, chain.get(2));
+		Assertions.assertSame(clientUnit3, chain.get(3));
+		Assertions.assertSame(unit2, chain.get(4));
 
 	}
 
@@ -293,9 +295,9 @@ public class MigrationRegistryTests {
 		registry.registerClientMigrationUnit("client2", clientUnit2);
 
 		final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion);
-		Assert.assertEquals(2, chain.size());
-		Assert.assertSame(clientUnit1, chain.get(0));
-		Assert.assertSame(clientUnit2, chain.get(1));
+		Assertions.assertEquals(2, chain.size());
+		Assertions.assertSame(clientUnit1, chain.get(0));
+		Assertions.assertSame(clientUnit2, chain.get(1));
 
 	}
 
@@ -343,71 +345,72 @@ public class MigrationRegistryTests {
 		registry.registerClientMigrationUnit("client2", clientUnit2);
 
 		final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion);
-		Assert.assertEquals(1, chain.size());
-		Assert.assertSame(clientUnit1, chain.get(0));
+		Assertions.assertEquals(1, chain.size());
+		Assertions.assertSame(clientUnit1, chain.get(0));
 	}
 
 	/**
 	 * Test initially added due to recursion error. Timeout to stop eventual out of memory error.s
 	 */
-	@Test(timeout = 5000)
+	@Test
 	public void testComplexChain1() {
+		Assertions.assertTimeout(Duration.of(5000, ChronoUnit.MILLIS), () -> {
+			final String scenarioContext = "ScenarioContext";
+			final int latestScenarioVersion = 25;
 
-		final String scenarioContext = "ScenarioContext";
-		final int latestScenarioVersion = 25;
+			final String clientContext = "ClientContext";
+			final int latestClientVersion = 7;
 
-		final String clientContext = "ClientContext";
-		final int latestClientVersion = 7;
+			final MigrationRegistry registry = new MigrationRegistry();
+			registry.registerContext(scenarioContext, latestScenarioVersion);
+			registry.registerClientContext(clientContext, latestClientVersion);
 
-		final MigrationRegistry registry = new MigrationRegistry();
-		registry.registerContext(scenarioContext, latestScenarioVersion);
-		registry.registerClientContext(clientContext, latestClientVersion);
+			registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 17, 18));
+			registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 18, 19));
+			registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 19, 20));
+			registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 20, 21));
+			registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 21, 22));
+			registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 22, 23));
+			registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 23, 24));
+			registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 24, 25));
 
-		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 17, 18));
-		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 18, 19));
-		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 19, 20));
-		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 20, 21));
-		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 21, 22));
-		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 22, 23));
-		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 23, 24));
-		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 24, 25));
-
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 0, 1));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 1, 2));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 2, 3));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 18, clientContext, 3, 4));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 19, clientContext, 4, 5));
-		// /
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 5, 6));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 6, 7));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 0, 5));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 3, 5));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 0, 6));
-		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 24, clientContext, 7, 8));
-		{
-			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 18, latestScenarioVersion, clientContext, 3, latestClientVersion);
-			Assert.assertFalse(chain.isEmpty());
-		}
-		{
-			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion);
-			Assert.assertFalse(chain.isEmpty());
-		}
-		{
-			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 3, latestClientVersion);
-			Assert.assertFalse(chain.isEmpty());
-		}
-		{
-			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 0, latestClientVersion);
-			Assert.assertFalse(chain.isEmpty());
-		}
-		{
-			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 17, latestScenarioVersion, clientContext, 0, latestClientVersion);
-			Assert.assertFalse(chain.isEmpty());
-		}
-		{
-			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 17, latestScenarioVersion, clientContext, 0, latestClientVersion);
-			Assert.assertFalse(chain.isEmpty());
-		}
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 0, 1));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 1, 2));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 2, 3));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 18, clientContext, 3, 4));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 19, clientContext, 4, 5));
+			// /
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 5, 6));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 6, 7));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 0, 5));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 3, 5));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 0, 6));
+			registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 24, clientContext, 7, 8));
+			{
+				final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 18, latestScenarioVersion, clientContext, 3, latestClientVersion);
+				Assertions.assertFalse(chain.isEmpty());
+			}
+			{
+				final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion);
+				Assertions.assertFalse(chain.isEmpty());
+			}
+			{
+				final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 3, latestClientVersion);
+				Assertions.assertFalse(chain.isEmpty());
+			}
+			{
+				final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 0, latestClientVersion);
+				Assertions.assertFalse(chain.isEmpty());
+			}
+			{
+				final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 17, latestScenarioVersion, clientContext, 0, latestClientVersion);
+				Assertions.assertFalse(chain.isEmpty());
+			}
+			{
+				final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 17, latestScenarioVersion, clientContext, 0, latestClientVersion);
+				Assertions.assertFalse(chain.isEmpty());
+			}
+		});
 	}
 
 	@NonNull

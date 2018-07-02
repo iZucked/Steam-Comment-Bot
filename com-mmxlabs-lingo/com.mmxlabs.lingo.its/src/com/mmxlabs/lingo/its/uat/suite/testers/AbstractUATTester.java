@@ -6,7 +6,7 @@ package com.mmxlabs.lingo.its.uat.suite.testers;
 
 import java.io.IOException;
 
-import org.junit.Assume;
+import org.junit.jupiter.api.Assumptions;
 
 import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
@@ -39,7 +39,7 @@ public abstract class AbstractUATTester {
 
 	protected void singleUATTestCase(String caseName) throws Exception {
 
-		Assume.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
 
 		UATCase c = findCase(caseName);
 		singleUATTestCase(c, false);
@@ -47,7 +47,7 @@ public abstract class AbstractUATTester {
 
 	protected void singleUATTestCase(String caseName, boolean additionalChecks) throws Exception {
 
-		Assume.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
 
 		UATCase c = findCase(caseName);
 		singleUATTestCase(c, additionalChecks);
@@ -55,7 +55,7 @@ public abstract class AbstractUATTester {
 
 	protected void singleUATTestCase(UATCase testCase, boolean additionalChecks) throws Exception {
 
-		Assume.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.UATCasestMode != TestMode.Skip);
 
 		getUATFeatureExtractor().checkPropertiesForCase(testCase.lingoFilePath, testCase.cargoName, additionalChecks);
 	}

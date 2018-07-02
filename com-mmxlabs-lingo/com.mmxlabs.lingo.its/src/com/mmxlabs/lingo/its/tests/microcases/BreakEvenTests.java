@@ -6,12 +6,12 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 @SuppressWarnings({ "unused", "null" })
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class BreakEvenTests extends AbstractMicroTestCase {
 
 	/**
@@ -34,7 +34,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_BE_Purchase() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -48,13 +48,13 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 			final Schedule schedule = scheduleModel.getSchedule();
-			Assert.assertNotNull(schedule);
-			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(7.0, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
+			Assertions.assertEquals(7.0, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
 
 			assertZeroPNL(cargoAllocation);
 		});
@@ -66,7 +66,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDES_Purchase_BE_Sale() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -80,13 +80,13 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 			final Schedule schedule = scheduleModel.getSchedule();
-			Assert.assertNotNull(schedule);
-			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(7.0, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
+			Assertions.assertEquals(7.0, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
 
 			assertZeroPNL(cargoAllocation);
 		});
@@ -98,7 +98,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFOB_Sale_BE_Sale() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -112,13 +112,13 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 			final Schedule schedule = scheduleModel.getSchedule();
-			Assert.assertNotNull(schedule);
-			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(7.0, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
+			Assertions.assertEquals(7.0, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
 
 			assertZeroPNL(cargoAllocation);
 		});
@@ -130,7 +130,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFOB_Sale_BE_Purchase() throws Exception {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -144,13 +144,13 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 			final Schedule schedule = scheduleModel.getSchedule();
-			Assert.assertNotNull(schedule);
-			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(7.0, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
+			Assertions.assertEquals(7.0, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
 
 			assertZeroPNL(cargoAllocation);
 		});
@@ -162,7 +162,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_BE_Purchase() throws Exception {
 
 		Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -182,13 +182,13 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 			final Schedule schedule = scheduleModel.getSchedule();
-			Assert.assertNotNull(schedule);
-			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(6.558, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
+			Assertions.assertEquals(6.558, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
 
 			assertZeroPNL(cargoAllocation);
 		});
@@ -200,7 +200,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShipped_BE_Sale() throws Exception {
 
 		Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -219,19 +219,19 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 			final Schedule schedule = scheduleModel.getSchedule();
-			Assert.assertNotNull(schedule);
-			Assert.assertEquals(1, schedule.getCargoAllocations().size());
+			Assertions.assertNotNull(schedule);
+			Assertions.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(7.450, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
+			Assertions.assertEquals(7.450, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
 
 			assertZeroPNL(cargoAllocation);
 		});
 	}
 
 	protected void assertZeroPNL(final SimpleCargoAllocation cargoAllocation) {
-		Assert.assertEquals(0, (int) PNLDeltaUtils.getElementProfitAndLoss(cargoAllocation.getCargoAllocation()), 1);
+		Assertions.assertEquals(0, (int) PNLDeltaUtils.getElementProfitAndLoss(cargoAllocation.getCargoAllocation()), 1);
 	}
 }

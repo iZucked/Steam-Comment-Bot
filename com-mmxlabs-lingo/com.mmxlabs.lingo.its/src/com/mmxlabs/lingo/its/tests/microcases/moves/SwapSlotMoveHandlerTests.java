@@ -12,13 +12,13 @@ import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -50,11 +49,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * Tests for the {@link GuidedMoveGenerator}
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapCargoLoadWithUnusedLoad() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -114,7 +113,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
 
-			Assert.assertNotNull(movePair);
+			Assertions.assertNotNull(movePair);
 
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
@@ -124,17 +123,17 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
 
 			// Check expectations
-			Assert.assertEquals(4, result.getSequence(resource1).size());
-			Assert.assertEquals(1, result.getUnusedElements().size());
+			Assertions.assertEquals(4, result.getSequence(resource1).size());
+			Assertions.assertEquals(1, result.getUnusedElements().size());
 
-			Assert.assertSame(load1, slotMapper.apply(result.getUnusedElements().get(0)));
-			Assert.assertSame(load2, slotMapper.apply(result.getSequence(resource1).get(1)));
-			Assert.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(2)));
+			Assertions.assertSame(load1, slotMapper.apply(result.getUnusedElements().get(0)));
+			Assertions.assertSame(load2, slotMapper.apply(result.getSequence(resource1).get(1)));
+			Assertions.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(2)));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapWithinSequence() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -191,7 +190,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, discharge2, random, options, Collections.emptySet());
 
-			Assert.assertNotNull(movePair);
+			Assertions.assertNotNull(movePair);
 
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
@@ -201,17 +200,17 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
 
 			// Check expectations
-			Assert.assertEquals(6, result.getSequence(resource1).size());
+			Assertions.assertEquals(6, result.getSequence(resource1).size());
 
-			Assert.assertSame(load1, result.getSequence(resource1).get(1));
-			Assert.assertSame(discharge2, result.getSequence(resource1).get(2));
-			Assert.assertSame(load2, result.getSequence(resource1).get(3));
-			Assert.assertSame(discharge1, result.getSequence(resource1).get(4));
+			Assertions.assertSame(load1, result.getSequence(resource1).get(1));
+			Assertions.assertSame(discharge2, result.getSequence(resource1).get(2));
+			Assertions.assertSame(load2, result.getSequence(resource1).get(3));
+			Assertions.assertSame(discharge1, result.getSequence(resource1).get(4));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapUnusedLoadWithUnusedLoadFails() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -262,13 +261,13 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
 
-			Assert.assertNull(movePair);
+			Assertions.assertNull(movePair);
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapCargoLoadWithDESPurchaseLoadFails() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -328,7 +327,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
 
-			Assert.assertNotNull(movePair);
+			Assertions.assertNotNull(movePair);
 
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
@@ -338,17 +337,17 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
 
 			// Check expectations
-			Assert.assertEquals(4, result.getSequence(resource1).size());
-			Assert.assertEquals(1, result.getUnusedElements().size());
+			Assertions.assertEquals(4, result.getSequence(resource1).size());
+			Assertions.assertEquals(1, result.getUnusedElements().size());
 
-			Assert.assertSame(load1, slotMapper.apply(result.getUnusedElements().get(0)));
-			Assert.assertSame(load2, slotMapper.apply(result.getSequence(resource1).get(1)));
-			Assert.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(2)));
+			Assertions.assertSame(load1, slotMapper.apply(result.getUnusedElements().get(0)));
+			Assertions.assertSame(load2, slotMapper.apply(result.getSequence(resource1).get(1)));
+			Assertions.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(2)));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapCargoDischargeWithUnusedDischarge() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -408,7 +407,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
 
-			Assert.assertNotNull(movePair);
+			Assertions.assertNotNull(movePair);
 
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
@@ -418,17 +417,17 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
 
 			// Check expectations
-			Assert.assertEquals(4, result.getSequence(resource1).size());
-			Assert.assertEquals(1, result.getUnusedElements().size());
+			Assertions.assertEquals(4, result.getSequence(resource1).size());
+			Assertions.assertEquals(1, result.getUnusedElements().size());
 
-			Assert.assertSame(discharge1, slotMapper.apply(result.getUnusedElements().get(0)));
-			Assert.assertSame(load1, slotMapper.apply(result.getSequence(resource1).get(1)));
-			Assert.assertSame(discharge2, slotMapper.apply(result.getSequence(resource1).get(2)));
+			Assertions.assertSame(discharge1, slotMapper.apply(result.getUnusedElements().get(0)));
+			Assertions.assertSame(load1, slotMapper.apply(result.getSequence(resource1).get(1)));
+			Assertions.assertSame(discharge2, slotMapper.apply(result.getSequence(resource1).get(2)));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapCargoDischargeWithUsedDischarge() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -497,7 +496,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
 
-			Assert.assertNotNull(movePair);
+			Assertions.assertNotNull(movePair);
 
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
@@ -509,19 +508,19 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IResource resource2 = vesselProvider.getResource(o_vesselAvailability2);
 
 			// Check expectations
-			Assert.assertEquals(4, result.getSequence(resource1).size());
-			Assert.assertEquals(4, result.getSequence(resource2).size());
-			Assert.assertEquals(0, result.getUnusedElements().size());
+			Assertions.assertEquals(4, result.getSequence(resource1).size());
+			Assertions.assertEquals(4, result.getSequence(resource2).size());
+			Assertions.assertEquals(0, result.getUnusedElements().size());
 
-			Assert.assertSame(load1, slotMapper.apply(result.getSequence(resource1).get(1)));
-			Assert.assertSame(discharge2, slotMapper.apply(result.getSequence(resource1).get(2)));
-			Assert.assertSame(load2, slotMapper.apply(result.getSequence(resource2).get(1)));
-			Assert.assertSame(discharge1, slotMapper.apply(result.getSequence(resource2).get(2)));
+			Assertions.assertSame(load1, slotMapper.apply(result.getSequence(resource1).get(1)));
+			Assertions.assertSame(discharge2, slotMapper.apply(result.getSequence(resource1).get(2)));
+			Assertions.assertSame(load2, slotMapper.apply(result.getSequence(resource2).get(1)));
+			Assertions.assertSame(discharge1, slotMapper.apply(result.getSequence(resource2).get(2)));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapCargoLoadWithUsedLoad() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -590,7 +589,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
 
-			Assert.assertNotNull(movePair);
+			Assertions.assertNotNull(movePair);
 
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
@@ -602,19 +601,19 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IResource resource2 = vesselProvider.getResource(o_vesselAvailability2);
 
 			// Check expectations
-			Assert.assertEquals(4, result.getSequence(resource1).size());
-			Assert.assertEquals(4, result.getSequence(resource2).size());
-			Assert.assertEquals(0, result.getUnusedElements().size());
+			Assertions.assertEquals(4, result.getSequence(resource1).size());
+			Assertions.assertEquals(4, result.getSequence(resource2).size());
+			Assertions.assertEquals(0, result.getUnusedElements().size());
 
-			Assert.assertSame(load2, slotMapper.apply(result.getSequence(resource1).get(1)));
-			Assert.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(2)));
-			Assert.assertSame(load1, slotMapper.apply(result.getSequence(resource2).get(1)));
-			Assert.assertSame(discharge2, slotMapper.apply(result.getSequence(resource2).get(2)));
+			Assertions.assertSame(load2, slotMapper.apply(result.getSequence(resource1).get(1)));
+			Assertions.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(2)));
+			Assertions.assertSame(load1, slotMapper.apply(result.getSequence(resource2).get(1)));
+			Assertions.assertSame(discharge2, slotMapper.apply(result.getSequence(resource2).get(2)));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapCargoLoadWithUnusedLoad_WiringLocked() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -674,7 +673,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
 
-			Assert.assertNull(movePair);
+			Assertions.assertNull(movePair);
 		});
 	}
 }

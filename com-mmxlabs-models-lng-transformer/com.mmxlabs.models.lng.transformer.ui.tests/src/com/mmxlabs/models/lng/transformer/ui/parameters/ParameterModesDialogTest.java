@@ -19,15 +19,14 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -42,7 +41,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 
-@RunWith(SWTBotJunit4ClassRunner.class)
 public class ParameterModesDialogTest {
 
 	private final CyclicBarrier swtBarrier = new CyclicBarrier(2);
@@ -52,13 +50,13 @@ public class ParameterModesDialogTest {
 	protected static Display display;
 	protected ParameterModesDialog dialog;
 
-	@BeforeClass
+	@BeforeAll
 	public static void init() {
 		// Enable these features for the dialog test
 		LicenseFeatures.initialiseFeatureEnablements("optimisation-charter-out-generation", "optimisation-period", "optimisation-similarity", "optimisation-actionset", "charter-length");
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void setKeyboard() {
 		// For typeText, set US keyboard layout as GB does not seem to be supported
 		System.setProperty(SWTBotPreferenceConstants.KEY_KEYBOARD_LAYOUT, "EN_US");
@@ -70,9 +68,9 @@ public class ParameterModesDialogTest {
 		settings.setShippingOnly(false);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_ON).click(), u -> {
-			Assert.assertTrue(u.isShippingOnly());
+			Assertions.assertTrue(u.isShippingOnly());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertTrue(settings.isShippingOnly());
+			Assertions.assertTrue(settings.isShippingOnly());
 		});
 	}
 
@@ -82,9 +80,9 @@ public class ParameterModesDialogTest {
 		settings.setShippingOnly(true);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_OFF).click(), u -> {
-			Assert.assertFalse(u.isShippingOnly());
+			Assertions.assertFalse(u.isShippingOnly());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertFalse(settings.isShippingOnly());
+			Assertions.assertFalse(settings.isShippingOnly());
 		});
 	}
 
@@ -94,9 +92,9 @@ public class ParameterModesDialogTest {
 		settings.setWithSpotCargoMarkets(false);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_ON).click(), u -> {
-			Assert.assertTrue(u.isWithSpotCargoMarkets());
+			Assertions.assertTrue(u.isWithSpotCargoMarkets());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertTrue(settings.isWithSpotCargoMarkets());
+			Assertions.assertTrue(settings.isWithSpotCargoMarkets());
 		});
 	}
 
@@ -106,9 +104,9 @@ public class ParameterModesDialogTest {
 		settings.setWithSpotCargoMarkets(true);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_OFF).click(), u -> {
-			Assert.assertFalse(u.isWithSpotCargoMarkets());
+			Assertions.assertFalse(u.isWithSpotCargoMarkets());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertFalse(settings.isWithSpotCargoMarkets());
+			Assertions.assertFalse(settings.isWithSpotCargoMarkets());
 		});
 	}
 
@@ -118,9 +116,9 @@ public class ParameterModesDialogTest {
 		settings.setGenerateCharterOuts(false);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_ON).click(), u -> {
-			Assert.assertTrue(u.isGenerateCharterOuts());
+			Assertions.assertTrue(u.isGenerateCharterOuts());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertTrue(settings.isGenerateCharterOuts());
+			Assertions.assertTrue(settings.isGenerateCharterOuts());
 		});
 	}
 
@@ -130,9 +128,9 @@ public class ParameterModesDialogTest {
 		settings.setGenerateCharterOuts(true);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_OFF).click(), u -> {
-			Assert.assertFalse(u.isGenerateCharterOuts());
+			Assertions.assertFalse(u.isGenerateCharterOuts());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertFalse(settings.isGenerateCharterOuts());
+			Assertions.assertFalse(settings.isGenerateCharterOuts());
 		});
 	}
 	@Test
@@ -165,9 +163,9 @@ public class ParameterModesDialogTest {
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(), u -> {
-			Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode());
+			Assertions.assertEquals(SimilarityMode.LOW, u.getSimilarityMode());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode());
+			Assertions.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode());
 		});
 	}
 
@@ -177,9 +175,9 @@ public class ParameterModesDialogTest {
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(), u -> {
-			Assert.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode());
+			Assertions.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode());
+			Assertions.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode());
 		});
 	}
 
@@ -189,9 +187,9 @@ public class ParameterModesDialogTest {
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(), u -> {
-			Assert.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode());
+			Assertions.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode());
+			Assertions.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode());
 		});
 	}
 
@@ -202,11 +200,11 @@ public class ParameterModesDialogTest {
 		settings.unsetPeriodEnd();
 
 		executeValidTest(settings, b -> b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("05/02/2015"), u -> {
-			Assert.assertEquals(LocalDate.of(2015, 2, 5), u.getPeriodStartDate()); //
-			Assert.assertFalse(u.isSetPeriodEnd()); //
+			Assertions.assertEquals(LocalDate.of(2015, 2, 5), u.getPeriodStartDate()); //
+			Assertions.assertFalse(u.isSetPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings); //
-			Assert.assertEquals(LocalDate.of(2015, 2, 5), settings.getPeriodStartDate()); //
-			Assert.assertFalse(settings.isSetPeriodEnd()); //
+			Assertions.assertEquals(LocalDate.of(2015, 2, 5), settings.getPeriodStartDate()); //
+			Assertions.assertFalse(settings.isSetPeriodEnd()); //
 
 		});
 	}
@@ -220,11 +218,11 @@ public class ParameterModesDialogTest {
 		executeValidTest(settings, b -> {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015");//
 		}, u -> {
-			Assert.assertFalse(u.isSetPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
+			Assertions.assertFalse(u.isSetPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings); //
-			Assert.assertFalse(settings.isSetPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
+			Assertions.assertFalse(settings.isSetPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
 
 		});
 	}
@@ -239,11 +237,11 @@ public class ParameterModesDialogTest {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/02/2015");//
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015");//
 		}, u -> {
-			Assert.assertEquals(LocalDate.of(2015, 2, 1), u.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
+			Assertions.assertEquals(LocalDate.of(2015, 2, 1), u.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings); //
-			Assert.assertEquals(LocalDate.of(2015, 2, 1), settings.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
+			Assertions.assertEquals(LocalDate.of(2015, 2, 1), settings.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
 
 		});
 	}
@@ -259,7 +257,7 @@ public class ParameterModesDialogTest {
 		executeInvalidTest(settings, b -> {
 			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
 		}, b -> {
-			Assert.assertFalse(b.button("OK").isEnabled());
+			Assertions.assertFalse(b.button("OK").isEnabled());
 		});
 	}
 
@@ -277,15 +275,15 @@ public class ParameterModesDialogTest {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("02/2015"); //
 		}, u -> {
-			Assert.assertTrue(u.isBuildActionSets());//
-			Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
-			Assert.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodEnd()); //
+			Assertions.assertTrue(u.isBuildActionSets());//
+			Assertions.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
+			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 2), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertTrue(settings.isBuildActionSets());//
-			Assert.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
-			Assert.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 2), settings.getPeriodEnd()); //
+			Assertions.assertTrue(settings.isBuildActionSets());//
+			Assertions.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
+			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 2), settings.getPeriodEnd()); //
 
 		});
 	}
@@ -304,15 +302,15 @@ public class ParameterModesDialogTest {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
 		}, u -> {
-			Assert.assertTrue(u.isBuildActionSets());//
-			Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
-			Assert.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
+			Assertions.assertTrue(u.isBuildActionSets());//
+			Assertions.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
+			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertTrue(settings.isBuildActionSets());//
-			Assert.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
-			Assert.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
+			Assertions.assertTrue(settings.isBuildActionSets());//
+			Assertions.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
+			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
 
 		});
 	}
@@ -331,15 +329,15 @@ public class ParameterModesDialogTest {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
 		}, u -> {
-			Assert.assertTrue(u.isBuildActionSets());//
-			Assert.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode()); //
-			Assert.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
+			Assertions.assertTrue(u.isBuildActionSets());//
+			Assertions.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode()); //
+			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertTrue(settings.isBuildActionSets());//
-			Assert.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode()); //
-			Assert.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
+			Assertions.assertTrue(settings.isBuildActionSets());//
+			Assertions.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode()); //
+			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
 
 		});
 	}
@@ -358,15 +356,15 @@ public class ParameterModesDialogTest {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
 		}, u -> {
-			Assert.assertTrue(u.isBuildActionSets());//
-			Assert.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode()); //
-			Assert.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
+			Assertions.assertTrue(u.isBuildActionSets());//
+			Assertions.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode()); //
+			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertTrue(settings.isBuildActionSets());//
-			Assert.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode()); //
-			Assert.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
-			Assert.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
+			Assertions.assertTrue(settings.isBuildActionSets());//
+			Assertions.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode()); //
+			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
+			Assertions.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
 
 		});
 	}
@@ -385,7 +383,7 @@ public class ParameterModesDialogTest {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
 		}, b -> {
-			Assert.assertFalse(b.button("OK").isEnabled());
+			Assertions.assertFalse(b.button("OK").isEnabled());
 		});
 	}
 
@@ -403,7 +401,7 @@ public class ParameterModesDialogTest {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("08/2015"); //
 		}, b -> {
-			Assert.assertFalse(b.button("OK").isEnabled());
+			Assertions.assertFalse(b.button("OK").isEnabled());
 		});
 	}
 
@@ -421,7 +419,7 @@ public class ParameterModesDialogTest {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("08/2015"); //
 		}, b -> {
-			Assert.assertFalse(b.button("OK").isEnabled());
+			Assertions.assertFalse(b.button("OK").isEnabled());
 		});
 	}
 
@@ -477,7 +475,7 @@ public class ParameterModesDialogTest {
 	}
 
 	public Future<UserSettings> executeTest(final UserSettings initialSettings, final IManipulatorFunction manipulator) throws Exception {
-		Assert.assertSame(display, bot.getDisplay());
+		Assertions.assertSame(display, bot.getDisplay());
 
 		final ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -513,7 +511,7 @@ public class ParameterModesDialogTest {
 		return future;
 	}
 
-	@Before
+	@BeforeEach
 	public void createDisplay() throws InterruptedException, BrokenBarrierException {
 
 		uiThread = new Thread(new Runnable() {
@@ -567,7 +565,7 @@ public class ParameterModesDialogTest {
 
 	}
 
-	@After
+	@AfterEach
 	public void disposeDisplay() throws InterruptedException {
 		// Ensure display is disposed
 		if (display != null && !display.isDisposed()) {

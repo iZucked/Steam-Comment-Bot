@@ -16,12 +16,12 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
@@ -46,7 +46,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 	enum ExpectedChange {
 		NONE, DISTANCE, LOCATION, GROUPS
@@ -62,9 +62,9 @@ public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 			location = m.getPortVersionRecord().getVersion();
 			portGroup = m.getPortGroupVersionRecord().getVersion();
 
-			Assert.assertNotNull(distance);
-			Assert.assertNotNull(location);
-			Assert.assertNotNull(portGroup);
+			Assertions.assertNotNull(distance);
+			Assertions.assertNotNull(location);
+			Assertions.assertNotNull(portGroup);
 		}
 	}
 
@@ -72,26 +72,26 @@ public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 		// None is just to make the API call easier.
 		final Set<ExpectedChange> changeTypesSet = EnumSet.of(ExpectedChange.NONE, changeTypes);
 		if (changeTypesSet.contains(ExpectedChange.DISTANCE)) {
-			Assert.assertNotEquals(currentVersion.distance, portModel.getDistanceVersionRecord().getVersion());
+			Assertions.assertNotEquals(currentVersion.distance, portModel.getDistanceVersionRecord().getVersion());
 			currentVersion.distance = portModel.getDistanceVersionRecord().getVersion();
 		}
 		if (changeTypesSet.contains(ExpectedChange.LOCATION)) {
-			Assert.assertNotEquals(currentVersion.location, portModel.getPortVersionRecord().getVersion());
+			Assertions.assertNotEquals(currentVersion.location, portModel.getPortVersionRecord().getVersion());
 			currentVersion.location = portModel.getPortVersionRecord().getVersion();
 		}
 		if (changeTypesSet.contains(ExpectedChange.GROUPS)) {
-			Assert.assertNotEquals(currentVersion.portGroup, portModel.getPortGroupVersionRecord().getVersion());
+			Assertions.assertNotEquals(currentVersion.portGroup, portModel.getPortGroupVersionRecord().getVersion());
 			currentVersion.portGroup = portModel.getPortGroupVersionRecord().getVersion();
 		}
 
 		// Lazy duplicated check here
-		Assert.assertEquals(currentVersion.distance, portModel.getDistanceVersionRecord().getVersion());
-		Assert.assertEquals(currentVersion.location, portModel.getPortVersionRecord().getVersion());
-		Assert.assertEquals(currentVersion.portGroup, portModel.getPortGroupVersionRecord().getVersion());
+		Assertions.assertEquals(currentVersion.distance, portModel.getDistanceVersionRecord().getVersion());
+		Assertions.assertEquals(currentVersion.location, portModel.getPortVersionRecord().getVersion());
+		Assertions.assertEquals(currentVersion.portGroup, portModel.getPortGroupVersionRecord().getVersion());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeLocationData() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -149,7 +149,7 @@ public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeRouteData() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -220,7 +220,7 @@ public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangePortData() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -270,7 +270,7 @@ public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeGroups() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -308,7 +308,7 @@ public class PortModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeOtherData_ContingencyMatrix() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);

@@ -6,20 +6,20 @@ package com.mmxlabs.lingo.its.tests.scenarios;
 
 import java.net.URL;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.LiNGOTestDataProvider;
-import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class TestDemoCases extends AbstractOptimisationResultTester {
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testBonnyProblems_Bonny_Optimise() throws Exception {
 
 		// Load the scenario to test
@@ -29,7 +29,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testBonnyProblems_LateAndLost_DES_Backfill_Optimise() throws Exception {
 
 		// Load the scenario to test
@@ -39,7 +39,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testBonnyProblems_O_LateAndLost_DES_Backfill_Optimise() throws Exception {
 
 		// Load the scenario to test
@@ -49,7 +49,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testDryDockIssues_base_Optimise() throws Exception {
 
 		// Load the scenario to test
@@ -59,7 +59,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testDryDockIssues_dryDock55_lateness_removed_Optimise() throws Exception {
 
 		// Load the scenario to test
@@ -69,7 +69,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testDryDockIssues_dryDock70_Optimise() throws Exception {
 
 		// Load the scenario to test
@@ -79,7 +79,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testDryDockIssues_charterInGenerated_Optimise() throws Exception {
 
 		// Load the scenario to test
@@ -89,7 +89,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testFleetCostOptimisation_fleet_demo_Optimise() throws Exception {
 
 		// Load the scenario to test
@@ -99,7 +99,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testFleetCostOptimisation_O_fleet_demo_Optimise() throws Exception {
 
 		// Load the scenario to test

@@ -18,12 +18,12 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
@@ -49,7 +49,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 	enum ExpectedChange {
 		NONE, MARKET, SETTLED
@@ -63,8 +63,8 @@ public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 			market = m.getMarketCurvesVersionRecord().getVersion();
 			settled = m.getSettledPricesVersionRecord().getVersion();
 
-			Assert.assertNotNull(market);
-			Assert.assertNotNull(settled);
+			Assertions.assertNotNull(market);
+			Assertions.assertNotNull(settled);
 		}
 	}
 
@@ -72,21 +72,21 @@ public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 		// None is just to make the API call easier.
 		final Set<ExpectedChange> changeTypesSet = EnumSet.of(ExpectedChange.NONE, changeTypes);
 		if (changeTypesSet.contains(ExpectedChange.MARKET)) {
-			Assert.assertNotEquals(currentVersion.market, pricingModel.getMarketCurvesVersionRecord().getVersion());
+			Assertions.assertNotEquals(currentVersion.market, pricingModel.getMarketCurvesVersionRecord().getVersion());
 			currentVersion.market = pricingModel.getMarketCurvesVersionRecord().getVersion();
 		}
 		if (changeTypesSet.contains(ExpectedChange.SETTLED)) {
-			Assert.assertNotEquals(currentVersion.settled, pricingModel.getSettledPricesVersionRecord().getVersion());
+			Assertions.assertNotEquals(currentVersion.settled, pricingModel.getSettledPricesVersionRecord().getVersion());
 			currentVersion.settled = pricingModel.getSettledPricesVersionRecord().getVersion();
 		}
 
 		// Lazy duplicated check here
-		Assert.assertEquals(currentVersion.market, pricingModel.getMarketCurvesVersionRecord().getVersion());
-		Assert.assertEquals(currentVersion.settled, pricingModel.getSettledPricesVersionRecord().getVersion());
+		Assertions.assertEquals(currentVersion.market, pricingModel.getMarketCurvesVersionRecord().getVersion());
+		Assertions.assertEquals(currentVersion.settled, pricingModel.getSettledPricesVersionRecord().getVersion());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeOtherData_SettledPrices() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -121,7 +121,7 @@ public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeOtherData_ConversionFactors() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -148,7 +148,7 @@ public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeCommodityIndex_Expression() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -177,7 +177,7 @@ public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeCommodityIndex_Data() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -218,7 +218,7 @@ public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeCurrencyIndex_Expression() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -249,7 +249,7 @@ public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeBaseFuelIndex_Expression() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -279,7 +279,7 @@ public class PricingModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeCharterIndex_Expression() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);

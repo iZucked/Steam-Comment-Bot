@@ -7,17 +7,17 @@ package com.mmxlabs.common;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class RandomHelperTest {
 	@Test
 	public void testNextDifferentInt() {
 		final Random random = new Random(1);
-		Assert.assertEquals(1, RandomHelper.nextDifferentInt(random, 2, 0));
-		Assert.assertEquals(0, RandomHelper.nextDifferentInt(random, 2, 1));
+		Assertions.assertEquals(1, RandomHelper.nextDifferentInt(random, 2, 0));
+		Assertions.assertEquals(0, RandomHelper.nextDifferentInt(random, 2, 1));
 		for (int i = 0; i < 10000; i++) {
-			Assert.assertFalse(5 == RandomHelper.nextDifferentInt(random, 10, 5));
+			Assertions.assertFalse(5 == RandomHelper.nextDifferentInt(random, 10, 5));
 		}
 	}
 
@@ -32,16 +32,16 @@ public class RandomHelperTest {
 		final int tests = 10000;
 		for (int i = 0; i < tests; i++) {
 			final Object o = RandomHelper.chooseElementFrom(random, list);
-			Assert.assertTrue(list.contains(o));
+			Assertions.assertTrue(list.contains(o));
 			hits[list.indexOf(o)]++;
 		}
 
 		// Test to see if objects are each hit 33% with an error margin of 0.01
 		final double errorMargin = 0.01;
 
-		Assert.assertEquals(1 / 3.0, hits[0] / (double) tests, errorMargin);
-		Assert.assertEquals(1 / 3.0, hits[1] / (double) tests, errorMargin);
-		Assert.assertEquals(1 / 3.0, hits[2] / (double) tests, errorMargin);
+		Assertions.assertEquals(1 / 3.0, hits[0] / (double) tests, errorMargin);
+		Assertions.assertEquals(1 / 3.0, hits[1] / (double) tests, errorMargin);
+		Assertions.assertEquals(1 / 3.0, hits[2] / (double) tests, errorMargin);
 	}
 
 	@Test
@@ -58,12 +58,12 @@ public class RandomHelperTest {
 		// Test normal cases are within the range max/2 +- max/2
 
 		for (int i = 0; i < numOfTests; i++) {
-			Assert.assertEquals(max / 2, RandomHelper.nextIntBetween(random, min, max), max / 2);
+			Assertions.assertEquals(max / 2, RandomHelper.nextIntBetween(random, min, max), max / 2);
 		}
 
 		// No difference between min and max, should return the minimum.
 		for (int i = 0; i < numOfTests; i++) {
-			Assert.assertEquals(i, RandomHelper.nextIntBetween(random, i, i));
+			Assertions.assertEquals(i, RandomHelper.nextIntBetween(random, i, i));
 		}
 	}
 
@@ -91,12 +91,12 @@ public class RandomHelperTest {
 			numOfHits += distribution[i];
 		}
 		// this should equal the number of tests.
-		Assert.assertEquals(numOfTests, numOfHits);
+		Assertions.assertEquals(numOfTests, numOfHits);
 
 		// test each one has been hit equally.
 		for (int i = 0; i < distribution.length; i++) {
 
-			Assert.assertEquals(1 / (double) numOfTests, distribution[i] / (double) numOfTests, 0.1d);
+			Assertions.assertEquals(1 / (double) numOfTests, distribution[i] / (double) numOfTests, 0.1d);
 		}
 	}
 
@@ -105,7 +105,7 @@ public class RandomHelperTest {
 	 * 
 	 * e.g. Max: 0, Min: 10
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testNextIntBetweenInvalidRange() {
 
 		final Random random = new Random(1);
@@ -116,9 +116,11 @@ public class RandomHelperTest {
 		final int wrongMin = 100;
 		final int wrongMax = 0;
 
-		for (int i = 0; i < numOfTests; i++) {
-			RandomHelper.nextIntBetween(random, wrongMin, wrongMax);
-		}
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			for (int i = 0; i < numOfTests; i++) {
+				RandomHelper.nextIntBetween(random, wrongMin, wrongMax);
+			}
+		});
 	}
 
 	/**
@@ -142,7 +144,7 @@ public class RandomHelperTest {
 				final float halfDifference = ((float) maxes[j] - (float) negMin) / 2f;
 				final float midPoint = maxes[j] - halfDifference;
 
-				Assert.assertEquals(midPoint, RandomHelper.nextIntBetween(random, negMin, maxes[j]), halfDifference);
+				Assertions.assertEquals(midPoint, RandomHelper.nextIntBetween(random, negMin, maxes[j]), halfDifference);
 			}
 		}
 

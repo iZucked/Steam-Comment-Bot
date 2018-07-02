@@ -18,8 +18,8 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -69,7 +69,7 @@ public class CopyPortsToScenarioTests {
 
 		String derivedJSON = serialise(mapper, derivedVersion);
 
-		Assert.assertEquals(expectedResult, derivedJSON);
+		Assertions.assertEquals(expectedResult, derivedJSON);
 
 	}
 
@@ -116,7 +116,7 @@ public class CopyPortsToScenarioTests {
 
 		String derivedJSON = serialise(mapper, derivedVersion);
 
-		Assert.assertEquals(expectedResult, derivedJSON);
+		Assertions.assertEquals(expectedResult, derivedJSON);
 
 	}
 

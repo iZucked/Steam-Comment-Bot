@@ -6,9 +6,9 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.multipleEvents;
 
 import java.time.LocalDateTime;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.Port;
@@ -31,7 +31,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * 
  * @author Adam Semenenko
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CharterOutTest {
 
 	/**
@@ -115,7 +115,7 @@ public class CharterOutTest {
 							}
 						}
 
-						Assert.assertTrue("Heel not exceeded", LNGUsed <= firstCOHeelLimit);
+						Assertions.assertTrue(LNGUsed <= firstCOHeelLimit, "Heel not exceeded");
 
 						FuelUsageAssertions.assertBaseFuelNotUsed(j);
 					} else if (j.getDestination().equals(portC)) {
@@ -132,11 +132,11 @@ public class CharterOutTest {
 							}
 						}
 
-						Assert.assertTrue("Heel not exceeded", LNGUsed == secondCOHeelLimit);
+						Assertions.assertTrue(LNGUsed == secondCOHeelLimit, "Heel not exceeded");
 
 						FuelUsageAssertions.assertLNGNotUsed(j);
 					} else {
-						Assert.fail("Journey not to a recognised port?");
+						Assertions.fail("Journey not to a recognised port?");
 					}
 				}
 			}

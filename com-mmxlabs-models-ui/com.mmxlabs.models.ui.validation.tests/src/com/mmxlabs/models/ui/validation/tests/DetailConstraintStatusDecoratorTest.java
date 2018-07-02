@@ -9,8 +9,8 @@ import java.util.Collection;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -132,8 +132,8 @@ public class DetailConstraintStatusDecoratorTest {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status, 2);
 
-		Assert.assertEquals(0,  status.getSeverity());
-		Assert.assertEquals(2,  deco.getSeverity());
+		Assertions.assertEquals(0,  status.getSeverity());
+		Assertions.assertEquals(2,  deco.getSeverity());
 		Mockito.verify(status).getSeverity();
 
 		Mockito.verifyNoMoreInteractions(status);
@@ -202,19 +202,19 @@ public class DetailConstraintStatusDecoratorTest {
 		deco.addEObjectAndFeature(obj1, feature2);
 		deco.addEObjectAndFeature(obj2, feature3);
 
-		Assert.assertTrue(deco.getObjects().contains(obj1));
-		Assert.assertTrue(deco.getObjects().contains(obj2));
-		Assert.assertFalse(deco.getObjects().contains(obj3));
+		Assertions.assertTrue(deco.getObjects().contains(obj1));
+		Assertions.assertTrue(deco.getObjects().contains(obj2));
+		Assertions.assertFalse(deco.getObjects().contains(obj3));
 
 		final Collection<EStructuralFeature> featuresForEObject1 = deco.getFeaturesForEObject(obj1);
 		final Collection<EStructuralFeature> featuresForEObject2 = deco.getFeaturesForEObject(obj2);
 
-		Assert.assertEquals(2, featuresForEObject1.size());
-		Assert.assertEquals(1, featuresForEObject2.size());
+		Assertions.assertEquals(2, featuresForEObject1.size());
+		Assertions.assertEquals(1, featuresForEObject2.size());
 
-		Assert.assertTrue(featuresForEObject1.contains(feature1));
-		Assert.assertTrue(featuresForEObject1.contains(feature2));
-		Assert.assertTrue(featuresForEObject2.contains(feature3));
+		Assertions.assertTrue(featuresForEObject1.contains(feature1));
+		Assertions.assertTrue(featuresForEObject1.contains(feature2));
+		Assertions.assertTrue(featuresForEObject2.contains(feature3));
 
 		Mockito.verifyNoMoreInteractions(status);
 

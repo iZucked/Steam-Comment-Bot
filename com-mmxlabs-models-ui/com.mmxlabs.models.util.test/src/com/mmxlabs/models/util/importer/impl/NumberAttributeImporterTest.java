@@ -9,8 +9,8 @@ import java.text.ParseException;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EcoreFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class NumberAttributeImporterTest {
 
@@ -29,9 +29,9 @@ public class NumberAttributeImporterTest {
 
 			for (int i = 0; i < testNumbers.length; ++i) {
 				final String str = importer.intToString(testNumbers[i], attribute);
-				Assert.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
+				Assertions.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
 				final int result = importer.stringToInt(str, attribute);
-				Assert.assertEquals(testNumbers[i], result);
+				Assertions.assertEquals(testNumbers[i], result);
 			}
 		}
 	}
@@ -49,9 +49,9 @@ public class NumberAttributeImporterTest {
 
 			for (int i = 0; i < testNumbers.length; ++i) {
 				final String str = importer.floatToString(testNumbers[i], attribute);
-				Assert.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
+				Assertions.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
 				final float result = importer.stringToFloat(str, attribute);
-				Assert.assertEquals(expectedNumbers[i], result, 0.0f);
+				Assertions.assertEquals(expectedNumbers[i], result, 0.0001f);
 			}
 		}
 	}
@@ -68,9 +68,9 @@ public class NumberAttributeImporterTest {
 			final NumberAttributeImporter importer = new NumberAttributeImporter(decimalSeparator);
 			for (int i = 0; i < testNumbers.length; ++i) {
 				final String str = importer.doubleToString(testNumbers[i], attribute);
-				Assert.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
+				Assertions.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
 				final double result = importer.stringToDouble(str, attribute);
-				Assert.assertEquals(expectedNumbers[i], result, 0.0f);
+				Assertions.assertEquals(expectedNumbers[i], result, 0.0001f);
 			}
 		}
 	}
@@ -93,9 +93,9 @@ public class NumberAttributeImporterTest {
 			final NumberAttributeImporter importer = new NumberAttributeImporter(decimalSeparator);
 			for (int i = 0; i < testNumbers.length; ++i) {
 				final String str = importer.doubleToString(testNumbers[i], attribute);
-				Assert.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
+				Assertions.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
 				final double result = importer.stringToDouble(str, attribute);
-				Assert.assertEquals(expectedNumbers[i], result, 0.0f);
+				Assertions.assertEquals(expectedNumbers[i], result, 0.0001f);
 			}
 		}
 	}
@@ -119,9 +119,9 @@ public class NumberAttributeImporterTest {
 			final NumberAttributeImporter importer = new NumberAttributeImporter(decimalSeparator);
 			for (int i = 0; i < testNumbers.length; ++i) {
 				final String str = importer.doubleToString(testNumbers[i], attribute);
-				Assert.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
+				Assertions.assertEquals(String.format(expectedPatterns[i], decimalSeparator), str);
 				final double result = importer.stringToDouble(str, attribute);
-				Assert.assertEquals(expectedNumbers[i], result, 0.0f);
+				Assertions.assertEquals(expectedNumbers[i], result, 0.0001f);
 			}
 		}
 	}

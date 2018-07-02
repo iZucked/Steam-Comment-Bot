@@ -7,8 +7,8 @@ package com.mmxlabs.common.indexedobjects.impl;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
@@ -21,27 +21,33 @@ public class ArrayIndexMapTest {
 		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final IIndexedObject key = Mockito.mock(IIndexedObject.class);
 
-		Assert.assertNull(map.maybeGet(key));
+		Assertions.assertNull(map.maybeGet(key));
 		Mockito.verify(key).getIndex();
 	}
 
-	@Test(expected = NoSuchElementException.class)
+	@Test
 	public void testGet2() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
-		final IIndexedObject key = Mockito.mock(IIndexedObject.class);
 
-		map.get(key);
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
+			final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
+			final IIndexedObject key = Mockito.mock(IIndexedObject.class);
 
-		Mockito.verify(key).getIndex();
+			map.get(key);
+
+			Mockito.verify(key).getIndex();
+		});
 	}
 
-	@Test(expected = NoSuchElementException.class)
+	@Test
 	public void testGet3() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
-		final IIndexedObject key = Mockito.mock(IIndexedObject.class);
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
 
-		Mockito.when(key.getIndex()).thenReturn(Integer.MAX_VALUE);
-		map.get(key);
+			final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
+			final IIndexedObject key = Mockito.mock(IIndexedObject.class);
+
+			Mockito.when(key.getIndex()).thenReturn(Integer.MAX_VALUE);
+			map.get(key);
+		});
 	}
 
 	@Test
@@ -53,7 +59,7 @@ public class ArrayIndexMapTest {
 		map.set(key, o1);
 		final Object object = map.get(key);
 
-		Assert.assertSame(o1, object);
+		Assertions.assertSame(o1, object);
 
 	}
 
@@ -70,20 +76,20 @@ public class ArrayIndexMapTest {
 
 		final Iterable<Object> values = map.getValues();
 
-		Assert.assertNotNull(values);
+		Assertions.assertNotNull(values);
 
 		final Iterator<Object> iterator = values.iterator();
 
-		Assert.assertNotNull(iterator);
+		Assertions.assertNotNull(iterator);
 
-		Assert.assertTrue(iterator.hasNext());
-		Assert.assertSame(value1, iterator.next());
-		Assert.assertTrue(iterator.hasNext());
-		Assert.assertSame(value2, iterator.next());
-		Assert.assertFalse(iterator.hasNext());
+		Assertions.assertTrue(iterator.hasNext());
+		Assertions.assertSame(value1, iterator.next());
+		Assertions.assertTrue(iterator.hasNext());
+		Assertions.assertSame(value2, iterator.next());
+		Assertions.assertFalse(iterator.hasNext());
 	}
 
-	@Test(expected = NoSuchElementException.class)
+	@Test
 	public void testGetValues2() {
 		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final Object value1 = new Object();
@@ -96,34 +102,38 @@ public class ArrayIndexMapTest {
 
 		final Iterable<Object> values = map.getValues();
 
-		Assert.assertNotNull(values);
+		Assertions.assertNotNull(values);
 
 		final Iterator<Object> iterator = values.iterator();
 
-		Assert.assertNotNull(iterator);
+		Assertions.assertNotNull(iterator);
 
-		Assert.assertTrue(iterator.hasNext());
-		Assert.assertSame(value1, iterator.next());
-		Assert.assertTrue(iterator.hasNext());
-		Assert.assertSame(value2, iterator.next());
-		Assert.assertFalse(iterator.hasNext());
+		Assertions.assertTrue(iterator.hasNext());
+		Assertions.assertSame(value1, iterator.next());
+		Assertions.assertTrue(iterator.hasNext());
+		Assertions.assertSame(value2, iterator.next());
+		Assertions.assertFalse(iterator.hasNext());
 
 		// Trigger no such element exception
-		iterator.next();
-
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
+			iterator.next();
+		});
 	}
 
-	@Test(expected = UnsupportedOperationException.class)
+	@Test
 	public void testGetValues3() {
 		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 
 		final Iterable<Object> values = map.getValues();
-		Assert.assertNotNull(values);
+		Assertions.assertNotNull(values);
 
 		final Iterator<Object> iterator = values.iterator();
-		Assert.assertNotNull(iterator);
+		Assertions.assertNotNull(iterator);
 
-		iterator.remove();
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+
+			iterator.remove();
+		});
 	}
 
 	@Test
@@ -135,11 +145,11 @@ public class ArrayIndexMapTest {
 		map.set(key, o1);
 		final Object object = map.get(key);
 
-		Assert.assertSame(o1, object);
+		Assertions.assertSame(o1, object);
 
 		map.clear();
 
-		Assert.assertNull(map.maybeGet(key));
+		Assertions.assertNull(map.maybeGet(key));
 
 	}
 

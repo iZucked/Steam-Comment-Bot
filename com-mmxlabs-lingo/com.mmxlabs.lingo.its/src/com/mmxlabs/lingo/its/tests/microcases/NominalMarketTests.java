@@ -13,18 +13,18 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -49,25 +49,22 @@ import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCore;
-import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class NominalMarketTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -77,7 +74,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -85,7 +82,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
-	@Before
+	@BeforeEach
 	@Override
 	public void constructor() throws Exception {
 
@@ -100,7 +97,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNominalHeel() throws Exception {
 
 		// Create the required basic elements
@@ -128,26 +125,26 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 			final EList<Event> events = cargoAllocation.getEvents();
 			final Event firstEvent = events.get(0);
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Check safety heel present.
-			Assert.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), firstEvent.getHeelAtStart());
-			Assert.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), lastEvent.getHeelAtEnd());
+			Assertions.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), firstEvent.getHeelAtStart());
+			Assertions.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), lastEvent.getHeelAtEnd());
 
 		});
 	}
@@ -158,7 +155,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCharterInHeel() throws Exception {
 
 		// Create the required basic elements
@@ -186,26 +183,26 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 			final EList<Event> events = cargoAllocation.getEvents();
 			final Event firstEvent = events.get(0);
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Check safety heel present.
-			Assert.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), firstEvent.getHeelAtStart());
-			Assert.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), lastEvent.getHeelAtEnd());
+			Assertions.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), firstEvent.getHeelAtStart());
+			Assertions.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), lastEvent.getHeelAtEnd());
 
 		});
 	}
@@ -216,7 +213,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNominalSlotBinding() throws Exception {
 
 		// Create the required basic elements
@@ -252,7 +249,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
@@ -267,20 +264,20 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			final ISequences initialRawSequences = dataTransformer.getInitialSequences();
 
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(dataTransformer, initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(dataTransformer, initialRawSequences));
 
 			final IModifiableSequences lsoSolution = SequenceHelper.createSequences(dataTransformer.getInjector());
 			SequenceHelper.addSequence(lsoSolution, dataTransformer.getInjector(), charterInMarket_1, -1, l1, d2, l2, d1);
 
 			// Validate the swapped discharges are invalid
 			final List<IConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateConstraintCheckers(dataTransformer, lsoSolution);
-			Assert.assertNotNull(failedConstraintCheckers);
+			Assertions.assertNotNull(failedConstraintCheckers);
 
 			// Expect just this one to fail
-			Assert.assertEquals(2, failedConstraintCheckers.size());
+			Assertions.assertEquals(2, failedConstraintCheckers.size());
 			// Order doesn't really matter. Should make test robust to order change
-			Assert.assertTrue(failedConstraintCheckers.get(0) instanceof RoundTripVesselPermissionConstraintChecker);
-			Assert.assertTrue(failedConstraintCheckers.get(1) instanceof PromptRoundTripVesselPermissionConstraintChecker);
+			Assertions.assertTrue(failedConstraintCheckers.get(0) instanceof RoundTripVesselPermissionConstraintChecker);
+			Assertions.assertTrue(failedConstraintCheckers.get(1) instanceof PromptRoundTripVesselPermissionConstraintChecker);
 		});
 	}
 
@@ -290,7 +287,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMoveNominalToFleet() throws Exception {
 
 		// Create the required basic elements
@@ -323,17 +320,17 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		});
 	}
 
@@ -343,7 +340,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMoveNominalToFleet_LossMakingCargo_ShipOnly() throws Exception {
 
 		// Create the required basic elements
@@ -385,7 +382,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
@@ -393,22 +390,22 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			scenarioRunner.runAndApplyBest();
 			final long afterPNL = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), optimiserScenario.getScheduleModel().getSchedule()).getGroupProfitAndLoss().getProfitAndLoss();
 
-			Assert.assertTrue(beforePNL > afterPNL);
+			Assertions.assertTrue(beforePNL > afterPNL);
 
 			// Check correct cargoes remain and spot index has changed.
-			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			final NonOptionalSlotFitnessCore core = new NonOptionalSlotFitnessCore("");
 			Injector cinjector = scenarioToOptimiserBridge.getInjector().createChildInjector(new InitialPhaseOptimisationDataModule());
 			cinjector.injectMembers(core);
 			core.init(cinjector.getInstance(IPhaseOptimisationData.class));
 			core.evaluate(initialRawSequences, new EvaluationState(), null);
-			Assert.assertTrue(core.getFitness() > 0);
+			Assertions.assertTrue(core.getFitness() > 0);
 
 		}, null);
 	}
@@ -419,7 +416,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMoveNominalToFleet_LossMakingCargo() throws Exception {
 
 		// Create the required basic elements
@@ -456,24 +453,24 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			final NonOptionalSlotFitnessCore core = new NonOptionalSlotFitnessCore("");
 			Injector cinjector = scenarioToOptimiserBridge.getInjector().createChildInjector(new InitialPhaseOptimisationDataModule());
 			cinjector.injectMembers(core);
 			core.init(cinjector.getInstance(IPhaseOptimisationData.class));
 			core.evaluate(initialRawSequences, new EvaluationState(), null);
-			Assert.assertTrue(core.getFitness() > 0);
+			Assertions.assertTrue(core.getFitness() > 0);
 		});
 	}
 
@@ -483,7 +480,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMoveNominalToOpen() throws Exception {
 
 		// Create the required basic elements
@@ -513,14 +510,14 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testForcePromptNominalToOpen_InPrompt() throws Exception {
 
 		// Create the required basic elements
@@ -556,15 +553,15 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 		}, null);
 
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testromptLockedNominalInPromptNotOpened() throws Exception {
 
 		// Create the required basic elements
@@ -600,12 +597,12 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargo still exists
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 
-			Assert.assertSame(charterInMarket_1, cargo1.getVesselAssignmentType());
-			Assert.assertEquals(-1, cargo1.getSpotIndex());
+			Assertions.assertSame(charterInMarket_1, cargo1.getVesselAssignmentType());
+			Assertions.assertEquals(-1, cargo1.getSpotIndex());
 		}, null);
 	}
 
@@ -615,7 +612,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testPromptNominalOptimisedIn_ShipOnly() throws Exception {
 
 		// Create the required basic elements
@@ -652,9 +649,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargo still exists
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 		}, null);
 
 	}
@@ -665,7 +662,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOutOfPromptButInPeriodNominalOptimisedStaysIn_ShipOnly() throws Exception {
 
 		// Create the required basic elements
@@ -704,9 +701,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargo still exists
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 		}, null);
 
 	}
@@ -717,7 +714,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOutOfPeriodButInPromptNominalOptimisedStaysNominal() throws Exception {
 
 		// Create the required basic elements
@@ -755,9 +752,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargo still exists
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 		}, null);
 
 	}
@@ -769,7 +766,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testForcePromptNominalToOpen_InPrompt_ActionSet() throws Exception {
 
 		// Create the required basic elements
@@ -860,18 +857,18 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(2, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(2, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getDischargeSlots().size());
 
-			Assert.assertSame(cargo2, optimiserScenario.getCargoModel().getCargoes().get(0));
-			Assert.assertSame(charterInMarket_2b, cargo2.getVesselAssignmentType());
+			Assertions.assertSame(cargo2, optimiserScenario.getCargoModel().getCargoes().get(0));
+			Assertions.assertSame(charterInMarket_2b, cargo2.getVesselAssignmentType());
 
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testForcePromptNominalToOpen_OutPrompt() throws Exception {
 
 		// Create the required basic elements
@@ -906,9 +903,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 		}, null);
 	}
 
@@ -918,7 +915,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMoveMultipleNominalVessels() throws Exception {
 
 		// Create the required basic elements
@@ -948,14 +945,14 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			final VesselAssignmentType vesselAssignmentType = optCargo1.getVesselAssignmentType();
-			Assert.assertEquals(charterInMarket_1, vesselAssignmentType);
-			Assert.assertEquals(-1, optCargo1.getSpotIndex());
+			Assertions.assertEquals(charterInMarket_1, vesselAssignmentType);
+			Assertions.assertEquals(-1, optCargo1.getSpotIndex());
 		});
 	}
 
@@ -965,7 +962,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMoveNominalVesselRestriction() throws Exception {
 
 		// Create the required basic elements
@@ -996,11 +993,11 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 			// Validate the initial sequences are invalid
 			final List<IConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assert.assertNotNull(failedConstraintCheckers);
+			Assertions.assertNotNull(failedConstraintCheckers);
 
 			// Expect just this one to fail
-			Assert.assertEquals(1, failedConstraintCheckers.size());
-			Assert.assertTrue(failedConstraintCheckers.get(0) instanceof AllowedVesselPermissionConstraintChecker);
+			Assertions.assertEquals(1, failedConstraintCheckers.size());
+			Assertions.assertTrue(failedConstraintCheckers.get(0) instanceof AllowedVesselPermissionConstraintChecker);
 
 		}, null);
 	}
@@ -1011,7 +1008,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDoNotMoveFleetToNominal() throws Exception {
 
 		// Create the required basic elements
@@ -1040,16 +1037,16 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		});
 	}
 

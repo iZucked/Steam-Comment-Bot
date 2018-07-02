@@ -10,8 +10,8 @@ import java.time.YearMonth;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
@@ -80,24 +80,24 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			EList<VesselAvailability> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselAvailabilities();
 
-			Assert.assertEquals(1, vesselAvailabilities.size());
+			Assertions.assertEquals(1, vesselAvailabilities.size());
 			VesselAvailability va = vesselAvailabilities.get(0);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assert.assertEquals("1000000", va.getRepositioningFee());
-			Assert.assertEquals("5", va.getStartHeel().getPriceExpression());
-			Assert.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0);
-			Assert.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0);
-			Assert.assertEquals(22.6, va.getStartHeel().getCvValue(), 0.0);
+			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
+			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
+			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
+			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
+			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
+			Assertions.assertEquals(22.6, va.getStartHeel().getCvValue(), 0.0001);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assert.assertEquals("1000000", va.getRepositioningFee());
-			Assert.assertEquals("7", va.getEndHeel().getPriceExpression());
-			Assert.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0);
-			Assert.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0);
-			Assert.assertNotNull(va.getBallastBonusContract());
+			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
+			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
+			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
+			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
+			Assertions.assertNotNull(va.getBallastBonusContract());
 		}, null);
 	}
 
@@ -151,24 +151,24 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			EList<VesselAvailability> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselAvailabilities();
 
-			Assert.assertEquals(1, vesselAvailabilities.size());
+			Assertions.assertEquals(1, vesselAvailabilities.size());
 			VesselAvailability va = vesselAvailabilities.get(0);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assert.assertEquals("1000000", va.getRepositioningFee());
-			Assert.assertEquals("5", va.getStartHeel().getPriceExpression());
-			Assert.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0);
-			Assert.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0);
-			Assert.assertEquals(22.6, va.getStartHeel().getCvValue(), 0.0);
+			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
+			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
+			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
+			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
+			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
+			Assertions.assertEquals(22.6, va.getStartHeel().getCvValue(), 0.0001);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assert.assertEquals("1000000", va.getRepositioningFee());
-			Assert.assertEquals("7", va.getEndHeel().getPriceExpression());
-			Assert.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0);
-			Assert.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0);
-			Assert.assertNotNull(va.getBallastBonusContract());
+			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
+			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
+			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
+			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
+			Assertions.assertNotNull(va.getBallastBonusContract());
 		}, null);
 	}
 
@@ -220,31 +220,31 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			EList<VesselAvailability> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselAvailabilities();
 
-			Assert.assertEquals(1, vesselAvailabilities.size());
+			Assertions.assertEquals(1, vesselAvailabilities.size());
 			VesselAvailability va = vesselAvailabilities.get(0);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartBy());
-			Assert.assertEquals("", va.getRepositioningFee());
-			Assert.assertEquals("", va.getStartHeel().getPriceExpression());
-			Assert.assertEquals(500.0, va.getStartHeel().getMinVolumeAvailable(), 0.0);
-			Assert.assertEquals(500.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0);
+			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartAfter());
+			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartBy());
+			Assertions.assertEquals("", va.getRepositioningFee());
+			Assertions.assertEquals("", va.getStartHeel().getPriceExpression());
+			Assertions.assertEquals(500.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
+			Assertions.assertEquals(500.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
 			// TODO: Decide what this should be! Is it previous heel or next heel?
 			// TODO: (Add another trimmed cargo with another CV value to test the correct one has been picked up)
 			// TODO: The period transformer hard codes 22.8!
-			Assert.assertEquals(22.3, va.getStartHeel().getCvValue(), 0.0);
+			Assertions.assertEquals(22.3, va.getStartHeel().getCvValue(), 0.0001);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assert.assertEquals("1000000", va.getRepositioningFee());
-			Assert.assertEquals("7", va.getEndHeel().getPriceExpression());
-			Assert.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0);
-			Assert.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0);
-			Assert.assertNotNull(va.getBallastBonusContract());
+			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
+			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
+			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
+			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
+			Assertions.assertNotNull(va.getBallastBonusContract());
 		}, null);
 	}
 
@@ -296,27 +296,27 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			EList<VesselAvailability> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselAvailabilities();
 
-			Assert.assertEquals(1, vesselAvailabilities.size());
+			Assertions.assertEquals(1, vesselAvailabilities.size());
 			VesselAvailability va = vesselAvailabilities.get(0);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assert.assertEquals("1000000", va.getRepositioningFee());
-			Assert.assertEquals("5", va.getStartHeel().getPriceExpression());
-			Assert.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0);
-			Assert.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0);
-			Assert.assertEquals(22.6, va.getStartHeel().getCvValue(), 0.0);
+			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
+			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
+			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
+			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
+			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
+			Assertions.assertEquals(22.6, va.getStartHeel().getCvValue(), 0.0001);
 
-			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndAfter());
-			Assert.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndBy());
-			Assert.assertEquals("1000000", va.getRepositioningFee());
-			Assert.assertEquals("", va.getEndHeel().getPriceExpression());
-			Assert.assertEquals(500.0, va.getEndHeel().getMinimumEndHeel(), 0.0);
-			Assert.assertEquals(500.0, va.getEndHeel().getMaximumEndHeel(), 0.0);
-			Assert.assertNull(va.getBallastBonusContract());
+			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndBy());
+			Assertions.assertEquals("1000000", va.getRepositioningFee());
+			Assertions.assertEquals("", va.getEndHeel().getPriceExpression());
+			Assertions.assertEquals(500.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
+			Assertions.assertEquals(500.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
+			Assertions.assertNull(va.getBallastBonusContract());
 		}, null);
 	}
 }

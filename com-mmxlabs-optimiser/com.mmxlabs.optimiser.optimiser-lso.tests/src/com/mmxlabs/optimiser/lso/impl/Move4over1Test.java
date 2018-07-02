@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -91,9 +91,9 @@ public class Move4over1Test {
 
 		final List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(5, 6, 3, 4, 1, 2, 7, 8, 9, 10);
 
-		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
+		Assertions.assertEquals(expectedSequence1.size(), sequence1.size());
 		for (int i = 0; i < expectedSequence1.size(); ++i) {
-			Assert.assertEquals(expectedSequence1.get(i), sequence1.get(i));
+			Assertions.assertEquals(expectedSequence1.get(i), sequence1.get(i));
 		}
 	}
 
@@ -117,44 +117,44 @@ public class Move4over1Test {
 		final int resource2Start = 4;
 		final int resource2End = 6;
 
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setResource(resource1);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setSegment1Start(resource1Start);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setSegment1End(resource1End);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setSegment2Start(resource2Start);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setSegment2End(resource2End);
-		Assert.assertTrue(move.validate(sequences));
+		Assertions.assertTrue(move.validate(sequences));
 
 		final Map<IResource, ISequence> sequenceMap_r1 = Collections.emptyMap();
 
 		final List<IResource> r1 = Collections.emptyList();
 
-		Assert.assertFalse(move.validate(new Sequences(r1, sequenceMap_r1)));
+		Assertions.assertFalse(move.validate(new Sequences(r1, sequenceMap_r1)));
 
 		// NOTE: This test does not trigger the desired code path. Check cobertura reports
 		move.setSegment1End(100);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setSegment1End(resource1End);
 
 		move.setSegment1Start(100);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setSegment1Start(resource1Start);
 
 		move.setSegment2End(100);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setSegment2End(resource2End);
 
 		move.setSegment2Start(100);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setSegment2Start(resource2Start);
 
 	}
@@ -166,9 +166,9 @@ public class Move4over1Test {
 
 		final IResource resource1 = Mockito.mock(IResource.class, "resource1");
 
-		Assert.assertNull(move.getResource());
+		Assertions.assertNull(move.getResource());
 		move.setResource(resource1);
-		Assert.assertSame(resource1, move.getResource());
+		Assertions.assertSame(resource1, move.getResource());
 	}
 
 	@Test
@@ -176,10 +176,10 @@ public class Move4over1Test {
 
 		final Move4over1 move = new Move4over1();
 
-		Assert.assertEquals(-1, move.getSegment1Start());
+		Assertions.assertEquals(-1, move.getSegment1Start());
 		final int pos = 10;
 		move.setSegment1Start(pos);
-		Assert.assertEquals(pos, move.getSegment1Start());
+		Assertions.assertEquals(pos, move.getSegment1Start());
 	}
 
 	@Test
@@ -187,10 +187,10 @@ public class Move4over1Test {
 
 		final Move4over1 move = new Move4over1();
 
-		Assert.assertEquals(-1, move.getSegment1End());
+		Assertions.assertEquals(-1, move.getSegment1End());
 		final int pos = 10;
 		move.setSegment1End(pos);
-		Assert.assertEquals(pos, move.getSegment1End());
+		Assertions.assertEquals(pos, move.getSegment1End());
 	}
 
 	@Test
@@ -198,10 +198,10 @@ public class Move4over1Test {
 
 		final Move4over1 move = new Move4over1();
 
-		Assert.assertEquals(-1, move.getSegment2Start());
+		Assertions.assertEquals(-1, move.getSegment2Start());
 		final int pos = 10;
 		move.setSegment2Start(pos);
-		Assert.assertEquals(pos, move.getSegment2Start());
+		Assertions.assertEquals(pos, move.getSegment2Start());
 	}
 
 	@Test
@@ -209,9 +209,9 @@ public class Move4over1Test {
 
 		final Move4over1 move = new Move4over1();
 
-		Assert.assertEquals(-1, move.getSegment2End());
+		Assertions.assertEquals(-1, move.getSegment2End());
 		final int pos = 10;
 		move.setSegment2End(pos);
-		Assert.assertEquals(pos, move.getSegment2End());
+		Assertions.assertEquals(pos, move.getSegment2End());
 	}
 }

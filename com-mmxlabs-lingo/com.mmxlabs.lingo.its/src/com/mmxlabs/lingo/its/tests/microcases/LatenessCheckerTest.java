@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -31,11 +31,11 @@ import com.mmxlabs.models.lng.types.TimePeriod;
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testEvent_NoLateness() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -72,16 +72,16 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 			final VesselEventVisit visit1 = MicroTestUtils.findVesselEventVisit(event1, lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assert.assertNull(lateness1);
+			Assertions.assertNull(lateness1);
 
 			final VesselEventVisit visit2 = MicroTestUtils.findVesselEventVisit(event2, lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assert.assertNull(lateness2);
+			Assertions.assertNull(lateness2);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testEvent_WithLateness() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -119,17 +119,17 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 			final VesselEventVisit visit1 = MicroTestUtils.findVesselEventVisit(event1, lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assert.assertNull(lateness1);
+			Assertions.assertNull(lateness1);
 
 			final VesselEventVisit visit2 = MicroTestUtils.findVesselEventVisit(event2, lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assert.assertNotNull(lateness2);
-			Assert.assertEquals(1, lateness2.getLatenessInHours());
+			Assertions.assertNotNull(lateness2);
+			Assertions.assertEquals(1, lateness2.getLatenessInHours());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCargo_NoLateness() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -171,16 +171,16 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assert.assertNull(lateness1);
+			Assertions.assertNull(lateness1);
 
 			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assert.assertNull(lateness2);
+			Assertions.assertNull(lateness2);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCargo_WithLateness() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -222,17 +222,17 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assert.assertNull(lateness1);
+			Assertions.assertNull(lateness1);
 
 			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assert.assertNotNull(lateness2);
-			Assert.assertEquals(1, lateness2.getLatenessInHours());
+			Assertions.assertNotNull(lateness2);
+			Assertions.assertEquals(1, lateness2.getLatenessInHours());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCargo_WithLatenessInFlex() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -274,13 +274,13 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assert.assertNull(lateness1);
+			Assertions.assertNull(lateness1);
 
 			// Still 1 hour late
 			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assert.assertNotNull(lateness2);
-			Assert.assertEquals(1, lateness2.getLatenessInHours());
+			Assertions.assertNotNull(lateness2);
+			Assertions.assertEquals(1, lateness2.getLatenessInHours());
 		});
 	}
 }

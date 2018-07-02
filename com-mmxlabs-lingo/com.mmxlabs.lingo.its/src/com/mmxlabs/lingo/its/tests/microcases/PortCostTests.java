@@ -6,12 +6,12 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  *
  */
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PortCostTests extends AbstractMicroTestCase {
 
 	/**
@@ -39,7 +39,7 @@ public class PortCostTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testPortCostOrder1() throws Exception {
 
 		// Remove all existing costs
@@ -70,8 +70,8 @@ public class PortCostTests extends AbstractMicroTestCase {
 			final IPort oPort1 = modelEntityMap.getOptimiserObjectNullChecked(port1, IPort.class);
 			final IPort oPort2 = modelEntityMap.getOptimiserObjectNullChecked(port2, IPort.class);
 
-			Assert.assertEquals(200_000_000L, portCostProvider.getPortCost(oPort1, oVessel, PortType.Load));
-			Assert.assertEquals(100_000_000L, portCostProvider.getPortCost(oPort2, oVessel, PortType.Load));
+			Assertions.assertEquals(200_000_000L, portCostProvider.getPortCost(oPort1, oVessel, PortType.Load));
+			Assertions.assertEquals(100_000_000L, portCostProvider.getPortCost(oPort2, oVessel, PortType.Load));
 		});
 	}
 
@@ -81,7 +81,7 @@ public class PortCostTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testPortCostOrder2() throws Exception {
 
 		// Remove all existing costs
@@ -112,8 +112,8 @@ public class PortCostTests extends AbstractMicroTestCase {
 			final IPort oPort1 = modelEntityMap.getOptimiserObjectNullChecked(port1, IPort.class);
 			final IPort oPort2 = modelEntityMap.getOptimiserObjectNullChecked(port2, IPort.class);
 
-			Assert.assertEquals(200_000_000L, portCostProvider.getPortCost(oPort1, oVessel, PortType.Load));
-			Assert.assertEquals(100_000_000L, portCostProvider.getPortCost(oPort2, oVessel, PortType.Load));
+			Assertions.assertEquals(200_000_000L, portCostProvider.getPortCost(oPort1, oVessel, PortType.Load));
+			Assertions.assertEquals(100_000_000L, portCostProvider.getPortCost(oPort2, oVessel, PortType.Load));
 		});
 	}
 

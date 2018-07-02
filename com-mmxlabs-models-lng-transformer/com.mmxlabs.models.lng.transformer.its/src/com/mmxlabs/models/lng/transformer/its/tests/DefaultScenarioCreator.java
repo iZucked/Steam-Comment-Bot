@@ -14,7 +14,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -839,10 +839,10 @@ public class DefaultScenarioCreator {
 	}
 
 	public void checkJourneyGeography(final Journey journey, final Port from, final Port to) {
-		Assert.assertEquals(journey.getPort(), from);
-		Assert.assertEquals(journey.getDestination(), to);
+		Assertions.assertEquals(journey.getPort(), from);
+		Assertions.assertEquals(journey.getDestination(), to);
 		final RouteOption routeOption = journey.getRouteOption();
-		Assert.assertEquals(journey.getDistance(), getDistance(from, to, routeOption));
+		Assertions.assertEquals(journey.getDistance(), getDistance(from, to, routeOption));
 	}
 
 	private int getDistance(final Port from, final Port to, final RouteOption routeOption) {

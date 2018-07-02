@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
@@ -19,8 +19,8 @@ public class AnnotatedSolutionTest {
 		final ISequences sequences = Mockito.mock(ISequences.class);
 		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 		final AnnotatedSolution solution = new AnnotatedSolution(sequences, state);
-		Assert.assertSame(sequences, solution.getFullSequences());
-		Assert.assertSame(state, solution.getEvaluationState());
+		Assertions.assertSame(sequences, solution.getFullSequences());
+		Assertions.assertSame(state, solution.getEvaluationState());
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class AnnotatedSolutionTest {
 
 		solution.setGeneralAnnotation(key, annotation);
 
-		Assert.assertSame(annotation, solution.getGeneralAnnotation(key, Object.class));
+		Assertions.assertSame(annotation, solution.getGeneralAnnotation(key, Object.class));
 	}
 
 	@Test
@@ -45,6 +45,6 @@ public class AnnotatedSolutionTest {
 		final AnnotatedSolution solution = new AnnotatedSolution(sequences, state);
 		final IElementAnnotationsMap elementAnnotations = solution.getElementAnnotations();
 
-		Assert.assertNotNull(elementAnnotations);
+		Assertions.assertNotNull(elementAnnotations);
 	}
 }

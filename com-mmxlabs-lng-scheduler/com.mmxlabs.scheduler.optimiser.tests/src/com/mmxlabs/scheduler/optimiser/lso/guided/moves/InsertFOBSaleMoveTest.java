@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -35,8 +35,8 @@ public class InsertFOBSaleMoveTest {
 
 		final InsertFOBSaleMove move = new InsertFOBSaleMove(resourceFOBSale, elementFOBSale, elementFOBPurchase, null);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceFOBSale));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceFOBSale));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementFOBSale, elementFOBPurchase);
@@ -50,12 +50,12 @@ public class InsertFOBSaleMoveTest {
 
 		move.apply(sequences);
 
-		Assert.assertTrue(modifiableUnusedSequences.isEmpty());
+		Assertions.assertTrue(modifiableUnusedSequences.isEmpty());
 
-		Assert.assertSame(elementFOBSaleStart, sequenceA.get(0));
-		Assert.assertSame(elementFOBPurchase, sequenceA.get(1));
-		Assert.assertSame(elementFOBSale, sequenceA.get(2));
-		Assert.assertSame(elementFOBSaleEnd, sequenceA.get(3));
+		Assertions.assertSame(elementFOBSaleStart, sequenceA.get(0));
+		Assertions.assertSame(elementFOBPurchase, sequenceA.get(1));
+		Assertions.assertSame(elementFOBSale, sequenceA.get(2));
+		Assertions.assertSame(elementFOBSaleEnd, sequenceA.get(3));
 	}
 
 	@Test
@@ -75,9 +75,9 @@ public class InsertFOBSaleMoveTest {
 
 		final InsertFOBSaleMove move = new InsertFOBSaleMove(resourceFOBSale, elementFOBSale, elementFOBPurchase, resourceCurrentFOBPurchase);
 
-		Assert.assertEquals(2, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceFOBSale));
-		Assert.assertTrue(move.getAffectedResources().contains(resourceCurrentFOBPurchase));
+		Assertions.assertEquals(2, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceFOBSale));
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceCurrentFOBPurchase));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementFOBSale);
@@ -95,13 +95,13 @@ public class InsertFOBSaleMoveTest {
 
 		move.apply(sequences);
 
-		Assert.assertTrue(modifiableUnusedSequences.isEmpty());
-		Assert.assertEquals(0, sequenceB.size());
+		Assertions.assertTrue(modifiableUnusedSequences.isEmpty());
+		Assertions.assertEquals(0, sequenceB.size());
 
-		Assert.assertSame(elementFOBSaleStart, sequenceA.get(0));
-		Assert.assertSame(elementFOBPurchase, sequenceA.get(1));
-		Assert.assertSame(elementFOBSale, sequenceA.get(2));
-		Assert.assertSame(elementFOBSaleEnd, sequenceA.get(3));
+		Assertions.assertSame(elementFOBSaleStart, sequenceA.get(0));
+		Assertions.assertSame(elementFOBPurchase, sequenceA.get(1));
+		Assertions.assertSame(elementFOBSale, sequenceA.get(2));
+		Assertions.assertSame(elementFOBSaleEnd, sequenceA.get(3));
 	}
 
 }

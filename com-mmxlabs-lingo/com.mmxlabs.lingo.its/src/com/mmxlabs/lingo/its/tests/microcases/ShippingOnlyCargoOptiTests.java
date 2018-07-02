@@ -6,11 +6,11 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 
@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void shippingOnly_SlotSwap_Permitted() throws Exception {
 
 		// Construct the cargo scenario
@@ -50,14 +50,14 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(false), null, scenarioRunner -> {
 
 			// Wiring should have changed
-			Assert.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
-			Assert.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
+			Assertions.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
+			Assertions.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
 
 		}, null);
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void shippingOnly_SlotSwap_NotPermitted() throws Exception {
 
 		// Construct the cargo scenario
@@ -83,13 +83,13 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(true), null, scenarioRunner -> {
 
 			// Wiring should have changed
-			Assert.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
-			Assert.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
+			Assertions.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
+			Assertions.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
 		}, null);
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void shippingOnly_OptionalSlots_Permitted() throws Exception {
 
 		// Construct the cargo scenario
@@ -103,13 +103,13 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(false), null, scenarioRunner -> {
 
-			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
 
 		}, null);
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void shippingOnly_OptionalSlots_NotPermitted() throws Exception {
 
 		// Construct the cargo scenario
@@ -123,7 +123,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(true), null, scenarioRunner -> {
 
-			Assert.assertEquals(0, lngScenarioModel.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(0, lngScenarioModel.getCargoModel().getCargoes().size());
 
 		}, null);
 	}

@@ -12,12 +12,12 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -36,11 +36,11 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeSpotIndex() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -58,11 +58,11 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, 1)));
 
-		Assert.assertEquals(0, cargo1.getSequenceHint());
+		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeAssignmentType() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -82,11 +82,11 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselAvailability)));
 
-		Assert.assertEquals(0, cargo1.getSequenceHint());
+		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeSlotPort() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -106,11 +106,11 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__PORT, portFinder.findPort("Ras Laffan"))));
 
-		Assert.assertEquals(0, cargo1.getSequenceHint());
+		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeSlotDuration() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -130,11 +130,11 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__DURATION, 10)));
 
-		Assert.assertEquals(0, cargo1.getSequenceHint());
+		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeSlotWindowSize() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -154,11 +154,11 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE, 10)));
 
-		Assert.assertEquals(0, cargo1.getSequenceHint());
+		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeSlotWindowSizeUnits() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -178,11 +178,11 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, TimePeriod.DAYS)));
 
-		Assert.assertEquals(0, cargo1.getSequenceHint());
+		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeSlotWindowStartTime() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -202,11 +202,11 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, 10)));
 
-		Assert.assertEquals(0, cargo1.getSequenceHint());
+		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeSlotWindowStart() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -226,7 +226,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_START, LocalDate.of(2015, 12, 10))));
 
-		Assert.assertEquals(0, cargo1.getSequenceHint());
+		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	private EditingDomain createEditingDomain(final LNGScenarioModel scenarioModel) {

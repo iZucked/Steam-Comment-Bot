@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.its.tests.sync;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -23,10 +22,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -60,7 +59,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class CopyFromBaseTests extends AbstractMicroTestCase {
 
 	@Override
@@ -78,7 +77,7 @@ public class CopyFromBaseTests extends AbstractMicroTestCase {
 		return commercialModelFinder.findEntity("Entity");
 	}
 
-	@Ignore("Test not ready yet")
+	@Disabled("Test not ready yet")
 	@Test
 	public void testDistanceCleanCopy() throws Exception {
 
@@ -94,7 +93,7 @@ public class CopyFromBaseTests extends AbstractMicroTestCase {
 				try {
 					updateDistances(baseCaseReference);
 				} catch (final Exception e) {
-					Assert.fail(e.getMessage());
+					Assertions.fail(e.getMessage());
 				}
 			});
 
@@ -106,7 +105,7 @@ public class CopyFromBaseTests extends AbstractMicroTestCase {
 				final PortModel destPortModel = ScenarioModelUtil.getPortModel(blankCaseReference);
 
 				final Comparison comparison = TesterUtil.compareModels(basePortModel, destPortModel);
-				Assert.assertTrue(comparison.getDifferences().isEmpty());
+				Assertions.assertTrue(comparison.getDifferences().isEmpty());
 			}
 		}
 
@@ -148,7 +147,7 @@ public class CopyFromBaseTests extends AbstractMicroTestCase {
 				final EList<Diff> differences = comparison.getDifferences();
 				// save(baseModel, "C:\\temp\\base.xmi");
 				// save(destModel, "C:\\temp\\dest.xmi");
-				Assert.assertTrue(differences.isEmpty());
+				Assertions.assertTrue(differences.isEmpty());
 			}
 		}
 

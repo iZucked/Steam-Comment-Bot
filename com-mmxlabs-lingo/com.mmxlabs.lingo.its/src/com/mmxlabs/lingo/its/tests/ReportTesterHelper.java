@@ -22,7 +22,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.E4PartWrapper;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.ReportsConstants;
@@ -191,7 +191,7 @@ public class ReportTesterHelper {
 					@Override
 					public void run() {
 						final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						Assert.assertNotNull(activePage);
+						Assertions.assertNotNull(activePage);
 						try {
 							// Close the existing view reference. E.g. because we have changed the license features.
 							final IViewReference ref = activePage.findViewReference(reportID);
@@ -204,7 +204,7 @@ public class ReportTesterHelper {
 							provider.deselectAll(true);
 
 							view[0] = activePage.showView(reportID);
-							Assert.assertNotNull(view[0]);
+							Assertions.assertNotNull(view[0]);
 							activePage.activate(view[0]);
 
 						} catch (final PartInitException e) {
@@ -273,7 +273,7 @@ public class ReportTesterHelper {
 					@Override
 					public void run() {
 						final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						Assert.assertNotNull(activePage);
+						Assertions.assertNotNull(activePage);
 						try {
 							// Close the existing view reference. E.g. because we have changed the license features.
 							final IViewReference ref = activePage.findViewReference(reportID);
@@ -286,7 +286,7 @@ public class ReportTesterHelper {
 							provider.deselectAll(true);
 
 							view[0] = activePage.showView(reportID);
-							Assert.assertNotNull(view[0]);
+							Assertions.assertNotNull(view[0]);
 							activePage.activate(view[0]);
 
 						} catch (final PartInitException e) {

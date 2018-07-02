@@ -13,8 +13,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.eclipse.emf.common.util.URI;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
@@ -34,6 +34,6 @@ public class JavascriptTests {
 
 		engine.eval(reader);
 		final String output = (String) engine.get("output");
-		Assert.assertEquals("http://com.mmxlabs.models.migration.tests/model", output);
+		Assertions.assertEquals("http://com.mmxlabs.models.migration.tests/model", output);
 	}
 }

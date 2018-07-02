@@ -163,7 +163,7 @@ public final class GeneralTestUtils {
 	public static int[] makeBaseFuelPrices(final int price) {
 		final int[] m = new int[10];
 		Arrays.fill(m, price);
-		// Mockito.when(m.get(Matchers.any(in[].class))).thenReturn(price);
+		// Mockito.when(m.get(ArgumentMatchers.any(in[].class))).thenReturn(price);
 		return m;
 	}
 }

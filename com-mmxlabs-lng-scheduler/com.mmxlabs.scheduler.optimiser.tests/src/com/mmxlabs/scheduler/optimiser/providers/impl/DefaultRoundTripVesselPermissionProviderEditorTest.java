@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.IResource;
@@ -25,8 +25,8 @@ public class DefaultRoundTripVesselPermissionProviderEditorTest {
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Assert.assertFalse(provider.isPermittedOnResource(portSlot, vesselAvailability));
-		Assert.assertFalse(provider.isPermittedOnResource(element, resource));
+		Assertions.assertFalse(provider.isPermittedOnResource(portSlot, vesselAvailability));
+		Assertions.assertFalse(provider.isPermittedOnResource(element, resource));
 	}
 
 	@Test
@@ -41,7 +41,7 @@ public class DefaultRoundTripVesselPermissionProviderEditorTest {
 
 		provider.permitElementOnResource(element, portSlot, resource, vesselAvailability);
 
-		Assert.assertTrue(provider.isPermittedOnResource(portSlot, vesselAvailability));
-		Assert.assertTrue(provider.isPermittedOnResource(element, resource));
+		Assertions.assertTrue(provider.isPermittedOnResource(portSlot, vesselAvailability));
+		Assertions.assertTrue(provider.isPermittedOnResource(element, resource));
 	}
 }

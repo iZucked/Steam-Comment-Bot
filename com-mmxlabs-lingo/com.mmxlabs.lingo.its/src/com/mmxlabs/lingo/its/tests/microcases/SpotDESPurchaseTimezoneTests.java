@@ -9,12 +9,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.moves.AbstractMoveHandlerTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -42,11 +42,11 @@ import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
  * Tests for the {@link GuidedMoveGenerator}
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class SpotDESPurchaseTimezoneTests extends AbstractMoveHandlerTest {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapCargoLoadWithUnusedLoad() throws Exception {
 
 		// Make a shipped cargo to define the time range.
@@ -100,8 +100,8 @@ public class SpotDESPurchaseTimezoneTests extends AbstractMoveHandlerTest {
 				}
 			}
 
-			Assert.assertNotNull(spotMminus1);
-			Assert.assertNotNull(spotM);
+			Assertions.assertNotNull(spotMminus1);
+			Assertions.assertNotNull(spotM);
 
 			LoadSlot loadM = modelEntityMap.getModelObjectNullChecked(spotM, LoadSlot.class);
 			LoadSlot loadMminus1 = modelEntityMap.getModelObjectNullChecked(spotMminus1, LoadSlot.class);
@@ -110,10 +110,10 @@ public class SpotDESPurchaseTimezoneTests extends AbstractMoveHandlerTest {
 			ISequences sequencesMinus1 = SequenceHelper.createJustFOBDESSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), loadMminus1, discharge);
 
 			List<IConstraintChecker> a = MicroTestUtils.validateConstraintCheckersWithoutNewUnit(injector, sequencesM);
-			Assert.assertNull(a);
+			Assertions.assertNull(a);
 
 			List<IConstraintChecker> b = MicroTestUtils.validateConstraintCheckersWithoutNewUnit(injector, sequencesMinus1);
-			Assert.assertNotNull(b);
+			Assertions.assertNotNull(b);
 			int ii = 0;
 
 		});

@@ -8,9 +8,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
@@ -44,25 +44,25 @@ public class MMXObjectEquivalanceTest {
 		u5.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid2");
 
 		// Check identity
-		Assert.assertTrue(MMXObjectEquivalance.equivalentUUIDObject(u1, u1));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentUUIDObject(u1, u1));
 
 		// Null to empty string is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u1, u2));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u1, u2));
 
 		// Null to non-empty string is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u1, u3));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u1, u3));
 
 		// Empty string to null is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u2, u1));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u2, u1));
 
 		// Non-empty string to null is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u3, u1));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u3, u1));
 
 		// Different instance, same UUID is equivalent
-		Assert.assertTrue(MMXObjectEquivalance.equivalentUUIDObject(u3, u4));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentUUIDObject(u3, u4));
 
 		// Different instance, different UUID is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u3, u5));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentUUIDObject(u3, u5));
 	}
 
 	@Test
@@ -88,25 +88,25 @@ public class MMXObjectEquivalanceTest {
 		u5.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name2");
 
 		// Check identity
-		Assert.assertTrue(MMXObjectEquivalance.equivalentNamedObject(u1, u1));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentNamedObject(u1, u1));
 
 		// Null to empty string is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u1, u2));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u1, u2));
 
 		// Null to non-empty string is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u1, u3));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u1, u3));
 
 		// Empty string to null is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u2, u1));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u2, u1));
 
 		// Non-empty string to null is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u3, u1));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u3, u1));
 
 		// Different instance, same Name is equivalent
-		Assert.assertTrue(MMXObjectEquivalance.equivalentNamedObject(u3, u4));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentNamedObject(u3, u4));
 
 		// Different instance, different Name is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u3, u5));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentNamedObject(u3, u5));
 	}
 
 	@Test
@@ -145,30 +145,30 @@ public class MMXObjectEquivalanceTest {
 		u7.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name3");
 
 		// Check identity
-		Assert.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u1, u1));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u1, u1));
 
 		// Null to empty string is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u1, u2));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u1, u2));
 
 		// Null to non-empty string is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u1, u3));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u1, u3));
 
 		// Empty string to null is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u2, u1));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u2, u1));
 
 		// Non-empty string to null is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u1));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u1));
 
 		// Different instance, same Name is equivalent
-		Assert.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u4));
-		Assert.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u5));
-		Assert.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u6));
-		Assert.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u4, u3));
-		Assert.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u5, u3));
-		Assert.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u6, u3));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u4));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u5));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u6));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u4, u3));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u5, u3));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalentOtherNamesObject(u6, u3));
 
 		// Different instance, different Name is not equivalent
-		Assert.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u7));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalentOtherNamesObject(u3, u7));
 	}
 
 	@Test
@@ -211,35 +211,35 @@ public class MMXObjectEquivalanceTest {
 		u3.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "name2");
 
 		// Eobjects different
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(e1, e2));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(e1, e2));
 
 		// Identity checks
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(n1, n1));
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(on1, on1));
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(u1, u1));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(n1, n1));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(on1, on1));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(u1, u1));
 
 		// Same Checks
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(n1, n2));
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(on1, on2));
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(u1, u2));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(n1, n2));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(on1, on2));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(u1, u2));
 
 		// Different checks
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(n1, n3));
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(on1, on3));
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(u1, u3));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(n1, n3));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(on1, on3));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(u1, u3));
 
 		// Mixed instance checks
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(n1, u1));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(n1, u1));
 		// FIXME: This case does not apply as OtherNames extends NamedObject. Not strictly correct as objects are of differnt types, but does not cause problems.
-		// Assert.assertFalse(MMXObjectEquivalance.equivalent(n1, on1));
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(u1, on1));
+		// Assertions.assertFalse(MMXObjectEquivalance.equivalent(n1, on1));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(u1, on1));
 
 		// OtherNames over Names - Named route will be false, but OtherNames will be true
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(on4, on5));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(on4, on5));
 
 	}
 
-	@Ignore("Test currently fail due to dynamic eobject usage. Waiting for response on EMF mailing list. - SG 2013-06-21")
+	@Disabled("Test currently fail due to dynamic eobject usage. Waiting for response on EMF mailing list. - SG 2013-06-21")
 	@Test
 	public void testEquivalent_CombinedObject() {
 
@@ -262,8 +262,8 @@ public class MMXObjectEquivalanceTest {
 		e1.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name1");
 		e1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid1");
 
-		Assert.assertEquals("name1", e1.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		Assert.assertEquals("uuid1", e1.eGet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()));
+		Assertions.assertEquals("name1", e1.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		Assertions.assertEquals("uuid1", e1.eGet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()));
 		
 		// Same as e1
 		e2.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name1");
@@ -281,15 +281,15 @@ public class MMXObjectEquivalanceTest {
 		e6.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name3");
 		e6.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid3");
 
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(e1, e2));
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(e1, e3));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(e1, e2));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(e1, e3));
 
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(e1, e4));
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(e1, e5));
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(e3, e4));
-		Assert.assertTrue(MMXObjectEquivalance.equivalent(e4, e5));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(e1, e4));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(e1, e5));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(e3, e4));
+		Assertions.assertTrue(MMXObjectEquivalance.equivalent(e4, e5));
 
-		Assert.assertFalse(MMXObjectEquivalance.equivalent(e1, e6));
+		Assertions.assertFalse(MMXObjectEquivalance.equivalent(e1, e6));
 
 	}
 }

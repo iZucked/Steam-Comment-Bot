@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -35,11 +35,11 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  * @author achurchill
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class MiscCostsTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCargo_NoMiscCosts() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -81,26 +81,26 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 
 			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assert.assertNull(lateness1);
+			Assertions.assertNull(lateness1);
 
 			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assert.assertNull(lateness2);
+			Assertions.assertNull(lateness2);
 
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			Assert.assertEquals(6042139L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+			Assertions.assertEquals(6042139L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
 			StartEvent start = getStartEvent(vesselAvailability);
-			Assert.assertEquals(0, start.getGroupProfitAndLoss().getProfitAndLoss());
-			Assert.assertEquals(6042139L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+			Assertions.assertEquals(0, start.getGroupProfitAndLoss().getProfitAndLoss());
+			Assertions.assertEquals(6042139L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCargo_WithMiscCostsLoad() throws Exception {
-	
+
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
@@ -141,22 +141,23 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 
 			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assert.assertNull(lateness1);
+			Assertions.assertNull(lateness1);
 
 			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assert.assertNull(lateness2);
+			Assertions.assertNull(lateness2);
 
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			Assert.assertEquals(String.format("Expected %s was %s", 6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()),6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
-			Assert.assertEquals( 6_042_139L - 1_000_000L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+			Assertions.assertEquals(6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(),
+					String.format("Expected %s was %s", 6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()));
+			Assertions.assertEquals(6_042_139L - 1_000_000L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCargo_WithMiscCostsDischarge() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -199,17 +200,18 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 
 			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
-			Assert.assertNull(lateness1);
+			Assertions.assertNull(lateness1);
 
 			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
-			Assert.assertNull(lateness2);
+			Assertions.assertNull(lateness2);
 
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			Assert.assertEquals(String.format("Expected %s was %s",  6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()),  6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
-			Assert.assertEquals(6_042_139L - 1_000_000L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+			Assertions.assertEquals(6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(),
+					String.format("Expected %s was %s", 6_042_139L - 1_000_000L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()));
+			Assertions.assertEquals(6_042_139L - 1_000_000L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 

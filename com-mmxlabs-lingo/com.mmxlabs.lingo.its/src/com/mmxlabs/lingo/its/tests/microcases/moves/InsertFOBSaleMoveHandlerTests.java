@@ -12,13 +12,13 @@ import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -47,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
  * Tests for the {@link GuidedMoveGenerator}
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 
 	/**
@@ -55,7 +55,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertFOBSaleMove() throws Exception {
 
 		final LoadSlot load1 = cargoModelBuilder//
@@ -102,7 +102,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, discharge_element, random, options, forbiddenElements);
 
-			Assert.assertNotNull(movePair);
+			Assertions.assertNotNull(movePair);
 
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
@@ -112,11 +112,11 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
 
 			// Check expectations
-			Assert.assertEquals(4, result.getSequence(resource1).size());
-			Assert.assertEquals(0, result.getUnusedElements().size());
+			Assertions.assertEquals(4, result.getSequence(resource1).size());
+			Assertions.assertEquals(0, result.getUnusedElements().size());
 
-			Assert.assertSame(load1, slotMapper.apply(result.getSequence(resource1).get(1)));
-			Assert.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(2)));
+			Assertions.assertSame(load1, slotMapper.apply(result.getSequence(resource1).get(1)));
+			Assertions.assertSame(discharge1, slotMapper.apply(result.getSequence(resource1).get(2)));
 		});
 	}
 
@@ -125,7 +125,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertFOBSaleMove_Fail_VesselRestriction() throws Exception {
 
 		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
@@ -177,7 +177,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, discharge_element, random, options, forbiddenElements);
 
-			Assert.assertNull(movePair);
+			Assertions.assertNull(movePair);
 		});
 	}
 
@@ -186,7 +186,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertFOBSaleMove_Fail_Timewindows() throws Exception {
 
 		final LoadSlot load1 = cargoModelBuilder//
@@ -233,7 +233,7 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 			@Nullable
 			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, discharge_element, random, options, forbiddenElements);
 
-			Assert.assertNull(movePair);
+			Assertions.assertNull(movePair);
 
 		});
 	}

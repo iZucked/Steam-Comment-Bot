@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,12 +13,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.Injector;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -50,13 +47,12 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @SuppressWarnings({ "unused", "null" })
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 	@Override
@@ -157,7 +153,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationPriceBasedTrimmingEmptyVesselTest() {
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
@@ -188,17 +184,17 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 
 				// Assert expected result (Truncated end window)
-				assertEquals(24 * 26 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 26 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
+				Assertions.assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
 
-				assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				Assertions.assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void minDurationPriceBasedTrimmingEmptyVesselTest() {
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
@@ -230,17 +226,17 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 
 				// Assert expected result (Truncated start window)
-				assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 
-				assertEquals(24 * 24 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 24 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
+				Assertions.assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void minMaxDurationPriceBasedTrimmingEmptyVesselTest() {
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
@@ -273,17 +269,17 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
 
 				// Assert expected result (Truncated start AND end windows)
-				assertEquals(24 * 39 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 39 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
+				Assertions.assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
 
-				assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void minMaxDurationPriceBasedTrimmingCargoTest() {
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
@@ -330,18 +326,18 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
 				// Assert expected result (Truncated start AND end windows)
-				assertEquals(24 * 37 + 6, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 37 + 5, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 37 + 6, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
+				Assertions.assertEquals(24 * 37 + 5, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
-				assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationOptimiseOutOfRangePriceBasedCargoTest() throws Exception {
 
 		// Create first vessel
@@ -378,23 +374,23 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 			final IScenarioDataProvider optimiserDataProvider = scenarioToOptimiserBridge.getOptimiserScenario();
 
 			// Check if the cargo is scheduled
-			assertEquals(1, ScenarioModelUtil.getCargoModel(optimiserDataProvider).getCargoes().size());
+			Assertions.assertEquals(1, ScenarioModelUtil.getCargoModel(optimiserDataProvider).getCargoes().size());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check the identity of the vessel
-			assertEquals(vesselAvailability, schedule.getSequences().get(0).getVesselAvailability());
-			assertEquals(vesselAvailability2, schedule.getSequences().get(1).getVesselAvailability());
+			Assertions.assertEquals(vesselAvailability, schedule.getSequences().get(0).getVesselAvailability());
+			Assertions.assertEquals(vesselAvailability2, schedule.getSequences().get(1).getVesselAvailability());
 
 			// Check On which vessel the cargo is
-			assertTrue(schedule.getSequences().get(1).getEvents().size() > 3);
-			assertEquals(3, schedule.getSequences().get(0).getEvents().size());
+			Assertions.assertTrue(schedule.getSequences().get(1).getEvents().size() > 3);
+			Assertions.assertEquals(3, schedule.getSequences().get(0).getEvents().size());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void minDurationOptimiseInPriceBasedCargoTest() throws Exception {
 
 		// Create first vessel
@@ -433,22 +429,22 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 			final IScenarioDataProvider optimiserDataProvider = scenarioToOptimiserBridge.getOptimiserScenario();
 
 			// Check if the cargo is scheduled
-			assertEquals(1, ScenarioModelUtil.getCargoModel(optimiserDataProvider).getCargoes().size());
+			Assertions.assertEquals(1, ScenarioModelUtil.getCargoModel(optimiserDataProvider).getCargoes().size());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the cargo moved from ship 1 to ship 2
-			assertEquals(vesselAvailability, schedule.getSequences().get(0).getVesselAvailability());
-			assertEquals(vesselAvailability2, schedule.getSequences().get(1).getVesselAvailability());
+			Assertions.assertEquals(vesselAvailability, schedule.getSequences().get(0).getVesselAvailability());
+			Assertions.assertEquals(vesselAvailability2, schedule.getSequences().get(1).getVesselAvailability());
 
-			assertTrue(schedule.getSequences().get(0).getEvents().size() > 3);
-			assertEquals(3, schedule.getSequences().get(1).getEvents().size());
+			Assertions.assertTrue(schedule.getSequences().get(0).getEvents().size() > 3);
+			Assertions.assertEquals(3, schedule.getSequences().get(1).getEvents().size());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationPriceBasedTrimmingCargoVesselTest() {
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
@@ -494,18 +490,18 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
 				// Assert expected result (Truncated end window)
-				assertEquals(24 * 25 + 6, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 25 + 5, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
+				Assertions.assertEquals(24 * 25 + 6, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
+				Assertions.assertEquals(24 * 25 + 5, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
-				assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
-				assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
+				Assertions.assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+				Assertions.assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void minDurationPriceBasedTrimmingCargoOptionalVesselTest() {
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
@@ -545,21 +541,21 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 			final IScenarioDataProvider optimiserDataProvider = scenarioToOptimiserBridge.getOptimiserScenario();
 
 			// Check if the cargo is scheduled
-			assertEquals(1, ScenarioModelUtil.getCargoModel(optimiserDataProvider).getCargoes().size());
+			Assertions.assertEquals(1, ScenarioModelUtil.getCargoModel(optimiserDataProvider).getCargoes().size());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the cargo moved from ship 1 to ship 2
 			// assertEquals(vesselAvailability, schedule.getSequences().get(1).getVesselAvailability());
-			assertEquals(vesselAvailability2, schedule.getSequences().get(0).getVesselAvailability());
+			Assertions.assertEquals(vesselAvailability2, schedule.getSequences().get(0).getVesselAvailability());
 
-			assertTrue(schedule.getSequences().get(0).getEvents().size() > 3);
+			Assertions.assertTrue(schedule.getSequences().get(0).getEvents().size() > 3);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationPriceBasedWithLateness() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -595,13 +591,13 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 			}
 			final EndEvent endEvent = MicroTestUtils.findVesselEndEvent(lngScenarioModel);
 			final PortVisitLateness lateness = endEvent.getLateness();
-			assertNotNull(lateness);
-			assertEquals(48, lateness.getLatenessInHours());
+			Assertions.assertNotNull(lateness);
+			Assertions.assertEquals(48, lateness.getLatenessInHours());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationSchedulerModelEmptyVesselTest() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -622,7 +618,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 		Event start = schedule.getSequences().get(0).getEvents().get(0);
 		Event end = schedule.getSequences().get(0).getEvents().get(2);
 
-		assertTrue(start.getStart().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0)));
-		assertTrue(end.getEnd().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0)));
+		Assertions.assertTrue(start.getStart().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0)));
+		Assertions.assertTrue(end.getEnd().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0)));
 	}
 }

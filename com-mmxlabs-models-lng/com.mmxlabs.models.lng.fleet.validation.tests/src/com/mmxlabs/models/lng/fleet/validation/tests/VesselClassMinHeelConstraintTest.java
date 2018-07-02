@@ -11,9 +11,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -90,15 +90,15 @@ public class VesselClassMinHeelConstraintTest {
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
 		Mockito.when(ctx.getTarget()).thenReturn(target);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
+		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
 		final VesselConstraint constraint = new VesselConstraint();
 		final IStatus status = constraint.validate(ctx);
 
 		if (expectSuccess) {
-			Assert.assertTrue("Success expected", status.isOK());
+			Assertions.assertTrue(status.isOK(), "Success expected");
 		} else {
-			Assert.assertFalse("Failure expected", status.isOK());
+			Assertions.assertFalse(status.isOK(), "Failure expected");
 
 		}
 	}

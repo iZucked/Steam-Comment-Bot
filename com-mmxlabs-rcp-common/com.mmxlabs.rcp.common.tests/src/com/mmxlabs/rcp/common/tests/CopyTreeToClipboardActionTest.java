@@ -12,19 +12,16 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 
-@RunWith(SWTBotJunit4ClassRunner.class)
 public class CopyTreeToClipboardActionTest {
 
-	@Ignore("Almost always fails on build server, probably timing issue")
+	@Disabled("Almost always fails on build server, probably timing issue")
 	@Test
 	public void testCopyTreeToClipboardAction() throws InterruptedException {
 
@@ -76,10 +73,10 @@ public class CopyTreeToClipboardActionTest {
 					final Object contents = cb.getContents(transfer);
 
 					// Expect a String
-					Assert.assertTrue(contents instanceof String);
+					Assertions.assertTrue(contents instanceof String);
 
 					// Check string is as expected
-					Assert.assertEquals(expectedStringBuilder.toString(), contents);
+					Assertions.assertEquals(expectedStringBuilder.toString(), contents);
 				} finally {
 
 					cb.dispose();

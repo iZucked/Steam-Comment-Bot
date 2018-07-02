@@ -2,10 +2,6 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2019
  * All rights reserved.
  */
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
- */
 package com.mmxlabs.lingo.its.microcases.longtermoptimiser;
 
 import java.time.LocalDate;
@@ -13,28 +9,25 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
@@ -68,8 +61,9 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
+
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	@Override
 	protected int getThreadCount() {
@@ -79,7 +73,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -89,7 +83,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -97,7 +91,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
-	@Before
+	@BeforeEach
 	@Override
 	public void constructor() throws Exception {
 
@@ -107,8 +101,8 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Ignore
-	@Category({ MicroTest.class })
+	@Disabled
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertShippedPair_Open() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -140,13 +134,13 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 			final LightWeightSchedulerOptimiserUnit lightWeightSchedulerOptimiserUnit = getOptimiser(scenarioRunner);
 			IMultiStateResult initialResult = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult();
 			final IMultiStateResult result1 = lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
-			Assert.assertNotNull(result1);
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assertions.assertNotNull(result1);
+			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
 			final IMultiStateResult result2 = lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
-			Assert.assertNotNull(result2);
-			Assert.assertTrue(result2.getSolutions().size() == 2);
+			Assertions.assertNotNull(result2);
+			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 		}, OptimiserInjectorServiceMaker.begin()//
 				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, createExtraDataModule(charterInMarket_1))//
@@ -154,8 +148,8 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Ignore
-	@Category({ MicroTest.class })
+	@Disabled
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertShippedPair_Open2() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -187,14 +181,14 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 			final LightWeightSchedulerOptimiserUnit lightWeightSchedulerOptimiserUnit = getOptimiser(scenarioRunner);
 			IMultiStateResult initialResult = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult();
 			final boolean[][] result1 = lightWeightSchedulerOptimiserUnit.runAndGetPairings(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
-			Assert.assertNotNull(result1);
-			Assert.assertArrayEquals(new boolean[][] { { false, true }, { true, false } }, result1);
-			// Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assertions.assertNotNull(result1);
+			Assertions.assertArrayEquals(new boolean[][] { { false, true }, { true, false } }, result1);
+			// Assertions.assertTrue(result1.getSolutions().size() == 2);
 			// assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 			//
 			// final IMultiStateResult result2 = lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
-			// Assert.assertNotNull(result2);
-			// Assert.assertTrue(result2.getSolutions().size() == 2);
+			// Assertions.assertNotNull(result2);
+			// Assertions.assertTrue(result2.getSolutions().size() == 2);
 			// assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 		}, OptimiserInjectorServiceMaker.begin()//
 				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, createExtraDataModule(charterInMarket_1))//

@@ -7,12 +7,11 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -37,7 +36,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CargoAllowedVesselConstraintCheckTest {
 
 	private static final int dischargePrice = 1;
@@ -94,7 +93,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 				if (!namesMatch) {
 					int ii = 0;
 				}
-				Assert.assertTrue("Only vessel class four used", namesMatch);
+				Assertions.assertTrue(namesMatch, "Only vessel class four used");
 				// don't need to carry on
 				break;
 			}
@@ -160,7 +159,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 					break;
 				}
 			}
-			Assert.assertTrue("Only vessel class four used", inAllowedVessels);
+			Assertions.assertTrue(inAllowedVessels, "Only vessel class four used");
 		}
 	}
 

@@ -7,8 +7,10 @@ package com.mmxlabs.optimiser.core.fitness.impl;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import javax.swing.text.html.HTMLDocument.RunElement;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
@@ -21,16 +23,16 @@ public class FitnessFunctionRegistryTest {
 		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
 		final IFitnessCoreFactory factory1 = new MockFitnessCoreFactory("factory1", CollectionsUtil.makeArrayList("component1"));
 
-		Assert.assertFalse(registry.getFitnessComponentNames().contains("component1"));
-		Assert.assertFalse(registry.getFitnessCoreFactoryNames().contains("factory1"));
+		Assertions.assertFalse(registry.getFitnessComponentNames().contains("component1"));
+		Assertions.assertFalse(registry.getFitnessCoreFactoryNames().contains("factory1"));
 
 		registry.registerFitnessCoreFactory(factory1);
 
-		Assert.assertTrue(registry.getFitnessComponentNames().contains("component1"));
-		Assert.assertTrue(registry.getFitnessCoreFactoryNames().contains("factory1"));
+		Assertions.assertTrue(registry.getFitnessComponentNames().contains("component1"));
+		Assertions.assertTrue(registry.getFitnessCoreFactoryNames().contains("factory1"));
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void testRegisterFitnessFunctionFactory2() {
 
 		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
@@ -38,18 +40,18 @@ public class FitnessFunctionRegistryTest {
 
 		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory("factory1", CollectionsUtil.makeArrayList("component2"));
 
-		Assert.assertFalse(registry.getFitnessComponentNames().contains("component1"));
-		Assert.assertFalse(registry.getFitnessCoreFactoryNames().contains("factory1"));
+		Assertions.assertFalse(registry.getFitnessComponentNames().contains("component1"));
+		Assertions.assertFalse(registry.getFitnessCoreFactoryNames().contains("factory1"));
 
 		registry.registerFitnessCoreFactory(factory1);
 
-		Assert.assertTrue(registry.getFitnessComponentNames().contains("component1"));
-		Assert.assertTrue(registry.getFitnessCoreFactoryNames().contains("factory1"));
+		Assertions.assertTrue(registry.getFitnessComponentNames().contains("component1"));
+		Assertions.assertTrue(registry.getFitnessCoreFactoryNames().contains("factory1"));
 
-		registry.registerFitnessCoreFactory(factory2);
+		Assertions.assertThrows(RuntimeException.class, () -> registry.registerFitnessCoreFactory(factory2));
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void testRegisterFitnessFunctionFactory3() {
 
 		final FitnessFunctionRegistry registry = new FitnessFunctionRegistry();
@@ -57,15 +59,15 @@ public class FitnessFunctionRegistryTest {
 
 		final IFitnessCoreFactory factory2 = new MockFitnessCoreFactory("factory2", CollectionsUtil.makeArrayList("component1"));
 
-		Assert.assertFalse(registry.getFitnessComponentNames().contains("component1"));
-		Assert.assertFalse(registry.getFitnessCoreFactoryNames().contains("factory1"));
+		Assertions.assertFalse(registry.getFitnessComponentNames().contains("component1"));
+		Assertions.assertFalse(registry.getFitnessCoreFactoryNames().contains("factory1"));
 
 		registry.registerFitnessCoreFactory(factory1);
 
-		Assert.assertTrue(registry.getFitnessComponentNames().contains("component1"));
-		Assert.assertTrue(registry.getFitnessCoreFactoryNames().contains("factory1"));
+		Assertions.assertTrue(registry.getFitnessComponentNames().contains("component1"));
+		Assertions.assertTrue(registry.getFitnessCoreFactoryNames().contains("factory1"));
 
-		registry.registerFitnessCoreFactory(factory2);
+		Assertions.assertThrows(RuntimeException.class, () -> registry.registerFitnessCoreFactory(factory2));
 	}
 
 	@Test
@@ -83,11 +85,11 @@ public class FitnessFunctionRegistryTest {
 
 		final Collection<IFitnessCoreFactory> fitnessFunctionFactories = registry.getFitnessCoreFactories();
 
-		Assert.assertEquals(3, fitnessFunctionFactories.size());
+		Assertions.assertEquals(3, fitnessFunctionFactories.size());
 
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory1));
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory2));
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory3));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory1));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory2));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory3));
 	}
 
 	@Test
@@ -106,10 +108,10 @@ public class FitnessFunctionRegistryTest {
 		final List<String> names = CollectionsUtil.makeArrayList("component3", "component2");
 
 		final Collection<IFitnessCoreFactory> fitnessFunctionFactories = registery.getFitnessCoreFactories(names);
-		Assert.assertEquals(2, fitnessFunctionFactories.size());
+		Assertions.assertEquals(2, fitnessFunctionFactories.size());
 
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory3));
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory2));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory3));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory2));
 	}
 
 	@Test
@@ -128,9 +130,9 @@ public class FitnessFunctionRegistryTest {
 		final List<String> names = CollectionsUtil.makeArrayList("component3", "component3");
 
 		final Collection<IFitnessCoreFactory> fitnessFunctionFactories = registery.getFitnessCoreFactories(names);
-		Assert.assertEquals(1, fitnessFunctionFactories.size());
+		Assertions.assertEquals(1, fitnessFunctionFactories.size());
 
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory3));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory3));
 	}
 
 	@Test
@@ -150,10 +152,10 @@ public class FitnessFunctionRegistryTest {
 
 		final Collection<IFitnessCoreFactory> fitnessFunctionFactories = registery.getFitnessCoreFactories(names);
 
-		Assert.assertEquals(2, fitnessFunctionFactories.size());
+		Assertions.assertEquals(2, fitnessFunctionFactories.size());
 
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory1));
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory3));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory1));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory3));
 	}
 
 	@Test
@@ -172,10 +174,10 @@ public class FitnessFunctionRegistryTest {
 
 		final Collection<IFitnessCoreFactory> fitnessFunctionFactories = registery.getFitnessCoreFactories();
 
-		Assert.assertEquals(3, fitnessFunctionFactories.size());
+		Assertions.assertEquals(3, fitnessFunctionFactories.size());
 
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory1));
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory2));
-		Assert.assertTrue(fitnessFunctionFactories.contains(factory3));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory1));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory2));
+		Assertions.assertTrue(fitnessFunctionFactories.contains(factory3));
 	}
 }

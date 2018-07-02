@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -18,9 +18,9 @@ public class PortOptionsTest {
 
 		final int value = 100;
 		final PortOptions options = new PortOptions(Mockito.mock(IPortSlot.class));
-		Assert.assertEquals(0, options.getVisitDuration());
+		Assertions.assertEquals(0, options.getVisitDuration());
 		options.setVisitDuration(value);
-		Assert.assertEquals(value, options.getVisitDuration());
+		Assertions.assertEquals(value, options.getVisitDuration());
 	}
 
 	@Test
@@ -28,7 +28,7 @@ public class PortOptionsTest {
 		final IPortSlot slot = Mockito.mock(IPortSlot.class);
 
 		final PortOptions options = new PortOptions(slot);
-		Assert.assertSame(slot, options.getPortSlot());
+		Assertions.assertSame(slot, options.getPortSlot());
 	}
 
 	@Test
@@ -36,9 +36,9 @@ public class PortOptionsTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IPortSlot slot = Mockito.mock(IPortSlot.class);
 		final PortOptions options = new PortOptions(slot);
-		Assert.assertNull(options.getVessel());
+		Assertions.assertNull(options.getVessel());
 		options.setVessel(vessel);
-		Assert.assertSame(vessel, options.getVessel());
+		Assertions.assertSame(vessel, options.getVessel());
 	}
 
 }

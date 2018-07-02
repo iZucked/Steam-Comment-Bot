@@ -6,8 +6,8 @@ package com.mmxlabs.optimiser.lso.impl.thresholders;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class GeometricThreholderTest {
 	@Test
@@ -27,17 +27,17 @@ public class GeometricThreholderTest {
 		final GeometricThresholder t = new GeometricThresholder(mockRandom, 2, initialTemperature, alpha);
 		t.init();
 
-		Assert.assertEquals(initialTemperature, t.getTemperature(), 0.0);
+		Assertions.assertEquals(initialTemperature, t.getTemperature(), 0.0001);
 
-		Assert.assertFalse(t.accept((long) (mlnHalf * initialTemperature) + 1));
+		Assertions.assertFalse(t.accept((long) (mlnHalf * initialTemperature) + 1));
 		t.step();
-		Assert.assertTrue(t.accept((long) (mlnHalf * initialTemperature) - 1));
+		Assertions.assertTrue(t.accept((long) (mlnHalf * initialTemperature) - 1));
 		t.step();
-		Assert.assertEquals(initialTemperature * alpha, t.getTemperature(), 0.0);
+		Assertions.assertEquals(initialTemperature * alpha, t.getTemperature(), 0.0);
 		t.step();
 		t.step();
-		Assert.assertEquals(initialTemperature * alpha * alpha, t.getTemperature(), 0.0);
-		Assert.assertTrue(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) - 1));
-		Assert.assertFalse(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) + 1));
+		Assertions.assertEquals(initialTemperature * alpha * alpha, t.getTemperature(), 0.0);
+		Assertions.assertTrue(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) - 1));
+		Assertions.assertFalse(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) + 1));
 	}
 }

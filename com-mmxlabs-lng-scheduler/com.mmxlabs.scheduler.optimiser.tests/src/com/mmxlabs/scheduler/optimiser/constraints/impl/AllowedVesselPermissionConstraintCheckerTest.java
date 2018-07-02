@@ -5,9 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class AllowedVesselPermissionConstraintCheckerTest {
 
-	@Ignore("Not finished")
+	@Disabled("Not finished")
 	@Test
 	public void testNoRestrictions() {
 
@@ -54,8 +54,8 @@ public class AllowedVesselPermissionConstraintCheckerTest {
 		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot1 = createSequenceElement(portSlotProvider);
 		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot2 = createSequenceElement(portSlotProvider);
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(slot1.getFirst(), slot2.getFirst(), resource));
-		Assert.assertFalse(checker.checkPairwiseConstraint(slot2.getFirst(), slot1.getFirst(), resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(slot1.getFirst(), slot2.getFirst(), resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(slot2.getFirst(), slot1.getFirst(), resource));
 	}
 
 	private AllowedVesselPermissionConstraintChecker createChecker(final @NonNull IVesselProvider vesselProvider, final @NonNull INominatedVesselProvider nominatedVesselProvider,

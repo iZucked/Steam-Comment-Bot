@@ -6,8 +6,8 @@ package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -49,7 +49,7 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
 
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element1);
 		Mockito.verify(restrictedElementsProvider).getRestrictedPrecedingElements(element2);
@@ -80,8 +80,8 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> singleton(element2));
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
 
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element1);
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element2);
@@ -101,7 +101,7 @@ public class RestrictedElementsConstraintCheckerTest {
 		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
 		final RestrictedElementsConstraintChecker checker = createChecker(name, restrictedElementsProvider, vesselProvider, portTypeProvider);
 
-		Assert.assertEquals(name, checker.getName());
+		Assertions.assertEquals(name, checker.getName());
 
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
@@ -117,8 +117,8 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
 
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element1);
 		Mockito.verify(restrictedElementsProvider).getRestrictedFollowerElements(element2);
@@ -140,7 +140,7 @@ public class RestrictedElementsConstraintCheckerTest {
 		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
 		final RestrictedElementsConstraintChecker checker = createChecker(name, restrictedElementsProvider, vesselProvider, portTypeProvider);
 
-		Assert.assertEquals(name, checker.getName());
+		Assertions.assertEquals(name, checker.getName());
 
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IResource resource2 = Mockito.mock(IResource.class);
@@ -170,15 +170,15 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(portTypeProvider.getPortType(element1)).thenReturn(PortType.Discharge);
 		Mockito.when(portTypeProvider.getPortType(element2)).thenReturn(PortType.Load);
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource2));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource2));
 
 		// First case, Load -> Discharge does apply on cargo shorts
 		Mockito.when(portTypeProvider.getPortType(element1)).thenReturn(PortType.Load);
 		Mockito.when(portTypeProvider.getPortType(element2)).thenReturn(PortType.Discharge);
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2));
 
 	}
 

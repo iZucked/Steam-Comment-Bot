@@ -8,11 +8,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 public class CargoEditingTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void assignVesselEvent() {
 
 		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -40,11 +40,11 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		helper.assignVesselEventToVesselAvailability("Assign event", vesselEvent, vesselAvailability);
 
-		Assert.assertSame(vesselAvailability, vesselEvent.getVesselAssignmentType());
+		Assertions.assertSame(vesselAvailability, vesselEvent.getVesselAssignmentType());
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void unassignVesselEvent() {
 
 		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -59,11 +59,11 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		helper.unassignVesselEventAssignment("Unassign event", vesselEvent);
 
-		Assert.assertNull(vesselEvent.getVesselAssignmentType());
+		Assertions.assertNull(vesselEvent.getVesselAssignmentType());
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void assignDESPurchase() {
 
 		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -76,11 +76,11 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		helper.assignNominatedVessel("Assign slot", load, vessel);
 
-		Assert.assertSame(vessel, load.getNominatedVessel());
+		Assertions.assertSame(vessel, load.getNominatedVessel());
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void unassignDESPurchase() {
 
 		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -93,11 +93,11 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		helper.assignNominatedVessel("Unassign slot", load, null);
 
-		Assert.assertNull(load.getNominatedVessel());
+		Assertions.assertNull(load.getNominatedVessel());
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void assignFOBSale() {
 
 		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -110,11 +110,11 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		helper.assignNominatedVessel("Assign slot", discharge, vessel);
 
-		Assert.assertSame(vessel, discharge.getNominatedVessel());
+		Assertions.assertSame(vessel, discharge.getNominatedVessel());
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void unassignFOBSale() {
 
 		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -127,6 +127,6 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		helper.assignNominatedVessel("Unassign slot", discharge, null);
 
-		Assert.assertNull(discharge.getNominatedVessel());
+		Assertions.assertNull(discharge.getNominatedVessel());
 	}
 }

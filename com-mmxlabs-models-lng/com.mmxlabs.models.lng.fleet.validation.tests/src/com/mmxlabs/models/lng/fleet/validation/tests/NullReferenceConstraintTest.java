@@ -13,8 +13,8 @@ import static org.mockito.Mockito.when;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -144,7 +144,7 @@ public class NullReferenceConstraintTest {
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
 		} else {
-			when(validationContext.createFailureStatus(Matchers.anyString())).thenReturn(resultStatus);
+			when(validationContext.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(resultStatus);
 		}
 
 		// run the thing
@@ -153,7 +153,7 @@ public class NullReferenceConstraintTest {
 		// verify mocked methods are called
 		verify(validationContext).getTarget();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
-		verify(validationContext, atLeast(0)).createFailureStatus(Matchers.anyString());
+		verify(validationContext, atLeast(0)).createFailureStatus(ArgumentMatchers.anyString());
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(validationContext);
 	}

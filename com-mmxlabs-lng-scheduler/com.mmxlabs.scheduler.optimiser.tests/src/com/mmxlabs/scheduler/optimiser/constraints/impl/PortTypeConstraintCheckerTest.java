@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -43,7 +43,7 @@ public class PortTypeConstraintCheckerTest {
 		final String name = "checker";
 		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name);
 
-		Assert.assertSame(name, checker.getName());
+		Assertions.assertSame(name, checker.getName());
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class PortTypeConstraintCheckerTest {
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
-		Assert.assertTrue(checker.checkConstraints(sequences, null));
+		Assertions.assertTrue(checker.checkConstraints(sequences, null));
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class PortTypeConstraintCheckerTest {
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
-		Assert.assertFalse(checker.checkConstraints(sequences, null));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null));
 	}
 
 	@Test
@@ -155,8 +155,8 @@ public class PortTypeConstraintCheckerTest {
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertTrue(checker.checkConstraints(sequences, null, messages));
-		Assert.assertEquals(0, messages.size());
+		Assertions.assertTrue(checker.checkConstraints(sequences, null, messages));
+		Assertions.assertEquals(0, messages.size());
 	}
 
 	@Test
@@ -193,8 +193,8 @@ public class PortTypeConstraintCheckerTest {
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkConstraints(sequences, null, messages));
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, messages));
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -224,9 +224,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(0, messages.size());
+		Assertions.assertEquals(0, messages.size());
 	}
 
 	/**
@@ -246,9 +246,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -269,9 +269,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -298,9 +298,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -333,9 +333,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6, o7));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(0, messages.size());
+		Assertions.assertEquals(0, messages.size());
 	}
 
 	/**
@@ -366,9 +366,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -399,9 +399,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -430,9 +430,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -461,9 +461,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -494,9 +494,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(0, messages.size());
+		Assertions.assertEquals(0, messages.size());
 	}
 
 	/**
@@ -527,9 +527,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(0, messages.size());
+		Assertions.assertEquals(0, messages.size());
 	}
 
 	/**
@@ -560,9 +560,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -593,9 +593,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -624,9 +624,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 	}
 
 	/**
@@ -657,9 +657,9 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
 
-		Assert.assertEquals(0, messages.size());
+		Assertions.assertEquals(0, messages.size());
 	}
 
 	private PortTypeConstraintChecker createChecker(final String name, final IVesselProvider vesselProvider, final IPortTypeProvider portTypeProvider,

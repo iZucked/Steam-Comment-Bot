@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -215,11 +215,11 @@ public class SimpleMultiObjectiveOptimiserTest {
 		SimpleMultiObjectiveOptimiser simpleMultiObjectiveOptimiser = getSimpleMultiObjectiveOptimiser(SimilarityFitnessMode.HIGH);
 		List<NonDominatedSolution> createWeirdDistributionTestData = createWeirdDistributionTestData();
 		NonDominatedSolution quartileSolution = simpleMultiObjectiveOptimiser.findSolutionWhichReachesQuartile(sortedArchive, 0, eQuartile.THIRD, true);
-		Assert.assertNotNull(quartileSolution);
+		Assertions.assertNotNull(quartileSolution);
 		long[] fitnesses = quartileSolution.getFitnesses();
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void createLargeSpatiallyDividedSolutions() {
 		List<NonDominatedSolution> sortedArchive = createLargeTestData();
@@ -231,15 +231,15 @@ public class SimpleMultiObjectiveOptimiserTest {
 	}
 
 	private void checkSpatiallyDividedSolutions(List<NonDominatedSolution> archive, List<List<NonDominatedSolution>> spatiallyDividedSolutions, int[][] breakpoints) {
-		Assert.assertTrue(spatiallyDividedSolutions.size() == 4);
+		Assertions.assertTrue(spatiallyDividedSolutions.size() == 4);
 		int sumOfSizes = spatiallyDividedSolutions.stream().mapToInt(i -> i.size()).sum();
-		Assert.assertTrue(sumOfSizes == archive.size() - 1);
+		Assertions.assertTrue(sumOfSizes == archive.size() - 1);
 		for (int i = 0; i < breakpoints.length; i++) {
 			int[] bp = breakpoints[i];
 			List<NonDominatedSolution> division = spatiallyDividedSolutions.get(i);
 			for (NonDominatedSolution solution : division) {
 				long[] fitnesses = solution.getFitnesses();
-				Assert.assertTrue(String.format("breakpoints: %s fitnesses: %s", Arrays.toString(bp), Arrays.toString(fitnesses)), bp[0] < fitnesses[1] && bp[1] >= fitnesses[1]);
+				Assertions.assertTrue(bp[0] < fitnesses[1] && bp[1] >= fitnesses[1], String.format("breakpoints: %s fitnesses: %s", Arrays.toString(bp), Arrays.toString(fitnesses)));
 			}
 		}
 	}

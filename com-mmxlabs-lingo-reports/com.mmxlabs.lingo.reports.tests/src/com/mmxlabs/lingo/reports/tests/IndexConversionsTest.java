@@ -8,8 +8,8 @@ import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -113,7 +113,7 @@ public class IndexConversionsTest {
 		final String expression = "?%HH";
 		@Nullable
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X, 10.0);
-		Assert.assertEquals("((10.0)/(1.0%(HH)))", IndexConversion.getExpression(testGraphRearrangement));
+		Assertions.assertEquals("((10.0)/(1.0%(HH)))", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class IndexConversionsTest {
 		final String expression = "?%HH+5";
 		@Nullable
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
-		Assert.assertEquals("(((10.0)-(5.0))/(1.0%(HH)))", IndexConversion.getExpression(testGraphRearrangement));
+		Assertions.assertEquals("(((10.0)-(5.0))/(1.0%(HH)))", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class IndexConversionsTest {
 		final String expression = "100%HH+?";
 		@Nullable
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
-		Assert.assertEquals("((10.0)-(100.0%(HH)))", IndexConversion.getExpression(testGraphRearrangement));
+		Assertions.assertEquals("((10.0)-(100.0%(HH)))", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
 	@Test
@@ -138,7 +138,7 @@ public class IndexConversionsTest {
 		final MarkedUpNode markedUpNode = getParentMarkedUpNode(expression);
 		String rearrangedExpression = IndexConversion.getExpression(markedUpNode);
 		System.out.println(rearrangedExpression);
-		Assert.assertEquals("((115.0%(HH))+(5.0))", rearrangedExpression);
+		Assertions.assertEquals("((115.0%(HH))+(5.0))", rearrangedExpression);
 	}
 
 	@Test
@@ -147,9 +147,9 @@ public class IndexConversionsTest {
 		@Nullable
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10);
 		String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
-		Assert.assertEquals("(((10.0)-(3.0))/(1.0%(HH)))", rearrangedExpression);
+		Assertions.assertEquals("(((10.0)-(3.0))/(1.0%(HH)))", rearrangedExpression);
 		double parseExpression = parseExpression(rearrangedExpression);
-		Assert.assertEquals(140, parseExpression, 0.0);
+		Assertions.assertEquals(140, parseExpression, 0.0001);
 	}
 
 	@Test
@@ -158,10 +158,10 @@ public class IndexConversionsTest {
 		@Nullable
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10);
 		String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
-		Assert.assertEquals("((10.0)-(100.0%((HH)*((FX_EURO_to_USD)*(mwh_to_mmBtu)))))", rearrangedExpression);
+		Assertions.assertEquals("((10.0)-(100.0%((HH)*((FX_EURO_to_USD)*(mwh_to_mmBtu)))))", rearrangedExpression);
 		System.out.println(rearrangedExpression);
 		double parseExpression = parseExpression(rearrangedExpression);
-		Assert.assertEquals(8.37, parseExpression, 0.001);
+		Assertions.assertEquals(8.37, parseExpression, 0.001);
 	}
 
 	@Test
@@ -171,9 +171,9 @@ public class IndexConversionsTest {
 		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.X_PLUS_C, 10);
 		String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
 		System.out.println(rearrangedExpression);
-		Assert.assertEquals("((10.0)-((1.0)*(HH)))", rearrangedExpression);
+		Assertions.assertEquals("((10.0)-((1.0)*(HH)))", rearrangedExpression);
 		double parseExpression = parseExpression(rearrangedExpression);
-		Assert.assertEquals(5.0, parseExpression, 0.001);
+		Assertions.assertEquals(5.0, parseExpression, 0.001);
 	}
 
 	private Form testExpression(final String expression) {

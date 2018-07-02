@@ -13,8 +13,8 @@ import java.util.List;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
@@ -177,8 +177,8 @@ public class ScenarioInstanceMigratorTest {
 			// Apply Migration Chain
 			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 3, latestClientVersion, dataManifest, new NullProgressMonitor());
 
-			Assert.assertEquals(latestScenarioVersion, migratedVersion[0]);
-			Assert.assertEquals(latestClientVersion, migratedVersion[1]);
+			Assertions.assertEquals(latestScenarioVersion, migratedVersion[0]);
+			Assertions.assertEquals(latestClientVersion, migratedVersion[1]);
 
 			final InOrder order = inOrder(unit19to20, unit20to21, unit21to22, client3to5, client5to6, client6to7, unit23to24, client7to8, unit24to25);
 			order.verify(unit19to20).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
@@ -193,15 +193,15 @@ public class ScenarioInstanceMigratorTest {
 		}
 		{
 			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion);
-			Assert.assertFalse(chain.isEmpty());
+			Assertions.assertFalse(chain.isEmpty());
 
 			// Example case 2
 
 			// Apply Migration Chain
 			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion, dataManifest, new NullProgressMonitor());
 
-			Assert.assertEquals(latestScenarioVersion, migratedVersion[0]);
-			Assert.assertEquals(latestClientVersion, migratedVersion[1]);
+			Assertions.assertEquals(latestScenarioVersion, migratedVersion[0]);
+			Assertions.assertEquals(latestClientVersion, migratedVersion[1]);
 
 			final InOrder order = inOrder(client3to5, client5to6, client6to7, unit23to24, client7to8, unit24to25);
 			order.verify(client3to5).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
@@ -215,8 +215,8 @@ public class ScenarioInstanceMigratorTest {
 
 			// Apply Migration Chain
 			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 18, latestScenarioVersion, clientContext, 3, latestClientVersion, dataManifest, new NullProgressMonitor());
-			Assert.assertEquals(latestScenarioVersion, migratedVersion[0]);
-			Assert.assertEquals(latestClientVersion, migratedVersion[1]);
+			Assertions.assertEquals(latestScenarioVersion, migratedVersion[0]);
+			Assertions.assertEquals(latestClientVersion, migratedVersion[1]);
 
 			// Example case 1
 
@@ -302,14 +302,14 @@ public class ScenarioInstanceMigratorTest {
 
 		{
 			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion);
-			Assert.assertFalse(chain.isEmpty());
+			Assertions.assertFalse(chain.isEmpty());
 
 			// Apply Migration Chain
 			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion, dataManifest, new NullProgressMonitor());
 
-			Assert.assertEquals(latestScenarioVersion, migratedVersion[0]);
-			// Assert.assertEquals(latestClientVersion, migratedVersion[1]);
-			Assert.assertEquals(3, migratedVersion[1]);
+			Assertions.assertEquals(latestScenarioVersion, migratedVersion[0]);
+			// Assertions.assertEquals(latestClientVersion, migratedVersion[1]);
+			Assertions.assertEquals(3, migratedVersion[1]);
 		}
 	}
 

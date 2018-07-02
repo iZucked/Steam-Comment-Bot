@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -22,8 +22,8 @@ public class CargoTest {
 		final ILoadSlot slot = Mockito.mock(ILoadSlot.class);
 		final Cargo cargo = new Cargo(Lists.<IPortSlot> newArrayList(slot));
 		List<IPortSlot> portSlots = cargo.getPortSlots();
-		Assert.assertNotNull(portSlots);
-		Assert.assertEquals(1, portSlots.size());
-		Assert.assertSame(slot, portSlots.get(0));
+		Assertions.assertNotNull(portSlots);
+		Assertions.assertEquals(1, portSlots.size());
+		Assertions.assertSame(slot, portSlots.get(0));
 	}
 }

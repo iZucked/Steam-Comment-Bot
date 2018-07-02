@@ -8,8 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -32,20 +32,20 @@ public class SequencesTest {
 
 		final Sequences sequences = new Sequences(resources);
 
-		Assert.assertEquals(2, sequences.size());
+		Assertions.assertEquals(2, sequences.size());
 
 		final List<IResource> resources2 = sequences.getResources();
-		Assert.assertSame(resource1, resources2.get(0));
-		Assert.assertSame(resource2, resources2.get(1));
+		Assertions.assertSame(resource1, resources2.get(0));
+		Assertions.assertSame(resource2, resources2.get(1));
 
-		Assert.assertNotNull(sequences.getSequence(0));
-		Assert.assertNotNull(sequences.getSequence(1));
+		Assertions.assertNotNull(sequences.getSequence(0));
+		Assertions.assertNotNull(sequences.getSequence(1));
 
-		Assert.assertNotNull(sequences.getSequence(resource1));
-		Assert.assertNotNull(sequences.getSequence(resource2));
+		Assertions.assertNotNull(sequences.getSequence(resource1));
+		Assertions.assertNotNull(sequences.getSequence(resource2));
 
-		Assert.assertEquals(0, sequences.getSequence(0).size());
-		Assert.assertEquals(0, sequences.getSequence(1).size());
+		Assertions.assertEquals(0, sequences.getSequence(0).size());
+		Assertions.assertEquals(0, sequences.getSequence(1).size());
 	}
 
 	@Test
@@ -66,17 +66,17 @@ public class SequencesTest {
 
 		final Sequences sequences = new Sequences(resources, map);
 
-		Assert.assertEquals(2, sequences.size());
+		Assertions.assertEquals(2, sequences.size());
 
 		final List<IResource> resources2 = sequences.getResources();
-		Assert.assertSame(resource1, resources2.get(0));
-		Assert.assertSame(resource2, resources2.get(1));
+		Assertions.assertSame(resource1, resources2.get(0));
+		Assertions.assertSame(resource2, resources2.get(1));
 
-		Assert.assertSame(sequence1, sequences.getSequence(0));
-		Assert.assertSame(sequence2, sequences.getSequence(1));
+		Assertions.assertSame(sequence1, sequences.getSequence(0));
+		Assertions.assertSame(sequence2, sequences.getSequence(1));
 
-		Assert.assertSame(sequence1, sequences.getSequence(resource1));
-		Assert.assertSame(sequence2, sequences.getSequence(resource2));
+		Assertions.assertSame(sequence1, sequences.getSequence(resource1));
+		Assertions.assertSame(sequence2, sequences.getSequence(resource2));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,19 +102,19 @@ public class SequencesTest {
 
 		final Sequences sequences = new Sequences(initialSequences);
 
-		Assert.assertEquals(2, sequences.size());
+		Assertions.assertEquals(2, sequences.size());
 
 		final List<IResource> resources2 = sequences.getResources();
-		Assert.assertSame(resource1, resources2.get(0));
-		Assert.assertSame(resource2, resources2.get(1));
+		Assertions.assertSame(resource1, resources2.get(0));
+		Assertions.assertSame(resource2, resources2.get(1));
 
 		// TODO: Tighten up, Deep copies are made
 
-		Assert.assertNotNull(sequences.getSequence(0));
-		Assert.assertNotNull(sequences.getSequence(1));
+		Assertions.assertNotNull(sequences.getSequence(0));
+		Assertions.assertNotNull(sequences.getSequence(1));
 
-		Assert.assertNotNull(sequences.getSequence(resource1));
-		Assert.assertNotNull(sequences.getSequence(resource2));
+		Assertions.assertNotNull(sequences.getSequence(resource1));
+		Assertions.assertNotNull(sequences.getSequence(resource2));
 	}
 
 	@Test
@@ -130,11 +130,11 @@ public class SequencesTest {
 
 		final Sequences sequences = new Sequences(resources);
 
-		Assert.assertEquals(2, sequences.size());
+		Assertions.assertEquals(2, sequences.size());
 
 		final List<IResource> resources2 = sequences.getResources();
-		Assert.assertSame(resource1, resources2.get(0));
-		Assert.assertSame(resource2, resources2.get(1));
+		Assertions.assertSame(resource1, resources2.get(0));
+		Assertions.assertSame(resource2, resources2.get(1));
 	}
 
 	@Test
@@ -155,10 +155,10 @@ public class SequencesTest {
 
 		final Sequences sequences = new Sequences(resources, map);
 
-		Assert.assertEquals(2, sequences.size());
+		Assertions.assertEquals(2, sequences.size());
 
-		Assert.assertSame(sequence1, sequences.getSequence(resource1));
-		Assert.assertSame(sequence2, sequences.getSequence(resource2));
+		Assertions.assertSame(sequence1, sequences.getSequence(resource1));
+		Assertions.assertSame(sequence2, sequences.getSequence(resource2));
 
 	}
 
@@ -180,10 +180,10 @@ public class SequencesTest {
 
 		final Sequences sequences = new Sequences(resources, map);
 
-		Assert.assertEquals(2, sequences.size());
+		Assertions.assertEquals(2, sequences.size());
 
-		Assert.assertSame(sequence1, sequences.getSequence(0));
-		Assert.assertSame(sequence2, sequences.getSequence(1));
+		Assertions.assertSame(sequence1, sequences.getSequence(0));
+		Assertions.assertSame(sequence2, sequences.getSequence(1));
 
 	}
 
@@ -205,14 +205,14 @@ public class SequencesTest {
 
 		final Sequences sequences = new Sequences(resources, map);
 
-		Assert.assertEquals(2, sequences.size());
+		Assertions.assertEquals(2, sequences.size());
 
 		final Map<IResource, ISequence> sequencesMap = sequences.getSequences();
 
-		Assert.assertTrue(sequencesMap.containsKey(resource1));
-		Assert.assertTrue(sequencesMap.containsKey(resource2));
-		Assert.assertSame(sequence1, sequencesMap.get(resource1));
-		Assert.assertSame(sequence2, sequencesMap.get(resource2));
+		Assertions.assertTrue(sequencesMap.containsKey(resource1));
+		Assertions.assertTrue(sequencesMap.containsKey(resource2));
+		Assertions.assertSame(sequence1, sequencesMap.get(resource1));
+		Assertions.assertSame(sequence2, sequencesMap.get(resource2));
 	}
 
 	@Test
@@ -233,6 +233,6 @@ public class SequencesTest {
 
 		final Sequences sequences = new Sequences(resources, map);
 
-		Assert.assertEquals(2, sequences.size());
+		Assertions.assertEquals(2, sequences.size());
 	}
 }

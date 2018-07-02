@@ -5,10 +5,9 @@
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -32,7 +31,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 	/**

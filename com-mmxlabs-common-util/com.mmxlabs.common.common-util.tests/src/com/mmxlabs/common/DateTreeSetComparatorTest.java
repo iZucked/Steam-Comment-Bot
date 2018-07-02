@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class DateTreeSetComparatorTest {
 
@@ -39,25 +39,25 @@ public class DateTreeSetComparatorTest {
 		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<>(transformer);
 
 		//
-		Assert.assertEquals(cmp.compare(d1, d2), cmp.compare(obj1, obj2));
-		Assert.assertEquals(cmp.compare(d1, obj2), cmp.compare(obj1, d2));
-		Assert.assertEquals(cmp.compare(d2, d1), cmp.compare(obj2, obj1));
-		Assert.assertEquals(cmp.compare(d2, obj1), cmp.compare(obj2, d1));
+		Assertions.assertEquals(cmp.compare(d1, d2), cmp.compare(obj1, obj2));
+		Assertions.assertEquals(cmp.compare(d1, obj2), cmp.compare(obj1, d2));
+		Assertions.assertEquals(cmp.compare(d2, d1), cmp.compare(obj2, obj1));
+		Assertions.assertEquals(cmp.compare(d2, obj1), cmp.compare(obj2, d1));
 
 		//
-		Assert.assertEquals(cmp.compare(d1, d2), -cmp.compare(d2, d1));
-		Assert.assertEquals(cmp.compare(d1, obj1), -cmp.compare(obj1, d1));
-		Assert.assertEquals(cmp.compare(d1, obj2), -cmp.compare(obj2, d1));
+		Assertions.assertEquals(cmp.compare(d1, d2), -cmp.compare(d2, d1));
+		Assertions.assertEquals(cmp.compare(d1, obj1), -cmp.compare(obj1, d1));
+		Assertions.assertEquals(cmp.compare(d1, obj2), -cmp.compare(obj2, d1));
 		// ....
 
 		// Test equality
-		Assert.assertEquals(0, cmp.compare(d1, d1));
-		Assert.assertEquals(0, cmp.compare(d2, d2));
-		Assert.assertEquals(0, cmp.compare(obj1, obj1));
-		Assert.assertEquals(0, cmp.compare(obj2, obj2));
+		Assertions.assertEquals(0, cmp.compare(d1, d1));
+		Assertions.assertEquals(0, cmp.compare(d2, d2));
+		Assertions.assertEquals(0, cmp.compare(obj1, obj1));
+		Assertions.assertEquals(0, cmp.compare(obj2, obj2));
 	}
 
-	@Ignore("See code review 165 https://mmxlabs.fogbugz.com/default.asp?165")
+	@Disabled("See code review 165 https://mmxlabs.fogbugz.com/default.asp?165")
 	@Test
 	public void testDateTreeSetComparatorCompareDateFromObject() {
 
@@ -82,7 +82,7 @@ public class DateTreeSetComparatorTest {
 		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<>(transformer);
 
 		// Check obj1 retrieves d1, therefore obj1 equals d1
-		Assert.assertEquals(0, cmp.compare(d1, obj1));
-		Assert.assertEquals(0, cmp.compare(d2, obj2));
+		Assertions.assertEquals(0, cmp.compare(d1, obj1));
+		Assertions.assertEquals(0, cmp.compare(d2, obj2));
 	}
 }

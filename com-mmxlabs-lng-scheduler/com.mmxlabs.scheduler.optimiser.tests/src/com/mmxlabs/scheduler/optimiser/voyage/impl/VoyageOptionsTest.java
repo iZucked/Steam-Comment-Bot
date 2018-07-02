@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -22,18 +22,18 @@ public class VoyageOptionsTest {
 	public void testGetSetAvailableTime() {
 		final int value = 100;
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assert.assertEquals(0, options.getAvailableTime());
+		Assertions.assertEquals(0, options.getAvailableTime());
 		options.setAvailableTime(value);
-		Assert.assertEquals(value, options.getAvailableTime());
+		Assertions.assertEquals(value, options.getAvailableTime());
 	}
 
 	@Test
 	public void testGetSetExtraIdleTime() {
 		final int value = 100;
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assert.assertEquals(0, options.getExtraIdleTime());
+		Assertions.assertEquals(0, options.getExtraIdleTime());
 		options.setExtraIdleTime(value);
-		Assert.assertEquals(value, options.getExtraIdleTime());
+		Assertions.assertEquals(value, options.getExtraIdleTime());
 	}
 
 	@Test
@@ -41,7 +41,7 @@ public class VoyageOptionsTest {
 		final IPortSlot slot = Mockito.mock(IPortSlot.class);
 
 		final VoyageOptions options = new VoyageOptions(slot, Mockito.mock(IPortSlot.class));
-		Assert.assertSame(slot, options.getFromPortSlot());
+		Assertions.assertSame(slot, options.getFromPortSlot());
 	}
 
 	@Test
@@ -49,16 +49,16 @@ public class VoyageOptionsTest {
 		final IPortSlot slot = Mockito.mock(IPortSlot.class);
 
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), slot);
-		Assert.assertSame(slot, options.getToPortSlot());
+		Assertions.assertSame(slot, options.getToPortSlot());
 	}
 
 	@Test
 	public void testGetSetNBOSpeed() {
 		final int value = 100;
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assert.assertEquals(0, options.getNBOSpeed());
+		Assertions.assertEquals(0, options.getNBOSpeed());
 		options.setNBOSpeed(value);
-		Assert.assertEquals(value, options.getNBOSpeed());
+		Assertions.assertEquals(value, options.getNBOSpeed());
 	}
 
 	@Test
@@ -68,11 +68,11 @@ public class VoyageOptionsTest {
 		final int distance = 100;
 		final long cost = 2000L;
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assert.assertNull(options.getRoute());
+		Assertions.assertNull(options.getRoute());
 		options.setRoute(route, distance, cost);
-		Assert.assertSame(route, options.getRoute());
-		Assert.assertEquals(distance, options.getDistance());
-		Assert.assertEquals(cost, options.getRouteCost());
+		Assertions.assertSame(route, options.getRoute());
+		Assertions.assertEquals(distance, options.getDistance());
+		Assertions.assertEquals(cost, options.getRouteCost());
 	}
 
 	@Test
@@ -80,9 +80,9 @@ public class VoyageOptionsTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assert.assertNull(options.getVessel());
+		Assertions.assertNull(options.getVessel());
 		options.setVessel(vessel);
-		Assert.assertSame(vessel, options.getVessel());
+		Assertions.assertSame(vessel, options.getVessel());
 
 	}
 
@@ -91,26 +91,26 @@ public class VoyageOptionsTest {
 		final VesselState state = VesselState.Laden;
 
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assert.assertNull(options.getVesselState());
+		Assertions.assertNull(options.getVesselState());
 		options.setVesselState(state);
-		Assert.assertSame(state, options.getVesselState());
+		Assertions.assertSame(state, options.getVesselState());
 
 	}
 
 	@Test
 	public void testTravelFuelChoice() {
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assert.assertSame(TravelFuelChoice.BUNKERS, options.getTravelFuelChoice()); // Default value
+		Assertions.assertSame(TravelFuelChoice.BUNKERS, options.getTravelFuelChoice()); // Default value
 		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
-		Assert.assertSame(TravelFuelChoice.NBO_PLUS_FBO, options.getTravelFuelChoice());
+		Assertions.assertSame(TravelFuelChoice.NBO_PLUS_FBO, options.getTravelFuelChoice());
 	}
 
 	@Test
 	public void testIdleFuelChoice() {
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assert.assertSame(IdleFuelChoice.BUNKERS, options.getIdleFuelChoice()); // Default value
+		Assertions.assertSame(IdleFuelChoice.BUNKERS, options.getIdleFuelChoice()); // Default value
 		options.setIdleFuelChoice(IdleFuelChoice.NBO);
-		Assert.assertSame(IdleFuelChoice.NBO, options.getIdleFuelChoice());
+		Assertions.assertSame(IdleFuelChoice.NBO, options.getIdleFuelChoice());
 	}
 
 	@Test
@@ -148,34 +148,34 @@ public class VoyageOptionsTest {
 		final VoyageOptions options13 = make(1, 2, vessel1, portSlot1, portSlot2, 3, TravelFuelChoice.NBO_PLUS_BUNKERS, IdleFuelChoice.NBO, route1, routeCost2, state1);
 		final VoyageOptions options14 = make(1, 2, vessel1, portSlot1, portSlot2, 3, TravelFuelChoice.NBO_PLUS_BUNKERS, IdleFuelChoice.NBO, route1, routeCost1, state2);
 
-		Assert.assertTrue(options1.equals(options1));
-		Assert.assertTrue(options1.equals(options2));
-		Assert.assertTrue(options2.equals(options1));
+		Assertions.assertTrue(options1.equals(options1));
+		Assertions.assertTrue(options1.equals(options2));
+		Assertions.assertTrue(options2.equals(options1));
 
-		Assert.assertFalse(options1.equals(options3));
-		Assert.assertFalse(options1.equals(options4));
-		Assert.assertFalse(options1.equals(options5));
-		Assert.assertFalse(options1.equals(options6));
-		Assert.assertFalse(options1.equals(options7));
-		Assert.assertFalse(options1.equals(options8));
-		Assert.assertFalse(options1.equals(options9));
-		Assert.assertFalse(options1.equals(options10));
-		Assert.assertFalse(options1.equals(options12));
-		Assert.assertFalse(options1.equals(options13));
+		Assertions.assertFalse(options1.equals(options3));
+		Assertions.assertFalse(options1.equals(options4));
+		Assertions.assertFalse(options1.equals(options5));
+		Assertions.assertFalse(options1.equals(options6));
+		Assertions.assertFalse(options1.equals(options7));
+		Assertions.assertFalse(options1.equals(options8));
+		Assertions.assertFalse(options1.equals(options9));
+		Assertions.assertFalse(options1.equals(options10));
+		Assertions.assertFalse(options1.equals(options12));
+		Assertions.assertFalse(options1.equals(options13));
 
-		Assert.assertFalse(options3.equals(options1));
-		Assert.assertFalse(options4.equals(options1));
-		Assert.assertFalse(options5.equals(options1));
-		Assert.assertFalse(options6.equals(options1));
-		Assert.assertFalse(options7.equals(options1));
-		Assert.assertFalse(options8.equals(options1));
-		Assert.assertFalse(options9.equals(options1));
-		Assert.assertFalse(options10.equals(options1));
-		Assert.assertFalse(options12.equals(options1));
-		Assert.assertFalse(options13.equals(options1));
-		Assert.assertFalse(options14.equals(options1));
+		Assertions.assertFalse(options3.equals(options1));
+		Assertions.assertFalse(options4.equals(options1));
+		Assertions.assertFalse(options5.equals(options1));
+		Assertions.assertFalse(options6.equals(options1));
+		Assertions.assertFalse(options7.equals(options1));
+		Assertions.assertFalse(options8.equals(options1));
+		Assertions.assertFalse(options9.equals(options1));
+		Assertions.assertFalse(options10.equals(options1));
+		Assertions.assertFalse(options12.equals(options1));
+		Assertions.assertFalse(options13.equals(options1));
+		Assertions.assertFalse(options14.equals(options1));
 
-		Assert.assertFalse(options1.equals(new Object()));
+		Assertions.assertFalse(options1.equals(new Object()));
 	}
 
 	VoyageOptions make(final int availableTime, final int distance, final IVessel vessel, final IPortSlot fromPortSlot, final IPortSlot toPortSlot, final int nboSpeed,

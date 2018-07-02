@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -13,7 +13,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintChecker;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class ContractCvConstraintCheckTest {
 	final private float lowCv = 22f;
 	final private float highCv = 24f;

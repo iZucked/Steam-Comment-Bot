@@ -6,8 +6,8 @@ package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.common.components.ILookupManager;
@@ -53,8 +53,8 @@ public class RandomMoveGeneratorTest {
 		// Run it a few times to let rng take its course
 		for (int i = 0; i < 10; ++i) {
 			final int bp = moveGenerator.generateBreakPoint(sequence, random);
-			Assert.assertTrue(bp >= 0);
-			Assert.assertTrue(bp <= sequence.size());
+			Assertions.assertTrue(bp >= 0);
+			Assertions.assertTrue(bp <= sequence.size());
 
 		}
 	}

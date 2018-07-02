@@ -7,13 +7,13 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -29,7 +29,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisat
 import com.mmxlabs.models.lng.types.TimePeriod;
 
 @SuppressWarnings({ "unused", "null" })
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class ExpressionPriceTests extends AbstractMicroTestCase {
 	//
 	// @Override
@@ -43,9 +43,9 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 	// return commercialModelFinder.findEntity("Entity");
 	// }
 
-	@Ignore("This test fails due to half hour timezone offset. Midnight Darwin becomes 11:30PM day before in ITC equiv")
+	@Disabled("This test fails due to half hour timezone offset. Midnight Darwin becomes 11:30PM day before in ITC equiv")
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test1() {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -89,8 +89,8 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 		CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
 		SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
 		double expectedLoadPrice = 10.0;
-		Assert.assertEquals(expectedLoadPrice, simpleCargoAllocation.getLoadAllocation().getPrice(), 0.0001);
-		Assert.assertEquals(expectedLoadPrice, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.0001);
+		Assertions.assertEquals(expectedLoadPrice, simpleCargoAllocation.getLoadAllocation().getPrice(), 0.0001);
+		Assertions.assertEquals(expectedLoadPrice, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.0001);
 
 	}
 }

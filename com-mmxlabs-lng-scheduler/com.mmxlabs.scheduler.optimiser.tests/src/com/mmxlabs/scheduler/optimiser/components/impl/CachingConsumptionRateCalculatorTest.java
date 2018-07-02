@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
@@ -22,14 +22,14 @@ public class CachingConsumptionRateCalculatorTest {
 		final int speed = 5;
 		Mockito.when(calc.getRate(speed)).thenReturn(100L);
 
-		Assert.assertEquals(100L, cachingCalc.getRate(speed));
-		Assert.assertEquals(100L, cachingCalc.getRate(speed));
+		Assertions.assertEquals(100L, cachingCalc.getRate(speed));
+		Assertions.assertEquals(100L, cachingCalc.getRate(speed));
 
 		final int speed2 = 7;
 		Mockito.when(calc.getRate(speed2)).thenReturn(200L);
-		Assert.assertEquals(200L, cachingCalc.getRate(speed2));
-		Assert.assertEquals(200L, cachingCalc.getRate(speed2));
+		Assertions.assertEquals(200L, cachingCalc.getRate(speed2));
+		Assertions.assertEquals(200L, cachingCalc.getRate(speed2));
 
-		Assert.assertEquals(100L, cachingCalc.getRate(speed));
+		Assertions.assertEquals(100L, cachingCalc.getRate(speed));
 	}
 }

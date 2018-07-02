@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class PairKeyedMapTest {
 
@@ -25,41 +25,41 @@ public class PairKeyedMapTest {
 		final Pair<String, String> p1 = new Pair<>(key1, key2);
 		final Pair<String, String> p2 = new Pair<>(key1, key3);
 
-		Assert.assertFalse(map.containsKey(p1));
-		Assert.assertFalse(map.containsKey(p2));
+		Assertions.assertFalse(map.containsKey(p1));
+		Assertions.assertFalse(map.containsKey(p2));
 
-		Assert.assertFalse(map.containsValue(obj1));
-		Assert.assertFalse(map.containsValue(obj2));
+		Assertions.assertFalse(map.containsValue(obj1));
+		Assertions.assertFalse(map.containsValue(obj2));
 
 		map.put(key1, key2, obj1);
 
-		Assert.assertTrue(map.containsKey(p1));
-		Assert.assertFalse(map.containsKey(p2));
+		Assertions.assertTrue(map.containsKey(p1));
+		Assertions.assertFalse(map.containsKey(p2));
 
-		Assert.assertTrue(map.containsValue(obj1));
-		Assert.assertFalse(map.containsValue(obj2));
+		Assertions.assertTrue(map.containsValue(obj1));
+		Assertions.assertFalse(map.containsValue(obj2));
 
-		Assert.assertSame(obj1, map.get(key1, key2));
-		Assert.assertSame(obj1, map.get(p1));
+		Assertions.assertSame(obj1, map.get(key1, key2));
+		Assertions.assertSame(obj1, map.get(p1));
 
 		map.put(p2, obj2);
 
-		Assert.assertTrue(map.containsKey(p1));
-		Assert.assertTrue(map.containsKey(p2));
+		Assertions.assertTrue(map.containsKey(p1));
+		Assertions.assertTrue(map.containsKey(p2));
 
-		Assert.assertTrue(map.containsValue(obj1));
-		Assert.assertTrue(map.containsValue(obj2));
+		Assertions.assertTrue(map.containsValue(obj1));
+		Assertions.assertTrue(map.containsValue(obj2));
 
-		Assert.assertSame(obj2, map.get(key1, key3));
-		Assert.assertSame(obj2, map.get(p2));
+		Assertions.assertSame(obj2, map.get(key1, key3));
+		Assertions.assertSame(obj2, map.get(p2));
 
 		map.clear();
 
-		Assert.assertFalse(map.containsKey(p1));
-		Assert.assertFalse(map.containsKey(p2));
+		Assertions.assertFalse(map.containsKey(p1));
+		Assertions.assertFalse(map.containsKey(p2));
 
-		Assert.assertFalse(map.containsValue(obj1));
-		Assert.assertFalse(map.containsValue(obj2));
+		Assertions.assertFalse(map.containsValue(obj1));
+		Assertions.assertFalse(map.containsValue(obj2));
 
 	}
 }

@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,7 +90,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	protected void withScenarioRunner(@NonNull final String filePath, final boolean isLingoFile, CheckedConsumer<LNGScenarioRunner, Exception> consumer) throws Exception {
 		final URL url = getClass().getResource(filePath);
-		Assert.assertNotNull(url);
+		Assertions.assertNotNull(url);
 		if (isLingoFile) {
 			LNGScenarioRunnerCreator.withLiNGOFileEvaluationRunner(url, consumer);
 		} else {
@@ -105,7 +105,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	public void withSchedule(@NonNull final String lingoFileName, CheckedConsumer<Schedule, Exception> consumer) throws Exception {
 		withScenarioRunner(lingoFileName, runner -> {
-			Assert.assertNotNull(runner);
+			Assertions.assertNotNull(runner);
 			final Schedule schedule = runner.getSchedule();
 			consumer.accept(schedule);
 		});
@@ -530,10 +530,10 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 			if (prop.containsKey(key) && !key.contains("uuid")) {
 				final String propertiesValue = prop.getProperty(key);
 				final String lingoValue = formatProperty(map.getContainer(), map.getFeature());
-				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue);
+				Assertions.assertEquals(propertiesValue, lingoValue, String.format("testing cargo (%s) \"%s:\"", cargoName, key));
 				// final double propertiesValue = Double.valueOf(prop.getProperty(key));
 				// final double lingoValue = getLingoOutput(map.getContainer(), map.getFeature());
-				// Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
+				// Assertions.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
 			} else {
 				LOG.warn(key + " not in map");
 			}

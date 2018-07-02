@@ -10,13 +10,13 @@ import java.util.Random;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -47,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * Tests for the {@link OptionalConstrainedMoveGenerator}
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 	/**
@@ -55,7 +55,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSimpleInsertOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
@@ -96,7 +96,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			lookupManager.createLookup(initialRawSequences);
 
 			final Pair<IResource, Integer> elementPair = lookupManager.lookup(element);
-			Assert.assertNotNull(elementPair);
+			Assertions.assertNotNull(elementPair);
 
 			final Random random = new Random(0);
 
@@ -111,11 +111,11 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			// Check expectations
 			// Empty vessel
-			Assert.assertNotNull("Sequence is null", result.getSequence(resource1));
-			Assert.assertEquals(3, result.getSequence(resource1).size());
-			Assert.assertEquals(0, result.getUnusedElements().size());
+			Assertions.assertNotNull(result.getSequence(resource1), "Sequence is null");
+			Assertions.assertEquals(3, result.getSequence(resource1).size());
+			Assertions.assertEquals(0, result.getUnusedElements().size());
 
-			Assert.assertEquals("charter_out_test_solo", result.getSequence(resource1).get(1).getName());
+			Assertions.assertEquals("charter_out_test_solo", result.getSequence(resource1).get(1).getName());
 		});
 	}
 
@@ -124,7 +124,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSimpleRemoveOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
@@ -165,7 +165,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			lookupManager.createLookup(initialRawSequences);
 
 			final Pair<IResource, Integer> elementPair = lookupManager.lookup(element);
-			Assert.assertNotNull(elementPair);
+			Assertions.assertNotNull(elementPair);
 
 			lookupManager.createLookup(initialRawSequences);
 
@@ -182,11 +182,11 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			// Check expectations
 			// 3 event: start, charter out, end
-			Assert.assertNotNull("Sequence is null", result.getSequence(0));
-			Assert.assertEquals(2, result.getSequence(resource1).size());
-			Assert.assertEquals(1, result.getUnusedElements().size());
+			Assertions.assertNotNull(result.getSequence(0), "Sequence is null");
+			Assertions.assertEquals(2, result.getSequence(resource1).size());
+			Assertions.assertEquals(1, result.getUnusedElements().size());
 
-			Assert.assertEquals("charter_out_test_solo", result.getUnusedElements().get(0).getName());
+			Assertions.assertEquals("charter_out_test_solo", result.getUnusedElements().get(0).getName());
 		});
 	}
 
@@ -195,7 +195,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
@@ -231,11 +231,11 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) portSlot;
 			{
 				// Validate event is transformed correctly and linked up
-				Assert.assertEquals(3, vesselEventPortSlot.getEventPortSlots().size());
-				Assert.assertEquals(3, vesselEventPortSlot.getEventSequenceElements().size());
+				Assertions.assertEquals(3, vesselEventPortSlot.getEventPortSlots().size());
+				Assertions.assertEquals(3, vesselEventPortSlot.getEventSequenceElements().size());
 				for (final IPortSlot ps : vesselEventPortSlot.getEventPortSlots()) {
-					Assert.assertEquals(3, ((IVesselEventPortSlot) ps).getEventPortSlots().size());
-					Assert.assertEquals(3, ((IVesselEventPortSlot) ps).getEventSequenceElements().size());
+					Assertions.assertEquals(3, ((IVesselEventPortSlot) ps).getEventPortSlots().size());
+					Assertions.assertEquals(3, ((IVesselEventPortSlot) ps).getEventSequenceElements().size());
 
 				}
 			}
@@ -248,7 +248,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			{
 				final ISequenceElement element = portSlotProvider.getElement(portSlot);
 				final Pair<IResource, Integer> elementPair = lookupManager.lookup(element);
-				Assert.assertNotNull(elementPair);
+				Assertions.assertNotNull(elementPair);
 
 				final Random random = new Random(0);
 
@@ -263,24 +263,24 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 				// Check expectations
 				// 5 events: start, start-charter, redirect-charter out, charter-out, end
-				Assert.assertNotNull("Sequence is null", result.getSequence(resource1));
-				Assert.assertEquals(5, result.getSequence(resource1).size());
-				Assert.assertEquals(0, result.getUnusedElements().size());
+				Assertions.assertNotNull(result.getSequence(resource1), "Sequence is null");
+				Assertions.assertEquals(5, result.getSequence(resource1).size());
+				Assertions.assertEquals(0, result.getUnusedElements().size());
 
-				Assert.assertEquals("start-charter_out_test_solo", result.getSequence(resource1).get(1).getName());
-				Assert.assertEquals("redirect-charter_out_test_solo", result.getSequence(resource1).get(2).getName());
-				Assert.assertEquals("charter_out_test_solo", result.getSequence(resource1).get(3).getName());
+				Assertions.assertEquals("start-charter_out_test_solo", result.getSequence(resource1).get(1).getName());
+				Assertions.assertEquals("redirect-charter_out_test_solo", result.getSequence(resource1).get(2).getName());
+				Assertions.assertEquals("charter_out_test_solo", result.getSequence(resource1).get(3).getName());
 			}
 
 			// Make sure we can insert from *ANY* element in the element sequence
 			for (final ISequenceElement element : vesselEventPortSlot.getEventSequenceElements()) {
 				final Pair<IResource, Integer> elementPair = lookupManager.lookup(element);
-				Assert.assertNotNull(elementPair);
+				Assertions.assertNotNull(elementPair);
 
 				final Random random = new Random(0);
 
 				final IMove move = handler.generateAddingMove(element, elementPair.getSecond(), lookupManager, random);
-				Assert.assertNotNull(move);
+				Assertions.assertNotNull(move);
 			}
 		});
 	}
@@ -290,7 +290,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testRemoveOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
@@ -332,7 +332,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			lookupManager.createLookup(initialRawSequences);
 
 			final Pair<IResource, Integer> elementPair = lookupManager.lookup(element);
-			Assert.assertNotNull(elementPair);
+			Assertions.assertNotNull(elementPair);
 
 			final Random random = new Random(0);
 
@@ -347,13 +347,13 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			// Check expectations
 			// 5 events: start, start-charter, redirect-charter out, charter-out, end
-			Assert.assertNotNull("Sequence is null", result.getSequence(resource1));
-			Assert.assertEquals(2, result.getSequence(resource1).size());
-			Assert.assertEquals(3, result.getUnusedElements().size());
+			Assertions.assertNotNull(result.getSequence(resource1), "Sequence is null");
+			Assertions.assertEquals(2, result.getSequence(resource1).size());
+			Assertions.assertEquals(3, result.getUnusedElements().size());
 
-			Assert.assertEquals("start-charter_out_test_solo", result.getUnusedElements().get(0).getName());
-			Assert.assertEquals("redirect-charter_out_test_solo", result.getUnusedElements().get(1).getName());
-			Assert.assertEquals("charter_out_test_solo", result.getUnusedElements().get(2).getName());
+			Assertions.assertEquals("start-charter_out_test_solo", result.getUnusedElements().get(0).getName());
+			Assertions.assertEquals("redirect-charter_out_test_solo", result.getUnusedElements().get(1).getName());
+			Assertions.assertEquals("charter_out_test_solo", result.getUnusedElements().get(2).getName());
 		});
 	}
 
@@ -362,7 +362,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testExportOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
@@ -397,12 +397,12 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			final Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
 
-			Assert.assertTrue(cmd.canExecute());
+			Assertions.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that everything is still there
 			final VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
-			Assert.assertNotNull(availability);
+			Assertions.assertNotNull(availability);
 		});
 	}
 
@@ -411,7 +411,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testExportOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
@@ -447,12 +447,12 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			final Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
 
-			Assert.assertTrue(cmd.canExecute());
+			Assertions.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that everything is still there
 			final VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
-			Assert.assertNotNull(availability);
+			Assertions.assertNotNull(availability);
 		});
 	}
 
@@ -461,7 +461,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	 * 
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testExportOptionalCharterOutWithRelocationRemoveMove() throws Exception {
 
 		// Construct the vessel
@@ -498,12 +498,12 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			final Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, updatedSchedule);
 
-			Assert.assertTrue(cmd.canExecute());
+			Assertions.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that the charter out event is now vessel-less
 			final VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
-			Assert.assertNull(availability);
+			Assertions.assertNull(availability);
 		});
 	}
 

@@ -9,14 +9,13 @@ import java.time.YearMonth;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -48,7 +47,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisat
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CharterInMarketTests extends AbstractMicroTestCase {
 
 	/**
@@ -58,7 +57,8 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
+	@Tag(TestCategories.QUICK_TEST)
 	public void testSpotCharterInMarketReduction_After() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -148,25 +148,25 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-			Assert.assertEquals("L1", optCargo1.getLoadName());
-			Assert.assertEquals(0, optCargo1.getSpotIndex());
+			Assertions.assertEquals("L1", optCargo1.getLoadName());
+			Assertions.assertEquals(0, optCargo1.getSpotIndex());
 			Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
-			Assert.assertEquals("L2", optCargo2.getLoadName());
-			Assert.assertEquals(0, optCargo2.getSpotIndex());
+			Assertions.assertEquals("L2", optCargo2.getLoadName());
+			Assertions.assertEquals(0, optCargo2.getSpotIndex());
 
 			// Reduced by one
-			Assert.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
+			Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
 			// Stays the same
-			Assert.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
+			Assertions.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
 			runner.dispose();
 		}
@@ -179,7 +179,8 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
+	@Tag(TestCategories.QUICK_TEST)
 	public void testSpotCharterInMarketReduction_Before() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -270,25 +271,25 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-			Assert.assertEquals("L1", optCargo1.getLoadName());
-			Assert.assertEquals(0, optCargo1.getSpotIndex());
+			Assertions.assertEquals("L1", optCargo1.getLoadName());
+			Assertions.assertEquals(0, optCargo1.getSpotIndex());
 			Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
-			Assert.assertEquals("L2", optCargo2.getLoadName());
-			Assert.assertEquals(0, optCargo2.getSpotIndex());
+			Assertions.assertEquals("L2", optCargo2.getLoadName());
+			Assertions.assertEquals(0, optCargo2.getSpotIndex());
 
 			// Reduced by one
-			Assert.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
+			Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
 			// Stays the same
-			Assert.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
+			Assertions.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
 			runner.dispose();
 		}

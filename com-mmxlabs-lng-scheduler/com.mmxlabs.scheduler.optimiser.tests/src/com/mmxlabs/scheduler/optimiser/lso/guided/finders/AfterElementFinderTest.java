@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.lso.guided.finders;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -27,14 +27,14 @@ public class AfterElementFinderTest {
 		final ISequenceElement elementE = Mockito.mock(ISequenceElement.class);
 		final ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementResourceAStart, elementA, elementB, elementC, elementD, elementResourceAEnd));
 
-		Assert.assertEquals(1, new AfterElementFinder(elementResourceAStart).findInsertionIndex(sequenceA));
-		Assert.assertEquals(2, new AfterElementFinder(elementA).findInsertionIndex(sequenceA));
-		Assert.assertEquals(3, new AfterElementFinder(elementB).findInsertionIndex(sequenceA));
-		Assert.assertEquals(4, new AfterElementFinder(elementC).findInsertionIndex(sequenceA));
-		Assert.assertEquals(5, new AfterElementFinder(elementD).findInsertionIndex(sequenceA));
-		Assert.assertEquals(6, new AfterElementFinder(elementResourceAEnd).findInsertionIndex(sequenceA));
+		Assertions.assertEquals(1, new AfterElementFinder(elementResourceAStart).findInsertionIndex(sequenceA));
+		Assertions.assertEquals(2, new AfterElementFinder(elementA).findInsertionIndex(sequenceA));
+		Assertions.assertEquals(3, new AfterElementFinder(elementB).findInsertionIndex(sequenceA));
+		Assertions.assertEquals(4, new AfterElementFinder(elementC).findInsertionIndex(sequenceA));
+		Assertions.assertEquals(5, new AfterElementFinder(elementD).findInsertionIndex(sequenceA));
+		Assertions.assertEquals(6, new AfterElementFinder(elementResourceAEnd).findInsertionIndex(sequenceA));
 
-		Assert.assertEquals(-1, new AfterElementFinder(elementE).findInsertionIndex(sequenceA));
+		Assertions.assertEquals(-1, new AfterElementFinder(elementE).findInsertionIndex(sequenceA));
 	}
 
 }

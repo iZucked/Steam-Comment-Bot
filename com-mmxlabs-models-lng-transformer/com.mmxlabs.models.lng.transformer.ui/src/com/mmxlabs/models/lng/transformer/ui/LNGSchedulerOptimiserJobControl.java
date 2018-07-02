@@ -130,7 +130,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 						}
 					} catch (final Exception e) {
-						// Assert.fail(e.getMessage());
+						// Assertions.fail(e.getMessage());
 					}
 				}
 
@@ -145,7 +145,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 						}
 					} catch (final Exception e) {
 						// return
-						// Assert.fail(e.getMessage());
+						// Assertions.fail(e.getMessage());
 					}
 					return null;
 				}

@@ -17,24 +17,22 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javax.print.attribute.standard.MediaSize.Other;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonServiceTransformer;
 import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
@@ -42,8 +40,8 @@ import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
-import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer;
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ScenarioComparisonTransformer;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
@@ -88,12 +86,12 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CompareViewTests {
 	private static List<String> requiredFeatures = Lists.newArrayList("difftools");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -103,7 +101,7 @@ public class CompareViewTests {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -112,7 +110,7 @@ public class CompareViewTests {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSimpleDESCargoSwap() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
@@ -168,37 +166,37 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(2, changeSet.getRows().size());
+			Assertions.assertEquals(2, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
 			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
 
 			// Expect 7-5 * 3m
-			Assert.assertEquals(3_000_000 * (7 - 5), ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
+			Assertions.assertEquals(3_000_000 * (7 - 5), ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
 			// Expect 8-3 * 3m
-			Assert.assertEquals(3_000_000 * (8 - 3), ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
+			Assertions.assertEquals(3_000_000 * (8 - 3), ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
 
 			// Expect 7-3 * 3m
-			Assert.assertEquals(3_000_000 * (7 - 3), ChangeSetKPIUtil.getPNL(row1, ResultType.After));
+			Assertions.assertEquals(3_000_000 * (7 - 3), ChangeSetKPIUtil.getPNL(row1, ResultType.After));
 			// Expect 8-5 * 3m
-			Assert.assertEquals(3_000_000 * (8 - 5), ChangeSetKPIUtil.getPNL(row2, ResultType.After));
+			Assertions.assertEquals(3_000_000 * (8 - 5), ChangeSetKPIUtil.getPNL(row2, ResultType.After));
 
 			// P&L Sanity check -- no missing components in P&L
 			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotCancellationFee_CargoToOpen() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
@@ -227,45 +225,45 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(2, changeSet.getRows().size());
+			Assertions.assertEquals(2, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
-			// Assert.assertNotNull(row1.getOriginalDischargeAllocation());
-			// Assert.assertNotNull(row1.getOriginalLoadAllocation());
-			// Assert.assertNotNull(row1.getNewOpenLoadAllocation());
+			// Assertions.assertNotNull(row1.getOriginalDischargeAllocation());
+			// Assertions.assertNotNull(row1.getOriginalLoadAllocation());
+			// Assertions.assertNotNull(row1.getNewOpenLoadAllocation());
 
 			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
-			// Assert.assertNotNull(row2.getOriginalDischargeAllocation());
+			// Assertions.assertNotNull(row2.getOriginalDischargeAllocation());
 
 			// Expect 50K for load cancellation
-			Assert.assertEquals(-50_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			Assert.assertEquals(-50_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(-50_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
+			Assertions.assertEquals(-50_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
 			// Expect 60K for discharge cancellation
-			Assert.assertEquals(-60_000, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
-			Assert.assertEquals(-60_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+			Assertions.assertEquals(-60_000, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
+			Assertions.assertEquals(-60_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
 
 			// Original cargo is a zero sum P&L
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
 
 			// P&L Sanity check -- no missing components in P&L
 			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotCancellationFee_OpenToCargo() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
@@ -294,34 +292,34 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(1, changeSet.getRows().size());
+			Assertions.assertEquals(1, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
 			assert row1 != null;
 			// Expect 50K for load cancellation and 60K for discharge cancellation
-			Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
+			Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
 
 			// New cargo is a zero sum P&L
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
 
 			// P&L Sanity check -- no missing components in P&L
 			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotHedingValue_CargoToOpen() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
@@ -350,40 +348,40 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(2, changeSet.getRows().size());
+			Assertions.assertEquals(2, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
 			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
 
 			// Expect 50K for load hedge
-			Assert.assertEquals(50_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			// Assert.assertEquals(-50_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
+			Assertions.assertEquals(50_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
+			// Assertions.assertEquals(-50_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
 			// Expect 60K for discharge hedge
-			Assert.assertEquals(60_000, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
-			// Assert.assertEquals(-60_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.NEW));
+			Assertions.assertEquals(60_000, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
+			// Assertions.assertEquals(-60_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.NEW));
 
 			// Original cargo is a zero sum P&L
-			Assert.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			// Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
-			// Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
+			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
+			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
+			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
 
 			// P&L Sanity check -- no missing components in P&L
 			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotHedgingValue_OpenToCargo() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
@@ -412,35 +410,35 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(1, changeSet.getRows().size());
+			Assertions.assertEquals(1, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
 			assert row1 != null;
 			// Expect 50K for load cancellation and 60K for discharge cancellation
-			Assert.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			// Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
+			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
+			// Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.ORIGINAL));
 
-			Assert.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			// Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
-			// Assert.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.NEW));
-			// Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
+			Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
+			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
+			// Assertions.assertEquals(50_000 + 60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.NEW));
+			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.NEW));
 
 			// P&L Sanity check -- no missing components in P&L
 			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotMiscCosts_CargoToOpen() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeCargo() //
@@ -469,45 +467,45 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(2, changeSet.getRows().size());
+			Assertions.assertEquals(2, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
-			// Assert.assertNotNull(row1.getOriginalDischargeAllocation());
-			// Assert.assertNotNull(row1.getOriginalLoadAllocation());
-			// Assert.assertNotNull(row1.getNewOpenLoadAllocation());
+			// Assertions.assertNotNull(row1.getOriginalDischargeAllocation());
+			// Assertions.assertNotNull(row1.getOriginalLoadAllocation());
+			// Assertions.assertNotNull(row1.getNewOpenLoadAllocation());
 
 			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
-			// Assert.assertNotNull(row2.getOriginalDischargeAllocation());
+			// Assertions.assertNotNull(row2.getOriginalDischargeAllocation());
 
 			// Expect 50K for load costs and 60K for discharge costs
-			Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
+			Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
 			// No costs on row two as part of row1 original P&L
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
 
 			// Original cargo is a zero sum P&L
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
 
 			// P&L Sanity check -- no missing components in P&L
 			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotMiscCosts_OpenToCargo() throws Exception {
 		runTest(maker -> {
 			maker.cargoModelBuilder.makeDESPurchase("DP1", false, LocalDate.of(2015, 01, 10), maker.portFinder.findPort("Sakai"), null, maker.entity, "5", 22.8, null) //
@@ -536,34 +534,34 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(1, changeSet.getRows().size());
+			Assertions.assertEquals(1, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
 			assert row1 != null;
 			// Expect 50K for load cost and 60K for discharge costs
-			Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
-			Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
+			Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
 
 			// original slot value is zero sum P&L
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
 
 			// P&L Sanity check -- no missing components in P&L
 			for (final ChangeSetTableRow row : changeSet.getRows()) {
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before));
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After));
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSlotCancellationFee_OpenToLDD() throws Exception {
 		runTest(maker -> {
 
@@ -624,43 +622,43 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(2, changeSet.getRows().size());
+			Assertions.assertEquals(2, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
 			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
 			assert row1 != null;
 			// Expect 50K for load cancellation and 60K for discharge cancellation
-			Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
-			Assert.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
-			Assert.assertEquals(-70_000, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
-			Assert.assertEquals(-70_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
+			Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getPNL(row1, ResultType.Before));
+			Assertions.assertEquals(-50_000 + -60_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			Assertions.assertEquals(-70_000, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
+			Assertions.assertEquals(-70_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
 
 			// No cancellation fee's after
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
 			// No P&L in row 2
-			Assert.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
 			// Cargo P&L in row 1
-			Assert.assertNotEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
+			Assertions.assertNotEquals(0, ChangeSetKPIUtil.getPNL(row1, ResultType.After));
 
 			// P&L Sanity check -- no missing components in P&L
 			for (final ChangeSetTableRow row : changeSet.getRows()) {
 				// Allow $1 "rounding"
 				final int roudingDelta = 1;
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before), roudingDelta);
-				Assert.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After), roudingDelta);
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.Before), ChangeSetKPIUtil.getPNLSum(row, ResultType.Before), roudingDelta);
+				Assertions.assertEquals(ChangeSetKPIUtil.getPNL(row, ResultType.After), ChangeSetKPIUtil.getPNLSum(row, ResultType.After), roudingDelta);
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testLDToLDD() throws Exception {
 		runTest(maker -> {
 
@@ -726,21 +724,21 @@ public class CompareViewTests {
 					.build();
 
 		}, changeSetRoot -> {
-			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
 			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
-			Assert.assertEquals(2, changeSet.getRows().size());
+			Assertions.assertEquals(2, changeSet.getRows().size());
 
 			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
 			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
 			// Expect 1m discharge 2 cancellation 2 - before only
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
-			Assert.assertEquals(-1_000_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
-			Assert.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			Assertions.assertEquals(-1_000_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
 
 			// P&L Sanity check -- no missing components in P&L
 			// NOTE: This is different to other test cases as second D sales revenue is shown on the second D row rather than the cargo row.
@@ -757,8 +755,8 @@ public class CompareViewTests {
 
 			}
 			final double roudingDelta = 1.0;
-			Assert.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
-			Assert.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
+			Assertions.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
+			Assertions.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
 		});
 	}
 
@@ -886,7 +884,7 @@ public class CompareViewTests {
 			return importer.doImport();
 		}
 
-		@Before
+		@BeforeEach
 		public void constructor() throws MalformedURLException {
 
 			scenarioDataProvider = importReferenceData();
@@ -914,7 +912,7 @@ public class CompareViewTests {
 			return commercialModelFinder.findEntity("Shipping");
 		}
 
-		@After
+		@AfterEach
 		public void destructor() {
 			lngScenarioModel = null;
 			scenarioModelFinder = null;

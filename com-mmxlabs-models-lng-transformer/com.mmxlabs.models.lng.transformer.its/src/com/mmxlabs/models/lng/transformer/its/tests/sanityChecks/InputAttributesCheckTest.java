@@ -8,10 +8,10 @@ import java.io.IOException;
 
 import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.util.ChangeRecorder;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -29,7 +29,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * 
  * @author Adam
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class InputAttributesCheckTest {
 
 	private static final int dischargePrice = 1;
@@ -42,7 +42,7 @@ public class InputAttributesCheckTest {
 	 *             Thrown by the method that checks that the original and evaluated scenarios are the same
 	 * @throws IOException
 	 */
-	@Ignore("Result does change as we now have a ScheduleModel")
+	@Disabled("Result does change as we now have a ScheduleModel")
 	@Test
 	public void test() throws InterruptedException {
 
@@ -77,6 +77,6 @@ public class InputAttributesCheckTest {
 		ScenarioTools.evaluate(scenarioDataProvider);
 
 		final ChangeDescription changeDescription = changeRecorder.endRecording();
-		Assert.assertTrue(changeDescription.getObjectChanges().isEmpty());
+		Assertions.assertTrue(changeDescription.getObjectChanges().isEmpty());
 	}
 }

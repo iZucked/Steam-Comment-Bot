@@ -7,8 +7,8 @@ package com.mmxlabs.common.options;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class StringEatingParserTest {
 
@@ -17,16 +17,16 @@ public class StringEatingParserTest {
 		final String defaultValue = new String();
 		final StringEatingParser parser = new StringEatingParser(defaultValue);
 
-		Assert.assertTrue(parser.hasDefaultValue());
-		Assert.assertSame(defaultValue, parser.getDefaultValue());
+		Assertions.assertTrue(parser.hasDefaultValue());
+		Assertions.assertSame(defaultValue, parser.getDefaultValue());
 	}
 
 	@Test
 	public void testStringEatingParser() {
 		final StringEatingParser parser = new StringEatingParser();
 
-		Assert.assertFalse(parser.hasDefaultValue());
-		Assert.assertNull(parser.getDefaultValue());
+		Assertions.assertFalse(parser.hasDefaultValue());
+		Assertions.assertNull(parser.getDefaultValue());
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class StringEatingParserTest {
 		strings.add(str1);
 		strings.add(str2);
 
-		Assert.assertEquals("abc def ", parser.parse(null, strings.iterator()));
+		Assertions.assertEquals("abc def ", parser.parse(null, strings.iterator()));
 	}
 
 }

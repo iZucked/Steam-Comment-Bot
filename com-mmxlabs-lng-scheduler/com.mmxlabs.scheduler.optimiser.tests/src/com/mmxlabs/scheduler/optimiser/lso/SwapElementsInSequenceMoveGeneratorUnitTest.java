@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -69,7 +69,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		preceders.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
 		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementA)));
 
-		Mockito.when(followersAndPreceders.getValidFollowers(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+		Mockito.when(followersAndPreceders.getValidFollowers(ArgumentMatchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
 
 			@Override
 			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
@@ -78,7 +78,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 				return followers.get(e);
 			}
 		});
-		Mockito.when(followersAndPreceders.getValidPreceders(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+		Mockito.when(followersAndPreceders.getValidPreceders(ArgumentMatchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
 
 			@Override
 			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
@@ -91,12 +91,12 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		final SwapSingleSequenceElements move = mg.generateMove(sequences, lookupManager, random);
 
 		// Failure - currently cannot swap two adjacent elements.
-		Assert.assertNull(move);
+		Assertions.assertNull(move);
 
-		// Assert.assertEquals(resource, move.getResource());
-		// Assert.assertTrue(move.getIndexA() == 0 || move.getIndexB() == 0);
-		// Assert.assertTrue(move.getIndexA() == 1 || move.getIndexB() == 1);
-		// Assert.assertTrue(move.getIndexA() != move.getIndexB());
+		// Assertions.assertEquals(resource, move.getResource());
+		// Assertions.assertTrue(move.getIndexA() == 0 || move.getIndexB() == 0);
+		// Assertions.assertTrue(move.getIndexA() == 1 || move.getIndexB() == 1);
+		// Assertions.assertTrue(move.getIndexA() != move.getIndexB());
 
 	}
 
@@ -144,7 +144,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementC)));
 		preceders.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
 
-		Mockito.when(followersAndPreceders.getValidFollowers(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+		Mockito.when(followersAndPreceders.getValidFollowers(ArgumentMatchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
 
 			@Override
 			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
@@ -153,7 +153,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 				return followers.get(e);
 			}
 		});
-		Mockito.when(followersAndPreceders.getValidPreceders(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+		Mockito.when(followersAndPreceders.getValidPreceders(ArgumentMatchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
 
 			@Override
 			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
@@ -165,12 +165,12 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 
 		final SwapSingleSequenceElements move = mg.generateMove(sequences, lookupManager, random);
 
-		Assert.assertNotNull(move);
+		Assertions.assertNotNull(move);
 
-		Assert.assertEquals(resource, move.getResource());
-		Assert.assertTrue(move.getIndexA() == 0 || move.getIndexB() == 0);
-		Assert.assertTrue(move.getIndexA() == 2 || move.getIndexB() == 2);
-		Assert.assertTrue(move.getIndexA() != move.getIndexB());
+		Assertions.assertEquals(resource, move.getResource());
+		Assertions.assertTrue(move.getIndexA() == 0 || move.getIndexB() == 0);
+		Assertions.assertTrue(move.getIndexA() == 2 || move.getIndexB() == 2);
+		Assertions.assertTrue(move.getIndexA() != move.getIndexB());
 	}
 
 	private SwapElementsInSequenceMoveGeneratorUnit create(final ConstrainedMoveGenerator owner, final IFollowersAndPreceders followersAndProceders) {

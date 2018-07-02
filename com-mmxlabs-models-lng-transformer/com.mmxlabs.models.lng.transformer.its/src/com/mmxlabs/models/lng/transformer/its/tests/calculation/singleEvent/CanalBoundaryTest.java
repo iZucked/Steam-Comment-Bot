@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -26,7 +26,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam Semenenko
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CanalBoundaryTest {
 
 	private static final RouteOption canalOption = RouteOption.SUEZ;
@@ -45,8 +45,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
-		Assert.assertTrue("Laden leg travels down canal", canalOption.equals(a.getLadenLeg().getRouteOption()));
-		Assert.assertTrue("Ballast leg travels down canal", canalOption.equals(a.getBallastLeg().getRouteOption()));
+		Assertions.assertTrue(canalOption.equals(a.getLadenLeg().getRouteOption()), "Laden leg travels down canal");
+		Assertions.assertTrue(canalOption.equals(a.getBallastLeg().getRouteOption()), "Ballast leg travels down canal");
 	}
 
 	/**
@@ -63,8 +63,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
-		Assert.assertTrue("Laden leg travels on open sea", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on open sea", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
+		Assertions.assertTrue(RouteOption.DIRECT == a.getLadenLeg().getRouteOption(), "Laden leg travels on open sea");
+		Assertions.assertTrue(RouteOption.DIRECT == a.getBallastLeg().getRouteOption(), "Ballast leg travels on open sea");
 	}
 
 	/**
@@ -81,8 +81,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
-		Assert.assertTrue("Laden leg travels on open sea", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on open sea", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
+		Assertions.assertTrue(RouteOption.DIRECT == a.getLadenLeg().getRouteOption(), "Laden leg travels on open sea");
+		Assertions.assertTrue(RouteOption.DIRECT == a.getBallastLeg().getRouteOption(), "Ballast leg travels on open sea");
 	}
 
 	/**
@@ -130,8 +130,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalTranistFuel, canalTransitTimePerHour));
 
-		Assert.assertTrue("Laden leg travels in canal", RouteOption.SUEZ == a.getLadenLeg().getRouteOption());
-		Assert.assertTrue("Ballast leg travels in canal", RouteOption.SUEZ == a.getBallastLeg().getRouteOption());
+		Assertions.assertTrue(RouteOption.SUEZ == a.getLadenLeg().getRouteOption(), "Laden leg travels in canal");
+		Assertions.assertTrue(RouteOption.SUEZ == a.getBallastLeg().getRouteOption(), "Ballast leg travels in canal");
 	}
 
 	/**
@@ -147,8 +147,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on canal", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
+		Assertions.assertTrue(RouteOption.DIRECT == a.getLadenLeg().getRouteOption(), "Laden leg travels on canal");
+		Assertions.assertTrue(RouteOption.DIRECT == a.getBallastLeg().getRouteOption(), "Ballast leg travels on canal");
 	}
 
 	/**
@@ -164,8 +164,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
+		Assertions.assertTrue(RouteOption.DIRECT == a.getLadenLeg().getRouteOption(), "Laden leg travels on ocean");
+		Assertions.assertTrue(RouteOption.DIRECT == a.getBallastLeg().getRouteOption(), "Ballast leg travels on ocean");
 	}
 
 	/**
@@ -181,8 +181,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
+		Assertions.assertTrue(RouteOption.DIRECT == a.getLadenLeg().getRouteOption(), "Laden leg travels on ocean");
+		Assertions.assertTrue(RouteOption.DIRECT == a.getBallastLeg().getRouteOption(), "Ballast leg travels on ocean");
 	}
 
 	/**

@@ -12,8 +12,8 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -62,14 +62,14 @@ public class RestrictedSlotsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
-		Assert.assertTrue(status1.isOK());
+		Assertions.assertTrue(status1.isOK());
 		
 		// Set up the expected return values of methods.
 		when(loadSlot.isRestrictedSlotsArePermissive()).thenReturn(false);
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
-		Assert.assertFalse(status2.isOK());
+		Assertions.assertFalse(status2.isOK());
 	}
 
 }

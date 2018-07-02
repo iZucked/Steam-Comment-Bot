@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LongFastEnumMapTest {
 
@@ -20,38 +20,38 @@ public class LongFastEnumMapTest {
 
 		final LongFastEnumMap<Enum1> map2 = new LongFastEnumMap<>(1);
 
-		Assert.assertEquals(map1.hashCode(), map2.hashCode());
+		Assertions.assertEquals(map1.hashCode(), map2.hashCode());
 
 		map1.put(Enum1.Enum1_A, 5l);
-		Assert.assertFalse(map1.hashCode() == map2.hashCode());
+		Assertions.assertFalse(map1.hashCode() == map2.hashCode());
 
 		map2.put(Enum1.Enum1_A, 5l);
-		Assert.assertEquals(map1.hashCode(), map2.hashCode());
+		Assertions.assertEquals(map1.hashCode(), map2.hashCode());
 	}
 
 	@Test
 	public void testGetPut() {
 		final LongFastEnumMap<Enum1> map = new LongFastEnumMap<>(Enum1.values().length);
 
-		Assert.assertEquals(0l, map.get(Enum1.Enum1_A));
-		Assert.assertEquals(0l, map.get(Enum1.Enum1_B));
+		Assertions.assertEquals(0l, map.get(Enum1.Enum1_A));
+		Assertions.assertEquals(0l, map.get(Enum1.Enum1_B));
 
 		map.put(Enum1.Enum1_A, 5l);
-		Assert.assertEquals(5l, map.get(Enum1.Enum1_A));
-		Assert.assertEquals(0l, map.get(Enum1.Enum1_B));
+		Assertions.assertEquals(5l, map.get(Enum1.Enum1_A));
+		Assertions.assertEquals(0l, map.get(Enum1.Enum1_B));
 
 		map.put(Enum1.Enum1_B, 10l);
 
-		Assert.assertEquals(5l, map.get(Enum1.Enum1_A));
-		Assert.assertEquals(10l, map.get(Enum1.Enum1_B));
+		Assertions.assertEquals(5l, map.get(Enum1.Enum1_A));
+		Assertions.assertEquals(10l, map.get(Enum1.Enum1_B));
 	}
 
-	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	@Test
 	public void testGetPut2() {
 		final LongFastEnumMap<Enum1> map = new LongFastEnumMap<>(1);
 
 		map.get(Enum1.Enum1_A);
-		map.get(Enum1.Enum1_B);
+		Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> map.get(Enum1.Enum1_B));
 	}
 
 	@Test
@@ -62,13 +62,13 @@ public class LongFastEnumMapTest {
 		map.put(Enum1.Enum1_A, 5l);
 		map2.put(Enum1.Enum1_B, 10l);
 
-		Assert.assertEquals(0l, map2.get(Enum1.Enum1_A));
-		Assert.assertEquals(10l, map2.get(Enum1.Enum1_B));
+		Assertions.assertEquals(0l, map2.get(Enum1.Enum1_A));
+		Assertions.assertEquals(10l, map2.get(Enum1.Enum1_B));
 
 		map2.putAll(map);
 
-		Assert.assertEquals(5l, map2.get(Enum1.Enum1_A));
-		Assert.assertEquals(0l, map2.get(Enum1.Enum1_B));
+		Assertions.assertEquals(5l, map2.get(Enum1.Enum1_A));
+		Assertions.assertEquals(0l, map2.get(Enum1.Enum1_B));
 	}
 
 	@Test
@@ -77,14 +77,14 @@ public class LongFastEnumMapTest {
 
 		final LongFastEnumMap<Enum1> map2 = new LongFastEnumMap<>(1);
 
-		Assert.assertEquals(map1, map2);
+		Assertions.assertEquals(map1, map2);
 
 		map1.put(Enum1.Enum1_A, 5l);
-		Assert.assertFalse(map1.equals(map2));
+		Assertions.assertFalse(map1.equals(map2));
 
 		map2.put(Enum1.Enum1_A, 5l);
-		Assert.assertFalse(map1.equals(new Object()));
-		Assert.assertFalse(map1.equals(null));
+		Assertions.assertFalse(map1.equals(new Object()));
+		Assertions.assertFalse(map1.equals(null));
 	}
 
 }

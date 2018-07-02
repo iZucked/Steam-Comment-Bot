@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -35,10 +35,10 @@ public class DataComponentProviderModuleTest {
 		final IVesselProvider provider = injector.getInstance(IVesselProvider.class);
 		final IVesselProviderEditor editor = injector.getInstance(IVesselProviderEditor.class);
 
-		Assert.assertNotNull(provider);
-		Assert.assertNotNull(editor);
+		Assertions.assertNotNull(provider);
+		Assertions.assertNotNull(editor);
 
-		Assert.assertSame(provider, editor);
+		Assertions.assertSame(provider, editor);
 	}
 
 	@Test
@@ -52,9 +52,9 @@ public class DataComponentProviderModuleTest {
 		});
 
 		final IElementDurationProviderEditor editor = injector.getInstance(IElementDurationProviderEditor.class);
-		Assert.assertNotNull(editor);
+		Assertions.assertNotNull(editor);
 
-		Assert.assertTrue(editor instanceof IndexedElementDurationEditor);
+		Assertions.assertTrue(editor instanceof IndexedElementDurationEditor);
 	}
 
 	@Test
@@ -68,9 +68,9 @@ public class DataComponentProviderModuleTest {
 		});
 
 		final IElementDurationProviderEditor editor = injector.getInstance(IElementDurationProviderEditor.class);
-		Assert.assertNotNull(editor);
+		Assertions.assertNotNull(editor);
 
-		Assert.assertTrue(editor instanceof HashMapElementDurationEditor);
+		Assertions.assertTrue(editor instanceof HashMapElementDurationEditor);
 	}
 
 }

@@ -7,9 +7,9 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.multipleEvents;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.Port;
@@ -34,7 +34,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class DryDockTest {
 
 	/**
@@ -100,7 +100,7 @@ public class DryDockTest {
 						if (fq.getFuel() == Fuel.BASE_FUEL) {
 							for (final FuelAmount amount : fq.getAmounts()) {
 								if (amount.getUnit() == FuelUnit.MT) {
-									Assert.assertEquals("100MT of basefuel used", 100, amount.getQuantity());
+									Assertions.assertEquals(100, amount.getQuantity(), "100MT of basefuel used");
 								}
 							}
 						}
@@ -108,7 +108,7 @@ public class DryDockTest {
 				} else if (e instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) e;
 
-					Assert.assertEquals("Duration of dry dock matches expected", TimeUnit.DAYS.toHours(dryDockDurationDays), vev.getDuration());
+					Assertions.assertEquals(TimeUnit.DAYS.toHours(dryDockDurationDays), vev.getDuration(), "Duration of dry dock matches expected");
 				}
 			}
 		}

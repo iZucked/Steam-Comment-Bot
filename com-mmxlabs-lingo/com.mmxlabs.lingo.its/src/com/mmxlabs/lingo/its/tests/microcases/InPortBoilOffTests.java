@@ -14,10 +14,10 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -96,7 +96,7 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -106,7 +106,7 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -114,7 +114,7 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
-	@Before
+	@BeforeEach
 	@Override
 	public void constructor() throws Exception {
 
@@ -168,10 +168,10 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 			}
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation("L1", schedule);
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 			SCAs.add(new SimpleCargoAllocation(cargoAllocation));
 
 		}, new boilOffOverride(compensate, minMax));

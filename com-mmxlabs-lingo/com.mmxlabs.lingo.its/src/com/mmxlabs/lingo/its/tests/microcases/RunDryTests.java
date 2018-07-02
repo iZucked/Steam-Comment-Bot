@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -43,7 +43,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  *
  */
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class RunDryTests extends AbstractMicroTestCase {
 
 	public @NonNull Vessel configureVessel() {
@@ -69,7 +69,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testPlentyOfHeel() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -94,18 +94,18 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final Journey journey = (Journey) sequence.getEvents().get(1);
 
 		// 10 days * 100m3/day
-		Assert.assertEquals(10 * 100, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
-		Assert.assertEquals(10 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
+		Assertions.assertEquals(10 * 100, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(10 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
 	}
 	
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartHeel() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -164,16 +164,16 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
 		
-		Assert.assertEquals(6000, startEvent.getHeelAtStart());
+		Assertions.assertEquals(6000, startEvent.getHeelAtStart());
 	}
 	
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNBOConversion() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -232,19 +232,19 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
 		final Journey journey = (Journey) sequence.getEvents().get(1);
 		
 		ScenarioTools.printFuel(journey.getFuels());
-		Assert.assertEquals(4734, startEvent.getHeelAtStart());
-		Assert.assertEquals(4734, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(4734, startEvent.getHeelAtStart());
+		Assertions.assertEquals(4734, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFifyPercentHeelInTravel() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -269,19 +269,19 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final Journey journey = (Journey) sequence.getEvents().get(1);
 
 		// 10 days * 100m3/day
-		Assert.assertEquals(10 * 100 / 2, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
-		Assert.assertEquals(10 * 1 / 2, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
-		Assert.assertEquals(10 * 100 / 2, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, journey));
+		Assertions.assertEquals(10 * 100 / 2, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(10 * 1 / 2, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
+		Assertions.assertEquals(10 * 100 / 2, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, journey));
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFifyPercentHeelInTravel_FBO() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -311,21 +311,21 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final Journey journey = (Journey) sequence.getEvents().get(1);
 
 		// 5 days nbo/fbo, 5 days base
-		Assert.assertEquals(5 * 50, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
-		Assert.assertEquals(5 * 50, ScheduleTools.getFuelQuantity(Fuel.FBO, FuelUnit.M3, journey));
-		Assert.assertEquals(5 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
+		Assertions.assertEquals(5 * 50, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(5 * 50, ScheduleTools.getFuelQuantity(Fuel.FBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(5 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
 		// 5 days full
-		Assert.assertEquals(5 * 100, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, journey));
+		Assertions.assertEquals(5 * 100, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, journey));
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFifyPercentHeelInTravel_BaseSupplemental() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -354,20 +354,20 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final Journey journey = (Journey) sequence.getEvents().get(1);
 
 		// 10 days * 100m3/day
-		Assert.assertEquals(8 * 50, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
-		Assert.assertEquals(0, ScheduleTools.getFuelQuantity(Fuel.FBO, FuelUnit.M3, journey));
-		Assert.assertEquals(0, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
-		Assert.assertEquals(8 * 50 + 2 * 100, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, journey));
+		Assertions.assertEquals(8 * 50, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(0, ScheduleTools.getFuelQuantity(Fuel.FBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(0, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
+		Assertions.assertEquals(8 * 50 + 2 * 100, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, journey));
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFifyPercentHeelInIdle() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -392,21 +392,21 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final Idle idle = (Idle) sequence.getEvents().get(1);
 
 		// 10 days * 50m3/day
-		Assert.assertEquals(10 * 50 / 2, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, idle));
-		Assert.assertEquals(10 * 1 / 2, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, idle));
+		Assertions.assertEquals(10 * 50 / 2, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, idle));
+		Assertions.assertEquals(10 * 1 / 2, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, idle));
 
 		// 10 days * 20MT/day
-		Assert.assertEquals(10 * 20 / 2, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, idle));
+		Assertions.assertEquals(10 * 20 / 2, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, idle));
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFullInTravelFifyPercentInIdle() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -431,26 +431,26 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final Journey journey = (Journey) sequence.getEvents().get(1);
 
 		// 10 days * 100m3/day
-		Assert.assertEquals(10 * 100, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
-		Assert.assertEquals(10 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
+		Assertions.assertEquals(10 * 100, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(10 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
 
 		final Idle idle = (Idle) sequence.getEvents().get(2);
 		// 10 days * 50m3/day
-		Assert.assertEquals(10 * 50 / 2, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, idle));
+		Assertions.assertEquals(10 * 50 / 2, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, idle));
 		// 10 days * 20MT/day
-		Assert.assertEquals(10 * 20 / 2, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, idle));
-		Assert.assertEquals(10 * 1 / 2, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, idle));
+		Assertions.assertEquals(10 * 20 / 2, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, idle));
+		Assertions.assertEquals(10 * 1 / 2, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, idle));
 
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNBOOnlyForCanal() throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -479,16 +479,16 @@ public class RunDryTests extends AbstractMicroTestCase {
 		});
 
 		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		final Journey journey = (Journey) sequence.getEvents().get(1);
 
 		// 1 days * 50 m3/day
-		Assert.assertEquals(1 * 50, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
-		Assert.assertEquals(1 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
+		Assertions.assertEquals(1 * 50, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
+		Assertions.assertEquals(1 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
 
 		// 10 days * 100 mt/day
-		Assert.assertEquals(10 * 100, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, journey));
+		Assertions.assertEquals(10 * 100, ScheduleTools.getFuelQuantity(Fuel.BASE_FUEL, FuelUnit.MT, journey));
 	}
 }

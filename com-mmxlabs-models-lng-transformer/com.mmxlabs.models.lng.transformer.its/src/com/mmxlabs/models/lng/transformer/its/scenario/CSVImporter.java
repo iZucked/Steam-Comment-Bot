@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -50,8 +50,6 @@ import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselImporter;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
-import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.importer.PortModelImporter;
@@ -69,7 +67,6 @@ import com.mmxlabs.models.lng.pricing.importers.PricingModelImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.ui.importers.PromptPeriodImporter;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -419,13 +416,13 @@ public class CSVImporter {
 					}
 				} catch (final IOException e) {
 					// e.printStackTrace();
-					// Assert.fail(e.getMessage());
+					// Assertions.fail(e.getMessage());
 				}
 			}
 			try {
 				return importer.importModel(readers, context);
 			} catch (final Throwable th) {
-				Assert.fail(th.getMessage());
+				Assertions.fail(th.getMessage());
 			}
 		} finally {
 			for (final CSVReader r : readers.values()) {
@@ -457,14 +454,14 @@ public class CSVImporter {
 							readers.put(key, r);
 						}
 					} catch (final IOException e) {
-						// Assert.fail(e.getMessage());
+						// Assertions.fail(e.getMessage());
 					}
 				}
 				try {
 					importer.importModel(scenarioModel, readers, context);
 				} catch (final Throwable th) {
 					throw new RuntimeException(th);
-//					Assert.fail(th.getMessage());
+//					Assertions.fail(th.getMessage());
 				}
 			} finally {
 				for (final CSVReader r : readers.values()) {

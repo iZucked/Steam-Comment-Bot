@@ -17,8 +17,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -151,25 +151,25 @@ public class MigrateToV4Test extends AbstractMigrationTestClass {
 
 				final EObject scenarioModel = r.getContents().get(0);
 
-				Assert.assertNotNull(scenarioModel);
+				Assertions.assertNotNull(scenarioModel);
 
 				final EObject portfolioModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_portfolioModel);
-				Assert.assertNotNull(portfolioModel);
+				Assertions.assertNotNull(portfolioModel);
 
 				final EObject scheduleModel = (EObject) portfolioModel.eGet(reference_LNGPortfolio_scheduleModel);
-				Assert.assertNotNull(scheduleModel);
+				Assertions.assertNotNull(scheduleModel);
 
 				final EObject schedule = (EObject) scheduleModel.eGet(reference_LNGScheduleModel_schedule);
-				Assert.assertNotNull(schedule);
+				Assertions.assertNotNull(schedule);
 
 				List<EObject> sequences = MetamodelUtils.getValueAsTypedList(schedule, reference_Schedule_sequences);
-				Assert.assertNotNull(sequences);
-				Assert.assertEquals(1, sequences.size());
+				Assertions.assertNotNull(sequences);
+				Assertions.assertEquals(1, sequences.size());
 
 				EObject sequence = sequences.get(0);
-				Assert.assertNotNull(sequence);
+				Assertions.assertNotNull(sequence);
 
-				Assert.assertFalse(sequence.eIsSet(attribute_Sequence_dailyHireRate));
+				Assertions.assertFalse(sequence.eIsSet(attribute_Sequence_dailyHireRate));
 			}
 		} finally {
 			if (tmpFile != null) {

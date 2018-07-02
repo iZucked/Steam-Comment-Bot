@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation.tests;
 
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -15,9 +15,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -37,7 +37,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class VesselAvailabilityPortConstraintTest {
 
-	@Ignore("Does not work with API changes")
+	@Disabled("Does not work with API changes")
 	@Test
 	public void testValidityConstraintFromPortAndTime() {
 		// This is the constraint we will be testing
@@ -90,9 +90,9 @@ public class VesselAvailabilityPortConstraintTest {
 
 		final IStatus result = constraint.validate(validationContext);
 
-		Assert.assertTrue("Result should be a detail constraint status decorator", result instanceof DetailConstraintStatusDecorator);
-		Assert.assertTrue("Port feature should be flagged up",
-				((DetailConstraintStatusDecorator) result).getFeaturesForEObject(availability).contains(CargoPackage.eINSTANCE.getVesselAvailability_StartAt()));
+		Assertions.assertTrue(result instanceof DetailConstraintStatusDecorator, "Result should be a detail constraint status decorator");
+		Assertions.assertTrue(((DetailConstraintStatusDecorator) result).getFeaturesForEObject(availability).contains(CargoPackage.eINSTANCE.getVesselAvailability_StartAt()),
+				"Port feature should be flagged up");
 
 		verify(availability, atLeastOnce()).eContainer();
 		verify(availability, atLeastOnce()).eContainingFeature();
@@ -115,7 +115,7 @@ public class VesselAvailabilityPortConstraintTest {
 	/**
 	 * Don't bother with mocking, instead just create a scenario with a port, vessel, etc, and then run it.
 	 */
-	@Ignore("ValidationSupport doesn't allow mocking, test disabled until mocking removed.")
+	@Disabled("ValidationSupport doesn't allow mocking, test disabled until mocking removed.")
 	@Test
 	public void testValidityConstraintFromVesselClass() {
 		// This is the constraint we will be testing
@@ -146,7 +146,7 @@ public class VesselAvailabilityPortConstraintTest {
 
 		System.out.println(result);
 
-		Assert.assertTrue("Result should be a detail constraint status decorator", result instanceof DetailConstraintStatusDecorator);
+		Assertions.assertTrue(result instanceof DetailConstraintStatusDecorator, "Result should be a detail constraint status decorator");
 
 		verify(vessel, atLeastOnce()).eContainer();
 		verify(vessel, atLeastOnce()).eContainingFeature();

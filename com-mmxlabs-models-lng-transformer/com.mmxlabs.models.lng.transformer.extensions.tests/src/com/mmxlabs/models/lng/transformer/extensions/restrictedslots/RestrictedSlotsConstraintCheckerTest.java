@@ -6,8 +6,8 @@ package com.mmxlabs.models.lng.transformer.extensions.restrictedslots;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -34,7 +34,7 @@ public class RestrictedSlotsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
 	}
 
 	@Test
@@ -52,8 +52,8 @@ public class RestrictedSlotsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> singleton(element2));
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class RestrictedSlotsConstraintCheckerTest {
 		final IRestrictedSlotsProvider restrictedElementsProvider = Mockito.mock(IRestrictedSlotsProvider.class);
 		final RestrictedSlotsConstraintChecker checker = createChecker(name, restrictedElementsProvider);
 
-		Assert.assertEquals(name, checker.getName());
+		Assertions.assertEquals(name, checker.getName());
 
 		final IResource resource1 = Mockito.mock(IResource.class);
 
@@ -73,8 +73,8 @@ public class RestrictedSlotsConstraintCheckerTest {
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
 	}
 
 

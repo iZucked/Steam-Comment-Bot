@@ -13,8 +13,8 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
 
@@ -38,11 +38,11 @@ public class CommandUtilTest {
 		sample.getESuperTypes().add(refClass1);
 
 		Command cmd = CommandUtil.createMultipleAttributeSetter(editingDomain, sample, EcorePackage.Literals.ECLASS__ESUPER_TYPES, Lists.newArrayList(refClass1, refClass1, refClass2));
-		Assert.assertNotNull(cmd);
+		Assertions.assertNotNull(cmd);
 
 		cmd.execute();
 		assert(sample.getESuperTypes().size() == sample.getESuperTypes().stream().distinct().count());
-		Assert.assertEquals(2, sample.getESuperTypes().size());
+		Assertions.assertEquals(2, sample.getESuperTypes().size());
 
 	}
 

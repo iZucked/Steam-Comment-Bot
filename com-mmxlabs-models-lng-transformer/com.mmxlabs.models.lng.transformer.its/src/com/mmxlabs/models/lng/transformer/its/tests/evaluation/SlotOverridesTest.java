@@ -13,9 +13,9 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -55,7 +55,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class SlotOverridesTest {
 	/*
 	 * Tests needed:
@@ -168,7 +168,7 @@ public class SlotOverridesTest {
 		final IEntity oEntity = entityProvider.getEntityForSlot(oSlot);
 
 		// make sure it matches
-		Assert.assertEquals(eEntity, tester.getModelObject(oEntity, LegalEntity.class));
+		Assertions.assertEquals(eEntity, tester.getModelObject(oEntity, LegalEntity.class));
 	}
 
 	@Test
@@ -193,7 +193,7 @@ public class SlotOverridesTest {
 		final IEntity oEntity = entityProvider.getEntityForSlot(oSlot);
 
 		// make sure it matches
-		Assert.assertEquals(eEntity, tester.getModelObject(oEntity, BaseLegalEntity.class));
+		Assertions.assertEquals(eEntity, tester.getModelObject(oEntity, BaseLegalEntity.class));
 	}
 
 	@Test
@@ -224,8 +224,8 @@ public class SlotOverridesTest {
 		final long maxCv = oSlot.getMaxCvValue();
 
 		// make sure it matches
-		Assert.assertEquals(Calculator.HighScaleFactor * SLOT_MIN_CV, minCv);
-		Assert.assertEquals(Calculator.HighScaleFactor * SLOT_MAX_CV, maxCv);
+		Assertions.assertEquals(Calculator.HighScaleFactor * SLOT_MIN_CV, minCv);
+		Assertions.assertEquals(Calculator.HighScaleFactor * SLOT_MAX_CV, maxCv);
 	}
 
 	@Test
@@ -252,8 +252,8 @@ public class SlotOverridesTest {
 		final long maxCv = oSlot.getMaxCvValue();
 
 		// make sure it matches
-		Assert.assertEquals(Calculator.HighScaleFactor * CONTRACT_MIN_CV, minCv);
-		Assert.assertEquals(Calculator.HighScaleFactor * CONTRACT_MAX_CV, maxCv);
+		Assertions.assertEquals(Calculator.HighScaleFactor * CONTRACT_MIN_CV, minCv);
+		Assertions.assertEquals(Calculator.HighScaleFactor * CONTRACT_MAX_CV, maxCv);
 	}
 
 	@Test
@@ -274,12 +274,12 @@ public class SlotOverridesTest {
 		final long maxCv = oSlot.getMaxCvValue();
 
 		// make sure it matches
-		Assert.assertEquals(0l, minCv);
-		Assert.assertEquals(Long.MAX_VALUE, maxCv);
+		Assertions.assertEquals(0l, minCv);
+		Assertions.assertEquals(Long.MAX_VALUE, maxCv);
 	}
 
 	public <T> void assertArrayEqualsCollection(final T[] expected, final Collection<T> actual) {
-		Assert.assertEquals(expected.length, actual.size());
+		Assertions.assertEquals(expected.length, actual.size());
 		final HashSet<T> expectedSet = new HashSet<T>();
 		final HashSet<T> remainder = new HashSet<T>();
 
@@ -290,12 +290,12 @@ public class SlotOverridesTest {
 		remainder.addAll(actual);
 		remainder.removeAll(expectedSet);
 
-		Assert.assertTrue(String.format("%d unexpected element(s) found in collection", remainder.size()), remainder.isEmpty());
+		Assertions.assertTrue(remainder.isEmpty(), String.format("%d unexpected element(s) found in collection", remainder.size()));
 
 		remainder.addAll(expectedSet);
 		remainder.removeAll(actual);
 
-		Assert.assertTrue(String.format("%d expected element(s) not found in collection", remainder.size()), remainder.isEmpty());
+		Assertions.assertTrue(remainder.isEmpty(), String.format("%d expected element(s) not found in collection", remainder.size()));
 	}
 
 	class MultipleCargoCreator extends MinimalScenarioCreator {

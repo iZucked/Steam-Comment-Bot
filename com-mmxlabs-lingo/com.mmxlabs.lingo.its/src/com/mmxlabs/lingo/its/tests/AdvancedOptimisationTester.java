@@ -7,19 +7,16 @@ package com.mmxlabs.lingo.its.tests;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.DynamicTest;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -30,235 +27,369 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
  * Generic tests linked to emailed cases
  * 
  */
-@RunWith(value = Parameterized.class)
 public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimisationTester {
 
-	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd) {
-		super(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, false);
+	public List<DynamicNode> makeTests(@NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd, boolean withGCO) {
+		final List<DynamicNode> tests = new LinkedList<>();
 
-	}
-
-	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd,
-			boolean runGCO) {
-		super(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, runGCO);
-	}
-
-	/**
-	 * Test the transformed scenario is pretty close to the original - specifically scheduling should be consistent.
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	@Category(MicroTest.class)
-	public void validatePeriodTransform() throws Exception {
-		Assume.assumeTrue(periodStart != null || periodEnd != null);
-		final URL url = getClass().getResource(scenarioURL);
-		Assert.assertNotNull(url);
-		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url, (modelReference, scenarioDataProvider) -> {
-			final OptimisationPlan optimiserSettings = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
-			if (periodStart != null) {
-				optimiserSettings.getUserSettings().setPeriodStartDate(periodStart);
+		for (final boolean withLimited : BOOLS) {
+			final String limitedLabel = withLimited ? "Limited_" : "";
+			final String gcoLabel = withGCO ? "GCO_" : "";
+			for (final boolean withActionSets : BOOLS) {
+				final String actionLabel = withActionSets ? "_ActionSets" : "";
+				for (final SimilarityMode similarityMode : SimilarityMode.values()) {
+					if (similarityMode == SimilarityMode.ALL) {
+						continue;
+					}
+					final String label = String.format("%s%s_%sSimilarity%s", limitedLabel, gcoLabel, similarityMode, actionLabel);
+					tests.add(DynamicTest.dynamicTest(label, () -> {
+						Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
+						// // No tests defined yet...
+						// Assumptions.assumeFalse(similarityMode == SimilarityMode.ALL);
+						init(scenarioURL, periodStart, periodEnd, withGCO);
+						runAdvancedOptimisationTestCase(withLimited, similarityMode, withActionSets, withGCO);
+					}));
+				}
 			}
-			if (periodEnd != null) {
-				optimiserSettings.getUserSettings().setPeriodEnd(periodEnd);
-			}
-			LNGScenarioRunnerCreator.withEvaluationRunner(scenarioDataProvider, optimiserSettings, runner -> PeriodVerifierUtil.runTest(runner, true));
-		});
-	}
+		}
+		if (periodStart != null || periodEnd != null) {
 
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_NoSimilarity() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, false, false);
-	}
+			tests.add(DynamicTest.dynamicTest("validatePeriodTransform", () -> {
+				Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
+				Assumptions.assumeTrue(periodStart != null || periodEnd != null);
+				// init(scenarioURL, periodStart, periodEnd, gco);
 
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_LowSimilarity() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, false, false);
-	}
+				final URL url = getClass().getResource(scenarioURL);
+				Assertions.assertNotNull(url);
+				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url, (modelReference, scenarioDataProvider) -> {
+					final OptimisationPlan optimiserSettings = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
+					if (periodStart != null) {
+						optimiserSettings.getUserSettings().setPeriodStartDate(periodStart);
+					}
+					if (periodEnd != null) {
+						optimiserSettings.getUserSettings().setPeriodEnd(periodEnd);
+					}
+					LNGScenarioRunnerCreator.withEvaluationRunner(scenarioDataProvider, optimiserSettings, runner -> PeriodVerifierUtil.runTest(runner, true));
+				});
+			}));
+		}
 
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_MediumSimilarity() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, false, false);
+		return tests;
 	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_HighSimilarity() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, false, false);
-	}
-
-	@Ignore("Not yet permitted")
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_NoSimilarity_ActionSet() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, true, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_LowSimilarity_ActionSet() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, true, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_MediumSimilarity_ActionSet() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, true, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_HighSimilarity_ActionSet() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, true, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_NoSimilarity() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_LowSimilarity() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, false, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_MediumSimilarity() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, false, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_HighSimilarity() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, false, false);
-	}
-
-	@Ignore("Not yet permitted")
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_NoSimilarity_ActionSet() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, true, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_LowSimilarity_ActionSet() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, true, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_MediumSimilarity_ActionSet() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, true, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_HighSimilarity_ActionSet() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, false);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_NoSimilarity_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, false, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_LowSimilarity_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, false, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_MediumSimilarity_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, false, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_HighSimilarity_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, false, true);
-	}
-
-	@Ignore("Not yet permitted")
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_NoSimilarity_ActionSet_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, true, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_LowSimilarity_ActionSet_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, true, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_MediumSimilarity_ActionSet_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, true, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Full_HighSimilarity_ActionSet_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, true, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_NoSimilarity_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_LowSimilarity_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, false, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_MediumSimilarity_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, false, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_HighSimilarity_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, false, true);
-	}
-
-	@Ignore("Not yet permitted")
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_NoSimilarity_ActionSet_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, true, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_LowSimilarity_ActionSet_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, true, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_MediumSimilarity_ActionSet_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, true, true);
-	}
-
-	@Test
-	@Category(OptimisationTest.class)
-	public void advancedOptimisation_Limited_HighSimilarity_ActionSet_GCO() throws Exception {
-		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, true);
-	}
+	//
+	// /**
+	// * Test the transformed scenario is pretty close to the original - specifically scheduling should be consistent.
+	// *
+	// * @throws Exception
+	// */
+	// @Test
+	// @Tag(TestCategories.MICRO_TEST)
+	// public void validatePeriodTransform(@NonNull final String _unused_method_prefix, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// Assumptions.assumeTrue(periodStart != null || periodEnd != null);
+	// final URL url = getClass().getResource(scenarioURL);
+	// Assertions.assertNotNull(url);
+	// ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url, (modelReference, scenarioDataProvider) -> {
+	// final OptimisationPlan optimiserSettings = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
+	// if (periodStart != null) {
+	// optimiserSettings.getUserSettings().setPeriodStartDate(periodStart);
+	// }
+	// if (periodEnd != null) {
+	// optimiserSettings.getUserSettings().setPeriodEnd(periodEnd);
+	// }
+	// LNGScenarioRunnerCreator.withEvaluationRunner(scenarioDataProvider, optimiserSettings, runner -> PeriodVerifierUtil.runTest(runner, true));
+	// });
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_NoSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, false, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_LowSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, false, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_MediumSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, false, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_HighSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, false, false);
+	// }
+	//
+	// @Disabled("Not yet permitted")
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_NoSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth
+	// periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, true, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_LowSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth
+	// periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, true, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_MediumSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, true, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_HighSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth
+	// periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, true, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_NoSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_LowSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, false, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_MediumSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, false, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_HighSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, false, false);
+	// }
+	//
+	// @Disabled("Not yet permitted")
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_NoSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, true, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_LowSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, true, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_MediumSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, true, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_HighSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, false);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_NoSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, false, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_LowSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, false, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_MediumSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, false, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_HighSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, false, true);
+	// }
+	//
+	// @Disabled("Not yet permitted")
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_NoSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, true, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_LowSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, true, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_MediumSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, true, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Full_HighSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, true, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_NoSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_LowSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	//
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, false, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_MediumSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth
+	// periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, false, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_HighSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, false, true);
+	// }
+	//
+	// @Disabled("Not yet permitted")
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_NoSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, true, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_LowSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, true, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_MediumSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, true, true);
+	// }
+	//
+	// @Test
+	// @Tag(TestCategories.OPTIMISATION_TEST)
+	// public void advancedOptimisation_Limited_HighSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
+	// init(scenarioURL, periodStart, periodEnd, gco);
+	// runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, true);
+	// }
 }

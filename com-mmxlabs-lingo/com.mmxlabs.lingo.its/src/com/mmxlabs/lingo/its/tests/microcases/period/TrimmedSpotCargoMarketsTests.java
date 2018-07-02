@@ -8,13 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -45,11 +44,12 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ QuickTest.class, MicroTest.class })
+	@Tag(TestCategories.QUICK_TEST)
+	@Tag(TestCategories.MICRO_TEST)
 	public void basicMarketTrim() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -121,21 +121,21 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
+			Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
 
 			SpotMarket opt_market = optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().get(0);
 
 			// Constant should be zero, and instead new options created
-			Assert.assertEquals(0, opt_market.getAvailability().getConstant());
+			Assertions.assertEquals(0, opt_market.getAvailability().getConstant());
 			// Expect 1 (this should be the newly created entry)
-			Assert.assertEquals(1, opt_market.getAvailability().getCurve().getPoints().size());
+			Assertions.assertEquals(1, opt_market.getAvailability().getCurve().getPoints().size());
 			boolean foundNewOne = false;
 			for (IndexPoint<Integer> pt : opt_market.getAvailability().getCurve().getPoints()) {
 				if (pt.getDate().isBefore(userSettings.getPeriodEnd())
 						&& (pt.getDate().isAfter(YearMonth.from(userSettings.getPeriodStartDate())) || pt.getDate().equals(YearMonth.from(userSettings.getPeriodStartDate())))) {
-					Assert.assertEquals(market.getAvailability().getConstant(), pt.getValue().intValue());
+					Assertions.assertEquals(market.getAvailability().getConstant(), pt.getValue().intValue());
 				} else {
-					Assert.assertEquals(0, pt.getValue().intValue());
+					Assertions.assertEquals(0, pt.getValue().intValue());
 				}
 
 				if (pt.getDate().equals(YearMonth.of(2015, 1))) {
@@ -144,15 +144,15 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 				}
 				if (pt.getDate().equals(YearMonth.of(2015, 12))) {
 					// This should have been removed as outside of period
-					Assert.fail();
+					Assertions.fail("Unexpected state");
 				}
 			}
-			Assert.assertTrue(foundNewOne);
+			Assertions.assertTrue(foundNewOne);
 
 			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
-			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
 			runner.dispose();
 		}
@@ -164,7 +164,8 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, MicroTest.class })
+	@Tag(TestCategories.QUICK_TEST)
+	@Tag(TestCategories.MICRO_TEST)
 	public void basicMarketTrim_PartMonth() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -236,21 +237,21 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
+			Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
 
 			SpotMarket opt_market = optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().get(0);
 
 			// Constant should be zero, and instead new options created
-			Assert.assertEquals(0, opt_market.getAvailability().getConstant());
+			Assertions.assertEquals(0, opt_market.getAvailability().getConstant());
 			// Expect 1 (this should be the newly created entry)
-			Assert.assertEquals(1, opt_market.getAvailability().getCurve().getPoints().size());
+			Assertions.assertEquals(1, opt_market.getAvailability().getCurve().getPoints().size());
 			boolean foundNewOne = false;
 			for (IndexPoint<Integer> pt : opt_market.getAvailability().getCurve().getPoints()) {
 				if (pt.getDate().isBefore(userSettings.getPeriodEnd())
 						&& (pt.getDate().isAfter(YearMonth.from(userSettings.getPeriodStartDate())) || pt.getDate().equals(YearMonth.from(userSettings.getPeriodStartDate())))) {
-					Assert.assertEquals(market.getAvailability().getConstant(), pt.getValue().intValue());
+					Assertions.assertEquals(market.getAvailability().getConstant(), pt.getValue().intValue());
 				} else {
-					Assert.assertEquals(0, pt.getValue().intValue());
+					Assertions.assertEquals(0, pt.getValue().intValue());
 				}
 
 				if (pt.getDate().equals(YearMonth.of(2015, 1))) {
@@ -259,15 +260,15 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 				}
 				if (pt.getDate().equals(YearMonth.of(2015, 12))) {
 					// This should have been removed as outside of period
-					Assert.fail();
+					Assertions.fail("Unexpected state");
 				}
 			}
-			Assert.assertTrue(foundNewOne);
+			Assertions.assertTrue(foundNewOne);
 
 			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
-			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
 			runner.dispose();
 		}

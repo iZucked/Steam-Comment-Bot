@@ -9,15 +9,14 @@ import java.time.YearMonth;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
@@ -51,7 +50,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * Some test cases around divertible DES cargoes.
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class DivertibleDESTests extends AbstractMicroTestCase {
 
 	/**
@@ -60,8 +59,9 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, MicroTest.class })
-	@Ignore("This is unexpected as the load is in the window, but as the sale is outside (and locked) and it is a DES Purchase, this is a fixed cargo and it does not matter if it is included or not")
+	@Tag(TestCategories.QUICK_TEST)
+	@Tag(TestCategories.MICRO_TEST)
+	@Disabled("This is unexpected as the load is in the window, but as the sale is outside (and locked) and it is a DES Purchase, this is a fixed cargo and it does not matter if it is included or not")
 	public void testDivertibleDES() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -122,19 +122,19 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 
 			// Check locked flags
-			Assert.assertFalse(optimiserScenario.getCargoModel().getCargoes().get(0).isLocked());
-			Assert.assertFalse(optimiserScenario.getCargoModel().getLoadSlots().get(0).isLocked());
-			Assert.assertTrue(optimiserScenario.getCargoModel().getDischargeSlots().get(0).isLocked());
+			Assertions.assertFalse(optimiserScenario.getCargoModel().getCargoes().get(0).isLocked());
+			Assertions.assertFalse(optimiserScenario.getCargoModel().getLoadSlots().get(0).isLocked());
+			Assertions.assertTrue(optimiserScenario.getCargoModel().getDischargeSlots().get(0).isLocked());
 
 			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
-			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
 			runner.dispose();
 		}

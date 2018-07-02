@@ -7,8 +7,8 @@ package com.mmxlabs.optimiser.core.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -36,9 +36,9 @@ public class UnmodifiableSequencesWrapperTest {
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
 		final List<IResource> resources2 = wrapper.getResources();
-		Assert.assertEquals(2, resources2.size());
-		Assert.assertSame(resource1, resources2.get(0));
-		Assert.assertSame(resource2, resources2.get(1));
+		Assertions.assertEquals(2, resources2.size());
+		Assertions.assertSame(resource1, resources2.get(0));
+		Assertions.assertSame(resource2, resources2.get(1));
 	}
 
 	@Test
@@ -57,11 +57,11 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
-		// Assert.assertSame(sequence1, wrapper.getSequence(resource1));
-		// Assert.assertSame(sequence2, wrapper.getSequence(resource2));
+		// Assertions.assertSame(sequence1, wrapper.getSequence(resource1));
+		// Assertions.assertSame(sequence2, wrapper.getSequence(resource2));
 
-		Assert.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
-		Assert.assertTrue(wrapper.getSequence(resource2) instanceof UnmodifiableSequenceWrapper);
+		Assertions.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
+		Assertions.assertTrue(wrapper.getSequence(resource2) instanceof UnmodifiableSequenceWrapper);
 
 		wrapper.getSequence(resource1).size();
 		Mockito.verify(sequence1).size();
@@ -87,8 +87,8 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
-		Assert.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
-		Assert.assertTrue(wrapper.getSequence(1) instanceof UnmodifiableSequenceWrapper);
+		Assertions.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
+		Assertions.assertTrue(wrapper.getSequence(1) instanceof UnmodifiableSequenceWrapper);
 
 		wrapper.getSequence(0).size();
 		Mockito.verify(sequence1).size();
@@ -115,8 +115,8 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final Map<IResource, ISequence> sequencesMap = wrapper.getSequences();
 
-		Assert.assertTrue(sequencesMap.containsKey(resource1));
-		Assert.assertTrue(sequencesMap.containsKey(resource2));
+		Assertions.assertTrue(sequencesMap.containsKey(resource1));
+		Assertions.assertTrue(sequencesMap.containsKey(resource2));
 
 		sequencesMap.get(resource1).size();
 		Mockito.verify(sequence1).size();
@@ -147,8 +147,8 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences1);
 
-		Assert.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
-		Assert.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
+		Assertions.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
+		Assertions.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
 
 		wrapper.getSequence(resource1).size();
 		Mockito.verify(sequence1).size();
@@ -175,6 +175,6 @@ public class UnmodifiableSequencesWrapperTest {
 		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
-		Assert.assertEquals(2, wrapper.size());
+		Assertions.assertEquals(2, wrapper.size());
 	}
 }

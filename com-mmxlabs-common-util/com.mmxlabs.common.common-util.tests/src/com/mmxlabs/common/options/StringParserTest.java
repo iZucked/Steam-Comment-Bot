@@ -7,16 +7,16 @@ package com.mmxlabs.common.options;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class StringParserTest {
 
 	@Test
 	public void testStringParser() {
 		final StringParser parser = new StringParser();
-		Assert.assertFalse(parser.hasDefaultValue());
-		Assert.assertNull(parser.getDefaultValue());
+		Assertions.assertFalse(parser.hasDefaultValue());
+		Assertions.assertNull(parser.getDefaultValue());
 	}
 
 	@Test
@@ -24,8 +24,8 @@ public class StringParserTest {
 		final String str = new String();
 
 		final StringParser parser = new StringParser(str);
-		Assert.assertTrue(parser.hasDefaultValue());
-		Assert.assertSame(str, parser.getDefaultValue());
+		Assertions.assertTrue(parser.hasDefaultValue());
+		Assertions.assertSame(str, parser.getDefaultValue());
 	}
 
 	@Test
@@ -38,6 +38,6 @@ public class StringParserTest {
 		strings.add(str1);
 		strings.add(str2);
 
-		Assert.assertSame(str1, parser.parse(null, strings.iterator()));
+		Assertions.assertSame(str1, parser.parse(null, strings.iterator()));
 	}
 }

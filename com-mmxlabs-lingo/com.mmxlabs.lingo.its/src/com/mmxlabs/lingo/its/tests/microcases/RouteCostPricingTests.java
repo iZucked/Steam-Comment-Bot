@@ -4,28 +4,22 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.util.Collections;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.lingo.its.ExpectedLongValue;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 
@@ -34,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
  *
  */
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class RouteCostPricingTests extends AbstractMicroTestCase {
 
 	/**
@@ -43,7 +37,7 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSuezRouteCostOrder1() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -91,15 +85,15 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 			final IVessel oVessel3 = modelEntityMap.getOptimiserObjectNullChecked(vessel3, IVessel.class);
 			final IVessel oVessel4 = modelEntityMap.getOptimiserObjectNullChecked(vessel4, IVessel.class);
 
-			Assert.assertEquals(specificCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel1, 0, CostType.Laden)); // Specific cost
-			Assert.assertEquals(genericCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel2, 0, CostType.Laden)); // Generic cost
-			Assert.assertEquals(scntCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel3, 0, CostType.Laden)); // SCNT override generic
-			Assert.assertEquals(specific2Cost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel4, 0, CostType.Laden)); // Specific override SCNT
+			Assertions.assertEquals(specificCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel1, 0, CostType.Laden)); // Specific cost
+			Assertions.assertEquals(genericCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel2, 0, CostType.Laden)); // Generic cost
+			Assertions.assertEquals(scntCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel3, 0, CostType.Laden)); // SCNT override generic
+			Assertions.assertEquals(specific2Cost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel4, 0, CostType.Laden)); // Specific override SCNT
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSuezRouteCostOrder2() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -147,15 +141,15 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 			final IVessel oVessel3 = modelEntityMap.getOptimiserObjectNullChecked(vessel3, IVessel.class);
 			final IVessel oVessel4 = modelEntityMap.getOptimiserObjectNullChecked(vessel4, IVessel.class);
 
-			Assert.assertEquals(specificCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel1, 0, CostType.Laden)); // Specific cost
-			Assert.assertEquals(genericCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel2, 0, CostType.Laden)); // Generic cost
-			Assert.assertEquals(scntCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel3, 0, CostType.Laden)); // SCNT override generic
-			Assert.assertEquals(specific2Cost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel4, 0, CostType.Laden)); // Specific override SCNT
+			Assertions.assertEquals(specificCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel1, 0, CostType.Laden)); // Specific cost
+			Assertions.assertEquals(genericCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel2, 0, CostType.Laden)); // Generic cost
+			Assertions.assertEquals(scntCost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel3, 0, CostType.Laden)); // SCNT override generic
+			Assertions.assertEquals(specific2Cost.output(), routeCostProvider.getRouteCost(ERouteOption.SUEZ, oVessel4, 0, CostType.Laden)); // Specific override SCNT
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testPanamaRouteCostOrder1() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -197,15 +191,15 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 			final IVessel oVessel4 = modelEntityMap.getOptimiserObjectNullChecked(vessel4, IVessel.class);
 
 			// Never get generic panama cost (unless there is no tariff formula at all..)
-			Assert.assertEquals(specificCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel1, 0, CostType.Laden)); // Specific cost
-			Assert.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel2, 0, CostType.Laden)); // Generic cost
-			Assert.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel3, 0, CostType.Laden)); // SCNT override generic
-			Assert.assertEquals(specific2Cost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel4, 0, CostType.Laden)); // Specific override SCNT
+			Assertions.assertEquals(specificCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel1, 0, CostType.Laden)); // Specific cost
+			Assertions.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel2, 0, CostType.Laden)); // Generic cost
+			Assertions.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel3, 0, CostType.Laden)); // SCNT override generic
+			Assertions.assertEquals(specific2Cost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel4, 0, CostType.Laden)); // Specific override SCNT
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testPanamaRouteCostOrder2() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -247,10 +241,10 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 			final IVessel oVessel4 = modelEntityMap.getOptimiserObjectNullChecked(vessel4, IVessel.class);
 
 			// Never get generic panama cost (unless there is no tariff formula at all..)
-			Assert.assertEquals(specificCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel1, 0, CostType.Laden)); // Specific cost
-			Assert.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel2, 0, CostType.Laden)); // Generic cost
-			Assert.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel3, 0, CostType.Laden)); // SCNT override generic
-			Assert.assertEquals(specific2Cost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel4, 0, CostType.Laden)); // Specific override SCNT
+			Assertions.assertEquals(specificCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel1, 0, CostType.Laden)); // Specific cost
+			Assertions.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel2, 0, CostType.Laden)); // Generic cost
+			Assertions.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel3, 0, CostType.Laden)); // SCNT override generic
+			Assertions.assertEquals(specific2Cost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oVessel4, 0, CostType.Laden)); // Specific override SCNT
 		});
 	}
 }

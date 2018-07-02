@@ -7,8 +7,8 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -28,7 +28,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author hinton
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class SimpleCalculationTest {
 
 	// Create a dummy scenario

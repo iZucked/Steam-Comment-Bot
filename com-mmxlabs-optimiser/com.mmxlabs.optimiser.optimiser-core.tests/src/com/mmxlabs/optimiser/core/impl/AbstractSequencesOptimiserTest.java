@@ -4,16 +4,14 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
-import static org.junit.Assert.fail;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -61,7 +59,7 @@ public class AbstractSequencesOptimiserTest {
 		lso.init();
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testInit3() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
 
@@ -79,10 +77,10 @@ public class AbstractSequencesOptimiserTest {
 
 		lso.setReportInterval(100);
 
-		lso.init();
+		Assertions.assertThrows(IllegalStateException.class, () -> lso.init());
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testInit4() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
 
@@ -99,10 +97,10 @@ public class AbstractSequencesOptimiserTest {
 
 		lso.setReportInterval(100);
 
-		lso.init();
+		Assertions.assertThrows(IllegalStateException.class, () -> lso.init());
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testInit5() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
 
@@ -119,10 +117,11 @@ public class AbstractSequencesOptimiserTest {
 
 		lso.setReportInterval(100);
 
-		lso.init();
+		Assertions.assertThrows(IllegalStateException.class, () -> lso.init());
+
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testInit6() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
 
@@ -139,10 +138,11 @@ public class AbstractSequencesOptimiserTest {
 
 		lso.setReportInterval(100);
 
-		lso.init();
+		Assertions.assertThrows(IllegalStateException.class, () -> lso.init());
+
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testInit7() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
 
@@ -159,10 +159,10 @@ public class AbstractSequencesOptimiserTest {
 
 		lso.setReportInterval(100);
 
-		lso.init();
+		Assertions.assertThrows(IllegalStateException.class, () -> lso.init());
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testInit8() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
 
@@ -180,7 +180,7 @@ public class AbstractSequencesOptimiserTest {
 		final IOptimiserProgressMonitor monitor = Mockito.mock(IOptimiserProgressMonitor.class);
 		lso.setProgressMonitor(monitor);
 
-		lso.init();
+		Assertions.assertThrows(IllegalStateException.class, () -> lso.init());
 	}
 
 	@Test
@@ -210,15 +210,15 @@ public class AbstractSequencesOptimiserTest {
 
 		// Check source and dest sequences contain the same values
 		for (int i = 0; i < 5; ++i) {
-			Assert.assertEquals(seq1.get(i), seq3.get(i));
-			Assert.assertEquals(seq2.get(i), seq4.get(i));
+			Assertions.assertEquals(seq1.get(i), seq3.get(i));
+			Assertions.assertEquals(seq2.get(i), seq4.get(i));
 		}
 
-		Assert.assertEquals(6, seq4.get(0).getIndex());
-		Assert.assertEquals(7, seq4.get(1).getIndex());
-		Assert.assertEquals(8, seq4.get(2).getIndex());
-		Assert.assertEquals(9, seq4.get(3).getIndex());
-		Assert.assertEquals(10, seq4.get(4).getIndex());
+		Assertions.assertEquals(6, seq4.get(0).getIndex());
+		Assertions.assertEquals(7, seq4.get(1).getIndex());
+		Assertions.assertEquals(8, seq4.get(2).getIndex());
+		Assertions.assertEquals(9, seq4.get(3).getIndex());
+		Assertions.assertEquals(10, seq4.get(4).getIndex());
 
 	}
 
@@ -252,38 +252,38 @@ public class AbstractSequencesOptimiserTest {
 	@Test
 	public void testGetSetNumberOfIterations() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
-		Assert.assertEquals(0, lso.getNumberOfIterations());
+		Assertions.assertEquals(0, lso.getNumberOfIterations());
 		lso.setNumberOfIterations(100);
-		Assert.assertEquals(100, lso.getNumberOfIterations());
+		Assertions.assertEquals(100, lso.getNumberOfIterations());
 	}
 
 	@Test
 	public void testGetSetConstraintCheckers() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
 		final List<IConstraintChecker> checkers = Collections.emptyList();
-		Assert.assertNull(lso.getConstraintCheckers());
+		Assertions.assertNull(lso.getConstraintCheckers());
 		lso.setConstraintCheckers(checkers);
-		Assert.assertSame(checkers, lso.getConstraintCheckers());
+		Assertions.assertSame(checkers, lso.getConstraintCheckers());
 
 	}
 
 	@Test
 	public void testGetSetFitnessEvaluator() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
-		Assert.assertNull(lso.getFitnessEvaluator());
+		Assertions.assertNull(lso.getFitnessEvaluator());
 		final IFitnessEvaluator fitnessEvaluator = Mockito.mock(IFitnessEvaluator.class);
 		lso.setFitnessEvaluator(fitnessEvaluator);
-		Assert.assertSame(fitnessEvaluator, lso.getFitnessEvaluator());
+		Assertions.assertSame(fitnessEvaluator, lso.getFitnessEvaluator());
 	}
 
 	@Test
 	public void testSetSequenceManipulator() {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
-		Assert.assertNull(lso.getSequenceManipulator());
+		Assertions.assertNull(lso.getSequenceManipulator());
 		final ISequencesManipulator sequencesManipulator = Mockito.mock(ISequencesManipulator.class);
 		assert sequencesManipulator != null;
 		lso.setSequenceManipulator(sequencesManipulator);
-		Assert.assertSame(sequencesManipulator, lso.getSequenceManipulator());
+		Assertions.assertSame(sequencesManipulator, lso.getSequenceManipulator());
 
 	}
 
@@ -298,13 +298,13 @@ public class AbstractSequencesOptimiserTest {
 
 		@Override
 		public IAnnotatedSolution start(@NonNull final IOptimisationContext context, final @NonNull ISequences initialRawSequences, final @NonNull ISequences inputRawSequences) {
-			fail("This is not part of the test.");
+			Assertions.fail("This is not part of the test.");
 			return null;
 		}
 
 		@Override
 		public int step(final int percentage) {
-			fail("This is not part of the test.");
+			Assertions.fail("This is not part of the test.");
 			return 0;
 		}
 	}

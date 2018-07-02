@@ -19,9 +19,9 @@ import java.util.Set;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -76,11 +75,11 @@ public class PeriodTransformerTests {
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
-		Assert.assertNotNull(periodRecord);
-		Assert.assertNull(periodRecord.lowerCutoff);
-		Assert.assertNull(periodRecord.lowerBoundary);
-		Assert.assertNull(periodRecord.upperBoundary);
-		Assert.assertNull(periodRecord.upperCutoff);
+		Assertions.assertNotNull(periodRecord);
+		Assertions.assertNull(periodRecord.lowerCutoff);
+		Assertions.assertNull(periodRecord.lowerBoundary);
+		Assertions.assertNull(periodRecord.upperBoundary);
+		Assertions.assertNull(periodRecord.upperCutoff);
 
 	}
 
@@ -97,11 +96,11 @@ public class PeriodTransformerTests {
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
-		Assert.assertNotNull(periodRecord);
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), periodRecord.lowerCutoff);
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1), periodRecord.lowerBoundary);
-		Assert.assertNull(periodRecord.upperBoundary);
-		Assert.assertNull(periodRecord.upperCutoff);
+		Assertions.assertNotNull(periodRecord);
+		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), periodRecord.lowerCutoff);
+		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1), periodRecord.lowerBoundary);
+		Assertions.assertNull(periodRecord.upperBoundary);
+		Assertions.assertNull(periodRecord.upperCutoff);
 	}
 
 	@Test
@@ -117,11 +116,11 @@ public class PeriodTransformerTests {
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
-		Assert.assertNotNull(periodRecord);
-		Assert.assertNull(periodRecord.lowerCutoff);
-		Assert.assertNull(periodRecord.lowerBoundary);
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1), periodRecord.upperBoundary);
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), periodRecord.upperCutoff);
+		Assertions.assertNotNull(periodRecord);
+		Assertions.assertNull(periodRecord.lowerCutoff);
+		Assertions.assertNull(periodRecord.lowerBoundary);
+		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1), periodRecord.upperBoundary);
+		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), periodRecord.upperCutoff);
 	}
 
 	@Test
@@ -138,11 +137,11 @@ public class PeriodTransformerTests {
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
-		Assert.assertNotNull(periodRecord);
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), periodRecord.lowerCutoff);
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1), periodRecord.lowerBoundary);
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 1), periodRecord.upperBoundary);
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1), periodRecord.upperCutoff);
+		Assertions.assertNotNull(periodRecord);
+		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), periodRecord.lowerCutoff);
+		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1), periodRecord.lowerBoundary);
+		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 1), periodRecord.upperBoundary);
+		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1), periodRecord.upperCutoff);
 	}
 
 	@Test
@@ -188,12 +187,12 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected - vesselAvailability1
-		Assert.assertNull(vesselAvailability1.getStartAt());
-		Assert.assertTrue(vesselAvailability1.getEndAt().isEmpty());
-		Assert.assertNull(vesselAvailability1.getStartAfter());
-		Assert.assertNull(vesselAvailability1.getStartBy());
-		Assert.assertNull(vesselAvailability1.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0), vesselAvailability1.getEndBy());
+		Assertions.assertNull(vesselAvailability1.getStartAt());
+		Assertions.assertTrue(vesselAvailability1.getEndAt().isEmpty());
+		Assertions.assertNull(vesselAvailability1.getStartAfter());
+		Assertions.assertNull(vesselAvailability1.getStartBy());
+		Assertions.assertNull(vesselAvailability1.getEndAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0), vesselAvailability1.getEndBy());
 	}
 
 	@Test
@@ -251,13 +250,13 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// Changed
-		Assert.assertEquals(port3, vesselAvailability2.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability2.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability2.getStartBy());
+		Assertions.assertEquals(port3, vesselAvailability2.getStartAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability2.getStartAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability2.getStartBy());
 		// Unchanged
-		Assert.assertTrue(vesselAvailability2.getEndAt().isEmpty());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability2.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability2.getEndBy());
+		Assertions.assertTrue(vesselAvailability2.getEndAt().isEmpty());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability2.getEndAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability2.getEndBy());
 	}
 
 	@Test
@@ -313,12 +312,12 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected
-		Assert.assertNull(vesselAvailability3.getStartAt());
-		Assert.assertTrue(vesselAvailability3.getEndAt().isEmpty());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0), vesselAvailability3.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0), vesselAvailability3.getStartBy());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.AUGUST, 1, 0), vesselAvailability3.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.AUGUST, 1, 0), vesselAvailability3.getEndBy());
+		Assertions.assertNull(vesselAvailability3.getStartAt());
+		Assertions.assertTrue(vesselAvailability3.getEndAt().isEmpty());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0), vesselAvailability3.getStartAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0), vesselAvailability3.getStartBy());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.AUGUST, 1, 0), vesselAvailability3.getEndAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.AUGUST, 1, 0), vesselAvailability3.getEndBy());
 	}
 
 	@Test
@@ -399,12 +398,12 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertEquals(port3, vesselAvailability4.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartBy());
-		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability4.getEndAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability4.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability4.getEndBy());
+		Assertions.assertEquals(port3, vesselAvailability4.getStartAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartBy());
+		Assertions.assertEquals(Collections.singletonList(port3), vesselAvailability4.getEndAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability4.getEndAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability4.getEndBy());
 	}
 
 	@Test
@@ -481,12 +480,12 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertEquals(port3, vesselAvailability5.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartBy());
-		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability5.getEndAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability5.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability5.getEndBy());
+		Assertions.assertEquals(port3, vesselAvailability5.getStartAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartBy());
+		Assertions.assertEquals(Collections.singletonList(port3), vesselAvailability5.getEndAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability5.getEndAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability5.getEndBy());
 	}
 
 	@Test
@@ -543,13 +542,13 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected
-		Assert.assertNull(vesselAvailability6.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartBy());
+		Assertions.assertNull(vesselAvailability6.getStartAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartBy());
 
-		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability6.getEndAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability6.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability6.getEndBy());
+		Assertions.assertEquals(Collections.singletonList(port3), vesselAvailability6.getEndAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability6.getEndAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability6.getEndBy());
 	}
 
 	@Test
@@ -593,12 +592,12 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected - vesselAvailability7
-		Assert.assertNull(vesselAvailability7.getStartAt());
-		Assert.assertTrue(vesselAvailability7.getEndAt().isEmpty());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0), vesselAvailability7.getStartAfter());
-		Assert.assertNull(vesselAvailability7.getStartBy());
-		Assert.assertNull(vesselAvailability7.getEndAfter());
-		Assert.assertNull(vesselAvailability7.getEndBy());
+		Assertions.assertNull(vesselAvailability7.getStartAt());
+		Assertions.assertTrue(vesselAvailability7.getEndAt().isEmpty());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0), vesselAvailability7.getStartAfter());
+		Assertions.assertNull(vesselAvailability7.getStartBy());
+		Assertions.assertNull(vesselAvailability7.getEndAfter());
+		Assertions.assertNull(vesselAvailability7.getEndBy());
 	}
 
 	@Test
@@ -649,12 +648,12 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertNull(vesselAvailability.getStartAt());
-		Assert.assertTrue(vesselAvailability.getEndAt().isEmpty());
-		Assert.assertNull(vesselAvailability.getStartAfter());
-		Assert.assertNull(vesselAvailability.getStartBy());
-		Assert.assertNull(vesselAvailability.getEndAfter());
-		Assert.assertNull(vesselAvailability.getEndBy());
+		Assertions.assertNull(vesselAvailability.getStartAt());
+		Assertions.assertTrue(vesselAvailability.getEndAt().isEmpty());
+		Assertions.assertNull(vesselAvailability.getStartAfter());
+		Assertions.assertNull(vesselAvailability.getStartBy());
+		Assertions.assertNull(vesselAvailability.getEndAfter());
+		Assertions.assertNull(vesselAvailability.getEndBy());
 	}
 
 	@Test
@@ -705,13 +704,13 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertEquals(port2, vesselAvailability.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartBy());
+		Assertions.assertEquals(port2, vesselAvailability.getStartAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartBy());
 
-		Assert.assertTrue(vesselAvailability.getEndAt().isEmpty());
-		Assert.assertNull(vesselAvailability.getEndAfter());
-		Assert.assertNull(vesselAvailability.getEndBy());
+		Assertions.assertTrue(vesselAvailability.getEndAt().isEmpty());
+		Assertions.assertNull(vesselAvailability.getEndAfter());
+		Assertions.assertNull(vesselAvailability.getEndBy());
 	}
 
 	@Test
@@ -762,13 +761,13 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertNull(vesselAvailability.getStartAt());
-		Assert.assertNull(vesselAvailability.getStartAfter());
-		Assert.assertNull(vesselAvailability.getStartBy());
+		Assertions.assertNull(vesselAvailability.getStartAt());
+		Assertions.assertNull(vesselAvailability.getStartAfter());
+		Assertions.assertNull(vesselAvailability.getStartBy());
 
-		Assert.assertEquals(Collections.singletonList(port2), vesselAvailability.getEndAt());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability.getEndBy());
+		Assertions.assertEquals(Collections.singletonList(port2), vesselAvailability.getEndAt());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability.getEndAfter());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability.getEndBy());
 	}
 
 	@Test
@@ -818,11 +817,11 @@ public class PeriodTransformerTests {
 			transformer.updateStartConditions(vesselAvailability1, assignedObject2, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability1, assignedObject3, startConditionMap, mapping);
 
-			Assert.assertEquals(port3, vesselAvailability1.getStartAt());
-			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getMinVolumeAvailable(), 0.0);
-			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getMaxVolumeAvailable(), 0.0);
-			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartBy());
-			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartAfter());
+			Assertions.assertEquals(port3, vesselAvailability1.getStartAt());
+			Assertions.assertEquals(30000.0, vesselAvailability1.getStartHeel().getMinVolumeAvailable(), 0.001);
+			Assertions.assertEquals(30000.0, vesselAvailability1.getStartHeel().getMaxVolumeAvailable(), 0.001);
+			Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartBy());
+			Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartAfter());
 		}
 		// Same again, but reverse order. Should yield same result as before.
 		{
@@ -834,11 +833,11 @@ public class PeriodTransformerTests {
 			transformer.updateStartConditions(vesselAvailability2, assignedObject2, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability2, assignedObject1, startConditionMap, mapping);
 
-			Assert.assertEquals(port3, vesselAvailability2.getStartAt());
-			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getMinVolumeAvailable(), 0.0);
-			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getMaxVolumeAvailable(), 0.0);
-			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartBy());
-			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartAfter());
+			Assertions.assertEquals(port3, vesselAvailability2.getStartAt());
+			Assertions.assertEquals(30000.0, vesselAvailability2.getStartHeel().getMinVolumeAvailable(), 0.001);
+			Assertions.assertEquals(30000.0, vesselAvailability2.getStartHeel().getMaxVolumeAvailable(), 0.001);
+			Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartBy());
+			Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartAfter());
 		}
 	}
 
@@ -889,9 +888,9 @@ public class PeriodTransformerTests {
 			transformer.updateEndConditions(vesselAvailability1, assignedObject2, endConditionMap, mapping);
 			transformer.updateEndConditions(vesselAvailability1, assignedObject3, endConditionMap, mapping);
 
-			Assert.assertEquals(Collections.singletonList(port1), vesselAvailability1.getEndAt());
-			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability1.getEndBy());
-			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability1.getEndAfter());
+			Assertions.assertEquals(Collections.singletonList(port1), vesselAvailability1.getEndAt());
+			Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability1.getEndBy());
+			Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability1.getEndAfter());
 		}
 		// Same again, but reverse order. Should yield same result as before.
 		{
@@ -903,9 +902,9 @@ public class PeriodTransformerTests {
 			transformer.updateEndConditions(vesselAvailability2, assignedObject2, endConditionMap, mapping);
 			transformer.updateEndConditions(vesselAvailability2, assignedObject1, endConditionMap, mapping);
 
-			Assert.assertEquals(Collections.singletonList(port1), vesselAvailability2.getEndAt());
-			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability2.getEndBy());
-			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability2.getEndAfter());
+			Assertions.assertEquals(Collections.singletonList(port1), vesselAvailability2.getEndAt());
+			Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability2.getEndBy());
+			Assertions.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability2.getEndAfter());
 		}
 	}
 
@@ -941,17 +940,17 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
-		Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
-		Assert.assertTrue(removedCargoes.contains(copyCargo));
+		Assertions.assertTrue(removedSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(removedSlots.contains(copyDischargeSlot));
+		Assertions.assertTrue(removedCargoes.contains(copyCargo));
 
 		// No change to copy scenario
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 	}
 
 	@Test
@@ -989,35 +988,35 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
-		Assert.assertFalse(removedSlots.contains(copyDischargeSlot));
-		Assert.assertFalse(removedCargoes.contains(copyCargo));
+		Assertions.assertFalse(removedSlots.contains(copyLoadSlot));
+		Assertions.assertFalse(removedSlots.contains(copyDischargeSlot));
+		Assertions.assertFalse(removedCargoes.contains(copyCargo));
 		//
 		//
 		// // Verify relevant slots and cargoes marked as remove
 		// Mockito.verify(seenSlots, Mockito.atLeastOnce()).add(copyLoadSlot);
 		// Mockito.verify(seenSlots, Mockito.atLeastOnce()).add(copyDischargeSlot);
-		// Mockito.verify(seenSlots).addAll(Matchers.anyList());
+		// Mockito.verify(seenSlots).addAll(ArgumentMatchers.anyList());
 		// Mockito.verifyNoMoreInteractions(seenSlots);
 		// Mockito.verifyNoMoreInteractions(removedSlots);
 		// Mockito.verifyNoMoreInteractions(removedCargoes);
 		// Mockito.verifyNoMoreInteractions(slotAllocationMap);
 		//
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // Check copy flags changed
 
 		// This should pass now
-		Assert.assertTrue(copyLoadSlot.isLocked());
-		Assert.assertFalse(copyDischargeSlot.isLocked());
-		Assert.assertTrue(copyCargo.isAllowRewiring());
-		Assert.assertFalse(copyCargo.isLocked());
+		Assertions.assertTrue(copyLoadSlot.isLocked());
+		Assertions.assertFalse(copyDischargeSlot.isLocked());
+		Assertions.assertTrue(copyCargo.isAllowRewiring());
+		Assertions.assertFalse(copyCargo.isLocked());
 	}
 
 	@Test
@@ -1070,12 +1069,12 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
-		Assert.assertFalse(removedSlots.contains(copyDischargeSlot));
-		Assert.assertFalse(removedCargoes.contains(copyCargo));
+		Assertions.assertFalse(removedSlots.contains(copyLoadSlot));
+		Assertions.assertFalse(removedSlots.contains(copyDischargeSlot));
+		Assertions.assertFalse(removedCargoes.contains(copyCargo));
 
 		//
 		// // Verify relevant slots and cargoes marked as remove
@@ -1087,16 +1086,16 @@ public class PeriodTransformerTests {
 		// Mockito.verifyZeroInteractions(slotAllocationMap);
 		//
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// Check copy flags unchanged
-		Assert.assertFalse(copyCargo.isLocked());
-		Assert.assertTrue(copyCargo.isAllowRewiring());
+		Assertions.assertFalse(copyCargo.isLocked());
+		Assertions.assertTrue(copyCargo.isAllowRewiring());
 		//
-		// Assert.assertFalse(cargo.isLocked());
-		// Assert.assertTrue(cargo.isAllowRewiring());
+		// Assertions.assertFalse(cargo.isLocked());
+		// Assertions.assertTrue(cargo.isAllowRewiring());
 		//
 		// Registered objects as removed.
 		// Mockito.verifyNoMoreInteractions(mapping);
@@ -1136,12 +1135,12 @@ public class PeriodTransformerTests {
 		copyCargo.setVesselAssignmentType(vesselA);
 
 		// // Check copy flags changed
-		Assert.assertFalse(copyCargo.isLocked());
-		Assert.assertTrue(copyCargo.isAllowRewiring());
+		Assertions.assertFalse(copyCargo.isLocked());
+		Assertions.assertTrue(copyCargo.isAllowRewiring());
 		//
 		// // but not original
-		// Assert.assertFalse(cargo.isLocked());
-		// Assert.assertTrue(cargo.isAllowRewiring());
+		// Assertions.assertFalse(cargo.isLocked());
+		// Assertions.assertTrue(cargo.isAllowRewiring());
 		//
 		// // Registered objects as removed.
 		// Mockito.verifyNoMoreInteractions(mapping);
@@ -1197,12 +1196,12 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
-		Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
-		Assert.assertTrue(removedCargoes.contains(copyCargo));
+		Assertions.assertTrue(removedSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(removedSlots.contains(copyDischargeSlot));
+		Assertions.assertTrue(removedCargoes.contains(copyCargo));
 
 		//
 		// // Verify relevant slots and cargoes marked as remove
@@ -1214,9 +1213,9 @@ public class PeriodTransformerTests {
 		// Mockito.verifyZeroInteractions(slotAllocationMap);
 
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // Registered objects as removed.
 		// Mockito.verify(mapping).registerRemovedOriginal(cargo);
@@ -1275,12 +1274,12 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
-		Assert.assertFalse(removedSlots.contains(copyDischargeSlot));
-		Assert.assertFalse(removedCargoes.contains(copyCargo));
+		Assertions.assertFalse(removedSlots.contains(copyLoadSlot));
+		Assertions.assertFalse(removedSlots.contains(copyDischargeSlot));
+		Assertions.assertFalse(removedCargoes.contains(copyCargo));
 
 		//
 		// // Verify relevant slots and cargoes marked as remove
@@ -1292,17 +1291,17 @@ public class PeriodTransformerTests {
 		// Mockito.verifyZeroInteractions(slotAllocationMap);
 		//
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // Check copy flags changed
-		Assert.assertTrue(copyCargo.isLocked());
-		Assert.assertFalse(copyCargo.isAllowRewiring());
+		Assertions.assertTrue(copyCargo.isLocked());
+		Assertions.assertFalse(copyCargo.isAllowRewiring());
 		//
 		// // but not original
-		// Assert.assertFalse(cargo.isLocked());
-		// Assert.assertTrue(cargo.isAllowRewiring());
+		// Assertions.assertFalse(cargo.isLocked());
+		// Assertions.assertTrue(cargo.isAllowRewiring());
 	}
 
 	@Test
@@ -1333,8 +1332,8 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(removedSlots.contains(copyLoadSlot));
 
 		//
 		// Mockito.verify(seenSlots).add(copyLoadSlot);
@@ -1342,9 +1341,9 @@ public class PeriodTransformerTests {
 		// Mockito.verifyZeroInteractions(slotAllocationMap);
 		//
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
 	}
 
 	@Test
@@ -1384,8 +1383,8 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(removedSlots.contains(copyLoadSlot));
 
 		//
 		// Mockito.verify(seenSlots).add(copyLoadSlot);
@@ -1396,14 +1395,14 @@ public class PeriodTransformerTests {
 		// Mockito.verifyZeroInteractions(slotAllocationMap);
 		//
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // No change to original
-		// Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		// Assertions.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
 		//
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
 		// // Registered objects as removed.
 		// Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
 	}
@@ -1436,15 +1435,15 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertFalse(removedSlots.contains(copyLoadSlot));
 
-		// Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		// Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		// Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		// Assertions.assertTrue(seenSlots.contains(copyDischargeSlot));
 		//
-		// Assert.assertTrue(removedSlots.contains(copyLoadSlot));
-		// Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
-		// Assert.assertTrue(removedCargoes.contains(copyCargo));
+		// Assertions.assertTrue(removedSlots.contains(copyLoadSlot));
+		// Assertions.assertTrue(removedSlots.contains(copyDischargeSlot));
+		// Assertions.assertTrue(removedCargoes.contains(copyCargo));
 
 		// Mockito.verify(seenSlots).add(copyLoadSlot);
 		// Mockito.verify(seenSlots).add(copyDischargeSlot);
@@ -1454,13 +1453,13 @@ public class PeriodTransformerTests {
 		// Mockito.verifyZeroInteractions(slotAllocationMap);
 		//
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // No changes
-		// Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
 		//
 		// Mockito.verifyNoMoreInteractions(mapping);
 	}
@@ -1493,16 +1492,16 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assertions.assertTrue(removedSlots.contains(copyLoadSlot));
 		//
 		//
-		// Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		// Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		// Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		// Assertions.assertTrue(seenSlots.contains(copyDischargeSlot));
 		//
-		// Assert.assertTrue(removedSlots.contains(copyLoadSlot));
-		// Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
-		// Assert.assertTrue(removedCargoes.contains(copyCargo));
+		// Assertions.assertTrue(removedSlots.contains(copyLoadSlot));
+		// Assertions.assertTrue(removedSlots.contains(copyDischargeSlot));
+		// Assertions.assertTrue(removedCargoes.contains(copyCargo));
 
 		// Mockito.verify(seenSlots).add(copyLoadSlot);
 		// Mockito.verify(seenSlots).add(copyDischargeSlot);
@@ -1512,14 +1511,14 @@ public class PeriodTransformerTests {
 		// Mockito.verifyZeroInteractions(slotAllocationMap);
 		//
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // No change to original
-		// Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		// Assertions.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
 		//
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
 		// // Registered objects as removed.
 		// Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
 	}
@@ -1556,12 +1555,12 @@ public class PeriodTransformerTests {
 				slotAllocationMap, objectToPortVisitMap, new HashSet<Cargo>(), new HashSet<Slot<?>>());
 
 		// Verify relevant slots and cargoes marked as remove
-		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
-		// Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		Assertions.assertTrue(seenSlots.contains(copyLoadSlot));
+		// Assertions.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
-		// Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
-		// Assert.assertTrue(removedCargoes.contains(copyCargo));
+		Assertions.assertTrue(removedSlots.contains(copyLoadSlot));
+		// Assertions.assertTrue(removedSlots.contains(copyDischargeSlot));
+		// Assertions.assertTrue(removedCargoes.contains(copyCargo));
 
 		// Mockito.verify(seenSlots).add(copyLoadSlot);
 		// Mockito.verify(seenSlots).add(copyDischargeSlot);
@@ -1571,14 +1570,14 @@ public class PeriodTransformerTests {
 		// Mockito.verifyZeroInteractions(slotAllocationMap);
 		//
 		// // No change to copy scenario
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // No change to original
-		// Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		// Assertions.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
 		//
-		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// Assertions.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
 		// // Registered objects as removed.
 		// Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
 	}
@@ -1624,9 +1623,9 @@ public class PeriodTransformerTests {
 		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
 
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().isEmpty());
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().isEmpty());
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(event);
@@ -1673,8 +1672,8 @@ public class PeriodTransformerTests {
 		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().contains(copyEvent));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().contains(copyEvent));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1721,8 +1720,8 @@ public class PeriodTransformerTests {
 		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().contains(copyEvent));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().contains(copyEvent));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1769,9 +1768,9 @@ public class PeriodTransformerTests {
 		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
 
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().isEmpty());
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().isEmpty());
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(event);
@@ -1816,9 +1815,9 @@ public class PeriodTransformerTests {
 		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, objectToPortVisitMap);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
 
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().isEmpty());
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().isEmpty());
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(vesselAvailability);
@@ -1858,14 +1857,14 @@ public class PeriodTransformerTests {
 
 		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
 		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, objectToPortVisitMap);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1910,8 +1909,8 @@ public class PeriodTransformerTests {
 		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, objectToPortVisitMap);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1956,9 +1955,9 @@ public class PeriodTransformerTests {
 		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, objectToPortVisitMap);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
 
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().isEmpty());
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().isEmpty());
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(vesselAvailability);
@@ -2003,8 +2002,8 @@ public class PeriodTransformerTests {
 		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, objectToPortVisitMap);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -2034,18 +2033,18 @@ public class PeriodTransformerTests {
 			EList<SpotMarket> markets = group.getMarkets();
 			SpotMarket market = markets.get(0);
 			SpotAvailability availability = market.getAvailability();
-			Assert.assertTrue(availability.isSetConstant() == false);
-			Assert.assertTrue(availability.getCurve().getPoints().size() > 0);
+			Assertions.assertTrue(availability.isSetConstant() == false);
+			Assertions.assertTrue(availability.getCurve().getPoints().size() > 0);
 			for (IndexPoint<Integer> point : availability.getCurve().getPoints()) {
 				YearMonth date = point.getDate();
 				ZonedDateTime dateAsDateTime = date.atDay(1).atStartOfDay(ZoneId.of("UTC"));
-				Assert.assertTrue(dateAsDateTime.isAfter(periodRecord.lowerCutoff));
-				Assert.assertTrue(dateAsDateTime.isBefore(periodRecord.upperBoundary));
+				Assertions.assertTrue(dateAsDateTime.isAfter(periodRecord.lowerCutoff));
+				Assertions.assertTrue(dateAsDateTime.isBefore(periodRecord.upperBoundary));
 			}
-			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 4)) == 5);
-			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 5)) == 5);
-			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 6)) == 2);
-			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 6)) == 2);
+			Assertions.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 4)) == 5);
+			Assertions.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 5)) == 5);
+			Assertions.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 6)) == 2);
+			Assertions.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 6)) == 2);
 		}
 	}
 
@@ -2088,8 +2087,8 @@ public class PeriodTransformerTests {
 
 		transformer.generateStartAndEndConditionsMap(scenarioModel.getScheduleModel().getSchedule(), startConditionMap, endConditionMap);
 
-		Assert.assertSame(endVisit, startConditionMap.get(cargo));
-		Assert.assertSame(loadVisit, endConditionMap.get(cargo));
+		Assertions.assertSame(endVisit, startConditionMap.get(cargo));
+		Assertions.assertSame(loadVisit, endConditionMap.get(cargo));
 
 	}
 
@@ -2133,8 +2132,8 @@ public class PeriodTransformerTests {
 
 		transformer.generateStartAndEndConditionsMap(scenarioModel.getScheduleModel().getSchedule(), startConditionMap, endConditionMap);
 
-		Assert.assertSame(endVisit, startConditionMap.get(cargo));
-		Assert.assertSame(loadVisit, endConditionMap.get(cargo));
+		Assertions.assertSame(endVisit, startConditionMap.get(cargo));
+		Assertions.assertSame(loadVisit, endConditionMap.get(cargo));
 
 	}
 
@@ -2166,16 +2165,16 @@ public class PeriodTransformerTests {
 
 		transformer.generateStartAndEndConditionsMap(scenarioModel.getScheduleModel().getSchedule(), startConditionMap, endConditionMap);
 
-		Assert.assertSame(endVisit, startConditionMap.get(vesselEvent));
-		Assert.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
+		Assertions.assertSame(endVisit, startConditionMap.get(vesselEvent));
+		Assertions.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
 
 	}
 
-	@Ignore()
+	@Disabled()
 	@Test
 	public void generateStartAndEndConditionsMapTest_CharterOutDifferentEndPort() {
 
-		Assert.fail("Not yet implemented");
+		Assertions.fail("Not yet implemented");
 
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
@@ -2202,8 +2201,8 @@ public class PeriodTransformerTests {
 
 		transformer.generateStartAndEndConditionsMap(scenarioModel.getScheduleModel().getSchedule(), startConditionMap, endConditionMap);
 
-		Assert.assertSame(endVisit, startConditionMap.get(vesselEvent));
-		Assert.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
+		Assertions.assertSame(endVisit, startConditionMap.get(vesselEvent));
+		Assertions.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
 
 	}
 
@@ -2259,13 +2258,13 @@ public class PeriodTransformerTests {
 		transformer.removeExcludedSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), mapping, removedSlots, removedCargoes);
 
 		// Removed from copy
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo1));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot1));
-		Assert.assertTrue(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot1));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo1));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot1));
+		Assertions.assertTrue(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot1));
 
-		Assert.assertFalse(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo2));
-		Assert.assertFalse(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot2));
-		Assert.assertFalse(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot2));
+		Assertions.assertFalse(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo2));
+		Assertions.assertFalse(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot2));
+		Assertions.assertFalse(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot2));
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(cargo2);
@@ -2333,17 +2332,17 @@ public class PeriodTransformerTests {
 
 		transformer.lockDownCargoDates(slotAllocationMap, cargo1, new HashSet<>(), true);
 
-		Assert.assertFalse(cargo1.isAllowRewiring());
-		Assert.assertTrue(cargo1.isLocked());
+		Assertions.assertFalse(cargo1.isAllowRewiring());
+		Assertions.assertTrue(cargo1.isLocked());
 
-		Assert.assertEquals(PeriodTestUtils.createLocalDate(2014, 10, 5), loadSlot1.getWindowStart());
-		Assert.assertEquals(PeriodTestUtils.createLocalDate(2014, 11, 10), dischargeSlot1.getWindowStart());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDate(2014, 10, 5), loadSlot1.getWindowStart());
+		Assertions.assertEquals(PeriodTestUtils.createLocalDate(2014, 11, 10), dischargeSlot1.getWindowStart());
 
-		Assert.assertEquals(0, loadSlot1.getWindowSize());
-		Assert.assertEquals(0, dischargeSlot1.getWindowSize());
+		Assertions.assertEquals(0, loadSlot1.getWindowSize());
+		Assertions.assertEquals(0, dischargeSlot1.getWindowSize());
 
-		Assert.assertEquals(1, loadSlot1.getWindowStartTime());
-		Assert.assertEquals(2, dischargeSlot1.getWindowStartTime());
+		Assertions.assertEquals(1, loadSlot1.getWindowStartTime());
+		Assertions.assertEquals(2, dischargeSlot1.getWindowStartTime());
 	}
 
 	private PeriodTransformer createPeriodTransformer(final InclusionChecker inclusionChecker) {

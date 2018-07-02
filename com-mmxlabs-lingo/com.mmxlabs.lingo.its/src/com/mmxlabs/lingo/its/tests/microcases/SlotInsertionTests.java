@@ -14,15 +14,15 @@ import java.util.function.Function;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.Injector;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
@@ -52,7 +52,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Override
 	protected int getThreadCount() {
@@ -60,7 +60,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertDESPurchase_OpenDESSale() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -76,19 +76,19 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES1), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assertions.assertNotNull(result1);
+			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
 			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result2);
-			Assert.assertTrue(result2.getSolutions().size() == 2);
+			Assertions.assertNotNull(result2);
+			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDESPurchase_SwapDESSale() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -114,17 +114,17 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assertions.assertNotNull(result1);
+			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
-			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Sale1"));
+			Assertions.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Sale1"));
 
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDESPurchase_SwapDESPurchase() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -152,7 +152,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES2), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
+			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
 					.withAnySolutionResultChecker() //
@@ -160,8 +160,8 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 					.withUnusedSlot("DES_Purchase1") //
 					.build();
 
-			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assert::fail);
-			Assert.assertNotNull(solution);
+			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assertions::fail);
+			Assertions.assertNotNull(solution);
 
 		}, null);
 	}
@@ -180,7 +180,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertFOBSale_OpenFOBPurchase() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -196,20 +196,20 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assertions.assertNotNull(result1);
+			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
 			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_FOB1), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result2);
-			Assert.assertTrue(result2.getSolutions().size() == 2);
+			Assertions.assertNotNull(result2);
+			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwaptFOBSale_FOBPurchase() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -236,18 +236,18 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
+			Assertions.assertNotNull(result1);
 
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
-			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("FOB_Purchase1"));
+			Assertions.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("FOB_Purchase1"));
 
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwaptFOBSale_FOBSale() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -275,7 +275,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_FOB2), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
+			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
 					.withAnySolutionResultChecker() //
@@ -283,13 +283,13 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 					.withUnusedSlot("FOB_Sale1") //
 					.build();
 
-			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assert::fail);
-			Assert.assertNotNull(solution);
+			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assertions::fail);
+			Assertions.assertNotNull(solution);
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertShippedPair_Open() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -311,20 +311,20 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assertions.assertNotNull(result1);
+			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
 			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result2);
-			Assert.assertTrue(result2.getSolutions().size() == 2);
+			Assertions.assertNotNull(result2);
+			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapShippedPair_FOBPurchase() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -359,18 +359,18 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
+			Assertions.assertNotNull(result1);
 
-			Assert.assertEquals(2, result1.getSolutions().size());
+			Assertions.assertEquals(2, result1.getSolutions().size());
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
-			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("FOB_Purchase1"));
+			Assertions.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("FOB_Purchase1"));
 
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapShippedPair_DESSale() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -405,18 +405,18 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
+			Assertions.assertNotNull(result1);
 
-			Assert.assertEquals(2, result1.getSolutions().size());
+			Assertions.assertEquals(2, result1.getSolutions().size());
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
-			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Sale1"));
+			Assertions.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Sale1"));
 
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertExtraShippedPair() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -465,22 +465,22 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 20, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
+			Assertions.assertNotNull(result1);
 
 			final AtomicBoolean bool = new AtomicBoolean(false);
-			Assert.assertTrue(result1.getSolutions().size() > 1);
+			Assertions.assertTrue(result1.getSolutions().size() > 1);
 			result1.getSolutions().parallelStream().map(p -> p.getFirst()).forEach(seq -> {
 				if (result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty()) {
 					bool.set(true);
 				}
 			});
-			Assert.assertTrue(bool.get());
+			Assertions.assertTrue(bool.get());
 
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDivertBackfill() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
@@ -518,7 +518,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
 			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES), Collections.emptyList(), 10, new NullProgressMonitor());
-			Assert.assertNotNull(result1);
+			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
 					.withAnySolutionResultChecker() //
@@ -526,13 +526,13 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 					.withCargo("DES_Purchase_1", "DES_Sale1").anyNominalVessel() //
 					.build();
 
-			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assert::fail);
-			Assert.assertNotNull(solution);
+			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assertions::fail);
+			Assertions.assertNotNull(solution);
 		}, null);
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertTrickyCargo() throws Exception {
 
 		// Model the case Alex found.
@@ -598,7 +598,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 
 			final IMultiStateResult results = slotInserter.run(Collections.singletonList(discharge_DES4), Collections.emptyList(), 10, new NullProgressMonitor());
 
-			Assert.assertTrue(results.getSolutions().size() > 1);
+			Assertions.assertTrue(results.getSolutions().size() > 1);
 			// Next validate solution types exist
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
 					.withAnySolutionResultChecker() //
@@ -606,7 +606,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 					.withUnusedSlot("DES_Sale2") // Main sure we have a solution with this slot unused.
 					.build();
 
-			verifier.verifySolutionExistsInResults(results, msg -> Assert.fail(msg));
+			verifier.verifySolutionExistsInResults(results, msg -> Assertions.fail(msg));
 		}, null);
 
 	}

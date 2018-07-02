@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -32,7 +32,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam Semenenko
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 
 public class MinMaxSpeedTest {
 
@@ -63,8 +63,8 @@ public class MinMaxSpeedTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(test(testName, travelTime, baseFuelExpensive));
 
-		Assert.assertTrue("Laden leg travels at max speed", a.getLadenLeg().getSpeed() == maxSpeed);
-		Assert.assertTrue("Ballast leg travels at max speed", a.getBallastLeg().getSpeed() == maxSpeed);
+		Assertions.assertTrue(a.getLadenLeg().getSpeed() == maxSpeed, "Laden leg travels at max speed");
+		Assertions.assertTrue(a.getBallastLeg().getSpeed() == maxSpeed, "Ballast leg travels at max speed");
 	}
 
 	/**
@@ -83,19 +83,19 @@ public class MinMaxSpeedTest {
 		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
 			if ((fq.getFuel() == Fuel.NBO) || (fq.getFuel() == Fuel.FBO)) {
 				for (FuelAmount fa : fq.getAmounts()) {
-					Assert.assertTrue("LNG not used as BF cheaper", fa.getQuantity() == 0);
+					Assertions.assertTrue(fa.getQuantity() == 0, "LNG not used as BF cheaper");
 				}
 			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
 				for (FuelAmount fa : fq.getAmounts()) {
 					if (fa.getUnit() == FuelUnit.MT) {
-						Assert.assertTrue("Base fuel used, LNG more expensive", fa.getQuantity() > 0);
+						Assertions.assertTrue(fa.getQuantity() > 0, "Base fuel used, LNG more expensive");
 					}
 				}
 			}
 		}
 
 		// assert that the vessel travels at min speed as there is sufficient time.
-		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
+		Assertions.assertTrue(a.getBallastLeg().getSpeed() == minSpeed, "Ballast leg travels at min speed");
 	}
 
 	/**
@@ -118,11 +118,11 @@ public class MinMaxSpeedTest {
 			if (fq.getFuel() == Fuel.NBO) {
 				for (FuelAmount fa : fq.getAmounts()) {
 					if (fa.getUnit() == FuelUnit.M3)
-						Assert.assertTrue("Cheap NBO used", fa.getQuantity() > 0);
+						Assertions.assertTrue(fa.getQuantity() > 0, "Cheap NBO used");
 				}
 			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
 				for (FuelAmount fa : fq.getAmounts()) {
-					Assert.assertTrue("Base fuel not used", fa.getQuantity() == 0);
+					Assertions.assertTrue(fa.getQuantity() == 0, "Base fuel not used");
 				}
 			}
 		}
@@ -135,7 +135,7 @@ public class MinMaxSpeedTest {
 		// - So lerp the min/max speeds/consumptions, and you get a speed of 11 from a fuel consumption of 11
 
 		final int minNBOSpeed = 11;
-		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minNBOSpeed);
+		Assertions.assertTrue(a.getBallastLeg().getSpeed() == minNBOSpeed, "Ballast leg travels at min speed");
 	}
 
 	/**
@@ -154,18 +154,18 @@ public class MinMaxSpeedTest {
 		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
 			if (fq.getFuel() == Fuel.NBO) {
 				for (FuelAmount fa : fq.getAmounts()) {
-					Assert.assertTrue("NBO not used", fa.getQuantity() == 0);
+					Assertions.assertTrue(fa.getQuantity() == 0, "NBO not used");
 				}
 			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
 				for (FuelAmount fa : fq.getAmounts()) {
 					if (fa.getUnit() == FuelUnit.MT) {
-						Assert.assertTrue("Base fuel used", fa.getQuantity() > 0);
+						Assertions.assertTrue(fa.getQuantity() > 0, "Base fuel used");
 					}
 				}
 			}
 		}
 
-		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
+		Assertions.assertTrue(a.getBallastLeg().getSpeed() == minSpeed, "Ballast leg travels at min speed");
 	}
 
 	private CargoAllocation test(final String testName, final int travelTime, final float baseFuelUnitPrice) {

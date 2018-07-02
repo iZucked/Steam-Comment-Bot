@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 public class PriceExpressionTests {
 	@NonNull
-	final static CommodityCurve[] indicies = new CommodityCurve[] { makeBrent(), makeJKM_H1(), makeJKM_H2() };
+	private static final CommodityCurve[] indicies = new CommodityCurve[] { makeBrent(), makeJKM_H1(), makeJKM_H2() };
 
 	private static CommodityCurve makeBrent() {
 		return makeIndex("Brent", "$", "mmBtu", YearMonth.of(2017, 3), /* 2017 */ 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17, //
@@ -46,69 +46,69 @@ public class PriceExpressionTests {
 
 	@Test
 	public void test_datedavg_3_0_1() {
-		Assert.assertEquals(55.373, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2017, 6, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.7467, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2017, 7, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2467, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2267, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.373, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2017, 6, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.7467, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2017, 7, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2467, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2267, parseExpression("DATEDAVG(Brent,3,0,1)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
 
 	}
 
 	@Test
 	public void test_datedavg_6_0_1() {
-		Assert.assertEquals(55.7583, parseExpression("DATEDAVG(Brent,6,0,1)", LocalDateTime.of(2017, 9, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.1950, parseExpression("DATEDAVG(Brent,6,0,1)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2217, parseExpression("DATEDAVG(Brent,6,0,1)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.7583, parseExpression("DATEDAVG(Brent,6,0,1)", LocalDateTime.of(2017, 9, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.1950, parseExpression("DATEDAVG(Brent,6,0,1)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2217, parseExpression("DATEDAVG(Brent,6,0,1)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
 	}
 
 	@Test
 	public void test_datedavg_3_0_3() {
-		Assert.assertEquals(55.7467, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 7, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.7467, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 8, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.7467, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 9, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2167, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 10, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2167, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2267, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.7467, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 7, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.7467, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 8, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.7467, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 9, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2167, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 10, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2167, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2267, parseExpression("DATEDAVG(Brent,3,0,3)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
 	}
 
 	@Test
 	public void test_datedavg_3_1_3() {
-		Assert.assertEquals(55.3733, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 7, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.3733, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 8, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.3733, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 9, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.1433, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 10, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.1433, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2467, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.3733, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 7, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.3733, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 8, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.3733, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 9, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.1433, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 10, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.1433, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2467, parseExpression("DATEDAVG(Brent,3,1,3)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
 	}
 
 	@Test
 	public void test_datedavg_6_1_3() {
-		Assert.assertEquals(55.7583, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2017, 10, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.7583, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2017, 11, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.7583, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.1950, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.1950, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2018, 2, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.1950, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2018, 3, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2083, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2018, 4, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.7583, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2017, 10, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.7583, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2017, 11, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.7583, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.1950, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.1950, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2018, 2, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.1950, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2018, 3, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2083, parseExpression("DATEDAVG(Brent,6,1,3)", LocalDateTime.of(2018, 4, 1, 0, 0, 0)), 0.001);
 	}
 
 	@Test
 	public void test_datedavg_6_0_3() {
-		Assert.assertEquals(55.9817, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2017, 10, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.9817, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2017, 11, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(55.9817, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2217, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2217, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2018, 2, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.2217, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2018, 3, 1, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.1767, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2018, 4, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.9817, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2017, 10, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.9817, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2017, 11, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(55.9817, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2017, 12, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2217, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2018, 1, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2217, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2018, 2, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.2217, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2018, 3, 1, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.1767, parseExpression("DATEDAVG(Brent,6,0,3)", LocalDateTime.of(2018, 4, 1, 0, 0, 0)), 0.001);
 	}
 
 	@Test
 	public void test_splitmonth() {
-		Assert.assertEquals(40.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 16, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 13, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(40.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 16, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 13, 0, 0, 0)), 0.001);
 
-		Assert.assertEquals(40.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 24, 0, 0, 0)), 0.001);
-		Assert.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 14, 23, 59, 0)), 0.001);
+		Assertions.assertEquals(40.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 24, 0, 0, 0)), 0.001);
+		Assertions.assertEquals(56.01, parseExpression("SPLITMONTH(JKM_H1,JKM_H2,15)", LocalDateTime.of(2017, 6, 14, 23, 59, 0)), 0.001);
 	}
 
 	private double parseExpression(final String expression, LocalDateTime time) {

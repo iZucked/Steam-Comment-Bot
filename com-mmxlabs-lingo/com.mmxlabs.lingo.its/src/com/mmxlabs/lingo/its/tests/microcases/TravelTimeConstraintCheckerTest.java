@@ -7,12 +7,12 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -28,11 +28,11 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChec
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testEventOrder_ExactTravel() throws Exception {
 
 		// map into same timezone to make expectations easier
@@ -69,13 +69,13 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testEventOrder_WithLateness() throws Exception {
 
 		// map into same timezone to make expectations easier
@@ -113,14 +113,14 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
 			checker.setMaxLateness(1);
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testEventOrder_WithLateness_WithCanal() throws Exception {
 
 		// map into same timezone to make expectations easier
@@ -161,9 +161,9 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
 			checker.setMaxLateness(1);
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
 		});
 	}
 }

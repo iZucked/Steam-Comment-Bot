@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -38,19 +38,19 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
  * 
  * 
  */
-@RunWith(value = Parameterized.class)
 public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 
 	private static Map<Pair<String, String>, Triple<URL, ScenarioModelRecord, IScenarioDataProvider>> cache = new HashMap<>();
 
-	private final Pair<String, String> key;
+	private Pair<String, String> key;
 
-	public AbstractReportTester_LiNGO(final String name, final String scenarioPath) throws Exception {
+	@Override
+	public void init(final String scenarioPath) throws Exception {
 
 		// Note: Junit 4.1.3 or Junit 5 should be able to do this without need for cache.
 		// JUnit 4.1.3 will have @Before/AfterParam annotations
 		// Currently we only unload scenarios once ALL report/scenario test combinations in class have run - potential memory leak
-		key = new Pair<>(name, scenarioPath);
+		key = new Pair<>(scenarioPath, scenarioPath);
 		if (TestingModes.ReportTestMode != TestMode.Skip) {
 
 			if (!cache.containsKey(key)) {
@@ -60,9 +60,9 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 				final ScenarioModelRecord modelRecord = p.getFirst();
 				final IScenarioDataProvider scenarioDataProvider = p.getSecond();
 
-				Assert.assertNotNull(url);
-				Assert.assertNotNull(modelRecord);
-				Assert.assertNotNull(scenarioDataProvider);
+				Assertions.assertNotNull(url);
+				Assertions.assertNotNull(modelRecord);
+				Assertions.assertNotNull(scenarioDataProvider);
 				// A side-effect is the initial evaluation.
 				LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
 				});
@@ -72,7 +72,7 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void clearCache() throws Exception {
 
 		final Iterator<Map.Entry<Pair<String, String>, Triple<URL, ScenarioModelRecord, IScenarioDataProvider>>> itr = cache.entrySet().iterator();
@@ -88,19 +88,19 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 
 	@Override
 	protected void testReports(final String reportID, final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
-		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		final Triple<URL, ScenarioModelRecord, IScenarioDataProvider> triple = cache.get(key);
 
-		Assert.assertNotNull(triple);
+		Assertions.assertNotNull(triple);
 
 		final URL url = triple.getFirst();
 		final ScenarioModelRecord modelRecord = triple.getSecond();
 		final IScenarioDataProvider scenarioDataProvider = triple.getThird();
 
-		Assert.assertNotNull(url);
-		Assert.assertNotNull(modelRecord);
-		Assert.assertNotNull(scenarioDataProvider);
+		Assertions.assertNotNull(url);
+		Assertions.assertNotNull(modelRecord);
+		Assertions.assertNotNull(scenarioDataProvider);
 
 		ReportTester.testReports_NoEvaluate(modelRecord, scenarioDataProvider, url, reportID, shortName, extension, preAction);
 	}

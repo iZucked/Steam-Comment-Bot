@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class AssociationTest {
 
@@ -22,26 +22,26 @@ public class AssociationTest {
 
 		assoc.add(s1, o1);
 
-		Assert.assertSame(o1, assoc.lookup(s1));
-		Assert.assertNull(assoc.lookup(s2));
+		Assertions.assertSame(o1, assoc.lookup(s1));
+		Assertions.assertNull(assoc.lookup(s2));
 
-		Assert.assertSame(s1, assoc.reverseLookup(o1));
-		Assert.assertNull(assoc.reverseLookup(o2));
+		Assertions.assertSame(s1, assoc.reverseLookup(o1));
+		Assertions.assertNull(assoc.reverseLookup(o2));
 
 		assoc.add(s2, o2);
 
-		Assert.assertSame(o1, assoc.lookup(s1));
-		Assert.assertSame(o2, assoc.lookup(s2));
+		Assertions.assertSame(o1, assoc.lookup(s1));
+		Assertions.assertSame(o2, assoc.lookup(s2));
 
-		Assert.assertSame(s1, assoc.reverseLookup(o1));
-		Assert.assertSame(s2, assoc.reverseLookup(o2));
+		Assertions.assertSame(s1, assoc.reverseLookup(o1));
+		Assertions.assertSame(s2, assoc.reverseLookup(o2));
 
 		assoc.clear();
 
-		Assert.assertNull(assoc.lookup(s1));
-		Assert.assertNull(assoc.lookup(s2));
+		Assertions.assertNull(assoc.lookup(s1));
+		Assertions.assertNull(assoc.lookup(s2));
 
-		Assert.assertNull(assoc.reverseLookup(o1));
-		Assert.assertNull(assoc.reverseLookup(o2));
+		Assertions.assertNull(assoc.reverseLookup(o1));
+		Assertions.assertNull(assoc.reverseLookup(o2));
 	}
 }

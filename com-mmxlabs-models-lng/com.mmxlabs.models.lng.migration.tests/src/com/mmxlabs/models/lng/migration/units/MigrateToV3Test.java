@@ -19,8 +19,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -173,36 +173,36 @@ public class MigrateToV3Test extends AbstractMigrationTestClass {
 
 				final EObject scenarioModel = r.getContents().get(0);
 
-				Assert.assertNotNull(scenarioModel);
+				Assertions.assertNotNull(scenarioModel);
 
 				final EObject portModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_portModel);
-				Assert.assertNotNull(portModel);
+				Assertions.assertNotNull(portModel);
 
 				final List<EObject> ports = MetamodelUtils.getValueAsTypedList(portModel, reference_PortModel_ports);
-				Assert.assertNotNull(ports);
-				Assert.assertEquals(1, ports.size());
+				Assertions.assertNotNull(ports);
+				Assertions.assertEquals(1, ports.size());
 				final EObject port = ports.get(0);
-				Assert.assertNotNull(port);
+				Assertions.assertNotNull(port);
 
 				final EObject spotMarketsModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_spotMarketsModel);
-				Assert.assertNotNull(spotMarketsModel);
+				Assertions.assertNotNull(spotMarketsModel);
 
 				final EObject fobSaleMarketGroup = (EObject) spotMarketsModel.eGet(reference_SpotMarketsModel_fobSalesSpotMarket);
-				Assert.assertNotNull(fobSaleMarketGroup);
+				Assertions.assertNotNull(fobSaleMarketGroup);
 
 				final List<EObject> markets = MetamodelUtils.getValueAsTypedList(fobSaleMarketGroup, reference_SpotMarketsGroup_markets);
-				Assert.assertNotNull(markets);
+				Assertions.assertNotNull(markets);
 
-				Assert.assertEquals(1, markets.size());
+				Assertions.assertEquals(1, markets.size());
 				final EObject market = markets.get(0);
-				Assert.assertNotNull(market);
+				Assertions.assertNotNull(market);
 
 				final List<EObject> originPorts = MetamodelUtils.getValueAsTypedList(market, reference_FOBSalesMarket_originPorts);
 
-				Assert.assertNotNull(originPorts);
+				Assertions.assertNotNull(originPorts);
 
-				Assert.assertEquals(1, originPorts.size());
-				Assert.assertSame(port, originPorts.get(0));
+				Assertions.assertEquals(1, originPorts.size());
+				Assertions.assertSame(port, originPorts.get(0));
 
 			}
 		} finally {
@@ -336,37 +336,37 @@ public class MigrateToV3Test extends AbstractMigrationTestClass {
 
 				final EObject scenarioModel = r.getContents().get(0);
 
-				Assert.assertNotNull(scenarioModel);
+				Assertions.assertNotNull(scenarioModel);
 
 				// This should have been removed
 				final EObject parametersModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_parametersModel);
-				Assert.assertNull(parametersModel);
+				Assertions.assertNull(parametersModel);
 
 				final EObject portfolioModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_portfolioModel);
-				Assert.assertNotNull(portfolioModel);
+				Assertions.assertNotNull(portfolioModel);
 
 				final EObject optmiserSettings = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_parameters);
-				Assert.assertNotNull(optmiserSettings);
+				Assertions.assertNotNull(optmiserSettings);
 
-				Assert.assertEquals(settingsName, optmiserSettings.eGet(attribute_NamedObject_name));
+				Assertions.assertEquals(settingsName, optmiserSettings.eGet(attribute_NamedObject_name));
 
 				final EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
-				Assert.assertNotNull(cargoModel);
+				Assertions.assertNotNull(cargoModel);
 
 				final List<EObject> cargoes = MetamodelUtils.getValueAsTypedList(cargoModel, reference_CargoModel_cargoes);
-				Assert.assertNotNull(cargoes);
-				Assert.assertEquals(3, cargoes.size());
+				Assertions.assertNotNull(cargoes);
+				Assertions.assertEquals(3, cargoes.size());
 
 				final EObject cargo1 = cargoes.get(0);
 				final EObject cargo2 = cargoes.get(1);
 				final EObject cargo3 = cargoes.get(2);
 
 				// Cargo 1 -- settings default -> true
-				Assert.assertTrue((Boolean) cargo1.eGet(attribute_Cargo_allowRewiring));
+				Assertions.assertTrue((Boolean) cargo1.eGet(attribute_Cargo_allowRewiring));
 				// Cargo 2 - no change
-				Assert.assertTrue((Boolean) cargo2.eGet(attribute_Cargo_allowRewiring));
+				Assertions.assertTrue((Boolean) cargo2.eGet(attribute_Cargo_allowRewiring));
 				// Cargo 3 - no change
-				Assert.assertFalse((Boolean) cargo3.eGet(attribute_Cargo_allowRewiring));
+				Assertions.assertFalse((Boolean) cargo3.eGet(attribute_Cargo_allowRewiring));
 			}
 		} finally {
 			if (tmpFile != null) {
@@ -588,53 +588,53 @@ public class MigrateToV3Test extends AbstractMigrationTestClass {
 				final EReference reference_NamedIndexContainer_data = MetamodelUtils.getReference(class_NamedIndexContainer, "data");
 
 				final EObject scenarioModel = r.getContents().get(0);
-				Assert.assertNotNull(scenarioModel);
+				Assertions.assertNotNull(scenarioModel);
 
 				final EObject pricingModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_pricingModel);
-				Assert.assertNotNull(pricingModel);
+				Assertions.assertNotNull(pricingModel);
 
 				final EObject fleetCostModel = (EObject) pricingModel.eGet(reference_PricingModel_fleetCost);
-				Assert.assertNotNull(fleetCostModel);
+				Assertions.assertNotNull(fleetCostModel);
 
 				final List<EObject> baseFuelCosts = MetamodelUtils.getValueAsTypedList(fleetCostModel, reference_FleetCostModel_baseFuelPrices);
-				Assert.assertNotNull(baseFuelCosts);
-				Assert.assertEquals(2, baseFuelCosts.size());
+				Assertions.assertNotNull(baseFuelCosts);
+				Assertions.assertEquals(2, baseFuelCosts.size());
 
 				final List<EObject> baseFuelIndices = MetamodelUtils.getValueAsTypedList(pricingModel, reference_PricingModel_baseFuelPrices);
-				Assert.assertNotNull(baseFuelIndices);
-				Assert.assertEquals(2, baseFuelIndices.size());
+				Assertions.assertNotNull(baseFuelIndices);
+				Assertions.assertEquals(2, baseFuelIndices.size());
 
 				final EObject baseFuelIndex1 = baseFuelIndices.get(0);
 				final EObject baseFuelIndex2 = baseFuelIndices.get(1);
 
-				Assert.assertEquals(baseFuel1, baseFuelIndex1.eGet(attribute_NamedObject_name));
-				Assert.assertEquals(baseFuel2, baseFuelIndex2.eGet(attribute_NamedObject_name));
+				Assertions.assertEquals(baseFuel1, baseFuelIndex1.eGet(attribute_NamedObject_name));
+				Assertions.assertEquals(baseFuel2, baseFuelIndex2.eGet(attribute_NamedObject_name));
 
 				final EObject baseFuelCost1 = baseFuelCosts.get(0);
 				final EObject baseFuelCost2 = baseFuelCosts.get(1);
 
-				Assert.assertSame(baseFuelIndex1, baseFuelCost1.eGet(reference_BaseFuelCost_index));
-				Assert.assertSame(baseFuelIndex2, baseFuelCost2.eGet(reference_BaseFuelCost_index));
+				Assertions.assertSame(baseFuelIndex1, baseFuelCost1.eGet(reference_BaseFuelCost_index));
+				Assertions.assertSame(baseFuelIndex2, baseFuelCost2.eGet(reference_BaseFuelCost_index));
 
 				final EObject index1 = (EObject) baseFuelIndex1.eGet(reference_NamedIndexContainer_data);
-				Assert.assertNotNull(index1);
+				Assertions.assertNotNull(index1);
 
 				final EObject index2 = (EObject) baseFuelIndex2.eGet(reference_NamedIndexContainer_data);
-				Assert.assertNotNull(index2);
+				Assertions.assertNotNull(index2);
 
 				final List<EObject> points1 = MetamodelUtils.getValueAsTypedList(index1, reference_DataIndex_points);
 				final List<EObject> points2 = MetamodelUtils.getValueAsTypedList(index2, reference_DataIndex_points);
-				Assert.assertNotNull(points1);
-				Assert.assertNotNull(points2);
+				Assertions.assertNotNull(points1);
+				Assertions.assertNotNull(points2);
 
-				Assert.assertEquals(1, points1.size());
-				Assert.assertEquals(1, points2.size());
+				Assertions.assertEquals(1, points1.size());
+				Assertions.assertEquals(1, points2.size());
 
 				final EObject price1 = points1.get(0);
 				final EObject price2 = points2.get(0);
 
-				Assert.assertEquals(Double.valueOf(5.0), price1.eGet(attribute_IndexPoint_value));
-				Assert.assertEquals(Double.valueOf(10.0), price2.eGet(attribute_IndexPoint_value));
+				Assertions.assertEquals(Double.valueOf(5.0), price1.eGet(attribute_IndexPoint_value));
+				Assertions.assertEquals(Double.valueOf(10.0), price2.eGet(attribute_IndexPoint_value));
 			}
 		} finally {
 			if (tmpFile != null) {

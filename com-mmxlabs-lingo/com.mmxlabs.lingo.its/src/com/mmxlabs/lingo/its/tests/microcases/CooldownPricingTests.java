@@ -6,12 +6,12 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -22,16 +22,13 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
  * @author Simon Goodall
  *
  */
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CooldownPricingTests extends AbstractMicroTestCase {
 
 	/**
@@ -40,7 +37,7 @@ public class CooldownPricingTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCooldownPriceOrder1() throws Exception {
 
 		// Remove all existing costs
@@ -71,8 +68,8 @@ public class CooldownPricingTests extends AbstractMicroTestCase {
 			final IPort oPort1 = modelEntityMap.getOptimiserObjectNullChecked(port1, IPort.class);
 			final IPort oPort2 = modelEntityMap.getOptimiserObjectNullChecked(port2, IPort.class);
 
-			Assert.assertEquals(200_000_000L, portCooldownDataProvider.getCooldownCalculator(oPort1).calculateCooldownCost(oVessel, oPort1, 0, 0));
-			Assert.assertEquals(100_000_000L, portCooldownDataProvider.getCooldownCalculator(oPort2).calculateCooldownCost(oVessel, oPort2, 0, 0));
+			Assertions.assertEquals(200_000_000L, portCooldownDataProvider.getCooldownCalculator(oPort1).calculateCooldownCost(oVessel, oPort1, 0, 0));
+			Assertions.assertEquals(100_000_000L, portCooldownDataProvider.getCooldownCalculator(oPort2).calculateCooldownCost(oVessel, oPort2, 0, 0));
 		});
 	}
 
@@ -82,7 +79,7 @@ public class CooldownPricingTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCooldownPriceOrder2() throws Exception {
 
 		// Remove all existing costs
@@ -113,8 +110,8 @@ public class CooldownPricingTests extends AbstractMicroTestCase {
 			final IPort oPort1 = modelEntityMap.getOptimiserObjectNullChecked(port1, IPort.class);
 			final IPort oPort2 = modelEntityMap.getOptimiserObjectNullChecked(port2, IPort.class);
 
-			Assert.assertEquals(200_000_000L, portCooldownDataProvider.getCooldownCalculator(oPort1).calculateCooldownCost(oVessel, oPort1, 0, 0));
-			Assert.assertEquals(100_000_000L, portCooldownDataProvider.getCooldownCalculator(oPort2).calculateCooldownCost(oVessel, oPort2, 0, 0));
+			Assertions.assertEquals(200_000_000L, portCooldownDataProvider.getCooldownCalculator(oPort1).calculateCooldownCost(oVessel, oPort1, 0, 0));
+			Assertions.assertEquals(100_000_000L, portCooldownDataProvider.getCooldownCalculator(oPort2).calculateCooldownCost(oVessel, oPort2, 0, 0));
 		});
 	}
 

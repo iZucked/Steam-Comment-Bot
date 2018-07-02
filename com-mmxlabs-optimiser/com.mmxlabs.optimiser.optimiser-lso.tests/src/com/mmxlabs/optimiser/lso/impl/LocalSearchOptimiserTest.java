@@ -4,15 +4,13 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
-import static org.junit.Assert.fail;
-
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -24,6 +22,8 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+
+import ch.qos.logback.core.encoder.ObjectStreamEncoder;
 
 @SuppressWarnings("null")
 public class LocalSearchOptimiserTest {
@@ -57,7 +57,7 @@ public class LocalSearchOptimiserTest {
 		lso.init();
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testInit2() {
 		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
 
@@ -80,16 +80,16 @@ public class LocalSearchOptimiserTest {
 
 		lso.setReportInterval(100);
 
-		lso.init();
+		Assertions.assertThrows(IllegalStateException.class, () -> lso.init());
 	}
 
 	@Test
 	public void testGetSetMoveGenerator() {
 		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
-		Assert.assertNull(lso.getMoveGenerator());
+		Assertions.assertNull(lso.getMoveGenerator());
 		final IMoveGenerator moveGenerator = Mockito.mock(IMoveGenerator.class);
 		lso.setMoveGenerator(moveGenerator);
-		Assert.assertSame(moveGenerator, lso.getMoveGenerator());
+		Assertions.assertSame(moveGenerator, lso.getMoveGenerator());
 	}
 
 	private static class TestLocalSearchOptimiser extends LocalSearchOptimiser {
@@ -97,13 +97,13 @@ public class LocalSearchOptimiserTest {
 		@Override
 		@Nullable
 		public IAnnotatedSolution start(@NonNull final IOptimisationContext context, @NonNull ISequences initialRawSequences, @NonNull ISequences inputRawSequences) {
-			fail("This is not part of the test.");
+			Assertions.fail("This is not part of the test.");
 			return null;
 		}
 
 		@Override
 		public int step(final int percentage) {
-			fail("This is not part of the test.");
+			Assertions.fail("This is not part of the test.");
 			return 0;
 		}
 	}

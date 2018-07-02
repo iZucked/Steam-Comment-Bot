@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.IResource;
@@ -22,25 +22,25 @@ public class HashMapVesselEditorTest {
 
 		editor.setVesselAvailabilityResource(resource1, vesselAvailability1);
 
-		Assert.assertSame(vesselAvailability1, editor.getVesselAvailability(resource1));
-		Assert.assertSame(resource1, editor.getResource(vesselAvailability1));
+		Assertions.assertSame(vesselAvailability1, editor.getVesselAvailability(resource1));
+		Assertions.assertSame(resource1, editor.getResource(vesselAvailability1));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testGetUnknownVesselAvailability() {
 		final HashMapVesselEditor editor = new HashMapVesselEditor();
 
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class, "vessel-1");
-		editor.getResource(vesselAvailability);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getResource(vesselAvailability));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testGetUnknownResource() {
 		final HashMapVesselEditor editor = new HashMapVesselEditor();
 
 		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
 
-		editor.getVesselAvailability(resource1);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getVesselAvailability(resource1));
 
 	}
 }

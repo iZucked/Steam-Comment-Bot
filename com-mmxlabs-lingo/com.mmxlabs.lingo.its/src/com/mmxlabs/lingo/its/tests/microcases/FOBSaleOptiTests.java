@@ -6,11 +6,11 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 public class FOBSaleOptiTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void divertibleFOBSale_SimpleSwap() throws Exception {
 
 		// Create the required basic elements
@@ -47,14 +47,14 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 		optimiseWithLSOTest(runner -> {
 
 			// Assert cargo wiring has changed.
-			Assert.assertNotNull(load2.getCargo());
-			Assert.assertTrue(load2.getCargo().getSlots().contains(discharge1));
+			Assertions.assertNotNull(load2.getCargo());
+			Assertions.assertTrue(load2.getCargo().getSlots().contains(discharge1));
 
 		});
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void divertibleFOBSale_SimpleSwap_NoDays() throws Exception {
 
 		// Create the required basic elements
@@ -82,15 +82,15 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 		optimiseWithLSOTest(runner -> {
 
 			// Assert cargo wiring has not changed.
-			Assert.assertNull(load2.getCargo());
-			Assert.assertNotNull(load1.getCargo());
-			Assert.assertTrue(load1.getCargo().getSlots().contains(discharge1));
+			Assertions.assertNull(load2.getCargo());
+			Assertions.assertNotNull(load1.getCargo());
+			Assertions.assertTrue(load1.getCargo().getSlots().contains(discharge1));
 
 		});
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void divertibleFOBSale_SimpleSwap_OnlyLadenDays() throws Exception {
 
 		// Create the required basic elements
@@ -118,9 +118,9 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 		optimiseWithLSOTest(runner -> {
 
 			// Assert cargo wiring has not changed.
-			Assert.assertNull(load2.getCargo());
-			Assert.assertNotNull(load1.getCargo());
-			Assert.assertTrue(load1.getCargo().getSlots().contains(discharge1));
+			Assertions.assertNull(load2.getCargo());
+			Assertions.assertNotNull(load1.getCargo());
+			Assertions.assertTrue(load1.getCargo().getSlots().contains(discharge1));
 
 		});
 	}

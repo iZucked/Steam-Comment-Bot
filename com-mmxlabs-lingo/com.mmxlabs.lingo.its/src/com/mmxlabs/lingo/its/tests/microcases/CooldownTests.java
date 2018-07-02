@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -28,11 +28,11 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @SuppressWarnings({ "unused", "null" })
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CooldownTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartEventCooldown() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -71,14 +71,14 @@ public class CooldownTests extends AbstractMicroTestCase {
 			final StartEvent event1 = (StartEvent) sequence.getEvents().get(0);
 
 			// = 1000m3 * 22.8 * $5.0
-			Assert.assertEquals(-114_000, ScheduleModelKPIUtils.getElementPNL(event1));
-			Assert.assertEquals(114_000, ScheduleModelKPIUtils.calculateEventShippingCost(event1, false, true, ShippingCostType.ALL).longValue());
+			Assertions.assertEquals(-114_000, ScheduleModelKPIUtils.getElementPNL(event1));
+			Assertions.assertEquals(114_000, ScheduleModelKPIUtils.calculateEventShippingCost(event1, false, true, ShippingCostType.ALL).longValue());
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartEventCooldownLumpsum() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -115,8 +115,8 @@ public class CooldownTests extends AbstractMicroTestCase {
 			final Sequence sequence = ScenarioModelUtil.getScheduleModel(optimiserScenarioDataProvider).getSchedule().getSequences().get(0);
 			final StartEvent event1 = (StartEvent) sequence.getEvents().get(0);
 
-			Assert.assertEquals(-75_000, ScheduleModelKPIUtils.getElementPNL(event1));
-			Assert.assertEquals(75_000, ScheduleModelKPIUtils.calculateEventShippingCost(event1, false, true, ShippingCostType.ALL).longValue());
+			Assertions.assertEquals(-75_000, ScheduleModelKPIUtils.getElementPNL(event1));
+			Assertions.assertEquals(75_000, ScheduleModelKPIUtils.calculateEventShippingCost(event1, false, true, ShippingCostType.ALL).longValue());
 
 		});
 	}

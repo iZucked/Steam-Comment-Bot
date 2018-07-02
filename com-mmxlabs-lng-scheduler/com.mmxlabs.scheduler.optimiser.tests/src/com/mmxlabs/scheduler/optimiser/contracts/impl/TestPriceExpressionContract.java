@@ -10,8 +10,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -84,8 +84,8 @@ public class TestPriceExpressionContract {
 		verifyNoMoreInteractions(curve);
 
 		// check that the returned results are correct
-		Assert.assertEquals(p1, price1);
-		Assert.assertEquals(p2, price2);
+		Assertions.assertEquals(p1, price1);
+		Assertions.assertEquals(p2, price2);
 	}
 
 	@Test
@@ -157,8 +157,8 @@ public class TestPriceExpressionContract {
 		verifyNoMoreInteractions(loadSlotNoPricingDate);
 
 		// check that the returned results are correct
-		Assert.assertEquals(priceAtLoadTime, loadPriceNoPricingDate);
-		Assert.assertEquals(oriceAtPricingDate, loadPriceWithPricingDate);
+		Assertions.assertEquals(priceAtLoadTime, loadPriceNoPricingDate);
+		Assertions.assertEquals(oriceAtPricingDate, loadPriceWithPricingDate);
 
 	}
 
@@ -206,8 +206,8 @@ public class TestPriceExpressionContract {
 		verifyNoMoreInteractions(curve);
 
 		// check that the returned results are correct
-		Assert.assertEquals(priceAtDischargeTime, salesPriceNoPricingDate);
-		Assert.assertEquals(priceAtPricingDate, salesPriceWithPricingDate);
+		Assertions.assertEquals(priceAtDischargeTime, salesPriceNoPricingDate);
+		Assertions.assertEquals(priceAtPricingDate, salesPriceWithPricingDate);
 
 	}
 

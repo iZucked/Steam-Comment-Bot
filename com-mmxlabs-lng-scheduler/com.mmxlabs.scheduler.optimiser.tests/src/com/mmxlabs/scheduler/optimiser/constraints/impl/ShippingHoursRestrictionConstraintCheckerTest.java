@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -42,7 +43,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		final String name = "ShippingHoursRestrictionChecker";
 		final ShippingHoursRestrictionChecker checker = new ShippingHoursRestrictionChecker();
 
-		Assert.assertSame(name, checker.getName());
+		Assertions.assertSame(name, checker.getName());
 	}
 
 	@SuppressWarnings("null")
@@ -51,7 +52,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		final Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1230, new Pair<>(661, 1227));
 		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = testData.getSecond();
 		// Mock resource here is ok as #createTester works with any resource
-		Assert.assertTrue(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
+		Assertions.assertTrue(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
 	}
 
 	@SuppressWarnings("null")
@@ -60,7 +61,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		final Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1220, new Pair<>(661, 1227));
 		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = testData.getSecond();
 		// Mock resource here is ok as #createTester works with any resource
-		Assert.assertFalse(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
+		Assertions.assertFalse(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
 	}
 
 	@SuppressWarnings("null")
@@ -92,7 +93,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		portSlotProvider.setPortSlot(o3, s3);
 		portSlotProvider.setPortSlot(o4, s4);
 
-		Mockito.when(actualsDataProvider.hasActuals(Matchers.any(IPortSlot.class))).thenReturn(false);
+		Mockito.when(actualsDataProvider.hasActuals(ArgumentMatchers.any(IPortSlot.class))).thenReturn(false);
 		Mockito.when(shippingHoursRestrictionProvider.getShippingHoursRestriction(o1)).thenReturn(shippingHoursRestriction);
 		Mockito.when(shippingHoursRestrictionProvider.isDivertible(Matchers.any(ISequenceElement.class))).thenReturn(true);
 		final ITimeWindow timeWindow = Mockito.mock(ITimeWindow.class);
@@ -105,9 +106,9 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
-		Mockito.when(vp.getVesselAvailability(Matchers.any(IResource.class))).thenReturn(vesselAvailability);
-		Mockito.when(nvp.getNominatedVessel(Matchers.any(IResource.class))).thenReturn(vessel);
-		Mockito.when(nvp.getNominatedVessel(Matchers.any(ISequenceElement.class))).thenReturn(vessel);
+		Mockito.when(vp.getVesselAvailability(ArgumentMatchers.any(IResource.class))).thenReturn(vesselAvailability);
+		Mockito.when(nvp.getNominatedVessel(ArgumentMatchers.any(IResource.class))).thenReturn(vessel);
+		Mockito.when(nvp.getNominatedVessel(ArgumentMatchers.any(ISequenceElement.class))).thenReturn(vessel);
 
 		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = createChecker(portSlotProvider, actualsDataProvider, shippingHoursRestrictionProvider, vp, nvp,
 				divertibleDESShippingTimesCalculator, divertibleFOBShippingTimesCalculator);

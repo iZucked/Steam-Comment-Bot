@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -13,14 +13,14 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 public class HashMapPortEditorTest {
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testGetSetPortForElement1() {
 
 		final HashMapElementPortEditor editor = new HashMapElementPortEditor();
 
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
 
-		Assert.assertNull(editor.getPortForElement(element));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getPortForElement(element));
 
 	}
 
@@ -34,7 +34,7 @@ public class HashMapPortEditorTest {
 
 		editor.setPortForElement(port, element);
 
-		Assert.assertSame(port, editor.getPortForElement(element));
+		Assertions.assertSame(port, editor.getPortForElement(element));
 	}
 
 }

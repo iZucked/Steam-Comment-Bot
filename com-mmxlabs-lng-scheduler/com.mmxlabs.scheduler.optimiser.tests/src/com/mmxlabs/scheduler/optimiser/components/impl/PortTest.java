@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -16,10 +16,10 @@ public class PortTest {
 	@Test
 	public void testGetSetName() {
 		final Port port = new Port(index);
-		Assert.assertNull(port.getName());
+		Assertions.assertNull(port.getName());
 		final String name = "name";
 		port.setName(name);
-		Assert.assertSame(name, port.getName());
+		Assertions.assertSame(name, port.getName());
 	}
 
 	@Test
@@ -30,13 +30,13 @@ public class PortTest {
 
 		final Port port3 = new Port(index, "name2");
 
-		Assert.assertTrue(port1.equals(port1));
-		Assert.assertTrue(port1.equals(port2));
-		Assert.assertTrue(port2.equals(port1));
+		Assertions.assertTrue(port1.equals(port1));
+		Assertions.assertTrue(port1.equals(port2));
+		Assertions.assertTrue(port2.equals(port1));
 
-		Assert.assertFalse(port1.equals(port3));
+		Assertions.assertFalse(port1.equals(port3));
 
-		Assert.assertFalse(port1.equals(new Object()));
+		Assertions.assertFalse(port1.equals(new Object()));
 	}
 
 }

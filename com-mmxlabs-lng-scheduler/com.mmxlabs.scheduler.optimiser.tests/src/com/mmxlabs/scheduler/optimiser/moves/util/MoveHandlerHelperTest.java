@@ -7,8 +7,8 @@ package com.mmxlabs.scheduler.optimiser.moves.util;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -63,33 +63,33 @@ public class MoveHandlerHelperTest {
 		// Check sequence extracts
 		{
 			List<ISequenceElement> segment = moveHandlerHelper.extractSegment(sequenceA, elementA);
-			Assert.assertSame(elementA, segment.get(0));
-			Assert.assertSame(elementB, segment.get(1));
+			Assertions.assertSame(elementA, segment.get(0));
+			Assertions.assertSame(elementB, segment.get(1));
 		}
 		{
 			List<ISequenceElement> segment = moveHandlerHelper.extractSegment(sequenceA, elementB);
-			Assert.assertSame(elementA, segment.get(0));
-			Assert.assertSame(elementB, segment.get(1));
+			Assertions.assertSame(elementA, segment.get(0));
+			Assertions.assertSame(elementB, segment.get(1));
 		}
 		{
 			List<ISequenceElement> segment = moveHandlerHelper.extractSegment(sequenceA, elementC);
-			Assert.assertSame(elementC, segment.get(0));
-			Assert.assertSame(elementD, segment.get(1));
+			Assertions.assertSame(elementC, segment.get(0));
+			Assertions.assertSame(elementD, segment.get(1));
 		}
 		{
 			List<ISequenceElement> segment = moveHandlerHelper.extractSegment(sequenceA, elementD);
-			Assert.assertSame(elementC, segment.get(0));
-			Assert.assertSame(elementD, segment.get(1));
+			Assertions.assertSame(elementC, segment.get(0));
+			Assertions.assertSame(elementD, segment.get(1));
 		}
 		{
 			List<ISequenceElement> segment = moveHandlerHelper.extractSegment(sequenceA, elementE);
-			Assert.assertSame(elementE, segment.get(0));
-			Assert.assertSame(elementF, segment.get(1));
+			Assertions.assertSame(elementE, segment.get(0));
+			Assertions.assertSame(elementF, segment.get(1));
 		}
 		{
 			List<ISequenceElement> segment = moveHandlerHelper.extractSegment(sequenceA, elementF);
-			Assert.assertSame(elementE, segment.get(0));
-			Assert.assertSame(elementF, segment.get(1));
+			Assertions.assertSame(elementE, segment.get(0));
+			Assertions.assertSame(elementF, segment.get(1));
 		}
 	}
 

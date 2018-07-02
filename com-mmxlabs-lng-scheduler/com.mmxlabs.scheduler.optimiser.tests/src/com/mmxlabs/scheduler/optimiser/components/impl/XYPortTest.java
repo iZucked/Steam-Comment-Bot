@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -20,34 +20,34 @@ public class XYPortTest {
 		final float y = 2.0f;
 
 		final XYPort port = new XYPort(index, name, x, y);
-		Assert.assertSame(name, port.getName());
-		Assert.assertEquals(x, port.getX(), 0.0f);
-		Assert.assertEquals(y, port.getY(), 0.0f);
+		Assertions.assertSame(name, port.getName());
+		Assertions.assertEquals(x, port.getX(), 0.001f);
+		Assertions.assertEquals(y, port.getY(), 0.001f);
 	}
 
 	@Test
 	public void testGetSetName() {
 		final XYPort port = new XYPort(index);
-		Assert.assertNull(port.getName());
+		Assertions.assertNull(port.getName());
 		final String name = "name";
 		port.setName(name);
-		Assert.assertSame(name, port.getName());
+		Assertions.assertSame(name, port.getName());
 	}
 
 	@Test
 	public void testGetSetX() {
 		final XYPort port = new XYPort(index);
-		Assert.assertEquals(0.0f, port.getX(), 0.0);
+		Assertions.assertEquals(0.0f, port.getX(), 0.001);
 		port.setX(10.0f);
-		Assert.assertEquals(10.0f, port.getX(), 0.0);
+		Assertions.assertEquals(10.0f, port.getX(), 0.001);
 	}
 
 	@Test
 	public void testGetSetY() {
 		final XYPort port = new XYPort(index);
-		Assert.assertEquals(0.0f, port.getY(), 0.0);
+		Assertions.assertEquals(0.0f, port.getY(), 0.001);
 		port.setY(10.0f);
-		Assert.assertEquals(10.0f, port.getY(), 0.0);
+		Assertions.assertEquals(10.0f, port.getY(), 0.001);
 	}
 
 	@Test
@@ -60,14 +60,14 @@ public class XYPortTest {
 		final XYPort port4 = new XYPort(index, "name", 2.0f, 2.0f);
 		final XYPort port5 = new XYPort(index, "name", 1.0f, 1.0f);
 
-		Assert.assertTrue(port1.equals(port1));
-		Assert.assertTrue(port1.equals(port2));
-		Assert.assertTrue(port2.equals(port1));
+		Assertions.assertTrue(port1.equals(port1));
+		Assertions.assertTrue(port1.equals(port2));
+		Assertions.assertTrue(port2.equals(port1));
 
-		Assert.assertFalse(port1.equals(port3));
-		Assert.assertFalse(port1.equals(port4));
-		Assert.assertFalse(port1.equals(port5));
+		Assertions.assertFalse(port1.equals(port3));
+		Assertions.assertFalse(port1.equals(port4));
+		Assertions.assertFalse(port1.equals(port5));
 
-		Assert.assertFalse(port1.equals(new Object()));
+		Assertions.assertFalse(port1.equals(new Object()));
 	}
 }

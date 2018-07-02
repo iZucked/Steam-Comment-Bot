@@ -11,18 +11,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
@@ -51,7 +51,7 @@ import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
@@ -61,7 +61,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 	private static String loadName = "load";
 	private static String dischargeName = "discharge";
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -71,7 +71,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -79,7 +79,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
-	@Before
+	@BeforeEach
 	@Override
 	public void constructor() throws Exception {
 
@@ -104,7 +104,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
 	}
 
-	@After
+	@AfterEach
 	@Override
 	public void destructor() {
 		lngScenarioModel = null;
@@ -128,7 +128,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSimpleWindowsCase() throws Exception {
 
 		// Create the required basic elements
@@ -191,9 +191,9 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// Tests
-				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
-				Assert.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
-				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				Assertions.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
 				// try {
 				// MicroCaseUtils.storeToFile(optimiserScenario, "alex_test");
 				// } catch (Exception e) {

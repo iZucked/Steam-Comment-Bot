@@ -6,9 +6,9 @@ package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
 import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -31,93 +31,93 @@ public class PriceIntervalProviderHelperLowLevelTest {
 	@Test
 	public void testIsFeasible_1() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 30));
+		Assertions.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 30));
 	}
 
 	@Test
 	public void testIsFeasible_2() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 5));
+		Assertions.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 5));
 	}
 
 	@Test
 	public void testIsFeasible_3() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 50));
+		Assertions.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 50));
 	}
 
 	@Test
 	public void testIsFeasible_4() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 100));
+		Assertions.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 100));
 	}
 
 	@Test
 	public void testIsFeasible_5() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertFalse(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 101));
+		Assertions.assertFalse(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 101));
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_LoadLate() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(0, 20, 50, 80, 5, 5, 10);
-		Assert.assertArrayEquals(new int[] { 15, 50 }, times);
+		Assertions.assertArrayEquals(new int[] { 15, 50 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_LoadEarlier() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(0, 20, 50, 80, 5, 30, 40);
-		Assert.assertArrayEquals(new int[] { 5, 50 }, times);
+		Assertions.assertArrayEquals(new int[] { 5, 50 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_DischargeLater() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(20, 20, 50, 80, 5, 30, 40);
-		Assert.assertArrayEquals(new int[] { 20, 65 }, times);
+		Assertions.assertArrayEquals(new int[] { 20, 65 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_LoadEarlierDischargeLater() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(15, 20, 50, 80, 5, 30, 40);
-		Assert.assertArrayEquals(new int[] { 15, 60 }, times);
+		Assertions.assertArrayEquals(new int[] { 15, 60 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_MaxInterval() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 50, 80, 5, 60, 90);
-		Assert.assertArrayEquals(new int[] { 10, 80 }, times);
+		Assertions.assertArrayEquals(new int[] { 10, 80 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_AlmostMaxSpeed() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 50, 80, 5, 60, 60);
-		Assert.assertArrayEquals(new int[] { 10, 75 }, times);
+		Assertions.assertArrayEquals(new int[] { 10, 75 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_MaxSpeed1() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 75, 80, 5, 60, 60);
-		Assert.assertArrayEquals(new int[] { 10, 75 }, times);
+		Assertions.assertArrayEquals(new int[] { 10, 75 }, times);
 	}
 
 	@Test
 	public void testIdealLoadAndDischargeTimes_MaxSpeed2() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 85, 100, 5, 60, 60);
-		Assert.assertArrayEquals(new int[] { 20, 85 }, times);
+		Assertions.assertArrayEquals(new int[] { 20, 85 }, times);
 	}
 
 	private PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiff) {
 		PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
-		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(t.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -125,7 +125,7 @@ public class PriceIntervalProviderHelperLowLevelTest {
 				return input;
 			}
 		});
-		when(t.localTime(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(t.localTime(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -133,7 +133,7 @@ public class PriceIntervalProviderHelperLowLevelTest {
 				return input;
 			}
 		});
-		when(t.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
+		when(t.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();

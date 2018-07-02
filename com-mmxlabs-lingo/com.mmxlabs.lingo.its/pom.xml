@@ -179,7 +179,6 @@
 						<artifactId>tycho-surefire-plugin</artifactId>
 						<version>${tycho.version}</version>
 						<configuration>
-							<providerHint>junit47</providerHint>
 							<providerProperties>
 								<groups>com.mmxlabs.lingo.its.tests.category.QuickTest</groups>
 							</providerProperties>
@@ -217,7 +216,6 @@
 						<artifactId>tycho-surefire-plugin</artifactId>
 						<version>${tycho.version}</version>
 						<configuration>
-							<providerHint>junit47</providerHint>
 							<providerProperties>
 								<excludegroups>${test.excludeCategories}</excludegroups>
 							</providerProperties>
@@ -237,7 +235,6 @@
 						<artifactId>tycho-surefire-plugin</artifactId>
 						<version>${tycho.version}</version>
 						<configuration>
-							<providerHint>junit47</providerHint>
 							<providerProperties>
 								<groups>com.mmxlabs.lingo.its.tests.category.${test.category}</groups>
 							</providerProperties>

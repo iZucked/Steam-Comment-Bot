@@ -4,16 +4,12 @@
  */
 package com.mmxlabs.scheduler.optimiser.lso;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -62,11 +58,11 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 		final Pair<IResource, Integer> secondPair = answer.getSecond();
 
 		// Match pairs, assert they are different
-		assertEquals(firstMockPair, firstPair);
-		assertNotNull(firstPair);
-		assertEquals(secondMockPair, secondPair);
-		assertNotNull(secondPair);
-		assertNotEquals(firstPair, secondPair);
+		Assertions.assertEquals(firstMockPair, firstPair);
+		Assertions.assertNotNull(firstPair);
+		Assertions.assertEquals(secondMockPair, secondPair);
+		Assertions.assertNotNull(secondPair);
+		Assertions.assertNotEquals(firstPair, secondPair);
 	}
 
 	@Test
@@ -106,7 +102,7 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answerNullLoop = loopingMoveGenerator.findEdge(lookupManager, x);
 
 		// Check maximum loops
-		assertNull(answerNullLoop);
+		Assertions.assertNull(answerNullLoop);
 
 	}
 

@@ -8,13 +8,13 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
@@ -25,29 +25,8 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  * 
  * @author NSteadman
  */
-@RunWith(Parameterized.class)
 public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 
-	private final String name;
-	private final int loadPortBoilOff;
-	private final int dischargePortBoilOff;
-	private final int vesselCapacity;
-	private final CapacityViolationType[] expectedViolations;
-	private final boolean compensateForBoilOff;
-	private final int[] portDischargeRanges;
-
-	public InPortBoilOffLDDUnconstrainedTests(final String name, final int loadPortBoilOff, final int dischargePortBoilOff, final int vesselCapacity, final CapacityViolationType[] expectedViolations,
-			final boolean compensateForBoilOff, final int[] portDischargeRanges) {
-		this.name = name;
-		this.loadPortBoilOff = loadPortBoilOff;
-		this.dischargePortBoilOff = dischargePortBoilOff;
-		this.vesselCapacity = vesselCapacity;
-		this.expectedViolations = expectedViolations;
-		this.compensateForBoilOff = compensateForBoilOff;
-		this.portDischargeRanges = portDischargeRanges;
-	}
-
-	@Parameterized.Parameters(name = "{0}")
 	public static Collection testCases() {
 		return Arrays.asList(new Object[][] {
 				// Name, loadPortBoilOff, dischargePortBoilOff, vesselCapacity, expectedViolations, compensateForBoilOff, portDischargeVolumes
@@ -82,9 +61,11 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		});
 	}
 
-	@Test
-	@Category({ MicroTest.class })
-	public void LDBoilOffTest() throws Exception {
+	@ParameterizedTest
+	@MethodSource("testCases")
+	@Tag(TestCategories.MICRO_TEST)
+	public void LDBoilOffTest(final String name, final int loadPortBoilOff, final int dischargePortBoilOff, final int vesselCapacity, final CapacityViolationType[] expectedViolations,
+			final boolean compensateForBoilOff, final int[] portDischargeRanges) throws Exception {
 
 		portModelBuilder.setAllExistingPortsToUTC();
 		
@@ -178,21 +159,21 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 			}
 		}
 
-		Assert.assertEquals(expectedLoadVolumeInM3, actualLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeInM3, actualDischargeVolumeInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeBInM3, actualDischargeVolumeBInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedPhysicalLoadVolumeInM3, actualPhysicalLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeInM3, actualPhysicalDischargeVolumeInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeBInM3, actualPhysicalDischargeVolumeBInM3, ROUNDING_EPSILON);
+		Assertions.assertEquals(expectedLoadVolumeInM3, actualLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
+		Assertions.assertEquals(expectedDischargeVolumeInM3, actualDischargeVolumeInM3, ROUNDING_EPSILON);
+		Assertions.assertEquals(expectedDischargeVolumeBInM3, actualDischargeVolumeBInM3, ROUNDING_EPSILON);
+		Assertions.assertEquals(expectedPhysicalLoadVolumeInM3, actualPhysicalLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
+		Assertions.assertEquals(expectedDischargeVolumeInM3, actualPhysicalDischargeVolumeInM3, ROUNDING_EPSILON);
+		Assertions.assertEquals(expectedDischargeVolumeBInM3, actualPhysicalDischargeVolumeBInM3, ROUNDING_EPSILON);
 
 		final int expectedViolationCount = expectedViolations.length;
 		final int actualViolationCount = result.getViolationsCount();
-		Assert.assertEquals(expectedViolationCount, actualViolationCount);
+		Assertions.assertEquals(expectedViolationCount, actualViolationCount);
 
 		// CompensationWIthExcessiveBoilOff
 		if (actualViolationCount > 0) {
 			final CapacityViolationType actualViolation = result.getDischargeViolationsB().get(0).getKey();
-			Assert.assertEquals(expectedViolations[0], actualViolation);
+			Assertions.assertEquals(expectedViolations[0], actualViolation);
 
 		}
 	}

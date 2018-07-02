@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -44,13 +44,13 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class CharterLengthTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("charter-length");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -60,7 +60,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -74,7 +74,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStandardIdleCase() throws Exception {
 
 		// Create the required basic elements
@@ -102,21 +102,21 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 
 		evaluate(false);
 		final Schedule withOutSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
-		Assert.assertNotNull(withOutSchedule);
+		Assertions.assertNotNull(withOutSchedule);
 		final Idle idle = findIdleEvent(dischargeSlot, withOutSchedule);
 		final CargoAllocation withOutCargo = findCargoAllocation(dischargeSlot, withOutSchedule);
 
 		evaluate(true);
 		final Schedule withSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
-		Assert.assertNotNull(withSchedule);
+		Assertions.assertNotNull(withSchedule);
 		final CharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
 		final CargoAllocation withCargo = findCargoAllocation(dischargeSlot, withSchedule);
 
-		Assert.assertEquals(idle.getDuration(), charterLengthEvent.getDuration());
-		Assert.assertEquals(idle.getCharterCost(), charterLengthEvent.getCharterCost());
-		Assert.assertEquals(idle.getFuelCost(), charterLengthEvent.getFuelCost());
-		Assert.assertEquals(idle.getHeelAtEnd(), charterLengthEvent.getHeelAtEnd());
-		Assert.assertEquals(getPNL(withOutCargo), getPNL(withCargo) + getPNL(charterLengthEvent));
+		Assertions.assertEquals(idle.getDuration(), charterLengthEvent.getDuration());
+		Assertions.assertEquals(idle.getCharterCost(), charterLengthEvent.getCharterCost());
+		Assertions.assertEquals(idle.getFuelCost(), charterLengthEvent.getFuelCost());
+		Assertions.assertEquals(idle.getHeelAtEnd(), charterLengthEvent.getHeelAtEnd());
+		Assertions.assertEquals(getPNL(withOutCargo), getPNL(withCargo) + getPNL(charterLengthEvent));
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStandardIdleWithCooldownCase() throws Exception {
 
 		// Create the required basic elements
@@ -160,18 +160,18 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 
 		evaluate(false);
 		final Schedule withOutSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
-		Assert.assertNotNull(withOutSchedule);
+		Assertions.assertNotNull(withOutSchedule);
 		final Idle idle = findIdleEvent(dischargeSlot, withOutSchedule);
 		final CargoAllocation withOutCargo = findCargoAllocation(dischargeSlot, withOutSchedule);
 
 		evaluate(true);
 		final Schedule withSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
-		Assert.assertNotNull(withSchedule);
+		Assertions.assertNotNull(withSchedule);
 		final CharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
 		final CargoAllocation withCargo = findCargoAllocation(dischargeSlot, withSchedule);
 
-		Assert.assertEquals(0, charterLengthEvent.getHeelAtEnd());
-		Assert.assertEquals(500, idle.getHeelAtEnd());
+		Assertions.assertEquals(0, charterLengthEvent.getHeelAtEnd());
+		Assertions.assertEquals(500, idle.getHeelAtEnd());
 	}
 
 	private @NonNull CharterLengthEvent findCharterLengthEvent(final Slot<?> slot, final Schedule schedule) {
@@ -179,7 +179,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 				.flatMap(s -> s.getEvents().stream()) //
 				.filter(evt -> (evt instanceof SlotVisit && (((SlotVisit) evt).getSlotAllocation().getSlot() == slot))) //
 				.findFirst();
-		Assert.assertTrue(discharge.isPresent());
+		Assertions.assertTrue(discharge.isPresent());
 		Event evt = discharge.get();
 		evt = evt.getNextEvent();
 		if (evt instanceof Journey) {
@@ -192,7 +192,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		if (evt instanceof CharterLengthEvent) {
 			return (CharterLengthEvent) evt;
 		}
-		Assert.fail();
+		Assertions.fail("");
 		throw new IllegalStateException();
 	}
 
@@ -201,13 +201,13 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 				.flatMap(s -> s.getEvents().stream()) //
 				.filter(evt -> (evt instanceof SlotVisit && (((SlotVisit) evt).getSlotAllocation().getSlot() == slot))) //
 				.findFirst();
-		Assert.assertTrue(discharge.isPresent());
+		Assertions.assertTrue(discharge.isPresent());
 		final Event evt = discharge.get();
 		if (evt instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) evt;
 			return slotVisit.getSlotAllocation().getCargoAllocation();
 		}
-		Assert.fail();
+		Assertions.fail("");
 		throw new IllegalStateException();
 	}
 
@@ -216,7 +216,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 				.flatMap(s -> s.getEvents().stream()) //
 				.filter(evt -> (evt instanceof SlotVisit && (((SlotVisit) evt).getSlotAllocation().getSlot() == slot))) //
 				.findFirst();
-		Assert.assertTrue(discharge.isPresent());
+		Assertions.assertTrue(discharge.isPresent());
 		Event evt = discharge.get();
 		evt = evt.getNextEvent();
 		if (evt instanceof Journey) {
@@ -225,7 +225,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		if (evt instanceof Idle) {
 			return (Idle) evt;
 		}
-		Assert.fail();
+		Assertions.fail("");
 		throw new IllegalStateException();
 	}
 

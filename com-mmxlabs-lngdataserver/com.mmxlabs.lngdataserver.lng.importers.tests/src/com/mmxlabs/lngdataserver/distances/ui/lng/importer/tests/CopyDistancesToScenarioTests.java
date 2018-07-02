@@ -20,8 +20,8 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,7 +69,7 @@ public class CopyDistancesToScenarioTests {
 
 		String derivedJSON = serialise(mapper, derivedVersion);
 
-		Assert.assertEquals(expectedResult, derivedJSON);
+		Assertions.assertEquals(expectedResult, derivedJSON);
 
 	}
 
@@ -114,7 +114,7 @@ public class CopyDistancesToScenarioTests {
 
 			for (Route route : portModel.getRoutes()) {
 				if (route.getRouteOption() != RouteOption.DIRECT) {
-					Assert.assertFalse(route.getLines().isEmpty());
+					Assertions.assertFalse(route.getLines().isEmpty());
 				}
 			}
 		}
@@ -136,16 +136,16 @@ public class CopyDistancesToScenarioTests {
 
 		String derivedJSON = serialise(mapper, derivedVersion);
 
-		Assert.assertEquals(expectedResult, derivedJSON);
+		Assertions.assertEquals(expectedResult, derivedJSON);
 
 		// Verify canal distances cleared
 		// Canal distances currently re-created during import
 		for (Route route : portModel.getRoutes()) {
 			if (route.getRouteOption() != RouteOption.DIRECT) {
-				// Assert.assertTrue(route.getLines().isEmpty());
+				// Assertions.assertTrue(route.getLines().isEmpty());
 			}
 		}
-		Assert.assertNull(portToRemove.eContainer());
+		Assertions.assertNull(portToRemove.eContainer());
 
 	}
 
@@ -185,7 +185,7 @@ public class CopyDistancesToScenarioTests {
 
 		String derivedJSON = serialise(mapper, derivedVersion);
 
-		Assert.assertEquals(expectedResult, derivedJSON);
+		Assertions.assertEquals(expectedResult, derivedJSON);
 	}
 
 	/**

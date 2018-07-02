@@ -12,18 +12,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 
-@RunWith(value = Parameterized.class)
 public class SeriesParserChangePointsTests {
-	@Parameters(name = "{0}")
+
 	public static Iterable<Object[]> generateTests() {
 		return Arrays.asList(new Object[][] { //
 				// Testing split month function (First day of month is zero not 1, hence -1)
@@ -31,13 +28,10 @@ public class SeriesParserChangePointsTests {
 		});
 	}
 
-	private final String expression;
-	private final List<Integer> expected;
-
-	public SeriesParserChangePointsTests(final String expression, final List<Integer> expected) {
-		this.expression = expression;
-		this.expected = expected;
-
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("generateTests")
+	public void run(String expression, List<Integer> expected) {
+		Assertions.assertTrue(compare(parse(expression), expected));
 	}
 
 	private boolean compare(final List<Integer> a, final List<Integer> b) {
@@ -53,11 +47,7 @@ public class SeriesParserChangePointsTests {
 
 		return true;
 	}
-
-	@Test
-	public void run() {
-		Assert.assertTrue(compare(parse(expression), expected));
-	}
+ 
 
 	List<Integer> parse(final String expression) {
 		final SeriesParser parser = new SeriesParser();

@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -37,9 +37,9 @@ public class RemoveElementsMoveTest {
 
 		final RemoveElementsMove move = new RemoveElementsMove(Lists.newArrayList(elementPairB, elementPairE));
 
-		Assert.assertEquals(2, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceA));
-		Assert.assertTrue(move.getAffectedResources().contains(resourceB));
+		Assertions.assertEquals(2, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceA));
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceB));
 
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementF);
 
@@ -59,15 +59,15 @@ public class RemoveElementsMoveTest {
 		move.apply(sequences);
 
 		// Check element order has swapped
-		Assert.assertSame(elementA, sequenceA.get(0));
-		Assert.assertSame(elementC, sequenceA.get(1));
+		Assertions.assertSame(elementA, sequenceA.get(0));
+		Assertions.assertSame(elementC, sequenceA.get(1));
 
-		Assert.assertSame(elementD, sequenceB.get(0));
+		Assertions.assertSame(elementD, sequenceB.get(0));
 
 		// Elements should be appended in input order
-		Assert.assertSame(elementF, modifiableUnusedSequences.get(0));
-		Assert.assertSame(elementB, modifiableUnusedSequences.get(1));
-		Assert.assertSame(elementE, modifiableUnusedSequences.get(2));
+		Assertions.assertSame(elementF, modifiableUnusedSequences.get(0));
+		Assertions.assertSame(elementB, modifiableUnusedSequences.get(1));
+		Assertions.assertSame(elementE, modifiableUnusedSequences.get(2));
 
 	}
 

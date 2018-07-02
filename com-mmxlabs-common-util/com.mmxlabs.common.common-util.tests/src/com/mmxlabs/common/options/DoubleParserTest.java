@@ -7,8 +7,8 @@ package com.mmxlabs.common.options;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class DoubleParserTest {
 
@@ -16,24 +16,24 @@ public class DoubleParserTest {
 	public void testDoubleParserDouble() {
 		final double i = 0.0;
 		final DoubleParser parser = new DoubleParser(i);
-		Assert.assertTrue(parser.hasDefaultValue());
-		Assert.assertEquals(i, parser.getDefaultValue());
+		Assertions.assertTrue(parser.hasDefaultValue());
+		Assertions.assertEquals(i, parser.getDefaultValue());
 	}
 
 	@Test
 	public void testDoubleParserString() {
 		final String str = "0";
 		final DoubleParser parser = new DoubleParser(str);
-		Assert.assertTrue(parser.hasDefaultValue());
-		Assert.assertEquals(Double.valueOf(0), parser.getDefaultValue());
+		Assertions.assertTrue(parser.hasDefaultValue());
+		Assertions.assertEquals(Double.valueOf(0), parser.getDefaultValue());
 	}
 
 	@Test
 	public void testDoubleParser() {
 
 		final DoubleParser parser = new DoubleParser();
-		Assert.assertFalse(parser.hasDefaultValue());
-		Assert.assertNull(parser.getDefaultValue());
+		Assertions.assertFalse(parser.hasDefaultValue());
+		Assertions.assertNull(parser.getDefaultValue());
 	}
 
 	@Test
@@ -47,7 +47,7 @@ public class DoubleParserTest {
 		strings.add(str1);
 		strings.add(str2);
 
-		Assert.assertEquals(Double.valueOf(0.0), parser.parse(null, strings.iterator()));
+		Assertions.assertEquals(Double.valueOf(0.0), parser.parse(null, strings.iterator()));
 	}
 
 }

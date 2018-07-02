@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -21,10 +21,10 @@ public class LinearFitnessCombinerTest {
 	public void testGetSetFitnessComponentWeights() {
 
 		final LinearFitnessCombiner combiner = new LinearFitnessCombiner();
-		Assert.assertNull(combiner.getFitnessComponentWeights());
+		Assertions.assertNull(combiner.getFitnessComponentWeights());
 		final Map<String, Double> weights = Collections.emptyMap();
 		combiner.setFitnessComponentWeights(weights);
-		Assert.assertSame(weights, combiner.getFitnessComponentWeights());
+		Assertions.assertSame(weights, combiner.getFitnessComponentWeights());
 	}
 
 	@Test
@@ -34,18 +34,18 @@ public class LinearFitnessCombinerTest {
 		final String c2Name = "c2";
 
 		final LinearFitnessCombiner combiner = new LinearFitnessCombiner();
-		Assert.assertNull(combiner.getFitnessComponentWeights());
+		Assertions.assertNull(combiner.getFitnessComponentWeights());
 
 		final Map<String, Double> weights = CollectionsUtil.makeHashMap(c1Name, 2.0, c2Name, 1.0);
 		combiner.setFitnessComponentWeights(weights);
-		Assert.assertSame(weights, combiner.getFitnessComponentWeights());
+		Assertions.assertSame(weights, combiner.getFitnessComponentWeights());
 
 		final IFitnessComponent c1 = new MockFitnessComponent(c1Name, 500);
 		final IFitnessComponent c2 = new MockFitnessComponent(c2Name, 1000);
 
 		final long f = combiner.calculateFitness(CollectionsUtil.makeArrayList(c1, c2));
 
-		Assert.assertEquals(2000l, f);
+		Assertions.assertEquals(2000l, f);
 	}
 
 	private static class MockFitnessComponent implements IFitnessComponent {

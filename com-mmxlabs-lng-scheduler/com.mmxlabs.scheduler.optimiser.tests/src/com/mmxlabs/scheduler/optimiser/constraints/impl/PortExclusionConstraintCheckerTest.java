@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -41,7 +41,7 @@ public class PortExclusionConstraintCheckerTest {
 		final String name = "checker";
 		final PortExclusionConstraintChecker checker = new PortExclusionConstraintChecker(name);
 
-		Assert.assertSame(name, checker.getName());
+		Assertions.assertSame(name, checker.getName());
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class PortExclusionConstraintCheckerTest {
 		final PortExclusionConstraintChecker checker = createChecker("name", vesselProvider, nominatedVesselProviderEditor, portProvider, exclusionProvider);
 
 		// check empty behaviour
-		Assert.assertTrue(exclusionProvider.hasNoExclusions());
+		Assertions.assertTrue(exclusionProvider.hasNoExclusions());
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = Mockito.mock(ISequenceElement.class, "2");
 		final ISequenceElement o3 = Mockito.mock(ISequenceElement.class, "3");
@@ -78,21 +78,21 @@ public class PortExclusionConstraintCheckerTest {
 
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o4));
 
-		Assert.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource));
 
 		exclusionProvider.setExcludedPorts(vessel, CollectionsUtil.makeHashSet(p3));
-		Assert.assertFalse(exclusionProvider.hasNoExclusions());
-		Assert.assertTrue(exclusionProvider.getExcludedPorts(vessel).contains(p3));
+		Assertions.assertFalse(exclusionProvider.hasNoExclusions());
+		Assertions.assertTrue(exclusionProvider.getExcludedPorts(vessel).contains(p3));
 
-		Assert.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource));
 		final ISequence sequence2 = new ListSequence(CollectionsUtil.makeArrayList(o1, o3, o4));
-		Assert.assertFalse(checker.checkSequence(sequence2, resource));
+		Assertions.assertFalse(checker.checkSequence(sequence2, resource));
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
-		Assert.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
 
 	}
 
@@ -107,7 +107,7 @@ public class PortExclusionConstraintCheckerTest {
 		final PortExclusionConstraintChecker checker = createChecker("name", vesselProvider, nominatedVesselProviderEditor, portProvider, exclusionProvider);
 
 		// check empty behaviour
-		Assert.assertTrue(exclusionProvider.hasNoExclusions());
+		Assertions.assertTrue(exclusionProvider.hasNoExclusions());
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = Mockito.mock(ISequenceElement.class, "2");
 		final ISequenceElement o3 = Mockito.mock(ISequenceElement.class, "3");
@@ -132,21 +132,21 @@ public class PortExclusionConstraintCheckerTest {
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 		nominatedVesselProviderEditor.setNominatedVessel(o2, resource, nominatedVessel);
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o4));
 
-		Assert.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource));
 
 		exclusionProvider.setExcludedPorts(nominatedVessel, CollectionsUtil.makeHashSet(p3));
-		Assert.assertFalse(exclusionProvider.hasNoExclusions());
-		Assert.assertTrue(exclusionProvider.getExcludedPorts(nominatedVessel).contains(p3));
+		Assertions.assertFalse(exclusionProvider.hasNoExclusions());
+		Assertions.assertTrue(exclusionProvider.getExcludedPorts(nominatedVessel).contains(p3));
 
-		Assert.assertTrue(checker.checkSequence(sequence, resource));
+		Assertions.assertTrue(checker.checkSequence(sequence, resource));
 		final ISequence sequence2 = new ListSequence(CollectionsUtil.makeArrayList(o1, o3, o4));
-		Assert.assertFalse(checker.checkSequence(sequence2, resource));
+		Assertions.assertFalse(checker.checkSequence(sequence2, resource));
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
-		Assert.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
 
 	}
 

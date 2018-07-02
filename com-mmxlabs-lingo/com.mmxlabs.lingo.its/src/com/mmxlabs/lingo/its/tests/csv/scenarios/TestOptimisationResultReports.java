@@ -4,25 +4,27 @@
  */
 package com.mmxlabs.lingo.its.tests.csv.scenarios;
 
-import java.net.MalformedURLException;
-import java.util.Arrays;
+import java.util.List;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.DynamicContainer;
+import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.TestFactory;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.its.tests.AbstractReportTester_CSV;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 
-@RunWith(value = Parameterized.class)
 public class TestOptimisationResultReports extends AbstractReportTester_CSV {
 
-	public TestOptimisationResultReports(final String name, final String scenario) throws MalformedURLException {
-		super(name, scenario);
-	}
+	@TestFactory
+	@Tag(TestCategories.REPORT_TEST)
+	public List<DynamicNode> datedScenarioTests() {
 
-	@Parameters(name = "{0}")
-	public static Iterable<Object[]> generateTests() {
-		return Arrays.asList(new Object[][] { { "sample-data", "/scenarios/sample-data/" }, { "des-cargo", "/scenarios/des-cargo/" } });
+		return Lists.newArrayList( //
+				DynamicContainer.dynamicContainer("sample-data", makeTests("/scenarios/sample-data/")), //
+				DynamicContainer.dynamicContainer("des-cargo", makeTests("/scenarios/des-cargo/")) //
+		);
 	}
 
 }

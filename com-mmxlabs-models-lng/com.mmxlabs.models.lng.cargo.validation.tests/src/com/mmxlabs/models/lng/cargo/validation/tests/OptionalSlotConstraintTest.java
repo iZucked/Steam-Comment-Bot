@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
@@ -44,7 +44,7 @@ public class OptionalSlotConstraintTest {
 		final OptionalSlotConstraint constraint = new OptionalSlotConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertTrue(status.isOK());
+		Assertions.assertTrue(status.isOK());
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class OptionalSlotConstraintTest {
 		final OptionalSlotConstraint constraint = new OptionalSlotConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertFalse(status.isOK());
+		Assertions.assertFalse(status.isOK());
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class OptionalSlotConstraintTest {
 		final OptionalSlotConstraint constraint = new OptionalSlotConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertTrue(status.isOK());
+		Assertions.assertTrue(status.isOK());
 	}
 
 	@Test
@@ -120,7 +120,7 @@ public class OptionalSlotConstraintTest {
 		final OptionalSlotConstraint constraint = new OptionalSlotConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertTrue(status.isOK());
+		Assertions.assertTrue(status.isOK());
 	}
 
 	@Test
@@ -144,7 +144,7 @@ public class OptionalSlotConstraintTest {
 		final OptionalSlotConstraint constraint = new OptionalSlotConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertFalse(status.isOK());
+		Assertions.assertFalse(status.isOK());
 	}
 
 	@Test
@@ -172,7 +172,7 @@ public class OptionalSlotConstraintTest {
 		final OptionalSlotConstraint constraint = new OptionalSlotConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertTrue(status.isOK());
+		Assertions.assertTrue(status.isOK());
 	}
 
 }

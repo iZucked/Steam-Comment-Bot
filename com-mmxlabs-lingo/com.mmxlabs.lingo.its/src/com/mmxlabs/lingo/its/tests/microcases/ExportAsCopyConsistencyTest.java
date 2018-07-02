@@ -8,13 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
-import com.mmxlabs.lingo.its.tests.category.RegressionTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -27,7 +26,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 
 	/**
@@ -36,7 +35,8 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, RegressionTest.class })
+	@Tag(TestCategories.QUICK_TEST)
+	@Tag(TestCategories.REGRESSION_TEST)
 	public void testExportAsCopyDoesNotDuplicateReferenceListItems() throws Exception {
 
 		// Create the required basic elements
@@ -67,10 +67,10 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 
 			final LNGScenarioModel copy = scenarioToOptimiserBridge.exportAsCopy(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 
-			Assert.assertEquals(1, copy.getCargoModel().getVesselEvents().size());
+			Assertions.assertEquals(1, copy.getCargoModel().getVesselEvents().size());
 
 			final VesselEvent event = copy.getCargoModel().getVesselEvents().get(0);
-			Assert.assertEquals(1, event.getAllowedVessels().size());
+			Assertions.assertEquals(1, event.getAllowedVessels().size());
 		});
 	}
 
@@ -79,7 +79,8 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	 * 
 	 */
 	@Test
-	@Category({ QuickTest.class, RegressionTest.class })
+	@Tag(TestCategories.QUICK_TEST)
+	@Tag(TestCategories.REGRESSION_TEST)
 	public void testExportAsCopyExportsBaseFuelCostsCorrectlyInPeriod() throws Exception {
 
 		evaluateWithLSOTest(false, plan -> {
@@ -94,7 +95,7 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 
 			final CostModel costModel = ScenarioModelUtil.getCostModel(copy);
 			for (final BaseFuelCost bfc : costModel.getBaseFuelCosts()) {
-				Assert.assertNotNull(bfc.getFuel());
+				Assertions.assertNotNull(bfc.getFuel());
 			}
 		}, null);
 	}
@@ -105,7 +106,8 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, RegressionTest.class })
+	@Tag(TestCategories.QUICK_TEST)
+	@Tag(TestCategories.REGRESSION_TEST)
 	public void testExportAsCopyExportsBaseFuelCostsCorrectly() throws Exception {
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -116,7 +118,7 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 
 			final CostModel costModel = ScenarioModelUtil.getCostModel(copy);
 			for (final BaseFuelCost bfc : costModel.getBaseFuelCosts()) {
-				Assert.assertNotNull(bfc.getFuel());
+				Assertions.assertNotNull(bfc.getFuel());
 			}
 		});
 	}

@@ -42,7 +42,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -310,7 +310,7 @@ public class TesterUtil {
 			final long currentFitness = f.getFitnessValue();
 
 			// test they are equal
-			Assert.assertEquals(f.getName() + " - Previous fitness matches current fitness", originalFitnessValue, currentFitness);
+			Assertions.assertEquals(originalFitnessValue, currentFitness, f.getName() + " - Previous fitness matches current fitness");
 
 			// add to total
 			totalCurrentFitness += currentFitness;
@@ -319,7 +319,7 @@ public class TesterUtil {
 		}
 
 		// test totals are equal
-		Assert.assertEquals("Total original fitnesses equal current fitnesses", totalOriginalFitness, totalCurrentFitness);
+		Assertions.assertEquals(totalOriginalFitness, totalCurrentFitness, "Total original fitnesses equal current fitnesses");
 
 		// Check that the expected fitness names appeared in the output
 		for (final Object fName : props.keySet()) {
@@ -328,7 +328,7 @@ public class TesterUtil {
 				if (fName.equals("originalFitnesses.SimilarityFitnessCore")) {
 					continue;
 				}
-				Assert.assertTrue(seenFitnesses.contains(fName));
+				Assertions.assertTrue(seenFitnesses.contains(fName));
 			}
 		}
 	}

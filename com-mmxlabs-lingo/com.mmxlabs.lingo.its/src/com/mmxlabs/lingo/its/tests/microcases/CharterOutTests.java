@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -15,13 +14,13 @@ import java.util.List;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -37,10 +36,9 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 @SuppressWarnings({ "unused", "null" })
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CharterOutTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
@@ -52,7 +50,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCharterOutOnly() throws Exception {
 
 		// Create the required basic elements
@@ -83,15 +81,15 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check that's a cargoes free scenario
-			Assert.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
 		});
 	}
 
@@ -101,7 +99,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOptionalCharterOutOnlyWithAssignment() throws Exception {
 
 		// Create the required basic elements
@@ -132,18 +130,18 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check that's a cargoes free scenario
-			Assert.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
 		});
 
-		Assert.assertTrue(true);
+		Assertions.assertTrue(true);
 	}
 
 	/**
@@ -152,7 +150,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOptionalCharterOutOnly() throws Exception {
 
 		// Create the required basic elements
@@ -183,18 +181,18 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check that's a cargoes free scenario
-			Assert.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
 		});
 
-		Assert.assertTrue(true);
+		Assertions.assertTrue(true);
 	}
 
 	/**
@@ -203,7 +201,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCharterOutAtEnd() throws Exception {
 
 		// Create the required basic elements
@@ -244,15 +242,15 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check that's a cargoes free scenario
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
 		});
 	}
 
@@ -263,9 +261,9 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOptionalCharterOutAtEnd() throws Exception {
-		Assert.assertTrue(true);
+		Assertions.assertTrue(true);
 
 		// Create the required basic elements
 		// Create a vessel and its availability
@@ -305,15 +303,15 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check if the cargo is scheduled
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the optional charter out event is present
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
 		});
 
 	}
@@ -325,7 +323,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOptionalCharterOutAtEndWithAssignment() throws Exception {
 
 		// Create the required basic elements
@@ -366,15 +364,15 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check if the cargo is scheduled
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
 		});
 	}
 
@@ -384,7 +382,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOptionalCharterOutBest() throws Exception {
 		// Create the required basic elements
 		// Create a vessel and its availability
@@ -423,19 +421,19 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check that the scenario is cargo free
-			Assert.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check that their is only only charter out event schedule
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
 
 			// Check if the correct charter out event is planned
 			if (charterOuts.size() == 1) {
-				Assert.assertEquals("charter_out_test_best", charterOuts.get(0).getName());
+				Assertions.assertEquals("charter_out_test_best", charterOuts.get(0).getName());
 			}
 		});
 	}
@@ -446,7 +444,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOptionalCharterOutNoAvailability() throws Exception {
 		// Create the required basic elements
 		// Create a vessel and its availability
@@ -486,15 +484,15 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check if the cargo is scheduled
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is not present
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(0, charterOuts.size());
+			Assertions.assertEquals(0, charterOuts.size());
 		});
 	}
 
@@ -502,7 +500,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * We check if the charter out event is present in the resulting cargoModel export After not been included in the optimisation due to period constrain.
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testExportOptionalCharterOutNotInPeriod() throws Exception {
 
 		// Construct the vessel
@@ -537,22 +535,22 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 			// Check charter out not in the schedule
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(0, charterOuts.size());
+			Assertions.assertEquals(0, charterOuts.size());
 
 			// Check unusedElement
-			Assert.assertEquals(0, schedule.getUnusedElements().size());
+			Assertions.assertEquals(0, schedule.getUnusedElements().size());
 
 			// Create the export command and try to execute it
 			final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
 			Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, schedule);
 
-			Assert.assertTrue(cmd.canExecute());
+			Assertions.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that everything is still there
 			VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
-			Assert.assertNull(availability);
+			Assertions.assertNull(availability);
 		}, null);
 	}
 
@@ -560,7 +558,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 	 * We check if the charter out event is present in the resulting cargoModel export After not been included in the optimisation due to period constrain.
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testExportOptionalCharterOutInPeriod() throws Exception {
 
 		// Construct the vessel
@@ -593,22 +591,22 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 			// Check charter out in the schedule
 			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
-			Assert.assertEquals(1, charterOuts.size());
+			Assertions.assertEquals(1, charterOuts.size());
 
 			// Check no unusedElement
-			Assert.assertEquals(0, schedule.getUnusedElements().size());
+			Assertions.assertEquals(0, schedule.getUnusedElements().size());
 
 			// Create the export command and try to execute it
 			final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
 			Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, schedule);
 
-			Assert.assertTrue(cmd.canExecute());
+			Assertions.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that the charter out was not exported out
 			VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
-			Assert.assertNotNull(availability);
+			Assertions.assertNotNull(availability);
 		}, null);
 	}
 

@@ -18,8 +18,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -133,26 +133,26 @@ public class MigrateToV2Test extends AbstractMigrationTestClass {
 
 				final EObject scenarioModel = r.getContents().get(0);
 
-				Assert.assertNotNull(scenarioModel);
+				Assertions.assertNotNull(scenarioModel);
 
 				final EObject spotMarketsModel = (EObject) scenarioModel.eGet(feature_ScenarioModel_spotMarketsModel);
-				Assert.assertNotNull(spotMarketsModel);
+				Assertions.assertNotNull(spotMarketsModel);
 
 				final EObject desPurchaseMarketGroup = (EObject) spotMarketsModel.eGet(feature_SpotMarketsModel_desPurchases_group);
-				Assert.assertNotNull(desPurchaseMarketGroup);
-				Assert.assertEquals(MetamodelUtils.getEEnum_Literal(SpotType_Enum, "DESPurchase"), desPurchaseMarketGroup.eGet(feature_SpotMarketsGroup_type));
+				Assertions.assertNotNull(desPurchaseMarketGroup);
+				Assertions.assertEquals(MetamodelUtils.getEEnum_Literal(SpotType_Enum, "DESPurchase"), desPurchaseMarketGroup.eGet(feature_SpotMarketsGroup_type));
 
 				final EObject desSaleMarketGroup = (EObject) spotMarketsModel.eGet(feature_SpotMarketsModel_desSales_group);
-				Assert.assertNotNull(desSaleMarketGroup);
-				Assert.assertEquals(MetamodelUtils.getEEnum_Literal(SpotType_Enum, "DESSale"), desSaleMarketGroup.eGet(feature_SpotMarketsGroup_type));
+				Assertions.assertNotNull(desSaleMarketGroup);
+				Assertions.assertEquals(MetamodelUtils.getEEnum_Literal(SpotType_Enum, "DESSale"), desSaleMarketGroup.eGet(feature_SpotMarketsGroup_type));
 
 				final EObject fobPurchaseMarketGroup = (EObject) spotMarketsModel.eGet(feature_SpotMarketsModel_fobPurchases_group);
-				Assert.assertNotNull(fobPurchaseMarketGroup);
-				Assert.assertEquals(MetamodelUtils.getEEnum_Literal(SpotType_Enum, "FOBPurchase"), fobPurchaseMarketGroup.eGet(feature_SpotMarketsGroup_type));
+				Assertions.assertNotNull(fobPurchaseMarketGroup);
+				Assertions.assertEquals(MetamodelUtils.getEEnum_Literal(SpotType_Enum, "FOBPurchase"), fobPurchaseMarketGroup.eGet(feature_SpotMarketsGroup_type));
 
 				final EObject fobSaleMarketGroup = (EObject) spotMarketsModel.eGet(feature_SpotMarketsModel_fobSales_group);
-				Assert.assertNotNull(fobSaleMarketGroup);
-				Assert.assertEquals(MetamodelUtils.getEEnum_Literal(SpotType_Enum, "FOBSale"), fobSaleMarketGroup.eGet(feature_SpotMarketsGroup_type));
+				Assertions.assertNotNull(fobSaleMarketGroup);
+				Assertions.assertEquals(MetamodelUtils.getEEnum_Literal(SpotType_Enum, "FOBSale"), fobSaleMarketGroup.eGet(feature_SpotMarketsGroup_type));
 			}
 		} finally {
 			if (tmpFile != null) {
@@ -298,44 +298,44 @@ public class MigrateToV2Test extends AbstractMigrationTestClass {
 
 				final EObject scenarioModel = r.getContents().get(0);
 
-				Assert.assertNotNull(scenarioModel);
+				Assertions.assertNotNull(scenarioModel);
 
 				final EObject pricingModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_PricingModel);
-				Assert.assertNotNull(pricingModel);
+				Assertions.assertNotNull(pricingModel);
 
 				final List<EObject> indices = MetamodelUtils.getValueAsTypedList(pricingModel, reference_PricingModel_commodityIndicies);
-				Assert.assertNotNull(indices);
+				Assertions.assertNotNull(indices);
 
-				Assert.assertEquals(2, indices.size());
+				Assertions.assertEquals(2, indices.size());
 
 				final EObject index1 = indices.get(0);
-				Assert.assertNotNull(index1);
-				Assert.assertTrue(class_CommodityIndex.isInstance(index1));
-				Assert.assertEquals(name1, index1.eGet(attribute_NamedObject_name));
-				Assert.assertEquals(uuid1, index1.eGet(attribute_UUIDObject_uuid));
-				Assert.assertNotNull(index1.eGet(reference_CommodityIndex_data));
+				Assertions.assertNotNull(index1);
+				Assertions.assertTrue(class_CommodityIndex.isInstance(index1));
+				Assertions.assertEquals(name1, index1.eGet(attribute_NamedObject_name));
+				Assertions.assertEquals(uuid1, index1.eGet(attribute_UUIDObject_uuid));
+				Assertions.assertNotNull(index1.eGet(reference_CommodityIndex_data));
 
 				final EObject index2 = indices.get(1);
-				Assert.assertNotNull(index2);
-				Assert.assertTrue(class_CommodityIndex.isInstance(index2));
-				Assert.assertEquals(name2, index2.eGet(attribute_NamedObject_name));
-				Assert.assertEquals(uuid2, index2.eGet(attribute_UUIDObject_uuid));
+				Assertions.assertNotNull(index2);
+				Assertions.assertTrue(class_CommodityIndex.isInstance(index2));
+				Assertions.assertEquals(name2, index2.eGet(attribute_NamedObject_name));
+				Assertions.assertEquals(uuid2, index2.eGet(attribute_UUIDObject_uuid));
 				final EObject index2_data = (EObject) index2.eGet(reference_CommodityIndex_data);
-				Assert.assertNotNull(index2_data);
+				Assertions.assertNotNull(index2_data);
 
-				Assert.assertTrue(class_DerivedIndex.isInstance(index2_data));
-				Assert.assertEquals(expr, index2_data.eGet(attribute_DerivedIndex_expression));
+				Assertions.assertTrue(class_DerivedIndex.isInstance(index2_data));
+				Assertions.assertEquals(expr, index2_data.eGet(attribute_DerivedIndex_expression));
 
 				final List<EObject> cooldownPrices = MetamodelUtils.getValueAsTypedList(pricingModel, reference_PricingModel_cooldownPrices);
-				Assert.assertNotNull(cooldownPrices);
+				Assertions.assertNotNull(cooldownPrices);
 
-				Assert.assertEquals(1, cooldownPrices.size());
+				Assertions.assertEquals(1, cooldownPrices.size());
 				final EObject cooldownPrice = cooldownPrices.get(0);
 
-				Assert.assertTrue(class_CooldownPrice.isInstance(cooldownPrice));
+				Assertions.assertTrue(class_CooldownPrice.isInstance(cooldownPrice));
 				final EObject indexRef = (EObject) cooldownPrice.eGet(reference_CooldownPrice_index);
 
-				Assert.assertSame(index2, indexRef);
+				Assertions.assertSame(index2, indexRef);
 
 			}
 		} finally {

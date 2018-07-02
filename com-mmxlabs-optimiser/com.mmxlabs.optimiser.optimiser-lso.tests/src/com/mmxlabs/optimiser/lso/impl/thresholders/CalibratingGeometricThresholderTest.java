@@ -6,8 +6,8 @@ package com.mmxlabs.optimiser.lso.impl.thresholders;
 
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class CalibratingGeometricThresholderTest {
 	@Test
@@ -21,19 +21,19 @@ public class CalibratingGeometricThresholderTest {
 
 		for (int i = 0; i < 19; i++) {
 			cgt.accept(i + base);
-			Assert.assertFalse("Calibrated at step " + i, cgt.isCalibrated());
+			Assertions.assertFalse(cgt.isCalibrated(), "Calibrated at step " + i);
 			cgt.step();
 		}
 		cgt.accept(119);
 		cgt.step();
-		Assert.assertTrue("Is calibrated after 20 steps", cgt.isCalibrated());
+		Assertions.assertTrue(cgt.isCalibrated(), "Is calibrated after 20 steps");
 
 		// test the calibrated values
 
 		final double roughTemperature = (-(base + 10)) / Math.log(0.75);
 
 		// ten percent error because it's not a massively accurate solution procedure.
-		Assert.assertEquals("Calibrated temperature should be around " + (int) roughTemperature, roughTemperature, cgt.getCalibratedTemperature(), roughTemperature / 10);
+		Assertions.assertEquals(roughTemperature, cgt.getCalibratedTemperature(), roughTemperature / 10, "Calibrated temperature should be around " + (int) roughTemperature);
 		// test the acceptance rate
 
 		int accepts = 0;
@@ -45,6 +45,6 @@ public class CalibratingGeometricThresholderTest {
 			}
 		}
 
-		Assert.assertEquals("Acceptance rate should be around 75%", 0.75, accepts / (double) tests, 0.15);
+		Assertions.assertEquals(0.75, accepts / (double) tests, 0.15, "Acceptance rate should be around 75%");
 	}
 }

@@ -7,8 +7,8 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -29,12 +29,12 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(optimisationPlan);
-		Assert.assertNotNull(optimisationPlan.getUserSettings());
-		Assert.assertSame(userSettings, optimisationPlan.getUserSettings());
-		Assert.assertFalse(optimisationPlan.getStages().isEmpty());
+		Assertions.assertNotNull(optimisationPlan);
+		Assertions.assertNotNull(optimisationPlan.getUserSettings());
+		Assertions.assertSame(userSettings, optimisationPlan.getUserSettings());
+		Assertions.assertFalse(optimisationPlan.getStages().isEmpty());
 		// hard to test this now...
-		// Assert.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
+		// Assertions.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
 	}
 
 	@Test
@@ -44,11 +44,11 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(optimisationPlan);
-		Assert.assertNotNull(optimisationPlan.getUserSettings());
-		Assert.assertSame(userSettings, optimisationPlan.getUserSettings());
-		Assert.assertFalse(optimisationPlan.getStages().isEmpty()); // hard to test this now...
-		// Assert.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
+		Assertions.assertNotNull(optimisationPlan);
+		Assertions.assertNotNull(optimisationPlan.getUserSettings());
+		Assertions.assertSame(userSettings, optimisationPlan.getUserSettings());
+		Assertions.assertFalse(optimisationPlan.getStages().isEmpty()); // hard to test this now...
+		// Assertions.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
 	}
 
 	@Test
@@ -58,12 +58,12 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(optimisationPlan);
-		Assert.assertNotNull(optimisationPlan.getUserSettings());
-		Assert.assertSame(userSettings, optimisationPlan.getUserSettings());
-		Assert.assertFalse(optimisationPlan.getStages().isEmpty());
+		Assertions.assertNotNull(optimisationPlan);
+		Assertions.assertNotNull(optimisationPlan.getUserSettings());
+		Assertions.assertSame(userSettings, optimisationPlan.getUserSettings());
+		Assertions.assertFalse(optimisationPlan.getStages().isEmpty());
 		// hard to test this now...
-		// Assert.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
+		// Assertions.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
 	}
 
 	@Test
@@ -73,14 +73,14 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(plan);
+		Assertions.assertNotNull(plan);
 		for (OptimisationStage stage : plan.getStages()) {
 			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
 				ConstraintsAndFitnessSettingsStage cfStage = (ConstraintsAndFitnessSettingsStage) stage;
 				ConstraintAndFitnessSettings constraintAndFitnessSettings = cfStage.getConstraintAndFitnessSettings();
-				Assert.assertNotNull(constraintAndFitnessSettings);
-				Assert.assertNotNull(constraintAndFitnessSettings.getSimilaritySettings());
-				Assert.assertEquals(ScenarioUtils.createOffSimilaritySettings(), constraintAndFitnessSettings.getSimilaritySettings());
+				Assertions.assertNotNull(constraintAndFitnessSettings);
+				Assertions.assertNotNull(constraintAndFitnessSettings.getSimilaritySettings());
+				Assertions.assertEquals(ScenarioUtils.createOffSimilaritySettings(), constraintAndFitnessSettings.getSimilaritySettings());
 
 			}
 		}
@@ -93,10 +93,10 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(plan);
-		Assert.assertFalse(userSettings.isBuildActionSets());
+		Assertions.assertNotNull(plan);
+		Assertions.assertFalse(userSettings.isBuildActionSets());
 		for (OptimisationStage stage : plan.getStages()) {
-			Assert.assertFalse(stage instanceof ActionPlanOptimisationStage);
+			Assertions.assertFalse(stage instanceof ActionPlanOptimisationStage);
 		}
 	}
 
@@ -109,8 +109,8 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(plan);
-		Assert.assertFalse(plan.getUserSettings().isBuildActionSets());
+		Assertions.assertNotNull(plan);
+		Assertions.assertFalse(plan.getUserSettings().isBuildActionSets());
 	}
 
 	@Test
@@ -123,8 +123,8 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(plan);
-		Assert.assertFalse(plan.getUserSettings().isBuildActionSets());
+		Assertions.assertNotNull(plan);
+		Assertions.assertFalse(plan.getUserSettings().isBuildActionSets());
 	}
 
 	@Test
@@ -137,8 +137,8 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(plan);
-		Assert.assertTrue(plan.getUserSettings().isBuildActionSets());
+		Assertions.assertNotNull(plan);
+		Assertions.assertTrue(plan.getUserSettings().isBuildActionSets());
 	}
 
 	@Test
@@ -151,8 +151,8 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(plan);
-		Assert.assertFalse(plan.getUserSettings().isBuildActionSets());
+		Assertions.assertNotNull(plan);
+		Assertions.assertFalse(plan.getUserSettings().isBuildActionSets());
 	}
 
 	@Test
@@ -165,8 +165,8 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(plan);
-		Assert.assertTrue(plan.getUserSettings().isBuildActionSets());
+		Assertions.assertNotNull(plan);
+		Assertions.assertTrue(plan.getUserSettings().isBuildActionSets());
 	}
 
 	@Test
@@ -179,8 +179,8 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(plan);
-		Assert.assertFalse(plan.getUserSettings().isBuildActionSets());
+		Assertions.assertNotNull(plan);
+		Assertions.assertFalse(plan.getUserSettings().isBuildActionSets());
 	}
 
 	@Test
@@ -190,11 +190,11 @@ public class OptimisationHelperTest {
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assert.assertNotNull(optimisationPlan);
-		Assert.assertNotNull(optimisationPlan.getUserSettings());
-		Assert.assertSame(userSettings, optimisationPlan.getUserSettings());
-		Assert.assertFalse(optimisationPlan.getStages().isEmpty()); // hard to test this now...
-		// Assert.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
+		Assertions.assertNotNull(optimisationPlan);
+		Assertions.assertNotNull(optimisationPlan.getUserSettings());
+		Assertions.assertSame(userSettings, optimisationPlan.getUserSettings());
+		Assertions.assertFalse(optimisationPlan.getStages().isEmpty()); // hard to test this now...
+		// Assertions.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
 	}
 
 }

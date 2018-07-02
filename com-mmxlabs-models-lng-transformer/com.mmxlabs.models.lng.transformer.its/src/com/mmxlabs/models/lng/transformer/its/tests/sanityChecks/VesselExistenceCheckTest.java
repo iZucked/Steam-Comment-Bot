@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
@@ -28,7 +28,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class VesselExistenceCheckTest {
 
 	private static final int dischargePrice = 1;
@@ -127,7 +127,7 @@ public class VesselExistenceCheckTest {
 			if (sequence.isFleetVessel()) {
 				final VesselAvailability fv = sequence.getVesselAvailability();
 
-				Assert.assertTrue("Input vessel exists in output", inputVessels.contains(fv));
+				Assertions.assertTrue(inputVessels.contains(fv), "Input vessel exists in output");
 				// remove the vessel - it should only exist once.
 				inputVessels.remove(fv);
 
@@ -136,8 +136,9 @@ public class VesselExistenceCheckTest {
 			}
 		}
 
-		Assert.assertEquals("Number of vessels in input same as number of vessels in output", expectedNumOfVessels, numOfVesselsInOutput);
-		Assert.assertEquals("All vessels were used in the output", 0L, inputVessels.size());
+		Assertions.assertEquals(expectedNumOfVessels, numOfVesselsInOutput, "Number of vessels in input same as number of vessels in output");
+		Assertions.assertEquals(0, inputVessels.size(), "All vessels were used in the output");
+		
 	}
 
 	/**
@@ -155,7 +156,7 @@ public class VesselExistenceCheckTest {
 			}
 		}
 
-		Assert.assertTrue("Actual number of spot charter vessels does not exceed allowed number", numOfSpotVessels <= maxNumOfSpotVessels);
+		Assertions.assertTrue(numOfSpotVessels <= maxNumOfSpotVessels, "Actual number of spot charter vessels does not exceed allowed number");
 
 	}
 }

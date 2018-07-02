@@ -9,12 +9,12 @@ import java.time.YearMonth;
 import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -41,11 +40,11 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFobPurchase_M3() throws Exception {
 
 		@NonNull
@@ -64,16 +63,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadSlot o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadSlot.class);
 
-			Assert.assertTrue(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertTrue(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFobPurchase_MMBTU() throws Exception {
 
 		@NonNull
@@ -92,16 +91,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadSlot o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadSlot.class);
 
-			Assert.assertFalse(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertFalse(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDESPurchase_M3() throws Exception {
 
 		@NonNull
@@ -120,16 +119,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadOption o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadOption.class);
 
-			Assert.assertTrue(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertTrue(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDESPurchase_MMBTU() throws Exception {
 
 		@NonNull
@@ -148,16 +147,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadOption o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadOption.class);
 
-			Assert.assertFalse(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertFalse(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDesSale_M3() throws Exception {
 
 		@NonNull
@@ -176,17 +175,17 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertTrue(o_dischargeSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertTrue(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDesSale_MMBTU() throws Exception {
 
 		@NonNull
@@ -205,18 +204,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertFalse(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertFalse(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFobSale_M3() throws Exception {
 
 		@NonNull
@@ -235,18 +234,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertTrue(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertTrue(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFobSale_MMBTU() throws Exception {
 
 		@NonNull
@@ -265,18 +264,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertFalse(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertFalse(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFobPurchase_M3_Contract() throws Exception {
 
 		final PurchaseContract contract = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionPurchaseContract("Contract", entity, "5");
@@ -299,16 +298,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadSlot o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadSlot.class);
 
-			Assert.assertTrue(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertTrue(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFobPurchase_MMBTU_Contract() throws Exception {
 
 		final PurchaseContract contract = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionPurchaseContract("Contract", entity, "5");
@@ -331,16 +330,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadSlot o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadSlot.class);
 
-			Assert.assertFalse(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertFalse(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDESPurchase_M3_Contract() throws Exception {
 
 		final PurchaseContract contract = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionPurchaseContract("Contract", entity, "5");
@@ -363,16 +362,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadOption o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadOption.class);
 
-			Assert.assertTrue(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertTrue(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDESPurchase_MMBTU_Contract() throws Exception {
 		final PurchaseContract contract = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionPurchaseContract("Contract", entity, "5");
 		contract.setMinQuantity(20 * 5_000);
@@ -393,16 +392,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadOption o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadOption.class);
 
-			Assert.assertFalse(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertFalse(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDesSale_M3_Contract() throws Exception {
 		final SalesContract contract = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionSalesContract("Contract", entity, "5");
 		contract.setMinQuantity(5_000);
@@ -424,17 +423,17 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertTrue(o_dischargeSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertTrue(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDesSale_MMBTU_Contract() throws Exception {
 		final SalesContract contract = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionSalesContract("Contract", entity, "5");
 		contract.setMinQuantity(20 * 5_000);
@@ -456,18 +455,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertFalse(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertFalse(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFobSale_M3_Contract() throws Exception {
 		final SalesContract contract = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionSalesContract("Contract", entity, "5");
 		contract.setMinQuantity(5_000);
@@ -489,18 +488,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertTrue(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertTrue(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFobSale_MMBTU_Contract() throws Exception {
 		final SalesContract contract = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionSalesContract("Contract", entity, "5");
 		contract.setMinQuantity(20 * 5_000);
@@ -521,20 +520,20 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertFalse(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertFalse(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	///////////////// Existing Spot cargoes
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobPurchase_M3_Existing() throws Exception {
 
 		final FOBPurchasesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPort("Point Fortin"), entity, "5", 20.0)
@@ -554,16 +553,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadSlot o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadSlot.class);
 
-			Assert.assertTrue(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertTrue(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobPurchase_MMBTU_Existing() throws Exception {
 		final FOBPurchasesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPort("Point Fortin"), entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU).build();
@@ -582,16 +581,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadSlot o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadSlot.class);
 
-			Assert.assertFalse(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertFalse(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDESPurchase_M3_Existing() throws Exception {
 
 		final DESPurchaseMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPort("Sakai")), entity, "5", 20.0)
@@ -611,16 +610,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadOption o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadOption.class);
 
-			Assert.assertTrue(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertTrue(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDESPurchase_MMBTU_Existing() throws Exception {
 		final DESPurchaseMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPort("Sakai")), entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU).build();
@@ -639,16 +638,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadOption o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadOption.class);
 
-			Assert.assertFalse(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertFalse(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDesSale_M3_Existing() throws Exception {
 
 		final DESSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPort("Sakai"), entity, "5")
@@ -669,17 +668,17 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertTrue(o_dischargeSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertTrue(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDesSale_MMBTU_Existing() throws Exception {
 
 		final DESSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPort("Sakai"), entity, "5")
@@ -700,18 +699,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertFalse(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertFalse(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobSale_M3_Existing() throws Exception {
 
 		final FOBSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPort("Point Fortin")), entity, "5")
@@ -732,18 +731,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertTrue(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertTrue(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobSale_MMBTU_Existing() throws Exception {
 		final FOBSalesMarket market = scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPort("Point Fortin")), entity, "5")
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU).build();
@@ -762,20 +761,20 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertFalse(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertFalse(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	///////////////// Generated Spot cargoes
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobPurchase_M3_Generated() throws Exception {
 
 		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPort("Point Fortin"), entity, "5", 20.0).withVolumeLimits(5_000, 10_000, VolumeUnits.M3)//
@@ -797,16 +796,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadSlot o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadSlot.class);
 
-			Assert.assertTrue(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertTrue(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobPurchase_MMBTU_Generated() throws Exception {
 		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBPurchaseMarket("Market", portFinder.findPort("Point Fortin"), entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
@@ -828,16 +827,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadSlot o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadSlot.class);
 
-			Assert.assertFalse(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertFalse(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDESPurchase_M3_Generated() throws Exception {
 
 		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPort("Sakai")), entity, "5", 20.0)
@@ -859,16 +858,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadOption o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadOption.class);
 
-			Assert.assertTrue(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertTrue(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDESPurchase_MMBTU_Generated() throws Exception {
 		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESPurchaseMarket("Market", Collections.singletonList(portFinder.findPort("Sakai")), entity, "5", 20.0)
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU) //
@@ -890,16 +889,16 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final ILoadOption o_loadSlot = modelEntityMap.getOptimiserObjectNullChecked(e_loadSlot, ILoadOption.class);
 
-			Assert.assertFalse(o_loadSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
-			Assert.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
-			Assert.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
-			Assert.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
+			Assertions.assertFalse(o_loadSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_loadSlot.getMinLoadVolume());
+			Assertions.assertEquals(10_000_000, o_loadSlot.getMaxLoadVolume());
+			Assertions.assertEquals(20 * 5_000_000, o_loadSlot.getMinLoadVolumeMMBTU());
+			Assertions.assertEquals(20 * 10_000_000, o_loadSlot.getMaxLoadVolumeMMBTU());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDesSale_M3_Generated() throws Exception {
 
 		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPort("Sakai"), entity, "5")//
@@ -921,17 +920,17 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertTrue(o_dischargeSlot.isVolumeSetInM3());
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertTrue(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotDesSale_MMBTU_Generated() throws Exception {
 
 		scenarioModelBuilder.getSpotMarketsModelBuilder().makeDESSaleMarket("Market", portFinder.findPort("Sakai"), entity, "5") //
@@ -953,18 +952,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertFalse(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertFalse(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobSale_M3_Generated() throws Exception {
 
 		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPort("Point Fortin")), entity, "5")
@@ -986,18 +985,18 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertTrue(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertTrue(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotFobSale_MMBTU_Generated() throws Exception {
 		scenarioModelBuilder.getSpotMarketsModelBuilder().makeFOBSaleMarket("Market", Collections.singletonList(portFinder.findPort("Point Fortin")), entity, "5")
 				.withVolumeLimits(20 * 5_000, 20 * 10_000, VolumeUnits.MMBTU)//
@@ -1018,13 +1017,13 @@ public class VolumeLimitsCreationTest extends AbstractMicroTestCase {
 
 			final IDischargeOption o_dischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(e_DischargeSlot, IDischargeOption.class);
 
-			Assert.assertFalse(o_dischargeSlot.isVolumeSetInM3());
+			Assertions.assertFalse(o_dischargeSlot.isVolumeSetInM3());
 
-			Assert.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
-			Assert.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
+			Assertions.assertEquals(5_000_000, o_dischargeSlot.getMinDischargeVolume(20_000_000));
+			Assertions.assertEquals(10_000_000, o_dischargeSlot.getMaxDischargeVolume(20_000_000));
 
-			Assert.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
-			Assert.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 5_000_000, o_dischargeSlot.getMinDischargeVolumeMMBTU(20_000_000));
+			Assertions.assertEquals(20 * 10_000_000, o_dischargeSlot.getMaxDischargeVolumeMMBTU(20_000_000));
 		});
 	}
 

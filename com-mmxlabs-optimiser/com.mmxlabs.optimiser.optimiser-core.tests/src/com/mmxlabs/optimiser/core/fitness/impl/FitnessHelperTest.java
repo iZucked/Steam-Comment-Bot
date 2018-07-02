@@ -4,14 +4,13 @@
  */
 package com.mmxlabs.optimiser.core.fitness.impl;
 
-import static org.junit.Assert.fail;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -35,7 +34,7 @@ public class FitnessHelperTest {
 
 		@Override
 		public long getFitness() {
-			fail("Unexpected method invocation");
+			Assertions.fail("Unexpected method invocation");
 			return -1;
 		}
 
@@ -48,7 +47,7 @@ public class FitnessHelperTest {
 		@Override
 		@NonNull
 		public String getName() {
-			fail("Unexpected method invocation");
+			Assertions.fail("Unexpected method invocation");
 			return "";
 		}
 

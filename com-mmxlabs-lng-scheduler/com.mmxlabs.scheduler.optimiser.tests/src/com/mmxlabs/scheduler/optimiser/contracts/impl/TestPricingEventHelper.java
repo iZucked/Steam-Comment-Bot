@@ -7,8 +7,9 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -42,7 +43,7 @@ public class TestPricingEventHelper {
 
 		final ITimeZoneToUtcOffsetProvider tzProvider = mock(ITimeZoneToUtcOffsetProvider.class);
 		// TZ Shift, +1 for load, +2 for discharge
-		when(tzProvider.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(tzProvider.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -55,7 +56,7 @@ public class TestPricingEventHelper {
 				}
 			}
 		});
-		when(tzProvider.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
+		when(tzProvider.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -82,19 +83,19 @@ public class TestPricingEventHelper {
 		when(loadOption.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
 		when(loadOption.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
-		Assert.assertEquals(10 + 1, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
+		Assertions.assertEquals(10 + 1, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
 
 		when(loadOption.getPricingEvent()).thenReturn(PricingEventType.END_OF_LOAD);
-		Assert.assertEquals(15 + 1, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
+		Assertions.assertEquals(15 + 1, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
 
 		when(loadOption.getPricingEvent()).thenReturn(PricingEventType.START_OF_DISCHARGE);
-		Assert.assertEquals(20 + 2, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
+		Assertions.assertEquals(20 + 2, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
 
 		when(loadOption.getPricingEvent()).thenReturn(PricingEventType.END_OF_DISCHARGE);
-		Assert.assertEquals(25 + 2, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
+		Assertions.assertEquals(25 + 2, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
 
 		when(loadOption.getPricingDate()).thenReturn(30);
-		Assert.assertEquals(30 + 1, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
+		Assertions.assertEquals(30 + 1, pricingEventHelper.getLoadPricingDate(loadOption, dischargeOption, portTimesRecord));
 	}
 
 	@Test
@@ -112,7 +113,7 @@ public class TestPricingEventHelper {
 
 		// TZ Shift, +1 for load, +2 for discharge
 		final ITimeZoneToUtcOffsetProvider tzProvider = mock(ITimeZoneToUtcOffsetProvider.class);
-		when(tzProvider.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+		when(tzProvider.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -124,7 +125,7 @@ public class TestPricingEventHelper {
 				}
 			}
 		});
-		when(tzProvider.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
+		when(tzProvider.UTC(ArgumentMatchers.anyInt(), ArgumentMatchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
 				final Object[] args = invocation.getArguments();
@@ -150,19 +151,19 @@ public class TestPricingEventHelper {
 		when(dischargeOption.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
 		when(dischargeOption.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
-		Assert.assertEquals(10 + 1, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
+		Assertions.assertEquals(10 + 1, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
 
 		when(dischargeOption.getPricingEvent()).thenReturn(PricingEventType.END_OF_LOAD);
-		Assert.assertEquals(15 + 1, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
+		Assertions.assertEquals(15 + 1, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
 
 		when(dischargeOption.getPricingEvent()).thenReturn(PricingEventType.START_OF_DISCHARGE);
-		Assert.assertEquals(20 + 2, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
+		Assertions.assertEquals(20 + 2, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
 
 		when(dischargeOption.getPricingEvent()).thenReturn(PricingEventType.END_OF_DISCHARGE);
-		Assert.assertEquals(25 + 2, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
+		Assertions.assertEquals(25 + 2, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
 
 		when(dischargeOption.getPricingDate()).thenReturn(30);
-		Assert.assertEquals(30 + 2, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
+		Assertions.assertEquals(30 + 2, pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord));
 	}
 
 	private PricingEventHelper createInstance(final ITimeZoneToUtcOffsetProvider tzProvider) {

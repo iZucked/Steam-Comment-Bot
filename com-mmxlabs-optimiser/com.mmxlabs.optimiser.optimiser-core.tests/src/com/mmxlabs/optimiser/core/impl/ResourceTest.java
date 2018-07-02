@@ -5,8 +5,8 @@
 package com.mmxlabs.optimiser.core.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -19,6 +19,6 @@ public class ResourceTest {
 	public void testResourceString() {
 		final String name = "name";
 		final Resource resource = new Resource(index, name);
-		Assert.assertSame(name, resource.getName());
+		Assertions.assertSame(name, resource.getName());
 	}
 }

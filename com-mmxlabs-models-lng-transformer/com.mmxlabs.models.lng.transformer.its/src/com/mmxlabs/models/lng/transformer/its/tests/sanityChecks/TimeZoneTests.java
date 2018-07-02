@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvide
  * @author achurchill
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class TimeZoneTests {
 	private ModelEntityMap modelEntityMap;
 	private DateAndCurveHelper dateHelper;
@@ -62,7 +62,7 @@ public class TimeZoneTests {
 		final int dhToInt = dateHelper.convertTime(dateToTest);
 		final ZonedDateTime intToDate = modelEntityMap.getDateFromHours(dhToInt, timeZone);
 		System.out.println(String.format("In: %s Out: %s", dateToTest, intToDate));
-		Assert.assertEquals(dateToTest, intToDate);
+		Assertions.assertEquals(dateToTest, intToDate);
 	}
 
 	private void setJanuaryEarliestTime(final String timeZone) {
@@ -221,7 +221,7 @@ public class TimeZoneTests {
 		final ZonedDateTime modelEntityMapCalcuttaTime = modelEntityMap.getDateFromHours(dhInternalDate, "Asia/Calcutta");
 
 		// Check we get the original time back.
-		Assert.assertEquals(calcuttaDateTime, modelEntityMapCalcuttaTime);
+		Assertions.assertEquals(calcuttaDateTime, modelEntityMapCalcuttaTime);
 
 		// Initialise internal helepr
 		final TimeZoneToUtcOffsetProvider helper = new TimeZoneToUtcOffsetProvider();
@@ -232,11 +232,11 @@ public class TimeZoneTests {
 		final int newLocalTime = helper.localTime(utcEquiv, "Asia/Calcutta");
 
 		// We should match
-		Assert.assertEquals(dhInternalDate, newLocalTime);
+		Assertions.assertEquals(dhInternalDate, newLocalTime);
 
 		final ZonedDateTime modelEntityMapCalcuttaUTCTime = modelEntityMap.getDateFromHours(utcEquiv, "Etc/UTC");
 		// Ahead of UTC - Expect to loose an hour
-		Assert.assertEquals(calcuttaDateTimeAsUTC.minusHours(1), modelEntityMapCalcuttaUTCTime);
+		Assertions.assertEquals(calcuttaDateTimeAsUTC.minusHours(1), modelEntityMapCalcuttaUTCTime);
 
 	}
 
@@ -253,7 +253,7 @@ public class TimeZoneTests {
 		final ZonedDateTime modelEntityMapnewfoundLandTime = modelEntityMap.getDateFromHours(dhInternalDate, "America/St_Johns");
 
 		// Check we get the original time back.
-		Assert.assertEquals(newfoundLandDateTime, modelEntityMapnewfoundLandTime);
+		Assertions.assertEquals(newfoundLandDateTime, modelEntityMapnewfoundLandTime);
 
 		// Initialise internal helper
 		final TimeZoneToUtcOffsetProvider helper = new TimeZoneToUtcOffsetProvider();
@@ -264,11 +264,11 @@ public class TimeZoneTests {
 		final int newLocalTime = helper.localTime(utcEquiv, "America/St_Johns");
 
 		// We should match
-		Assert.assertEquals(dhInternalDate, newLocalTime);
+		Assertions.assertEquals(dhInternalDate, newLocalTime);
 
 		final ZonedDateTime modelEntityMapNewfoundLandUTCTime = modelEntityMap.getDateFromHours(utcEquiv, "Etc/UTC");
 		// Behind UTC, should match
-		Assert.assertEquals(newfoundLandDateTimeAsUTC, modelEntityMapNewfoundLandUTCTime);
+		Assertions.assertEquals(newfoundLandDateTimeAsUTC, modelEntityMapNewfoundLandUTCTime);
 
 	}
 

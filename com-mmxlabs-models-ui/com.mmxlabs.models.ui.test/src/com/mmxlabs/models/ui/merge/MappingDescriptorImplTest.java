@@ -11,8 +11,8 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class MappingDescriptorImplTest {
 
@@ -30,12 +30,12 @@ public class MappingDescriptorImplTest {
 
 		final MappingDescriptorImpl descriptor = new MappingDescriptorImpl(sourceContainer, destinationContainer, ref, destinationToSourceMap, objectsAdded, objectsRemoved);
 
-		Assert.assertSame(sourceContainer, descriptor.getSourceContainer());
-		Assert.assertSame(destinationContainer, descriptor.getDestinationContainer());
-		Assert.assertSame(ref, descriptor.getReference());
-		Assert.assertSame(destinationToSourceMap, descriptor.getDestinationToSourceMap());
-		Assert.assertSame(objectsAdded, descriptor.getAddedObjects());
-		Assert.assertSame(objectsRemoved, descriptor.getRemovedObjects());
+		Assertions.assertSame(sourceContainer, descriptor.getSourceContainer());
+		Assertions.assertSame(destinationContainer, descriptor.getDestinationContainer());
+		Assertions.assertSame(ref, descriptor.getReference());
+		Assertions.assertSame(destinationToSourceMap, descriptor.getDestinationToSourceMap());
+		Assertions.assertSame(objectsAdded, descriptor.getAddedObjects());
+		Assertions.assertSame(objectsRemoved, descriptor.getRemovedObjects());
 	}
 
 }

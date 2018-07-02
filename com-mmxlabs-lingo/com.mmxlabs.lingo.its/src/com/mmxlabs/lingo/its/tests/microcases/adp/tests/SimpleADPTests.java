@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
@@ -49,7 +49,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	@Test
 	public void testEvaluateDoesNotUpair() {
 
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 
@@ -85,14 +85,14 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 			runnerBuilder.dispose();
 		}
 
-		Assert.assertNotNull(testCargo.eContainer());
-		Assert.assertNotNull(load.getCargo());
-		Assert.assertNotNull(discharge.getCargo());
+		Assertions.assertNotNull(testCargo.eContainer());
+		Assertions.assertNotNull(load.getCargo());
+		Assertions.assertNotNull(discharge.getCargo());
 	}
 
 	@Test
 	public void testBasic12CargoADPOptimisation() {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 
@@ -106,9 +106,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 
@@ -126,7 +126,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
 				verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
-				verifier.verifyOptimisationResults(result, Assert::fail);
+				verifier.verifyOptimisationResults(result, Assertions::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -160,7 +160,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 
 	@Test
 	public void tesDESPurchaseADPOptimisation() {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, "50000", 0);
@@ -215,9 +215,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		// create plan in parent
 		final OptimisationPlan optimisationPlan = super.createOptimisationPlan(createUserSettings(true));
@@ -238,7 +238,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
 				verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
-				verifier.verifyOptimisationResults(result, Assert::fail);
+				verifier.verifyOptimisationResults(result, Assertions::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -250,7 +250,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testVesselStartTrimming() {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -266,9 +266,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 
@@ -286,7 +286,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
 				verifier.withAnySolutionResultChecker().withCargoCount(10, true).build();
-				verifier.verifyOptimisationResults(result, Assert::fail);
+				verifier.verifyOptimisationResults(result, Assertions::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -298,7 +298,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testVesselEndTrimming() {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -316,9 +316,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 
@@ -335,7 +335,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 8, result, Assert::fail);
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 8, result, Assertions::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -347,7 +347,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testVesselStartAndEndTrimming() {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -363,9 +363,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
@@ -381,7 +381,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 10, result,  Assert::fail);
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 10, result,  Assertions::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -393,7 +393,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testContingencyOneVessel() {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -407,9 +407,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final OptimisationPlan optimisationPlan = createOptimisationPlan();
 		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
@@ -425,7 +425,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 1, result, Assert::fail);
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 1, result, Assertions::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();
@@ -437,7 +437,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 	 */
 	@Test
 	public void testContingencyTwoVessels() {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
 		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
@@ -452,9 +452,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final CargoModel cargoModel = cargoModelBuilder.getCargoModel();
 
 		// Check initial conditions are correct
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
 			System.out.print(ls.getName() + "\n");
@@ -478,7 +478,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				final IMultiStateResult result = runner.runAndApplyBest();
 				// Simple verification, have these slots been used?
 				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assert::fail);
+				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
 			});
 		} finally {
 			runnerBuilder.dispose();

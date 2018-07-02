@@ -7,9 +7,9 @@ package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
 
 	@Test
@@ -189,7 +189,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		checker.check(sequence);
 	}
 
-	@Ignore("Attempting to create a case where min heel is kept on ballast leg thus causing the min discharge violation")
+	@Disabled("Attempting to create a case where min heel is kept on ballast leg thus causing the min discharge violation")
 	@Test
 	public void testVoyageRequirementsIncMinHeelViolateMinDischarge() {
 		System.err.println("\n\nMin discharge violated due to fuel constraints inc min heel.");

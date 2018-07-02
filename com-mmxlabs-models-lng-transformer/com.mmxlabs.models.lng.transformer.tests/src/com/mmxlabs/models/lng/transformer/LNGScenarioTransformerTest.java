@@ -9,8 +9,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -54,9 +54,9 @@ public class LNGScenarioTransformerTest {
 		final Route panamaRoute = PortFactory.eINSTANCE.createRoute();
 		panamaRoute.setRouteOption(RouteOption.PANAMA);
 
-		Assert.assertEquals(ERouteOption.DIRECT, LNGScenarioTransformer.mapRouteOption(directRoute));
-		Assert.assertEquals(ERouteOption.SUEZ, LNGScenarioTransformer.mapRouteOption(suezRoute));
-		Assert.assertEquals(ERouteOption.PANAMA, LNGScenarioTransformer.mapRouteOption(panamaRoute));
+		Assertions.assertEquals(ERouteOption.DIRECT, LNGScenarioTransformer.mapRouteOption(directRoute));
+		Assertions.assertEquals(ERouteOption.SUEZ, LNGScenarioTransformer.mapRouteOption(suezRoute));
+		Assertions.assertEquals(ERouteOption.PANAMA, LNGScenarioTransformer.mapRouteOption(panamaRoute));
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class LNGScenarioTransformerTest {
 
 		// Fall back to route default as defined in ECore
 		final Route route = PortFactory.eINSTANCE.createRoute();
-		Assert.assertEquals(ERouteOption.DIRECT, LNGScenarioTransformer.mapRouteOption(route));
+		Assertions.assertEquals(ERouteOption.DIRECT, LNGScenarioTransformer.mapRouteOption(route));
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class LNGScenarioTransformerTest {
 		route.setRouteOption(RouteOption.PANAMA);
 		// Seems to trigger a reset to default
 		route.setRouteOption(null);
-		Assert.assertEquals(ERouteOption.DIRECT, LNGScenarioTransformer.mapRouteOption(route));
+		Assertions.assertEquals(ERouteOption.DIRECT, LNGScenarioTransformer.mapRouteOption(route));
 	}
 
 	@Test
@@ -722,7 +722,7 @@ public class LNGScenarioTransformerTest {
 		case RoundTripBallast:
 			return panamaCanalTariff.getBands().get(band).getBallastRoundtripTariff();
 		}
-		Assert.fail();
+		Assertions.fail("Unknown cost type");
 		return 0.0;
 	}
 
@@ -734,7 +734,7 @@ public class LNGScenarioTransformerTest {
 		case Ballast:
 			return suezCanalTariff.getBands().get(band).getBallastTariff();
 		}
-		Assert.fail();
+		Assertions.fail("Unknown cost type");
 		return 0.0;
 	}
 

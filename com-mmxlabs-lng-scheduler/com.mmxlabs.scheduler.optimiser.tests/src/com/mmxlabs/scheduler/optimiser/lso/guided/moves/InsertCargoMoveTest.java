@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -41,9 +41,9 @@ public class InsertCargoMoveTest {
 
 		final InsertSegmentMove move = new InsertSegmentMove(resourceA, Lists.newArrayList(elementA, elementB), resourceB, insertionFinder);
 
-		Assert.assertEquals(2, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceA));
-		Assert.assertTrue(move.getAffectedResources().contains(resourceB));
+		Assertions.assertEquals(2, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceA));
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceB));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList();
@@ -61,19 +61,19 @@ public class InsertCargoMoveTest {
 
 		move.apply(sequences);
 
-		Assert.assertTrue(modifiableUnusedSequences.isEmpty());
-		Assert.assertEquals(4, sequenceA.size());
-		Assert.assertEquals(4, sequenceB.size());
+		Assertions.assertTrue(modifiableUnusedSequences.isEmpty());
+		Assertions.assertEquals(4, sequenceA.size());
+		Assertions.assertEquals(4, sequenceB.size());
 
-		Assert.assertSame(elementResourceAStart, sequenceA.get(0));
-		Assert.assertSame(elementC, sequenceA.get(1));
-		Assert.assertSame(elementD, sequenceA.get(2));
-		Assert.assertSame(elementResourceAEnd, sequenceA.get(3));
+		Assertions.assertSame(elementResourceAStart, sequenceA.get(0));
+		Assertions.assertSame(elementC, sequenceA.get(1));
+		Assertions.assertSame(elementD, sequenceA.get(2));
+		Assertions.assertSame(elementResourceAEnd, sequenceA.get(3));
 
-		Assert.assertSame(elementResourceBStart, sequenceB.get(0));
-		Assert.assertSame(elementA, sequenceB.get(1));
-		Assert.assertSame(elementB, sequenceB.get(2));
-		Assert.assertSame(elementResourceBEnd, sequenceB.get(3));
+		Assertions.assertSame(elementResourceBStart, sequenceB.get(0));
+		Assertions.assertSame(elementA, sequenceB.get(1));
+		Assertions.assertSame(elementB, sequenceB.get(2));
+		Assertions.assertSame(elementResourceBEnd, sequenceB.get(3));
 	}
 
 	@Test
@@ -97,8 +97,8 @@ public class InsertCargoMoveTest {
 
 		final InsertSegmentMove move = new InsertSegmentMove(null, Lists.newArrayList(elementA, elementB), resourceB, insertionFinder);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceB));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceB));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementB, elementA);
@@ -116,19 +116,19 @@ public class InsertCargoMoveTest {
 
 		move.apply(sequences);
 
-		Assert.assertTrue(modifiableUnusedSequences.isEmpty());
-		Assert.assertEquals(4, sequenceA.size());
-		Assert.assertEquals(4, sequenceB.size());
+		Assertions.assertTrue(modifiableUnusedSequences.isEmpty());
+		Assertions.assertEquals(4, sequenceA.size());
+		Assertions.assertEquals(4, sequenceB.size());
 
-		Assert.assertSame(elementResourceAStart, sequenceA.get(0));
-		Assert.assertSame(elementC, sequenceA.get(1));
-		Assert.assertSame(elementD, sequenceA.get(2));
-		Assert.assertSame(elementResourceAEnd, sequenceA.get(3));
+		Assertions.assertSame(elementResourceAStart, sequenceA.get(0));
+		Assertions.assertSame(elementC, sequenceA.get(1));
+		Assertions.assertSame(elementD, sequenceA.get(2));
+		Assertions.assertSame(elementResourceAEnd, sequenceA.get(3));
 
-		Assert.assertSame(elementResourceBStart, sequenceB.get(0));
-		Assert.assertSame(elementA, sequenceB.get(1));
-		Assert.assertSame(elementB, sequenceB.get(2));
-		Assert.assertSame(elementResourceBEnd, sequenceB.get(3));
+		Assertions.assertSame(elementResourceBStart, sequenceB.get(0));
+		Assertions.assertSame(elementA, sequenceB.get(1));
+		Assertions.assertSame(elementB, sequenceB.get(2));
+		Assertions.assertSame(elementResourceBEnd, sequenceB.get(3));
 	}
 
 }

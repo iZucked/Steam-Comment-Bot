@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -30,28 +30,28 @@ public class PeriodVerifierUtil {
 		final Schedule fullSchedule = ScenarioModelUtil.getScheduleModel(fullModel).getSchedule();
 		final Schedule periodSchedule = scenarioRunner.getScenarioToOptimiserBridge().createOptimiserInitialSchedule();
 
-		Assert.assertNotNull(fullSchedule);
-		Assert.assertNotNull(periodSchedule);
+		Assertions.assertNotNull(fullSchedule);
+		Assertions.assertNotNull(periodSchedule);
 
 		for (final Cargo cargo : periodCargoModel.getCargoes()) {
 			final CargoAllocation fullCargoAllocation = ScheduleTools.findCargoAllocation(cargo.getLoadName(), fullSchedule);
 			final CargoAllocation periodCargoAllocation = ScheduleTools.findCargoAllocation(cargo.getLoadName(), periodSchedule);
 
-			Assert.assertNotNull(fullCargoAllocation);
-			Assert.assertNotNull(periodCargoAllocation);
+			Assertions.assertNotNull(fullCargoAllocation);
+			Assertions.assertNotNull(periodCargoAllocation);
 
 			// Check same number of slots
 			final int numberOfSlots = fullCargoAllocation.getSlotAllocations().size();
-			Assert.assertEquals(numberOfSlots, periodCargoAllocation.getSlotAllocations().size());
+			Assertions.assertEquals(numberOfSlots, periodCargoAllocation.getSlotAllocations().size());
 
 			// Check slot dates are the same
 			for (int idx = 0; idx < numberOfSlots; ++idx) {
-				Assert.assertEquals(fullCargoAllocation.getSlotAllocations().get(idx).getSlotVisit().getStart(), periodCargoAllocation.getSlotAllocations().get(idx).getSlotVisit().getStart());
+				Assertions.assertEquals(fullCargoAllocation.getSlotAllocations().get(idx).getSlotVisit().getStart(), periodCargoAllocation.getSlotAllocations().get(idx).getSlotVisit().getStart());
 			}
 			// Check return dates are the same
 			final int numberOfEvents = fullCargoAllocation.getEvents().size();
-			Assert.assertEquals(numberOfEvents, periodCargoAllocation.getEvents().size());
-			Assert.assertEquals(fullCargoAllocation.getEvents().get(numberOfEvents - 1).getEnd(), periodCargoAllocation.getEvents().get(numberOfEvents - 1).getEnd());
+			Assertions.assertEquals(numberOfEvents, periodCargoAllocation.getEvents().size());
+			Assertions.assertEquals(fullCargoAllocation.getEvents().get(numberOfEvents - 1).getEnd(), periodCargoAllocation.getEvents().get(numberOfEvents - 1).getEnd());
 
 			// Check same route, fuel choice
 			for (int idx = 0; idx < numberOfEvents; ++idx) {
@@ -59,25 +59,25 @@ public class PeriodVerifierUtil {
 				if (fullEvent instanceof Journey) {
 					final Journey fullJourney = (Journey) fullEvent;
 					final Journey periodJourney = (Journey) periodCargoAllocation.getEvents().get(idx);
-					Assert.assertEquals(fullJourney.getRouteOption(), periodJourney.getRouteOption());
+					Assertions.assertEquals(fullJourney.getRouteOption(), periodJourney.getRouteOption());
 
 					// TODO: Fuel choice (in master branch)
 
 					// Assert panama booking (if requested) is the same
 					if (checkPanamaBookings) {
-						// Assert.assertEquals(fullJourney.getCanalBooking(), periodJourney.getCanalBooking());
-						Assert.assertEquals(fullJourney.getCanalBookingPeriod(), periodJourney.getCanalBookingPeriod());
-						Assert.assertEquals(fullJourney.getCanalDateTime(), periodJourney.getCanalDateTime());
-						Assert.assertEquals(fullJourney.getCanalArrivalTime(), periodJourney.getCanalArrivalTime());
-						Assert.assertEquals(fullJourney.getLatestPossibleCanalDateTime(), periodJourney.getLatestPossibleCanalDateTime());
+						// Assertions.assertEquals(fullJourney.getCanalBooking(), periodJourney.getCanalBooking());
+						Assertions.assertEquals(fullJourney.getCanalBookingPeriod(), periodJourney.getCanalBookingPeriod());
+						Assertions.assertEquals(fullJourney.getCanalDateTime(), periodJourney.getCanalDateTime());
+						Assertions.assertEquals(fullJourney.getCanalArrivalTime(), periodJourney.getCanalArrivalTime());
+						Assertions.assertEquals(fullJourney.getLatestPossibleCanalDateTime(), periodJourney.getLatestPossibleCanalDateTime());
 						// Use Enum in master branch
-						// Assert.assertEquals(fullJourney.getCanalEntry(), periodJourney.getCanalEntry().getName());
+						// Assertions.assertEquals(fullJourney.getCanalEntry(), periodJourney.getCanalEntry().getName());
 					}
 				}
 			}
 
 			// Assert P&L is "similar"
-			Assert.assertEquals(fullCargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), periodCargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 10_000.0);
+			Assertions.assertEquals(fullCargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), periodCargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 10_000.0);
 
 		}
 		// Again for vessel events,

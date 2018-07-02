@@ -10,9 +10,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class FileDeleterTest {
 
@@ -24,7 +24,7 @@ public class FileDeleterTest {
 	 * @throws Exception
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void test() throws Exception {
 
 		ExecutorService executor = Executors.newFixedThreadPool(4);
@@ -45,7 +45,7 @@ public class FileDeleterTest {
 
 						FileDeleter.delete(f, true);
 
-						Assert.assertFalse(f.exists());
+						Assertions.assertFalse(f.exists());
 					} catch (Throwable t) {
 						t.printStackTrace();
 					}

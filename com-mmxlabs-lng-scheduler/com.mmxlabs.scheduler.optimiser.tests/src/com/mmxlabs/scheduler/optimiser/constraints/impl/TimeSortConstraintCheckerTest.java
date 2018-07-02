@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -63,7 +63,7 @@ public class TimeSortConstraintCheckerTest {
 		Mockito.when(tw2.getInclusiveStart()).thenReturn(2);
 		Mockito.when(tw2.getExclusiveEnd()).thenReturn(3);
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
 
 		Mockito.when(tw2.getInclusiveStart()).thenReturn(0);
 		Mockito.when(tw2.getExclusiveEnd()).thenReturn(1);
@@ -71,7 +71,7 @@ public class TimeSortConstraintCheckerTest {
 		Mockito.when(tw1.getInclusiveStart()).thenReturn(2);
 		Mockito.when(tw1.getExclusiveEnd()).thenReturn(3);
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class TimeSortConstraintCheckerTest {
 		Mockito.when(tw2.getInclusiveStart()).thenReturn(1);
 		Mockito.when(tw2.getExclusiveEnd()).thenReturn(3);
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
 
 		Mockito.when(tw2.getInclusiveStart()).thenReturn(0);
 		Mockito.when(tw2.getExclusiveEnd()).thenReturn(2);
@@ -123,7 +123,7 @@ public class TimeSortConstraintCheckerTest {
 		Mockito.when(tw1.getInclusiveStart()).thenReturn(1);
 		Mockito.when(tw1.getExclusiveEnd()).thenReturn(3);
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class TimeSortConstraintCheckerTest {
 		Mockito.when(tw2.getInclusiveStart()).thenReturn(1);
 		Mockito.when(tw2.getExclusiveEnd()).thenReturn(2);
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
 
 		Mockito.when(tw2.getInclusiveStart()).thenReturn(0);
 		Mockito.when(tw2.getExclusiveEnd()).thenReturn(3);
@@ -174,7 +174,7 @@ public class TimeSortConstraintCheckerTest {
 		Mockito.when(tw1.getInclusiveStart()).thenReturn(1);
 		Mockito.when(tw1.getExclusiveEnd()).thenReturn(2);
 
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
 	}
 
 	/**
@@ -230,15 +230,15 @@ public class TimeSortConstraintCheckerTest {
 		Mockito.when(portTypeProvider.getPortType(element1)).thenReturn(PortType.Discharge);
 		Mockito.when(portTypeProvider.getPortType(element2)).thenReturn(PortType.Load);
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource2));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource2));
 
 		// First case, Load -> Discharge does apply on cargo shorts
 		Mockito.when(portTypeProvider.getPortType(element1)).thenReturn(PortType.Load);
 		Mockito.when(portTypeProvider.getPortType(element2)).thenReturn(PortType.Discharge);
 
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2));
 
 	}
 

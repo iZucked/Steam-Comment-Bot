@@ -4,25 +4,24 @@
  */
 package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -44,7 +43,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
@@ -54,7 +53,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 	private static String loadName = "load";
 	private static String dischargeName = "discharge";
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -64,7 +63,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -78,7 +77,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 		return importReferenceData("/referencedata/idle-time-when-laden/");
 	}
 	
-	@Before
+	@BeforeEach
 	public void constructor() throws Exception {
 		
 		scenarioDataProvider = importReferenceData();
@@ -102,7 +101,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 1, 1), LocalDate.of(2017, 3, 1));
 	}
 
-	@After
+	@AfterEach
 	public void destructor() {
 		lngScenarioModel = null;
 		scenarioModelFinder = null;
@@ -155,7 +154,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 * */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testScheduleProviderCreatesIdleTime_whenLadenOnNBO() throws Exception {
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability_ForNBOLaden(LocalDateTime.of(2017, 1, 1, 0, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0, 0),
@@ -181,13 +180,13 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 
 			Idle idle = null;
 			// check that we have cargo allocations
-			Assert.assertTrue(scenarioRunner.getSchedule().getCargoAllocations().size() > 0);
+			Assertions.assertTrue(scenarioRunner.getSchedule().getCargoAllocations().size() > 0);
 			
 			for (final CargoAllocation cargoA : scenarioRunner.getSchedule().getCargoAllocations()) {
 				SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoA);
 				idle = simpleCargoAllocation.getLadenIdle();
 				// check that idle time is 0ß
-				Assert.assertEquals(0, idle.getDuration());
+				Assertions.assertEquals(0, idle.getDuration());
 			}
 
 		});
@@ -200,7 +199,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 * */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testScheduleProviderCreatesIdleTime_whenLadenOnNBO_HighPortCV() throws Exception {
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability_ForNBOLaden(LocalDateTime.of(2017, 1, 1, 0, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0, 0),
@@ -226,13 +225,13 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 
 			Idle idle = null;
 			// check that we have cargo allocations
-			Assert.assertTrue(scenarioRunner.getSchedule().getCargoAllocations().size() > 0);
+			Assertions.assertTrue(scenarioRunner.getSchedule().getCargoAllocations().size() > 0);
 			
 			for (final CargoAllocation cargoA : scenarioRunner.getSchedule().getCargoAllocations()) {
 				SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoA);
 				idle = simpleCargoAllocation.getLadenIdle();
 				// check that existing idle is 0
-				Assert.assertEquals(0, idle.getDuration());
+				Assertions.assertEquals(0, idle.getDuration());
 			}
 
 		});

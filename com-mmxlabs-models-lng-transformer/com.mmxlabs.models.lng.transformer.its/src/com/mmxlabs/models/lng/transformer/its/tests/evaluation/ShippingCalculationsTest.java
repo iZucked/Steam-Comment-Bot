@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -54,7 +54,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class ShippingCalculationsTest extends AbstractShippingCalculationsTestClass {
 
 	/*
@@ -316,9 +316,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
-		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(1)).getRouteOption());
-		Assert.assertEquals(RouteOption.PANAMA, ((Journey) sequence.getEvents().get(4)).getRouteOption());
-		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(7)).getRouteOption());
+		Assertions.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(1)).getRouteOption());
+		Assertions.assertEquals(RouteOption.PANAMA, ((Journey) sequence.getEvents().get(4)).getRouteOption());
+		Assertions.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(7)).getRouteOption());
 
 		checker.check(sequence);
 
@@ -366,7 +366,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 				fboUsages += 1;
 			}
 		}
-		Assert.assertEquals("Exactly one leg uses FBO", 1, fboUsages);
+		Assertions.assertEquals(1, fboUsages, "Exactly one leg uses FBO");
 	}
 
 	/*
@@ -795,7 +795,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 
 		final Cooldown cooldown = extractObjectsOfClass(sequence.getEvents(), Cooldown.class).get(0);
-		Assert.assertEquals("Cooldown cost", 2100, cooldown.getCost());
+		Assertions.assertEquals(2100, cooldown.getCost(), "Cooldown cost");
 
 	}
 
@@ -832,7 +832,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 
 		final Cooldown cooldown = extractObjectsOfClass(sequence.getEvents(), Cooldown.class).get(0);
-		Assert.assertEquals("Cooldown cost", 2100, cooldown.getCost());
+		Assertions.assertEquals(2100, cooldown.getCost(), "Cooldown cost");
 
 	}
 
@@ -857,7 +857,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 
 		// change from default scenario: sequence daily hire rate should be set
-		// Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
+		// Assertions.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
 	}
 
 	@Test
@@ -913,7 +913,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 
 		// change from default scenario: sequence daily hire rate should be set
-		// Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
+		// Assertions.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
 	}
 
 	/**
@@ -1011,7 +1011,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 
 		// change from default scenario: sequence daily hire rate should be set
-		// Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
+		// Assertions.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
 	}
 
 	@Test

@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.ISequences;
@@ -39,15 +39,15 @@ public class OptimisationContextTest {
 		final OptimisationContext optContext = new OptimisationContext(initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry,
 				evaluationProcesses, evaluationProcessRegistry, evaluatedStateConstraintCheckers, evaluatedStateConstraintCheckerRegistry);
 
-//		Assert.assertSame(optimisationData, optContext.getOptimisationData());
-		Assert.assertSame(initialSequences, optContext.getInputSequences());
-		Assert.assertSame(fitnessComponents, optContext.getFitnessComponents());
-		Assert.assertSame(fitnessFunctionRegistry, optContext.getFitnessFunctionRegistry());
-		Assert.assertSame(constraintCheckers, optContext.getConstraintCheckers());
-		Assert.assertSame(constraintCheckerRegistry, optContext.getConstraintCheckerRegistry());
-		Assert.assertSame(evaluationProcesses, optContext.getEvaluationProcesses());
-		Assert.assertSame(evaluationProcessRegistry, optContext.getEvaluationProcessRegistry());
-		Assert.assertSame(evaluatedStateConstraintCheckers, optContext.getEvaluatedStateConstraintCheckers());
-		Assert.assertSame(evaluatedStateConstraintCheckerRegistry, optContext.getEvaluatedStateConstraintCheckerRegistry());
+//		Assertions.assertSame(optimisationData, optContext.getOptimisationData());
+		Assertions.assertSame(initialSequences, optContext.getInputSequences());
+		Assertions.assertSame(fitnessComponents, optContext.getFitnessComponents());
+		Assertions.assertSame(fitnessFunctionRegistry, optContext.getFitnessFunctionRegistry());
+		Assertions.assertSame(constraintCheckers, optContext.getConstraintCheckers());
+		Assertions.assertSame(constraintCheckerRegistry, optContext.getConstraintCheckerRegistry());
+		Assertions.assertSame(evaluationProcesses, optContext.getEvaluationProcesses());
+		Assertions.assertSame(evaluationProcessRegistry, optContext.getEvaluationProcessRegistry());
+		Assertions.assertSame(evaluatedStateConstraintCheckers, optContext.getEvaluatedStateConstraintCheckers());
+		Assertions.assertSame(evaluatedStateConstraintCheckerRegistry, optContext.getEvaluatedStateConstraintCheckerRegistry());
 	}
 }

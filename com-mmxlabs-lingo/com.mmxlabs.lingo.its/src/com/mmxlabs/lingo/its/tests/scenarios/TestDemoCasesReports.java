@@ -6,20 +6,10 @@ package com.mmxlabs.lingo.its.tests.scenarios;
 
 import java.util.Arrays;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
 import com.mmxlabs.lingo.its.tests.AbstractReportTester_LiNGO;
 
-@RunWith(value = Parameterized.class)
 public class TestDemoCasesReports extends AbstractReportTester_LiNGO {
 
-	public TestDemoCasesReports(String name, String scenario) throws Exception {
-		super(name, scenario);
-	}
-
-	@Parameters(name = "{0}")
 	public static Iterable<Object[]> generateTests() {
 		return Arrays.asList(new Object[][] { { "testBonnyProblems_Bonny", "/scenarios/demo-cases/Bonny problems/0 Bonny.lingo" },
 				{ "testBonnyProblems_LateAndLost_DES_Backfill", "/scenarios/demo-cases/Bonny problems/1 late and lost-DES backfill -F- Bonny.lingo" },

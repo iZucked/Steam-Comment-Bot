@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -66,8 +66,8 @@ public class CooldownLumpSumCalculatorTest {
 		long testCalculationA = lsc.calculateCooldownCost(mockVessel, mockPort, 0, timeA);
 		long testCalculationB = lsc.calculateCooldownCost(mockVessel, mockPort, 0, timeB);
 
-		Assert.assertEquals(String.format("CooldownLumpSumCalculator returns %d but should be %d.", testCalculationA, expectedA), testCalculationA, expectedA);
-		Assert.assertEquals(String.format("CooldownLumpSumCalculator returns %d but should be %d.", testCalculationB, expectedB), testCalculationB, expectedB);
+		Assertions.assertEquals(testCalculationA, expectedA, String.format("CooldownLumpSumCalculator returns %d but should be %d.", testCalculationA, expectedA));
+		Assertions.assertEquals(testCalculationB, expectedB, String.format("CooldownLumpSumCalculator returns %d but should be %d.", testCalculationB, expectedB));
 
 	}
 

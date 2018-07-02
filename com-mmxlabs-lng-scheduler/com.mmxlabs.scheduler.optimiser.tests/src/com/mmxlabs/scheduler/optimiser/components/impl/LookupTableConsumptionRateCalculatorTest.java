@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
@@ -17,39 +17,38 @@ public class LookupTableConsumptionRateCalculatorTest {
 	public void testLookupTableConsumptionRateCalculator() {
 		final IConsumptionRateCalculator calc = Mockito.mock(IConsumptionRateCalculator.class);
 
-		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100L);
+		Mockito.when(calc.getRate(ArgumentMatchers.anyInt())).thenReturn(100L);
 
 		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 
-		Assert.assertEquals(100L, lookupCalc.getRate(5));
-		Assert.assertEquals(100L, lookupCalc.getRate(6));
-		Assert.assertEquals(100L, lookupCalc.getRate(7));
-		Assert.assertEquals(100L, lookupCalc.getRate(8));
-		Assert.assertEquals(100L, lookupCalc.getRate(9));
-		Assert.assertEquals(100L, lookupCalc.getRate(10));
+		Assertions.assertEquals(100L, lookupCalc.getRate(5));
+		Assertions.assertEquals(100L, lookupCalc.getRate(6));
+		Assertions.assertEquals(100L, lookupCalc.getRate(7));
+		Assertions.assertEquals(100L, lookupCalc.getRate(8));
+		Assertions.assertEquals(100L, lookupCalc.getRate(9));
+		Assertions.assertEquals(100L, lookupCalc.getRate(10));
 
 	}
 
-	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	@Test
 	public void testLookupTableConsumptionRateCalculator2() {
 		final IConsumptionRateCalculator calc = Mockito.mock(IConsumptionRateCalculator.class);
 
-		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100L);
+		Mockito.when(calc.getRate(ArgumentMatchers.anyInt())).thenReturn(100L);
 
 		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 
-		lookupCalc.getRate(4);
+		Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> lookupCalc.getRate(4));
 
 	}
 
-	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	@Test
 	public void testLookupTableConsumptionRateCalculator3() {
 		final IConsumptionRateCalculator calc = Mockito.mock(IConsumptionRateCalculator.class);
-		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100L);
+		Mockito.when(calc.getRate(ArgumentMatchers.anyInt())).thenReturn(100L);
 
 		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 
-		lookupCalc.getRate(11);
-
+		Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> lookupCalc.getRate(11));
 	}
 }

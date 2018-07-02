@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.TreeMap;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -69,7 +69,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int speed = calc.calculateSpeed(options, options.getAvailableTime());
 
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedSpeed), speed);
+		Assertions.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedSpeed), speed);
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class NewLNGVoyageCalculatorTest {
 		options.setRoute(ERouteOption.DIRECT, expectedMinSpeed * 48, 0L);
 
 		// Sanity check that inputs will yield a speed lower than the expected min speed
-		Assert.assertTrue(options.getDistance() / options.getAvailableTime() < expectedMinSpeed);
+		Assertions.assertTrue(options.getDistance() / options.getAvailableTime() < expectedMinSpeed);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -100,7 +100,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = calc.calculateSpeed(options, options.getAvailableTime());
 
 		// Check speed is clamped to the minumum
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedMinSpeed), speed);
+		Assertions.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedMinSpeed), speed);
 	}
 
 	@Test
@@ -118,7 +118,7 @@ public class NewLNGVoyageCalculatorTest {
 		options.setRoute(ERouteOption.DIRECT, expectedMinSpeed * 48, 0L);
 
 		// Sanity check that inputs will yield a speed lower than the expected min speed
-		Assert.assertTrue(options.getDistance() / options.getAvailableTime() < expectedMinSpeed);
+		Assertions.assertTrue(options.getDistance() / options.getAvailableTime() < expectedMinSpeed);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -131,7 +131,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = calc.calculateSpeed(options, options.getAvailableTime());
 
 		// Check speed is clamped to the minumum
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedMinSpeed), speed);
+		Assertions.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedMinSpeed), speed);
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public class NewLNGVoyageCalculatorTest {
 		options.setRoute(ERouteOption.DIRECT, expectedMaxSpeed * 48, 0L);
 
 		// Sanity check that inputs will yield a speed higher than the expected max speed
-		Assert.assertTrue(options.getDistance() / options.getAvailableTime() > expectedMaxSpeed);
+		Assertions.assertTrue(options.getDistance() / options.getAvailableTime() > expectedMaxSpeed);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -162,7 +162,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = calc.calculateSpeed(options, options.getAvailableTime());
 
 		// Check speed is clamped to the minumum
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedMaxSpeed), speed);
+		Assertions.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedMaxSpeed), speed);
 	}
 
 	@Test
@@ -188,7 +188,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int speed = calc.calculateSpeed(options, options.getAvailableTime());
 
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedSpeed), speed);
+		Assertions.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedSpeed), speed);
 	}
 
 	@Test
@@ -215,7 +215,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int speed = calc.calculateSpeed(options, options.getAvailableTime());
 
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedMinSpeed), speed);
+		Assertions.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(expectedMinSpeed), speed);
 	}
 
 	@Test
@@ -236,7 +236,7 @@ public class NewLNGVoyageCalculatorTest {
 		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
 
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
-		Assert.assertTrue(OptimiserUnitConvertor.convertToInternalSpeed(speed) < options.getNBOSpeed());
+		Assertions.assertTrue(OptimiserUnitConvertor.convertToInternalSpeed(speed) < options.getNBOSpeed());
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -254,15 +254,15 @@ public class NewLNGVoyageCalculatorTest {
 		final long nboRate = vessel.getNBORate(vesselState);
 		final long pilotLightRate = vessel.getPilotLightRate();
 
-		Assert.assertEquals(nboRate * travelTime / 24, details.getFuelConsumption(LNGFuelKeys.NBO_In_m3));
+		Assertions.assertEquals(nboRate * travelTime / 24, details.getFuelConsumption(LNGFuelKeys.NBO_In_m3));
 		// Expect some pilot light
-		Assert.assertTrue(details.getFuelConsumption(vessel.getPilotLightFuelInMT()) > 0);
+		Assertions.assertTrue(details.getFuelConsumption(vessel.getPilotLightFuelInMT()) > 0);
 
-		Assert.assertEquals(pilotLightRate * travelTime / 24, details.getFuelConsumption(vessel.getPilotLightFuelInMT()));
+		Assertions.assertEquals(pilotLightRate * travelTime / 24, details.getFuelConsumption(vessel.getPilotLightFuelInMT()));
 
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getTravelBaseFuelInMT()));
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
-		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.FBO_In_m3));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.FBO_In_m3));
 	}
 
 	@Test
@@ -281,7 +281,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
-		Assert.assertTrue(internalSpeed > options.getNBOSpeed());
+		Assertions.assertTrue(internalSpeed > options.getNBOSpeed());
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -307,15 +307,15 @@ public class NewLNGVoyageCalculatorTest {
 		final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
 		final IBaseFuel pilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 
-		Assert.assertEquals(nboRate * travelTime / 24, details.getFuelConsumption(LNGFuelKeys.NBO_In_m3));
+		Assertions.assertEquals(nboRate * travelTime / 24, details.getFuelConsumption(LNGFuelKeys.NBO_In_m3));
 		// Equivalence is 0.5 so double to convert rate to m3
-		Assert.assertEquals((2 * expectedBaseConsumption - nboRate) * travelTime / 24, details.getFuelConsumption(LNGFuelKeys.FBO_In_m3));
-		Assert.assertTrue(details.getFuelConsumption(vessel.getPilotLightFuelInMT()) > 0);
+		Assertions.assertEquals((2 * expectedBaseConsumption - nboRate) * travelTime / 24, details.getFuelConsumption(LNGFuelKeys.FBO_In_m3));
+		Assertions.assertTrue(details.getFuelConsumption(vessel.getPilotLightFuelInMT()) > 0);
 		// Expect some pilot light
-		Assert.assertEquals(pilotLightRate * travelTime / 24, details.getFuelConsumption(vessel.getPilotLightFuelInMT()));
+		Assertions.assertEquals(pilotLightRate * travelTime / 24, details.getFuelConsumption(vessel.getPilotLightFuelInMT()));
 
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getTravelBaseFuelInMT()));
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
 
 	}
 
@@ -335,7 +335,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
-		Assert.assertTrue(internalSpeed > options.getNBOSpeed());
+		Assertions.assertTrue(internalSpeed > options.getNBOSpeed());
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -357,15 +357,15 @@ public class NewLNGVoyageCalculatorTest {
 		final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
 		final IBaseFuel pilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 
-		Assert.assertEquals(nboRate * travelTime / 24, details.getFuelConsumption(LNGFuelKeys.NBO_In_m3));
+		Assertions.assertEquals(nboRate * travelTime / 24, details.getFuelConsumption(LNGFuelKeys.NBO_In_m3));
 		// Some supplement expected
-		Assert.assertEquals((expectedBaseConsumption - nboRate / 2) * travelTime / 24, details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
+		Assertions.assertEquals((expectedBaseConsumption - nboRate / 2) * travelTime / 24, details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
 		// Equivalence is 0.5
-		Assert.assertTrue(details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()) > 0);
+		Assertions.assertTrue(details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()) > 0);
 
-		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.FBO_In_m3));
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getPilotLightFuelInMT()));
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.FBO_In_m3));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getPilotLightFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getTravelBaseFuelInMT()));
 
 	}
 
@@ -385,7 +385,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
-		Assert.assertTrue(internalSpeed > options.getNBOSpeed());
+		Assertions.assertTrue(internalSpeed > options.getNBOSpeed());
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -405,12 +405,12 @@ public class NewLNGVoyageCalculatorTest {
 		final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
 		final IBaseFuel pilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 
-		Assert.assertEquals(expectedBaseConsumption * travelTime / 24, details.getFuelConsumption(vessel.getTravelBaseFuelInMT()));
+		Assertions.assertEquals(expectedBaseConsumption * travelTime / 24, details.getFuelConsumption(vessel.getTravelBaseFuelInMT()));
 
-		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.NBO_In_m3));
-		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.FBO_In_m3));
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getPilotLightFuelInMT()));
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.NBO_In_m3));
+		Assertions.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.FBO_In_m3));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getPilotLightFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
 	}
 
 	@Test
@@ -446,12 +446,12 @@ public class NewLNGVoyageCalculatorTest {
 		final IBaseFuel idleBaseFuel = vessel.getIdleBaseFuel();
 		final IBaseFuel pilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 
-		Assert.assertEquals(nboIdleRate * idleTime / 24, details.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3));
+		Assertions.assertEquals(nboIdleRate * idleTime / 24, details.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3));
 		// Expect some pilot light
-		Assert.assertTrue(details.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()) > 0);
-		Assert.assertEquals(pilotLightRate * idleTime / 24, details.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()));
+		Assertions.assertTrue(details.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()) > 0);
+		Assertions.assertEquals(pilotLightRate * idleTime / 24, details.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()));
 
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getIdleBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getIdleBaseFuelInMT()));
 
 	}
 
@@ -487,10 +487,10 @@ public class NewLNGVoyageCalculatorTest {
 		final IBaseFuel idleBaseFuel = vessel.getIdleBaseFuel();
 		final IBaseFuel pilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 
-		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3));
-		Assert.assertEquals(0, details.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()));
+		Assertions.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3));
+		Assertions.assertEquals(0, details.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()));
 
-		Assert.assertEquals(baseRate * idleTime / 24, details.getFuelConsumption(vessel.getIdleBaseFuelInMT()));
+		Assertions.assertEquals(baseRate * idleTime / 24, details.getFuelConsumption(vessel.getIdleBaseFuelInMT()));
 
 	}
 
@@ -523,7 +523,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Check results
 		final long cooldownVolume = options.getVessel().getCooldownVolume();
 
-		Assert.assertEquals(cooldownVolume, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
+		Assertions.assertEquals(cooldownVolume, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
 
 	}
 
@@ -556,7 +556,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Check results
 		final long cooldownVolume = options.getVessel().getCooldownVolume();
 
-		Assert.assertEquals(cooldownVolume, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
+		Assertions.assertEquals(cooldownVolume, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
 
 	}
 
@@ -587,7 +587,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime, Long.MAX_VALUE);
 
 		// Check results
-		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
+		Assertions.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
 	}
 
 	@Test
@@ -617,7 +617,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.calculateIdleFuelRequirements(options, details, options.getVessel(), vesselState, idleTime, Long.MAX_VALUE);
 
 		// Check results
-		Assert.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
+		Assertions.assertEquals(0, details.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3));
 
 	}
 
@@ -664,15 +664,15 @@ public class NewLNGVoyageCalculatorTest {
 		// Check results
 		final long pilotLightRate = options.getVessel().getPilotLightRate();
 
-		Assert.assertEquals(nboRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
-		Assert.assertEquals((2 * expectedBaseConsumption - nboRate) * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3));
+		Assertions.assertEquals(nboRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
+		Assertions.assertEquals((2 * expectedBaseConsumption - nboRate) * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3));
 		// Expect some pilot light
-		Assert.assertTrue(details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()) > 0);
+		Assertions.assertTrue(details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()) > 0);
 
-		Assert.assertEquals(pilotLightRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()));
+		Assertions.assertEquals(pilotLightRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()));
 
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
 
 	}
 
@@ -716,15 +716,15 @@ public class NewLNGVoyageCalculatorTest {
 		final long pilotLightRate = vessel.getPilotLightRate();
 		// Expected pure base consumption rates
 
-		Assert.assertEquals(nboRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
+		Assertions.assertEquals(nboRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
 		// Equivalence is 0.5 so double to convert rate to m3
-		Assert.assertEquals((2 * expectedBaseConsumption - nboRate) * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3));
-		Assert.assertTrue(details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()) > 0);
+		Assertions.assertEquals((2 * expectedBaseConsumption - nboRate) * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3));
+		Assertions.assertTrue(details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()) > 0);
 		// Expect some pilot light
-		Assert.assertEquals(pilotLightRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()));
+		Assertions.assertEquals(pilotLightRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()));
 
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
 
 	}
 
@@ -765,15 +765,15 @@ public class NewLNGVoyageCalculatorTest {
 
 		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
 
-		Assert.assertEquals(nboRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
+		Assertions.assertEquals(nboRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
 		// Some supplement expected
-		Assert.assertEquals(((expectedBaseConsumption * 2 - nboRate) * additionalRouteTime) / 2 / 24, details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
+		Assertions.assertEquals(((expectedBaseConsumption * 2 - nboRate) * additionalRouteTime) / 2 / 24, details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
 		// Equivalence is 0.5
-		Assert.assertTrue(details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()) > 0);
+		Assertions.assertTrue(details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()) > 0);
 
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3));
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()));
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
 	}
 
 	@Test
@@ -811,12 +811,12 @@ public class NewLNGVoyageCalculatorTest {
 
 		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
 
-		Assert.assertEquals(expectedBaseConsumption * additionalRouteTime / 24, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
+		Assertions.assertEquals(expectedBaseConsumption * additionalRouteTime / 24, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
 
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3));
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()));
-		Assert.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT()));
+		Assertions.assertEquals(0, details.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()));
 
 	}
 
@@ -875,9 +875,9 @@ public class NewLNGVoyageCalculatorTest {
 		calc.calculatePortFuelRequirements(options, details);
 
 		// Check results
-		Assert.assertSame(options, details.getOptions());
+		Assertions.assertSame(options, details.getOptions());
 
-		Assert.assertEquals(target, details.getFuelConsumption(vessel.getInPortBaseFuelInMT()));
+		Assertions.assertEquals(target, details.getFuelConsumption(vessel.getInPortBaseFuelInMT()));
 	}
 
 	@Test
@@ -947,13 +947,13 @@ public class NewLNGVoyageCalculatorTest {
 
 		final long result = calc.calculateLNGFuelConsumptions(vessel, loadDetails, details, dischargeDetails);
 
-		Assert.assertEquals(22 + 33 + 55, result);
+		Assertions.assertEquals(22 + 33 + 55, result);
 
 		// Expect no change in LNG price
-		// Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.FBO));
-		// Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.NBO));
-		// Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.IdleNBO));
-		// Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.Cooldown));
+		// Assertions.assertEquals(0, details.getFuelUnitPrice(FuelComponent.FBO));
+		// Assertions.assertEquals(0, details.getFuelUnitPrice(FuelComponent.NBO));
+		// Assertions.assertEquals(0, details.getFuelUnitPrice(FuelComponent.IdleNBO));
+		// Assertions.assertEquals(0, details.getFuelUnitPrice(FuelComponent.Cooldown));
 	}
 
 	@Test
@@ -1014,7 +1014,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		Mockito.verify(cooldownCalculator).calculateCooldownCost(vessel, toPort, OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), 2);
 
-		Assert.assertEquals(expectedCooldownCost, cooldownCost);
+		Assertions.assertEquals(expectedCooldownCost, cooldownCost);
 	}
 
 	@Test
@@ -1076,7 +1076,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		Mockito.verify(cooldownCalculator).calculateCooldownCost(vessel, toPort, OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), 2);
 
-		Assert.assertEquals(expectedCooldownCost, cooldownCost);
+		Assertions.assertEquals(expectedCooldownCost, cooldownCost);
 	}
 
 	@Test
@@ -1137,7 +1137,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		Mockito.verifyZeroInteractions(cooldownCalculator);
 
-		Assert.assertEquals(0, cooldownCost);
+		Assertions.assertEquals(0, cooldownCost);
 
 	}
 

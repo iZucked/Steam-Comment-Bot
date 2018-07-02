@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -28,7 +28,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam Semenenko
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class RouteSameCostTest {
 
 	static class CanalParameters {
@@ -53,7 +53,7 @@ public class RouteSameCostTest {
 		final int expensiveDistance1 = 1100;
 		final int expensiveDistance2 = 1200;
 
-		final int[] portDistances = { cheapestDistance };//, expensiveDistance1, expensiveDistance2 };
+		final int[] portDistances = { cheapestDistance };// , expensiveDistance1, expensiveDistance2 };
 
 		CanalParameters params = new CanalParameters();
 		params.canalOption = RouteOption.SUEZ;
@@ -73,13 +73,13 @@ public class RouteSameCostTest {
 		// check same price
 		final long canalPrice = getPriceOfCanal(testName, params, fuelTravelConsumptionPerHour, NBORatePerHour);
 		final long oceanPrice = getPriceOfOcean(testName, cheapestDistance, fuelTravelConsumptionPerHour, NBORatePerHour);
-		Assert.assertTrue("Cheapest routes are same price", canalPrice == oceanPrice);
+		Assertions.assertTrue(canalPrice == oceanPrice, "Cheapest routes are same price");
 
 		// check the vessel took either of the cheapest routes.
 		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRouteOption().equals(params.canalOption);
 		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRouteOption().equals(params.canalOption);
 
-		Assert.assertTrue("Vessel took one of cheapest routes", ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal);
+		Assertions.assertTrue(ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal, "Vessel took one of cheapest routes");
 	}
 
 	/**
@@ -115,13 +115,13 @@ public class RouteSameCostTest {
 		// check same price
 		final long canalPrice = getPriceOfCanal(testName, params, fuelConsumptionHours, NBORateHours);
 		final long oceanPrice = getPriceOfOcean(testName, cheapestDistance, fuelConsumptionHours, NBORateHours);
-		Assert.assertTrue("Cheapest routes are same price", canalPrice == oceanPrice);
+		Assertions.assertTrue(canalPrice == oceanPrice, "Cheapest routes are same price");
 
 		// check the vessel took either of the cheapest routes.
 		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRouteOption().equals(params.canalOption);
 		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRouteOption().equals(params.canalOption);
 
-		Assert.assertTrue("Vessel took one of cheapest routes", ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal);
+		Assertions.assertTrue(ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal, "Vessel took one of cheapest routes");
 	}
 
 	/**

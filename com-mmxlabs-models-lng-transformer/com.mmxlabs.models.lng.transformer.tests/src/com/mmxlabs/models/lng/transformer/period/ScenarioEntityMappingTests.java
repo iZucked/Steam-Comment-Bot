@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class ScenarioEntityMappingTests {
@@ -25,14 +25,14 @@ public class ScenarioEntityMappingTests {
 
 		mapping.createMapping(original, copy);
 
-		Assert.assertSame(original, mapping.getOriginalFromCopy(copy));
-		Assert.assertSame(copy, mapping.getCopyFromOriginal(original));
+		Assertions.assertSame(original, mapping.getOriginalFromCopy(copy));
+		Assertions.assertSame(copy, mapping.getCopyFromOriginal(original));
 
-		Assert.assertNull(mapping.getOriginalFromCopy(original));
-		Assert.assertNull(mapping.getCopyFromOriginal(copy));
+		Assertions.assertNull(mapping.getOriginalFromCopy(original));
+		Assertions.assertNull(mapping.getCopyFromOriginal(copy));
 
-		Assert.assertEquals(Collections.singleton(original), mapping.getUsedOriginalObjects());
-		Assert.assertEquals(Collections.emptySet(), mapping.getUnusedOriginalObjects());
+		Assertions.assertEquals(Collections.singleton(original), mapping.getUsedOriginalObjects());
+		Assertions.assertEquals(Collections.emptySet(), mapping.getUnusedOriginalObjects());
 	}
 
 	@Test
@@ -48,14 +48,14 @@ public class ScenarioEntityMappingTests {
 
 		mapping.createMappings(map);
 
-		Assert.assertSame(original, mapping.getOriginalFromCopy(copy));
-		Assert.assertSame(copy, mapping.getCopyFromOriginal(original));
+		Assertions.assertSame(original, mapping.getOriginalFromCopy(copy));
+		Assertions.assertSame(copy, mapping.getCopyFromOriginal(original));
 
-		Assert.assertNull(mapping.getOriginalFromCopy(original));
-		Assert.assertNull(mapping.getCopyFromOriginal(copy));
+		Assertions.assertNull(mapping.getOriginalFromCopy(original));
+		Assertions.assertNull(mapping.getCopyFromOriginal(copy));
 
-		Assert.assertEquals(Collections.singleton(original), mapping.getUsedOriginalObjects());
-		Assert.assertEquals(Collections.emptySet(), mapping.getUnusedOriginalObjects());
+		Assertions.assertEquals(Collections.singleton(original), mapping.getUsedOriginalObjects());
+		Assertions.assertEquals(Collections.emptySet(), mapping.getUnusedOriginalObjects());
 
 	}
 
@@ -74,8 +74,8 @@ public class ScenarioEntityMappingTests {
 
 		mapping.registerRemovedOriginal(original2);
 
-		Assert.assertEquals(Collections.singleton(original1), mapping.getUsedOriginalObjects());
-		Assert.assertEquals(Collections.singleton(original2), mapping.getUnusedOriginalObjects());
+		Assertions.assertEquals(Collections.singleton(original1), mapping.getUsedOriginalObjects());
+		Assertions.assertEquals(Collections.singleton(original2), mapping.getUnusedOriginalObjects());
 
 	}
 

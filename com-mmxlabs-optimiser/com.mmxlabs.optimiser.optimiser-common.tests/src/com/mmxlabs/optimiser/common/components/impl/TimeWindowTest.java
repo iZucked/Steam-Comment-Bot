@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.components.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TimeWindowTest {
 
@@ -17,8 +17,8 @@ public class TimeWindowTest {
 
 		final TimeWindow tw = new TimeWindow(start, end);
 
-		Assert.assertEquals(start, tw.getInclusiveStart());
-		Assert.assertEquals(end, tw.getExclusiveEnd());
+		Assertions.assertEquals(start, tw.getInclusiveStart());
+		Assertions.assertEquals(end, tw.getExclusiveEnd());
 	}
 
 	@Test
@@ -29,20 +29,20 @@ public class TimeWindowTest {
 		final TimeWindow tw4 = new TimeWindow(20, 10);
 		final TimeWindow tw5 = new TimeWindow(10, 10);
 
-		Assert.assertTrue(tw1.equals(tw1));
+		Assertions.assertTrue(tw1.equals(tw1));
 
-		Assert.assertTrue(tw1.equals(tw2));
-		Assert.assertTrue(tw2.equals(tw1));
+		Assertions.assertTrue(tw1.equals(tw2));
+		Assertions.assertTrue(tw2.equals(tw1));
 
-		Assert.assertFalse(tw1.equals(tw3));
-		Assert.assertFalse(tw1.equals(tw4));
-		Assert.assertFalse(tw1.equals(tw5));
+		Assertions.assertFalse(tw1.equals(tw3));
+		Assertions.assertFalse(tw1.equals(tw4));
+		Assertions.assertFalse(tw1.equals(tw5));
 
-		Assert.assertFalse(tw3.equals(tw1));
-		Assert.assertFalse(tw4.equals(tw1));
-		Assert.assertFalse(tw5.equals(tw1));
+		Assertions.assertFalse(tw3.equals(tw1));
+		Assertions.assertFalse(tw4.equals(tw1));
+		Assertions.assertFalse(tw5.equals(tw1));
 
-		Assert.assertFalse(tw1.equals(new Object()));
+		Assertions.assertFalse(tw1.equals(new Object()));
 	}
 
 	@Test
@@ -54,11 +54,11 @@ public class TimeWindowTest {
 		final TimeWindow tw5 = new TimeWindow(10, 11);
 		final TimeWindow tw6 = new TimeWindow(11, 12);
 
-		Assert.assertTrue(tw1.overlaps(tw1)); // Identity
-		Assert.assertTrue(tw1.overlaps(tw2)); // Equivalence
-		Assert.assertFalse(tw1.overlaps(tw3)); // Out of bounds
-		Assert.assertFalse(tw1.overlaps(tw4)); // Out of bounds
-		Assert.assertTrue(tw1.overlaps(tw5)); // Intersects
-		Assert.assertTrue(tw1.overlaps(tw5)); // Intersects
+		Assertions.assertTrue(tw1.overlaps(tw1)); // Identity
+		Assertions.assertTrue(tw1.overlaps(tw2)); // Equivalence
+		Assertions.assertFalse(tw1.overlaps(tw3)); // Out of bounds
+		Assertions.assertFalse(tw1.overlaps(tw4)); // Out of bounds
+		Assertions.assertTrue(tw1.overlaps(tw5)); // Intersects
+		Assertions.assertTrue(tw1.overlaps(tw5)); // Intersects
 	}
 }

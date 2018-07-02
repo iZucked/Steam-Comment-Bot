@@ -24,8 +24,8 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
@@ -83,32 +83,32 @@ public class EMFModelMergeToolsTest {
 
 		final IMappingDescriptor descriptor = EMFModelMergeTools.generateMappingDescriptorManyContainment(sourceContainer, destinationContainer, containerReference);
 
-		Assert.assertNotNull(descriptor);
+		Assertions.assertNotNull(descriptor);
 
 		// Check basic inputs
-		Assert.assertSame(containerReference, descriptor.getReference());
-		Assert.assertSame(sourceContainer, descriptor.getSourceContainer());
-		Assert.assertSame(destinationContainer, descriptor.getDestinationContainer());
+		Assertions.assertSame(containerReference, descriptor.getReference());
+		Assertions.assertSame(sourceContainer, descriptor.getSourceContainer());
+		Assertions.assertSame(destinationContainer, descriptor.getDestinationContainer());
 
 		// // Check derived data.
 
 		// Check objects added
 		final List<EObject> objectsAdded = descriptor.getAddedObjects();
-		Assert.assertEquals(2, objectsAdded.size());
-		Assert.assertTrue(objectsAdded.contains(source3));
-		Assert.assertTrue(objectsAdded.contains(source4));
+		Assertions.assertEquals(2, objectsAdded.size());
+		Assertions.assertTrue(objectsAdded.contains(source3));
+		Assertions.assertTrue(objectsAdded.contains(source4));
 
 		// Check objects removed
 		final Collection<EObject> objectsRemoved = descriptor.getRemovedObjects();
-		Assert.assertEquals(2, objectsRemoved.size());
-		Assert.assertTrue(objectsRemoved.contains(dest3));
-		Assert.assertTrue(objectsRemoved.contains(dest4));
+		Assertions.assertEquals(2, objectsRemoved.size());
+		Assertions.assertTrue(objectsRemoved.contains(dest3));
+		Assertions.assertTrue(objectsRemoved.contains(dest4));
 
 		// Check Mapping
 		final Map<EObject, EObject> destinationToSourceMap = descriptor.getDestinationToSourceMap();
-		Assert.assertEquals(2, destinationToSourceMap.size());
-		Assert.assertSame(source1, destinationToSourceMap.get(dest1));
-		Assert.assertSame(source2, destinationToSourceMap.get(dest2));
+		Assertions.assertEquals(2, destinationToSourceMap.size());
+		Assertions.assertSame(source1, destinationToSourceMap.get(dest1));
+		Assertions.assertSame(source2, destinationToSourceMap.get(dest2));
 	}
 
 	/**
@@ -147,27 +147,27 @@ public class EMFModelMergeToolsTest {
 
 		final IMappingDescriptor descriptor = EMFModelMergeTools.generateMappingDescriptorSingleNonContainment(sourceContainer, destinationContainer, nonContainerReference);
 
-		Assert.assertNotNull(descriptor);
+		Assertions.assertNotNull(descriptor);
 
 		// Check basic inputs
-		Assert.assertSame(nonContainerReference, descriptor.getReference());
-		Assert.assertSame(sourceContainer, descriptor.getSourceContainer());
-		Assert.assertSame(destinationContainer, descriptor.getDestinationContainer());
+		Assertions.assertSame(nonContainerReference, descriptor.getReference());
+		Assertions.assertSame(sourceContainer, descriptor.getSourceContainer());
+		Assertions.assertSame(destinationContainer, descriptor.getDestinationContainer());
 
 		// // Check derived data.
 
 		// Check objects added
 		final List<EObject> objectsAdded = descriptor.getAddedObjects();
-		Assert.assertEquals(1, objectsAdded.size());
-		Assert.assertTrue(objectsAdded.contains(source1));
+		Assertions.assertEquals(1, objectsAdded.size());
+		Assertions.assertTrue(objectsAdded.contains(source1));
 
 		// Check objects removed
 		final Collection<EObject> objectsRemoved = descriptor.getRemovedObjects();
-		Assert.assertTrue(objectsRemoved.isEmpty());
+		Assertions.assertTrue(objectsRemoved.isEmpty());
 
 		// Check Mapping
 		final Map<EObject, EObject> destinationToSourceMap = descriptor.getDestinationToSourceMap();
-		Assert.assertTrue(destinationToSourceMap.isEmpty());
+		Assertions.assertTrue(destinationToSourceMap.isEmpty());
 	}
 
 	private class SimpleModelBuilder {
@@ -324,9 +324,9 @@ public class EMFModelMergeToolsTest {
 
 		// Generate the command to patch in the model
 		final Command cmd = EMFModelMergeTools.applyMappingDescriptors(domain, destinationRoot, descriptors);
-		Assert.assertNotNull(cmd);
+		Assertions.assertNotNull(cmd);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 
 		// Execute command to modify the model state
 		domain.getCommandStack().execute(cmd);
@@ -337,40 +337,40 @@ public class EMFModelMergeToolsTest {
 		final EObject destContainer2 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container2));
 		final EObject destContainer3 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container3));
 
-		Assert.assertNotNull(destContainer1);
-		Assert.assertNotNull(destContainer2);
-		Assert.assertNotNull(destContainer3);
+		Assertions.assertNotNull(destContainer1);
+		Assertions.assertNotNull(destContainer2);
+		Assertions.assertNotNull(destContainer3);
 
 		final List<Object> newDestContainer1Objects = (List<Object>) destContainer1.eGet(builder.getContainerReference(cls_container1));
 		final List<Object> newDestContainer2Objects = (List<Object>) destContainer2.eGet(builder.getContainerReference(cls_container2));
 		final List<Object> newDestContainer3Objects = (List<Object>) destContainer3.eGet(builder.getContainerReference(cls_container3));
 
 		// New data switched owner
-		Assert.assertSame(destContainer1, sourceUUID1.eContainer());
-		Assert.assertSame(destContainer1, sourceUUID2.eContainer());
-		Assert.assertSame(destContainer2, sourceDataA1.eContainer());
-		Assert.assertSame(destContainer2, sourceDataA2.eContainer());
+		Assertions.assertSame(destContainer1, sourceUUID1.eContainer());
+		Assertions.assertSame(destContainer1, sourceUUID2.eContainer());
+		Assertions.assertSame(destContainer2, sourceDataA1.eContainer());
+		Assertions.assertSame(destContainer2, sourceDataA2.eContainer());
 		// This data no change
 
 		// Have UUID objects been replaced?
-		Assert.assertEquals(2, newDestContainer1Objects.size());
-		Assert.assertTrue(newDestContainer1Objects.contains(sourceUUID1));
-		Assert.assertTrue(newDestContainer1Objects.contains(sourceUUID2));
+		Assertions.assertEquals(2, newDestContainer1Objects.size());
+		Assertions.assertTrue(newDestContainer1Objects.contains(sourceUUID1));
+		Assertions.assertTrue(newDestContainer1Objects.contains(sourceUUID2));
 
 		// Have dataA objects been replaced?
-		Assert.assertEquals(2, newDestContainer2Objects.size());
-		Assert.assertTrue(newDestContainer2Objects.contains(sourceDataA1));
-		Assert.assertTrue(newDestContainer2Objects.contains(sourceDataA2));
+		Assertions.assertEquals(2, newDestContainer2Objects.size());
+		Assertions.assertTrue(newDestContainer2Objects.contains(sourceDataA1));
+		Assertions.assertTrue(newDestContainer2Objects.contains(sourceDataA2));
 
 		// Are dataA objects still pointing to correct refs?
-		Assert.assertSame(sourceUUID1, sourceDataA1.eGet(dataPairA.getSecond()));
-		Assert.assertSame(sourceUUID2, sourceDataA2.eGet(dataPairA.getSecond()));
+		Assertions.assertSame(sourceUUID1, sourceDataA1.eGet(dataPairA.getSecond()));
+		Assertions.assertSame(sourceUUID2, sourceDataA2.eGet(dataPairA.getSecond()));
 
 		// Make sure container 3 objects are still the same
-		Assert.assertEquals(0, newDestContainer3Objects.size());
+		Assertions.assertEquals(0, newDestContainer3Objects.size());
 		
 		// Check single non-containment ref update
-		Assert.assertSame(sourceUUID1, destinationRoot.eGet(nonContainmentRef));
+		Assertions.assertSame(sourceUUID1, destinationRoot.eGet(nonContainmentRef));
 	}
 
 	/**
@@ -479,9 +479,9 @@ public class EMFModelMergeToolsTest {
 
 		// Generate the command to patch in the model
 		final Command cmd = EMFModelMergeTools.applyMappingDescriptors(domain, destinationRoot, descriptors);
-		Assert.assertNotNull(cmd);
+		Assertions.assertNotNull(cmd);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 
 		// Execute command to modify the model state
 		domain.getCommandStack().execute(cmd);
@@ -492,57 +492,57 @@ public class EMFModelMergeToolsTest {
 		final EObject destContainer2 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container2));
 		final EObject destContainer3 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container3));
 
-		Assert.assertNotNull(destContainer1);
-		Assert.assertNotNull(destContainer2);
-		Assert.assertNotNull(destContainer3);
+		Assertions.assertNotNull(destContainer1);
+		Assertions.assertNotNull(destContainer2);
+		Assertions.assertNotNull(destContainer3);
 
 		final List<Object> newDestContainer1Objects = (List<Object>) destContainer1.eGet(builder.getContainerReference(cls_container1));
 		final List<Object> newDestContainer2Objects = (List<Object>) destContainer2.eGet(builder.getContainerReference(cls_container2));
 		final List<Object> newDestContainer3Objects = (List<Object>) destContainer3.eGet(builder.getContainerReference(cls_container3));
 
 		// Check containership -- old data no longer contained
-		Assert.assertNull(destUUID1.eContainer());
-		Assert.assertNull(destUUID2.eContainer());
-		Assert.assertNull(destDataA1.eContainer());
-		Assert.assertNull(destDataA2.eContainer());
+		Assertions.assertNull(destUUID1.eContainer());
+		Assertions.assertNull(destUUID2.eContainer());
+		Assertions.assertNull(destDataA1.eContainer());
+		Assertions.assertNull(destDataA2.eContainer());
 		// New data switched owner
-		Assert.assertSame(destContainer1, sourceUUID1.eContainer());
-		Assert.assertSame(destContainer1, sourceUUID2.eContainer());
-		Assert.assertSame(destContainer2, sourceDataA1.eContainer());
-		Assert.assertSame(destContainer2, sourceDataA2.eContainer());
+		Assertions.assertSame(destContainer1, sourceUUID1.eContainer());
+		Assertions.assertSame(destContainer1, sourceUUID2.eContainer());
+		Assertions.assertSame(destContainer2, sourceDataA1.eContainer());
+		Assertions.assertSame(destContainer2, sourceDataA2.eContainer());
 		// This data no change
-		Assert.assertSame(destContainer3, destDataB1.eContainer());
-		Assert.assertSame(destContainer3, destDataB2.eContainer());
+		Assertions.assertSame(destContainer3, destDataB1.eContainer());
+		Assertions.assertSame(destContainer3, destDataB2.eContainer());
 
 		// Have UUID objects been replaced?
-		Assert.assertEquals(2, newDestContainer1Objects.size());
-		Assert.assertTrue(newDestContainer1Objects.contains(sourceUUID1));
-		Assert.assertTrue(newDestContainer1Objects.contains(sourceUUID2));
-		Assert.assertFalse(newDestContainer1Objects.contains(destUUID1));
-		Assert.assertFalse(newDestContainer1Objects.contains(destUUID2));
+		Assertions.assertEquals(2, newDestContainer1Objects.size());
+		Assertions.assertTrue(newDestContainer1Objects.contains(sourceUUID1));
+		Assertions.assertTrue(newDestContainer1Objects.contains(sourceUUID2));
+		Assertions.assertFalse(newDestContainer1Objects.contains(destUUID1));
+		Assertions.assertFalse(newDestContainer1Objects.contains(destUUID2));
 
 		// Have dataA objects been replaced?
-		Assert.assertEquals(2, newDestContainer2Objects.size());
-		Assert.assertTrue(newDestContainer2Objects.contains(sourceDataA1));
-		Assert.assertTrue(newDestContainer2Objects.contains(sourceDataA2));
-		Assert.assertFalse(newDestContainer2Objects.contains(destDataA1));
-		Assert.assertFalse(newDestContainer2Objects.contains(destDataA2));
+		Assertions.assertEquals(2, newDestContainer2Objects.size());
+		Assertions.assertTrue(newDestContainer2Objects.contains(sourceDataA1));
+		Assertions.assertTrue(newDestContainer2Objects.contains(sourceDataA2));
+		Assertions.assertFalse(newDestContainer2Objects.contains(destDataA1));
+		Assertions.assertFalse(newDestContainer2Objects.contains(destDataA2));
 
 		// Are dataA objects still pointing to correct refs?
-		Assert.assertSame(sourceUUID1, sourceDataA1.eGet(dataPairA.getSecond()));
-		Assert.assertSame(sourceUUID2, sourceDataA2.eGet(dataPairA.getSecond()));
+		Assertions.assertSame(sourceUUID1, sourceDataA1.eGet(dataPairA.getSecond()));
+		Assertions.assertSame(sourceUUID2, sourceDataA2.eGet(dataPairA.getSecond()));
 
 		// Make sure container 3 objects are still the same
-		Assert.assertEquals(2, newDestContainer3Objects.size());
-		Assert.assertTrue(newDestContainer3Objects.contains(destDataB1));
-		Assert.assertTrue(newDestContainer3Objects.contains(destDataB2));
+		Assertions.assertEquals(2, newDestContainer3Objects.size());
+		Assertions.assertTrue(newDestContainer3Objects.contains(destDataB1));
+		Assertions.assertTrue(newDestContainer3Objects.contains(destDataB2));
 
 		// Make sure container 3 references are correctly updated
-		Assert.assertSame(sourceUUID1, destDataB1.eGet(dataPairB.getSecond()));
-		Assert.assertNull(destDataB2.eGet(dataPairB.getSecond()));
+		Assertions.assertSame(sourceUUID1, destDataB1.eGet(dataPairB.getSecond()));
+		Assertions.assertNull(destDataB2.eGet(dataPairB.getSecond()));
 		
 		// Check single non-containment ref update
-		Assert.assertSame(sourceUUID1, destinationRoot.eGet(nonContainmentRef));
+		Assertions.assertSame(sourceUUID1, destinationRoot.eGet(nonContainmentRef));
 	}
 
 	/**
@@ -638,9 +638,9 @@ public class EMFModelMergeToolsTest {
 
 		// Generate the command to patch in the model
 		final Command cmd = EMFModelMergeTools.applyMappingDescriptors(domain, destinationRoot, descriptors);
-		Assert.assertNotNull(cmd);
+		Assertions.assertNotNull(cmd);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 
 		// Execute command to modify the model state
 		domain.getCommandStack().execute(cmd);
@@ -651,44 +651,44 @@ public class EMFModelMergeToolsTest {
 		final EObject destContainer2 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container2));
 		final EObject destContainer3 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container3));
 
-		Assert.assertNotNull(destContainer1);
-		Assert.assertNotNull(destContainer2);
-		Assert.assertNotNull(destContainer3);
+		Assertions.assertNotNull(destContainer1);
+		Assertions.assertNotNull(destContainer2);
+		Assertions.assertNotNull(destContainer3);
 
 		final List<Object> newDestContainer1Objects = (List<Object>) destContainer1.eGet(builder.getContainerReference(cls_container1));
 		final List<Object> newDestContainer2Objects = (List<Object>) destContainer2.eGet(builder.getContainerReference(cls_container2));
 		final List<Object> newDestContainer3Objects = (List<Object>) destContainer3.eGet(builder.getContainerReference(cls_container3));
 
 		// Check containership -- old data no longer contained
-		Assert.assertNull(destUUID1.eContainer());
-		Assert.assertNull(destUUID2.eContainer());
-		Assert.assertNull(destDataA1.eContainer());
-		Assert.assertNull(destDataA2.eContainer());
+		Assertions.assertNull(destUUID1.eContainer());
+		Assertions.assertNull(destUUID2.eContainer());
+		Assertions.assertNull(destDataA1.eContainer());
+		Assertions.assertNull(destDataA2.eContainer());
 		// This data no change
-		Assert.assertSame(destContainer3, destDataB1.eContainer());
-		Assert.assertSame(destContainer3, destDataB2.eContainer());
+		Assertions.assertSame(destContainer3, destDataB1.eContainer());
+		Assertions.assertSame(destContainer3, destDataB2.eContainer());
 
 		// Have UUID objects been replaced?
-		Assert.assertEquals(0, newDestContainer1Objects.size());
-		Assert.assertFalse(newDestContainer1Objects.contains(destUUID1));
-		Assert.assertFalse(newDestContainer1Objects.contains(destUUID2));
+		Assertions.assertEquals(0, newDestContainer1Objects.size());
+		Assertions.assertFalse(newDestContainer1Objects.contains(destUUID1));
+		Assertions.assertFalse(newDestContainer1Objects.contains(destUUID2));
 
 		// Have dataA objects been replaced?
-		Assert.assertEquals(0, newDestContainer2Objects.size());
-		Assert.assertFalse(newDestContainer2Objects.contains(destDataA1));
-		Assert.assertFalse(newDestContainer2Objects.contains(destDataA2));
+		Assertions.assertEquals(0, newDestContainer2Objects.size());
+		Assertions.assertFalse(newDestContainer2Objects.contains(destDataA1));
+		Assertions.assertFalse(newDestContainer2Objects.contains(destDataA2));
 
 		// Make sure container 3 objects are still the same
-		Assert.assertEquals(2, newDestContainer3Objects.size());
-		Assert.assertTrue(newDestContainer3Objects.contains(destDataB1));
-		Assert.assertTrue(newDestContainer3Objects.contains(destDataB2));
+		Assertions.assertEquals(2, newDestContainer3Objects.size());
+		Assertions.assertTrue(newDestContainer3Objects.contains(destDataB1));
+		Assertions.assertTrue(newDestContainer3Objects.contains(destDataB2));
 
 		// Make sure container 3 references are correctly updated
-		Assert.assertNull(destDataB1.eGet(dataPairB.getSecond()));
-		Assert.assertNull(destDataB2.eGet(dataPairB.getSecond()));
+		Assertions.assertNull(destDataB1.eGet(dataPairB.getSecond()));
+		Assertions.assertNull(destDataB2.eGet(dataPairB.getSecond()));
 		
 		// Check single non-containment ref update
-		Assert.assertNull(destinationRoot.eGet(nonContainmentRef));
+		Assertions.assertNull(destinationRoot.eGet(nonContainmentRef));
 	}
 
 	/**
@@ -973,13 +973,13 @@ public class EMFModelMergeToolsTest {
 		EMFModelMergeTools.rewriteMappingDescriptors(descriptors, sourceRoot, destinationRoot);
 
 		// Replaced with dest model item
-		Assert.assertSame(destDataA1, sourceDataB1.eGet(dataPairB.getSecond()));
+		Assertions.assertSame(destDataA1, sourceDataB1.eGet(dataPairB.getSecond()));
 		// Oops, not found so null!
-		Assert.assertNull(sourceDataB2.eGet(dataPairB.getSecond()));
+		Assertions.assertNull(sourceDataB2.eGet(dataPairB.getSecond()));
 
 		// Check no other data changes
-		Assert.assertSame(sourceUUID1, sourceDataA1.eGet(dataPairA.getSecond()));
-		Assert.assertSame(sourceUUID2, sourceDataA2.eGet(dataPairA.getSecond()));
+		Assertions.assertSame(sourceUUID1, sourceDataA1.eGet(dataPairA.getSecond()));
+		Assertions.assertSame(sourceUUID2, sourceDataA2.eGet(dataPairA.getSecond()));
 
 	}
 

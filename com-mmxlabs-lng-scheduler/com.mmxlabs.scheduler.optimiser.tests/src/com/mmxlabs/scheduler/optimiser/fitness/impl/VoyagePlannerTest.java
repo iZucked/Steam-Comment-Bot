@@ -8,10 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -32,7 +32,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
-import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -84,7 +83,7 @@ public final class VoyagePlannerTest {
 	 * @throws CloneNotSupportedException
 	 * 
 	 */
-	@Ignore("Does not work after JMock - Mockito Change. Verify happens after execution where as jmock expectations happen during execution")
+	@Disabled("Does not work after JMock - Mockito Change. Verify happens after execution where as jmock expectations happen during execution")
 	@Test
 	public void testSchedule_1() throws CloneNotSupportedException {
 		final IIndexingContext index = new SimpleIndexingContext();
@@ -147,7 +146,7 @@ public final class VoyagePlannerTest {
 		final IResource resource = new Resource(index, vessel.getName());
 
 		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
-		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyInt())).thenReturn(15000);
+		Mockito.when(consumptionRateCalculator.getSpeed(ArgumentMatchers.anyInt())).thenReturn(15000);
 
 		vessel.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 		vessel.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
@@ -291,8 +290,8 @@ public final class VoyagePlannerTest {
 		// Schedule sequence
 		final List<Pair<VoyagePlan, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
 
-		Assert.assertNotNull(plans);
-		Assert.assertEquals(2, plans.size());
+		Assertions.assertNotNull(plans);
+		Assertions.assertEquals(2, plans.size());
 	}
 
 	// /**
@@ -300,7 +299,7 @@ public final class VoyagePlannerTest {
 	// *
 	// * @throws CloneNotSupportedException
 	// */
-	// @Ignore("Does not work after JMock - Mockito Change. Verify happens after execution where as jmock expectations happen during execution")
+	// @Disabled("Does not work after JMock - Mockito Change. Verify happens after execution where as jmock expectations happen during execution")
 	// @SuppressWarnings({ "unchecked", "rawtypes", "null" })
 	// @Test
 	// public void testSchedule_2() throws CloneNotSupportedException {
@@ -375,7 +374,7 @@ public final class VoyagePlannerTest {
 	// final IResource resource = new Resource(index, vessel.getName());
 	//
 	// final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
-	// Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyInt())).thenReturn(15000);
+	// Mockito.when(consumptionRateCalculator.getSpeed(ArgumentMatchers.anyInt())).thenReturn(15000);
 	//
 	// vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 	// vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
@@ -514,18 +513,18 @@ public final class VoyagePlannerTest {
 	// // Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
 	// //
 	// // // Set expected list of VPO choices
-	// // Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
+	// // Mockito.verify(voyagePlanOptimiser).addChoice(ArgumentMatchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
 	// //
-	// // Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1)));
+	// // Mockito.verify(voyagePlanOptimiser).addChoice(ArgumentMatchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1)));
 	// //
-	// // Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2)));
+	// // Mockito.verify(voyagePlanOptimiser).addChoice(ArgumentMatchers.eq(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2)));
 	// //
-	// // Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions2)));
+	// // Mockito.verify(voyagePlanOptimiser).addChoice(ArgumentMatchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions2)));
 	// //
-	// // Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2)));
+	// // Mockito.verify(voyagePlanOptimiser).addChoice(ArgumentMatchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2)));
 	// //
 	// // // Expect two runs of the VPO
-	// // Mockito.verify(voyagePlanOptimiser).setBasicSequence(Matchers.eq(expectedBasicSequence1));
+	// // Mockito.verify(voyagePlanOptimiser).setBasicSequence(ArgumentMatchers.eq(expectedBasicSequence1));
 	// //
 	// // Mockito.verify(voyagePlanOptimiser).init();
 	// // Mockito.verify(voyagePlanOptimiser).optimise();
@@ -537,10 +536,10 @@ public final class VoyagePlannerTest {
 	//
 	// // Expected arrival times per plan
 	//
-	// // Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord));
+	// // Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(ArgumentMatchers.eq(portTimesRecord));
 	//
-	// Assert.assertNotNull(voyagePlans);
-	// Assert.assertEquals(1, voyagePlans.size());
+	// Assertions.assertNotNull(voyagePlans);
+	// Assertions.assertEquals(1, voyagePlans.size());
 	//
 	// // TODO: Check plan details are as expected
 	// // TODO: Return a default plan from VPO and check expected output is
@@ -549,22 +548,22 @@ public final class VoyagePlannerTest {
 	// //
 	// // // Check plan 1
 	// final VoyagePlan plan1 = voyagePlans.get(0).getFirst();
-	// Assert.assertSame(testVoyagePlan, plan1);
+	// Assertions.assertSame(testVoyagePlan, plan1);
 	//
 	// final Object[] outputSequence = testVoyagePlan.getSequence();
 	//
-	// // Assert.assertEquals(5,
+	// // Assertions.assertEquals(5,
 	// // ((PortDetails) outputSequence[0]).getStartTime());
-	// Assert.assertEquals(1, ((PortDetails) outputSequence[0]).getOptions().getVisitDuration());
-	// // Assert.assertEquals(6,
+	// Assertions.assertEquals(1, ((PortDetails) outputSequence[0]).getOptions().getVisitDuration());
+	// // Assertions.assertEquals(6,
 	// // ((VoyageDetails) outputSequence[1]).getStartTime());
-	// // Assert.assertEquals(10,
+	// // Assertions.assertEquals(10,
 	// // ((PortDetails) outputSequence[2]).getStartTime());
-	// Assert.assertEquals(1, ((PortDetails) outputSequence[2]).getOptions().getVisitDuration());
-	// // Assert.assertEquals(11,
+	// Assertions.assertEquals(1, ((PortDetails) outputSequence[2]).getOptions().getVisitDuration());
+	// // Assertions.assertEquals(11,
 	// // ((VoyageDetails) outputSequence[3]).getStartTime());
-	// // Assert.assertEquals(15,
+	// // Assertions.assertEquals(15,
 	// // ((PortDetails) outputSequence[4]).getStartTime());
-	// Assert.assertEquals(1, ((PortDetails) outputSequence[4]).getOptions().getVisitDuration());
+	// Assertions.assertEquals(1, ((PortDetails) outputSequence[4]).getOptions().getVisitDuration());
 	// }
 }

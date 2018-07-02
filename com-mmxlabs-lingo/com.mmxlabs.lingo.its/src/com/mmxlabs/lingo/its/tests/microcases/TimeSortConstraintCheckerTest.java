@@ -7,12 +7,12 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -27,11 +27,11 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintChecke
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testEventOrder_ConsequetiveEvent() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -55,13 +55,13 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TimeSortConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TimeSortConstraintChecker.class);
 
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testEventOrder_OverlappingEvent() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -85,8 +85,8 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TimeSortConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TimeSortConstraintChecker.class);
 
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
 		});
 	}
 }

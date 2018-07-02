@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
 
@@ -19,19 +19,19 @@ public class OrderedSequenceElementsDataComponentProviderTest {
 
 		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider();
 
-		Assert.assertNull(provider.getNextElement(obj1));
-		Assert.assertNull(provider.getPreviousElement(obj1));
+		Assertions.assertNull(provider.getNextElement(obj1));
+		Assertions.assertNull(provider.getPreviousElement(obj1));
 
-		Assert.assertNull(provider.getNextElement(obj2));
-		Assert.assertNull(provider.getPreviousElement(obj2));
+		Assertions.assertNull(provider.getNextElement(obj2));
+		Assertions.assertNull(provider.getPreviousElement(obj2));
 
 		provider.setElementOrder(obj1, obj2);
 
-		Assert.assertSame(obj2, provider.getNextElement(obj1));
-		Assert.assertNull(provider.getPreviousElement(obj1));
+		Assertions.assertSame(obj2, provider.getNextElement(obj1));
+		Assertions.assertNull(provider.getPreviousElement(obj1));
 
-		Assert.assertNull(provider.getNextElement(obj2));
-		Assert.assertSame(obj1, provider.getPreviousElement(obj2));
+		Assertions.assertNull(provider.getNextElement(obj2));
+		Assertions.assertSame(obj1, provider.getPreviousElement(obj2));
 	}
 
 }

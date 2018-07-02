@@ -5,17 +5,16 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -38,11 +37,11 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateCh
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testExactDates() throws Exception {
 		@NonNull
 		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
@@ -59,7 +58,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final Schedule schedule = scenarioRunner.getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			CargoAllocation cargoAllocation = null;
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
@@ -68,20 +67,20 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 					break;
 				}
 			}
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			final SimpleCargoAllocation sca = new SimpleCargoAllocation(cargoAllocation);
 
 			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, dischargePort.getZoneId());
 
-			Assert.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
-			Assert.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());
+			Assertions.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
+			Assertions.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOverlappingDates1() throws Exception {
 		@NonNull
 		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
@@ -101,7 +100,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final Schedule schedule = scenarioRunner.getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			CargoAllocation cargoAllocation = null;
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
@@ -110,20 +109,20 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 					break;
 				}
 			}
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			final SimpleCargoAllocation sca = new SimpleCargoAllocation(cargoAllocation);
 
 			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, dischargePort.getZoneId());
 
-			Assert.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
-			Assert.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());
+			Assertions.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
+			Assertions.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testOverlappingDates2() throws Exception {
 		@NonNull
 		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
@@ -142,7 +141,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final Schedule schedule = scenarioRunner.getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			CargoAllocation cargoAllocation = null;
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
@@ -151,14 +150,14 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 					break;
 				}
 			}
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 
 			final SimpleCargoAllocation sca = new SimpleCargoAllocation(cargoAllocation);
 
 			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, dischargePort.getZoneId());
 
-			Assert.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
-			Assert.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());
+			Assertions.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
+			Assertions.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());
 
 		});
 	}
@@ -167,7 +166,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 	 * In this test the start of the sales window is the end (exclusive!) of the purchase window.
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDateOutByOneError() throws Exception {
 		@NonNull
 		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
@@ -191,11 +190,11 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 			// Validate the initial sequences are invalid
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
-			Assert.assertNotNull(failedConstraintCheckers);
+			Assertions.assertNotNull(failedConstraintCheckers);
 
 			// Expect just this one to fail
-			Assert.assertEquals(1, failedConstraintCheckers.size());
-			Assert.assertTrue(failedConstraintCheckers.get(0) instanceof LatenessEvaluatedStateChecker);
+			Assertions.assertEquals(1, failedConstraintCheckers.size());
+			Assertions.assertTrue(failedConstraintCheckers.get(0) instanceof LatenessEvaluatedStateChecker);
 		});
 	}
 
@@ -203,7 +202,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 	 * In this test the start of the sales window is just after the end (exclusive!) of the purchase window.
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDateOutByTwoError() throws Exception {
 		@NonNull
 		final Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
@@ -227,11 +226,11 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 			// Validate the initial sequences are invalid
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
-			Assert.assertNotNull(failedConstraintCheckers);
+			Assertions.assertNotNull(failedConstraintCheckers);
 
 			// Expect just this one to fail
-			Assert.assertEquals(1, failedConstraintCheckers.size());
-			Assert.assertTrue(failedConstraintCheckers.get(0) instanceof LatenessEvaluatedStateChecker);
+			Assertions.assertEquals(1, failedConstraintCheckers.size());
+			Assertions.assertTrue(failedConstraintCheckers.get(0) instanceof LatenessEvaluatedStateChecker);
 		});
 	}
 

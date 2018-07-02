@@ -9,8 +9,6 @@ import java.net.URL;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
@@ -33,13 +31,13 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
  * 
  * 
  */
-@RunWith(value = Parameterized.class)
 public abstract class AbstractReportTester_CSV extends AbstractReportTester {
 
-	private final Pair<String, String> key;
+	private Pair<String, String> key;
 
-	public AbstractReportTester_CSV(final String name, final String scenarioPath) throws MalformedURLException {
-		key = new Pair<>(name, scenarioPath);
+	@Override
+	public void init(final String scenarioPath) throws Exception {
+		key = new Pair<>(scenarioPath, scenarioPath);
 	}
 
 	@Override

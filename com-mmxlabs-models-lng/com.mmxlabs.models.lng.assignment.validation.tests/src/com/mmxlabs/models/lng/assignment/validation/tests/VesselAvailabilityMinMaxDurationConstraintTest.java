@@ -13,9 +13,9 @@ import java.time.Month;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityMinMaxConstraint;
@@ -282,17 +282,17 @@ public class VesselAvailabilityMinMaxDurationConstraintTest {
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
 		Mockito.when(ctx.getTarget()).thenReturn(target);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString(), Matchers.any())).thenReturn(failureStatus);
+		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString(), ArgumentMatchers.any())).thenReturn(failureStatus);
 
 		final VesselAvailabilityMinMaxConstraint constraint = new VesselAvailabilityMinMaxConstraint();
-		Assert.assertNotNull(constraint);
+		Assertions.assertNotNull(constraint);
 		final IStatus status = constraint.validate(ctx);
-		Assert.assertNotNull(status);
+		Assertions.assertNotNull(status);
 
 		if (expectSuccess) {
-			Assert.assertTrue("Sucess expected", status.isOK());
+			Assertions.assertTrue(status.isOK(), "Success expected");
 		} else {
-			Assert.assertFalse("Failure expected", status.isOK());
+			Assertions.assertFalse(status.isOK(), "Failure expected");
 
 		}
 	}

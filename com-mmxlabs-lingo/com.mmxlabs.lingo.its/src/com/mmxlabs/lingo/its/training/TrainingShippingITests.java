@@ -14,13 +14,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
-import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
@@ -67,13 +67,13 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class TrainingShippingITests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("optimisation-similarity", "optimisation-hillclimb");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -83,7 +83,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -135,12 +135,12 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
 		final Command updateCommand = DistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, distanceVersion, true);
 
-		Assert.assertTrue(updateCommand.canExecute());
+		Assertions.assertTrue(updateCommand.canExecute());
 
 		editingDomain.getCommandStack().execute(updateCommand);
 
 		// Ensure updated.
-		Assert.assertEquals(distanceVersion.getIdentifier(), portModel.getDistanceVersionRecord().getVersion());
+		Assertions.assertEquals(distanceVersion.getIdentifier(), portModel.getDistanceVersionRecord().getVersion());
 	}
 
 	public static void updatePortsData(IScenarioDataProvider scenarioDataProvider, String key) throws Exception {
@@ -156,12 +156,12 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
 		final Command updateCommand = PortsToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
 
-		Assert.assertTrue(updateCommand.canExecute());
+		Assertions.assertTrue(updateCommand.canExecute());
 
 		editingDomain.getCommandStack().execute(updateCommand);
 
 		// Ensure updated.
-		Assert.assertEquals(version.getIdentifier(), portModel.getPortVersionRecord().getVersion());
+		Assertions.assertEquals(version.getIdentifier(), portModel.getPortVersionRecord().getVersion());
 	}
 
 	@Override
@@ -198,9 +198,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ OptimisationTest.class })
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testShipping_I_Stage_1_Shipping() throws Exception {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -215,7 +215,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 			runnerBuilder.evaluateInitialState();
 
 			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assert.assertNotNull(initialSchedule);
+			Assertions.assertNotNull(initialSchedule);
 			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
 			runnerBuilder.run(false, runner -> {
 
@@ -233,8 +233,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, 944_899, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+					Assertions.assertNotNull(solution);
 				}
 				// Solution 2
 				{
@@ -244,17 +244,17 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, 610_378, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+					Assertions.assertNotNull(solution);
 				}
 			});
 		}
 	}
 
 	@Test
-	@Category({ OptimisationTest.class })
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testShipping_I_Stage_2_1_Lateness() throws Exception {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -275,7 +275,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 			runnerBuilder.evaluateInitialState();
 
 			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assert.assertNotNull(initialSchedule);
+			Assertions.assertNotNull(initialSchedule);
 
 			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
 			final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
@@ -299,8 +299,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -992_994, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
+					Assertions.assertNotNull(solution);
 				}
 				// Solution 2
 				{
@@ -313,8 +313,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -1_327_515, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
+					Assertions.assertNotNull(solution);
 				}
 				// Solution 3
 				{
@@ -325,8 +325,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -2_144_366, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
+					Assertions.assertNotNull(solution);
 
 				}
 			});
@@ -334,9 +334,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ OptimisationTest.class })
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testShipping_I_Stage_2_2_Lateness_with_charter_in() throws Exception {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -362,7 +362,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 			runnerBuilder.evaluateInitialState();
 
 			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assert.assertNotNull(initialSchedule);
+			Assertions.assertNotNull(initialSchedule);
 
 			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
 			final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
@@ -387,8 +387,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -147_982, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+					Assertions.assertNotNull(solution);
 				}
 				// Solution 2
 				{
@@ -401,8 +401,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -482_503, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+					Assertions.assertNotNull(solution);
 
 				}
 				// Solution 3
@@ -414,8 +414,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -1_351_441, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, Assert::fail);
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(result, Assertions::fail);
+					Assertions.assertNotNull(solution);
 				}
 
 			});
@@ -423,9 +423,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ OptimisationTest.class })
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testShipping_I_Stage_3_1_allocation_and_keep_open() throws Exception {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -470,7 +470,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 			runnerBuilder.evaluateInitialState();
 
 			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assert.assertNotNull(initialSchedule);
+			Assertions.assertNotNull(initialSchedule);
 
 			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
 			final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
@@ -495,7 +495,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, 19_124_719, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assert::fail);
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
 
 				}
 				// Solution 2
@@ -507,8 +507,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, 18_179_820, 1_000) //
 							.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, Assert::fail);
-					Assert.assertNotNull(solution);
+					final ISequences solution = verifier.verifySolutionExistsInResults(result, Assertions::fail);
+					Assertions.assertNotNull(solution);
 
 				}
 			});

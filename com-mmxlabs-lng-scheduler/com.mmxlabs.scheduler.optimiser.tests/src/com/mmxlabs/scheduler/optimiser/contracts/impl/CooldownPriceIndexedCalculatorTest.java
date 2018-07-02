@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -19,17 +19,17 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 
 public class CooldownPriceIndexedCalculatorTest {
-	
+
 	@Test
-	public void testUTC(){
+	public void testUTC() {
 		testCalculatorPriceIndex("UTC");
 	}
-	
+
 	@Test
-	public void testEtc12(){
+	public void testEtc12() {
 		testCalculatorPriceIndex("Etc/GMT+12");
 	}
-	
+
 	public void testCalculatorPriceIndex(String timeZone) {
 		ICurve curve = Mockito.mock(ICurve.class);
 		IVessel mockVessel = Mockito.mock(IVessel.class);
@@ -37,7 +37,7 @@ public class CooldownPriceIndexedCalculatorTest {
 		// create a cooldown calculator and avoid using injection
 		// TODO Use injection
 		CooldownPriceIndexedCalculator lsc = createCooldownPriceIndexedCalculator(curve);
-		
+
 		// create prices for different times (to test UTC)
 		int priceA = OptimiserUnitConvertor.convertToInternalConversionFactor(10);
 		int priceAMinus = OptimiserUnitConvertor.convertToInternalConversionFactor(5);
@@ -45,21 +45,21 @@ public class CooldownPriceIndexedCalculatorTest {
 		int priceBMinus = OptimiserUnitConvertor.convertToInternalConversionFactor(10);
 		int timeA = 100;
 		int timeB = 200;
-		
+
 		// create different cv values (to test correct calculation)
 		int cvA = OptimiserUnitConvertor.convertToInternalConversionFactor(20);
 		int cvB = OptimiserUnitConvertor.convertToInternalConversionFactor(22);
-		
+
 		// mock some return values
 		Mockito.when(curve.getValueAtPoint(timeA)).thenReturn(priceA);
-		Mockito.when(curve.getValueAtPoint(timeA-12)).thenReturn(priceAMinus);
+		Mockito.when(curve.getValueAtPoint(timeA - 12)).thenReturn(priceAMinus);
 		Mockito.when(curve.getValueAtPoint(timeB)).thenReturn(priceB);
-		Mockito.when(curve.getValueAtPoint(timeB-12)).thenReturn(priceBMinus);
+		Mockito.when(curve.getValueAtPoint(timeB - 12)).thenReturn(priceBMinus);
 		Mockito.when(mockVessel.getCooldownVolume()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(1000));
-		
+
 		// mock passed in timezone
 		Mockito.when(mockPort.getTimeZoneId()).thenReturn(timeZone);
-		
+
 		long expectedA, expectedB;
 		if (timeZone.equals("UTC")) {
 			expectedA = OptimiserUnitConvertor.convertToInternalFixedCost(200000);
@@ -68,13 +68,12 @@ public class CooldownPriceIndexedCalculatorTest {
 			expectedA = OptimiserUnitConvertor.convertToInternalFixedCost(100000);
 			expectedB = OptimiserUnitConvertor.convertToInternalFixedCost(220000);
 		}
-		
+
 		long testCalculationA = lsc.calculateCooldownCost(mockVessel, mockPort, cvA, timeA);
 		long testCalculationB = lsc.calculateCooldownCost(mockVessel, mockPort, cvB, timeB);
-		
-		
-		Assert.assertEquals(String.format("CooldownPriceIndexedCalculator returns %d but should be %d.", testCalculationA, expectedA), testCalculationA, expectedA);
-		Assert.assertEquals(String.format("CooldownPriceIndexedCalculator returns %d but should be %d.", testCalculationB, expectedB), testCalculationB, expectedB);
+
+		Assertions.assertEquals(testCalculationA, expectedA, String.format("CooldownPriceIndexedCalculator returns %d but should be %d.", testCalculationA, expectedA));
+		Assertions.assertEquals(testCalculationB, expectedB, String.format("CooldownPriceIndexedCalculator returns %d but should be %d.", testCalculationB, expectedB));
 
 	}
 

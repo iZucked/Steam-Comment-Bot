@@ -16,12 +16,12 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -44,7 +44,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class FleetModelDataCommandProviderTest extends AbstractMicroTestCase {
 	enum ExpectedChange {
 		NONE, FLEET, BUNKERS, GROUPS
@@ -60,9 +60,9 @@ public class FleetModelDataCommandProviderTest extends AbstractMicroTestCase {
 			bunkers = m.getBunkerFuelsVersionRecord().getVersion();
 			groups = m.getVesselGroupVersionRecord().getVersion();
 
-			Assert.assertNotNull(fleet);
-			Assert.assertNotNull(bunkers);
-			Assert.assertNotNull(groups);
+			Assertions.assertNotNull(fleet);
+			Assertions.assertNotNull(bunkers);
+			Assertions.assertNotNull(groups);
 		}
 	}
 
@@ -70,26 +70,26 @@ public class FleetModelDataCommandProviderTest extends AbstractMicroTestCase {
 		// None is just to make the API call easier.
 		final Set<ExpectedChange> changeTypesSet = EnumSet.of(ExpectedChange.NONE, changeTypes);
 		if (changeTypesSet.contains(ExpectedChange.FLEET)) {
-			Assert.assertNotEquals(currentVersion.fleet, fleetModel.getFleetVersionRecord().getVersion());
+			Assertions.assertNotEquals(currentVersion.fleet, fleetModel.getFleetVersionRecord().getVersion());
 			currentVersion.fleet = fleetModel.getFleetVersionRecord().getVersion();
 		}
 		if (changeTypesSet.contains(ExpectedChange.BUNKERS)) {
-			Assert.assertNotEquals(currentVersion.bunkers, fleetModel.getBunkerFuelsVersionRecord().getVersion());
+			Assertions.assertNotEquals(currentVersion.bunkers, fleetModel.getBunkerFuelsVersionRecord().getVersion());
 			currentVersion.bunkers = fleetModel.getBunkerFuelsVersionRecord().getVersion();
 		}
 		if (changeTypesSet.contains(ExpectedChange.GROUPS)) {
-			Assert.assertNotEquals(currentVersion.groups, fleetModel.getVesselGroupVersionRecord());
+			Assertions.assertNotEquals(currentVersion.groups, fleetModel.getVesselGroupVersionRecord());
 			currentVersion.groups = fleetModel.getVesselGroupVersionRecord().getVersion();
 		}
 
 		// Lazy duplicated check here
-		Assert.assertEquals(currentVersion.fleet, fleetModel.getFleetVersionRecord().getVersion());
-		Assert.assertEquals(currentVersion.bunkers, fleetModel.getBunkerFuelsVersionRecord().getVersion());
-		Assert.assertEquals(currentVersion.groups, fleetModel.getVesselGroupVersionRecord().getVersion());
+		Assertions.assertEquals(currentVersion.fleet, fleetModel.getFleetVersionRecord().getVersion());
+		Assertions.assertEquals(currentVersion.bunkers, fleetModel.getBunkerFuelsVersionRecord().getVersion());
+		Assertions.assertEquals(currentVersion.groups, fleetModel.getVesselGroupVersionRecord().getVersion());
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeVesselData() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -300,7 +300,7 @@ public class FleetModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeVesselGroups() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
@@ -332,14 +332,14 @@ public class FleetModelDataCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void test_ChangeBunkerFuels() throws Exception {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
 		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioDataProvider);
 		final VersionData currentVersion = new VersionData(fleetModel);
-		Assert.assertNotNull(currentVersion);
+		Assertions.assertNotNull(currentVersion);
 
 		final BaseFuel fuel = FleetFactory.eINSTANCE.createBaseFuel();
 

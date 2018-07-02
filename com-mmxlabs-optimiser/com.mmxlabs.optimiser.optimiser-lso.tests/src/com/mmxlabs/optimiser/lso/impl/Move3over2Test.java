@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -94,14 +94,14 @@ public class Move3over2Test {
 		final List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(3, 4, 5);
 		final List<ISequenceElement> expectedSequence2 = OptimiserTestUtil.makeList(6, 1, 2, 7, 8, 9, 10);
 
-		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
+		Assertions.assertEquals(expectedSequence1.size(), sequence1.size());
 		for (int i = 0; i < expectedSequence1.size(); ++i) {
-			Assert.assertEquals(expectedSequence1.get(i), sequence1.get(i));
+			Assertions.assertEquals(expectedSequence1.get(i), sequence1.get(i));
 		}
 
-		Assert.assertEquals(expectedSequence2.size(), sequence2.size());
+		Assertions.assertEquals(expectedSequence2.size(), sequence2.size());
 		for (int i = 0; i < expectedSequence2.size(); ++i) {
-			Assert.assertEquals(expectedSequence2.get(i), sequence2.get(i));
+			Assertions.assertEquals(expectedSequence2.get(i), sequence2.get(i));
 		}
 	}
 
@@ -126,52 +126,52 @@ public class Move3over2Test {
 
 		final int resource2Start = 1;
 
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setResource1(resource1);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setResource2(resource2);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setResource1Start(resource1Start);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setResource1End(resource1End);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 
 		move.setResource2Position(resource2Start);
 
 		final Map<IResource, ISequence> sequenceMap_r1 = CollectionsUtil.makeHashMap(resource1, sequence1);
 		final Map<IResource, ISequence> sequenceMap_r2 = CollectionsUtil.makeHashMap(resource2, sequence2);
 
-		Assert.assertFalse(move.validate(new Sequences(Collections.singletonList(resource2), sequenceMap_r2)));
-		Assert.assertFalse(move.validate(new Sequences(Collections.singletonList(resource1), sequenceMap_r1)));
+		Assertions.assertFalse(move.validate(new Sequences(Collections.singletonList(resource2), sequenceMap_r2)));
+		Assertions.assertFalse(move.validate(new Sequences(Collections.singletonList(resource1), sequenceMap_r1)));
 
-		Assert.assertTrue(move.validate(sequences));
+		Assertions.assertTrue(move.validate(sequences));
 
 		move.setResource1End(100);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setResource1End(resource1End);
 
 		move.setResource1End(-1);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setResource1End(resource1End);
 
 		move.setResource1Start(100);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setResource1Start(resource1Start);
 
 		move.setResource1Start(-1);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setResource1Start(resource1Start);
 
 		move.setResource2Position(100);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setResource2Position(resource2Start);
 
 		move.setResource2Position(-1);
-		Assert.assertFalse(move.validate(sequences));
+		Assertions.assertFalse(move.validate(sequences));
 		move.setResource2Position(resource2Start);
 
 	}
@@ -182,7 +182,7 @@ public class Move3over2Test {
 		final Move3over2 move = new Move3over2();
 		final IResource resource1 = Mockito.mock(IResource.class);
 		move.setResource1(resource1);
-		Assert.assertSame(resource1, move.getResource1());
+		Assertions.assertSame(resource1, move.getResource1());
 	}
 
 	@Test
@@ -191,36 +191,36 @@ public class Move3over2Test {
 		final Move3over2 move = new Move3over2();
 		final IResource resource2 = Mockito.mock(IResource.class);
 		move.setResource2(resource2);
-		Assert.assertSame(resource2, move.getResource2());
+		Assertions.assertSame(resource2, move.getResource2());
 	}
 
 	@Test
 	public void testGetSetResource1Start() {
 
 		final Move3over2 move = new Move3over2();
-		Assert.assertEquals(-1, move.getResource1Start());
+		Assertions.assertEquals(-1, move.getResource1Start());
 		final int pos = 10;
 		move.setResource1Start(pos);
-		Assert.assertEquals(pos, move.getResource1Start());
+		Assertions.assertEquals(pos, move.getResource1Start());
 	}
 
 	@Test
 	public void testGetSetResource1End() {
 
 		final Move3over2 move = new Move3over2();
-		Assert.assertEquals(-1, move.getResource1End());
+		Assertions.assertEquals(-1, move.getResource1End());
 		final int pos = 10;
 		move.setResource1End(pos);
-		Assert.assertEquals(pos, move.getResource1End());
+		Assertions.assertEquals(pos, move.getResource1End());
 	}
 
 	@Test
 	public void testGetSetResource2Position() {
 
 		final Move3over2 move = new Move3over2();
-		Assert.assertEquals(-1, move.getResource2Position());
+		Assertions.assertEquals(-1, move.getResource2Position());
 		final int pos = 10;
 		move.setResource2Position(pos);
-		Assert.assertEquals(pos, move.getResource2Position());
+		Assertions.assertEquals(pos, move.getResource2Position());
 	}
 }

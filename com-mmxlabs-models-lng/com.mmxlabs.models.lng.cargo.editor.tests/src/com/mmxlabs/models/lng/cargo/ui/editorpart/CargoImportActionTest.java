@@ -17,9 +17,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
-@Ignore
+@Disabled
 public class CargoImportActionTest {
 
 	/**
@@ -63,21 +63,21 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertTrue(imports.isEmpty());
+		Assertions.assertTrue(imports.isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.canExecute();
 
 		// No change is expected
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
 	}
 
@@ -109,22 +109,22 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(1, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(1, cargoModel.getLoadSlots().size());
 		final LoadSlot importedLoadSlot = cargoModel.getLoadSlots().get(0);
-		Assert.assertEquals(loadSlot, importedLoadSlot);
+		Assertions.assertEquals(loadSlot, importedLoadSlot);
 	}
 
 	/**
@@ -172,27 +172,27 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(1, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(1, cargoModel.getLoadSlots().size());
 		final LoadSlot importedLoadSlot = cargoModel.getLoadSlots().get(0);
 		// Original slot has been updated
-		Assert.assertSame(originalLoadSlot, importedLoadSlot);
+		Assertions.assertSame(originalLoadSlot, importedLoadSlot);
 
-		Assert.assertEquals(100, importedLoadSlot.getDuration());
+		Assertions.assertEquals(100, importedLoadSlot.getDuration());
 		// Ensure original UUID has been retained
-		Assert.assertEquals("TestUUID", importedLoadSlot.getUuid());
+		Assertions.assertEquals("TestUUID", importedLoadSlot.getUuid());
 	}
 
 	/**
@@ -240,40 +240,40 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(2, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(2, cargoModel.getLoadSlots().size());
 		{
 
 			final LoadSlot importedLoadSlot = cargoModel.getLoadSlots().get(0);
 			// Original slot has been replaced
-			Assert.assertSame(originalLoadSlot, importedLoadSlot);
+			Assertions.assertSame(originalLoadSlot, importedLoadSlot);
 
-			Assert.assertEquals(50, importedLoadSlot.getDuration());
+			Assertions.assertEquals(50, importedLoadSlot.getDuration());
 			// Ensure original UUID has been retained
-			Assert.assertEquals("TestUUID", importedLoadSlot.getUuid());
+			Assertions.assertEquals("TestUUID", importedLoadSlot.getUuid());
 		}
 
 		{
 
 			final LoadSlot importedLoadSlot = cargoModel.getLoadSlots().get(1);
 			// Original slot has been replaced
-			Assert.assertSame(newLoadSlot, importedLoadSlot);
+			Assertions.assertSame(newLoadSlot, importedLoadSlot);
 
-			Assert.assertEquals(100, importedLoadSlot.getDuration());
+			Assertions.assertEquals(100, importedLoadSlot.getDuration());
 			// Ensure original UUID has been retained
-			Assert.assertEquals("NewUUID", importedLoadSlot.getUuid());
+			Assertions.assertEquals("NewUUID", importedLoadSlot.getUuid());
 		}
 	}
 
@@ -305,22 +305,22 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
 
-		Assert.assertEquals(1, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(1, cargoModel.getDischargeSlots().size());
 		final DischargeSlot importedDischargeSlot = cargoModel.getDischargeSlots().get(0);
-		Assert.assertEquals(dischargeSlot, importedDischargeSlot);
+		Assertions.assertEquals(dischargeSlot, importedDischargeSlot);
 	}
 
 	/**
@@ -368,27 +368,27 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
 
-		Assert.assertEquals(1, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(1, cargoModel.getDischargeSlots().size());
 		final DischargeSlot importedDischargeSlot = cargoModel.getDischargeSlots().get(0);
 		// Original slot has been updated
-		Assert.assertSame(originalDischargeSlot, importedDischargeSlot);
+		Assertions.assertSame(originalDischargeSlot, importedDischargeSlot);
 
-		Assert.assertEquals(100, importedDischargeSlot.getDuration());
+		Assertions.assertEquals(100, importedDischargeSlot.getDuration());
 		// Ensure original UUID has been retained
-		Assert.assertEquals("TestUUID", importedDischargeSlot.getUuid());
+		Assertions.assertEquals("TestUUID", importedDischargeSlot.getUuid());
 	}
 
 	/**
@@ -436,40 +436,40 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(2, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(2, cargoModel.getDischargeSlots().size());
 		{
 
 			final DischargeSlot importedDischargeSlot = cargoModel.getDischargeSlots().get(0);
 			// Original slot has been replaced
-			Assert.assertSame(originalDischargeSlot, importedDischargeSlot);
+			Assertions.assertSame(originalDischargeSlot, importedDischargeSlot);
 
-			Assert.assertEquals(50, importedDischargeSlot.getDuration());
+			Assertions.assertEquals(50, importedDischargeSlot.getDuration());
 			// Ensure original UUID has been retained
-			Assert.assertEquals("TestUUID", importedDischargeSlot.getUuid());
+			Assertions.assertEquals("TestUUID", importedDischargeSlot.getUuid());
 		}
 
 		{
 
 			final DischargeSlot importedDischargeSlot = cargoModel.getDischargeSlots().get(1);
 			// Original slot has been replaced
-			Assert.assertSame(newDischargeSlot, importedDischargeSlot);
+			Assertions.assertSame(newDischargeSlot, importedDischargeSlot);
 
-			Assert.assertEquals(100, importedDischargeSlot.getDuration());
+			Assertions.assertEquals(100, importedDischargeSlot.getDuration());
 			// Ensure original UUID has been retained
-			Assert.assertEquals("NewUUID", importedDischargeSlot.getUuid());
+			Assertions.assertEquals("NewUUID", importedDischargeSlot.getUuid());
 		}
 	}
 
@@ -519,28 +519,28 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertTrue(cargoModel.getCargoes().isEmpty());
-		Assert.assertTrue(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertTrue(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
+		Assertions.assertTrue(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertTrue(cargoModel.getDischargeSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertFalse(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(1, cargoModel.getCargoes().size());
-		Assert.assertEquals(1, cargoModel.getLoadSlots().size());
-		Assert.assertEquals(1, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(1, cargoModel.getCargoes().size());
+		Assertions.assertEquals(1, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(1, cargoModel.getDischargeSlots().size());
 
-		Assert.assertSame(newLoadSlot, cargoModel.getLoadSlots().get(0));
-		Assert.assertSame(newDischargeSlot, cargoModel.getDischargeSlots().get(0));
-		Assert.assertSame(newCargo, cargoModel.getCargoes().get(0));
-		Assert.assertSame(newLoadSlot, cargoModel.getCargoes().get(0).getSlots().get(0));
-		Assert.assertSame(newDischargeSlot, cargoModel.getCargoes().get(0).getSlots().get(1));
+		Assertions.assertSame(newLoadSlot, cargoModel.getLoadSlots().get(0));
+		Assertions.assertSame(newDischargeSlot, cargoModel.getDischargeSlots().get(0));
+		Assertions.assertSame(newCargo, cargoModel.getCargoes().get(0));
+		Assertions.assertSame(newLoadSlot, cargoModel.getCargoes().get(0).getSlots().get(0));
+		Assertions.assertSame(newDischargeSlot, cargoModel.getCargoes().get(0).getSlots().get(1));
 	}
 
 	/**
@@ -624,44 +624,44 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertFalse(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertFalse(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(1, cargoModel.getCargoes().size());
-		Assert.assertEquals(1, cargoModel.getLoadSlots().size());
-		Assert.assertEquals(1, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(1, cargoModel.getCargoes().size());
+		Assertions.assertEquals(1, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(1, cargoModel.getDischargeSlots().size());
 
-		Assert.assertSame(originalLoadSlot, cargoModel.getLoadSlots().get(0));
-		Assert.assertSame(originalDischargeSlot, cargoModel.getDischargeSlots().get(0));
+		Assertions.assertSame(originalLoadSlot, cargoModel.getLoadSlots().get(0));
+		Assertions.assertSame(originalDischargeSlot, cargoModel.getDischargeSlots().get(0));
 		Cargo importedCargo = cargoModel.getCargoes().get(0);
 		// Cargo reference should NOT have changed
-		Assert.assertSame(originalCargo, importedCargo);
+		Assertions.assertSame(originalCargo, importedCargo);
 
 		// Slot References should be the newly created imported object
 		Slot importedLoadSlot = importedCargo.getSlots().get(0);
-		Assert.assertSame(originalLoadSlot, importedLoadSlot);
+		Assertions.assertSame(originalLoadSlot, importedLoadSlot);
 		Slot importedDischargeSlot = importedCargo.getSlots().get(1);
-		Assert.assertSame(originalDischargeSlot, importedDischargeSlot);
+		Assertions.assertSame(originalDischargeSlot, importedDischargeSlot);
 
 		// UUID Fields Should NOT change
-		Assert.assertEquals("originalUUID1", importedLoadSlot.getUuid());
-		Assert.assertEquals("originalUUID2", importedDischargeSlot.getUuid());
-		Assert.assertEquals("originalUUID3", importedCargo.getUuid());
+		Assertions.assertEquals("originalUUID1", importedLoadSlot.getUuid());
+		Assertions.assertEquals("originalUUID2", importedDischargeSlot.getUuid());
+		Assertions.assertEquals("originalUUID3", importedCargo.getUuid());
 
 		// Check field updates
-		Assert.assertEquals(100, importedLoadSlot.getDuration());
-		Assert.assertEquals(200, importedDischargeSlot.getDuration());
-		Assert.assertTrue(importedCargo.isAllowRewiring());
+		Assertions.assertEquals(100, importedLoadSlot.getDuration());
+		Assertions.assertEquals(200, importedDischargeSlot.getDuration());
+		Assertions.assertTrue(importedCargo.isAllowRewiring());
 	}
 
 	/**
@@ -763,64 +763,64 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertFalse(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertFalse(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(1, cargoModel.getCargoes().size());
-		Assert.assertEquals(1, cargoModel.getLoadSlots().size());
-		Assert.assertEquals(2, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(1, cargoModel.getCargoes().size());
+		Assertions.assertEquals(1, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(2, cargoModel.getDischargeSlots().size());
 
 		// Check container state - old cargo and load slot should have gone. New cargo + new load copy and both old and new discharge slots should exist
-		Assert.assertSame(originalLoadSlot, cargoModel.getLoadSlots().get(0));
-		Assert.assertSame(originalDischargeSlot, cargoModel.getDischargeSlots().get(0));
-		Assert.assertSame(newDischargeSlot, cargoModel.getDischargeSlots().get(1));
-		Assert.assertSame(newCargo, cargoModel.getCargoes().get(0));
+		Assertions.assertSame(originalLoadSlot, cargoModel.getLoadSlots().get(0));
+		Assertions.assertSame(originalDischargeSlot, cargoModel.getDischargeSlots().get(0));
+		Assertions.assertSame(newDischargeSlot, cargoModel.getDischargeSlots().get(1));
+		Assertions.assertSame(newCargo, cargoModel.getCargoes().get(0));
 
 		// / Check obsolete classes
 		// Should no longer be contained
-		Assert.assertNull(originalCargo.eContainer());
+		Assertions.assertNull(originalCargo.eContainer());
 		// Discharge slot should not be connected to a cargo
-		Assert.assertFalse(originalCargo.getSlots().contains(originalDischargeSlot));
-		Assert.assertNull(originalDischargeSlot.getCargo());
+		Assertions.assertFalse(originalCargo.getSlots().contains(originalDischargeSlot));
+		Assertions.assertNull(originalDischargeSlot.getCargo());
 
 		Cargo importedCargo = cargoModel.getCargoes().get(0);
 
-		Assert.assertEquals(2, importedCargo.getSlots().size());
+		Assertions.assertEquals(2, importedCargo.getSlots().size());
 
-		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getLoadSlots().get(0)));
-		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(1)));
+		Assertions.assertTrue(importedCargo.getSlots().contains(cargoModel.getLoadSlots().get(0)));
+		Assertions.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(1)));
 
-		// Assert.assertEquals(100, importedCargo.getLoadSlot().getDuration());
-		// Assert.assertEquals(200, importedCargo.getDischargeSlot().getDuration());
+		// Assertions.assertEquals(100, importedCargo.getLoadSlot().getDuration());
+		// Assertions.assertEquals(200, importedCargo.getDischargeSlot().getDuration());
 
 		// Slot References should be the newly created imported object
 		Slot importedCargoLoadSlot = importedCargo.getSlots().get(0);
-		Assert.assertSame(originalLoadSlot, importedCargoLoadSlot);
-		Assert.assertSame(importedCargoLoadSlot, cargoModel.getLoadSlots().get(0));
+		Assertions.assertSame(originalLoadSlot, importedCargoLoadSlot);
+		Assertions.assertSame(importedCargoLoadSlot, cargoModel.getLoadSlots().get(0));
 
 		Slot importedDischargeSlot = importedCargo.getSlots().get(1);
-		Assert.assertSame(newDischargeSlot, importedDischargeSlot);
+		Assertions.assertSame(newDischargeSlot, importedDischargeSlot);
 
 		// Check expected UUID fields - only load slot should have the original UUID
-		Assert.assertEquals("originalUUID1", importedCargoLoadSlot.getUuid());
-		Assert.assertEquals("newUUID2", importedDischargeSlot.getUuid());
-		Assert.assertEquals("newUUID3", importedCargo.getUuid());
+		Assertions.assertEquals("originalUUID1", importedCargoLoadSlot.getUuid());
+		Assertions.assertEquals("newUUID2", importedDischargeSlot.getUuid());
+		Assertions.assertEquals("newUUID3", importedCargo.getUuid());
 
 		// Check field updates
-		Assert.assertTrue(importedCargo.isAllowRewiring());
-		Assert.assertEquals(100, importedCargoLoadSlot.getDuration());
-		Assert.assertEquals(200, importedDischargeSlot.getDuration());
-		Assert.assertEquals(50, originalDischargeSlot.getDuration());
+		Assertions.assertTrue(importedCargo.isAllowRewiring());
+		Assertions.assertEquals(100, importedCargoLoadSlot.getDuration());
+		Assertions.assertEquals(200, importedDischargeSlot.getDuration());
+		Assertions.assertEquals(50, originalDischargeSlot.getDuration());
 	}
 
 	/**
@@ -965,54 +965,54 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertEquals(2, cargoModel.getCargoes().size());
-		Assert.assertEquals(2, cargoModel.getLoadSlots().size());
-		Assert.assertEquals(2, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(2, cargoModel.getCargoes().size());
+		Assertions.assertEquals(2, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(2, cargoModel.getDischargeSlots().size());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertFalse(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(2, cargoModel.getCargoes().size());
-		Assert.assertEquals(2, cargoModel.getLoadSlots().size());
-		Assert.assertEquals(2, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(2, cargoModel.getCargoes().size());
+		Assertions.assertEquals(2, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(2, cargoModel.getDischargeSlots().size());
 
 		// Check container state - same cargoes should still exist
-		Assert.assertSame(originalLoadSlot1, cargoModel.getLoadSlots().get(0));
-		Assert.assertSame(originalLoadSlot2, cargoModel.getLoadSlots().get(1));
-		Assert.assertSame(originalDischargeSlot1, cargoModel.getDischargeSlots().get(0));
-		Assert.assertSame(originalDischargeSlot2, cargoModel.getDischargeSlots().get(1));
+		Assertions.assertSame(originalLoadSlot1, cargoModel.getLoadSlots().get(0));
+		Assertions.assertSame(originalLoadSlot2, cargoModel.getLoadSlots().get(1));
+		Assertions.assertSame(originalDischargeSlot1, cargoModel.getDischargeSlots().get(0));
+		Assertions.assertSame(originalDischargeSlot2, cargoModel.getDischargeSlots().get(1));
 		Cargo importedCargo1 = cargoModel.getCargoes().get(0);
-		Assert.assertSame(originalCargo1, importedCargo1);
+		Assertions.assertSame(originalCargo1, importedCargo1);
 		Cargo importedCargo2 = cargoModel.getCargoes().get(1);
-		Assert.assertSame(originalCargo2, importedCargo2);
+		Assertions.assertSame(originalCargo2, importedCargo2);
 
 		// Check new wiring
-		Assert.assertSame(originalLoadSlot1, importedCargo1.getSlots().get(0));
-		Assert.assertSame(originalDischargeSlot2, importedCargo1.getSlots().get(1));
-		Assert.assertSame(originalLoadSlot2, importedCargo2.getSlots().get(0));
-		Assert.assertSame(originalDischargeSlot1, importedCargo2.getSlots().get(1));
+		Assertions.assertSame(originalLoadSlot1, importedCargo1.getSlots().get(0));
+		Assertions.assertSame(originalDischargeSlot2, importedCargo1.getSlots().get(1));
+		Assertions.assertSame(originalLoadSlot2, importedCargo2.getSlots().get(0));
+		Assertions.assertSame(originalDischargeSlot1, importedCargo2.getSlots().get(1));
 
 		// Check expected UUID fields - all original
-		Assert.assertEquals("originalUUID1", cargoModel.getLoadSlots().get(0).getUuid());
-		Assert.assertEquals("originalUUID2", cargoModel.getDischargeSlots().get(0).getUuid());
-		Assert.assertEquals("originalUUID3", cargoModel.getCargoes().get(0).getUuid());
-		Assert.assertEquals("originalUUID4", cargoModel.getLoadSlots().get(1).getUuid());
-		Assert.assertEquals("originalUUID5", cargoModel.getDischargeSlots().get(1).getUuid());
-		Assert.assertEquals("originalUUID6", cargoModel.getCargoes().get(1).getUuid());
+		Assertions.assertEquals("originalUUID1", cargoModel.getLoadSlots().get(0).getUuid());
+		Assertions.assertEquals("originalUUID2", cargoModel.getDischargeSlots().get(0).getUuid());
+		Assertions.assertEquals("originalUUID3", cargoModel.getCargoes().get(0).getUuid());
+		Assertions.assertEquals("originalUUID4", cargoModel.getLoadSlots().get(1).getUuid());
+		Assertions.assertEquals("originalUUID5", cargoModel.getDischargeSlots().get(1).getUuid());
+		Assertions.assertEquals("originalUUID6", cargoModel.getCargoes().get(1).getUuid());
 
 		// Check field updates
-		Assert.assertEquals(100, cargoModel.getLoadSlots().get(0).getDuration());
-		Assert.assertEquals(200, cargoModel.getDischargeSlots().get(0).getDuration());
-		Assert.assertEquals(300, cargoModel.getLoadSlots().get(1).getDuration());
-		Assert.assertEquals(400, cargoModel.getDischargeSlots().get(1).getDuration());
-		Assert.assertTrue(cargoModel.getCargoes().get(0).isAllowRewiring());
-		Assert.assertFalse(cargoModel.getCargoes().get(1).isAllowRewiring());
+		Assertions.assertEquals(100, cargoModel.getLoadSlots().get(0).getDuration());
+		Assertions.assertEquals(200, cargoModel.getDischargeSlots().get(0).getDuration());
+		Assertions.assertEquals(300, cargoModel.getLoadSlots().get(1).getDuration());
+		Assertions.assertEquals(400, cargoModel.getDischargeSlots().get(1).getDuration());
+		Assertions.assertTrue(cargoModel.getCargoes().get(0).isAllowRewiring());
+		Assertions.assertFalse(cargoModel.getCargoes().get(1).isAllowRewiring());
 	}
 
 	/**
@@ -1157,56 +1157,56 @@ public class CargoImportActionTest {
 		}
 
 		// These should not fail
-		Assert.assertEquals(2, cargoModel.getCargoes().size());
-		Assert.assertEquals(2, cargoModel.getLoadSlots().size());
-		Assert.assertEquals(2, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(2, cargoModel.getCargoes().size());
+		Assertions.assertEquals(2, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(2, cargoModel.getDischargeSlots().size());
 
 		final Command cmd = action.mergeImports(cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), imports);
 
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		cmd.execute();
 
-		Assert.assertFalse(cargoModel.getCargoes().isEmpty());
-		Assert.assertFalse(cargoModel.getLoadSlots().isEmpty());
-		Assert.assertFalse(cargoModel.getDischargeSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getCargoes().isEmpty());
+		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
+		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
-		Assert.assertEquals(2, cargoModel.getCargoes().size());
-		Assert.assertEquals(2, cargoModel.getLoadSlots().size());
-		Assert.assertEquals(2, cargoModel.getDischargeSlots().size());
+		Assertions.assertEquals(2, cargoModel.getCargoes().size());
+		Assertions.assertEquals(2, cargoModel.getLoadSlots().size());
+		Assertions.assertEquals(2, cargoModel.getDischargeSlots().size());
 
 		// Check container state - same cargoes should still exist
-		Assert.assertSame(originalLoadSlot1, cargoModel.getLoadSlots().get(0));
-		Assert.assertSame(originalLoadSlot2, cargoModel.getLoadSlots().get(1));
-		Assert.assertSame(originalDischargeSlot1, cargoModel.getDischargeSlots().get(0));
-		Assert.assertSame(originalDischargeSlot2, cargoModel.getDischargeSlots().get(1));
+		Assertions.assertSame(originalLoadSlot1, cargoModel.getLoadSlots().get(0));
+		Assertions.assertSame(originalLoadSlot2, cargoModel.getLoadSlots().get(1));
+		Assertions.assertSame(originalDischargeSlot1, cargoModel.getDischargeSlots().get(0));
+		Assertions.assertSame(originalDischargeSlot2, cargoModel.getDischargeSlots().get(1));
 		Cargo importedCargo1 = cargoModel.getCargoes().get(0);
-		Assert.assertSame(originalCargo1, importedCargo1);
+		Assertions.assertSame(originalCargo1, importedCargo1);
 		Cargo importedCargo2 = cargoModel.getCargoes().get(1);
-		Assert.assertSame(originalCargo2, importedCargo2);
+		Assertions.assertSame(originalCargo2, importedCargo2);
 
 		// Check new wiring
-		Assert.assertEquals(2, importedCargo1.getSlots().size());
-		Assert.assertEquals(2, importedCargo2.getSlots().size());
-		Assert.assertTrue(importedCargo1.getSlots().contains(originalLoadSlot2));
-		Assert.assertTrue(importedCargo1.getSlots().contains(originalDischargeSlot1));
-		Assert.assertTrue(importedCargo2.getSlots().contains(originalLoadSlot1));
-		Assert.assertTrue(importedCargo2.getSlots().contains(originalDischargeSlot2));
+		Assertions.assertEquals(2, importedCargo1.getSlots().size());
+		Assertions.assertEquals(2, importedCargo2.getSlots().size());
+		Assertions.assertTrue(importedCargo1.getSlots().contains(originalLoadSlot2));
+		Assertions.assertTrue(importedCargo1.getSlots().contains(originalDischargeSlot1));
+		Assertions.assertTrue(importedCargo2.getSlots().contains(originalLoadSlot1));
+		Assertions.assertTrue(importedCargo2.getSlots().contains(originalDischargeSlot2));
 
 		// Check expected UUID fields - all original
-		Assert.assertEquals("originalUUID1", cargoModel.getLoadSlots().get(0).getUuid());
-		Assert.assertEquals("originalUUID2", cargoModel.getDischargeSlots().get(0).getUuid());
-		Assert.assertEquals("originalUUID3", cargoModel.getCargoes().get(0).getUuid());
-		Assert.assertEquals("originalUUID4", cargoModel.getLoadSlots().get(1).getUuid());
-		Assert.assertEquals("originalUUID5", cargoModel.getDischargeSlots().get(1).getUuid());
-		Assert.assertEquals("originalUUID6", cargoModel.getCargoes().get(1).getUuid());
+		Assertions.assertEquals("originalUUID1", cargoModel.getLoadSlots().get(0).getUuid());
+		Assertions.assertEquals("originalUUID2", cargoModel.getDischargeSlots().get(0).getUuid());
+		Assertions.assertEquals("originalUUID3", cargoModel.getCargoes().get(0).getUuid());
+		Assertions.assertEquals("originalUUID4", cargoModel.getLoadSlots().get(1).getUuid());
+		Assertions.assertEquals("originalUUID5", cargoModel.getDischargeSlots().get(1).getUuid());
+		Assertions.assertEquals("originalUUID6", cargoModel.getCargoes().get(1).getUuid());
 
 		// Check field updates
-		Assert.assertEquals(100, cargoModel.getLoadSlots().get(0).getDuration());
-		Assert.assertEquals(200, cargoModel.getDischargeSlots().get(0).getDuration());
-		Assert.assertEquals(300, cargoModel.getLoadSlots().get(1).getDuration());
-		Assert.assertEquals(400, cargoModel.getDischargeSlots().get(1).getDuration());
-		Assert.assertTrue(cargoModel.getCargoes().get(0).isAllowRewiring());
-		Assert.assertFalse(cargoModel.getCargoes().get(1).isAllowRewiring());
+		Assertions.assertEquals(100, cargoModel.getLoadSlots().get(0).getDuration());
+		Assertions.assertEquals(200, cargoModel.getDischargeSlots().get(0).getDuration());
+		Assertions.assertEquals(300, cargoModel.getLoadSlots().get(1).getDuration());
+		Assertions.assertEquals(400, cargoModel.getDischargeSlots().get(1).getDuration());
+		Assertions.assertTrue(cargoModel.getCargoes().get(0).isAllowRewiring());
+		Assertions.assertFalse(cargoModel.getCargoes().get(1).isAllowRewiring());
 	}
 
 }

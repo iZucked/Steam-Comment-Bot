@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.validation.tests;
 
-import static org.mockito.Matchers.anyFloat;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -16,10 +14,9 @@ import static org.mockito.Mockito.when;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -190,7 +187,7 @@ public class VesselClassSpeedConstraintTest {
 		verify(vessel, times(2)).getVesselOrDelegateMaxSpeed();
 		verify(validationContext).getTarget();
 		verify(validationContext).getCurrentConstraintId();
-		verify(validationContext).createFailureStatus(Matchers.anyString(), AdditionalMatchers.eq(minSpeed, 1.0), AdditionalMatchers.eq(maxSpeed, 1.0));
+		verify(validationContext).createFailureStatus(ArgumentMatchers.anyString(), AdditionalMatchers.eq(minSpeed, 1.0), AdditionalMatchers.eq(maxSpeed, 1.0));
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(vessel);
 		verifyNoMoreInteractions(validationContext);
@@ -398,7 +395,7 @@ public class VesselClassSpeedConstraintTest {
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
 		} else {
-			when(validationContext.createFailureStatus(Matchers.<Object> anyVararg())).thenReturn(resultStatus);
+			when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(resultStatus);
 		}
 
 		constraint.validate(validationContext);
@@ -423,7 +420,7 @@ public class VesselClassSpeedConstraintTest {
 		if (expectSuccess) {
 			verify(validationContext).createSuccessStatus();
 		} else {
-			verify(validationContext).createFailureStatus(Matchers.<Object> anyVararg());
+			verify(validationContext).createFailureStatus(ArgumentMatchers.any());
 		}
 	}
 

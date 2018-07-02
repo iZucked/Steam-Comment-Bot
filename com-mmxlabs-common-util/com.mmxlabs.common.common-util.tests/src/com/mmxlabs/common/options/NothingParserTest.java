@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common.options;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class NothingParserTest {
 
@@ -13,9 +13,9 @@ public class NothingParserTest {
 	public void test() throws InvalidArgumentException {
 		final NothingParser parser = new NothingParser();
 
-		Assert.assertTrue(parser.hasDefaultValue());
-		Assert.assertEquals(false, parser.getDefaultValue());
+		Assertions.assertTrue(parser.hasDefaultValue());
+		Assertions.assertEquals(false, parser.getDefaultValue());
 
-		Assert.assertEquals(true, parser.parse(null, null));
+		Assertions.assertEquals(true, parser.parse(null, null));
 	}
 }

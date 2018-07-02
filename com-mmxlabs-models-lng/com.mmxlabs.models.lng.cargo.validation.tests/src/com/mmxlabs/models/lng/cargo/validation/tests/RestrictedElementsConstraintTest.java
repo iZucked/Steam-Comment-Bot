@@ -13,8 +13,8 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
@@ -88,7 +88,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
-		Assert.assertTrue(status1.isOK());
+		Assertions.assertTrue(status1.isOK());
 
 		// Flip black/white mode
 
@@ -97,7 +97,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
-		Assert.assertFalse(status2.isOK());
+		Assertions.assertFalse(status2.isOK());
 	}
 
 	@Test
@@ -154,7 +154,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
-		Assert.assertFalse(status1.isOK());
+		Assertions.assertFalse(status1.isOK());
 
 		// Flip black/white mode
 
@@ -163,7 +163,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
-		Assert.assertTrue(status2.isOK());
+		Assertions.assertTrue(status2.isOK());
 	}
 
 	@Test
@@ -220,7 +220,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
-		Assert.assertFalse(status1.isOK());
+		Assertions.assertFalse(status1.isOK());
 
 		// Flip black/white mode
 
@@ -229,7 +229,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
-		Assert.assertTrue(status2.isOK());
+		Assertions.assertTrue(status2.isOK());
 	}
 
 	@Test
@@ -285,7 +285,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
-		Assert.assertFalse(status1.isOK());
+		Assertions.assertFalse(status1.isOK());
 
 		// Flip black/white mode
 
@@ -294,7 +294,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
-		Assert.assertTrue(status2.isOK());
+		Assertions.assertTrue(status2.isOK());
 	}
 
 	@Test
@@ -358,7 +358,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
-		Assert.assertFalse(status1.isOK());
+		Assertions.assertFalse(status1.isOK());
 
 		// Flip black/white mode
 
@@ -367,7 +367,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
-		Assert.assertTrue(status2.isOK());
+		Assertions.assertTrue(status2.isOK());
 	}
 
 	@Test
@@ -423,7 +423,7 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status1 = constraint.validate(validationContext);
-		Assert.assertFalse(status1.isOK());
+		Assertions.assertFalse(status1.isOK());
 
 		// Flip black/white mode
 
@@ -432,6 +432,6 @@ public class RestrictedElementsConstraintTest {
 
 		// validate the constraint using the mocked expected values set above
 		final IStatus status2 = constraint.validate(validationContext);
-		Assert.assertTrue(status2.isOK());
+		Assertions.assertTrue(status2.isOK());
 	}
 }

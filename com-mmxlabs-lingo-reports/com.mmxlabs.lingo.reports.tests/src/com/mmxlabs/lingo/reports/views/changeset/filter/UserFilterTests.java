@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.filter;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.reports.views.changeset.filter.UserFilter.FilterSlotType;
 import com.mmxlabs.lingo.reports.views.changeset.filter.UserFilter.FilterVesselType;
@@ -27,7 +27,7 @@ public class UserFilterTests {
 
 		final UserFilter filter = new UserFilter("Filter");
 
-		Assert.assertFalse(filter.include(null));
+		Assertions.assertFalse(filter.include(null));
 
 	}
 
@@ -41,7 +41,7 @@ public class UserFilterTests {
 
 		final ChangeSetTableGroup group = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
 
-		Assert.assertTrue(filter.include(group));
+		Assertions.assertTrue(filter.include(group));
 
 	}
 
@@ -62,7 +62,7 @@ public class UserFilterTests {
 			row.setLhsName("slotid");
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		// Matching slot id - multiple rows
 		{
@@ -77,7 +77,7 @@ public class UserFilterTests {
 			row3.setLhsName("notslotid3");
 			group.getRows().add(row3);
 
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		// Mismatching slot id
 		{
@@ -87,13 +87,13 @@ public class UserFilterTests {
 
 			group.getRows().add(row);
 
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 		// No slot/row at all
 		{
 			final ChangeSetTableGroup group = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
 
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 		// Matching slot id - wrong slot
 		{
@@ -102,7 +102,7 @@ public class UserFilterTests {
 			row.setRhsName("slotid");
 
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 	}
 
@@ -123,7 +123,7 @@ public class UserFilterTests {
 			row.setRhsName("slotid");
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		// Matching slot id - multiple rows
 		{
@@ -138,7 +138,7 @@ public class UserFilterTests {
 			row3.setRhsName("notslotid3");
 			group.getRows().add(row3);
 
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		// Mismatching slot id
 		{
@@ -148,13 +148,13 @@ public class UserFilterTests {
 
 			group.getRows().add(row);
 
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 		// No slot/row at all
 		{
 			final ChangeSetTableGroup group = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
 
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 		// Matching slot id - wrong slot
 		{
@@ -163,7 +163,7 @@ public class UserFilterTests {
 			row.setLhsName("slotid");
 
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 	}
 
@@ -192,7 +192,7 @@ public class UserFilterTests {
 			row.setLhsAfter(data);
 			row.setLhsSlot(true);
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 
 		// Matching contract id - before
@@ -211,7 +211,7 @@ public class UserFilterTests {
 
 			group.getRows().add(row);
 			// Filter only applies to after
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 
 		// Mis-Matching contract id - after
@@ -229,7 +229,7 @@ public class UserFilterTests {
 			row.setLhsAfter(data);
 			row.setLhsSlot(true);
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 
 		// Null contract name
@@ -247,7 +247,7 @@ public class UserFilterTests {
 			row.setLhsAfter(data);
 			row.setLhsSlot(true);
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 
 		// No contract - after
@@ -262,7 +262,7 @@ public class UserFilterTests {
 			row.setLhsAfter(data);
 			row.setLhsSlot(true);
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 	}
 
@@ -291,7 +291,7 @@ public class UserFilterTests {
 			row.setRhsAfter(data);
 			row.setRhsSlot(true);
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 
 		// Matching contract id - before
@@ -310,7 +310,7 @@ public class UserFilterTests {
 
 			group.getRows().add(row);
 			// Filter only applies to after
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 
 		// Mis-Matching contract id - after
@@ -328,7 +328,7 @@ public class UserFilterTests {
 			row.setRhsAfter(data);
 			row.setRhsSlot(true);
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 
 		// Null contract name
@@ -346,7 +346,7 @@ public class UserFilterTests {
 			row.setRhsAfter(data);
 			row.setRhsSlot(true);
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 
 		// No contract - after
@@ -361,7 +361,7 @@ public class UserFilterTests {
 			row.setRhsAfter(data);
 			row.setRhsSlot(true);
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 	}
 
@@ -382,7 +382,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("vesselname");
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		// Mis-Matching vessel id
 		{
@@ -391,7 +391,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("notvesselname");
 
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 
 	}
@@ -414,7 +414,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("vesselname");
 
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 		// Mis-Matching vessel id
 		{
@@ -423,7 +423,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("notvesselname");
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		// null
 		{
@@ -432,7 +432,7 @@ public class UserFilterTests {
 			row.setAfterVesselName(null);
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 
 	}
@@ -457,7 +457,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("vesselname");
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		{
 			final ChangeSetTableGroup group = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
@@ -466,7 +466,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("vesselname");
 
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 		{
 			final ChangeSetTableGroup group = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
@@ -475,7 +475,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("notvesselname");
 
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 	}
 
@@ -500,7 +500,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("vesselname");
 
 			group.getRows().add(row);
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 		// Not matching
 		{
@@ -510,7 +510,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("vesselname");
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		{
 			final ChangeSetTableGroup group = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
@@ -519,7 +519,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("notvesselname");
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		{
 			final ChangeSetTableGroup group = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
@@ -528,7 +528,7 @@ public class UserFilterTests {
 			row.setAfterVesselName("notvesselname");
 
 			group.getRows().add(row);
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 		// Multiple rows
 		{
@@ -548,7 +548,7 @@ public class UserFilterTests {
 
 				group.getRows().add(row);
 			}
-			Assert.assertFalse(filter.include(group));
+			Assertions.assertFalse(filter.include(group));
 		}
 		// Multiple rows
 		{
@@ -568,7 +568,7 @@ public class UserFilterTests {
 				
 				group.getRows().add(row);
 			}
-			Assert.assertTrue(filter.include(group));
+			Assertions.assertTrue(filter.include(group));
 		}
 	}
 }

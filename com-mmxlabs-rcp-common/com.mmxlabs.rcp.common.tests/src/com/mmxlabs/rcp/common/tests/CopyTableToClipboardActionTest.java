@@ -12,18 +12,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 
-@RunWith(SWTBotJunit4ClassRunner.class)
 public class CopyTableToClipboardActionTest {
 
-	@Ignore("Almost always fails on build server, probably timing issue")
+	@Disabled("Almost always fails on build server, probably timing issue")
 	@Test
 	public void testCopyTableToClipboardAction() throws InterruptedException {
 
@@ -62,10 +59,10 @@ public class CopyTableToClipboardActionTest {
 					final TextTransfer transfer = TextTransfer.getInstance();
 					final Object contents = cb.getContents(transfer);
 					// Expect a String
-					Assert.assertTrue(contents instanceof String);
+					Assertions.assertTrue(contents instanceof String);
 
 					// Check string is as expected
-					Assert.assertEquals(expectedStringBuilder.toString(), contents);
+					Assertions.assertEquals(expectedStringBuilder.toString(), contents);
 				} finally {
 
 					cb.dispose();

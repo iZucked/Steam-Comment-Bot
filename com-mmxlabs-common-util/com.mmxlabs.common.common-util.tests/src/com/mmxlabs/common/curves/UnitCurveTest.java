@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common.curves;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class UnitCurveTest {
 
@@ -14,10 +14,10 @@ public class UnitCurveTest {
 
 		final UnitCurve c = UnitCurve.getInstance();
 
-		Assert.assertNotNull(c);
+		Assertions.assertNotNull(c);
 
 		for (int i = 0; i < 100; ++i) {
-			Assert.assertEquals(1, c.getValueAtPoint(i));
+			Assertions.assertEquals(1, c.getValueAtPoint(i));
 		}
 	}
 }

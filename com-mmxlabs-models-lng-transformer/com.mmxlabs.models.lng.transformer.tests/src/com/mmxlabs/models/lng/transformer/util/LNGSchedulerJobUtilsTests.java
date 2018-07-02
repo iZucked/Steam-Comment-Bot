@@ -9,8 +9,8 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -108,11 +108,11 @@ public class LNGSchedulerJobUtilsTests {
 
 		}
 		final Command cmd = LNGSchedulerJobUtils.derive(domain, null, schedule, cargoModel, null);
-		Assert.assertTrue(cmd.canExecute());
+		Assertions.assertTrue(cmd.canExecute());
 		domain.getCommandStack().execute(cmd);
 
 		// Check output
-		Assert.assertEquals(availability2, cargo.getVesselAssignmentType());
+		Assertions.assertEquals(availability2, cargo.getVesselAssignmentType());
 
 	}
 }

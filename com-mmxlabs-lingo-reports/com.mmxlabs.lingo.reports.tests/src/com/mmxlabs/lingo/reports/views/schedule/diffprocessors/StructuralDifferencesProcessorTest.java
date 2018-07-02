@@ -11,8 +11,8 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcoreFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Sets;
@@ -58,9 +58,9 @@ public class StructuralDifferencesProcessorTest {
 
 		processor.runDiffProcess(table, Collections.singletonList(referenceElement), Collections.<EObject> emptyList(), equivalancesMap, elementToRowMap);
 
-		Assert.assertFalse(referenceRow.isVisible());
-		Assert.assertFalse(equivalentRow1.isVisible());
-		Assert.assertFalse(equivalentRow2.isVisible());
+		Assertions.assertFalse(referenceRow.isVisible());
+		Assertions.assertFalse(equivalentRow1.isVisible());
+		Assertions.assertFalse(equivalentRow2.isVisible());
 	}
 
 	@Test
@@ -98,9 +98,9 @@ public class StructuralDifferencesProcessorTest {
 
 		processor.runDiffProcess(table, Collections.singletonList(referenceElement), Collections.<EObject> emptyList(), equivalancesMap, elementToRowMap);
 
-		Assert.assertTrue(referenceRow.isVisible());
-		Assert.assertTrue(equivalentRow1.isVisible());
-		Assert.assertTrue(equivalentRow2.isVisible());
+		Assertions.assertTrue(referenceRow.isVisible());
+		Assertions.assertTrue(equivalentRow1.isVisible());
+		Assertions.assertTrue(equivalentRow2.isVisible());
 	}
 
 }

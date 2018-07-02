@@ -6,14 +6,15 @@ Fragment-Host: com.mmxlabs.lingo.reports
 Bundle-Version: 4.6.10.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-10
-Require-Bundle: org.junit;bundle-version="4.8.1",
+Require-Bundle: org.junit.jupiter.api;bundle-version="5.0.0",
  com.mmxlabs.models.lng.types;bundle-version="[4.6.10,5.0.0)",
  com.mmxlabs.models.lng.cargo;bundle-version="[4.6.10,5.0.0)",
  com.mmxlabs.models.lng.commercial;bundle-version="[4.6.10,5.0.0)",
  com.mmxlabs.models.lng.pricing;bundle-version="[4.6.10,5.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.models.lng.pricing.validation
+ com.mmxlabs.models.lng.pricing.validation,
+ org.junit.jupiter.params;bundle-version="5.1.0"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Automatic-Module-Name: com.mmxlabs.lingo.reports.tests

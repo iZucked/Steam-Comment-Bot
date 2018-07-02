@@ -14,13 +14,13 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -28,7 +28,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
@@ -67,7 +67,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 @SuppressWarnings({ "unused", "null" })
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class CapacityViolationTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("optimisation-charter-out-generation");
@@ -113,7 +113,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -123,7 +123,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -155,9 +155,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				.build();
 	}
 
-	@Ignore("Uncertain behaviour regarding heel violations. Unable to produce multiple valid violations on one cargo.")
+	@Disabled("Uncertain behaviour regarding heel violations. Unable to produce multiple valid violations on one cargo.")
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMultipleCapacityConstraints() throws Exception {
 		initCommonData1();
 
@@ -180,28 +180,28 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check single cargo
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
 			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is no ConstraintCheckers
-			Assert.assertNull(failedConstraintCheckers);
+			Assertions.assertNull(failedConstraintCheckers);
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testViableCapacityConstraintSwap() throws Exception {
 		initCommonData1();
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 6), portFinder.findPort("Point Fortin"), null, entity, "5", null).build();
@@ -215,27 +215,27 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check single cargo
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
 			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is no ConstraintCheckers
-			Assert.assertNull(failedConstraintCheckers);
+			Assertions.assertNull(failedConstraintCheckers);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testInvalidCapacityConstraint() throws Exception {
 		initCommonData1();
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", null)
@@ -257,43 +257,43 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			// e.printStackTrace();
 			// }
 			// Check single cargo
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
 			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is a singular constraint checker
-			Assert.assertEquals(1, failedConstraintCheckers.size());
+			Assertions.assertEquals(1, failedConstraintCheckers.size());
 			// Check that it is CapacityEvaluatedStateChecker
 			final IEvaluatedStateConstraintChecker con = failedConstraintCheckers.get(0);
-			Assert.assertTrue(con instanceof CapacityEvaluatedStateChecker);
+			Assertions.assertTrue(con instanceof CapacityEvaluatedStateChecker);
 			// Cast to CESC
 			final CapacityEvaluatedStateChecker castedCon = (CapacityEvaluatedStateChecker) con;
 			// Check that there was a single initial violation
-			Assert.assertEquals(1, castedCon.getInitialSoftViolations());
+			Assertions.assertEquals(1, castedCon.getInitialSoftViolations());
 
 			final Set<IPortSlot> slots = castedCon.getCurrentViolatedSlots();
 			final long softViolations = castedCon.getCurrentSoftViolations();
 			// Check that there is only a singular violated slot and no soft violations.
-			Assert.assertEquals(0, softViolations);
-			Assert.assertEquals(1, slots.size());
+			Assertions.assertEquals(0, softViolations);
+			Assertions.assertEquals(1, slots.size());
 			// Check that the violation is a MIN_DISCHARGE
-			Assert.assertEquals(CapacityViolationType.MIN_DISCHARGE, castedCon.getTriggeredViolations().get(0));
+			Assertions.assertEquals(CapacityViolationType.MIN_DISCHARGE, castedCon.getTriggeredViolations().get(0));
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
@@ -320,15 +320,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(2, seq.getSequenceSlots().size());
+				Assertions.assertEquals(2, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -336,39 +336,39 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				final List<@NonNull CapacityViolationType> startPortViolations = seq.getCapacityViolations(startPortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
-				Assert.assertTrue(startPortViolations.isEmpty());
-				Assert.assertTrue(endPortViolations.isEmpty());
+				Assertions.assertTrue(startPortViolations.isEmpty());
+				Assertions.assertTrue(endPortViolations.isEmpty());
 
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(6600_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(6600_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(5 * 22.5 * 6600 * 1000, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(6600_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(6600_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(5 * 22.5 * 6600 * 1000, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue(), 0.0001);
 				}
 
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(500 * 22.5 * 10 * 1000.0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(500 * 22.5 * 10 * 1000.0, heelRecord.getHeelRevenue(), 0.0001);
 
 				}
 
 				// P&L is just heel cost and hire cost is zero
 				final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
-				Assert.assertEquals(-6600 * 22.5 * 5 * 1000, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(startPortSlot)), 0.0);
-				Assert.assertEquals(500 * 22.5 * 10 * 1000.0, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(endPortSlot)), 0.0);
+				Assertions.assertEquals(-6600 * 22.5 * 5 * 1000, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(startPortSlot)), 0.0001);
+				Assertions.assertEquals(500 * 22.5 * 10 * 1000.0, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(endPortSlot)), 0.0001);
 
 			});
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToEndHeel_Fail_CannotMeetMinEndHeel() throws Exception {
 
 		// Create the required basic elements
@@ -397,15 +397,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(2, seq.getSequenceSlots().size());
+				Assertions.assertEquals(2, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -413,15 +413,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				final List<@NonNull CapacityViolationType> startPortViolations = seq.getCapacityViolations(startPortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
-				Assert.assertTrue(startPortViolations.isEmpty());
-				Assert.assertEquals(1, endPortViolations.size());
-				Assert.assertTrue(endPortViolations.contains(CapacityViolationType.MIN_HEEL));
+				Assertions.assertTrue(startPortViolations.isEmpty());
+				Assertions.assertEquals(1, endPortViolations.size());
+				Assertions.assertTrue(endPortViolations.contains(CapacityViolationType.MIN_HEEL));
 			});
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToEndHeel_Fail_CannotMeetMaxStartHeel_MixedMode() throws Exception {
 
 		// Create the required basic elements
@@ -459,15 +459,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(2, seq.getSequenceSlots().size());
+				Assertions.assertEquals(2, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -476,29 +476,29 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> startPortViolations = seq.getCapacityViolations(startPortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
 
-				Assert.assertEquals(1, endPortViolations.size());
-				Assert.assertTrue(endPortViolations.contains(CapacityViolationType.MIN_HEEL));
+				Assertions.assertEquals(1, endPortViolations.size());
+				Assertions.assertTrue(endPortViolations.contains(CapacityViolationType.MIN_HEEL));
 
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(6000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(6000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(6000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(6000_000, heelRecord.getHeelAtEndInM3());
 					double a = 6000 * 22.5 * 5.0 * 1000.0;
 					long b = heelRecord.getHeelCost();
-					Assert.assertEquals(a, b, 10.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertEquals(a, b, 10.0);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue(), 0.0001);
 				}
 
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(0, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(0, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(0, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue(), 0.0001);
 				}
 
 				// P&L is just heel cost + bunkers and hire cost is zero
@@ -506,15 +506,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				double fuel = 100 * 50 * 1000; // One day of bunkers
 
 				final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
-				Assert.assertEquals(-heelCost - fuel, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(startPortSlot)), 1.0);
-				Assert.assertEquals(0.0, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(endPortSlot)), 0.0);
+				Assertions.assertEquals(-heelCost - fuel, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(startPortSlot)), 1.0);
+				Assertions.assertEquals(0.0, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(endPortSlot)), 0.0001);
 
 			});
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToEndHeel_Fail_NeedToUseLessThanMinHeel() throws Exception {
 
 		// Create the required basic elements
@@ -543,15 +543,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(2, seq.getSequenceSlots().size());
+				Assertions.assertEquals(2, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -560,16 +560,16 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> startPortViolations = seq.getCapacityViolations(startPortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
 
-				Assert.assertEquals(1, endPortViolations.size());
-				Assert.assertTrue(endPortViolations.contains(CapacityViolationType.LOST_HEEL));
+				Assertions.assertEquals(1, endPortViolations.size());
+				Assertions.assertTrue(endPortViolations.contains(CapacityViolationType.LOST_HEEL));
 			});
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToDrydockToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
@@ -603,15 +603,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(3, seq.getSequenceSlots().size());
+				Assertions.assertEquals(3, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -623,16 +623,16 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> dryDockViolations = seq.getCapacityViolations(dryDockPortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
 
-				Assert.assertEquals(0, dryDockViolations.size());
-				Assert.assertEquals(0, endPortViolations.size());
+				Assertions.assertEquals(0, dryDockViolations.size());
+				Assertions.assertEquals(0, endPortViolations.size());
 			});
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToDrydockToEndHeel_Fail_InitialHeelLost_CannotEndCold() throws Exception {
 
 		// Create the required basic elements
@@ -666,15 +666,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(3, seq.getSequenceSlots().size());
+				Assertions.assertEquals(3, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -686,19 +686,19 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> dryDockViolations = seq.getCapacityViolations(dryDockPortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
 
-				Assert.assertEquals(1, dryDockViolations.size());
-				Assert.assertTrue(dryDockViolations.contains(CapacityViolationType.LOST_HEEL));
+				Assertions.assertEquals(1, dryDockViolations.size());
+				Assertions.assertTrue(dryDockViolations.contains(CapacityViolationType.LOST_HEEL));
 
-				Assert.assertEquals(1, endPortViolations.size());
-				Assert.assertTrue(endPortViolations.contains(CapacityViolationType.FORCED_COOLDOWN));
+				Assertions.assertEquals(1, endPortViolations.size());
+				Assertions.assertTrue(endPortViolations.contains(CapacityViolationType.FORCED_COOLDOWN));
 			});
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToCharterOutToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
@@ -734,15 +734,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(3, seq.getSequenceSlots().size());
+				Assertions.assertEquals(3, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -754,48 +754,48 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> charterOutViolations = seq.getCapacityViolations(charterOutPortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
-				Assert.assertEquals(0, charterOutViolations.size());
-				Assert.assertEquals(0, endPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, charterOutViolations.size());
+				Assertions.assertEquals(0, endPortViolations.size());
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(500 * 22.8 * 5.0 * 1000, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(500 * 22.8 * 5.0 * 1000, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(charterOutPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(6_100_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(500 * 22.8 * 6 * 1000.0, heelRecord.getHeelRevenue(), 0.0);
-					Assert.assertEquals(6100.0 * 22.8 * 7.5 * 1000.0, heelRecord.getHeelCost(), 0.0);
+					Assertions.assertEquals(6_100_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(500 * 22.8 * 6 * 1000.0, heelRecord.getHeelRevenue(), 0.0001);
+					Assertions.assertEquals(6100.0 * 22.8 * 7.5 * 1000.0, heelRecord.getHeelCost(), 0.0001);
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(1000.0 * 22.8 * 10.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(1000.0 * 22.8 * 10.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0001);
 
 				}
 
 				// P&L is just heel cost and hire cost is zero
 				final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
-				Assert.assertEquals(-500 * 22.8 * 5 * 1000, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(startPortSlot)), 0.0);
-				Assert.assertEquals(-6100 * 22.8 * 7.5 * 1000 + 500 * 22.8 * 6 * 1000, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(charterOutPortSlot)), 0.0);
-				Assert.assertEquals(1000 * 22.8 * 10 * 1000.0, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(endPortSlot)), 0.0);
+				Assertions.assertEquals(-500 * 22.8 * 5 * 1000, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(startPortSlot)), 0.0001);
+				Assertions.assertEquals(-6100 * 22.8 * 7.5 * 1000 + 500 * 22.8 * 6 * 1000, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(charterOutPortSlot)), 0.0001);
+				Assertions.assertEquals(1000 * 22.8 * 10 * 1000.0, profitAndLossSequences.getVoyagePlanGroupValue(seq.getVoyagePlan(endPortSlot)), 0.0001);
 
 			});
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToCargoToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
@@ -837,15 +837,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(4, seq.getSequenceSlots().size());
+				Assertions.assertEquals(4, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -860,45 +860,45 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> dischargePortViolations = seq.getCapacityViolations(dischargePortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
-				Assert.assertEquals(0, loadPortViolations.size());
-				Assert.assertEquals(0, dischargePortViolations.size());
-				Assert.assertEquals(0, endPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, loadPortViolations.size());
+				Assertions.assertEquals(0, dischargePortViolations.size());
+				Assertions.assertEquals(0, endPortViolations.size());
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1245.833 * 5.0 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(1245.833 * 5.0 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(loadPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(5_268_333, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(5_268_333, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(1000 * 22.5 * 10.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(1000 * 22.5 * 10.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0001);
 
 				}
 			});
@@ -906,7 +906,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToCargoToEndHeelNoBallast_OK() throws Exception {
 
 		// Create the required basic elements
@@ -948,15 +948,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(4, seq.getSequenceSlots().size());
+				Assertions.assertEquals(4, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -971,45 +971,45 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> dischargePortViolations = seq.getCapacityViolations(dischargePortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				// Assert.assertEquals(0, startPortViolations.size());
-				// Assert.assertEquals(0, loadPortViolations.size());
-				// Assert.assertEquals(0, dischargePortViolations.size());
-				// Assert.assertEquals(0, endPortViolations.size());
+				// Assertions.assertEquals(0, startPortViolations.size());
+				// Assertions.assertEquals(0, loadPortViolations.size());
+				// Assertions.assertEquals(0, dischargePortViolations.size());
+				// Assertions.assertEquals(0, endPortViolations.size());
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(loadPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(1000 * 22.5 * 10.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(1000 * 22.5 * 10.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0001);
 
 				}
 			});
@@ -1017,7 +1017,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToCharterOutToEndHeel_MixedMode() throws Exception {
 
 		// Create the required basic elements
@@ -1053,15 +1053,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(3, seq.getSequenceSlots().size());
+				Assertions.assertEquals(3, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -1073,37 +1073,37 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> charterOutViolations = seq.getCapacityViolations(charterOutPortSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
-				Assert.assertEquals(0, charterOutViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, charterOutViolations.size());
 
 				// We won't meet our end obligation either...
-				Assert.assertEquals(1, endPortViolations.size());
-				Assert.assertTrue(endPortViolations.contains(CapacityViolationType.FORCED_COOLDOWN));
+				Assertions.assertEquals(1, endPortViolations.size());
+				Assertions.assertTrue(endPortViolations.contains(CapacityViolationType.FORCED_COOLDOWN));
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(5 * 22.8 * 500 * 1000, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(5 * 22.8 * 500 * 1000, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(charterOutPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(500 * 22.8 * 6.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0);
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1_000 * 22.8 * 7.5 * 1000.0, heelRecord.getHeelCost(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(500 * 22.8 * 6.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0001);
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(1_000 * 22.8 * 7.5 * 1000.0, heelRecord.getHeelCost(), 0.0001);
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(0, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(0, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(0, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 			});
@@ -1111,7 +1111,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testStartToCharterOutRedirectToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
@@ -1147,15 +1147,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(5, seq.getSequenceSlots().size());
+				Assertions.assertEquals(5, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -1173,55 +1173,55 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> charterOutViolations3 = seq.getCapacityViolations(charterOutPortSlot3);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
-				Assert.assertEquals(0, charterOutViolations1.size());
-				Assert.assertEquals(0, charterOutViolations2.size());
-				Assert.assertEquals(0, charterOutViolations3.size());
-				Assert.assertEquals(0, endPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, charterOutViolations1.size());
+				Assertions.assertEquals(0, charterOutViolations2.size());
+				Assertions.assertEquals(0, charterOutViolations3.size());
+				Assertions.assertEquals(0, endPortViolations.size());
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(5 * 22.8 * 500 * 1000, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(5 * 22.8 * 500 * 1000, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(charterOutPortSlot1);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(500 * 22.8 * 6.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(500 * 22.8 * 6.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0001);
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(charterOutPortSlot2);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(charterOutPortSlot3);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(6_100_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(7.5 * 22.8 * 6100 * 1000, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(6_100_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(7.5 * 22.8 * 6100 * 1000, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost(), 0.0);
-					Assert.assertEquals(10 * 22.8 * 1000 * 1000, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost(), 0.0001);
+					Assertions.assertEquals(10 * 22.8 * 1000 * 1000, heelRecord.getHeelRevenue(), 0.0001);
 
 				}
 			});
@@ -1229,7 +1229,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testGCOAfterCargo_OK() throws Exception {
 
 		// Create the required basic elements
@@ -1275,15 +1275,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(5, seq.getSequenceSlots().size());
+				Assertions.assertEquals(5, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -1301,54 +1301,54 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> gcoViolations = seq.getCapacityViolations(gcoSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
-				Assert.assertEquals(0, loadPortViolations.size());
-				Assert.assertEquals(0, dischargePortViolations.size());
-				Assert.assertEquals(0, gcoViolations.size());
-				Assert.assertEquals(0, endPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, loadPortViolations.size());
+				Assertions.assertEquals(0, dischargePortViolations.size());
+				Assertions.assertEquals(0, gcoViolations.size());
+				Assertions.assertEquals(0, endPortViolations.size());
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(loadPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(12_874_577, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(12_874_577, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(gcoSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(7_568_595, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(7_568_595, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(7_568_595, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(7_568.595 * 22.5 * 7.0, heelRecord.getHeelCost() / 1000L, 1.0);
-					Assert.assertEquals(7_568.595 * 22.5 * 7.0, heelRecord.getHeelRevenue() / 1000L, 1.0);
+					Assertions.assertEquals(7_568_595, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(7_568.595 * 22.5 * 7.0, heelRecord.getHeelCost() / 1000L, 1.0);
+					Assertions.assertEquals(7_568.595 * 22.5 * 7.0, heelRecord.getHeelRevenue() / 1000L, 1.0);
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(1000 * 22.5 * 10 * 1000, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(1000 * 22.5 * 10 * 1000, heelRecord.getHeelRevenue(), 0.0001);
 				}
 			});
 		}, null);
@@ -1356,7 +1356,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testGCOAfterStart_OK_TravelThenGCO() throws Exception {
 
 		// Create the required basic elements
@@ -1390,15 +1390,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(3, seq.getSequenceSlots().size());
+				Assertions.assertEquals(3, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -1410,35 +1410,35 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> gcoViolations = seq.getCapacityViolations(gcoSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
-				Assert.assertEquals(0, gcoViolations.size());
-				Assert.assertEquals(0, endPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, gcoViolations.size());
+				Assertions.assertEquals(0, endPortViolations.size());
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(5000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(5000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(5000_000 * 5 * 22.5, heelRecord.getHeelCost(), 10.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(5000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(5000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(5000_000 * 5 * 22.5, heelRecord.getHeelCost(), 10.0);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(gcoSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(0, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(0, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(0, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(0, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(0, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(0, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(0, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue(), 0.0001);
 				}
 			});
 		}, null);
@@ -1446,7 +1446,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testGCOAfterStart_OK_GCOThenTravel() throws Exception {
 
 		// Create the required basic elements
@@ -1480,15 +1480,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(3, seq.getSequenceSlots().size());
+				Assertions.assertEquals(3, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -1500,59 +1500,59 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> gcoViolations = seq.getCapacityViolations(gcoSlot);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
-				Assert.assertEquals(0, gcoViolations.size());
-				Assert.assertEquals(0, endPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, gcoViolations.size());
+				Assertions.assertEquals(0, endPortViolations.size());
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(5000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(5000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(5000_000 * 5.0 * 22.5, heelRecord.getHeelCost(), 10.0);
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(5000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(5000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(5000_000 * 5.0 * 22.5, heelRecord.getHeelCost(), 10.0);
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(gcoSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(5000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(5000_000, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(5000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(5000_000 * 5 * 22.5, heelRecord.getHeelCost(), 10.0);
-					Assert.assertEquals(5000_000 * 5 * 22.5, heelRecord.getHeelRevenue(), 10.0);
+					Assertions.assertEquals(5000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(5000_000 * 5 * 22.5, heelRecord.getHeelCost(), 10.0);
+					Assertions.assertEquals(5000_000 * 5 * 22.5, heelRecord.getHeelRevenue(), 10.0);
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(0, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(0, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(0, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue(), 0.0001);
 				}
 			});
 		}, null);
 
 	}
 
-	@Ignore
+	@Disabled
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShortLoad_OK() throws Exception {
 		// Test short loading works ok
-		Assert.fail("Not yet implemented");
+		Assertions.fail("Not yet implemented");
 	}
 
-	@Ignore
+	@Disabled
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMinVolume_OK() throws Exception {
 		// Test min volume allocator works ok
-		Assert.fail("Not yet implemented");
+		Assertions.fail("Not yet implemented");
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCargoToCargo_OK() throws Exception {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -1605,15 +1605,15 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 				@NonNull
 				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-				Assert.assertNotNull(volumeAllocatedSequences);
+				Assertions.assertNotNull(volumeAllocatedSequences);
 
 				// There should only be one resource...
-				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				Assertions.assertEquals(1, initialRawSequences.getResources().size());
 				final IResource resource = initialRawSequences.getResources().get(0);
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 				// Only expect start and end slot here
-				Assert.assertEquals(6, seq.getSequenceSlots().size());
+				Assertions.assertEquals(6, seq.getSequenceSlots().size());
 				@NonNull
 				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
 				@NonNull
@@ -1634,66 +1634,66 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				final List<@NonNull CapacityViolationType> dischargePortViolations2 = seq.getCapacityViolations(dischargePortSlot2);
 				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
 
-				Assert.assertEquals(0, startPortViolations.size());
-				Assert.assertEquals(0, loadPortViolations1.size());
-				Assert.assertEquals(0, dischargePortViolations1.size());
-				Assert.assertEquals(0, loadPortViolations2.size());
-				Assert.assertEquals(0, dischargePortViolations2.size());
-				Assert.assertEquals(0, endPortViolations.size());
+				Assertions.assertEquals(0, startPortViolations.size());
+				Assertions.assertEquals(0, loadPortViolations1.size());
+				Assertions.assertEquals(0, dischargePortViolations1.size());
+				Assertions.assertEquals(0, loadPortViolations2.size());
+				Assertions.assertEquals(0, dischargePortViolations2.size());
+				Assertions.assertEquals(0, endPortViolations.size());
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1245_833, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1245_833, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(1245.833 * 5 * 22.5 * 1000.0, heelRecord.getHeelCost(), 10.0);
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(loadPortSlot1);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot1);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(5_514_166, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(5_514_166, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(loadPortSlot2);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(500_000, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(145_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(dischargePortSlot2);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(141_173_334, heelRecord.getHeelAtStartInM3());
 					// Includes boil-off
-					Assert.assertEquals(4_141_502, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+					Assertions.assertEquals(4_141_502, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(0, heelRecord.getHeelRevenue());
 
 				}
 				{
 					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
-					Assert.assertNotNull(heelRecord);
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
-					Assert.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
-					Assert.assertEquals(0, heelRecord.getHeelCost());
-					Assert.assertEquals(1000 * 22.5 * 10.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0);
+					Assertions.assertNotNull(heelRecord);
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtStartInM3());
+					Assertions.assertEquals(1_000_000, heelRecord.getHeelAtEndInM3());
+					Assertions.assertEquals(0, heelRecord.getHeelCost());
+					Assertions.assertEquals(1000 * 22.5 * 10.0 * 1000.0, heelRecord.getHeelRevenue(), 0.0001);
 
 				}
 			});
@@ -1707,7 +1707,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	 */
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNominalCargoViolationCanMoveToVessel() throws Exception {
 		LicenseFeatures.addFeatureEnablements("no-nominal-in-prompt");
 		try {
@@ -1739,14 +1739,14 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 			optimiseWithLSOTest(scenarioRunner -> {
 
-				Assert.assertEquals(vesselAvailability1, cargo1.getVesselAssignmentType());
+				Assertions.assertEquals(vesselAvailability1, cargo1.getVesselAssignmentType());
 
 				// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
 				final Schedule schedule = scenarioRunner.getSchedule();
-				Assert.assertNotNull(schedule);
+				Assertions.assertNotNull(schedule);
 
 				final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
-				Assert.assertNotNull(cargoAllocation);
+				Assertions.assertNotNull(cargoAllocation);
 
 				boolean foundViolation = false;
 				// Is there is min/max load or discharge violation?
@@ -1757,7 +1757,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 					}
 
 				}
-				Assert.assertTrue(foundViolation);
+				Assertions.assertTrue(foundViolation);
 			});
 
 		} finally {

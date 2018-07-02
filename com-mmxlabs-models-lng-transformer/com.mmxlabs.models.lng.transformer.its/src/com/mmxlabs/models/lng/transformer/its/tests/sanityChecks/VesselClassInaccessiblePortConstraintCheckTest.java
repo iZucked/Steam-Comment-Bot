@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -32,7 +32,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class VesselClassInaccessiblePortConstraintCheckTest {
 
 	private static final int dischargePrice = 1;
@@ -106,12 +106,12 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 			} else if (vesselClass.equals(vesselClassFour)) {
 				bannedPort = portD;
 			} else {
-				Assert.fail("Expected an inaccessible port for all vessel classes, but vessel class " + vesselClass.getName() + " didn't have a banned port.");
+				Assertions.fail("Expected an inaccessible port for all vessel classes, but vessel class " + vesselClass.getName() + " didn't have a banned port.");
 			}
 			assert bannedPort != null;
 
-			Assert.assertTrue("inaccessible port still exists", vesselClass.getVesselOrDelegateInaccessiblePorts().contains(bannedPort));
-			Assert.assertEquals("Only one inaccessible port expected", 1, vesselClass.getVesselOrDelegateInaccessiblePorts().size());
+			Assertions.assertTrue(vesselClass.getVesselOrDelegateInaccessiblePorts().contains(bannedPort), "inaccessible port still exists");
+			Assertions.assertEquals(1, vesselClass.getVesselOrDelegateInaccessiblePorts().size(), "Only one inaccessible port expected");
 			System.out.println("Vessel (" + vesselClass.getName() + ") is banned from " + vesselClass.getVesselOrDelegateInaccessiblePorts().get(0).getName());
 
 			final List<Port> visitedPorts = SanityCheckTools.getVesselsVisitedPorts(sequence);
@@ -119,7 +119,7 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 			for (final Port p : visitedPorts) {
 				System.out.println("Vessel (" + vesselClass.getName() + ") visited " + p.getName() + " (banned from " + bannedPort.getName() + ")");
 
-				Assert.assertFalse(vesselClass.getName() + " vessel did not visit inaccessible port (" + bannedPort.getName() + ")", bannedPort.equals(p));
+				Assertions.assertFalse(bannedPort.equals(p), vesselClass.getName() + " vessel did not visit inaccessible port (" + bannedPort.getName() + ")");
 			}
 		}
 	}

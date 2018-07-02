@@ -4,19 +4,17 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -53,7 +51,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class VesselEventConstraintCheckTest {
 
 	private static final int dischargePrice = 1;
@@ -74,7 +72,7 @@ public class VesselEventConstraintCheckTest {
 	/**
 	 * This is called before each test is run.
 	 */
-	@Before
+	@BeforeEach
 	public void setupTest() {
 		csc = new CustomScenarioCreator(dischargePrice);
 
@@ -96,7 +94,7 @@ public class VesselEventConstraintCheckTest {
 	/**
 	 * Reset variables for the next test.
 	 */
-	@After
+	@AfterEach
 	public void afterTests() {
 		csc = null;
 		ports = null;
@@ -227,11 +225,11 @@ public class VesselEventConstraintCheckTest {
 					final Vessel usedVessel = seq.getVesselAvailability().getVessel();
 
 					if (ve instanceof CharterOutEvent) {
-						assertTrue("Charter out uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel));
+						Assertions.assertTrue(isUsedVesselValid(usedVessel, allowedCharterOutVessel), "Charter out uses allowed vessel or vessel of allowed VesselClass");
 					} else if (ve instanceof DryDockEvent) {
-						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedDryDockVessel));
+						Assertions.assertTrue(isUsedVesselValid(usedVessel, allowedDryDockVessel), "Drydock uses allowed vessel or vessel of allowed VesselClass");
 					} else {
-						fail("Test should cover all VesselEvents.");
+						Assertions.fail("Test should cover all VesselEvents.");
 					}
 				}
 			}

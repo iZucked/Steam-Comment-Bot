@@ -12,8 +12,8 @@ import java.time.LocalDate;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
@@ -55,7 +55,7 @@ public class CargoSlotOrderConstraintTest {
 		final CargoSlotOrderConstraint constraint = new CargoSlotOrderConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertSame(successStatus, status);
+		Assertions.assertSame(successStatus, status);
 	}
 
 	@Test
@@ -87,8 +87,8 @@ public class CargoSlotOrderConstraintTest {
 		final CargoSlotOrderConstraint constraint = new CargoSlotOrderConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertSame(successStatus, status);
-		Assert.assertTrue("Expect success status", status.isOK());
+		Assertions.assertSame(successStatus, status);
+		Assertions.assertTrue(status.isOK(), "Expect success status");
 	}
 
 	@Test
@@ -126,7 +126,7 @@ public class CargoSlotOrderConstraintTest {
 		final CargoSlotOrderConstraint constraint = new CargoSlotOrderConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertSame(successStatus, status);
+		Assertions.assertSame(successStatus, status);
 	}
 
 	@Test
@@ -161,8 +161,8 @@ public class CargoSlotOrderConstraintTest {
 		final CargoSlotOrderConstraint constraint = new CargoSlotOrderConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertSame(successStatus, status);
-		Assert.assertTrue("Expect success status", status.isOK());
+		Assertions.assertSame(successStatus, status);
+		Assertions.assertTrue(status.isOK(), "Expect success status");
 	}
 
 	@Test
@@ -197,8 +197,8 @@ public class CargoSlotOrderConstraintTest {
 		final CargoSlotOrderConstraint constraint = new CargoSlotOrderConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertNotSame(successStatus, status);
-		Assert.assertFalse("Expect failure status", status.isOK());
+		Assertions.assertNotSame(successStatus, status);
+		Assertions.assertFalse(status.isOK(), "Expect failure status");
 	}
 
 	@Test
@@ -236,8 +236,8 @@ public class CargoSlotOrderConstraintTest {
 		final CargoSlotOrderConstraint constraint = new CargoSlotOrderConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertNotSame(successStatus, status);
-		Assert.assertFalse("Expect failure status", status.isOK());
+		Assertions.assertNotSame(successStatus, status);
+		Assertions.assertFalse(status.isOK(), "Expect failure status");
 	}
 
 	private void setDate(final Slot slot, final int year, final int month, final int day) {

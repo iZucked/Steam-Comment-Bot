@@ -7,8 +7,8 @@ package com.mmxlabs.common.options;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class StringListParserTest {
 
@@ -18,13 +18,13 @@ public class StringListParserTest {
 		final String defaultValue = "x";
 		final StringListParser parser = new StringListParser(separator, defaultValue);
 
-		Assert.assertTrue(parser.hasDefaultValue());
+		Assertions.assertTrue(parser.hasDefaultValue());
 
 		final Object result = parser.getDefaultValue();
-		Assert.assertTrue(result instanceof List);
+		Assertions.assertTrue(result instanceof List);
 		final List<?> resultList = (List<?>) result;
-		Assert.assertEquals(1, resultList.size());
-		Assert.assertEquals(defaultValue, resultList.get(0));
+		Assertions.assertEquals(1, resultList.size());
+		Assertions.assertEquals(defaultValue, resultList.get(0));
 	}
 
 	@Test
@@ -32,8 +32,8 @@ public class StringListParserTest {
 		final String separator = "z";
 		final StringListParser parser = new StringListParser(separator);
 
-		Assert.assertFalse(parser.hasDefaultValue());
-		Assert.assertNull(parser.getDefaultValue());
+		Assertions.assertFalse(parser.hasDefaultValue());
+		Assertions.assertNull(parser.getDefaultValue());
 	}
 
 	@Test
@@ -47,11 +47,11 @@ public class StringListParserTest {
 		strings.add(str1);
 
 		final Object result = parser.parse(null, strings.iterator());
-		Assert.assertTrue(result instanceof List);
+		Assertions.assertTrue(result instanceof List);
 		final List<?> resultList = (List<?>) result;
-		Assert.assertEquals(2, resultList.size());
-		Assert.assertEquals("abc", resultList.get(0));
-		Assert.assertEquals("def ghi", resultList.get(1));
+		Assertions.assertEquals(2, resultList.size());
+		Assertions.assertEquals("abc", resultList.get(0));
+		Assertions.assertEquals("def ghi", resultList.get(1));
 
 	}
 }

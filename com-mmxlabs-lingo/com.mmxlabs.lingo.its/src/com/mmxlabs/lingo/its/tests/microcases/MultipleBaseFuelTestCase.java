@@ -10,11 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -61,7 +61,7 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 
 	private final boolean writeScenario = false;
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -71,7 +71,7 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -79,7 +79,7 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
-	@Before
+	@BeforeEach
 	@Override
 	public void constructor() throws Exception {
 		super.constructor();
@@ -162,7 +162,7 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 			}
 
 			final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserDataProvider).getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final Vessel vessel = schedule.getSequences().get(0).getVesselAvailability().getVessel();
 
@@ -171,13 +171,13 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 			final BaseFuel scenarioPilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 			final BaseFuel scenarioInPortBaseFuel = vessel.getInPortBaseFuel();
 
-			Assert.assertEquals(baseFuel, scenarioBaseFuel);
-			Assert.assertEquals(idleBaseFuel, scenarioIdleBaseFuel);
-			Assert.assertEquals(pilotLightBaseFuel, scenarioPilotLightBaseFuel);
-			Assert.assertEquals(inPortBaseFuel, scenarioInPortBaseFuel);
+			Assertions.assertEquals(baseFuel, scenarioBaseFuel);
+			Assertions.assertEquals(idleBaseFuel, scenarioIdleBaseFuel);
+			Assertions.assertEquals(pilotLightBaseFuel, scenarioPilotLightBaseFuel);
+			Assertions.assertEquals(inPortBaseFuel, scenarioInPortBaseFuel);
 
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation("L1", schedule);
-			Assert.assertNotNull(cargoAllocation);
+			Assertions.assertNotNull(cargoAllocation);
 			final SimpleCargoAllocation SCA = new SimpleCargoAllocation(cargoAllocation);
 
 			// System.out.println("LD: " + Arrays.toString(SCA.getLoadAllocation().getSlotVisit().getFuels().toArray()));
@@ -189,14 +189,14 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 
 			// Load Event
 			final EList<FuelQuantity> loadFuels = SCA.getLoadAllocation().getSlotVisit().getFuels();
-			Assert.assertEquals(1, loadFuels.size());
+			Assertions.assertEquals(1, loadFuels.size());
 			final FuelQuantity loadFuel = loadFuels.get(0);
-			Assert.assertEquals(inPortBaseFuel, loadFuel.getBaseFuel());
-			Assert.assertEquals(20 * loadFuel.getAmounts().get(0).getQuantity(), loadFuel.getCost(), ROUNDING_EPSILON);
+			Assertions.assertEquals(inPortBaseFuel, loadFuel.getBaseFuel());
+			Assertions.assertEquals(20 * loadFuel.getAmounts().get(0).getQuantity(), loadFuel.getCost(), ROUNDING_EPSILON);
 
 			// Laden Journey Event
 			final EList<FuelQuantity> ladenJourneyFuels = SCA.getLadenLeg().getFuels();
-			Assert.assertEquals(2, ladenJourneyFuels.size());
+			Assertions.assertEquals(2, ladenJourneyFuels.size());
 			FuelQuantity ladenJourneyFuel = null;
 			FuelAmount ladenJourneyFuel_MT = null;
 			FuelQuantity ladenJourneyNBO = null;
@@ -219,40 +219,40 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 				}
 
 			}
-			Assert.assertEquals(pilotLightBaseFuel, ladenJourneyFuel.getBaseFuel());
-			Assert.assertEquals(null, ladenJourneyNBO.getBaseFuel());
-			Assert.assertEquals(70 * ladenJourneyFuel_MT.getQuantity(), ladenJourneyFuel.getCost(), ROUNDING_EPSILON);
-			Assert.assertEquals(90 * 22.8 * ladenJourneyNBO_M3.getQuantity(), ladenJourneyNBO.getCost(), ROUNDING_EPSILON);
+			Assertions.assertEquals(pilotLightBaseFuel, ladenJourneyFuel.getBaseFuel());
+			Assertions.assertEquals(null, ladenJourneyNBO.getBaseFuel());
+			Assertions.assertEquals(70 * ladenJourneyFuel_MT.getQuantity(), ladenJourneyFuel.getCost(), ROUNDING_EPSILON);
+			Assertions.assertEquals(90 * 22.8 * ladenJourneyNBO_M3.getQuantity(), ladenJourneyNBO.getCost(), ROUNDING_EPSILON);
 
 			// Laden Idle Event
 			final EList<FuelQuantity> ladenIdleFuels = SCA.getLadenIdle().getFuels();
-			Assert.assertEquals(2, ladenIdleFuels.size());
+			Assertions.assertEquals(2, ladenIdleFuels.size());
 			final BaseFuel ladenIdleFuel_0 = ladenIdleFuels.get(0).getBaseFuel();
 			final BaseFuel ladenIdleFuel_1 = ladenIdleFuels.get(1).getBaseFuel();
-			Assert.assertNotEquals(ladenIdleFuel_0, ladenIdleFuel_1);
-			Assert.assertTrue(pilotLightBaseFuel == ladenIdleFuel_0 || null == ladenIdleFuel_0);
-			Assert.assertTrue(pilotLightBaseFuel == ladenIdleFuel_1 || null == ladenIdleFuel_1);
+			Assertions.assertNotEquals(ladenIdleFuel_0, ladenIdleFuel_1);
+			Assertions.assertTrue(pilotLightBaseFuel == ladenIdleFuel_0 || null == ladenIdleFuel_0);
+			Assertions.assertTrue(pilotLightBaseFuel == ladenIdleFuel_1 || null == ladenIdleFuel_1);
 
 			// Discharge Event
 			final EList<FuelQuantity> dischargeFuels = SCA.getDischargeAllocation().getSlotVisit().getFuels();
-			Assert.assertEquals(1, dischargeFuels.size());
+			Assertions.assertEquals(1, dischargeFuels.size());
 			final FuelQuantity dischargeFuel = dischargeFuels.get(0);
-			Assert.assertEquals(inPortBaseFuel, dischargeFuel.getBaseFuel());
-			Assert.assertEquals(20 * dischargeFuel.getAmounts().get(0).getQuantity(), dischargeFuel.getCost(), ROUNDING_EPSILON);
+			Assertions.assertEquals(inPortBaseFuel, dischargeFuel.getBaseFuel());
+			Assertions.assertEquals(20 * dischargeFuel.getAmounts().get(0).getQuantity(), dischargeFuel.getCost(), ROUNDING_EPSILON);
 
 			// Ballast Journey Event
 			final EList<FuelQuantity> ballastJourneyFuels = SCA.getBallastLeg().getFuels();
-			Assert.assertEquals(1, ballastJourneyFuels.size());
+			Assertions.assertEquals(1, ballastJourneyFuels.size());
 			final FuelQuantity ballastJourneyFuel = ballastJourneyFuels.get(0);
-			Assert.assertEquals(baseFuel, ballastJourneyFuel.getBaseFuel());
-			Assert.assertEquals(100 * ballastJourneyFuel.getAmounts().get(0).getQuantity(), ballastJourneyFuel.getCost(), ROUNDING_EPSILON);
+			Assertions.assertEquals(baseFuel, ballastJourneyFuel.getBaseFuel());
+			Assertions.assertEquals(100 * ballastJourneyFuel.getAmounts().get(0).getQuantity(), ballastJourneyFuel.getCost(), ROUNDING_EPSILON);
 
 			// Ballast Idle Event
 			final EList<FuelQuantity> ballastIdleFuels = SCA.getBallastIdle().getFuels();
-			Assert.assertEquals(1, ballastIdleFuels.size());
+			Assertions.assertEquals(1, ballastIdleFuels.size());
 			final FuelQuantity ballastIdleFuel = ballastIdleFuels.get(0);
-			Assert.assertEquals(idleBaseFuel, ballastIdleFuel.getBaseFuel());
-			Assert.assertEquals(3 * ballastIdleFuel.getAmounts().get(0).getQuantity(), ballastIdleFuel.getCost(), ROUNDING_EPSILON);
+			Assertions.assertEquals(idleBaseFuel, ballastIdleFuel.getBaseFuel());
+			Assertions.assertEquals(3 * ballastIdleFuel.getAmounts().get(0).getQuantity(), ballastIdleFuel.getCost(), ROUNDING_EPSILON);
 
 		});
 

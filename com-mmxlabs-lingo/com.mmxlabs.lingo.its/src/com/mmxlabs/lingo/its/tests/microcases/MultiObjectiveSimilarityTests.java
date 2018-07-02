@@ -10,16 +10,16 @@ import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -43,13 +43,13 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("optimisation-similarity", "optimisation-hillclimb");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -59,7 +59,7 @@ public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -129,7 +129,7 @@ public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ OptimisationTest.class })
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public void testShipping_I_Stage_1_Shipping() throws Exception {
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
@@ -145,7 +145,7 @@ public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 			runnerBuilder.evaluateInitialState();
 
 			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assert.assertNotNull(initialSchedule);
+			Assertions.assertNotNull(initialSchedule);
 			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
 			runnerBuilder.run(false, runner -> {
 
@@ -173,7 +173,7 @@ public class MultiObjectiveSimilarityTests extends AbstractMicroTestCase {
 					.withUsedLoad("S_4").onFleetVessel("Large Ship") //
 					.build();
 
-				verifier.verifyOptimisationResults(result, msg -> Assert.fail(msg));
+				verifier.verifyOptimisationResults(result, msg -> Assertions.fail(msg));
 			});
 		}
 	}

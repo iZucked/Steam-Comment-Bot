@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common.indexedobjects;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -17,9 +17,9 @@ public class IndexedObjectTest {
 		final IndexedObject o1 = new IndexedObject(context);
 		final IndexedObject o2 = new IndexedObject(context);
 
-		Assert.assertFalse(o1.getIndex() == o2.getIndex());
-		Assert.assertEquals(o1.getIndex(), 0);
-		Assert.assertEquals(o2.getIndex(), 1);
+		Assertions.assertFalse(o1.getIndex() == o2.getIndex());
+		Assertions.assertEquals(o1.getIndex(), 0);
+		Assertions.assertEquals(o2.getIndex(), 1);
 	}
 
 	@Test
@@ -29,8 +29,8 @@ public class IndexedObjectTest {
 		final A a = new A(context);
 		final B b = new B(context);
 		final A a1 = new A(context);
-		Assert.assertTrue(a.getIndex() == b.getIndex());
-		Assert.assertFalse(a.getIndex() == a1.getIndex());
+		Assertions.assertTrue(a.getIndex() == b.getIndex());
+		Assertions.assertFalse(a.getIndex() == a1.getIndex());
 	}
 
 	static class A extends IndexedObject {

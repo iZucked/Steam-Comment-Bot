@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -23,9 +23,9 @@ public class CycleGroupUtilsTest {
 
 		final CycleGroup returnedCycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, row);
 
-		Assert.assertNotNull(returnedCycleGroup);
-		Assert.assertSame(returnedCycleGroup, row.getCycleGroup());
-		Assert.assertTrue(table.getCycleGroups().contains(returnedCycleGroup));
+		Assertions.assertNotNull(returnedCycleGroup);
+		Assertions.assertSame(returnedCycleGroup, row.getCycleGroup());
+		Assertions.assertTrue(table.getCycleGroups().contains(returnedCycleGroup));
 	}
 
 	@Test
@@ -40,10 +40,10 @@ public class CycleGroupUtilsTest {
 
 		final CycleGroup returnedCycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, row);
 
-		Assert.assertNotNull(returnedCycleGroup);
-		Assert.assertSame(cycleGroup, returnedCycleGroup);
-		Assert.assertSame(returnedCycleGroup, row.getCycleGroup());
-		Assert.assertTrue(table.getCycleGroups().contains(returnedCycleGroup));
+		Assertions.assertNotNull(returnedCycleGroup);
+		Assertions.assertSame(cycleGroup, returnedCycleGroup);
+		Assertions.assertSame(returnedCycleGroup, row.getCycleGroup());
+		Assertions.assertTrue(table.getCycleGroups().contains(returnedCycleGroup));
 	}
 
 	@Test
@@ -61,11 +61,11 @@ public class CycleGroupUtilsTest {
 
 		CycleGroupUtils.addToOrMergeCycleGroup(table, row2, cycleGroup);
 
-		Assert.assertSame(cycleGroup, row1.getCycleGroup());
-		Assert.assertSame(cycleGroup, row2.getCycleGroup());
-		Assert.assertTrue(cycleGroup.getRows().contains(row1));
-		Assert.assertTrue(cycleGroup.getRows().contains(row2));
-		Assert.assertTrue(table.getCycleGroups().contains(cycleGroup));
+		Assertions.assertSame(cycleGroup, row1.getCycleGroup());
+		Assertions.assertSame(cycleGroup, row2.getCycleGroup());
+		Assertions.assertTrue(cycleGroup.getRows().contains(row1));
+		Assertions.assertTrue(cycleGroup.getRows().contains(row2));
+		Assertions.assertTrue(table.getCycleGroups().contains(cycleGroup));
 	}
 
 	@Test
@@ -86,12 +86,12 @@ public class CycleGroupUtilsTest {
 
 		CycleGroupUtils.addToOrMergeCycleGroup(table, row2, cycleGroup1);
 
-		Assert.assertSame(cycleGroup1, row1.getCycleGroup());
-		Assert.assertSame(cycleGroup1, row2.getCycleGroup());
-		Assert.assertTrue(cycleGroup1.getRows().contains(row1));
-		Assert.assertTrue(cycleGroup1.getRows().contains(row2));
-		Assert.assertTrue(table.getCycleGroups().contains(cycleGroup1));
-		Assert.assertFalse(table.getCycleGroups().contains(cycleGroup2));
+		Assertions.assertSame(cycleGroup1, row1.getCycleGroup());
+		Assertions.assertSame(cycleGroup1, row2.getCycleGroup());
+		Assertions.assertTrue(cycleGroup1.getRows().contains(row1));
+		Assertions.assertTrue(cycleGroup1.getRows().contains(row2));
+		Assertions.assertTrue(table.getCycleGroups().contains(cycleGroup1));
+		Assertions.assertFalse(table.getCycleGroups().contains(cycleGroup2));
 	}
 
 }

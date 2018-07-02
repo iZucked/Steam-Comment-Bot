@@ -12,9 +12,9 @@ import java.util.Map;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -36,7 +36,6 @@ import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
@@ -53,7 +52,7 @@ public class SimilarityFitnessCoreTest {
 		final String name = "name";
 		final SimilarityFitnessCore core = new SimilarityFitnessCore(name);
 
-		Assert.assertSame(name, core.getName());
+		Assertions.assertSame(name, core.getName());
 	}
 
 	private SimilarityFitnessCore createSimilarityFitnessCore(final ISequences sequences) {
@@ -61,7 +60,7 @@ public class SimilarityFitnessCoreTest {
 
 		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
 
-		Mockito.when(portTypeProvider.getPortType(Matchers.<ISequenceElement> any())).then(new Answer<PortType>() {
+		Mockito.when(portTypeProvider.getPortType(ArgumentMatchers.<ISequenceElement> any())).then(new Answer<PortType>() {
 
 			@Override
 			public PortType answer(final InvocationOnMock invocation) throws Throwable {
@@ -143,7 +142,7 @@ public class SimilarityFitnessCoreTest {
 
 		// initial evaluation
 		c.evaluate(sequences, evaluationState);
-		Assert.assertTrue(c.getFitness() == 0);
+		Assertions.assertTrue(c.getFitness() == 0);
 	}
 
 	@Test
@@ -158,12 +157,12 @@ public class SimilarityFitnessCoreTest {
 
 		// initial evaluation
 		c.evaluate(sequences, evaluationState);
-		Assert.assertTrue(c.getFitness() == 0);
+		Assertions.assertTrue(c.getFitness() == 0);
 
 		sequences = swapFirstNElementsForTwoSequences(sequences, 0, 1, 1);
 		c.evaluate(sequences, evaluationState);
 
-		Assert.assertTrue(c.getFitness() == 4);
+		Assertions.assertTrue(c.getFitness() == 4);
 	}
 
 	@Test
@@ -178,12 +177,12 @@ public class SimilarityFitnessCoreTest {
 
 		// initial evaluation
 		c.evaluate(sequences, evaluationState);
-		Assert.assertTrue(c.getFitness() == 0);
+		Assertions.assertTrue(c.getFitness() == 0);
 
 		sequences = swapFirstNElementsForTwoSequences(sequences, 0, 1, 2);
 		c.evaluate(sequences, evaluationState);
 
-		Assert.assertTrue(c.getFitness() == 2);
+		Assertions.assertTrue(c.getFitness() == 2);
 	}
 
 	@Test
@@ -198,12 +197,12 @@ public class SimilarityFitnessCoreTest {
 
 		// initial evaluation
 		c.evaluate(sequences, evaluationState);
-		Assert.assertTrue(c.getFitness() == 0);
+		Assertions.assertTrue(c.getFitness() == 0);
 
 		sequences = swapFirstNElementsForTwoSequences(sequences, 0, 1, 4);
 		c.evaluate(sequences, evaluationState);
 
-		Assert.assertTrue(c.getFitness() == 4);
+		Assertions.assertTrue(c.getFitness() == 4);
 	}
 
 	@Test
@@ -218,12 +217,12 @@ public class SimilarityFitnessCoreTest {
 
 		// initial evaluation
 		c.evaluate(sequences, evaluationState);
-		Assert.assertTrue(c.getFitness() == 0);
+		Assertions.assertTrue(c.getFitness() == 0);
 
 		sequences = swapFirstNElementsForTwoSequences(sequences, 0, 1, 5);
 		c.evaluate(sequences, evaluationState);
 
-		Assert.assertTrue("fitness: " + c.getFitness(), c.getFitness() == 8);
+		Assertions.assertTrue(c.getFitness() == 8, "fitness: " + c.getFitness());
 	}
 
 	public void registerContext() {

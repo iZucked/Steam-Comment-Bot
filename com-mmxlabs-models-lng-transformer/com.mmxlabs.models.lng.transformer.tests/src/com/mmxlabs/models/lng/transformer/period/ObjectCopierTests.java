@@ -13,9 +13,9 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -53,13 +53,13 @@ public class ObjectCopierTests {
 
 		// Test new has the same attribute values as the old
 		for (final EAttribute attrib : sourceLoad1.eClass().getEAllAttributes()) {
-			Assert.assertEquals(sourceLoad1.eIsSet(attrib), newLoad1.eIsSet(attrib));
+			Assertions.assertEquals(sourceLoad1.eIsSet(attrib), newLoad1.eIsSet(attrib));
 			if (newLoad1.eIsSet(attrib)) {
-				Assert.assertEquals(sourceLoad1.eGet(attrib), newLoad1.eGet(attrib));
+				Assertions.assertEquals(sourceLoad1.eGet(attrib), newLoad1.eGet(attrib));
 			}
 		}
 		// Redundant test, but here as a sanity check.
-		Assert.assertEquals("LoadSlot1", newLoad1.getName());
+		Assertions.assertEquals("LoadSlot1", newLoad1.getName());
 	}
 
 	/**
@@ -84,13 +84,13 @@ public class ObjectCopierTests {
 		// Perform the copy
 		final LoadSlot newLoad1 = ObjectCopier.copySlot(sourceLoad1, mapping);
 
-		Assert.assertSame(originalPort1, newLoad1.getPort());
+		Assertions.assertSame(originalPort1, newLoad1.getPort());
 	}
 
 	/**
 	 * Given a new load slot expected to have been created in our new scenario, create a copy of the load slot with references to the original data.
 	 */
-	@Ignore("No such feature available")
+	@Disabled("No such feature available")
 	@Test
 	public void copySlotSingleContainmentReferenceTest() {
 
@@ -110,7 +110,7 @@ public class ObjectCopierTests {
 		// Perform the copy
 		final LoadSlot newLoad1 = ObjectCopier.copySlot(sourceLoad1, mapping);
 
-		Assert.assertSame(originalPort1, newLoad1.getPort());
+		Assertions.assertSame(originalPort1, newLoad1.getPort());
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class ObjectCopierTests {
 		final DischargeSlot newDischarge1 = ObjectCopier.copySlot(sourceDischarge1, mapping);
 
 		final List<Port> expectedPortsList = Lists.newArrayList(originalPort1, originalPort2);
-		Assert.assertEquals(expectedPortsList, newDischarge1.getRestrictedPorts());
+		Assertions.assertEquals(expectedPortsList, newDischarge1.getRestrictedPorts());
 	}
 
 	/**
@@ -200,14 +200,14 @@ public class ObjectCopierTests {
 		final DischargeSlot newDischarge1 = ObjectCopier.copySlot(sourceDischarge1, mapping);
 
 		final List<EObject> newExtensions = newDischarge1.getExtensions();
-		Assert.assertEquals(1, newExtensions.size());
+		Assertions.assertEquals(1, newExtensions.size());
 
 		final EObject newExtension = newExtensions.get(0);
-		Assert.assertNotNull(newExtension);
-		Assert.assertNotSame(slotContractParams1, newExtension);
-		Assert.assertEquals("abc", newExtension.eGet(MMXCorePackage.Literals.UUID_OBJECT__UUID));
-		Assert.assertEquals("valueA", newExtension.eGet(attributeA));
-		Assert.assertSame(originalPort1, newExtension.eGet(referenceA));
+		Assertions.assertNotNull(newExtension);
+		Assertions.assertNotSame(slotContractParams1, newExtension);
+		Assertions.assertEquals("abc", newExtension.eGet(MMXCorePackage.Literals.UUID_OBJECT__UUID));
+		Assertions.assertEquals("valueA", newExtension.eGet(attributeA));
+		Assertions.assertSame(originalPort1, newExtension.eGet(referenceA));
 	}
 
 	@Test
@@ -225,7 +225,7 @@ public class ObjectCopierTests {
 
 		final LoadSlot newLoad1 = ObjectCopier.copySlot(sourceLoad1, mapping);
 
-		Assert.assertNull(newLoad1.getCargo());
+		Assertions.assertNull(newLoad1.getCargo());
 	}
 
 	@Test
@@ -243,6 +243,6 @@ public class ObjectCopierTests {
 
 		final Cargo newCargo1 = ObjectCopier.copyCargo(sourceCargo1, mapping);
 
-		Assert.assertTrue(newCargo1.getSlots().isEmpty());
+		Assertions.assertTrue(newCargo1.getSlots().isEmpty());
 	}
 }

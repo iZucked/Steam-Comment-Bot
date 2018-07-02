@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;

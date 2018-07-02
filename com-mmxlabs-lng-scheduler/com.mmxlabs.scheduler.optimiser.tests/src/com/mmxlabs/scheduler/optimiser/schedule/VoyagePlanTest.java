@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -18,18 +18,18 @@ public class VoyagePlanTest {
 		final FuelComponent c = FuelComponent.Base;
 		final long value = 100L;
 		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertEquals(0, plan.getBaseFuelCost());
+		Assertions.assertEquals(0, plan.getBaseFuelCost());
 		plan.setBaseFuelCost(value);
-		Assert.assertEquals(value, plan.getBaseFuelCost());
+		Assertions.assertEquals(value, plan.getBaseFuelCost());
 	}
 
 	@Test
 	public void testGetSetSequence() {
 		final IDetailsSequenceElement[] value = new IDetailsSequenceElement[0];
 		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertNull(plan.getSequence());
+		Assertions.assertNull(plan.getSequence());
 		plan.setSequence(value);
-		Assert.assertSame(value, plan.getSequence());
+		Assertions.assertSame(value, plan.getSequence());
 	}
 
 	@Test
@@ -50,34 +50,34 @@ public class VoyagePlanTest {
 		final VoyagePlan plan11 = make(seq1, 6, 7, 8, 9, 10, 11, 12, 13, 2100, false);
 		final VoyagePlan plan12 = make(seq1, 6, 7, 8, 9, 10, 11, 12, 13, 100, true);
 
-		Assert.assertTrue(plan1.equals(plan1));
-		Assert.assertTrue(plan1.equals(plan2));
-		Assert.assertTrue(plan2.equals(plan1));
+		Assertions.assertTrue(plan1.equals(plan1));
+		Assertions.assertTrue(plan1.equals(plan2));
+		Assertions.assertTrue(plan2.equals(plan1));
 
-		Assert.assertFalse(plan1.equals(plan3));
-		Assert.assertFalse(plan1.equals(plan4));
-		Assert.assertFalse(plan1.equals(plan5));
-		Assert.assertFalse(plan1.equals(plan6));
-		Assert.assertFalse(plan1.equals(plan7));
-		Assert.assertFalse(plan1.equals(plan8));
-		Assert.assertFalse(plan1.equals(plan9));
-		Assert.assertFalse(plan1.equals(plan10));
-		Assert.assertFalse(plan1.equals(plan11));
-		Assert.assertFalse(plan1.equals(plan12));
+		Assertions.assertFalse(plan1.equals(plan3));
+		Assertions.assertFalse(plan1.equals(plan4));
+		Assertions.assertFalse(plan1.equals(plan5));
+		Assertions.assertFalse(plan1.equals(plan6));
+		Assertions.assertFalse(plan1.equals(plan7));
+		Assertions.assertFalse(plan1.equals(plan8));
+		Assertions.assertFalse(plan1.equals(plan9));
+		Assertions.assertFalse(plan1.equals(plan10));
+		Assertions.assertFalse(plan1.equals(plan11));
+		Assertions.assertFalse(plan1.equals(plan12));
 
-		Assert.assertFalse(plan3.equals(plan1));
-		Assert.assertFalse(plan4.equals(plan1));
-		Assert.assertFalse(plan5.equals(plan1));
-		Assert.assertFalse(plan6.equals(plan1));
-		Assert.assertFalse(plan7.equals(plan1));
-		Assert.assertFalse(plan8.equals(plan1));
-		Assert.assertFalse(plan9.equals(plan1));
-		Assert.assertFalse(plan10.equals(plan1));
-		Assert.assertFalse(plan10.equals(plan1));
-		Assert.assertFalse(plan11.equals(plan1));
-		Assert.assertFalse(plan12.equals(plan1));
+		Assertions.assertFalse(plan3.equals(plan1));
+		Assertions.assertFalse(plan4.equals(plan1));
+		Assertions.assertFalse(plan5.equals(plan1));
+		Assertions.assertFalse(plan6.equals(plan1));
+		Assertions.assertFalse(plan7.equals(plan1));
+		Assertions.assertFalse(plan8.equals(plan1));
+		Assertions.assertFalse(plan9.equals(plan1));
+		Assertions.assertFalse(plan10.equals(plan1));
+		Assertions.assertFalse(plan10.equals(plan1));
+		Assertions.assertFalse(plan11.equals(plan1));
+		Assertions.assertFalse(plan12.equals(plan1));
 
-		Assert.assertFalse(plan1.equals(new Object()));
+		Assertions.assertFalse(plan1.equals(new Object()));
 	}
 
 	VoyagePlan make(final IDetailsSequenceElement[] sequence, final long baseFuelCost, final long charterInRate, final long cooldownCost, final long lngFuelCost, final long lngFuelVolume,

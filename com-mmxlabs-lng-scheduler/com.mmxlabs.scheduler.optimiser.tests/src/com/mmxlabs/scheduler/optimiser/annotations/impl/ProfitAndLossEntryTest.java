@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.annotations.impl;
 
 import static org.mockito.Mockito.mock;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
@@ -24,9 +24,9 @@ public class ProfitAndLossEntryTest {
 
 		final ProfitAndLossEntry entry = new ProfitAndLossEntry(entityBook, groupValue, groupValuePreTax, details);
 
-		Assert.assertSame(entityBook, entry.getEntityBook());
-		Assert.assertEquals(groupValue, entry.getFinalGroupValue());
-		Assert.assertSame(details, entry.getDetails());
+		Assertions.assertSame(entityBook, entry.getEntityBook());
+		Assertions.assertEquals(groupValue, entry.getFinalGroupValue());
+		Assertions.assertSame(details, entry.getDetails());
 	}
 
 }

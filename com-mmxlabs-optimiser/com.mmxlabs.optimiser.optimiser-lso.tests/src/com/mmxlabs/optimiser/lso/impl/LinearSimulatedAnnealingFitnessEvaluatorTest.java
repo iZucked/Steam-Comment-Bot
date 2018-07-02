@@ -8,9 +8,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -45,8 +45,8 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		assert thresholder != null;
 
 		final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator(thresholder, fitnessComponents, evaluationProcesses);
-		Assert.assertTrue(evaluator.getFitnessComponents().isEmpty());
-		Assert.assertTrue(evaluator.getEvaluationProcesses().isEmpty());
+		Assertions.assertTrue(evaluator.getFitnessComponents().isEmpty());
+		Assertions.assertTrue(evaluator.getEvaluationProcesses().isEmpty());
 	}
 
 	@Test
@@ -73,41 +73,41 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluatorInstance(fitnessCombiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses);
 
-		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
-		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
+		Assertions.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
+		Assertions.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
 
 		evaluator.setInitialSequences(source, source, evaluationState);
 
-		Assert.assertEquals(1000, evaluator.getBestFitness());
-		Assert.assertEquals(1000, evaluator.getCurrentFitness());
+		Assertions.assertEquals(1000, evaluator.getBestFitness());
+		Assertions.assertEquals(1000, evaluator.getCurrentFitness());
 
-		Assert.assertNotNull(evaluator.getBestSequences());
+		Assertions.assertNotNull(evaluator.getBestSequences());
 		Triple<ISequences, ISequences, IEvaluationState> current = evaluator.getCurrentSequences();
 		Triple<ISequences, ISequences, IEvaluationState> best = evaluator.getBestSequences();
 
-		Assert.assertNotNull(current);
-		Assert.assertNotNull(best);
-		Assert.assertNotNull(current.getFirst());
-		Assert.assertNotNull(best.getFirst());
+		Assertions.assertNotNull(current);
+		Assertions.assertNotNull(best);
+		Assertions.assertNotNull(current.getFirst());
+		Assertions.assertNotNull(best.getFirst());
 
 		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents)).thenReturn(true);
 		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents, resources)).thenReturn(true);
 
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(500l);
-		Mockito.when(thresholder.accept(Matchers.anyLong())).thenReturn(true);
+		Mockito.when(thresholder.accept(ArgumentMatchers.anyLong())).thenReturn(true);
 
 		final List<IResource> affectedResources = Collections.emptyList();
 		assert affectedResources != null;
 
 		evaluator.evaluateSequences(source, source, evaluationState, affectedResources);
 
-		Assert.assertEquals(500, evaluator.getBestFitness());
-		Assert.assertEquals(500, evaluator.getCurrentFitness());
+		Assertions.assertEquals(500, evaluator.getBestFitness());
+		Assertions.assertEquals(500, evaluator.getCurrentFitness());
 
-		Assert.assertNotNull(evaluator.getBestSequences());
+		Assertions.assertNotNull(evaluator.getBestSequences());
 
-		Assert.assertNotSame(current, evaluator.getCurrentSequences());
-		Assert.assertNotSame(best, evaluator.getBestSequences());
+		Assertions.assertNotSame(current, evaluator.getCurrentSequences());
+		Assertions.assertNotSame(best, evaluator.getBestSequences());
 		current = evaluator.getCurrentSequences();
 		best = evaluator.getBestSequences();
 
@@ -116,13 +116,13 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		evaluator.evaluateSequences(source, source, evaluationState, affectedResources);
 
-		Assert.assertEquals(500, evaluator.getBestFitness());
-		Assert.assertEquals(700, evaluator.getCurrentFitness());
+		Assertions.assertEquals(500, evaluator.getBestFitness());
+		Assertions.assertEquals(700, evaluator.getCurrentFitness());
 
-		Assert.assertNotNull(evaluator.getBestSequences());
+		Assertions.assertNotNull(evaluator.getBestSequences());
 
-		Assert.assertNotSame(current, evaluator.getCurrentSequences());
-		Assert.assertSame(best, evaluator.getBestSequences());
+		Assertions.assertNotSame(current, evaluator.getCurrentSequences());
+		Assertions.assertSame(best, evaluator.getBestSequences());
 
 		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents, affectedResources)).thenReturn(true);
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(600l);
@@ -130,13 +130,13 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		evaluator.evaluateSequences(source, source, evaluationState, affectedResources);
 
-		Assert.assertEquals(500, evaluator.getBestFitness());
-		Assert.assertEquals(700, evaluator.getCurrentFitness());
+		Assertions.assertEquals(500, evaluator.getBestFitness());
+		Assertions.assertEquals(700, evaluator.getCurrentFitness());
 
-		Assert.assertNotNull(evaluator.getBestSequences());
+		Assertions.assertNotNull(evaluator.getBestSequences());
 
-		Assert.assertEquals(current, evaluator.getCurrentSequences());
-		Assert.assertEquals(best, evaluator.getBestSequences());
+		Assertions.assertEquals(current, evaluator.getCurrentSequences());
+		Assertions.assertEquals(best, evaluator.getBestSequences());
 	}
 
 	@Test
@@ -163,18 +163,18 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluatorInstance(fitnessCombiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses);
 
-		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
-		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
+		Assertions.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
+		Assertions.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
 
 		evaluator.setInitialSequences(source, source, evaluationState);
 
-		Assert.assertEquals(1000, evaluator.getBestFitness());
-		Assert.assertEquals(1000, evaluator.getCurrentFitness());
+		Assertions.assertEquals(1000, evaluator.getBestFitness());
+		Assertions.assertEquals(1000, evaluator.getCurrentFitness());
 
 		// These should be copies of the input, but hard to test...
 		// TODO: Use/Implement .equals?
-		// Assert.assertSame(source, evaluator.getCurrentSequences());
-		// Assert.assertSame(source, evaluator.getBestSequences());
+		// Assertions.assertSame(source, evaluator.getCurrentSequences());
+		// Assertions.assertSame(source, evaluator.getBestSequences());
 	}
 
 	private static LinearSimulatedAnnealingFitnessEvaluator createFitnessEvaluatorInstance(@NonNull final IFitnessCombiner fitnessCombiner, @NonNull final IThresholder thresholder,

@@ -7,8 +7,8 @@ package com.mmxlabs.optimiser.core.scenario.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -24,7 +24,7 @@ public class OptimisationDataTest {
 
 		data.setSequenceElements(list);
 
-		Assert.assertSame(list, data.getSequenceElements());
+		Assertions.assertSame(list, data.getSequenceElements());
 	}
 
 	@Test
@@ -35,7 +35,7 @@ public class OptimisationDataTest {
 
 		data.setResources(list);
 
-		Assert.assertSame(list, data.getResources());
+		Assertions.assertSame(list, data.getResources());
 	}
 
 	@Test
@@ -49,12 +49,12 @@ public class OptimisationDataTest {
 		data.setResources(resources);
 
 		// Sanity check state
-		Assert.assertSame(elements, data.getSequenceElements());
-		Assert.assertSame(resources, data.getResources());
+		Assertions.assertSame(elements, data.getSequenceElements());
+		Assertions.assertSame(resources, data.getResources());
 
 		data.dispose();
 
-		Assert.assertNull(data.getSequenceElements());
-		Assert.assertNull(data.getResources());
+		Assertions.assertNull(data.getSequenceElements());
+		Assertions.assertNull(data.getResources());
 	}
 }

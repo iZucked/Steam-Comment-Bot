@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its;
 
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.InitializationError;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 
@@ -15,10 +15,10 @@ import com.mmxlabs.license.features.LicenseFeatures;
  * @author Simon Goodall
  * 
  */
-public class ShiroRunner extends BlockJUnit4ClassRunner {
+public class ShiroRunner implements BeforeAllCallback {
 
-	public ShiroRunner(Class<?> klass) throws InitializationError {
-		super(klass);
+	@Override
+	public void beforeAll(ExtensionContext context) throws Exception {
 		initAccessControl();
 	}
 

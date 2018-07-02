@@ -5,8 +5,8 @@
 package com.mmxlabs.optimiser.common.dcproviders.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
@@ -27,13 +27,13 @@ public class HashMapElementDurationEditorTest {
 		final Resource r2 = new Resource(index, "r2");
 		final ISequenceElement obj = Mockito.mock(ISequenceElement.class, "1");
 
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
 
 		provider.setElementDuration(obj, r1, 10);
 
-		Assert.assertEquals(10, provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
+		Assertions.assertEquals(10, provider.getElementDuration(obj, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
 	}
 
 	@Test
@@ -45,19 +45,19 @@ public class HashMapElementDurationEditorTest {
 		final ISequenceElement obj1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement obj2 = Mockito.mock(ISequenceElement.class, "2");
 
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r2));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r2));
 
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r2));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r2));
 
 		provider.setElementDuration(obj1, r1, 10);
 		provider.setElementDuration(obj2, r1, 20);
 
-		Assert.assertEquals(10, provider.getElementDuration(obj1, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r2));
-		Assert.assertEquals(20, provider.getElementDuration(obj2, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r2));
+		Assertions.assertEquals(10, provider.getElementDuration(obj1, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r2));
+		Assertions.assertEquals(20, provider.getElementDuration(obj2, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r2));
 	}
 
 	@Test
@@ -67,15 +67,15 @@ public class HashMapElementDurationEditorTest {
 		final Resource r1 = new Resource(index, "r1");
 		final ISequenceElement obj1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement obj2 = Mockito.mock(ISequenceElement.class, "2");
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r1));
 
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
 
 		provider.setElementDuration(obj1, r1, 10);
 
-		Assert.assertEquals(10, provider.getElementDuration(obj1, r1));
+		Assertions.assertEquals(10, provider.getElementDuration(obj1, r1));
 
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
+		Assertions.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
 	}
 
 	@Test
@@ -83,11 +83,11 @@ public class HashMapElementDurationEditorTest {
 
 		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor();
 
-		Assert.assertEquals(0, provider.getDefaultValue());
+		Assertions.assertEquals(0, provider.getDefaultValue());
 
 		provider.setDefaultValue(100);
 
-		Assert.assertEquals(100, provider.getDefaultValue());
+		Assertions.assertEquals(100, provider.getDefaultValue());
 
 	}
 }

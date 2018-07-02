@@ -5,8 +5,8 @@
 package com.mmxlabs.common.caches;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
@@ -21,8 +21,8 @@ public class AbstractCacheTest {
 		final IKeyEvaluator<String, Object> evaluator = Mockito.mock(IKeyEvaluator.class);
 		final TestAbstractCache cache = new TestAbstractCache(name, evaluator);
 
-		Assert.assertSame(name, cache.getName());
-		Assert.assertSame(evaluator, cache.evaluator);
+		Assertions.assertSame(name, cache.getName());
+		Assertions.assertSame(evaluator, cache.evaluator);
 	}
 
 	@Test
@@ -31,8 +31,8 @@ public class AbstractCacheTest {
 		final IKeyEvaluator<String, Object> evaluator = Mockito.mock(IKeyEvaluator.class);
 		final TestAbstractCache cache = new TestAbstractCache(name, evaluator);
 
-		Assert.assertSame(name, cache.getName());
-		Assert.assertSame(evaluator, cache.evaluator);
+		Assertions.assertSame(name, cache.getName());
+		Assertions.assertSame(evaluator, cache.evaluator);
 
 		final String key = "key";
 
@@ -46,7 +46,7 @@ public class AbstractCacheTest {
 		final String name = "name";
 		final IKeyEvaluator<String, Object> evaluator = Mockito.mock(IKeyEvaluator.class);
 		final TestAbstractCache cache = new TestAbstractCache(name, evaluator);
-		Assert.assertNotNull(cache.toString());
+		Assertions.assertNotNull(cache.toString());
 	}
 
 	@Test
@@ -54,9 +54,9 @@ public class AbstractCacheTest {
 		final String name = "name";
 		final IKeyEvaluator<String, Object> evaluator = Mockito.mock(IKeyEvaluator.class);
 		final TestAbstractCache cache = new TestAbstractCache(name, evaluator);
-		Assert.assertEquals(0, cache.hits);
+		Assertions.assertEquals(0, cache.hits);
 		cache.hit();
-		Assert.assertEquals(1, cache.hits);
+		Assertions.assertEquals(1, cache.hits);
 	}
 
 	@Test
@@ -66,17 +66,17 @@ public class AbstractCacheTest {
 		final TestAbstractCache cache = new TestAbstractCache(name, evaluator);
 
 		cache.hit();
-		Assert.assertEquals(1, cache.hits);
-		Assert.assertEquals(0, cache.queries);
+		Assertions.assertEquals(1, cache.hits);
+		Assertions.assertEquals(0, cache.queries);
 		// 100000 is the SAMPLE constant in AbstractCache
 		for (int i = 0; i < 100000; ++i) {
-			Assert.assertEquals(i, cache.queries);
-			Assert.assertEquals(1, cache.hits);
+			Assertions.assertEquals(i, cache.queries);
+			Assertions.assertEquals(1, cache.hits);
 
 			cache.query();
 		}
-		Assert.assertEquals(0, cache.queries);
-		Assert.assertEquals(0, cache.hits);
+		Assertions.assertEquals(0, cache.queries);
+		Assertions.assertEquals(0, cache.hits);
 
 	}
 

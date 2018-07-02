@@ -12,17 +12,19 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseDateUtils;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
@@ -65,7 +67,7 @@ import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
@@ -75,7 +77,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	private static String loadName = "load";
 	private static String dischargeName = "discharge";
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -85,7 +87,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -116,7 +118,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testLowLevelCosts() throws Exception {
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0),
@@ -194,19 +196,19 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				/*
 				 * Test correct values are being calculated
 				 */
-				Assert.assertEquals(directCost, 156_740220L); // $156,740
-				Assert.assertEquals(canalCost, 593_205000L); // $593,205
+				Assertions.assertEquals(directCost, 156_740220L); // $156,740
+				Assertions.assertEquals(canalCost, 593_205000L); // $593,205
 				/*
 				 * Test correct route chosen
 				 */
 				final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
 						o_vessel.getNBORate(VesselState.Laden), o_vessel, load.getCargoCVValue(), true);
-				Assert.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[0]);
+				Assertions.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[0]);
 				final TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);
 				final long charterRate = 0;
 				final int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,
 						loadDuration, new IntervalData[] { purchase }, new IntervalData[] { sales }, new IntervalData[] { sales }, charterRate);
-				Assert.assertArrayEquals(findBestBucketPairWithRouteAndBoiloffConsiderations, new int[] { 0, 1, 70, 71 });
+				Assertions.assertArrayEquals(findBestBucketPairWithRouteAndBoiloffConsiderations, new int[] { 0, 1, 70, 71 });
 			});
 		});
 	}
@@ -217,7 +219,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSimpleWindowsCase() throws Exception {
 
 		// Create the required basic elements
@@ -279,9 +281,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// Tests
-				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
-				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
-				Assert.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				Assertions.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
 			});
 		});
 	}
@@ -292,7 +294,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSimpleWindowsCase2() throws Exception {
 
 		// Create the required basic elements
@@ -356,9 +358,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// tests
-				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
-				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
-				Assert.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				Assertions.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
 			});
 		});
 	}
@@ -369,7 +371,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_23hours_lower_price() throws Exception {
 
 		// Create the required basic elements
@@ -433,9 +435,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// tests
-				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
-				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
-				Assert.assertEquals(1464, dischargeFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				Assertions.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(1464, dischargeFeasibleTimeWindow.getInclusiveStart());
 			});
 		});
 	}
@@ -446,7 +448,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_24hours_higher_price() throws Exception {
 
 		// Create the required basic elements
@@ -507,11 +509,11 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
-				Assert.assertEquals(13.5, ScheduleTools.getPrice(optimiserScenario, cargo1.getSortedSlots().get(1)), 0.0001);
-				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
-				Assert.assertEquals(1488, dischargeFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(13.5, ScheduleTools.getPrice(optimiserScenario, cargo1.getSortedSlots().get(1)), 0.0001);
+				Assertions.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assertions.assertEquals(1488, dischargeFeasibleTimeWindow.getInclusiveStart());
 
-				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 9, 01, 0, getDefaultEMFDischargeSlot().getPort()),
+				Assertions.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 9, 01, 0, getDefaultEMFDischargeSlot().getPort()),
 						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()));
 
 			});
@@ -528,7 +530,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_higher_price_worthwhile() throws Exception {
 
 		// Create the required basic elements
@@ -590,8 +592,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
-				Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
-				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 9, 1, 0, getDefaultEMFDischargeSlot().getPort()),
+				Assertions.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
+				Assertions.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 9, 1, 0, getDefaultEMFDischargeSlot().getPort()),
 						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, 1488, getDefaultEMFDischargeSlot().getPort().getZoneId()));
 
 			});
@@ -608,7 +610,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_higher_price_too_costly() throws Exception {
 
 		// Create the required basic elements
@@ -667,8 +669,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
-				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
-				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 8, 1, 0, getDefaultEMFDischargeSlot().getPort()),
+				Assertions.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
+				Assertions.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 8, 1, 0, getDefaultEMFDischargeSlot().getPort()),
 						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()));
 			});
 		},
@@ -684,7 +686,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testExactTimeWindows() throws Exception {
 
 		// Create the required basic elements
@@ -754,11 +756,11 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				System.out.println(getDefaultEMFDischargeSlot().getPort().getZoneId().getRules().getOffset(LocalDateTime.of(2018, 1, 1, 0, 0)));
 				System.out.println(getDefaultEMFDischargeSlot().getPort().getZoneId().getRules().getOffset(LocalDateTime.of(2018, 6, 1, 0, 0)));
 
-				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 07, 01, 0, getDefaultEMFLoadSlot().getPort()),
+				Assertions.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 07, 01, 0, getDefaultEMFLoadSlot().getPort()),
 						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, loadFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFLoadSlot().getPort().getZoneId()));
-				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 8, 21, 0, getDefaultEMFDischargeSlot().getPort()),
+				Assertions.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 8, 21, 0, getDefaultEMFDischargeSlot().getPort()),
 						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()));
-				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				Assertions.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
 			});
 		});
 	}
@@ -771,7 +773,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonHourAlignedTimezoneOffset() throws Exception {
 
 		// Do not set this! Timezone critical for test
@@ -831,7 +833,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
 
 		// 2018-10-12: This currently fails as the timezone rounding means we end up with the wrong price.
-		Assert.assertEquals(12.0, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.1);
+		Assertions.assertEquals(12.0, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.1);
 	}
 
 	public IDischargeSlot getDefaultOptimiserDischargeSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {

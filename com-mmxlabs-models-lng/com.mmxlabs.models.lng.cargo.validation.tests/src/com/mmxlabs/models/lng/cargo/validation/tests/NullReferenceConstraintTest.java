@@ -13,8 +13,8 @@ import static org.mockito.Mockito.when;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -151,7 +151,7 @@ public class NullReferenceConstraintTest {
 		final CharterOutEvent co = initCharterOut();
 	
 		// only test end port. Start port is tested by testVesselEvent()
-		Assert.assertNotNull(co.getRelocateTo());
+		Assertions.assertNotNull(co.getRelocateTo());
 		testNullReferenceConstraint(true, co);
 	}
 
@@ -185,7 +185,7 @@ public class NullReferenceConstraintTest {
 	public void testVesselEvent() {
 		final VesselEvent ve = initVesselEvent();
 		// test it
-		Assert.assertNotNull(ve.getPort());
+		Assertions.assertNotNull(ve.getPort());
 		testNullReferenceConstraint(true, ve);
 	}
 

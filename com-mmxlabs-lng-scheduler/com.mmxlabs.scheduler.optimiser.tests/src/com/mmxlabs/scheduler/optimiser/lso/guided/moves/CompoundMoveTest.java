@@ -7,10 +7,10 @@ package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InOrder;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -30,7 +30,7 @@ public class CompoundMoveTest {
 
 		Mockito.verifyNoMoreInteractions(sequences);
 
-		Assert.assertTrue(move.getAffectedResources().isEmpty());
+		Assertions.assertTrue(move.getAffectedResources().isEmpty());
 	}
 
 	@Test
@@ -40,8 +40,8 @@ public class CompoundMoveTest {
 
 		// This move should not affect the compound move as the list should have already been processed by now
 		final IMove extraMove = Mockito.mock(IMove.class);
-		Mockito.doThrow(RuntimeException.class).when(extraMove).apply(Matchers.any());
-		Mockito.when(extraMove.validate(Matchers.any())).thenThrow(RuntimeException.class);
+		Mockito.doThrow(RuntimeException.class).when(extraMove).apply(ArgumentMatchers.any());
+		Mockito.when(extraMove.validate(ArgumentMatchers.any())).thenThrow(RuntimeException.class);
 		moveList.add(extraMove);
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
@@ -50,7 +50,7 @@ public class CompoundMoveTest {
 
 		Mockito.verifyNoMoreInteractions(sequences);
 
-		Assert.assertTrue(move.getAffectedResources().isEmpty());
+		Assertions.assertTrue(move.getAffectedResources().isEmpty());
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class CompoundMoveTest {
 		final List<IResource> resources = Lists.newArrayList(resource1);
 
 		final IMove extraMove = Mockito.mock(IMove.class);
-		Mockito.when(extraMove.validate(Matchers.any())).thenReturn(Boolean.TRUE);
+		Mockito.when(extraMove.validate(ArgumentMatchers.any())).thenReturn(Boolean.TRUE);
 		Mockito.when(extraMove.getAffectedResources()).thenReturn(resources);
 		moveList.add(extraMove);
 
@@ -77,8 +77,8 @@ public class CompoundMoveTest {
 		Mockito.verify(extraMove).apply(sequences);
 		Mockito.verifyNoMoreInteractions(sequences);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resource1));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resource1));
 	}
 
 	@Test
@@ -91,12 +91,12 @@ public class CompoundMoveTest {
 		final List<IResource> resources2 = Lists.newArrayList(resource2);
 
 		final IMove extraMove1 = Mockito.mock(IMove.class);
-		Mockito.when(extraMove1.validate(Matchers.any())).thenReturn(Boolean.TRUE);
+		Mockito.when(extraMove1.validate(ArgumentMatchers.any())).thenReturn(Boolean.TRUE);
 		Mockito.when(extraMove1.getAffectedResources()).thenReturn(resources1);
 		moveList.add(extraMove1);
 
 		final IMove extraMove2 = Mockito.mock(IMove.class);
-		Mockito.when(extraMove2.validate(Matchers.any())).thenReturn(Boolean.TRUE);
+		Mockito.when(extraMove2.validate(ArgumentMatchers.any())).thenReturn(Boolean.TRUE);
 		Mockito.when(extraMove2.getAffectedResources()).thenReturn(resources2);
 		moveList.add(extraMove2);
 
@@ -114,9 +114,9 @@ public class CompoundMoveTest {
 		Mockito.verifyNoMoreInteractions(sequences);
 
 		// Verify merged resources list
-		Assert.assertEquals(2, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resource1));
-		Assert.assertTrue(move.getAffectedResources().contains(resource2));
+		Assertions.assertEquals(2, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resource1));
+		Assertions.assertTrue(move.getAffectedResources().contains(resource2));
 	}
 
 }

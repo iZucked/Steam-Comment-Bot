@@ -8,13 +8,13 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
@@ -30,11 +30,11 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpecificDate_Before() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -72,24 +72,24 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(2.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(2.0, purchaseAllocation.getPrice(), 0.0001);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpecificDate_After() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -127,25 +127,25 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(3.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(3.0, purchaseAllocation.getPrice(), 0.0001);
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testSpecificDate_On() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -183,25 +183,25 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(3.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(3.0, purchaseAllocation.getPrice(), 0.0001);
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShift_Last_N_Days_Before() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -239,24 +239,24 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(2.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(2.0, purchaseAllocation.getPrice(), 0.0001);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShift_Last_N_Days_After() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -294,24 +294,24 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(3.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(3.0, purchaseAllocation.getPrice(), 0.0001);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShift_Last_N_Days_On() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -349,24 +349,24 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(3.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(3.0, purchaseAllocation.getPrice(), 0.0001);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShift_First_N_Days_Before() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -404,24 +404,24 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(1.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(1.0, purchaseAllocation.getPrice(), 0.0001);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShift_First_N_Days_After() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -459,24 +459,24 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(2.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(2.0, purchaseAllocation.getPrice(), 0.0001);
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShift_First_N_Days_On() throws Exception {
 
 		pricingModelBuilder.makeCommodityDataCurve("TEST_CURVE", "$", "mmBtu") //
@@ -514,19 +514,19 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
 			final SlotAllocation purchaseAllocation = cargoAllocation.getSlotAllocations().get(0);
-			Assert.assertEquals(1.0, purchaseAllocation.getPrice(), 0.0);
+			Assertions.assertEquals(1.0, purchaseAllocation.getPrice(), 0.0001);
 		});
 	}
 }

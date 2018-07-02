@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -36,7 +36,7 @@ public class ContractCvConstraintCheckerTest {
 		final String name = "checker";
 		final ContractCvConstraintChecker checker = new ContractCvConstraintChecker(name);
 
-		Assert.assertSame(name, checker.getName());
+		Assertions.assertSame(name, checker.getName());
 	}
 
 	@Test
@@ -88,30 +88,30 @@ public class ContractCvConstraintCheckerTest {
 		Mockito.when(actualsDataProvider.hasActuals(s4)).thenReturn(false);
 
 		// OK pairing
-		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
 		final ISequence okSequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2));
-		Assert.assertTrue(checker.checkSequence(okSequence, resource));
+		Assertions.assertTrue(checker.checkSequence(okSequence, resource));
 
 		// CV too low
-		Assert.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
 		final ISequence tooLowSequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o3));
-		Assert.assertFalse(checker.checkSequence(tooLowSequence, resource));
+		Assertions.assertFalse(checker.checkSequence(tooLowSequence, resource));
 
 		// CV too high
-		Assert.assertFalse(checker.checkPairwiseConstraint(o1, o4, resource));
+		Assertions.assertFalse(checker.checkPairwiseConstraint(o1, o4, resource));
 		final ISequence tooHighSequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o4));
-		Assert.assertFalse(checker.checkSequence(tooHighSequence, resource));
+		Assertions.assertFalse(checker.checkSequence(tooHighSequence, resource));
 
 		// combined sequence of all cases should fail
 		final ISequence combinedSequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o1, o3, o1, o4));
-		Assert.assertFalse(checker.checkSequence(combinedSequence, resource));
+		Assertions.assertFalse(checker.checkSequence(combinedSequence, resource));
 
 		// Actuals test case - should now pass as actualised CV are ignored
 		// CV too high
 		Mockito.when(actualsDataProvider.hasActuals(s1)).thenReturn(true);
 		Mockito.when(actualsDataProvider.hasActuals(s4)).thenReturn(true);
-		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o4, resource));
-		Assert.assertTrue(checker.checkSequence(tooHighSequence, resource));
+		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o4, resource));
+		Assertions.assertTrue(checker.checkSequence(tooHighSequence, resource));
 	}
 
 	private ContractCvConstraintChecker createChecker(@NonNull final String name, @NonNull final IPortTypeProviderEditor portTypeProvider, @NonNull final IPortSlotProviderEditor portSlotProvider,

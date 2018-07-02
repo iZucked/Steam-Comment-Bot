@@ -16,10 +16,10 @@ import java.util.function.Consumer;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -60,6 +60,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipher
  * 
  */
 public class AbstractOptimisationResultTester {
+	public static final boolean[] BOOLS = { true, false };
 
 	/**
 	 * Subclasses can set to false to disable properties file generation for test cases which check other things.
@@ -94,7 +95,7 @@ public class AbstractOptimisationResultTester {
 	// // Register a cipher provider with the osgi framework for running these tests
 	private static ServiceRegistration<IScenarioCipherProvider> cipherServiceRef = null;
 
-	@BeforeClass
+	@BeforeAll
 	public static void registerCipherProvider() {
 		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
 		if (bundle != null) {
@@ -105,7 +106,7 @@ public class AbstractOptimisationResultTester {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void deregisterCipherProvider() {
 		if (cipherServiceRef != null) {
 			cipherServiceRef.unregister();
@@ -155,10 +156,10 @@ public class AbstractOptimisationResultTester {
 	}
 
 	public IMultiStateResult optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
 
 		final Schedule intialSchedule = scenarioRunner.getSchedule();
-		Assert.assertNotNull(intialSchedule);
+		Assertions.assertNotNull(intialSchedule);
 
 		Properties props = null;
 		if (doPropertiesChecks) {
@@ -185,7 +186,7 @@ public class AbstractOptimisationResultTester {
 				int solutionCount = 0;
 				if (props.contains("solution-count")) {
 					solutionCount = Integer.valueOf(props.getProperty("solution-count")).intValue();
-					Assert.assertEquals(solutionCount, result.getSolutions().size());
+					Assertions.assertEquals(solutionCount, result.getSolutions().size());
 				} else {
 					checkSolutions = false;
 				}
@@ -229,7 +230,7 @@ public class AbstractOptimisationResultTester {
 					TesterUtil.saveProperties(props, testDataProvider.getFitnessDataAsFile());
 				} catch (final URISyntaxException e) {
 					e.printStackTrace();
-					Assert.fail();
+					Assertions.fail(e.getMessage());
 				}
 			}
 		}

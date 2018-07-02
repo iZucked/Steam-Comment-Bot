@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.common.indexedobjects.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 
@@ -20,27 +20,27 @@ public class ArrayIndexBitsTest {
 		final MockIndexedObject obj2 = new MockIndexedObject(2);
 		final MockIndexedObject obj3 = new MockIndexedObject(3);
 
-		Assert.assertFalse(bits.isSet(obj1));
-		Assert.assertFalse(bits.isSet(obj2));
-		Assert.assertFalse(bits.isSet(obj3));
+		Assertions.assertFalse(bits.isSet(obj1));
+		Assertions.assertFalse(bits.isSet(obj2));
+		Assertions.assertFalse(bits.isSet(obj3));
 
 		bits.set(obj1);
 
-		Assert.assertTrue(bits.isSet(obj1));
-		Assert.assertFalse(bits.isSet(obj2));
-		Assert.assertFalse(bits.isSet(obj3));
+		Assertions.assertTrue(bits.isSet(obj1));
+		Assertions.assertFalse(bits.isSet(obj2));
+		Assertions.assertFalse(bits.isSet(obj3));
 
 		bits.set(obj2);
-		Assert.assertTrue(bits.isSet(obj1));
-		Assert.assertTrue(bits.isSet(obj2));
-		Assert.assertFalse(bits.isSet(obj3));
+		Assertions.assertTrue(bits.isSet(obj1));
+		Assertions.assertTrue(bits.isSet(obj2));
+		Assertions.assertFalse(bits.isSet(obj3));
 
 		bits.clear(obj2);
 		bits.set(obj3);
 
-		Assert.assertTrue(bits.isSet(obj1));
-		Assert.assertFalse(bits.isSet(obj2));
-		Assert.assertTrue(bits.isSet(obj3));
+		Assertions.assertTrue(bits.isSet(obj1));
+		Assertions.assertFalse(bits.isSet(obj2));
+		Assertions.assertTrue(bits.isSet(obj3));
 	}
 
 	private static class MockIndexedObject implements IIndexedObject {

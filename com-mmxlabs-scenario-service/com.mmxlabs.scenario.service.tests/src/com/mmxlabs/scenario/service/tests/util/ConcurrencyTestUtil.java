@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scenario.service.tests.util;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +11,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.Assertions;
 
 public class ConcurrencyTestUtil {
 
@@ -49,11 +49,11 @@ public class ConcurrencyTestUtil {
 				});
 			}
 			// wait until all threads are ready
-			assertTrue("Timeout initializing threads! Perform long lasting initializations before passing runnables to assertConcurrent",
-					allExecutorThreadsReady.await(runnables.size() * 10, TimeUnit.MILLISECONDS));
+			Assertions.assertTrue(allExecutorThreadsReady.await(runnables.size() * 10, TimeUnit.MILLISECONDS),
+					"Timeout initializing threads! Perform long lasting initializations before passing runnables to assertConcurrent");
 			// start all test runners
 			afterInitBlocker.countDown();
-			assertTrue(message + " timeout! More than" + maxTimeoutSeconds + "seconds", allDone.await(maxTimeoutSeconds, TimeUnit.SECONDS));
+			Assertions.assertTrue(allDone.await(maxTimeoutSeconds, TimeUnit.SECONDS), message + " timeout! More than" + maxTimeoutSeconds + "seconds");
 		} finally {
 			threadPool.shutdownNow();
 		}
@@ -62,7 +62,7 @@ public class ConcurrencyTestUtil {
 		if (exceptions.isEmpty() == false) {
 			exceptions.forEach(e -> e.printStackTrace());
 		}
-		assertTrue(message + "failed with exception(s)" + exceptions, exceptions.isEmpty());
+		Assertions.assertTrue(exceptions.isEmpty(), message + "failed with exception(s)" + exceptions);
 
 	}
 }

@@ -8,13 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -47,7 +46,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * Some test cases around period optimisation with vessel events (specifically charter out events which can move between vessels). Original period transformer locks down all vessel events.
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 
 	/**
@@ -55,7 +54,8 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, MicroTest.class })
+	@Tag(TestCategories.QUICK_TEST)
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCharterOutEvent_In() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -133,14 +133,14 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 
 			// Check locked flags
 			final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
-			Assert.assertEquals(vessel_1.getName(), ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel().getName());
+			Assertions.assertEquals(vessel_1.getName(), ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel().getName());
 
-			Assert.assertFalse(period_event.isLocked());
-			Assert.assertFalse(period_event.getAllowedVessels().isEmpty());
-			Assert.assertEquals(charter_1.getAllowedVessels().size(), period_event.getAllowedVessels().size());
+			Assertions.assertFalse(period_event.isLocked());
+			Assertions.assertFalse(period_event.getAllowedVessels().isEmpty());
+			Assertions.assertEquals(charter_1.getAllowedVessels().size(), period_event.getAllowedVessels().size());
 
 			runner.run(true);
-			Assert.assertSame(vesselAvailability_2, charter_1.getVesselAssignmentType());
+			Assertions.assertSame(vesselAvailability_2, charter_1.getVesselAssignmentType());
 		} finally {
 			runner.dispose();
 		}
@@ -151,7 +151,8 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, MicroTest.class })
+	@Tag(TestCategories.QUICK_TEST)
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCharterOutEvent_Boundary() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -230,15 +231,15 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			// Check locked flags
 			final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
 			final Vessel period_vessel_1 = ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel();
-			Assert.assertEquals(vessel_1.getName(), period_vessel_1.getName());
+			Assertions.assertEquals(vessel_1.getName(), period_vessel_1.getName());
 
-			Assert.assertFalse(period_event.isLocked());
-			Assert.assertFalse(period_event.getAllowedVessels().isEmpty());
-			Assert.assertEquals(1, period_event.getAllowedVessels().size());
-			Assert.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));
+			Assertions.assertFalse(period_event.isLocked());
+			Assertions.assertFalse(period_event.getAllowedVessels().isEmpty());
+			Assertions.assertEquals(1, period_event.getAllowedVessels().size());
+			Assertions.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));
 
 			runner.run(true);
-			Assert.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());
+			Assertions.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());
 
 		} finally {
 			runner.dispose();

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-SymbolicName: com.mmxlabs.common.common-recorder.tests
+Bundle-Vendor: Minimax Labs Ltd.
+Bundle-Version: 4.5.3.qualifier
+Fragment-Host: com.mmxlabs.common.common-recorder
+Bundle-Name: Common-Recorder: Tests
+Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ org.mockito.mockito-core;bundle-version="1.9.5",
+ org.junit.jupiter.api;bundle-version="5.0.0"

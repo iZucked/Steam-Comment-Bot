@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -23,9 +23,9 @@ public class PortSlotTest {
 
 		final IHeelOptionSupplier heelOptions = Mockito.mock(IHeelOptionSupplier.class);
 		final StartPortSlot slot = new StartPortSlot("id", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
-		Assert.assertNotSame(port, slot.getPort());
+		Assertions.assertNotSame(port, slot.getPort());
 		slot.setPort(port);
-		Assert.assertSame(port, slot.getPort());
+		Assertions.assertSame(port, slot.getPort());
 
 	}
 
@@ -34,9 +34,9 @@ public class PortSlotTest {
 		final ITimeWindow window = Mockito.mock(ITimeWindow.class);
 		final IHeelOptionSupplier heelOptions = Mockito.mock(IHeelOptionSupplier.class);
 		final StartPortSlot slot = new StartPortSlot("id", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
-		Assert.assertNotNull(slot.getTimeWindow());
+		Assertions.assertNotNull(slot.getTimeWindow());
 		slot.setTimeWindow(window);
-		Assert.assertSame(window, slot.getTimeWindow());
+		Assertions.assertSame(window, slot.getTimeWindow());
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class PortSlotTest {
 		final IHeelOptionSupplier heelOptions = Mockito.mock(IHeelOptionSupplier.class);
 		final StartPortSlot slot = new StartPortSlot(id, Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
 
-		Assert.assertSame(id, slot.getId());
+		Assertions.assertSame(id, slot.getId());
 	}
 
 	@Test
@@ -73,14 +73,14 @@ public class PortSlotTest {
 		final StartPortSlot slot5 = new StartPortSlot(id1, port1, tw2, heelOptions1);
 
 		// This falls back to the PortSlot doEquals.
-		Assert.assertTrue(slot1.doEquals(slot1));
-		Assert.assertTrue(slot1.doEquals(slot2));
-		Assert.assertTrue(slot2.doEquals(slot1));
+		Assertions.assertTrue(slot1.doEquals(slot1));
+		Assertions.assertTrue(slot1.doEquals(slot2));
+		Assertions.assertTrue(slot2.doEquals(slot1));
 
-		Assert.assertFalse(slot1.doEquals(slot3));
-		Assert.assertFalse(slot1.doEquals(slot4));
-		Assert.assertFalse(slot1.doEquals(slot5));
+		Assertions.assertFalse(slot1.doEquals(slot3));
+		Assertions.assertFalse(slot1.doEquals(slot4));
+		Assertions.assertFalse(slot1.doEquals(slot5));
 
-		Assert.assertFalse(slot1.doEquals(new Object()));
+		Assertions.assertFalse(slot1.doEquals(new Object()));
 	}
 }

@@ -9,27 +9,14 @@ import java.net.URL;
 import java.util.Arrays;
 
 import org.eclipse.emf.common.util.EList;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.models.lng.schedule.Fitness;
 
-@RunWith(Parameterized.class)
 public class IOTesterLiNGO {
 
-	private String name;
-	private String scenarioPath;
-
-	public IOTesterLiNGO(final String name, final String scenarioPath) throws Exception {
-
-		this.name = name;
-		this.scenarioPath = scenarioPath;
-	}
-
-	@Parameters(name = "{0}")
 	public static Iterable<Object[]> generateTests() {
 		return Arrays.asList(new Object[][] { { "testBonnyProblems_Bonny", "/scenarios/demo-cases/Bonny problems/0 Bonny.lingo" },
 				{ "testBonnyProblems_LateAndLost_DES_Backfill", "/scenarios/demo-cases/Bonny problems/1 late and lost-DES backfill -F- Bonny.lingo" },
@@ -45,8 +32,9 @@ public class IOTesterLiNGO {
 		});
 	}
 
-	@Test
-	public void testLiNGOInOut() throws Exception {
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("generateTests")
+	public void testLiNGOInOut(String name, String scenarioPath) throws Exception {
 
 		final URL url = getClass().getResource(scenarioPath);
 
@@ -64,7 +52,7 @@ public class IOTesterLiNGO {
 				restoredCaseProvider.execute(restoredCase -> {
 					EList<Fitness> restoredFitnesses = IOTestUtil.scenarioModeltoFitnessList(restoredCase);
 					long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
-					Assert.assertArrayEquals(originalArray, restoredArray);
+					Assertions.assertArrayEquals(originalArray, restoredArray);
 				});
 			} finally {
 				// Delete temporary directory

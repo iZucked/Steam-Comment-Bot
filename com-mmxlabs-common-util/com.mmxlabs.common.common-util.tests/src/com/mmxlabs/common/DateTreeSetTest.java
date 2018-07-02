@@ -4,19 +4,19 @@
  */
 package com.mmxlabs.common;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.impl.MappingTransformer;
 
-@Ignore("Skip until API is sorted out. See Case 188")
+@Disabled("Skip until API is sorted out. See Case 188")
 public class DateTreeSetTest {
 
 	@Test
@@ -38,16 +38,16 @@ public class DateTreeSetTest {
 
 		dts.add(obj1);
 
-		Assert.assertTrue(dts.contains(obj1));
-		Assert.assertTrue(dts.contains(date1));
+		Assertions.assertTrue(dts.contains(obj1));
+		Assertions.assertTrue(dts.contains(date1));
 
-		Assert.assertFalse(dts.contains(obj2));
-		Assert.assertTrue(dts.contains(date2));
+		Assertions.assertFalse(dts.contains(obj2));
+		Assertions.assertTrue(dts.contains(date2));
 
-		Assert.assertFalse(dts.contains(obj3));
-		Assert.assertFalse(dts.contains(date3));
+		Assertions.assertFalse(dts.contains(obj3));
+		Assertions.assertFalse(dts.contains(date3));
 
-		Assert.assertEquals(1, dts.size());
+		Assertions.assertEquals(1, dts.size());
 
 		fail("Not yet implemented");
 	}

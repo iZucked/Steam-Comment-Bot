@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -30,15 +30,15 @@ public class FuelUsageAssertions {
 		for (final FuelQuantity fq : j.getFuels()) {
 			if (fq.getFuel() == Fuel.NBO) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("NBO not used", amount.getQuantity() == 0);
+					Assertions.assertTrue(amount.getQuantity() == 0, "NBO not used");
 				}
 			} else if (fq.getFuel() == Fuel.FBO) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("FBO not used", amount.getQuantity() == 0);
+					Assertions.assertTrue(amount.getQuantity() == 0, "FBO not used");
 				}
 			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("Base fuel used", amount.getQuantity() > 0);
+					Assertions.assertTrue(amount.getQuantity() > 0, "Base fuel used");
 				}
 			}
 		}
@@ -54,15 +54,15 @@ public class FuelUsageAssertions {
 		for (final FuelQuantity fq : j.getFuels()) {
 			if (fq.getFuel() == Fuel.BASE_FUEL) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("Base fuel not used", amount.getQuantity() == 0);
+					Assertions.assertTrue(amount.getQuantity() == 0, "Base fuel not used");
 				}
 			} else if (fq.getFuel() == Fuel.NBO) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("NBO used", amount.getQuantity() > 0);
+					Assertions.assertTrue(amount.getQuantity() > 0, "NBO used");
 				}
 			} else if (fq.getFuel() == Fuel.FBO) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("FBO used", amount.getQuantity() > 0);
+					Assertions.assertTrue(amount.getQuantity() > 0, "FBO used");
 				}
 			}
 		}
@@ -78,15 +78,15 @@ public class FuelUsageAssertions {
 		for (final FuelQuantity fq : j.getFuels()) {
 			if (fq.getFuel() == Fuel.FBO) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("FBO not used", amount.getQuantity() == 0);
+					Assertions.assertTrue(amount.getQuantity() == 0, "FBO not used");
 				}
 			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("BF used", amount.getQuantity() > 0);
+					Assertions.assertTrue(amount.getQuantity() > 0, "BF used");
 				}
 			} else if (fq.getFuel() == Fuel.NBO) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue("NBO used", amount.getQuantity() > 0);
+					Assertions.assertTrue(amount.getQuantity() > 0, "NBO used");
 				}
 			}
 		}
@@ -97,7 +97,7 @@ public class FuelUsageAssertions {
 		for (final FuelQuantity fq : fuels) {
 			if (fq.getFuel() == fuelType) {
 				for (final FuelAmount amount : fq.getAmounts()) {
-					Assert.assertTrue(fuelType + " not used", amount.getQuantity() == 0);
+					Assertions.assertTrue(amount.getQuantity() == 0, fuelType + " not used");
 				}
 			}
 		}
@@ -109,13 +109,11 @@ public class FuelUsageAssertions {
 			if (fq.getFuel() == fuelType) {
 				for (final FuelAmount amount : fq.getAmounts()) {
 					if (amount.getUnit() == fuelUnit) {
-						Assert.assertTrue(fuelType + " used", amount.getQuantity() > 0);
+						Assertions.assertTrue(amount.getQuantity() > 0, fuelType + " used");
 					}
 				}
 			}
 		}
 	}
-	
-	
 
 }

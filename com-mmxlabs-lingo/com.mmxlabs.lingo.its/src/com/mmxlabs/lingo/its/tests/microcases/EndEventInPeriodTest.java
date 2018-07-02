@@ -10,12 +10,12 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -35,12 +35,12 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
  *
  */
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class EndEventInPeriodTest extends AbstractMicroTestCase {
 
 	@SuppressWarnings("null")
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testFlagIsSet() throws Exception {
 
 		// Create the required basic elements
@@ -83,7 +83,7 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 			final LNGScenarioModel periodScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final VesselAvailability vesselAvailability = periodScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assert.assertFalse(vesselAvailability.isForceHireCostOnlyEndRule());
+			Assertions.assertFalse(vesselAvailability.isForceHireCostOnlyEndRule());
 
 			LOOP_SEARCH: for (final Sequence s : periodScenario.getScheduleModel().getSchedule().getSequences()) {
 				if (s.getVesselAvailability() == vesselAvailability) {
@@ -91,14 +91,14 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 						if (e instanceof EndEvent) {
 							endDate[0] = e.getEnd();
 							// Expect some sort of duration here
-							Assert.assertNotEquals(e.getStart(), e.getEnd());
+							Assertions.assertNotEquals(e.getStart(), e.getEnd());
 							break LOOP_SEARCH;
 						}
 					}
 				}
 			}
 		});
-		Assert.assertNotNull(endDate[0]);
+		Assertions.assertNotNull(endDate[0]);
 
 		// Check the period scenario has been updated correctly.
 		evaluateWithLSOTest(false, plan -> {
@@ -112,22 +112,22 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 			final LNGScenarioModel periodScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final VesselAvailability vesselAvailability = periodScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assert.assertTrue(vesselAvailability.isForceHireCostOnlyEndRule());
+			Assertions.assertTrue(vesselAvailability.isForceHireCostOnlyEndRule());
 
 			// Vessel availability is in UTC
-			Assert.assertEquals(endDate[0].withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), vesselAvailability.getEndAfter());
-			Assert.assertEquals(endDate[0].withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), vesselAvailability.getEndBy());
+			Assertions.assertEquals(endDate[0].withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), vesselAvailability.getEndAfter());
+			Assertions.assertEquals(endDate[0].withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), vesselAvailability.getEndBy());
 
 			// Now check optimisation can utilise the space
 			Cargo l_cargo2 = periodScenario.getCargoModel().getCargoes().get(1);
 			// Check correct cargo lookup
-			Assert.assertEquals("L2", l_cargo2.getLoadName());
+			Assertions.assertEquals("L2", l_cargo2.getLoadName());
 
-			Assert.assertNotSame(vesselAvailability, l_cargo2.getVesselAssignmentType());
+			Assertions.assertNotSame(vesselAvailability, l_cargo2.getVesselAssignmentType());
 
-			Assert.assertNotSame(vesselAvailability1, cargo2.getVesselAssignmentType());
+			Assertions.assertNotSame(vesselAvailability1, cargo2.getVesselAssignmentType());
 			scenarioRunner.runAndApplyBest();
-			Assert.assertSame(vesselAvailability1, cargo2.getVesselAssignmentType());
+			Assertions.assertSame(vesselAvailability1, cargo2.getVesselAssignmentType());
 			// Cannot check period result as we do not generate any Schedule models in the period schedule any more
 
 		}, null);

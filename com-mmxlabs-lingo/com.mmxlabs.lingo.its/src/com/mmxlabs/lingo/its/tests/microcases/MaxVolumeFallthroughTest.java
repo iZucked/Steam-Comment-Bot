@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -37,11 +37,11 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShippedCargo_LoadSlotIsLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -76,16 +76,16 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
 			final SlotAllocation loadAllocation = cargoAllocation.getLoadAllocation();
 
-			Assert.assertEquals(15_000, loadAllocation.getVolumeTransferred());
+			Assertions.assertEquals(15_000, loadAllocation.getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShippedCargo_DischargeSlotIsLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -123,16 +123,16 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
 			final SlotAllocation discahrgeAllocation = cargoAllocation.getDischargeAllocation();
 
-			Assert.assertEquals(15_000, discahrgeAllocation.getVolumeTransferred());
+			Assertions.assertEquals(15_000, discahrgeAllocation.getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShippedCargo_LoadContractIsLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -170,16 +170,16 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
 			final SlotAllocation loadAllocation = cargoAllocation.getLoadAllocation();
 
-			Assert.assertEquals(14_000, loadAllocation.getVolumeTransferred());
+			Assertions.assertEquals(14_000, loadAllocation.getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShippedCargo_DischargeContractIsLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -217,14 +217,14 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(14_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(14_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShippedCargo_LoadMarketIsLimit() throws Exception {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(500_000);
@@ -262,16 +262,16 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
 			final SlotAllocation loadAllocation = cargoAllocation.getLoadAllocation();
 
-			Assert.assertEquals(14_000, loadAllocation.getVolumeTransferred());
+			Assertions.assertEquals(14_000, loadAllocation.getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShippedCargo_DischargeMarketIsLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -311,14 +311,14 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(14_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(14_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShippedCargo_VesselIsLoadLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -351,16 +351,16 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
 			final SlotAllocation loadAllocation = cargoAllocation.getLoadAllocation();
 
-			Assert.assertEquals(15_000, loadAllocation.getVolumeTransferred());
+			Assertions.assertEquals(15_000, loadAllocation.getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testShippedCargo_VesselIsDischargeLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -393,16 +393,16 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
 			// Load volume is clamped.
-			Assert.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertTrue(15_000 > cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertTrue(15_000 > cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedFOBCargo_VesselIsDischargeLimit() throws Exception {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(15_000);
@@ -429,15 +429,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(15_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedFOBCargo_VesselIsLoadLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -465,15 +465,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(15_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedFOBCargo_UseLoadLimit() throws Exception {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
@@ -498,15 +498,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(200_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(200_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedFOBCargo_UseDischargeLimit() throws Exception {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
@@ -531,15 +531,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(200_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(200_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedFOBCargo_140IsLimit() throws Exception {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
@@ -564,15 +564,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(140_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(140_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(140_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(140_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedDESCargo_VesselIsDischargeLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -600,15 +600,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(15_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedDESCargo_VesselIsLoadLimit() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -636,15 +636,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(15_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(15_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedDESCargo_140IsLimit() throws Exception {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
@@ -669,15 +669,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(140_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(140_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(140_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(140_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedDESCargo_UseDischargeLimit() throws Exception {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
@@ -702,15 +702,15 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(200_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(200_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testNonShippedDESCargo_UseLoadLimit() throws Exception {
 
 		final Cargo e_cargo = cargoModelBuilder.makeCargo() //
@@ -735,10 +735,10 @@ public class MaxVolumeFallthroughTest extends AbstractMicroTestCase {
 			final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
+			Assertions.assertTrue(ScheduleModelUtils.matchingSlots(e_cargo, cargoAllocation.getCargoAllocation()));
 
-			Assert.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
-			Assert.assertEquals(200_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
+			Assertions.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
+			Assertions.assertEquals(200_000, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
 		});
 	}
 }

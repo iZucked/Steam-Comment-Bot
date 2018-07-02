@@ -17,11 +17,9 @@ import java.util.OptionalDouble;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -49,15 +47,13 @@ import com.mmxlabs.models.lng.types.DealType;
  * @author Simon McGregor, Simon Goodall
  * 
  */
-@RunWith(value = Parameterized.class)
 public class ExposuresTest {
 	private static @NonNull final YearMonth pricingDate = YearMonth.of(2016, 4);
 	private static final int pricingDay = 4;
 
 	private static final double defaultVolumeInMMBTU = 3_000_000.0;
 
-	@Parameters(name = "{0}")
-	public static Iterable<Object[]> generateTests() {
+	public static Collection generateTests() {
 		return Arrays.asList(new Object[][] { //
 				{ "HH", "HH", "HH", single(calcExpected("HH", 5.0, 1.0)), indiciesOf(makeHH()) }, //
 
@@ -274,20 +270,11 @@ public class ExposuresTest {
 		return makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), value);
 	}
 
-	private @NonNull final String expression;
-	private @NonNull final String indexName;
-	private @NonNull final AbstractYearMonthCurve[] indicies;
-	private @NonNull final ResultChecker checker;
-
-	public ExposuresTest(final String name, final String expression, final String indexName, final @NonNull ResultChecker expectedResult, final AbstractYearMonthCurve[] indicies) {
-		this.checker = expectedResult;
-		this.indicies = indicies;
-		this.indexName = indexName;
-		this.expression = expression;
-	}
-
-	@Test
-	public void testPriceExpressionExposureCoefficient() {
+	 
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("generateTests")
+	public void testPriceExpressionExposureCoefficient(final String name, final String expression, final String indexName, final @NonNull ResultChecker checker,
+			final AbstractYearMonthCurve[] indicies) {
 
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
 
@@ -301,7 +288,7 @@ public class ExposuresTest {
 			} else if (idx instanceof BunkerFuelCurve) {
 				pricingModel.getBunkerFuelCurves().add((BunkerFuelCurve) idx);
 			} else {
-				Assert.fail();
+				Assertions.fail("Unknown index type");
 			}
 		}
 
@@ -451,12 +438,12 @@ public class ExposuresTest {
 				for (final ExposureDetail detail : details) {
 					if (detail.getDealType() == DealType.FINANCIAL) {
 						final ExpectedResult r = m.remove(new Pair<>(detail.getIndexName(), detail.getDate()));
-						Assert.assertNotNull(r);
+						Assertions.assertNotNull(r);
 						r.validate(detail, expression, lookupData);
 					}
 				}
 			}
-			Assert.assertTrue(m.isEmpty());
+			Assertions.assertTrue(m.isEmpty());
 		}
 	}
 
@@ -525,18 +512,18 @@ public class ExposuresTest {
 
 		void validate(@Nullable final ExposureDetail detail, final String expression, final LookupData lookupData) {
 			if (!expectExposed) {
-				Assert.assertTrue(detail == null);
+				Assertions.assertTrue(detail == null);
 				return;
 			}
 
-			Assert.assertEquals(expectedDate, detail.getDate());
+			Assertions.assertEquals(expectedDate, detail.getDate());
 
-			Assert.assertNotNull(detail);
+			Assertions.assertNotNull(detail);
 			if (expectedVolume.isPresent()) {
-				Assert.assertEquals("Volume", expectedVolume.getAsDouble(), detail.getVolumeInNativeUnits(), delta);
+				Assertions.assertEquals(expectedVolume.getAsDouble(), detail.getVolumeInNativeUnits(), delta, "Volume");
 			}
 			if (expectedValue.isPresent()) {
-				Assert.assertEquals("Value", expectedValue.getAsDouble(), detail.getNativeValue(), delta);
+				Assertions.assertEquals(expectedValue.getAsDouble(), detail.getNativeValue(), delta, "Value");
 			}
 			if (expectedExpressionValue.isPresent()) {
 				final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
@@ -551,7 +538,7 @@ public class ExposuresTest {
 				}
 
 				final double val = evaluate.doubleValue() * defaultVolumeInMMBTU;
-				Assert.assertEquals("Expr Value", expectedExpressionValue.getAsDouble(), val, delta);
+				Assertions.assertEquals(expectedExpressionValue.getAsDouble(), val, delta, "Expr Value");
 			}
 		}
 	}

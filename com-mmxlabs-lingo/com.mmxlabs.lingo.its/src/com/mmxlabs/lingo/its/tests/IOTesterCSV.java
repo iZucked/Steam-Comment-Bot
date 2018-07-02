@@ -9,27 +9,14 @@ import java.net.URL;
 import java.util.Arrays;
 
 import org.eclipse.emf.common.util.EList;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.models.lng.schedule.Fitness;
 
-@RunWith(Parameterized.class)
 public class IOTesterCSV {
 
-	private final String name;
-	private final String scenarioPath;
-
-	public IOTesterCSV(final String name, final String scenarioPath) throws Exception {
-
-		this.name = name;
-		this.scenarioPath = scenarioPath;
-	}
-
-	@Parameters(name = "{0}")
 	public static Iterable<Object[]> generateTests() {
 		return Arrays.asList(new Object[][] { { "testBonnyProblems_Bonny", "/scenarios/demo-cases/Bonny problems/0 Bonny.scenario - CSV/" },
 				{ "testBonnyProblems_LateAndLost_DES_Backfill", "/scenarios/demo-cases/Bonny problems/1 late and lost-DES backfill -F- Bonny.scenario - CSV/" },
@@ -44,10 +31,11 @@ public class IOTesterCSV {
 		});
 	}
 
-	@Test
-	public void testCSVInOut() throws Exception {
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("generateTests")
+	public void testCSVInOut(final String name, final String scenarioPath) throws Exception {
 
-		final URL url = getClass().getResource(this.scenarioPath);
+		final URL url = getClass().getResource(scenarioPath);
 
 		final ITestDataProvider testCaseProvider = new CSVTestDataProvider(url);
 		testCaseProvider.execute(testCase -> {
@@ -63,7 +51,7 @@ public class IOTesterCSV {
 				restoredCaseProvider.execute(restoredCase -> {
 					final EList<Fitness> restoredFitnesses = IOTestUtil.scenarioModeltoFitnessList(restoredCase);
 					final long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
-					Assert.assertArrayEquals(originalArray, restoredArray);
+					Assertions.assertArrayEquals(originalArray, restoredArray);
 				});
 			} finally {
 				// Delete temporary directory

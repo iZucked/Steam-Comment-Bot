@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -25,17 +25,17 @@ public class LoadSlotTest {
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
 
 		final LoadSlot slot = new LoadSlot(id, port, tw, true, minLoadVolume, maxLoadVolume, contract, cargoCVValue, false, true);
-		Assert.assertSame(id, slot.getId());
-		Assert.assertSame(port, slot.getPort());
-		Assert.assertSame(tw, slot.getTimeWindow());
+		Assertions.assertSame(id, slot.getId());
+		Assertions.assertSame(port, slot.getPort());
+		Assertions.assertSame(tw, slot.getTimeWindow());
 
-		Assert.assertEquals(minLoadVolume, slot.getMinLoadVolume());
-		Assert.assertEquals(maxLoadVolume, slot.getMaxLoadVolume());
-		Assert.assertSame(contract, slot.getLoadPriceCalculator());
-		Assert.assertEquals(cargoCVValue, slot.getCargoCVValue());
+		Assertions.assertEquals(minLoadVolume, slot.getMinLoadVolume());
+		Assertions.assertEquals(maxLoadVolume, slot.getMaxLoadVolume());
+		Assertions.assertSame(contract, slot.getLoadPriceCalculator());
+		Assertions.assertEquals(cargoCVValue, slot.getCargoCVValue());
 
-		Assert.assertFalse(slot.isCooldownSet());
-		Assert.assertTrue(slot.isCooldownForbidden());
+		Assertions.assertFalse(slot.isCooldownSet());
+		Assertions.assertTrue(slot.isCooldownForbidden());
 	}
 
 	@Test
@@ -47,10 +47,10 @@ public class LoadSlotTest {
 		slot.setCargoCVValue(cv1);
 		slot.setVolumeLimits(true, 5_000_000, 10_000_000);
 
-		Assert.assertEquals(5_000_000, slot.getMinLoadVolume());
-		Assert.assertEquals(10_000_000, slot.getMaxLoadVolume());
-		Assert.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
-		Assert.assertEquals(20 * 10_000_000, slot.getMaxLoadVolumeMMBTU());
+		Assertions.assertEquals(5_000_000, slot.getMinLoadVolume());
+		Assertions.assertEquals(10_000_000, slot.getMaxLoadVolume());
+		Assertions.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
+		Assertions.assertEquals(20 * 10_000_000, slot.getMaxLoadVolumeMMBTU());
 	}
 
 	@Test
@@ -62,10 +62,10 @@ public class LoadSlotTest {
 		// CV After vol limits
 		slot.setCargoCVValue(cv1);
 
-		Assert.assertEquals(5_000_000, slot.getMinLoadVolume());
-		Assert.assertEquals(10_000_000, slot.getMaxLoadVolume());
-		Assert.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
-		Assert.assertEquals(20 * 10_000_000, slot.getMaxLoadVolumeMMBTU());
+		Assertions.assertEquals(5_000_000, slot.getMinLoadVolume());
+		Assertions.assertEquals(10_000_000, slot.getMaxLoadVolume());
+		Assertions.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
+		Assertions.assertEquals(20 * 10_000_000, slot.getMaxLoadVolumeMMBTU());
 	}
 
 	@Test
@@ -76,10 +76,10 @@ public class LoadSlotTest {
 		int cv1 = 20_000_000;
 		slot.setCargoCVValue(cv1);
 
-		Assert.assertEquals(5_000_000, slot.getMinLoadVolume());
-		Assert.assertEquals(Long.MAX_VALUE, slot.getMaxLoadVolume());
-		Assert.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
-		Assert.assertEquals(Long.MAX_VALUE, slot.getMaxLoadVolumeMMBTU());
+		Assertions.assertEquals(5_000_000, slot.getMinLoadVolume());
+		Assertions.assertEquals(Long.MAX_VALUE, slot.getMaxLoadVolume());
+		Assertions.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
+		Assertions.assertEquals(Long.MAX_VALUE, slot.getMaxLoadVolumeMMBTU());
 	}
 
 	private LoadSlot instantiateSlot() {
@@ -90,18 +90,18 @@ public class LoadSlotTest {
 	public void testGetSetPurchasePriceCurve() {
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
 		final LoadSlot slot = instantiateSlot();
-		Assert.assertNotNull(slot.getLoadPriceCalculator());
+		Assertions.assertNotNull(slot.getLoadPriceCalculator());
 		slot.setLoadPriceCalculator(contract);
-		Assert.assertSame(contract, slot.getLoadPriceCalculator());
+		Assertions.assertSame(contract, slot.getLoadPriceCalculator());
 	}
 
 	@Test
 	public void testGetSetCargoCVValue() {
 		final int value = 20;
 		final LoadSlot slot = instantiateSlot();
-		Assert.assertEquals(10, slot.getCargoCVValue());
+		Assertions.assertEquals(10, slot.getCargoCVValue());
 		slot.setCargoCVValue(value);
-		Assert.assertEquals(value, slot.getCargoCVValue());
+		Assertions.assertEquals(value, slot.getCargoCVValue());
 	}
 
 	@Test
@@ -137,42 +137,42 @@ public class LoadSlotTest {
 		final NotionalLoadSlot slot13 = new NotionalLoadSlot(id1, port1, tw1, true, 10L, 20L, curve1, 240, true, true);
 		final NotionalLoadSlot slot14 = new NotionalLoadSlot(id1, port1, tw1, false, 10L, 20L, curve1, 40, false, false);
 
-		Assert.assertTrue(slot1.equals(slot1));
-		Assert.assertTrue(slot1.equals(slot2));
-		Assert.assertTrue(slot2.equals(slot1));
+		Assertions.assertTrue(slot1.equals(slot1));
+		Assertions.assertTrue(slot1.equals(slot2));
+		Assertions.assertTrue(slot2.equals(slot1));
 
-		Assert.assertTrue(slot13.equals(slot11));
-		Assert.assertTrue(slot11.equals(slot13));
+		Assertions.assertTrue(slot13.equals(slot11));
+		Assertions.assertTrue(slot11.equals(slot13));
 
-		Assert.assertFalse(slot9.equals(slot10));
-		Assert.assertFalse(slot9.equals(slot11));
-		Assert.assertFalse(slot9.equals(slot12));
-		Assert.assertFalse(slot9.equals(slot13));
+		Assertions.assertFalse(slot9.equals(slot10));
+		Assertions.assertFalse(slot9.equals(slot11));
+		Assertions.assertFalse(slot9.equals(slot12));
+		Assertions.assertFalse(slot9.equals(slot13));
 
-		Assert.assertFalse(slot10.equals(slot11));
-		Assert.assertFalse(slot10.equals(slot12));
-		Assert.assertFalse(slot11.equals(slot12));
-		Assert.assertFalse(slot12.equals(slot11));
+		Assertions.assertFalse(slot10.equals(slot11));
+		Assertions.assertFalse(slot10.equals(slot12));
+		Assertions.assertFalse(slot11.equals(slot12));
+		Assertions.assertFalse(slot12.equals(slot11));
 
-		Assert.assertFalse(slot1.equals(slot3));
-		Assert.assertFalse(slot1.equals(slot4));
-		Assert.assertFalse(slot1.equals(slot5));
-		Assert.assertFalse(slot1.equals(slot6));
-		Assert.assertFalse(slot1.equals(slot7));
-		Assert.assertFalse(slot1.equals(slot8));
-		Assert.assertFalse(slot1.equals(slot9));
+		Assertions.assertFalse(slot1.equals(slot3));
+		Assertions.assertFalse(slot1.equals(slot4));
+		Assertions.assertFalse(slot1.equals(slot5));
+		Assertions.assertFalse(slot1.equals(slot6));
+		Assertions.assertFalse(slot1.equals(slot7));
+		Assertions.assertFalse(slot1.equals(slot8));
+		Assertions.assertFalse(slot1.equals(slot9));
 
-		Assert.assertFalse(slot3.equals(slot1));
-		Assert.assertFalse(slot4.equals(slot1));
-		Assert.assertFalse(slot5.equals(slot1));
-		Assert.assertFalse(slot6.equals(slot1));
-		Assert.assertFalse(slot7.equals(slot1));
-		Assert.assertFalse(slot8.equals(slot1));
-		Assert.assertFalse(slot9.equals(slot1));
+		Assertions.assertFalse(slot3.equals(slot1));
+		Assertions.assertFalse(slot4.equals(slot1));
+		Assertions.assertFalse(slot5.equals(slot1));
+		Assertions.assertFalse(slot6.equals(slot1));
+		Assertions.assertFalse(slot7.equals(slot1));
+		Assertions.assertFalse(slot8.equals(slot1));
+		Assertions.assertFalse(slot9.equals(slot1));
 
-		Assert.assertFalse(slot14.equals(slot1));
+		Assertions.assertFalse(slot14.equals(slot1));
 
-		Assert.assertFalse(slot1.equals(new Object()));
+		Assertions.assertFalse(slot1.equals(new Object()));
 	}
 
 }

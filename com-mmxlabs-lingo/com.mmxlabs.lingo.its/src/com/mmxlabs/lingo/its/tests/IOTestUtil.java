@@ -10,7 +10,7 @@ import java.net.URL;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.google.common.io.Files;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -91,7 +91,7 @@ public class IOTestUtil {
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
 		final Schedule schedule = scheduleModel.getSchedule();
 
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		return schedule.getFitnesses();
 	}

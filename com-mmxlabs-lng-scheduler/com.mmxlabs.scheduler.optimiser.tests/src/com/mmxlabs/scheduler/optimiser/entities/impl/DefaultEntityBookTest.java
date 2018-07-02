@@ -8,8 +8,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
@@ -27,7 +27,7 @@ public class DefaultEntityBookTest {
 		final int time = 12345;
 
 		// 50% * 10000
-		Assert.assertEquals(10000, entityBook.getTaxedProfit(10000, time));
+		Assertions.assertEquals(10000, entityBook.getTaxedProfit(10000, time));
 
 		verify(curve).getValueAtPoint(time);
 

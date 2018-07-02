@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -32,7 +32,7 @@ public class SwapElementsMoveTest {
 
 		final SwapElementsMove move = new SwapElementsMove(elementPairA, elementPairB);
 
-		Assert.assertEquals(0, move.getAffectedResources().size());
+		Assertions.assertEquals(0, move.getAffectedResources().size());
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementA, elementB, elementC, elementD);
@@ -43,11 +43,11 @@ public class SwapElementsMoveTest {
 		move.apply(sequences);
 
 		// Check element order has swapped
-		Assert.assertSame(elementB, modifiableUnusedSequences.get(0));
-		Assert.assertSame(elementA, modifiableUnusedSequences.get(1));
+		Assertions.assertSame(elementB, modifiableUnusedSequences.get(0));
+		Assertions.assertSame(elementA, modifiableUnusedSequences.get(1));
 		// Check element order is the same
-		Assert.assertSame(elementC, modifiableUnusedSequences.get(2));
-		Assert.assertSame(elementD, modifiableUnusedSequences.get(3));
+		Assertions.assertSame(elementC, modifiableUnusedSequences.get(2));
+		Assertions.assertSame(elementD, modifiableUnusedSequences.get(3));
 	}
 
 	@Test
@@ -67,8 +67,8 @@ public class SwapElementsMoveTest {
 
 		final SwapElementsMove move = new SwapElementsMove(elementPairB, elementPairE);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceA));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceA));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementA, elementB, elementC);
@@ -83,13 +83,13 @@ public class SwapElementsMoveTest {
 		move.apply(sequences);
 
 		// Check element order has swapped
-		Assert.assertSame(elementA, modifiableUnusedSequences.get(0));
-		Assert.assertSame(elementE, modifiableUnusedSequences.get(1));
-		Assert.assertSame(elementC, modifiableUnusedSequences.get(2));
+		Assertions.assertSame(elementA, modifiableUnusedSequences.get(0));
+		Assertions.assertSame(elementE, modifiableUnusedSequences.get(1));
+		Assertions.assertSame(elementC, modifiableUnusedSequences.get(2));
 
-		Assert.assertSame(elementD, sequenceA.get(0));
-		Assert.assertSame(elementB, sequenceA.get(1));
-		Assert.assertSame(elementF, sequenceA.get(2));
+		Assertions.assertSame(elementD, sequenceA.get(0));
+		Assertions.assertSame(elementB, sequenceA.get(1));
+		Assertions.assertSame(elementF, sequenceA.get(2));
 	}
 
 	@Test
@@ -109,8 +109,8 @@ public class SwapElementsMoveTest {
 
 		final SwapElementsMove move = new SwapElementsMove(elementPairE, elementPairB);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceA));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceA));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementA, elementB, elementC);
@@ -125,13 +125,13 @@ public class SwapElementsMoveTest {
 		move.apply(sequences);
 
 		// Check element order has swapped
-		Assert.assertSame(elementA, modifiableUnusedSequences.get(0));
-		Assert.assertSame(elementE, modifiableUnusedSequences.get(1));
-		Assert.assertSame(elementC, modifiableUnusedSequences.get(2));
+		Assertions.assertSame(elementA, modifiableUnusedSequences.get(0));
+		Assertions.assertSame(elementE, modifiableUnusedSequences.get(1));
+		Assertions.assertSame(elementC, modifiableUnusedSequences.get(2));
 
-		Assert.assertSame(elementD, sequenceA.get(0));
-		Assert.assertSame(elementB, sequenceA.get(1));
-		Assert.assertSame(elementF, sequenceA.get(2));
+		Assertions.assertSame(elementD, sequenceA.get(0));
+		Assertions.assertSame(elementB, sequenceA.get(1));
+		Assertions.assertSame(elementF, sequenceA.get(2));
 	}
 
 	@Test
@@ -152,9 +152,9 @@ public class SwapElementsMoveTest {
 
 		final SwapElementsMove move = new SwapElementsMove(elementPairB, elementPairE);
 
-		Assert.assertEquals(2, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceA));
-		Assert.assertTrue(move.getAffectedResources().contains(resourceB));
+		Assertions.assertEquals(2, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceA));
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceB));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementA, elementB, elementC));
@@ -169,13 +169,13 @@ public class SwapElementsMoveTest {
 		move.apply(sequences);
 
 		// Check element order has swapped
-		Assert.assertSame(elementA, sequenceA.get(0));
-		Assert.assertSame(elementE, sequenceA.get(1));
-		Assert.assertSame(elementC, sequenceA.get(2));
+		Assertions.assertSame(elementA, sequenceA.get(0));
+		Assertions.assertSame(elementE, sequenceA.get(1));
+		Assertions.assertSame(elementC, sequenceA.get(2));
 
-		Assert.assertSame(elementD, sequenceB.get(0));
-		Assert.assertSame(elementB, sequenceB.get(1));
-		Assert.assertSame(elementF, sequenceB.get(2));
+		Assertions.assertSame(elementD, sequenceB.get(0));
+		Assertions.assertSame(elementB, sequenceB.get(1));
+		Assertions.assertSame(elementF, sequenceB.get(2));
 	}
 
 	@Test
@@ -195,8 +195,8 @@ public class SwapElementsMoveTest {
 
 		final SwapElementsMove move = new SwapElementsMove(elementPairB, elementPairE);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceA));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceA));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementA, elementB, elementC, elementD, elementE, elementF));
@@ -207,11 +207,11 @@ public class SwapElementsMoveTest {
 		move.apply(sequences);
 
 		// Check element order has swapped
-		Assert.assertSame(elementA, sequenceA.get(0));
-		Assert.assertSame(elementE, sequenceA.get(1));
-		Assert.assertSame(elementC, sequenceA.get(2));
-		Assert.assertSame(elementD, sequenceA.get(3));
-		Assert.assertSame(elementB, sequenceA.get(4));
-		Assert.assertSame(elementF, sequenceA.get(5));
+		Assertions.assertSame(elementA, sequenceA.get(0));
+		Assertions.assertSame(elementE, sequenceA.get(1));
+		Assertions.assertSame(elementC, sequenceA.get(2));
+		Assertions.assertSame(elementD, sequenceA.get(3));
+		Assertions.assertSame(elementB, sequenceA.get(4));
+		Assertions.assertSame(elementF, sequenceA.get(5));
 	}
 }

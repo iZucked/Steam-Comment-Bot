@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -39,7 +39,7 @@ public class ResourceAllocationConstraintCheckerTest {
 
 		final ResourceAllocationConstraintChecker checker = new ResourceAllocationConstraintChecker("name");
 
-		Assert.assertEquals("name", checker.getName());
+		Assertions.assertEquals("name", checker.getName());
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
-		Assert.assertTrue(checker.checkConstraints(sequences, null));
+		Assertions.assertTrue(checker.checkConstraints(sequences, null));
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
-		Assert.assertFalse(checker.checkConstraints(sequences, null));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null));
 	}
 
 	@Test
@@ -128,9 +128,9 @@ public class ResourceAllocationConstraintCheckerTest {
 
 		final List<String> messages = new LinkedList<String>();
 
-		Assert.assertTrue(checker.checkConstraints(sequences, null, messages));
+		Assertions.assertTrue(checker.checkConstraints(sequences, null, messages));
 
-		Assert.assertTrue(messages.isEmpty());
+		Assertions.assertTrue(messages.isEmpty());
 	}
 
 	@Test
@@ -161,9 +161,9 @@ public class ResourceAllocationConstraintCheckerTest {
 
 		final List<String> messages = new LinkedList<String>();
 
-		Assert.assertFalse(checker.checkConstraints(sequences, null, messages));
+		Assertions.assertFalse(checker.checkConstraints(sequences, null, messages));
 
-		Assert.assertEquals(1, messages.size());
+		Assertions.assertEquals(1, messages.size());
 
 	}
 

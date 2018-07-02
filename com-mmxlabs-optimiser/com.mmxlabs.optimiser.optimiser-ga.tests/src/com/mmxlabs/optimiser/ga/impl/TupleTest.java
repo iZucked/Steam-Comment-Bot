@@ -9,8 +9,8 @@ package com.mmxlabs.optimiser.ga.impl;
 
 import java.util.TreeSet;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Simon Goodall
@@ -28,9 +28,9 @@ public class TupleTest {
 		final long f1 = 100l;
 		final Tuple<Object> t1 = new Tuple<Object>(o1, idx1, f1);
 
-		Assert.assertSame(o1, t1.i);
-		Assert.assertEquals(idx1, t1.idx);
-		Assert.assertEquals(f1, t1.f);
+		Assertions.assertSame(o1, t1.i);
+		Assertions.assertEquals(idx1, t1.idx);
+		Assertions.assertEquals(f1, t1.f);
 	}
 
 	/**
@@ -59,14 +59,14 @@ public class TupleTest {
 		final long f4 = 100l;
 		final Tuple<Object> t4 = new Tuple<Object>(o4, idx4, f4);
 
-		Assert.assertEquals(0, t1.compareTo(t2));
-		Assert.assertEquals(0, t2.compareTo(t1));
+		Assertions.assertEquals(0, t1.compareTo(t2));
+		Assertions.assertEquals(0, t2.compareTo(t1));
 
-		Assert.assertEquals(-1, t1.compareTo(t3));
-		Assert.assertEquals(1, t3.compareTo(t1));
+		Assertions.assertEquals(-1, t1.compareTo(t3));
+		Assertions.assertEquals(1, t3.compareTo(t1));
 
-		Assert.assertEquals(-1, t1.compareTo(t4));
-		Assert.assertEquals(1, t4.compareTo(t1));
+		Assertions.assertEquals(-1, t1.compareTo(t4));
+		Assertions.assertEquals(1, t4.compareTo(t1));
 	}
 
 	/**
@@ -102,11 +102,11 @@ public class TupleTest {
 		set.add(t4);
 
 		// Expect to loose t2 as it is identical to t1
-		Assert.assertEquals(3, set.size());
+		Assertions.assertEquals(3, set.size());
 
 		final Object[] array = set.toArray();
-		Assert.assertSame(t1, array[0]);
-		Assert.assertSame(t4, array[1]);
-		Assert.assertSame(t3, array[2]);
+		Assertions.assertSame(t1, array[0]);
+		Assertions.assertSame(t4, array[1]);
+		Assertions.assertSame(t3, array[2]);
 	}
 }

@@ -10,13 +10,13 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.CSVTestDataProvider;
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -35,7 +35,7 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 	 * @throws URISyntaxException
 	 */
 	@Test
-	@Category(QuickTest.class)
+	@Tag(TestCategories.QUICK_TEST)
 	public void spotDESPurchaseTimezoneBoundaryTest() throws Exception {
 
 		// Load the scenario to test
@@ -45,17 +45,17 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 
 			// runner.updateScenario();
 			final Schedule schedule = runner.getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			// Expect only two spot cargoes in Jan
-			Assert.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-0", schedule));
-			Assert.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-1", schedule));
+			Assertions.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-0", schedule));
+			Assertions.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-1", schedule));
 
 			// Should not expect a third Jan cargo
-			Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-2", schedule));
+			Assertions.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-2", schedule));
 			// Should not expect a cargo in Dec or Feb
-			Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2013-12-0", schedule));
-			Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-02-0", schedule));
+			Assertions.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2013-12-0", schedule));
+			Assertions.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-02-0", schedule));
 
 			// Check the two valid cargoes
 			checkCargoAllocation(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-0", schedule));
@@ -70,15 +70,15 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 				final LoadSlot loadSlot = (LoadSlot) slotAllcocation.getSlot();
 				final ZonedDateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
 				final LocalDateTime localDateTime = cal.toLocalDateTime();
-				Assert.assertEquals(1, localDateTime.getMonthValue());
-				Assert.assertEquals(1, localDateTime.getDayOfMonth());
-				Assert.assertEquals(0, localDateTime.getHour());
-				Assert.assertEquals(0, localDateTime.getMinute());
-				Assert.assertEquals(0, localDateTime.getSecond());
-				Assert.assertEquals(0, localDateTime.getNano());
+				Assertions.assertEquals(1, localDateTime.getMonthValue());
+				Assertions.assertEquals(1, localDateTime.getDayOfMonth());
+				Assertions.assertEquals(0, localDateTime.getHour());
+				Assertions.assertEquals(0, localDateTime.getMinute());
+				Assertions.assertEquals(0, localDateTime.getSecond());
+				Assertions.assertEquals(0, localDateTime.getNano());
 				return;
 			}
 		}
-		Assert.fail("No spot slot found");
+		Assertions.fail("No spot slot found");
 	}
 }

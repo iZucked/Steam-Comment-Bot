@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.constraints;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ResourceAllocationConstraintCheckerFactoryTest {
 
@@ -13,14 +13,14 @@ public class ResourceAllocationConstraintCheckerFactoryTest {
 	public void testGetName() {
 
 		final ResourceAllocationConstraintCheckerFactory factory = new ResourceAllocationConstraintCheckerFactory();
-		Assert.assertEquals(ResourceAllocationConstraintCheckerFactory.NAME, factory.getName());
+		Assertions.assertEquals(ResourceAllocationConstraintCheckerFactory.NAME, factory.getName());
 	}
 
 	@Test
 	public void testInstantiate() {
 		final ResourceAllocationConstraintCheckerFactory factory = new ResourceAllocationConstraintCheckerFactory();
 		final ResourceAllocationConstraintChecker checker = factory.instantiate();
-		Assert.assertNotNull(checker);
-		Assert.assertEquals(ResourceAllocationConstraintCheckerFactory.NAME, checker.getName());
+		Assertions.assertNotNull(checker);
+		Assertions.assertEquals(ResourceAllocationConstraintCheckerFactory.NAME, checker.getName());
 	}
 }

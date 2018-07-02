@@ -50,11 +50,11 @@ public class PeriodExporterTests {
 //		}
 //		// Check original scenario state
 //		{
-//			Assert.assertSame(cargo1, originalScenario.getCargoModel().getCargoes().get(0));
-//			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
-//			Assert.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
-//			Assert.assertSame(cargo1, load1.getCargo());
-//			Assert.assertSame(cargo1, discharge1.getCargo());
+//			Assertions.assertSame(cargo1, originalScenario.getCargoModel().getCargoes().get(0));
+//			Assertions.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+//			Assertions.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
+//			Assertions.assertSame(cargo1, load1.getCargo());
+//			Assertions.assertSame(cargo1, discharge1.getCargo());
 //		}
 //	}
 //
@@ -96,9 +96,9 @@ public class PeriodExporterTests {
 //		}
 //		// Check original scenario state
 //		{
-//			Assert.assertSame(cargo1, originalScenario.getCargoModel().getCargoes().get(0));
-//			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
-//			Assert.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
+//			Assertions.assertSame(cargo1, originalScenario.getCargoModel().getCargoes().get(0));
+//			Assertions.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+//			Assertions.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
 //		}
 //	}
 //
@@ -154,8 +154,8 @@ public class PeriodExporterTests {
 //
 //		// Check original scenario state
 //		{
-//			Assert.assertSame(vesselAvailability2, cargo1.getVesselAssignmentType());
-//			Assert.assertEquals(2, cargo1.getSequenceHint());
+//			Assertions.assertSame(vesselAvailability2, cargo1.getVesselAssignmentType());
+//			Assertions.assertEquals(2, cargo1.getSequenceHint());
 //		}
 //	}
 //
@@ -213,13 +213,13 @@ public class PeriodExporterTests {
 //
 //		// Check original scenario state
 //		{
-//			Assert.assertEquals(2, cargo1.getSlots().size());
-//			Assert.assertTrue(cargo1.getSlots().contains(load1));
-//			Assert.assertTrue(cargo1.getSlots().contains(discharge2));
+//			Assertions.assertEquals(2, cargo1.getSlots().size());
+//			Assertions.assertTrue(cargo1.getSlots().contains(load1));
+//			Assertions.assertTrue(cargo1.getSlots().contains(discharge2));
 //
-//			Assert.assertEquals(2, cargo2.getSlots().size());
-//			Assert.assertTrue(cargo2.getSlots().contains(load2));
-//			Assert.assertTrue(cargo2.getSlots().contains(discharge1));
+//			Assertions.assertEquals(2, cargo2.getSlots().size());
+//			Assertions.assertTrue(cargo2.getSlots().contains(load2));
+//			Assertions.assertTrue(cargo2.getSlots().contains(discharge1));
 //		}
 //	}
 //
@@ -275,13 +275,13 @@ public class PeriodExporterTests {
 //		// Check original scenario state
 //		{
 //
-//			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
-//			Assert.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
+//			Assertions.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+//			Assertions.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
 //
-//			Assert.assertNull(load1.getCargo());
-//			Assert.assertNull(discharge1.getCargo());
+//			Assertions.assertNull(load1.getCargo());
+//			Assertions.assertNull(discharge1.getCargo());
 //
-//			Assert.assertTrue(originalScenario.getCargoModel().getCargoes().isEmpty());
+//			Assertions.assertTrue(originalScenario.getCargoModel().getCargoes().isEmpty());
 //		}
 //	}
 //
@@ -338,11 +338,11 @@ public class PeriodExporterTests {
 //		// Check original scenario state
 //		{
 //
-//			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
-//			Assert.assertNull(load1.getCargo());
+//			Assertions.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+//			Assertions.assertNull(load1.getCargo());
 //
-//			Assert.assertTrue(originalScenario.getCargoModel().getCargoes().isEmpty());
-//			Assert.assertTrue(originalScenario.getCargoModel().getDischargeSlots().isEmpty());
+//			Assertions.assertTrue(originalScenario.getCargoModel().getCargoes().isEmpty());
+//			Assertions.assertTrue(originalScenario.getCargoModel().getDischargeSlots().isEmpty());
 //		}
 //	}
 //
@@ -398,16 +398,16 @@ public class PeriodExporterTests {
 //		// Check original scenario state
 //		{
 //
-//			Assert.assertFalse(originalScenario.getCargoModel().getCargoes().isEmpty());
+//			Assertions.assertFalse(originalScenario.getCargoModel().getCargoes().isEmpty());
 //			final Cargo newCargo = originalScenario.getCargoModel().getCargoes().get(0);
 //
-//			Assert.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
+//			Assertions.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
 //
-//			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
-//			Assert.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
+//			Assertions.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+//			Assertions.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
 //
-//			Assert.assertSame(newCargo, load1.getCargo());
-//			Assert.assertSame(newCargo, discharge1.getCargo());
+//			Assertions.assertSame(newCargo, load1.getCargo());
+//			Assertions.assertSame(newCargo, discharge1.getCargo());
 //		}
 //	}
 //
@@ -468,19 +468,19 @@ public class PeriodExporterTests {
 //		// Check original scenario state
 //		{
 //
-//			Assert.assertFalse(originalScenario.getCargoModel().getCargoes().isEmpty());
+//			Assertions.assertFalse(originalScenario.getCargoModel().getCargoes().isEmpty());
 //			final Cargo newCargo = originalScenario.getCargoModel().getCargoes().get(0);
 //
-//			Assert.assertFalse(originalScenario.getCargoModel().getDischargeSlots().isEmpty());
+//			Assertions.assertFalse(originalScenario.getCargoModel().getDischargeSlots().isEmpty());
 //			final DischargeSlot newDischarge = originalScenario.getCargoModel().getDischargeSlots().get(0);
-//			Assert.assertTrue(newDischarge instanceof SpotSlot);
+//			Assertions.assertTrue(newDischarge instanceof SpotSlot);
 //
-//			Assert.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
+//			Assertions.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
 //
-//			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+//			Assertions.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
 //
-//			Assert.assertSame(newCargo, load1.getCargo());
-//			Assert.assertSame(newCargo, newDischarge.getCargo());
+//			Assertions.assertSame(newCargo, load1.getCargo());
+//			Assertions.assertSame(newCargo, newDischarge.getCargo());
 //
 //		}
 //	}
@@ -552,10 +552,10 @@ public class PeriodExporterTests {
 //
 //		// Check original scenario state
 //		{
-//			Assert.assertEquals(2, cargo1.getSlots().size());
-//			Assert.assertTrue(cargo1.getSlots().contains(load1));
-//			Assert.assertTrue(cargo1.getSlots().contains(discharge2));
-//			Assert.assertSame(port2, load1.getPort());
+//			Assertions.assertEquals(2, cargo1.getSlots().size());
+//			Assertions.assertTrue(cargo1.getSlots().contains(load1));
+//			Assertions.assertTrue(cargo1.getSlots().contains(discharge2));
+//			Assertions.assertSame(port2, load1.getPort());
 //		}
 //	}
 //
@@ -612,8 +612,8 @@ public class PeriodExporterTests {
 //
 //		// Check original scenario state
 //		{
-//			Assert.assertSame(vesselAvailability2, event1.getVesselAssignmentType());
-//			Assert.assertEquals(2, event1.getSequenceHint());
+//			Assertions.assertSame(vesselAvailability2, event1.getVesselAssignmentType());
+//			Assertions.assertEquals(2, event1.getSequenceHint());
 //		}
 //	}
 //
@@ -623,7 +623,7 @@ public class PeriodExporterTests {
 //		final PeriodExporter exporter = new PeriodExporter();
 //
 //		final Command cmd = exporter.updateOriginal(editingDomain, originalScenario, periodScenario, mapping);
-//		Assert.assertTrue(cmd.canExecute());
+//		Assertions.assertTrue(cmd.canExecute());
 //		editingDomain.getCommandStack().execute(cmd);
 //	}
 }

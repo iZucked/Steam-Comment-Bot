@@ -9,8 +9,8 @@ import java.util.LinkedList;
 
 import javax.inject.Singleton;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -22,7 +22,6 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
@@ -63,8 +62,8 @@ public class LatenessComponentTest {
 		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(null);
 		final LatenessComponent c = new LatenessComponent(name, core);
 
-		Assert.assertSame(name, c.getName());
-		Assert.assertSame(core, c.getFitnessCore());
+		Assertions.assertSame(name, c.getName());
+		Assertions.assertSame(core, c.getFitnessCore());
 	}
 
 	@Test
@@ -205,7 +204,7 @@ public class LatenessComponentTest {
 		final long cost = c.endEvaluationAndGetCost();
 
 		final long expectedCost = (dischargeLateTime + loadLateTime) * penalty;
-		Assert.assertEquals("Expected cost equals calculated cost.", expectedCost, cost);
+		Assertions.assertEquals(expectedCost, cost, "Expected cost equals calculated cost.");
 	}
 
 }

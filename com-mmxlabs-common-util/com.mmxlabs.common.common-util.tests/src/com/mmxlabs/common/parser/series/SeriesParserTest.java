@@ -6,17 +6,14 @@ package com.mmxlabs.common.parser.series;
 
 import java.util.Arrays;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.parser.IExpression;
 
-@RunWith(value = Parameterized.class)
 public class SeriesParserTest {
-	@Parameters(name = "{0}")
+
 	public static Iterable<Object[]> generateTests() {
 		return Arrays.asList(new Object[][] { //
 				{ "-1", -1.0 }, //
@@ -71,18 +68,10 @@ public class SeriesParserTest {
 		});
 	}
 
-	private String expression;
-	private double expected;
-
-	public SeriesParserTest(String expression, double expected) {
-		this.expression = expression;
-		this.expected = expected;
-
-	}
-
-	@Test
-	public void run() {
-		Assert.assertEquals(expected, parse(expression), 0.1);
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("generateTests")
+	public void run(String expression, double expected) {
+		Assertions.assertEquals(expected, parse(expression), 0.1);
 	}
 
 	double parse(String expression) {

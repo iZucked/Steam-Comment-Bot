@@ -7,9 +7,9 @@ package com.mmxlabs.optimiser.lso.fitness.impl;
 import java.util.Collection;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
@@ -21,7 +21,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 
@@ -30,7 +29,7 @@ public class SortingFitnessCoreTest {
 	private IFitnessComponent component;
 	private IFitnessCore core;
 
-	@Before
+	@BeforeEach
 	public void initPieces() {
 
 		final SortingFitnessFactory factory = new SortingFitnessFactory();
@@ -41,7 +40,7 @@ public class SortingFitnessCoreTest {
 
 		final Collection<IFitnessComponent> fitnessComponents = core.getFitnessComponents();
 
-		Assert.assertEquals(1, fitnessComponents.size());
+		Assertions.assertEquals(1, fitnessComponents.size());
 		component = fitnessComponents.iterator().next();
 	}
 
@@ -54,7 +53,7 @@ public class SortingFitnessCoreTest {
 
 		core.evaluate(sequences, evaluationState);
 
-		Assert.assertEquals(0, component.getFitness());
+		Assertions.assertEquals(0, component.getFitness());
 	}
 
 	@Test
@@ -65,7 +64,7 @@ public class SortingFitnessCoreTest {
 
 		core.evaluate(sequences, evaluationState);
 
-		Assert.assertEquals(1, component.getFitness());
+		Assertions.assertEquals(1, component.getFitness());
 	}
 
 	@Test
@@ -76,7 +75,7 @@ public class SortingFitnessCoreTest {
 		assert evaluationState != null;
 		core.evaluate(sequences, evaluationState);
 
-		Assert.assertEquals(3, component.getFitness());
+		Assertions.assertEquals(3, component.getFitness());
 	}
 
 	@Test
@@ -87,7 +86,7 @@ public class SortingFitnessCoreTest {
 
 		core.evaluate(sequences, evaluationState);
 
-		Assert.assertEquals(0, component.getFitness());
+		Assertions.assertEquals(0, component.getFitness());
 	}
 
 	@Test
@@ -105,7 +104,7 @@ public class SortingFitnessCoreTest {
 
 		core.evaluate(sequences, evaluationState);
 
-		Assert.assertEquals(3, component.getFitness());
+		Assertions.assertEquals(3, component.getFitness());
 	}
 
 }

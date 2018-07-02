@@ -10,8 +10,8 @@ import java.util.Calendar;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
  * @author Alex Churchill
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PricingTimesScenarioTester {
 	public void testingIndexingAndPriceDating(@NonNull final String name, @NonNull final LocalDate expectedPriceLookupDate, @NonNull final LocalDateTime dischargeDate,
 			@Nullable final LocalDate priceDate, final double priceA, final double priceB, final double priceC) {

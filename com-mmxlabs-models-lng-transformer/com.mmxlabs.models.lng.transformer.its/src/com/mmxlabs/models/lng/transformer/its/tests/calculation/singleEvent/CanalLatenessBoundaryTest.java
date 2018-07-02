@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -26,7 +26,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam Semenenko
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CanalLatenessBoundaryTest {
 
 	// private static final RouteOption canalOption = RouteOption.SUEZ;
@@ -51,8 +51,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", RouteOption.SUEZ.equals(a.getLadenLeg().getRouteOption()));
-		Assert.assertTrue("Ballast leg travels on canal", RouteOption.SUEZ.equals(a.getBallastLeg().getRouteOption()));
+		Assertions.assertTrue(RouteOption.SUEZ.equals(a.getLadenLeg().getRouteOption()), "Laden leg travels on canal");
+		Assertions.assertTrue(RouteOption.SUEZ.equals(a.getBallastLeg().getRouteOption()), "Ballast leg travels on canal");
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", RouteOption.SUEZ.equals(a.getLadenLeg().getRouteOption()));
-		Assert.assertTrue("Ballast leg travels on canal", RouteOption.SUEZ.equals(a.getBallastLeg().getRouteOption()));
+		Assertions.assertTrue(RouteOption.SUEZ.equals(a.getLadenLeg().getRouteOption()), "Laden leg travels on canal");
+		Assertions.assertTrue(RouteOption.SUEZ.equals(a.getBallastLeg().getRouteOption()), "Ballast leg travels on canal");
 	}
 
 	/**
@@ -95,8 +95,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT.equals(a.getLadenLeg().getRouteOption()));
-		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT.equals(a.getBallastLeg().getRouteOption()));
+		Assertions.assertTrue(RouteOption.DIRECT.equals(a.getLadenLeg().getRouteOption()), "Laden leg travels on ocean");
+		Assertions.assertTrue(RouteOption.DIRECT.equals(a.getBallastLeg().getRouteOption()), "Ballast leg travels on ocean");
 	}
 
 	/**
@@ -117,8 +117,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT.equals(a.getLadenLeg().getRouteOption()));
-		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT.equals(a.getBallastLeg().getRouteOption()));
+		Assertions.assertTrue(RouteOption.DIRECT.equals(a.getLadenLeg().getRouteOption()), "Laden leg travels on ocean");
+		Assertions.assertTrue(RouteOption.DIRECT.equals(a.getBallastLeg().getRouteOption()), "Ballast leg travels on ocean");
 	}
 
 	/**
@@ -140,8 +140,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels direct", RouteOption.DIRECT.equals(a.getLadenLeg().getRouteOption()));
-		Assert.assertTrue("Ballast leg travels direct", RouteOption.DIRECT.equals(a.getBallastLeg().getRouteOption()));
+		Assertions.assertTrue(RouteOption.DIRECT.equals(a.getLadenLeg().getRouteOption()), "Laden leg travels direct");
+		Assertions.assertTrue(RouteOption.DIRECT.equals(a.getBallastLeg().getRouteOption()), "Ballast leg travels direct");
 	}
 
 	/**

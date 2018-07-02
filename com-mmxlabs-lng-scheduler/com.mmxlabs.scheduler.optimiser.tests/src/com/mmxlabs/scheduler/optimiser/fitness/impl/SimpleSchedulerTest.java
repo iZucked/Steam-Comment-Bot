@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.awt.color.CMMException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -314,16 +313,16 @@ public class SimpleSchedulerTest {
 			final long initialFitness = linearFitnessEvaluator.getBestFitness();
 			System.out.println("Initial fitness " + initialFitness);
 
-			Assert.assertFalse(initialFitness == Long.MAX_VALUE);
+			Assertions.assertFalse(initialFitness == Long.MAX_VALUE);
 
 			optimiser.optimise(context);
 
 			final long finalFitness = linearFitnessEvaluator.getBestFitness();
 			System.out.println("Final fitness " + finalFitness);
-			Assert.assertFalse(finalFitness == Long.MAX_VALUE);
+			Assertions.assertFalse(finalFitness == Long.MAX_VALUE);
 
 			final Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
-			Assert.assertNotNull(bestSequences);
+			Assertions.assertNotNull(bestSequences);
 			printSequences(bestSequences.getFirst());
 
 			// TODO: How to verify result?

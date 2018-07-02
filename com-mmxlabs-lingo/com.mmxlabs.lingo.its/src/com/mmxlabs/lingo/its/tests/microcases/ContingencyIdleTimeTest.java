@@ -8,16 +8,16 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -36,13 +36,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
  * @author Simon Goodall
  *
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(value = ShiroRunner.class)
 public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("contingency-idle-time");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -52,7 +52,7 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -61,7 +61,7 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDataProviderIdleTimeIncrease() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -90,8 +90,8 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 				final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 				final Idle ladenIdle = cargoAllocation.getLadenIdle();
 				final Idle ballastIdle = cargoAllocation.getBallastIdle();
-				Assert.assertEquals(0, ladenIdle.getDuration());
-				Assert.assertEquals(0, ballastIdle.getDuration());
+				Assertions.assertEquals(0, ladenIdle.getDuration());
+				Assertions.assertEquals(0, ballastIdle.getDuration());
 			}
 			final IExtraIdleTimeProviderEditor extraIdleTimeProviderEditor = scenarioToOptimiserBridge.getInjector().getInstance(IExtraIdleTimeProviderEditor.class);
 			final ModelEntityMap modelEntityMap = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getModelEntityMap();
@@ -105,8 +105,8 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 				final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 				final Idle ladenIdle = cargoAllocation.getLadenIdle();
 				final Idle ballastIdle = cargoAllocation.getBallastIdle();
-				Assert.assertEquals(48, ladenIdle.getDuration());
-				Assert.assertEquals(0, ballastIdle.getDuration());
+				Assertions.assertEquals(48, ladenIdle.getDuration());
+				Assertions.assertEquals(0, ballastIdle.getDuration());
 			}
 			{
 				final IPort fromPort = modelEntityMap.getOptimiserObjectNullChecked(cargo1.getSlots().get(1).getPort(), IPort.class);
@@ -114,18 +114,18 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 				extraIdleTimeProviderEditor.setExtraIdleTimeOnVoyage(fromPort, toPort, 48);
 
 				final Schedule schedule = scenarioRunner.evaluateInitialState();
-				Assert.assertNotNull("Unable to evaluate schedule", schedule);
+				Assertions.assertNotNull(schedule, "Unable to evaluate schedule");
 				final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 				final Idle ladenIdle = cargoAllocation.getLadenIdle();
 				final Idle ballastIdle = cargoAllocation.getBallastIdle();
-				Assert.assertEquals(48, ladenIdle.getDuration());
-				Assert.assertEquals(48, ballastIdle.getDuration());
+				Assertions.assertEquals(48, ladenIdle.getDuration());
+				Assertions.assertEquals(48, ballastIdle.getDuration());
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMatrixValue_1() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -156,14 +156,14 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 				final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 				final Idle ladenIdle = cargoAllocation.getLadenIdle();
 				final Idle ballastIdle = cargoAllocation.getBallastIdle();
-				Assert.assertEquals(24, ladenIdle.getDuration());
-				Assert.assertEquals(0, ballastIdle.getDuration());
+				Assertions.assertEquals(24, ladenIdle.getDuration());
+				Assertions.assertEquals(0, ballastIdle.getDuration());
 			}
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testMatrixValue_2() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -194,8 +194,8 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 				final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 				final Idle ladenIdle = cargoAllocation.getLadenIdle();
 				final Idle ballastIdle = cargoAllocation.getBallastIdle();
-				Assert.assertEquals(24, ladenIdle.getDuration());
-				Assert.assertEquals(24, ballastIdle.getDuration());
+				Assertions.assertEquals(24, ladenIdle.getDuration());
+				Assertions.assertEquals(24, ballastIdle.getDuration());
 			}
 		});
 	}

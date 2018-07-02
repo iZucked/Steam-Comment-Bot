@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
@@ -46,11 +46,11 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, 500_000, LNGVoyageCalculator.STATE_COLD_WARMING_TIME);
-		Assert.assertEquals(0, violationCount);
+		Assertions.assertEquals(0, violationCount);
 
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
-		Assert.assertEquals(100_000L, voyagePlan.getStartingHeelInM3());
-		Assert.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
+		Assertions.assertEquals(100_000L, voyagePlan.getStartingHeelInM3());
+		Assertions.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
 	}
 
 	@Test
@@ -82,11 +82,11 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, 500_000, LNGVoyageCalculator.STATE_WARM);
-		Assert.assertEquals(0, violationCount);
+		Assertions.assertEquals(0, violationCount);
 
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
-		Assert.assertEquals(0L, voyagePlan.getStartingHeelInM3());
-		Assert.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
+		Assertions.assertEquals(0L, voyagePlan.getStartingHeelInM3());
+		Assertions.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
 	}
 
 	@Test
@@ -118,11 +118,11 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, -1, -1);
-		Assert.assertEquals(100, violationCount);
+		Assertions.assertEquals(100, violationCount);
 
-		// Assert.assertEquals(0L, voyagePlan.getLNGFuelVolume());
-		// Assert.assertEquals(0L, voyagePlan.getStartingHeelInM3());
-		// Assert.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
+		// Assertions.assertEquals(0L, voyagePlan.getLNGFuelVolume());
+		// Assertions.assertEquals(0L, voyagePlan.getStartingHeelInM3());
+		// Assertions.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
 	}
 
 	@Test
@@ -154,11 +154,11 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, -1, -1);
-		Assert.assertEquals(300, violationCount);
+		Assertions.assertEquals(300, violationCount);
 
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getStartingHeelInM3());
-		Assert.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getStartingHeelInM3());
+		Assertions.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
 	}
 
 	@Test
@@ -191,13 +191,13 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, -1, -1);
-		Assert.assertEquals(1, violationCount);
+		Assertions.assertEquals(1, violationCount);
 
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
 		// Heel up to max start heel.
-		Assert.assertEquals(50_000L, voyagePlan.getStartingHeelInM3());
+		Assertions.assertEquals(50_000L, voyagePlan.getStartingHeelInM3());
 		// End heel under min requirement, but as close as possible
-		Assert.assertEquals(40_000L, voyagePlan.getRemainingHeelInM3());
+		Assertions.assertEquals(40_000L, voyagePlan.getRemainingHeelInM3());
 	}
 
 	@Test
@@ -230,12 +230,12 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, -1, -1);
-		Assert.assertEquals(0, violationCount);
+		Assertions.assertEquals(0, violationCount);
 
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
-		Assert.assertEquals(10_000L, voyagePlan.getStartingHeelInM3());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
+		Assertions.assertEquals(10_000L, voyagePlan.getStartingHeelInM3());
 		// End with zero heel even though min is non-zero as we are in Either end state
-		Assert.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
+		Assertions.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
 	}
 
 	@Test
@@ -268,12 +268,12 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, -1, -1);
-		Assert.assertEquals(0, violationCount);
+		Assertions.assertEquals(0, violationCount);
 
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
-		Assert.assertEquals(20_000L, voyagePlan.getStartingHeelInM3());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
+		Assertions.assertEquals(20_000L, voyagePlan.getStartingHeelInM3());
 		// End with min heel
-		Assert.assertEquals(10_000L, voyagePlan.getRemainingHeelInM3());
+		Assertions.assertEquals(10_000L, voyagePlan.getRemainingHeelInM3());
 	}
 
 	@Test
@@ -306,11 +306,11 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 		
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, LNGVoyageCalculator.STATE_COLD_COOLDOWN, 450_000);
-		Assert.assertEquals(1, violationCount);
+		Assertions.assertEquals(1, violationCount);
 		
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getStartingHeelInM3());
-		Assert.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getStartingHeelInM3());
+		Assertions.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
 	}
 	@Test
 	public void testVoyageRange_EndWarm() {
@@ -342,10 +342,10 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, LNGVoyageCalculator.STATE_WARM, 450_000);
-		Assert.assertEquals(1, violationCount);
+		Assertions.assertEquals(1, violationCount);
 
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
-		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getStartingHeelInM3());
-		Assert.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
+		Assertions.assertEquals(lngCommitmentInM3, voyagePlan.getStartingHeelInM3());
+		Assertions.assertEquals(0L, voyagePlan.getRemainingHeelInM3());
 	}
 }

@@ -9,9 +9,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -38,7 +38,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CargoExistenceCheckTest {
 
 	private static final int dischargePrice = 1;
@@ -110,7 +110,7 @@ public class CargoExistenceCheckTest {
 
 		final int numOfInputCargoes = inputCargoes.size();
 
-		Assert.assertEquals("Same number of cargoes in the output as in the input", numOfInputCargoes, result.getCargoAllocations().size());
+		Assertions.assertEquals(numOfInputCargoes, result.getCargoAllocations().size(), "Same number of cargoes in the output as in the input");
 
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 			for (final Cargo c : inputCargoes) {
@@ -121,6 +121,6 @@ public class CargoExistenceCheckTest {
 			}
 		}
 
-		Assert.assertEquals("All cargoes in output", 0, inputCargoes.size());
+		Assertions.assertEquals(0, inputCargoes.size(), "All cargoes in output");
 	}
 }

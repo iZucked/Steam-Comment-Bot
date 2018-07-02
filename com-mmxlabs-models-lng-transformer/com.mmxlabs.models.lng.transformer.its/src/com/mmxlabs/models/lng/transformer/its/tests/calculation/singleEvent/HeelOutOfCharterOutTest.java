@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -48,13 +48,13 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam Semenenko
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class HeelOutOfCharterOutTest {
 
 	/**
 	 * LNG is available but BF is used as LNG is slightly more expensive
 	 */
-	@Ignore("Test cannot distinguish between base and base supplemental")
+	@Disabled("Test cannot distinguish between base and base supplemental")
 	@Test
 	public void heelFBOAvailableLNGExpensiveUsed() {
 
@@ -65,7 +65,7 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * LNG is not available for FBO but not used for NBO as LNG is slightly more expensive
 	 */
-	@Ignore("Test cannot distinguish between base and base supplemental")
+	@Disabled("Test cannot distinguish between base and base supplemental")
 	@Test
 	public void heelNBOAvailableLNGExpensiveUsed() {
 
@@ -146,7 +146,7 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * Heel is only available for NBO, BF used to supplement.
 	 */
-	@Ignore("Mixed mode means we can now use FBO then run dry")
+	@Disabled("Mixed mode means we can now use FBO then run dry")
 	@Test
 	public void heelNBOAvailableCheaper() {
 
@@ -169,7 +169,7 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * Check that for varying heel limits LNG usage never exceeds (but may equal) the amount of heel).
 	 */
-	@Ignore("Heel may not be exceeded with a capacity violation")
+	@Disabled("Heel may not be exceeded with a capacity violation")
 	@Test
 	public void heelNotExceeded() {
 
@@ -193,7 +193,7 @@ public class HeelOutOfCharterOutTest {
 				}
 			}
 
-			Assert.assertTrue("Heel not exceeded", LNGUsed <= heelLimit);
+			Assertions.assertTrue(LNGUsed <= heelLimit, "Heel not exceeded");
 		}
 
 	}
@@ -269,7 +269,7 @@ public class HeelOutOfCharterOutTest {
 	 */
 	private Journey getJourneyAfterCharterOut(final Schedule charterOutSchedule) {
 		// only expect one sequence.
-		Assert.assertTrue("Only one sequence", charterOutSchedule.getSequences().size() == 1);
+		Assertions.assertTrue(charterOutSchedule.getSequences().size() == 1, "Only one sequence");
 		final Sequence seq = charterOutSchedule.getSequences().get(0);
 
 		// get the event after the charter out.
@@ -279,15 +279,15 @@ public class HeelOutOfCharterOutTest {
 				// got the charter out, now get the event after it and make sure it is a journey. If it is, return it.
 				final int charterOutIndex = seq.getEvents().indexOf(e);
 				final int nextEventIndex = charterOutIndex + 1;
-				Assert.assertTrue("There is an event after the charter out", seq.getEvents().size() >= nextEventIndex);
+				Assertions.assertTrue(seq.getEvents().size() >= nextEventIndex, "There is an event after the charter out");
 				final Event eventAfterCharterOut = seq.getEvents().get(charterOutIndex + 1);
-				Assert.assertTrue("Event after charter out is a journey", eventAfterCharterOut instanceof Journey);
+				Assertions.assertTrue(eventAfterCharterOut instanceof Journey, "Event after charter out is a journey");
 
 				return (Journey) eventAfterCharterOut;
 			}
 		}
 
-		Assert.fail("No charter out in sequence");
+		Assertions.fail("No charter out in sequence");
 		return null;
 	}
 }

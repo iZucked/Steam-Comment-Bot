@@ -5,18 +5,19 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 
 public class NonShippedCargoSwapOptiTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void desPurchaseSwapTest() throws Exception {
 
 		// Construct the cargo scenario
@@ -45,14 +46,14 @@ public class NonShippedCargoSwapOptiTests extends AbstractMicroTestCase {
 			scenarioRunner.runAndApplyBest();
 
 			// Wiring should have changed
-			Assert.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
-			Assert.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
+			Assertions.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
+			Assertions.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
 
 		});
 	}
 
 	@Test
-	@Category(MicroTest.class)
+	@Tag(TestCategories.MICRO_TEST)
 	public void fobSaleSwapTest() throws Exception {
 
 		// Construct the cargo scenario
@@ -80,8 +81,8 @@ public class NonShippedCargoSwapOptiTests extends AbstractMicroTestCase {
 			scenarioRunner.runAndApplyBest();
 
 			// Wiring should have changed
-			Assert.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
-			Assert.assertSame(discharge2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
+			Assertions.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
+			Assertions.assertSame(discharge2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
 
 		});
 	}

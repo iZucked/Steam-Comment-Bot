@@ -21,8 +21,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xml.type.AnyType;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -38,13 +38,13 @@ public class MigrationTest {
 		PackageData v1PkgData = new PackageData("http://com.mmxlabs.models.migration.tests/model", "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore",
 				"../../com.mmxlabs.models.migration.tests/models/model.ecore");
 		final EPackage v1Pkg = v1Loader.loadEPackage(v1ResourceURI, v1PkgData);
-		Assert.assertNotNull(v1Pkg);
+		Assertions.assertNotNull(v1Pkg);
 
 		final URI v1SubResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/sub-model-v1.ecore", true);
 		PackageData v1SubPkgData = new PackageData("http://com.mmxlabs.models.migration.tests/submodel", "platform:/plugin/com.mmxlabs.models.migration.tests/models/sub-model.ecore",
 				"../../com.mmxlabs.models.migration.tests/models/sub-model.ecore");
 		final EPackage v1SubPkg = v1Loader.loadEPackage(v1SubResourceURI, v1SubPkgData);
-		Assert.assertNotNull(v1SubPkg);
+		Assertions.assertNotNull(v1SubPkg);
 
 		// Create a V2 loader
 		final MetamodelLoader v2Loader = new MetamodelLoader();
@@ -52,13 +52,13 @@ public class MigrationTest {
 		PackageData v2PkgData = new PackageData("http://com.mmxlabs.models.migration.tests/model", "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore",
 				"../../com.mmxlabs.models.migration.tests/models/model.ecore");
 		final EPackage v2Pkg = v2Loader.loadEPackage(v2ResourceURI, v2PkgData);
-		Assert.assertNotNull(v2Pkg);
+		Assertions.assertNotNull(v2Pkg);
 
 		final URI v2SubResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/sub-model-v2.ecore", true);
 		PackageData v2SubPkgData = new PackageData("http://com.mmxlabs.models.migration.tests/submodel", "platform:/plugin/com.mmxlabs.models.migration.tests/models/sub-model.ecore",
 				"../../com.mmxlabs.models.migration.tests/models/sub-model.ecore");
 		final EPackage v2SubPkg = v2Loader.loadEPackage(v2SubResourceURI, v2SubPkgData);
-		Assert.assertNotNull(v2SubPkg);
+		Assertions.assertNotNull(v2SubPkg);
 
 		EcoreUtil.resolveAll(v1Loader.getResourceSet());
 		EcoreUtil.resolveAll(v2Loader.getResourceSet());
@@ -86,11 +86,11 @@ public class MigrationTest {
 		f.delete();
 
 		// Check model was loaded
-		Assert.assertNotNull(r2.getContents());
-		Assert.assertFalse(r2.getContents().isEmpty());
+		Assertions.assertNotNull(r2.getContents());
+		Assertions.assertFalse(r2.getContents().isEmpty());
 
 		final EObject v2Object = r2.getContents().iterator().next();
-		Assert.assertNotNull(v2Object);
+		Assertions.assertNotNull(v2Object);
 
 		// This map records features with no model equiv - i.e. V1 features not in V2
 		final Map<EObject, AnyType> oldFeatures = ((XMLResource) r2).getEObjectToExtensionMap();
@@ -117,9 +117,9 @@ public class MigrationTest {
 		}
 		// Check our new attribute has required value.
 		// TODO: Should we persist and reload?
-		Assert.assertEquals(1, ((Integer) v2Object.eGet(v2Object.eClass().getEStructuralFeature("attributeA"))).intValue());
-		Assert.assertEquals(2, ((Integer) v2Object.eGet(v2Object.eClass().getEStructuralFeature("attributeC"))).intValue());
-		Assert.assertEquals(3, ((Integer) v2Object.eGet(v2Object.eClass().getEStructuralFeature("subAttributeA"))).intValue());
+		Assertions.assertEquals(1, ((Integer) v2Object.eGet(v2Object.eClass().getEStructuralFeature("attributeA"))).intValue());
+		Assertions.assertEquals(2, ((Integer) v2Object.eGet(v2Object.eClass().getEStructuralFeature("attributeC"))).intValue());
+		Assertions.assertEquals(3, ((Integer) v2Object.eGet(v2Object.eClass().getEStructuralFeature("subAttributeA"))).intValue());
 
 	}
 

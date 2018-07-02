@@ -9,8 +9,8 @@ import java.time.YearMonth;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.EObject;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.lingo.its.CSVBuilder;
@@ -63,7 +63,7 @@ public class ImporterTests {
 
 			final Collection<EObject> results = importer.importObjects(SpotMarketsPackage.Literals.SPOT_MARKET, reader, context);
 
-			Assert.assertEquals(2, results.size());
+			Assertions.assertEquals(2, results.size());
 			boolean foundMarket = false;
 			for (final EObject e : results) {
 				if (e instanceof SpotMarketGroup) {
@@ -72,25 +72,25 @@ public class ImporterTests {
 				} else if (e instanceof SpotMarket) {
 					final SpotMarket spotMarket = (SpotMarket) e;
 
-					Assert.assertEquals(PricingEvent.START_LOAD, spotMarket.getPricingEvent());
-					Assert.assertEquals(VolumeUnits.MMBTU, spotMarket.getVolumeLimitsUnit());
-					Assert.assertEquals(2_000_000, spotMarket.getMinQuantity());
-					Assert.assertEquals(3_000_000, spotMarket.getMaxQuantity());
+					Assertions.assertEquals(PricingEvent.START_LOAD, spotMarket.getPricingEvent());
+					Assertions.assertEquals(VolumeUnits.MMBTU, spotMarket.getVolumeLimitsUnit());
+					Assertions.assertEquals(2_000_000, spotMarket.getMinQuantity());
+					Assertions.assertEquals(3_000_000, spotMarket.getMaxQuantity());
 
 					final SpotAvailability availability = spotMarket.getAvailability();
-					Assert.assertNotNull(availability);
-					Assert.assertEquals(2, availability.getConstant());
-					Assert.assertEquals(1, availability.getCurve().getPoints().size());
+					Assertions.assertNotNull(availability);
+					Assertions.assertEquals(2, availability.getConstant());
+					Assertions.assertEquals(1, availability.getCurve().getPoints().size());
 
 					final IndexPoint<Integer> pt = availability.getCurve().getPoints().get(0);
-					Assert.assertEquals(YearMonth.of(2016, 8), pt.getDate());
-					Assert.assertEquals(6, (int) pt.getValue());
+					Assertions.assertEquals(YearMonth.of(2016, 8), pt.getDate());
+					Assertions.assertEquals(6, (int) pt.getValue());
 
 					foundMarket = true;
 				}
 			}
 
-			Assert.assertTrue(foundMarket);
+			Assertions.assertTrue(foundMarket);
 		}
 	}
 

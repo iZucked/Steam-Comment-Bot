@@ -12,18 +12,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -46,7 +46,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
@@ -56,7 +56,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	private static String loadName = "load";
 	private static String dischargeName = "discharge";
 
-	@BeforeClass
+	@BeforeAll
 	public static void hookIn() {
 		for (final String feature : requiredFeatures) {
 			if (!LicenseFeatures.isPermitted("features:" + feature)) {
@@ -66,7 +66,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void hookOut() {
 		for (final String feature : addedFeatures) {
 			LicenseFeatures.removeFeatureEnablements(feature);
@@ -74,7 +74,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
-	@Before
+	@BeforeEach
 	public void constructor() throws Exception {
 
 		scenarioDataProvider = importReferenceData();
@@ -98,7 +98,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
 	}
 
-	@After
+	@AfterEach
 	public void destructor() {
 		lngScenarioModel = null;
 		scenarioModelFinder = null;
@@ -119,7 +119,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_higher_price_worthwhile_48hours() throws Exception {
 
 		// Create the required basic elements
@@ -162,7 +162,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_higher_price_48_hours_too_costly() throws Exception {
 
 		// Create the required basic elements
@@ -205,7 +205,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_higher_price_800hrs_too_costly() throws Exception {
 
 		// Create the required basic elements
@@ -248,7 +248,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_higher_price_800hrs_worthwhile() throws Exception {
 
 		// Create the required basic elements
@@ -291,7 +291,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_DL_higher_price_800hrs_worthwhile() throws Exception {
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
@@ -335,7 +335,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_DL_higher_price_800hrs_too_costly() throws Exception {
 
 		// Create the required basic elements
@@ -391,8 +391,8 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 			assert load != null;
 			assert discharge != null;
 
-			Assert.assertEquals(loadPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFLoadSlot()), 0.000001);
-			Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
+			Assertions.assertEquals(loadPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFLoadSlot()), 0.000001);
+			Assertions.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
 		},
 				/*
 				 * Include correct time windows scheduler

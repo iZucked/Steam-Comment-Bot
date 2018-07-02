@@ -12,19 +12,17 @@ import java.time.YearMonth;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
@@ -41,7 +39,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PeriodOptimiserTest {
 
 	public static final boolean OUTPUT_SCENARIOS = false;
@@ -54,24 +52,24 @@ public class PeriodOptimiserTest {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 
 		// Check the prices are correct rather than specific slot instances.
-		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
 
-		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
 		tester.optimise();
 
-		Assert.assertEquals("20.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
 
-		Assert.assertEquals("5.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 	}
 
 	@Test
@@ -79,24 +77,24 @@ public class PeriodOptimiserTest {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 
 		// Check the prices are correct rather than specific slot instances.
-		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
 
-		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
 		tester.periodOptimise(LocalDate.of(2013, 6, 1), DateAndCurveHelper.createYearMonth(2015, 10));
 
-		Assert.assertEquals("20.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
 
-		Assert.assertEquals("5.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 	}
 
 	@Test
@@ -105,24 +103,24 @@ public class PeriodOptimiserTest {
 				DefaultScenarioCreator.createLocalDateTime(2014, 7, 30, 0), DefaultScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
 
 		// Check the prices are correct rather than specific slot instances.
-		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
 
-		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
 		tester.periodOptimise(LocalDate.of(2014, 9, 1), DateAndCurveHelper.createYearMonth(2014, 10));
 
-		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
 
-		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 	}
 
 	/**
@@ -135,24 +133,24 @@ public class PeriodOptimiserTest {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 
 		// Check the prices are correct rather than specific slot instances.
-		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
 
-		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
 		tester.periodOptimise(LocalDate.of(2014, 9, 1), DateAndCurveHelper.createYearMonth(2014, 10));
 
-		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
 
-		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 	}
 
 	/**
@@ -182,23 +180,23 @@ public class PeriodOptimiserTest {
 		tester.cargoB3.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[0].getVessel());
 
 		// Check the prices are correct rather than specific slot instances.
-		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
 
-		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(0).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(0).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB1.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB2.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
 
 		// Pass in null to disable opt range
 		tester.periodOptimise(LocalDate.of(2014, 8, 1), DateAndCurveHelper.createYearMonth(2014, 9));
-		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
 
-		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(0).getPriceExpression());
-		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(0).getPriceExpression());
-		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB1.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("5.0", tester.cargoB2.getSlots().get(0).getPriceExpression());
+		Assertions.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
 	}
 
 	/**
@@ -359,7 +357,7 @@ public class PeriodOptimiserTest {
 				}
 			} catch (final Exception er) {
 				// this exception should not occur
-				// Assert.fail("Scenario runner failed to initialise scenario");
+				// Assertions.fail("Scenario runner failed to initialise scenario");
 				throw er;
 			} finally {
 				executorService.shutdownNow();
@@ -406,7 +404,7 @@ public class PeriodOptimiserTest {
 			} catch (final Exception er) {
 				er.printStackTrace();
 				// this exception should not occur
-				// Assert.fail("Scenario runner failed to initialise scenario: " + er.getMessage());
+				// Assertions.fail("Scenario runner failed to initialise scenario: " + er.getMessage());
 				throw er;
 			} finally {
 				executorService.shutdownNow();

@@ -10,8 +10,8 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.ui.test.model.ModelFactory;
 import com.mmxlabs.models.ui.test.model.ModelRoot;
@@ -39,11 +39,11 @@ public class DialogEcoreCopierTest {
 		final SimpleObject copy = (SimpleObject) copier.copy(simpleObject);
 		copier.record();
 
-		Assert.assertEquals(simpleObject.getAttribute(), copy.getAttribute());
+		Assertions.assertEquals(simpleObject.getAttribute(), copy.getAttribute());
 		copy.setAttribute(newValue);
 
-		Assert.assertEquals(originalValue, simpleObject.getAttribute());
-		Assert.assertEquals(newValue, copy.getAttribute());
+		Assertions.assertEquals(originalValue, simpleObject.getAttribute());
+		Assertions.assertEquals(newValue, copy.getAttribute());
 
 		
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory();
@@ -53,15 +53,15 @@ public class DialogEcoreCopierTest {
 
 		cmd.execute();
 
-		Assert.assertEquals(newValue, simpleObject.getAttribute());
+		Assertions.assertEquals(newValue, simpleObject.getAttribute());
 
 		cmd.undo();
 
-		Assert.assertEquals(originalValue, simpleObject.getAttribute());
+		Assertions.assertEquals(originalValue, simpleObject.getAttribute());
 
 		cmd.redo();
 
-		Assert.assertEquals(newValue, simpleObject.getAttribute());
+		Assertions.assertEquals(newValue, simpleObject.getAttribute());
 
 	}
 
@@ -82,17 +82,17 @@ public class DialogEcoreCopierTest {
 		singleReference1.setMultipleReference(multipleReference);
 		singleReference2.setMultipleReference(multipleReference);
 
-		Assert.assertEquals(2, multipleReference.getSingleReferences().size());
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
+		Assertions.assertEquals(2, multipleReference.getSingleReferences().size());
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
 
 		modelRoot.getMultipleReferences().add(multipleReference);
 		modelRoot.getSingleReferences().add(singleReference1);
 		modelRoot.getSingleReferences().add(singleReference2);
 
-		Assert.assertEquals(modelRoot, singleReference1.getModelRoot());
-		Assert.assertEquals(modelRoot, singleReference2.getModelRoot());
-		Assert.assertEquals(modelRoot, multipleReference.getModelRoot());
+		Assertions.assertEquals(modelRoot, singleReference1.getModelRoot());
+		Assertions.assertEquals(modelRoot, singleReference2.getModelRoot());
+		Assertions.assertEquals(modelRoot, multipleReference.getModelRoot());
 
 		final MultipleReference copyMultipleReference = (MultipleReference) copier.copy(multipleReference);
 		final SingleReference copySingleReference1 = (SingleReference) copier.copy(singleReference1);
@@ -101,22 +101,22 @@ public class DialogEcoreCopierTest {
 		copier.record();
 
 		// Check original has not changed
-		Assert.assertEquals(2, multipleReference.getSingleReferences().size());
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
-		Assert.assertEquals(multipleReference, singleReference1.getMultipleReference());
-		Assert.assertEquals(multipleReference, singleReference2.getMultipleReference());
+		Assertions.assertEquals(2, multipleReference.getSingleReferences().size());
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
+		Assertions.assertEquals(multipleReference, singleReference1.getMultipleReference());
+		Assertions.assertEquals(multipleReference, singleReference2.getMultipleReference());
 
-		Assert.assertEquals(modelRoot, singleReference1.getModelRoot());
-		Assert.assertEquals(modelRoot, singleReference2.getModelRoot());
-		Assert.assertEquals(modelRoot, multipleReference.getModelRoot());
+		Assertions.assertEquals(modelRoot, singleReference1.getModelRoot());
+		Assertions.assertEquals(modelRoot, singleReference2.getModelRoot());
+		Assertions.assertEquals(modelRoot, multipleReference.getModelRoot());
 
 		// Check copy is correctly hooked up
-		Assert.assertEquals(2, copyMultipleReference.getSingleReferences().size());
-		Assert.assertTrue(copyMultipleReference.getSingleReferences().contains(copySingleReference1));
-		Assert.assertTrue(copyMultipleReference.getSingleReferences().contains(copySingleReference2));
-		Assert.assertEquals(copyMultipleReference, copySingleReference1.getMultipleReference());
-		Assert.assertEquals(copyMultipleReference, copySingleReference2.getMultipleReference());
+		Assertions.assertEquals(2, copyMultipleReference.getSingleReferences().size());
+		Assertions.assertTrue(copyMultipleReference.getSingleReferences().contains(copySingleReference1));
+		Assertions.assertTrue(copyMultipleReference.getSingleReferences().contains(copySingleReference2));
+		Assertions.assertEquals(copyMultipleReference, copySingleReference1.getMultipleReference());
+		Assertions.assertEquals(copyMultipleReference, copySingleReference2.getMultipleReference());
 
 		// Do something?
 
@@ -128,59 +128,59 @@ public class DialogEcoreCopierTest {
 		cmd.execute();
 
 		// Check original has not changed
-		Assert.assertEquals(2, multipleReference.getSingleReferences().size());
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
-		Assert.assertEquals(multipleReference, singleReference1.getMultipleReference());
-		Assert.assertEquals(multipleReference, singleReference2.getMultipleReference());
-		Assert.assertEquals(modelRoot, singleReference1.getModelRoot());
-		Assert.assertEquals(modelRoot, singleReference2.getModelRoot());
-		Assert.assertEquals(modelRoot, multipleReference.getModelRoot());
+		Assertions.assertEquals(2, multipleReference.getSingleReferences().size());
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
+		Assertions.assertEquals(multipleReference, singleReference1.getMultipleReference());
+		Assertions.assertEquals(multipleReference, singleReference2.getMultipleReference());
+		Assertions.assertEquals(modelRoot, singleReference1.getModelRoot());
+		Assertions.assertEquals(modelRoot, singleReference2.getModelRoot());
+		Assertions.assertEquals(modelRoot, multipleReference.getModelRoot());
 
-		Assert.assertEquals(2, modelRoot.getSingleReferences().size());
-		Assert.assertEquals(1, modelRoot.getMultipleReferences().size());
+		Assertions.assertEquals(2, modelRoot.getSingleReferences().size());
+		Assertions.assertEquals(1, modelRoot.getMultipleReferences().size());
 
-		Assert.assertNull(copySingleReference1.getModelRoot());
-		Assert.assertNull(copySingleReference2.getModelRoot());
-		Assert.assertNull(copyMultipleReference.getModelRoot());
+		Assertions.assertNull(copySingleReference1.getModelRoot());
+		Assertions.assertNull(copySingleReference2.getModelRoot());
+		Assertions.assertNull(copyMultipleReference.getModelRoot());
 
 		cmd.undo();
 
 		// Check original has not changed
-		Assert.assertEquals(2, multipleReference.getSingleReferences().size());
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
-		Assert.assertEquals(multipleReference, singleReference1.getMultipleReference());
-		Assert.assertEquals(multipleReference, singleReference2.getMultipleReference());
-		Assert.assertEquals(modelRoot, singleReference1.getModelRoot());
-		Assert.assertEquals(modelRoot, singleReference2.getModelRoot());
-		Assert.assertEquals(modelRoot, multipleReference.getModelRoot());
+		Assertions.assertEquals(2, multipleReference.getSingleReferences().size());
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
+		Assertions.assertEquals(multipleReference, singleReference1.getMultipleReference());
+		Assertions.assertEquals(multipleReference, singleReference2.getMultipleReference());
+		Assertions.assertEquals(modelRoot, singleReference1.getModelRoot());
+		Assertions.assertEquals(modelRoot, singleReference2.getModelRoot());
+		Assertions.assertEquals(modelRoot, multipleReference.getModelRoot());
 
-		Assert.assertEquals(2, modelRoot.getSingleReferences().size());
-		Assert.assertEquals(1, modelRoot.getMultipleReferences().size());
+		Assertions.assertEquals(2, modelRoot.getSingleReferences().size());
+		Assertions.assertEquals(1, modelRoot.getMultipleReferences().size());
 
-		Assert.assertNull(copySingleReference1.getModelRoot());
-		Assert.assertNull(copySingleReference2.getModelRoot());
-		Assert.assertNull(copyMultipleReference.getModelRoot());
+		Assertions.assertNull(copySingleReference1.getModelRoot());
+		Assertions.assertNull(copySingleReference2.getModelRoot());
+		Assertions.assertNull(copyMultipleReference.getModelRoot());
 
 		cmd.redo();
 
 		// Check original has not changed
-		Assert.assertEquals(2, multipleReference.getSingleReferences().size());
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
-		Assert.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
-		Assert.assertEquals(multipleReference, singleReference1.getMultipleReference());
-		Assert.assertEquals(multipleReference, singleReference2.getMultipleReference());
-		Assert.assertEquals(modelRoot, singleReference1.getModelRoot());
-		Assert.assertEquals(modelRoot, singleReference2.getModelRoot());
-		Assert.assertEquals(modelRoot, multipleReference.getModelRoot());
+		Assertions.assertEquals(2, multipleReference.getSingleReferences().size());
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference1));
+		Assertions.assertTrue(multipleReference.getSingleReferences().contains(singleReference2));
+		Assertions.assertEquals(multipleReference, singleReference1.getMultipleReference());
+		Assertions.assertEquals(multipleReference, singleReference2.getMultipleReference());
+		Assertions.assertEquals(modelRoot, singleReference1.getModelRoot());
+		Assertions.assertEquals(modelRoot, singleReference2.getModelRoot());
+		Assertions.assertEquals(modelRoot, multipleReference.getModelRoot());
 
-		Assert.assertNull(copySingleReference1.getModelRoot());
-		Assert.assertNull(copySingleReference2.getModelRoot());
-		Assert.assertNull(copyMultipleReference.getModelRoot());
+		Assertions.assertNull(copySingleReference1.getModelRoot());
+		Assertions.assertNull(copySingleReference2.getModelRoot());
+		Assertions.assertNull(copyMultipleReference.getModelRoot());
 
-		Assert.assertEquals(2, modelRoot.getSingleReferences().size());
-		Assert.assertEquals(1, modelRoot.getMultipleReferences().size());
+		Assertions.assertEquals(2, modelRoot.getSingleReferences().size());
+		Assertions.assertEquals(1, modelRoot.getMultipleReferences().size());
 
 	}
 
@@ -201,24 +201,24 @@ public class DialogEcoreCopierTest {
 		final SingleContainmentReference singleContainmentReference = ModelFactory.eINSTANCE.createSingleContainmentReference();
 		singleContainmentReference.setSimpleObject(simpleObject);
 
-		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
-		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+		Assertions.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(singleContainmentReference, simpleObject.eContainer());
 
 		final SingleContainmentReference copySingleContainmentReference = (SingleContainmentReference) copier.copy(singleContainmentReference);
 		// Contained objects automatically copied.
 		final SimpleObject copySimpleObject = copySingleContainmentReference.getSimpleObject();//(SimpleObject) copier.copy(simpleObject);
 
-		Assert.assertNotSame(simpleObject, copySimpleObject);
+		Assertions.assertNotSame(simpleObject, copySimpleObject);
 		
 		copier.record();
 
 		// Check original has not changed
-		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
-		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+		Assertions.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(singleContainmentReference, simpleObject.eContainer());
 
 		// Check copy is correctly hooked up
-		Assert.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
-		Assert.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
+		Assertions.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
 
 		// Do something?
 		copySimpleObject.setAttribute(newValue);
@@ -231,41 +231,41 @@ public class DialogEcoreCopierTest {
 		cmd.execute();
 
 		// Check original has not changed
-		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
-		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+		Assertions.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(singleContainmentReference, simpleObject.eContainer());
 
 		// Check copy is correctly hooked up
-		Assert.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
-		Assert.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
+		Assertions.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
 
 		// Check attrrib change
-		Assert.assertEquals(newValue, simpleObject.getAttribute());
+		Assertions.assertEquals(newValue, simpleObject.getAttribute());
 
 		cmd.undo();
 
 		// Check original has not changed
-		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
-		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+		Assertions.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(singleContainmentReference, simpleObject.eContainer());
 
 		// Check copy is correctly hooked up
-		Assert.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
-		Assert.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
+		Assertions.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
 
 		// Check attrrib change
-		Assert.assertEquals(originalValue, simpleObject.getAttribute());
+		Assertions.assertEquals(originalValue, simpleObject.getAttribute());
 
 		cmd.redo();
 
 		// Check original has not changed
-		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
-		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+		Assertions.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(singleContainmentReference, simpleObject.eContainer());
 
 		// Check copy is correctly hooked up
-		Assert.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
-		Assert.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
+		Assertions.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
+		Assertions.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
 
 		// Check attrrib change
-		Assert.assertEquals(newValue, simpleObject.getAttribute());
+		Assertions.assertEquals(newValue, simpleObject.getAttribute());
 
 	}
 }

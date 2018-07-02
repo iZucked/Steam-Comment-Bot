@@ -7,12 +7,12 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -25,11 +25,11 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class HedgeValueTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testLoadSlotHedgeValue() throws Exception {
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 9), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
@@ -43,23 +43,23 @@ public class HedgeValueTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check single cargo
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final List<OpenSlotAllocation> openSlotAllocations = schedule.getOpenSlotAllocations();
 
-			Assert.assertEquals(1, openSlotAllocations.size());
+			Assertions.assertEquals(1, openSlotAllocations.size());
 			final OpenSlotAllocation openSlotAllocation = openSlotAllocations.get(0);
 
-			Assert.assertEquals(1000L, ScheduleModelKPIUtils.getHedgeValue(openSlotAllocation));
-			Assert.assertEquals(1000L, ScheduleModelKPIUtils.getElementPNL(openSlotAllocation));
+			Assertions.assertEquals(1000L, ScheduleModelKPIUtils.getHedgeValue(openSlotAllocation));
+			Assertions.assertEquals(1000L, ScheduleModelKPIUtils.getElementPNL(openSlotAllocation));
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDischargeSlotHedgeValue() throws Exception {
 
 		final DischargeSlot loadSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 9), portFinder.findPort("Sakai"), null, entity, "5") //
@@ -74,21 +74,21 @@ public class HedgeValueTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final List<OpenSlotAllocation> openSlotAllocations = schedule.getOpenSlotAllocations();
 
-			Assert.assertEquals(1, openSlotAllocations.size());
+			Assertions.assertEquals(1, openSlotAllocations.size());
 			final OpenSlotAllocation openSlotAllocation = openSlotAllocations.get(0);
 
-			Assert.assertEquals(1000L, ScheduleModelKPIUtils.getHedgeValue(openSlotAllocation));
-			Assert.assertEquals(1000L, ScheduleModelKPIUtils.getElementPNL(openSlotAllocation));
+			Assertions.assertEquals(1000L, ScheduleModelKPIUtils.getHedgeValue(openSlotAllocation));
+			Assertions.assertEquals(1000L, ScheduleModelKPIUtils.getElementPNL(openSlotAllocation));
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testCargoHedgeValue() throws Exception {
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -111,17 +111,17 @@ public class HedgeValueTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final List<CargoAllocation> cargoAllocations = schedule.getCargoAllocations();
 
-			Assert.assertEquals(1, cargoAllocations.size());
+			Assertions.assertEquals(1, cargoAllocations.size());
 			final CargoAllocation cargoAllocation = cargoAllocations.get(0);
 
-			Assert.assertEquals(1000L + 1500L, ScheduleModelKPIUtils.getHedgeValue(cargoAllocation));
+			Assertions.assertEquals(1000L + 1500L, ScheduleModelKPIUtils.getHedgeValue(cargoAllocation));
 
 			final long pnl = ScheduleModelKPIUtils.getElementPNL(cargoAllocation);
-			Assert.assertEquals(1000L + 1500L, pnl);
+			Assertions.assertEquals(1000L + 1500L, pnl);
 
 		});
 	}

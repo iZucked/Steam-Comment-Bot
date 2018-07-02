@@ -7,8 +7,8 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 
@@ -22,7 +22,7 @@ public class TimeWindowTesting {
 		DateAndCurveHelper helper = new DateAndCurveHelper(earlyTime, lateTime);
 
 		// Sanity check time zero
-		Assert.assertEquals(0, helper.convertTime(earlyTime));
+		Assertions.assertEquals(0, helper.convertTime(earlyTime));
 
 	}
 
@@ -37,8 +37,8 @@ public class TimeWindowTesting {
 		DateAndCurveHelper helper = new DateAndCurveHelper(earlyTime, lateTime);
 
 		// Sanity check time zero
-		Assert.assertEquals(0, helper.convertTime(startTime));
-		Assert.assertEquals(24, helper.convertTime(endTime));
+		Assertions.assertEquals(0, helper.convertTime(startTime));
+		Assertions.assertEquals(24, helper.convertTime(endTime));
 
 	}
 
@@ -53,8 +53,8 @@ public class TimeWindowTesting {
 		DateAndCurveHelper helper = new DateAndCurveHelper(earlyTime, lateTime);
 
 		// Sanity check time zero
-		Assert.assertEquals(0, helper.convertTime(startTime));
-		Assert.assertEquals(24, helper.convertTime(endTime));
+		Assertions.assertEquals(0, helper.convertTime(startTime));
+		Assertions.assertEquals(24, helper.convertTime(endTime));
 	}
 
 }

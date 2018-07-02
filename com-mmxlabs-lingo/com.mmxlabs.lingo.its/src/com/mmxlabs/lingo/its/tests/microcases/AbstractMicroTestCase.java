@@ -11,8 +11,8 @@ import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
@@ -90,7 +90,7 @@ public abstract class AbstractMicroTestCase {
 		return importer.doImport();
 	}
 
-	@Before
+	@BeforeEach
 	public void constructor() throws Exception {
 
 		scenarioDataProvider = importReferenceData();
@@ -132,7 +132,7 @@ public abstract class AbstractMicroTestCase {
 		return commercialModelFinder.findEntity("Shipping");
 	}
 
-	@After
+	@AfterEach
 	public void destructor() {
 		lngScenarioModel = null;
 		scenarioModelFinder = null;

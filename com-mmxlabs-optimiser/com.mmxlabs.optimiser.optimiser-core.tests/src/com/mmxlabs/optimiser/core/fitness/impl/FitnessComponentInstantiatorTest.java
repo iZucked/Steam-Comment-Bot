@@ -12,8 +12,8 @@ package com.mmxlabs.optimiser.core.fitness.impl;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -27,7 +27,7 @@ public class FitnessComponentInstantiatorTest {
 		final FitnessComponentInstantiator inst = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> components = inst.instantiateFitnesses(registry);
 
-		Assert.assertTrue(components.isEmpty());
+		Assertions.assertTrue(components.isEmpty());
 	}
 
 	@Test
@@ -40,9 +40,9 @@ public class FitnessComponentInstantiatorTest {
 		final FitnessComponentInstantiator inst = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> components = inst.instantiateFitnesses(registry);
 
-		Assert.assertEquals(1, components.size());
+		Assertions.assertEquals(1, components.size());
 
-		Assert.assertTrue(components.get(0) instanceof MockFitnessComponent);
+		Assertions.assertTrue(components.get(0) instanceof MockFitnessComponent);
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class FitnessComponentInstantiatorTest {
 		final List<String> names = Collections.emptyList();
 		final List<IFitnessComponent> components = inst.instantiateFitnesses(registry, names);
 
-		Assert.assertTrue(components.isEmpty());
+		Assertions.assertTrue(components.isEmpty());
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class FitnessComponentInstantiatorTest {
 		final FitnessComponentInstantiator inst = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> components = inst.instantiateFitnesses(registry, Collections.singletonList("Unknown"));
 
-		Assert.assertEquals(0, components.size());
+		Assertions.assertEquals(0, components.size());
 	}
 
 	@Test
@@ -76,8 +76,8 @@ public class FitnessComponentInstantiatorTest {
 		final FitnessComponentInstantiator inst = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> components = inst.instantiateFitnesses(registry, Collections.singletonList("component"));
 
-		Assert.assertEquals(1, components.size());
+		Assertions.assertEquals(1, components.size());
 
-		Assert.assertTrue(components.get(0) instanceof MockFitnessComponent);
+		Assertions.assertTrue(components.get(0) instanceof MockFitnessComponent);
 	}
 }

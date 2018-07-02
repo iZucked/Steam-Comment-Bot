@@ -7,8 +7,8 @@ package com.mmxlabs.models.lng.migration.units;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -21,7 +21,7 @@ public abstract class AbstractMigrationTestClass {
 
 	private static ServiceRegistration<IScenarioCipherProvider> cipherServiceRef = null;
 
-	@BeforeClass
+	@BeforeAll
 	public static void registerCipherProvider() {
 		final Bundle bundle = FrameworkUtil.getBundle(AbstractMigrationTestClass.class);
 		if (bundle != null) {
@@ -32,7 +32,7 @@ public abstract class AbstractMigrationTestClass {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void dregisterCipherProvider() {
 		if (cipherServiceRef != null) {
 			cipherServiceRef.unregister();

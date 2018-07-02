@@ -6,8 +6,8 @@ package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -35,8 +35,8 @@ public class InsertDESPurchaseMoveTest {
 
 		final InsertDESPurchaseMove move = new InsertDESPurchaseMove(resourceDESPurchase, elementDESPurchase, elementDESSale, null);
 
-		Assert.assertEquals(1, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceDESPurchase));
+		Assertions.assertEquals(1, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceDESPurchase));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementDESPurchase, elementDESSale);
@@ -50,12 +50,12 @@ public class InsertDESPurchaseMoveTest {
 
 		move.apply(sequences);
 
-		Assert.assertTrue(modifiableUnusedSequences.isEmpty());
+		Assertions.assertTrue(modifiableUnusedSequences.isEmpty());
 
-		Assert.assertSame(elementDESPurchaseStart, sequenceA.get(0));
-		Assert.assertSame(elementDESPurchase, sequenceA.get(1));
-		Assert.assertSame(elementDESSale, sequenceA.get(2));
-		Assert.assertSame(elementDESPurchaseEnd, sequenceA.get(3));
+		Assertions.assertSame(elementDESPurchaseStart, sequenceA.get(0));
+		Assertions.assertSame(elementDESPurchase, sequenceA.get(1));
+		Assertions.assertSame(elementDESSale, sequenceA.get(2));
+		Assertions.assertSame(elementDESPurchaseEnd, sequenceA.get(3));
 	}
 
 	@Test
@@ -75,9 +75,9 @@ public class InsertDESPurchaseMoveTest {
 
 		final InsertDESPurchaseMove move = new InsertDESPurchaseMove(resourceDESPurchase, elementDESPurchase, elementDESSale, resourceCurrentDESSale);
 
-		Assert.assertEquals(2, move.getAffectedResources().size());
-		Assert.assertTrue(move.getAffectedResources().contains(resourceDESPurchase));
-		Assert.assertTrue(move.getAffectedResources().contains(resourceCurrentDESSale));
+		Assertions.assertEquals(2, move.getAffectedResources().size());
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceDESPurchase));
+		Assertions.assertTrue(move.getAffectedResources().contains(resourceCurrentDESSale));
 
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
 		final List<ISequenceElement> modifiableUnusedSequences = Lists.newArrayList(elementDESPurchase);
@@ -95,13 +95,13 @@ public class InsertDESPurchaseMoveTest {
 
 		move.apply(sequences);
 
-		Assert.assertTrue(modifiableUnusedSequences.isEmpty());
-		Assert.assertEquals(0, sequenceB.size());
+		Assertions.assertTrue(modifiableUnusedSequences.isEmpty());
+		Assertions.assertEquals(0, sequenceB.size());
 
-		Assert.assertSame(elementDESPurchaseStart, sequenceA.get(0));
-		Assert.assertSame(elementDESPurchase, sequenceA.get(1));
-		Assert.assertSame(elementDESSale, sequenceA.get(2));
-		Assert.assertSame(elementDESPurchaseEnd, sequenceA.get(3));
+		Assertions.assertSame(elementDESPurchaseStart, sequenceA.get(0));
+		Assertions.assertSame(elementDESPurchase, sequenceA.get(1));
+		Assertions.assertSame(elementDESSale, sequenceA.get(2));
+		Assertions.assertSame(elementDESPurchaseEnd, sequenceA.get(3));
 	}
 
 }

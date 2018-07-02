@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -19,10 +19,10 @@ public class HashMapPortTypeEditorTest {
 		final HashMapPortTypeEditor editor = new HashMapPortTypeEditor();
 
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
-		Assert.assertSame(PortType.Unknown, editor.getPortType(element));
+		Assertions.assertSame(PortType.Unknown, editor.getPortType(element));
 
 		editor.setPortType(element, PortType.Waypoint);
 
-		Assert.assertSame(PortType.Waypoint, editor.getPortType(element));
+		Assertions.assertSame(PortType.Waypoint, editor.getPortType(element));
 	}
 }

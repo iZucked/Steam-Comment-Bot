@@ -7,7 +7,7 @@ Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-core.tests
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 4.6.10.qualifier
 Fragment-Host: com.mmxlabs.optimiser.optimiser-core
-Require-Bundle: org.junit;bundle-version="4.8.2",
+Require-Bundle: org.junit.jupiter.api;bundle-version="5.0.0",
  org.mockito.mockito-core;bundle-version="1.9.5",
  org.slf4j.api;bundle-version="1.6.4",
  ch.qos.logback.classic;bundle-version="1.0.0",

@@ -7,12 +7,12 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -25,11 +25,11 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 
 @SuppressWarnings({ "unused", "null" })
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class CancellationFeesTests extends AbstractMicroTestCase {
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testLoadSlotCancellationFee() throws Exception {
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2015, 12, 9), portFinder.findPort("Point Fortin"), null, entity, "5", null) //
@@ -43,24 +43,24 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check single cargo
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final List<OpenSlotAllocation> openSlotAllocations = schedule.getOpenSlotAllocations();
 
-			Assert.assertEquals(1, openSlotAllocations.size());
+			Assertions.assertEquals(1, openSlotAllocations.size());
 			final OpenSlotAllocation openSlotAllocation = openSlotAllocations.get(0);
 
 			final long cancellationFees = ScheduleModelKPIUtils.getCancellationFees(openSlotAllocation);
-			Assert.assertEquals(1000L, cancellationFees);
+			Assertions.assertEquals(1000L, cancellationFees);
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDischargeSlotCancellationFee() throws Exception {
 
 		final DischargeSlot loadSlot = cargoModelBuilder.makeDESSale("D2", LocalDate.of(2015, 12, 9), portFinder.findPort("Sakai"), null, entity, "5") //
@@ -75,21 +75,21 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final List<OpenSlotAllocation> openSlotAllocations = schedule.getOpenSlotAllocations();
 
-			Assert.assertEquals(1, openSlotAllocations.size());
+			Assertions.assertEquals(1, openSlotAllocations.size());
 			final OpenSlotAllocation openSlotAllocation = openSlotAllocations.get(0);
 
 			final long cancellationFees = ScheduleModelKPIUtils.getCancellationFees(openSlotAllocation);
-			Assert.assertEquals(1000L, cancellationFees);
+			Assertions.assertEquals(1000L, cancellationFees);
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testLoadSlotContractCancellationFee() throws Exception {
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("Purchase", entity, "5");
@@ -105,24 +105,24 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check single cargo
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final List<OpenSlotAllocation> openSlotAllocations = schedule.getOpenSlotAllocations();
 
-			Assert.assertEquals(1, openSlotAllocations.size());
+			Assertions.assertEquals(1, openSlotAllocations.size());
 			final OpenSlotAllocation openSlotAllocation = openSlotAllocations.get(0);
 
 			final long cancellationFees = ScheduleModelKPIUtils.getCancellationFees(openSlotAllocation);
-			Assert.assertEquals(1000L, cancellationFees);
+			Assertions.assertEquals(1000L, cancellationFees);
 
 		});
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testDischargeSlotContractCancellationFee() throws Exception {
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("Sales", entity, "5");
@@ -139,15 +139,15 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
-			Assert.assertNotNull(schedule);
+			Assertions.assertNotNull(schedule);
 
 			final List<OpenSlotAllocation> openSlotAllocations = schedule.getOpenSlotAllocations();
 
-			Assert.assertEquals(1, openSlotAllocations.size());
+			Assertions.assertEquals(1, openSlotAllocations.size());
 			final OpenSlotAllocation openSlotAllocation = openSlotAllocations.get(0);
 
 			final long cancellationFees = ScheduleModelKPIUtils.getCancellationFees(openSlotAllocation);
-			Assert.assertEquals(1000L, cancellationFees);
+			Assertions.assertEquals(1000L, cancellationFees);
 
 		});
 	}

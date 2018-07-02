@@ -7,8 +7,8 @@ package com.mmxlabs.optimiser.core.constraints.impl;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
@@ -21,11 +21,11 @@ public class ConstraintCheckerRegistryTest {
 		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
 		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
 
-		Assert.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
+		Assertions.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
 
 		registry.registerConstraintCheckerFactory(factory1);
 
-		Assert.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
+		Assertions.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
 	}
 
 	@Test
@@ -34,31 +34,31 @@ public class ConstraintCheckerRegistryTest {
 		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
 		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
 
-		Assert.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
+		Assertions.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
 
 		registry.registerConstraintCheckerFactory(factory1);
 
-		Assert.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
+		Assertions.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
 
 		registry.deregisterConstraintCheckerFactory(factory1);
 
-		Assert.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
+		Assertions.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
 	}
 
-	@Test(expected = RuntimeException.class)
+	@Test
 	public void testRegisterConstraintCheckerFactory2() {
 
 		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
 		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
 		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory("factory1");
 
-		Assert.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
+		Assertions.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
 
 		registry.registerConstraintCheckerFactory(factory1);
 
-		Assert.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
+		Assertions.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
 
-		registry.registerConstraintCheckerFactory(factory2);
+		Assertions.assertThrows(RuntimeException.class, () -> registry.registerConstraintCheckerFactory(factory2));
 	}
 
 	@Test
@@ -76,11 +76,11 @@ public class ConstraintCheckerRegistryTest {
 
 		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registry.getConstraintCheckerFactories();
 
-		Assert.assertEquals(3, constraintCheckerFactories.size());
+		Assertions.assertEquals(3, constraintCheckerFactories.size());
 
-		Assert.assertTrue(constraintCheckerFactories.contains(factory1));
-		Assert.assertTrue(constraintCheckerFactories.contains(factory2));
-		Assert.assertTrue(constraintCheckerFactories.contains(factory3));
+		Assertions.assertTrue(constraintCheckerFactories.contains(factory1));
+		Assertions.assertTrue(constraintCheckerFactories.contains(factory2));
+		Assertions.assertTrue(constraintCheckerFactories.contains(factory3));
 	}
 
 	@Test
@@ -99,10 +99,10 @@ public class ConstraintCheckerRegistryTest {
 		final List<String> names = CollectionsUtil.makeArrayList("factory3", "factory2");
 
 		final Collection<IConstraintCheckerFactory> constraintCheckersFactories = registery.getConstraintCheckerFactories(names);
-		Assert.assertEquals(2, constraintCheckersFactories.size());
+		Assertions.assertEquals(2, constraintCheckersFactories.size());
 
-		Assert.assertTrue(constraintCheckersFactories.contains(factory3));
-		Assert.assertTrue(constraintCheckersFactories.contains(factory2));
+		Assertions.assertTrue(constraintCheckersFactories.contains(factory3));
+		Assertions.assertTrue(constraintCheckersFactories.contains(factory2));
 	}
 
 	@Test
@@ -121,9 +121,9 @@ public class ConstraintCheckerRegistryTest {
 		final List<String> names = CollectionsUtil.makeArrayList("factory3", "factory3");
 
 		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registery.getConstraintCheckerFactories(names);
-		Assert.assertEquals(1, constraintCheckerFactories.size());
+		Assertions.assertEquals(1, constraintCheckerFactories.size());
 
-		Assert.assertTrue(constraintCheckerFactories.contains(factory3));
+		Assertions.assertTrue(constraintCheckerFactories.contains(factory3));
 	}
 
 	@Test
@@ -143,10 +143,10 @@ public class ConstraintCheckerRegistryTest {
 
 		final Collection<IConstraintCheckerFactory> constraintFactories = registery.getConstraintCheckerFactories(names);
 
-		Assert.assertEquals(2, constraintFactories.size());
+		Assertions.assertEquals(2, constraintFactories.size());
 
-		Assert.assertTrue(constraintFactories.contains(factory1));
-		Assert.assertTrue(constraintFactories.contains(factory3));
+		Assertions.assertTrue(constraintFactories.contains(factory1));
+		Assertions.assertTrue(constraintFactories.contains(factory3));
 	}
 
 	@Test
@@ -165,11 +165,11 @@ public class ConstraintCheckerRegistryTest {
 
 		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registery.getConstraintCheckerFactories();
 
-		Assert.assertEquals(3, constraintCheckerFactories.size());
+		Assertions.assertEquals(3, constraintCheckerFactories.size());
 
-		Assert.assertTrue(constraintCheckerFactories.contains(factory1));
-		Assert.assertTrue(constraintCheckerFactories.contains(factory2));
-		Assert.assertTrue(constraintCheckerFactories.contains(factory3));
+		Assertions.assertTrue(constraintCheckerFactories.contains(factory1));
+		Assertions.assertTrue(constraintCheckerFactories.contains(factory2));
+		Assertions.assertTrue(constraintCheckerFactories.contains(factory3));
 	}
 
 }

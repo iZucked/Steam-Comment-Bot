@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -33,7 +33,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * @author Adam
  * 
  */
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class VesselEventExistenceTest {
 
 	private static final int dischargePrice = 1;
@@ -140,7 +140,7 @@ public class VesselEventExistenceTest {
 					final VesselEventVisit vev = (VesselEventVisit) e;
 					final VesselEvent ve = vev.getVesselEvent();
 
-					Assert.assertTrue("Input VesselEvent is in output", inputVesselEvents.contains(ve));
+					Assertions.assertTrue(inputVesselEvents.contains(ve), "Input VesselEvent is in output");
 
 					inputVesselEvents.remove(ve);
 
@@ -149,8 +149,8 @@ public class VesselEventExistenceTest {
 				}
 			}
 		}
-		Assert.assertEquals("Same number of VesselEvents in the output as in the input", inputNumOfVesselEvents, outputNumOfVesselEvents);
+		Assertions.assertEquals(inputNumOfVesselEvents, outputNumOfVesselEvents, "Same number of VesselEvents in the output as in the input");
 
-		Assert.assertEquals("All VesselEvents in output", 0, inputVesselEvents.size());
+		Assertions.assertEquals(0, inputVesselEvents.size(), "All VesselEvents in output");
 	}
 }

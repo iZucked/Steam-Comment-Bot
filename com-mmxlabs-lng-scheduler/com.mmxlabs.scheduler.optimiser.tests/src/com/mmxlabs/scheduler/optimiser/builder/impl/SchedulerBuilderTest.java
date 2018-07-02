@@ -4,11 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
 
-import static org.junit.Assert.fail;
-
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -27,7 +25,7 @@ public class SchedulerBuilderTest {
 
 	public static final boolean DEFAULT_VOLUME_LIMIT_IS_M3 = true;
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testSchedulerBuilder() {
 
@@ -35,10 +33,10 @@ public class SchedulerBuilderTest {
 		 * How to test builder? -- No access to state until we get the finished product? Perhaps a second constructor passing in DCP objects and ensure they are called correctly.
 		 */
 
-		fail("Not yet implemented");
+		Assertions.fail("Not yet implemented");
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testCreateVessel() {
 		final SimpleIndexingContext indexingContext = new SimpleIndexingContext();
@@ -58,17 +56,17 @@ public class SchedulerBuilderTest {
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, safetyHeel, 700;
 
-		Assert.assertEquals(minSpeed, vessel.getMinSpeed());
-		Assert.assertEquals(maxSpeed, vessel.getMaxSpeed());
-		Assert.assertEquals(capacity, vessel.getCargoCapacity());
-		Assert.assertEquals(safetyHeel, vessel.getSafetyHeel());
-		Assert.assertEquals(baseFuel, vessel.getTravelBaseFuel());
-		Assert.assertEquals(1000, vessel.getTravelBaseFuel().getEquivalenceFactor());
+		Assertions.assertEquals(minSpeed, vessel.getMinSpeed());
+		Assertions.assertEquals(maxSpeed, vessel.getMaxSpeed());
+		Assertions.assertEquals(capacity, vessel.getCargoCapacity());
+		Assertions.assertEquals(safetyHeel, vessel.getSafetyHeel());
+		Assertions.assertEquals(baseFuel, vessel.getTravelBaseFuel());
+		Assertions.assertEquals(1000, vessel.getTravelBaseFuel().getEquivalenceFactor());
 
-		Assert.assertEquals(35353, vessel.getWarmupTime());
-		Assert.assertEquals(10101, vessel.getCooldownVolume());
+		Assertions.assertEquals(35353, vessel.getWarmupTime());
+		Assertions.assertEquals(10101, vessel.getCooldownVolume());
 
-		fail("Not yet implemented - Internal state checks");
+		Assertions.fail("Not yet implemented - Internal state checks");
 	}
 
 	@Test
@@ -93,15 +91,15 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = createScheduleBuilder();
 		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, 0, 35353, 10101, 0, false);
-		Assert.assertEquals(baseFuel, vessel.getTravelBaseFuel());
-		Assert.assertEquals(idleBaseFuel, vessel.getIdleBaseFuel());
-		Assert.assertEquals(inPortBaseFuel, vessel.getInPortBaseFuel());
-		Assert.assertEquals(pilotLightBaseFuel, vessel.getPilotLightBaseFuel());
+		Assertions.assertEquals(baseFuel, vessel.getTravelBaseFuel());
+		Assertions.assertEquals(idleBaseFuel, vessel.getIdleBaseFuel());
+		Assertions.assertEquals(inPortBaseFuel, vessel.getInPortBaseFuel());
+		Assertions.assertEquals(pilotLightBaseFuel, vessel.getPilotLightBaseFuel());
 
-		Assert.assertEquals(1_000, vessel.getTravelBaseFuel().getEquivalenceFactor());
-		Assert.assertEquals(2_000, vessel.getIdleBaseFuel().getEquivalenceFactor());
-		Assert.assertEquals(3_000, vessel.getInPortBaseFuel().getEquivalenceFactor());
-		Assert.assertEquals(4_000, vessel.getPilotLightBaseFuel().getEquivalenceFactor());
+		Assertions.assertEquals(1_000, vessel.getTravelBaseFuel().getEquivalenceFactor());
+		Assertions.assertEquals(2_000, vessel.getIdleBaseFuel().getEquivalenceFactor());
+		Assertions.assertEquals(3_000, vessel.getInPortBaseFuel().getEquivalenceFactor());
+		Assertions.assertEquals(4_000, vessel.getPilotLightBaseFuel().getEquivalenceFactor());
 
 	}
 

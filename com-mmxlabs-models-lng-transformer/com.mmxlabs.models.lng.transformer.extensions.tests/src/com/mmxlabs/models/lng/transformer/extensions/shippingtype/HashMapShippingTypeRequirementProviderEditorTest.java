@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
@@ -26,7 +26,7 @@ public class HashMapShippingTypeRequirementProviderEditorTest {
 		provider.setPurchaseSlotDeliveryType(element1, cargoType1);
 		provider.setPurchaseSlotDeliveryType(element2, cargoType2);
 
-		Assert.assertEquals(provider.getPurchaseSlotDeliveryType(element1), cargoType1);
-		Assert.assertEquals(provider.getPurchaseSlotDeliveryType(element2), cargoType2);
+		Assertions.assertEquals(provider.getPurchaseSlotDeliveryType(element1), cargoType1);
+		Assertions.assertEquals(provider.getPurchaseSlotDeliveryType(element2), cargoType2);
 	}
 }

@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -34,7 +34,7 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 		Mockito.when(shippingTypeRequirementProviderEditor.getPurchaseSlotRequiredDeliveryType(element2)).thenReturn(CargoDeliveryType.ANY);
 
 		boolean expectedResult = (requiredType == CargoDeliveryType.ANY || requiredType == cargoType);
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1) == expectedResult);
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1) == expectedResult);
 
 		Mockito.verify(shippingTypeRequirementProviderEditor).getSalesSlotRequiredDeliveryType(element2);
 		if (requiredType != CargoDeliveryType.ANY) {
@@ -64,7 +64,7 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 		Mockito.when(shippingTypeRequirementProviderEditor.getSalesSlotDeliveryType(element2)).thenReturn(cargoType);
 
 		boolean expectedResult = (requiredType == CargoDeliveryType.ANY || requiredType == cargoType);
-		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1) == expectedResult);
+		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1) == expectedResult);
 
 		Mockito.verify(shippingTypeRequirementProviderEditor).getPurchaseSlotRequiredDeliveryType(element1);
 		if (requiredType != CargoDeliveryType.ANY) {

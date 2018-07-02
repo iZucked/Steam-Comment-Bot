@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -133,7 +133,7 @@ public class MicroTestUtils {
 				final EvaluationState evaluationState = new EvaluationState();
 				final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
 				for (final IEvaluationProcess.Phase phase : IEvaluationProcess.Phase.values()) {
-					Assert.assertTrue(process.evaluate(phase, fullSequences, evaluationState));
+					Assertions.assertTrue(process.evaluate(phase, fullSequences, evaluationState));
 				}
 				// Apply hard constraint checkers
 				for (final IEvaluatedStateConstraintChecker checker : constraintCheckers) {
@@ -147,7 +147,7 @@ public class MicroTestUtils {
 				final EvaluationState evaluationState = new EvaluationState();
 				final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
 				for (final IEvaluationProcess.Phase phase : IEvaluationProcess.Phase.values()) {
-					Assert.assertTrue(process.evaluate(phase, fullSequences, evaluationState));
+					Assertions.assertTrue(process.evaluate(phase, fullSequences, evaluationState));
 				}
 				// Apply hard constraint checkers
 				for (final IEvaluatedStateConstraintChecker checker : constraintCheckers) {
@@ -210,7 +210,7 @@ public class MicroTestUtils {
 			}
 
 		}
-		Assert.fail(String.format("Unable to find %s", cls.getName()));
+		Assertions.fail(String.format("Unable to find %s", cls.getName()));
 		throw new IllegalStateException();
 	}
 
@@ -234,7 +234,7 @@ public class MicroTestUtils {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
@@ -247,7 +247,7 @@ public class MicroTestUtils {
 				}
 			}
 		}
-		Assert.fail("Event not found");
+		Assertions.fail("Event not found");
 		throw new IllegalStateException();
 	}
 
@@ -255,7 +255,7 @@ public class MicroTestUtils {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
@@ -268,7 +268,7 @@ public class MicroTestUtils {
 				}
 			}
 		}
-		Assert.fail("Slot not found");
+		Assertions.fail("Slot not found");
 		throw new IllegalStateException();
 	}
 
@@ -276,7 +276,7 @@ public class MicroTestUtils {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Assert.assertNotNull(schedule);
+		Assertions.assertNotNull(schedule);
 
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
@@ -285,7 +285,7 @@ public class MicroTestUtils {
 				}
 			}
 		}
-		Assert.fail("End Event not found");
+		Assertions.fail("End Event not found");
 		throw new IllegalStateException();
 	}
 }

@@ -6,8 +6,8 @@ package com.mmxlabs.optimiser.core.impl;
 
 import java.util.Iterator;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.ISequence;
@@ -58,7 +58,7 @@ public class UnmodifiableSequenceWrapperTest {
 
 		Mockito.when(target.next()).thenReturn(element);
 		final ISequenceElement next = wrappedItr.next();
-		Assert.assertEquals(element, next);
+		Assertions.assertEquals(element, next);
 
 	}
 
@@ -80,7 +80,7 @@ public class UnmodifiableSequenceWrapperTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Test(expected = UnsupportedOperationException.class)
+	@Test
 	public void testIterator4() {
 
 		final Iterator<ISequenceElement> target = Mockito.mock(Iterator.class);
@@ -91,7 +91,7 @@ public class UnmodifiableSequenceWrapperTest {
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
 		final Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
-		wrappedItr.remove();
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> wrappedItr.remove());
 	}
 
 	@Test

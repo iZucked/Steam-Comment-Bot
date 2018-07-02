@@ -22,8 +22,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-import org.junit.Assert;
-import org.junit.Assume;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +68,7 @@ public class ReportTester {
 				}
 			}
 
-			Assert.assertNotNull("Target element not found", elementID);
+			Assertions.assertNotNull("Target element not found", elementID);
 			final Object pTarget = target;
 
 			// Step 1 open the view, release UI thread
@@ -77,7 +77,7 @@ public class ReportTester {
 				@Override
 				public void run() {
 					final ESelectionService selectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
-					Assert.assertNotNull(selectionService);
+					Assertions.assertNotNull(selectionService);
 					selectionService.setPostSelection(pTarget);
 				}
 			});
@@ -92,7 +92,7 @@ public class ReportTester {
 	public static void testReports(final @NonNull ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 
-		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
 		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
@@ -111,9 +111,9 @@ public class ReportTester {
 		final ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
-		Assert.assertNotNull(reportContents);
+		Assertions.assertNotNull(reportContents);
 		final String actualContents = reportContents.getStringContents();
-		Assert.assertNotNull(actualContents);
+		Assertions.assertNotNull(actualContents);
 		if (TestingModes.ReportTestMode == TestMode.Generate) {
 
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
@@ -161,7 +161,7 @@ public class ReportTester {
 
 	public static void testPinDiffReports(final ScenarioModelRecord pinInstance, final IScenarioDataProvider pinModelDataProvider, final ScenarioModelRecord refInstance,
 			final IScenarioDataProvider refModelDataProvider, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
-		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
 
@@ -177,9 +177,9 @@ public class ReportTester {
 					result[0] = generator.getStringContents(pinResult, refResult);
 				});
 
-				Assert.assertNotNull(result[0]);
+				Assertions.assertNotNull(result[0]);
 				final String actualContents = result[0];
-				Assert.assertNotNull(actualContents);
+				Assertions.assertNotNull(actualContents);
 				if (TestingModes.ReportTestMode == TestMode.Generate) {
 
 					final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
@@ -239,7 +239,7 @@ public class ReportTester {
 
 	public static void testActionPlanReport(final List<Pair<ScenarioModelRecord, IScenarioDataProvider>> orderedInstances, final URL scenarioURL, final String reportID, final String shortName,
 			final String extension) throws Exception {
-		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		final CheckedConsumer<List<ScenarioResult>, Exception> c = orderedResults -> {
 
@@ -247,9 +247,9 @@ public class ReportTester {
 
 			final IReportContents reportContents = reportTester.getActionPlanReportContents(orderedResults, reportID);
 
-			Assert.assertNotNull(reportContents);
+			Assertions.assertNotNull(reportContents);
 			final String actualContents = reportContents.getStringContents();
-			Assert.assertNotNull(actualContents);
+			Assertions.assertNotNull(actualContents);
 			if (TestingModes.ReportTestMode == TestMode.Generate) {
 
 				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
@@ -313,7 +313,7 @@ public class ReportTester {
 		if (!valid) {
 			LOG.warn("Expected " + expectedOutput);
 			LOG.warn("Actual " + actualContents);
-			Assert.assertEquals(stripWhitespace.apply(expectedOutput), stripWhitespace.apply(actualContents));
+			Assertions.assertEquals(stripWhitespace.apply(expectedOutput), stripWhitespace.apply(actualContents));
 		}
 	}
 }

@@ -12,14 +12,14 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -38,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPer
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 
 @SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 	@Override
 	protected int getThreadCount() {
@@ -50,9 +50,9 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	@Ignore("Proof of concept, no need to run generally")
+	@Disabled("Proof of concept, no need to run generally")
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void testBasicCase() throws Exception {
 
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();

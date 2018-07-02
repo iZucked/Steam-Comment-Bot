@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.constraints;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class OrderedSequenceElementsConstraintCheckerFactoryTest {
 
@@ -13,15 +13,15 @@ public class OrderedSequenceElementsConstraintCheckerFactoryTest {
 	public void testGetName() {
 
 		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory();
-		Assert.assertEquals(OrderedSequenceElementsConstraintCheckerFactory.NAME, factory.getName());
+		Assertions.assertEquals(OrderedSequenceElementsConstraintCheckerFactory.NAME, factory.getName());
 	}
 
 	@Test
 	public void testInstantiate() {
 		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory();
 		final OrderedSequenceElementsConstraintChecker checker = factory.instantiate();
-		Assert.assertNotNull(checker);
-		Assert.assertEquals(OrderedSequenceElementsConstraintCheckerFactory.NAME, checker.getName());
+		Assertions.assertNotNull(checker);
+		Assertions.assertEquals(OrderedSequenceElementsConstraintCheckerFactory.NAME, checker.getName());
 	}
 
 }

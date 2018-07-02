@@ -18,10 +18,8 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 
 import com.google.common.base.Joiner;
 import com.google.inject.AbstractModule;
@@ -52,7 +50,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  * Generic tests linked to emailed cases
  * 
  */
-@RunWith(value = Parameterized.class)
 public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimisationResultTester {
 
 	// This should only be committed as false to avoid crazy test run times.
@@ -60,19 +57,16 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 	// This should only be committed as true.
 	private static final boolean RUN_LIMITED_ITERATION_CASES = true;
 
-	protected @NonNull final String scenarioURL;
-	protected @Nullable final LocalDate periodStart;
-	protected @Nullable final YearMonth periodEnd;
-	private final boolean runGCO;
+	protected @Nullable String scenarioURL;
+	protected @Nullable LocalDate periodStart;
+	protected @Nullable YearMonth periodEnd;
+	protected boolean runGCO;
 
-	public AbstractAdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart,
-			@Nullable final YearMonth periodEnd) {
-		this(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, false);
-
+	public void init(@NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd) {
+		init(scenarioURL, periodStart, periodEnd, false);
 	}
 
-	public AbstractAdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart,
-			@Nullable final YearMonth periodEnd, final boolean runGCO) {
+	public void init(@NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd, final boolean runGCO) {
 		this.scenarioURL = scenarioURL;
 		this.periodStart = periodStart;
 		this.periodEnd = periodEnd;
@@ -88,37 +82,35 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 	@SuppressWarnings("unused")
 	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts,
 			final IOptimiserInjectorService optimiserInjectorService, String... extraHints) throws Exception {
-		Assume.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
+		Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
 
 		if (withGeneratedCharterOuts) {
-			Assume.assumeTrue(runGCO);
+			Assumptions.assumeTrue(runGCO);
 		}
 
 		if (withActionSets) {
 			// Preconditions check - ensure period, otherwise ignore test case
-			Assume.assumeTrue(periodStart != null);
-			Assume.assumeTrue(periodEnd != null);
+			Assumptions.assumeTrue(periodStart != null);
+			Assumptions.assumeTrue(periodEnd != null);
 
 			// Should match OptimisationHelper (Repeated null checks for null analysis code)
 			if (periodStart != null && periodEnd != null) {
-				Assume.assumeTrue(Months.between(periodStart, periodEnd) <= 6);
+				Assumptions.assumeTrue(Months.between(periodStart, periodEnd) <= 6);
 			}
 			if (periodStart != null && periodEnd != null) {
-				Assume.assumeTrue(Months.between(periodStart, periodEnd) < 3 || mode != SimilarityMode.LOW);
+				Assumptions.assumeTrue(Months.between(periodStart, periodEnd) < 3 || mode != SimilarityMode.LOW);
 			}
 		}
 
 		// Only run full iterations if the flag is set
-		if (limitedIterations)
-
-		{
-			Assume.assumeTrue(RUN_LIMITED_ITERATION_CASES);
+		if (limitedIterations) {
+			Assumptions.assumeTrue(RUN_LIMITED_ITERATION_CASES);
 		} else {
-			Assume.assumeTrue(RUN_FULL_ITERATION_CASES);
+			Assumptions.assumeTrue(RUN_FULL_ITERATION_CASES);
 		}
 		// Load the scenario to test
 		final URL url = getClass().getResource(scenarioURL);
-		Assert.assertNotNull(url);
+		Assertions.assertNotNull(url);
 
 		final List<String> components = new LinkedList<>();
 		if (!limitedIterations) {
@@ -165,7 +157,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			userSettings.setSimilarityMode(mode);
 
 			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
-			Assert.assertNotNull(optimisationPlan);
+			Assertions.assertNotNull(optimisationPlan);
 
 			if (limitedIterations) {
 				// Limit for quick optimisation
@@ -176,11 +168,11 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 
 			}
 			final UserSettings planUserSettings = optimisationPlan.getUserSettings();
-			Assert.assertEquals(withActionSets, planUserSettings.isBuildActionSets());
-			Assert.assertEquals(withGeneratedCharterOuts, planUserSettings.isGenerateCharterOuts());
-			Assert.assertFalse(planUserSettings.isShippingOnly());
-			Assert.assertEquals(periodStart, planUserSettings.getPeriodStartDate());
-			Assert.assertEquals(periodEnd, planUserSettings.getPeriodEnd());
+			Assertions.assertEquals(withActionSets, planUserSettings.isBuildActionSets());
+			Assertions.assertEquals(withGeneratedCharterOuts, planUserSettings.isGenerateCharterOuts());
+			Assertions.assertFalse(planUserSettings.isShippingOnly());
+			Assertions.assertEquals(periodStart, planUserSettings.getPeriodStartDate());
+			Assertions.assertEquals(periodEnd, planUserSettings.getPeriodEnd());
 
 			// scenarioRunner.initAndEval();
 
@@ -222,11 +214,11 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 							final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 							final File file2 = new File(expectedReportOutput.toURI());
 							try (FileOutputStream fos = new FileOutputStream(file2)) {
-								Assert.assertNotNull(injector);
+								Assertions.assertNotNull(injector);
 								SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 							}
 						} catch (final Exception e) {
-							Assert.fail(e.getMessage());
+							Assertions.fail(e.getMessage());
 						}
 					}
 
@@ -236,12 +228,12 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 							final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 							final File file2 = new File(expectedReportOutput.toURI());
 							try (FileInputStream fos = new FileInputStream(file2)) {
-								Assert.assertNotNull(injector);
+								Assertions.assertNotNull(injector);
 								return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
 							}
 						} catch (final Exception e) {
 							// return
-							// Assert.fail(e.getMessage());
+							// Assertions.fail(e.getMessage());
 						}
 						return null;
 					}
@@ -249,7 +241,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 					private void verify(final String type, final ISequences actual, final Injector injector) {
 						final ISequences expected = load(type, injector);
 						if (actual != null && expected != null) {
-							Assert.assertEquals(expected, actual);
+							Assertions.assertEquals(expected, actual);
 						}
 					}
 				};
@@ -259,7 +251,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			LNGScenarioRunnerCreator.withOptimisationRunner(originalScenarioDataProvider, optimisationPlan, scenarioRunner -> {
 
 				// After initial evaluation, save, reload and compare models.
-				Assert.assertTrue("Validate reloaded model is identical", TesterUtil.validateReloadedState(originalScenarioDataProvider));
+				Assertions.assertTrue(TesterUtil.validateReloadedState(originalScenarioDataProvider), "Validate reloaded model is identical");
 				if (runnerHook != null) {
 					scenarioRunner.setRunnerHook(runnerHook);
 				}

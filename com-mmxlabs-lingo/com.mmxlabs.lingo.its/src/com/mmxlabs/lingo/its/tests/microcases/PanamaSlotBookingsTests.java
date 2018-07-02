@@ -4,11 +4,11 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
 import java.time.LocalDate;
@@ -19,12 +19,12 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.Injector;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -61,7 +61,7 @@ import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
-@RunWith(value = ShiroRunner.class)
+@ExtendWith(ShiroRunner.class)
 public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 	@Override
@@ -134,7 +134,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void panamaSlotAvailableTest_Constraint() {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -180,7 +180,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void panamaSlotNoDoubleAssignmentTest() {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -242,7 +242,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void panamaSlotUnavailableTest() {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -290,7 +290,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void bookingButNoVoyageTest() {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -340,7 +340,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void nonMatchingBookingTest() {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -389,7 +389,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void bookingAssignedToSlotTest() {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -436,7 +436,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void asssignedBookingNotUsedTest() {
 
 		// map into same timezone to make expectations easier
@@ -499,7 +499,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void journeyCanBeMadeDirectTest() {
 
 		// map into same timezone to make expectations easier
@@ -550,7 +550,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void choosePanamaIfRelaxedTest() {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -602,7 +602,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void marginTest() {
 
 		// map into same timezone to make expectations easier
@@ -653,7 +653,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void windowEndTrimmingTest() {
 
 		// map into same timezone to make expectations easier
@@ -740,7 +740,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void noSuezDistanceAvailableTest() {
 
 		// map into same timezone to make expectations easier
@@ -813,7 +813,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void relaxedLimits_SouthBound_NotAvailable() {
 
 		// map into same timezone to make expectations easier
@@ -890,7 +890,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void relaxedLimits_NouthBound_Available() {
 
 		// map into same timezone to make expectations easier
@@ -968,7 +968,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void northbound_cant_direct_can_panama() {
 
 		// map into same timezone to make expectations easier
@@ -1050,7 +1050,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void northbound_cant_direct_cant_panama() {
 
 		// map into same timezone to make expectations easier
@@ -1126,7 +1126,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Category({ MicroTest.class })
+	@Tag(TestCategories.MICRO_TEST)
 	public void relaxedLimits_SouthBound_Available() {
 
 		// map into same timezone to make expectations easier

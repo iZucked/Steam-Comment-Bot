@@ -6,8 +6,8 @@ package com.mmxlabs.common.impl;
 
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
 
@@ -29,11 +29,11 @@ public class MappingTransformerTest {
 
 		final MappingTransformer<Object, String> transformer = new MappingTransformer<>(map);
 
-		Assert.assertSame(map, transformer.getMapping());
+		Assertions.assertSame(map, transformer.getMapping());
 
-		Assert.assertSame(s1, transformer.transform(obj1));
-		Assert.assertSame(s2, transformer.transform(obj2));
-		Assert.assertSame(s3, transformer.transform(obj3));
-		Assert.assertNull(transformer.transform(obj4));
+		Assertions.assertSame(s1, transformer.transform(obj1));
+		Assertions.assertSame(s2, transformer.transform(obj2));
+		Assertions.assertSame(s3, transformer.transform(obj3));
+		Assertions.assertNull(transformer.transform(obj4));
 	}
 }
