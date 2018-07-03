@@ -62,6 +62,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -207,6 +208,9 @@ public class InventoryReport extends ViewPart {
 				createColumn("Type", 150, o -> o.type);
 				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
+				createColumn("Vessel", 150, o -> o.vessel);
+				createColumn("D-ID", 150, o -> o.dischargeId);
+				createColumn("Port", 150, o -> o.dischargePort);
 				tableItem.setControl(tableViewer.getControl());
 
 			}
@@ -311,28 +315,27 @@ public class InventoryReport extends ViewPart {
 								inventoryEvents.getEvents().forEach(e -> {
 									String type = "Unknown";
 									if (e.getSlotAllocation() != null) {
-										type = "SCHEDULE";
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity());
-										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-										if (tableLevels.isEmpty() && firstInventoryDataFinal.isPresent()) {
-											assert firstInventoryDataFinal.get() == e;
-										}
-										tableLevels.add(lvl);
+										type = "Cargo";
+										final String vessel = e.getSlotAllocation().getCargoAllocation().getEvents().get(0).getSequence().getName();
 
-									} else if (e.getOpenSlotAllocation() != null) {
-										type = "OPEN";
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity());
+										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getName();
+										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getPort().getName();
+										
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId, dischargePort);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-										if (tableLevels.isEmpty() && firstInventoryDataFinal.isPresent()) {
-											assert firstInventoryDataFinal.get() == e;
-										}
+										
+										tableLevels.add(lvl);
+									} else if (e.getOpenSlotAllocation() != null) {
+										type = "Open";
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null);
+										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										
 										tableLevels.add(lvl);
 									} else if (e.getEvent() != null) {
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity());
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-										if (tableLevels.isEmpty() && firstInventoryDataFinal.isPresent()) {
-											assert firstInventoryDataFinal.get() == e;
-										}
+										InventoryChangeEvent first = firstInventoryDataFinal.get();
+										
 										tableLevels.add(lvl);
 									}
 								});
@@ -564,20 +567,29 @@ public class InventoryReport extends ViewPart {
 		public final LocalDate date;
 		public final int changeInM3;
 		public final String type;
+		public final String vessel;
+		public final String dischargeId;
+		public final String dischargePort;
+		
 		public int runningTotal = 0;
 		public boolean breach = false;
 
-		public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3) {
+		public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort) {
 			this.date = date;
 			this.type = type.toString();
 			this.changeInM3 = changeInM3;
-
+			this.vessel = vessel;
+			this.dischargeId = dischargeId;
+			this.dischargePort = dischargePort;
 		}
 
-		public InventoryLevel(final LocalDate date, final String type, final int changeInM3) {
+		public InventoryLevel(final LocalDate date, final String type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort) {
 			this.date = date;
 			this.type = type;
 			this.changeInM3 = changeInM3;
+			this.vessel = vessel;
+			this.dischargeId = dischargeId;
+			this.dischargePort = dischargePort;
 		}
 
 	}

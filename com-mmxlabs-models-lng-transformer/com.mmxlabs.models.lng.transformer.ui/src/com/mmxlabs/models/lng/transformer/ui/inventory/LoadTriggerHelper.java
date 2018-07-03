@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui.inventory;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -58,7 +59,8 @@ public class LoadTriggerHelper {
 			List<SlotAllocation> loadSlotsToConsider = getSortedFilteredLoadSlots(model, start, inventory, insAndOuts);
 			processWithLoadsAndStartDate(loadSlotsToConsider, insAndOuts, start);
 			// create new Loads
-			standardLoadTrigger(model, port, insAndOuts, cargoVolume, start);
+			//standardLoadTrigger(model, port, insAndOuts, cargoVolume, start);
+			moveAndMatchSlotsLoadTrigger(model, port, insAndOuts, cargoVolume, start);
 		}
 	}
 
@@ -115,9 +117,40 @@ public class LoadTriggerHelper {
 		}
 		
 		createLoadSlots(model, port, loadDates, cargoVolume, start, false);
-		clearLoadSlots(sortedSlots, model.getCargoModel());
+		clearLoadSlots(sortedSlots, model.getCargoModel(), model);
 	}
 
+	private void moveAndMatchSlotsLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int cargoVolume, LocalDate start) {
+		List<LoadSlot> sortedSlots = model.getCargoModel().getLoadSlots().stream().filter(l->l.getPort() == port).sorted((a,b) -> a.getWindowStart().compareTo(b.getWindowStart())).collect(Collectors.toList());
+		
+		// Create all the load date
+		List<LocalDate> loadDates = new LinkedList<>();
+		int runningVolume = 0;
+		for (Entry<LocalDate, InventoryDailyEvent> entry : insAndOuts.entrySet()) {
+			runningVolume += entry.getValue().netVolumeIn;
+			if (runningVolume > entry.getValue().minVolume + cargoVolume) {
+				loadDates.add(entry.getKey());
+				runningVolume -= cargoVolume;
+			}
+		}
+		
+		// Assign the new load date to the current load slot
+		int interSize = Math.min(sortedSlots.size(), loadDates.size());
+		
+		for (int i = 0; i < interSize; i++) {
+			sortedSlots.get(i).setWindowStart(loadDates.get(i));
+		}
+		
+		// Case A: Not enough loads 
+		// Create remaining one
+		if (loadDates.size() > sortedSlots.size()) {
+			createLoadSlots(model, port, loadDates.subList(sortedSlots.size(), loadDates.size() - 1), cargoVolume, start, false);
+		} 
+		// Case B: Too many slot
+		else {
+			clearLoadSlots(sortedSlots.subList(loadDates.size(), sortedSlots.size()), model.getCargoModel(), model);
+		}
+	}
 	
 	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts) {
 		for (InventoryEventRow inventoryEventRow : events) {
@@ -189,18 +222,27 @@ public class LoadTriggerHelper {
 		clearSchedule(scenario, schedule);
 	}
 	
-	private void clearLoadSlots(Collection<LoadSlot> loadSlots, CargoModel cargoModel) {
+	private void clearLoadSlots(Collection<LoadSlot> loadSlots, CargoModel cargoModel, LNGScenarioModel scenario) {
 		for (LoadSlot loadSlot : loadSlots) {
 			Cargo cargo = loadSlot.getCargo();
+
 			if (cargo != null) {
-				loadSlot.getCargo().getSlots().clear();
-				for (Slot slot : loadSlot.getCargo().getSlots()) {
+				List<Slot> slots = new ArrayList<>(cargo.getSlots());
+				for (Slot slot : slots) {
 					slot.setCargo(null);
 				}
+				
+				if (cargo.getSlots() != null) {
+					cargo.getSlots().clear();
+				}
+				
 				cargoModel.getCargoes().remove(cargo);
 			}
 			cargoModel.getLoadSlots().remove(loadSlot);
 		}
+
+		final Schedule schedule = scenario.getScheduleModel().getSchedule();
+		clearSchedule(scenario, schedule);
 	}
 
 
