@@ -60,6 +60,14 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 	}
 
 	@Override
+	public void addMinLoadSlotsPerMonthlyPeriod(List<ILoadOption> slots, int startMonth, int period, int limit) {
+		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period));	}
+
+	@Override
+	public void addMaxLoadSlotsPerMonthlyPeriod(List<ILoadOption> slots, int startMonth, int period, int limit) {
+		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period));	}
+
+	@Override
 	public void addMinDischargeSlotsPerMonth(final List<IDischargeOption> slots, final int startMonth, final int limit) {
 		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1));
 	}
@@ -87,6 +95,16 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 	@Override
 	public void addMaxDischargeSlotsPerQuarter(final List<IDischargeOption> slots, final int startMonth, final int limit) {
 		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3));
+	}
+
+	@Override
+	public void addMinDischargeSlotsPerMonthlyPeriod(List<IDischargeOption> slots, int startMonth, int period, int limit) {
+		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period));
+	}
+
+	@Override
+	public void addMaxDischargeSlotsPerMonthlyPeriod(List<IDischargeOption> slots, int startMonth, int period, int limit) {
+		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period));
 	}
 
 	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerMonth(final List<T> slots, final int startMonth, final int limit) {

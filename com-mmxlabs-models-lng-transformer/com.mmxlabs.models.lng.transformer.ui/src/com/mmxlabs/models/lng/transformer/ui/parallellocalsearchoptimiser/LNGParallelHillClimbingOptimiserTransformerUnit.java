@@ -111,7 +111,7 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 	@Override
 	protected List<Module> createModules(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final HillClimbOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService) {
+			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
 		final List<Module> modules = new LinkedList<>();
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
@@ -127,8 +127,7 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 
 			@Override
 			protected void configure() {
-				// TODO Auto-generated method stub
-				
+				bind(CleanableExecutorService.class).toInstance(executorService);
 			}
 			
 			@Provides

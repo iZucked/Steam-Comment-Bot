@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -17,6 +16,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -50,7 +50,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 	private Injector injector;
 	
 	@Inject
-	ExecutorService executorService;
+	CleanableExecutorService executorService;
 
 	protected Pair<Integer, Long> best = new Pair<>(0, Long.MAX_VALUE);
 
@@ -208,12 +208,14 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 				incrementingRandomSeed.setSeed(acceptedSeed);
 				continue;
 			}
+			this.executorService.removeCompleted();
 		}
 		setNumberOfIterationsCompleted(numberOfMovesTried);
 		if (DEBUG) {
 			System.out.println("moves tried:"+numberOfMovesTried);
 			System.out.println("time:"+(System.currentTimeMillis()-start)/1000.0);
 		}
+		
 		return iterationsThisStep;
 	}
 

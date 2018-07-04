@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.util;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -33,6 +36,13 @@ public class SchedulerCalculationUtils {
 	public IVesselAvailability getVesselAvailabilityFromResource(@NonNull final IResource resource) {
 		return vesselProvider.getVesselAvailability(resource);
 	}
+	
+	@NonNull
+	public List<IVesselAvailability> getAllVesselAvailabilities() {
+		return vesselProvider.getSortedResources().stream()
+				.map(r->vesselProvider.getVesselAvailability(r)).collect(Collectors.toList());
+	}
+
 
 	public long getVesselCharterInRatePerDay(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
 		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, voyagePlanStartTime);

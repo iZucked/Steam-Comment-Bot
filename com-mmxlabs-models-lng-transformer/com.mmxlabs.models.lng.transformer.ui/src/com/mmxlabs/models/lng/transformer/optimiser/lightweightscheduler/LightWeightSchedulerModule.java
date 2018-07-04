@@ -25,11 +25,8 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.DefaultLightWeightPostOptimisationStateModifier;
-import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.DefaultLongTermSequenceElementFilter;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightPostOptimisationStateModifier;
-import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ISequenceElementFilter;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper.ShippingType;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightShippingRestrictionsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.DefaultPNLLightWeightFitnessFunctionFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.VesselCargoCountLightWeightFitnessFunctionFactory;
@@ -40,8 +37,9 @@ import com.mmxlabs.models.lng.transformer.optimiser.longterm.ICargoVesselRestric
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.ILongTermMatrixOptimiser;
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimisationData;
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimiserHelper;
-import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper.ShippingType;
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.webservice.WebserviceLongTermMatrixOptimiser;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -55,7 +53,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
 public class LightWeightSchedulerModule extends AbstractModule {
@@ -80,9 +77,6 @@ public class LightWeightSchedulerModule extends AbstractModule {
 	protected void configure() {
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 
-		bind(DefaultLongTermVesselSlotCountFitnessProvider.class).in(Singleton.class);
-		bind(ILongTermVesselSlotCountFitnessProvider.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
-
 		bind(HashSetLongTermSlotsEditor.class).in(Singleton.class);
 		bind(ILongTermSlotsProvider.class).to(HashSetLongTermSlotsEditor.class);
 		bind(ILongTermSlotsProviderEditor.class).to(HashSetLongTermSlotsEditor.class);
@@ -97,7 +91,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		bind(ILightWeightPostOptimisationStateModifier.class).to(DefaultLightWeightPostOptimisationStateModifier.class);
 		
 		
-		bind(ISequenceElementFilter.class).to(DefaultLongTermSequenceElementFilter.class);
+//		bind(ISequenceElementFilter.class).to(DefaultLongTermSequenceElementFilter.class);
 	}
 
 	@Provides
@@ -266,10 +260,10 @@ public class LightWeightSchedulerModule extends AbstractModule {
 
 	@Provides
 	@Named(LIGHTWEIGHT_VESSELS)
-	private List<@NonNull IVesselAvailability> getVessels(IVesselProvider vesselProvider) {
-		return vesselProvider
-				.getSortedResources()
-				.stream()
+	private List<@NonNull IVesselAvailability> getVessels(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences, IVesselProvider vesselProvider) {
+		return initialSequences
+				.getResources().stream()
+				.sorted((a,b) -> a.getName().compareTo(b.getName())) //
 				.map(v -> vesselProvider.getVesselAvailability(v))
 				.filter(v -> LightWeightOptimiserHelper.isShippedVessel(v))
 				.collect(Collectors.toList());
@@ -277,7 +271,8 @@ public class LightWeightSchedulerModule extends AbstractModule {
 
 	@Provides
 	@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT)
-	private int[] getDesiredNumberSlotsPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels, ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
+	private int[] getDesiredNumberSlotsPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels,
+			ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
 		int[] desiredVesselCargoCount = new int[vessels.size()];
 		if (vesselSlotCountFitnessProvider != null) {
 			for (int i = 0; i < vessels.size(); i++) {

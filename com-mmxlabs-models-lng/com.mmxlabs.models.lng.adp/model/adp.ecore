@@ -132,6 +132,7 @@
     <eLiterals name="MONTHLY" value="1"/>
     <eLiterals name="WEEKLY" value="2"/>
     <eLiterals name="YEARLY" value="3"/>
+    <eLiterals name="BIMONTHLY" value="4" literal="BIMONTHLY"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FlowType" eSuperTypes="#//SubProfileConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="SupplyFromFlow" eSuperTypes="#//FlowType"/>

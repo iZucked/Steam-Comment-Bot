@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.extensions.adp;
 import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,7 +32,12 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
  * @author Simon Goodall
@@ -41,6 +47,15 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 	@Inject
 	private IMaxSlotConstraintDataProviderEditor maxSlotConstraintDataTransformer;
 
+	@Inject
+	private ILongTermVesselSlotCountFitnessProviderEditor longTermVesselSlotCountFitnessProviderEditor;
+
+	@Inject
+	private IVesselProvider vesselProvider;
+	
+	@Inject
+	private SchedulerCalculationUtils scheduleCalculationUtils;
+	
 	@Inject
 	private CalendarMonthMapper calendarMonthMapper;
 
@@ -96,6 +111,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					case YEARLY:
 						maxSlotConstraintDataTransformer.addMinLoadSlotsPerYear(o_slots, startMonth, minCargoConstraint.getMinCargoes());
 						break;
+					case BIMONTHLY:
+						maxSlotConstraintDataTransformer.addMinLoadSlotsPerMonthlyPeriod(o_slots, startMonth, 2, minCargoConstraint.getMinCargoes());
+						break;
 					default:
 						throw new IllegalStateException("Unsupported interval type " + minCargoConstraint.getIntervalType());
 					}
@@ -110,6 +128,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 						break;
 					case YEARLY:
 						maxSlotConstraintDataTransformer.addMaxLoadSlotsPerYear(o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
+						break;
+					case BIMONTHLY:
+						maxSlotConstraintDataTransformer.addMaxLoadSlotsPerMonthlyPeriod(o_slots, startMonth, 2, maxCargoConstraint.getMaxCargoes());
 						break;
 					default:
 						throw new IllegalStateException("Unsupported interval type " + maxCargoConstraint.getIntervalType());
@@ -151,6 +172,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					case YEARLY:
 						maxSlotConstraintDataTransformer.addMinDischargeSlotsPerYear(o_slots, startMonth, minCargoConstraint.getMinCargoes());
 						break;
+					case BIMONTHLY:
+						maxSlotConstraintDataTransformer.addMinDischargeSlotsPerMonthlyPeriod(o_slots, startMonth, 2, minCargoConstraint.getMinCargoes());
+						break;
 					default:
 						throw new IllegalStateException("Unsupported interval type " + minCargoConstraint.getIntervalType());
 					}
@@ -166,6 +190,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					case YEARLY:
 						maxSlotConstraintDataTransformer.addMaxDischargeSlotsPerYear(o_slots, startMonth, maxCargoConstraint.getMaxCargoes());
 						break;
+					case BIMONTHLY:
+						maxSlotConstraintDataTransformer.addMaxDischargeSlotsPerMonthlyPeriod(o_slots, startMonth, 2, maxCargoConstraint.getMaxCargoes());
+						break;
 					default:
 						throw new IllegalStateException("Unsupported interval type " + maxCargoConstraint.getIntervalType());
 					}
@@ -175,15 +202,22 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 
 			}
 		}
+		handleVesselConstraints(adpModel);
 	}
 	
 	public void handleVesselConstraints(@NonNull ADPModel model) {
 		if (model.getFleetProfile() != null && model.getFleetProfile().getConstraints() != null) {
 			for (FleetConstraint fleetConstraint : model.getFleetProfile().getConstraints()) {
 				if (fleetConstraint instanceof TargetCargoesOnVesselConstraint) {
-					
+					IVessel iVessel = modelEntityMap.getOptimiserObjectNullChecked(((TargetCargoesOnVesselConstraint) fleetConstraint).getVessel(), IVessel.class);
+					List<IVesselAvailability> availabilities = scheduleCalculationUtils.getAllVesselAvailabilities()
+							.stream().filter(v->v.getVessel() == iVessel).collect(Collectors.toList());
+					for (IVesselAvailability availability : availabilities) {
+						longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(availability,
+								((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
+								(long) ((TargetCargoesOnVesselConstraint) fleetConstraint).getWeight());
+					}
 				}
-				
 			}
 		}
 	}

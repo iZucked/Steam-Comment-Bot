@@ -77,7 +77,7 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 	
 	protected abstract List<Module> createModules(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService);
+			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService);
 
 	@Override
 	@NonNull

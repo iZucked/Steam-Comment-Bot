@@ -2,7 +2,6 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 
@@ -21,6 +20,9 @@ public interface IMaxSlotConstraintDataProviderEditor extends IMaxSlotCountConst
 	void addMinLoadSlotsPerQuarter(List<ILoadOption> slots, int startMonth, int limit);
 	void addMaxLoadSlotsPerQuarter(List<ILoadOption> slots, int startMonth, int limit);
 	
+	void addMinLoadSlotsPerMonthlyPeriod(List<ILoadOption> slots, int startMonth, int period, int limit);
+	void addMaxLoadSlotsPerMonthlyPeriod(List<ILoadOption> slots, int startMonth, int period, int limit);
+
 	void addMinDischargeSlotsPerMonth(List<IDischargeOption> slots, int startMonth, int limit);
 	void addMaxDischargeSlotsPerMonth(List<IDischargeOption> slots, int startMonth, int limit);
 	
@@ -29,4 +31,7 @@ public interface IMaxSlotConstraintDataProviderEditor extends IMaxSlotCountConst
 
 	void addMinDischargeSlotsPerQuarter(List<IDischargeOption> slots, int startMonth, int limit);
 	void addMaxDischargeSlotsPerQuarter(List<IDischargeOption> slots, int startMonth, int limit);
+
+	void addMinDischargeSlotsPerMonthlyPeriod(List<IDischargeOption> slots, int startMonth, int period, int limit);
+	void addMaxDischargeSlotsPerMonthlyPeriod(List<IDischargeOption> slots, int startMonth, int period, int limit);
 }

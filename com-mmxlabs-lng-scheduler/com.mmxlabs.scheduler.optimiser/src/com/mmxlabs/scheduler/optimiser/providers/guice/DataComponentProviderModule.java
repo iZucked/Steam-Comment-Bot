@@ -59,6 +59,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
@@ -119,6 +121,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvid
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
@@ -407,5 +410,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultMaxSlotConstraintDataProviderEditor.class).in(Singleton.class);
 		bind(IMaxSlotCountConstraintDataProvider.class).to(DefaultMaxSlotConstraintDataProviderEditor.class);
 		bind(IMaxSlotConstraintDataProviderEditor.class).to(DefaultMaxSlotConstraintDataProviderEditor.class);
+		
+		bind(DefaultLongTermVesselSlotCountFitnessProvider.class).in(Singleton.class);
+		bind(ILongTermVesselSlotCountFitnessProvider.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
+		bind(ILongTermVesselSlotCountFitnessProviderEditor.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
+
 	}
 }

@@ -36,6 +36,5 @@ public class VesselCargoCountLightWeightFitnessFunction implements ILightWeightF
 				perVesselWeight[i] = lightWeightOptimisationData.getDesiredVesselCargoWeight()[i];
 			}
 		}
-				
 	}
 }

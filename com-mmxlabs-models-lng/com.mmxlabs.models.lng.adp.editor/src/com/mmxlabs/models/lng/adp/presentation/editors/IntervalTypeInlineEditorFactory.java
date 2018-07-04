@@ -35,6 +35,9 @@ public class IntervalTypeInlineEditorFactory implements IInlineEditorFactory {
 			case WEEKLY:
 				name = "Weekly";
 				break;
+			case BIMONTHLY:
+				name = "Bimonthly";
+				break;
 			default:
 				name = type.getName();
 				break;

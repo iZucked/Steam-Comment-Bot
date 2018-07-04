@@ -58,7 +58,15 @@ public enum IntervalType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	YEARLY(3, "YEARLY", "YEARLY");
+	YEARLY(3, "YEARLY", "YEARLY"), /**
+	 * The '<em><b>BIMONTHLY</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #BIMONTHLY_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	BIMONTHLY(4, "BIMONTHLY", "BIMONTHLY");
 
 	/**
 	 * The '<em><b>QUARTERLY</b></em>' literal value.
@@ -121,6 +129,21 @@ public enum IntervalType implements Enumerator {
 	public static final int YEARLY_VALUE = 3;
 
 	/**
+	 * The '<em><b>BIMONTHLY</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>BIMONTHLY</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #BIMONTHLY
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int BIMONTHLY_VALUE = 4;
+
+	/**
 	 * An array of all the '<em><b>Interval Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -132,6 +155,7 @@ public enum IntervalType implements Enumerator {
 			MONTHLY,
 			WEEKLY,
 			YEARLY,
+			BIMONTHLY,
 		};
 
 	/**
@@ -192,6 +216,7 @@ public enum IntervalType implements Enumerator {
 			case MONTHLY_VALUE: return MONTHLY;
 			case WEEKLY_VALUE: return WEEKLY;
 			case YEARLY_VALUE: return YEARLY;
+			case BIMONTHLY_VALUE: return BIMONTHLY;
 		}
 		return null;
 	}

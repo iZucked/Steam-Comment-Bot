@@ -1695,6 +1695,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		addEEnumLiteral(intervalTypeEEnum, IntervalType.MONTHLY);
 		addEEnumLiteral(intervalTypeEEnum, IntervalType.WEEKLY);
 		addEEnumLiteral(intervalTypeEEnum, IntervalType.YEARLY);
+		addEEnumLiteral(intervalTypeEEnum, IntervalType.BIMONTHLY);
 
 		initEEnum(lngVolumeUnitEEnum, LNGVolumeUnit.class, "LNGVolumeUnit");
 		addEEnumLiteral(lngVolumeUnitEEnum, LNGVolumeUnit.M3);

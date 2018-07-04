@@ -119,4 +119,16 @@ public class SimpleCleanableExecutorService implements CleanableExecutorService 
 			iterator.remove();
 		}
 	}
+	
+	@Override
+	public void removeCompleted() {
+		Iterator<Future> iterator = futures.iterator();
+		while (iterator.hasNext()) {
+			Future future = iterator.next();
+			if (future.isDone()) {
+				iterator.remove();
+			}
+		}
+	}
+
 }

@@ -99,7 +99,7 @@ public class LNGParallelOptimiserTransformerUnit extends AbstractLNGOptimiserTra
 	@Override
 	protected List<Module> createModules(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService) {
+			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
 		final List<Module> modules = new LinkedList<>();
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
@@ -115,7 +115,7 @@ public class LNGParallelOptimiserTransformerUnit extends AbstractLNGOptimiserTra
 
 			@Override
 			protected void configure() {
-				bind(ExecutorService.class).toInstance(executorService);
+				bind(CleanableExecutorService.class).toInstance(executorService);
 			}
 
 			@Provides

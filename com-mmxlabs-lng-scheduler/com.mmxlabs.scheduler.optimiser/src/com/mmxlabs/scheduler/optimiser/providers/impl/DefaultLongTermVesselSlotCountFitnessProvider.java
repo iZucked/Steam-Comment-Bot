@@ -18,7 +18,7 @@ public class DefaultLongTermVesselSlotCountFitnessProvider implements ILongTermV
 
 	@Override
 	public long getWeightForVessel(IVesselAvailability vessel) {
-		return vesselCountMap.getOrDefault(vessel, 0);
+		return vesselWeightMap.getOrDefault(vessel, 0L);
 	}
 
 	@Override
