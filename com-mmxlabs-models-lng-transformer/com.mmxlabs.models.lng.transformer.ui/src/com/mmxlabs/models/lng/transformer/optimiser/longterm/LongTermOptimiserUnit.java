@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.webservice.WebserviceLongTermMatrixOptimiser;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
@@ -102,7 +101,7 @@ public class LongTermOptimiserUnit {
 				HashSetLongTermSlotsEditor longTermSlotEditor = new HashSetLongTermSlotsEditor();
 				bind(ILongTermSlotsProvider.class).toInstance(longTermSlotEditor);
 				bind(ILongTermSlotsProviderEditor.class).toInstance(longTermSlotEditor);
-				WebserviceLongTermMatrixOptimiser matrixOptimiser = new WebserviceLongTermMatrixOptimiser();
+				LongTermMatrixOptimiser matrixOptimiser = new LongTermMatrixOptimiser();
 				bind(ILongTermMatrixOptimiser.class).toInstance(matrixOptimiser);
 			}
 

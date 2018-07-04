@@ -102,7 +102,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 		TabuLightWeightSequenceOptimiserDataTransformer dataTransformer = new TabuLightWeightSequenceOptimiserDataTransformer(lightWeightOptimisationData);
 
-		createExternalData(lightWeightOptimisationData, dataTransformer);
+//		createExternalData(lightWeightOptimisationData, dataTransformer);
 
 		return optimise(0, false, //
 				lightWeightOptimisationData.getCargoes().size(), //

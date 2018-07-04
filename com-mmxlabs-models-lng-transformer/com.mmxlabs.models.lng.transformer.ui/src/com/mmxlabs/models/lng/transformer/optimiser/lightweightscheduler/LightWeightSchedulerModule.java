@@ -25,7 +25,9 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.DefaultLightWeightPostOptimisationStateModifier;
+import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.DefaultLongTermSequenceElementFilter;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightPostOptimisationStateModifier;
+import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ISequenceElementFilter;
 import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper.ShippingType;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightShippingRestrictionsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.DefaultPNLLightWeightFitnessFunctionFactory;
@@ -35,9 +37,9 @@ import com.mmxlabs.models.lng.transformer.optimiser.longterm.CargoVesselRestrict
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.ICargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.ICargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.ILongTermMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermMatrixOptimiser;
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimisationData;
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimiserHelper;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.webservice.WebserviceLongTermMatrixOptimiser;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -81,7 +83,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		bind(ILongTermSlotsProvider.class).to(HashSetLongTermSlotsEditor.class);
 		bind(ILongTermSlotsProviderEditor.class).to(HashSetLongTermSlotsEditor.class);
 
-		bind(ILongTermMatrixOptimiser.class).to(WebserviceLongTermMatrixOptimiser.class);
+		bind(ILongTermMatrixOptimiser.class).to(LongTermMatrixOptimiser.class);
 
 		bind(ICargoToCargoCostCalculator.class).to(SimpleCargoToCargoCostCalculator.class);
 		bind(ICargoVesselRestrictionsMatrixProducer.class).to(CargoVesselRestrictionsMatrixProducer.class);
@@ -91,7 +93,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		bind(ILightWeightPostOptimisationStateModifier.class).to(DefaultLightWeightPostOptimisationStateModifier.class);
 		
 		
-//		bind(ISequenceElementFilter.class).to(DefaultLongTermSequenceElementFilter.class);
+		bind(ISequenceElementFilter.class).to(DefaultLongTermSequenceElementFilter.class);
 	}
 
 	@Provides
@@ -137,7 +139,7 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		// now using our profits recorder we have a full matrix of constraints and pnl
 		Long[][] profit = optimiserRecorder.getProfit();
 
-		LightWeightOptimiserHelper.produceDataForGurobi(optimiserRecorder, "/tmp/");
+//		LightWeightOptimiserHelper.produceDataForGurobi(optimiserRecorder, "/tmp/");
 		
 		// (3) Optimise matrix
 		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
