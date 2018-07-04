@@ -554,7 +554,7 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 	private void exportScenarioResult() {
 
-		final String name = ScenarioServiceModelUtils.openNewNameForForkPrompt("AD ForkP", "AD Fork", Collections.emptySet());
+		final String name = ScenarioServiceModelUtils.openNewNameForForkPrompt("ADP Fork", "ADP Fork", Collections.emptySet());
 		if (name == null) {
 			return;
 		}
