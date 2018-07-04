@@ -5,7 +5,6 @@
 package com.mmxlabs.common.parser.series;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -23,30 +22,30 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 
 @RunWith(value = Parameterized.class)
-public class SeriesParserChangePoints {
+public class SeriesParserChangePointsTests {
 	@Parameters(name = "{0}")
 	public static Iterable<Object[]> generateTests() {
 		return Arrays.asList(new Object[][] { //
 				// Testing split month function
-				{ "splitmonth(HH,HH2, 15)", new ArrayList<Integer>(Arrays.asList(0, 15 * 24, 1, (15 * 24) + 1))} //
+				{ "splitmonth(HH,HH2, 15)", new ArrayList<>(Arrays.asList(0, 15 * 24, 1, (15 * 24) + 1)) } //
 		});
 	}
 
-	private String expression;
-	private List<Integer> expected;
+	private final String expression;
+	private final List<Integer> expected;
 
-	public SeriesParserChangePoints(String expression, List<Integer> expected) {
+	public SeriesParserChangePointsTests(final String expression, final List<Integer> expected) {
 		this.expression = expression;
 		this.expected = expected;
 
 	}
-	
-	private boolean compare(List<Integer> a, List<Integer> b) {
+
+	private boolean compare(final List<Integer> a, final List<Integer> b) {
 		if (a.size() != b.size()) {
 			return false;
 		}
-		
-		for(int i = 0; i < a.size(); i++) {
+
+		for (int i = 0; i < a.size(); i++) {
 			if (!a.get(i).equals(b.get(i))) {
 				return false;
 			}
@@ -60,8 +59,8 @@ public class SeriesParserChangePoints {
 		Assert.assertTrue(compare(parse(expression), expected));
 	}
 
-	List<Integer> parse(String expression) {
-		SeriesParser parser = new SeriesParser();
+	List<Integer> parse(final String expression) {
+		final SeriesParser parser = new SeriesParser();
 		parser.addSeriesExpression("HH", "1.0");
 		parser.addSeriesExpression("HH2", "2.0");
 
@@ -69,23 +68,23 @@ public class SeriesParserChangePoints {
 		parser.setCalendarMonthMapper(new CalendarMonthMapper() {
 
 			@Override
-			public int mapMonthToChangePoint(int currentChangePoint) {
+			public int mapMonthToChangePoint(final int currentChangePoint) {
 				return currentChangePoint;
 			}
 
 			@Override
-			public int mapChangePointToMonth(int currentChangePoint) {
+			public int mapChangePointToMonth(final int currentChangePoint) {
 				return currentChangePoint;
 			}
 		});
 
-		IExpression<ISeries> parsed = parser.parse(expression);
-		ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(2018, 1, 1, 0, 0), ZoneOffset.UTC);
-		ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(2018, 3, 1, 0, 0), ZoneOffset.UTC);
-		Pair<ZonedDateTime, ZonedDateTime> timebox = new Pair<ZonedDateTime, ZonedDateTime>(start, end);
-		
-		int[] changePoints = parsed.evaluate(timebox).getChangePoints();
-		
-		return Arrays.stream(changePoints).boxed().collect(Collectors.toList());  
+		final IExpression<ISeries> parsed = parser.parse(expression);
+		final ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(2018, 1, 1, 0, 0), ZoneOffset.UTC);
+		final ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(2018, 3, 1, 0, 0), ZoneOffset.UTC);
+		final Pair<ZonedDateTime, ZonedDateTime> timebox = new Pair<>(start, end);
+
+		final int[] changePoints = parsed.evaluate(timebox).getChangePoints();
+
+		return Arrays.stream(changePoints).boxed().collect(Collectors.toList());
 	}
 }
