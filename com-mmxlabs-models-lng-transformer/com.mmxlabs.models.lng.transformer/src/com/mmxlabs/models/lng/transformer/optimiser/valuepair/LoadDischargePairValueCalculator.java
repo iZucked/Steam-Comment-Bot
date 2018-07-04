@@ -36,6 +36,8 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -87,6 +89,13 @@ public class LoadDischargePairValueCalculator {
 			if (checker instanceof TravelTimeConstraintChecker) {
 				((TravelTimeConstraintChecker) checker).setMaxLateness(0);
 			}
+			if (checker instanceof LadenIdleTimeConstraintChecker) {
+				((LadenIdleTimeConstraintChecker) checker).setMaxIdleTimeInHours(8);
+			}
+			if (checker instanceof LadenLegLimitConstraintChecker) {
+				((LadenLegLimitConstraintChecker) checker).setMaxLadenDuration(32*24);
+			}
+
 		}
 	}
 

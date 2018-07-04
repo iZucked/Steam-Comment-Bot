@@ -21,7 +21,7 @@ import com.google.ortools.linearsolver.MPSolver;
 import com.google.ortools.linearsolver.MPVariable;
 
 /**
- * Optimise cargo allocations with Gurobi.
+ * Optimise cargo allocations with Google OR.
  * <p>
  */
 public class LongTermMatrixOptimiser implements ILongTermMatrixOptimiser {

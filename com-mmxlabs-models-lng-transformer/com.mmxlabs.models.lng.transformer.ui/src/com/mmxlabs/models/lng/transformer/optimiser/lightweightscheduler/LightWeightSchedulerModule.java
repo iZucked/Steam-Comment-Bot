@@ -92,7 +92,6 @@ public class LightWeightSchedulerModule extends AbstractModule {
 		bind(LongTermOptimisationData.class);
 		bind(ILightWeightPostOptimisationStateModifier.class).to(DefaultLightWeightPostOptimisationStateModifier.class);
 		
-		
 		bind(ISequenceElementFilter.class).to(DefaultLongTermSequenceElementFilter.class);
 	}
 

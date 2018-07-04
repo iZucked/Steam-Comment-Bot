@@ -21,16 +21,13 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -49,11 +46,11 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 	/**
 	 * Max allowable idle time
 	 */
-	private static final int MAX_IDLE_TIME_HOURS = 9*24;
+	private static int MAX_IDLE_TIME_HOURS = 9*24;
 	/**
 	 * Nominal speed
 	 */
-	private static final int MAX_SPEED = 16000; 
+	private static final int MAX_SPEED = 16_000; 
 
 	@NonNull
 	private final String name;
@@ -212,5 +209,9 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 
 		return "Excessive idle time : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getInclusiveStart()
 				+ " and end of second = " + tw2.getExclusiveEnd();
+	}
+	
+	public void setMaxIdleTimeInHours(int hours) {
+		this.MAX_IDLE_TIME_HOURS = hours;
 	}
 }
