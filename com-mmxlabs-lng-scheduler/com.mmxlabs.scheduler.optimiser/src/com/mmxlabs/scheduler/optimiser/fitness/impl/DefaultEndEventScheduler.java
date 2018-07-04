@@ -113,10 +113,8 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		assert prevPortSlot != null;
 		final int prevArrivalTime = partialPortTimesRecord.getSlotTime(prevPortSlot);
 		final int prevVisitDuration = partialPortTimesRecord.getSlotDuration(prevPortSlot);
-		final int extraIdleTime = partialPortTimesRecord.getSlotDuration(prevPortSlot);
-if (extraIdleTime > 0) {
-	int ii = 0;
-}
+		final int extraIdleTime = partialPortTimesRecord.getSlotExtraIdleTime(prevPortSlot);
+
 		// TODO: Quickest != most economical routing
 		final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), endEventSlot.getPort(), vesselAvailability.getVessel().getMaxSpeed(),
 				partialPortTimesRecord.getSlotNextVoyageOptions(prevPortSlot)).getSecond();
