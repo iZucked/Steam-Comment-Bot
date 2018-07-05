@@ -48,20 +48,20 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 
 	@Inject
 	private Injector injector;
-	
+
 	@Inject
-	CleanableExecutorService executorService;
+	private CleanableExecutorService executorService;
 
 	protected Pair<Integer, Long> best = new Pair<>(0, Long.MAX_VALUE);
 
 	@Inject
 	@Named(LocalSearchOptimiserModule.RANDOM_SEED)
 	private long seed;
-	
+
 	@Inject
 	@Named(PARALLEL_LSO_BATCH_SIZE)
 	private int batchSize;
-	
+
 	@Inject
 	@Named(LocalSearchOptimiserModule.OPTIMISER_DEBUG_MODE)
 	protected boolean DEBUG;
@@ -81,7 +81,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 		setCurrentContext(optimiserContext);
 
 		initLogger();
-		
+
 		final ModifiableSequences currentRawSequences = new ModifiableSequences(inputRawSequences);
 
 		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
@@ -142,7 +142,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 		int iterationsCompletedThisStep = 0;
 		while (iterationsCompletedThisStep < iterationsThisStep) {
 			List<Future<LSOJobState>> futures = new LinkedList<>();
-			
+
 			// create and submit jobs
 			final ILookupManager lookupManagerBatch = injector.getInstance(ILookupManager.class);
 			ISequences batchSequences = new ModifiableSequences(pinnedPotentialRawSequences);
@@ -153,7 +153,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 				LSOJob job = new LSOJob(injector, batchSequences, lookupManagerBatch, getMoveGenerator(), incrementingRandomSeed.getSeed(), failedInitialConstraintCheckers);
 				futures.add(executorService.submit(job));
 			}
-			
+
 			// collect and process jobs
 			boolean sequenceWasAccepted = false;
 			long acceptedSeed = 0;
@@ -171,8 +171,8 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 				++iterationsCompletedThisStep;
 				boolean accepted = getFitnessEvaluator().evaluateSequencesFromFitnessOnly(state.rawSequences, state.evaluationState, state.fullSequences, state.fitness);
 				if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
-					loggingDataStore.logProgress(numberOfMovesTried, numberOfMovesAccepted, 0, 0, 0,
-							getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
+					loggingDataStore.logProgress(numberOfMovesTried, numberOfMovesAccepted, 0, 0, 0, getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(),
+							new Date().getTime());
 				}
 				if (accepted) {
 					numberOfMovesAccepted++;
@@ -188,13 +188,13 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 					}
 					failedInitialConstraintCheckers = false;
 					acceptedSeed = state.getSeed();
-					for (int cancelIdx = futureIdx+1; cancelIdx < futures.size(); cancelIdx++) {
+					for (int cancelIdx = futureIdx + 1; cancelIdx < futures.size(); cancelIdx++) {
 						Future<LSOJobState> futureToCancel = futures.get(cancelIdx);
 						futureToCancel.cancel(false);
 					}
 					break;
 				} else {
-					numberOfMovesRejected++;					
+					numberOfMovesRejected++;
 				}
 				if (iterationsCompletedThisStep >= iterationsThisStep) {
 					incrementingRandomSeed.setSeed(state.getSeed());
@@ -212,10 +212,10 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 		}
 		setNumberOfIterationsCompleted(numberOfMovesTried);
 		if (DEBUG) {
-			System.out.println("moves tried:"+numberOfMovesTried);
-			System.out.println("time:"+(System.currentTimeMillis()-start)/1000.0);
+			System.out.println("moves tried:" + numberOfMovesTried);
+			System.out.println("time:" + (System.currentTimeMillis() - start) / 1000.0);
 		}
-		
+
 		return iterationsThisStep;
 	}
 
@@ -269,5 +269,5 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 	private void updateSequences(@NonNull ISequences pinnedPotentialRawSequences, @NonNull ISequences rawSequences) {
 		pinnedPotentialRawSequences = rawSequences;
 	}
-	
+
 }
