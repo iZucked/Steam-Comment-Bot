@@ -332,7 +332,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ADPPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -346,7 +346,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		if (isInited) return (ADPPackage)EPackage.Registry.INSTANCE.getEPackage(ADPPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ADPPackageImpl theADPPackage = (ADPPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ADPPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ADPPackageImpl());
+		Object registeredADPPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ADPPackageImpl theADPPackage = registeredADPPackage instanceof ADPPackageImpl ? (ADPPackageImpl)registeredADPPackage : new ADPPackageImpl();
 
 		isInited = true;
 
@@ -371,7 +372,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		// Mark meta-data to indicate it can't be changed
 		theADPPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ADPPackage.eNS_URI, theADPPackage);
 		return theADPPackage;
@@ -496,6 +496,24 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 */
 	public EReference getFleetProfile_VesselEvents() {
 		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFleetProfile_DefaultVessel() {
+		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFleetProfile_DefaultVesselCharterInRate() {
+		return (EAttribute)fleetProfileEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1358,6 +1376,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(fleetProfileEClass, FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS);
 		createEReference(fleetProfileEClass, FLEET_PROFILE__CONSTRAINTS);
 		createEReference(fleetProfileEClass, FLEET_PROFILE__VESSEL_EVENTS);
+		createEReference(fleetProfileEClass, FLEET_PROFILE__DEFAULT_VESSEL);
+		createEAttribute(fleetProfileEClass, FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE);
 
 		contractProfileEClass = createEClass(CONTRACT_PROFILE);
 		createEReference(contractProfileEClass, CONTRACT_PROFILE__CONTRACT);
@@ -1502,9 +1522,9 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		// Obtain other dependent packages
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
-		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 
@@ -1560,6 +1580,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getFleetProfile_IncludeEnabledCharterMarkets(), ecorePackage.getEBoolean(), "includeEnabledCharterMarkets", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFleetProfile_Constraints(), this.getFleetConstraint(), null, "constraints", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFleetProfile_VesselEvents(), theCargoPackage.getVesselEvent(), null, "vesselEvents", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFleetProfile_DefaultVessel(), theFleetPackage.getVessel(), null, "defaultVessel", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFleetProfile_DefaultVesselCharterInRate(), ecorePackage.getEString(), "defaultVesselCharterInRate", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(contractProfileEClass, ContractProfile.class, "ContractProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContractProfile_Contract(), theCommercialPackage.getContract(), null, "contract", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1691,11 +1713,11 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		// Initialize enums and add enum literals
 		initEEnum(intervalTypeEEnum, IntervalType.class, "IntervalType");
-		addEEnumLiteral(intervalTypeEEnum, IntervalType.QUARTERLY);
-		addEEnumLiteral(intervalTypeEEnum, IntervalType.MONTHLY);
 		addEEnumLiteral(intervalTypeEEnum, IntervalType.WEEKLY);
-		addEEnumLiteral(intervalTypeEEnum, IntervalType.YEARLY);
+		addEEnumLiteral(intervalTypeEEnum, IntervalType.MONTHLY);
 		addEEnumLiteral(intervalTypeEEnum, IntervalType.BIMONTHLY);
+		addEEnumLiteral(intervalTypeEEnum, IntervalType.QUARTERLY);
+		addEEnumLiteral(intervalTypeEEnum, IntervalType.YEARLY);
 
 		initEEnum(lngVolumeUnitEEnum, LNGVolumeUnit.class, "LNGVolumeUnit");
 		addEEnumLiteral(lngVolumeUnitEEnum, LNGVolumeUnit.M3);
@@ -1708,6 +1730,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/pricing/expressionType
+		createExpressionTypeAnnotations();
 		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
 		createNamedObjectAnnotations();
 	}
@@ -1719,18 +1743,47 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getPreDefinedDistributionModel_WindowSize(), 
-		   source, 
+		  (getFleetProfile_DefaultVesselCharterInRate(),
+		   source,
 		   new String[] {
-			 "formatString", "##,##0"
-		   });	
+			   "unit", "$/day"
+		   });
 		addAnnotation
-		  (getPreDefinedDistributionModel_WindowSizeUnits(), 
-		   source, 
+		  (getPreDefinedDistributionModel_WindowSize(),
+		   source,
 		   new String[] {
-			 "formatString", "##,##0"
+			   "formatString", "##,##0"
+		   });
+		addAnnotation
+		  (getPreDefinedDistributionModel_WindowSizeUnits(),
+		   source,
+		   new String[] {
+			   "formatString", "##,##0"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/pricing/expressionType</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExpressionTypeAnnotations() {
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";
+		addAnnotation
+		  (getFleetProfile_DefaultVesselCharterInRate(),
+		   source,
+		   new String[] {
+			   "type", "charter"
+		   });
+		addAnnotation
+		  (getFleetProfile_DefaultVesselCharterInRate(),
+		   new boolean[] { true },
+		   "http://www.mmxlabs.com/models/pricing/expressionType",
+		   new String[] {
+			   "type", "charter"
 		   });
 	}
 
@@ -1741,12 +1794,12 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	protected void createNamedObjectAnnotations() {
-		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";	
+		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";
 		addAnnotation
-		  (adpModelResultEClass, 
-		   source, 
+		  (adpModelResultEClass,
+		   source,
 		   new String[] {
-			 "nonUniqueChildren", "true"
+			   "nonUniqueChildren", "true"
 		   });
 	}
 

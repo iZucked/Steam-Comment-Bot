@@ -199,13 +199,31 @@ public interface ADPPackage extends EPackage {
 	int FLEET_PROFILE__VESSEL_EVENTS = 3;
 
 	/**
+	 * The feature id for the '<em><b>Default Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_PROFILE__DEFAULT_VESSEL = 4;
+
+	/**
+	 * The feature id for the '<em><b>Default Vessel Charter In Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE = 5;
+
+	/**
 	 * The number of structural features of the '<em>Fleet Profile</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_PROFILE_FEATURE_COUNT = 4;
+	int FLEET_PROFILE_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Fleet Profile</em>' class.
@@ -1915,6 +1933,28 @@ public interface ADPPackage extends EPackage {
 	EReference getFleetProfile_VesselEvents();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.FleetProfile#getDefaultVessel <em>Default Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Default Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FleetProfile#getDefaultVessel()
+	 * @see #getFleetProfile()
+	 * @generated
+	 */
+	EReference getFleetProfile_DefaultVessel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.FleetProfile#getDefaultVesselCharterInRate <em>Default Vessel Charter In Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Vessel Charter In Rate</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FleetProfile#getDefaultVesselCharterInRate()
+	 * @see #getFleetProfile()
+	 * @generated
+	 */
+	EAttribute getFleetProfile_DefaultVesselCharterInRate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ContractProfile <em>Contract Profile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2948,6 +2988,22 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_PROFILE__VESSEL_EVENTS = eINSTANCE.getFleetProfile_VesselEvents();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_PROFILE__DEFAULT_VESSEL = eINSTANCE.getFleetProfile_DefaultVessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Vessel Charter In Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE = eINSTANCE.getFleetProfile_DefaultVesselCharterInRate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl <em>Contract Profile</em>}' class.

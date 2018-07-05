@@ -9,6 +9,7 @@ import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -37,6 +38,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#isIncludeEnabledCharterMarkets <em>Include Enabled Charter Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#getVesselEvents <em>Vessel Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#getDefaultVessel <em>Default Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl#getDefaultVesselCharterInRate <em>Default Vessel Charter In Rate</em>}</li>
  * </ul>
  *
  * @generated
@@ -90,6 +93,36 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 	 * @ordered
 	 */
 	protected EList<VesselEvent> vesselEvents;
+
+	/**
+	 * The cached value of the '{@link #getDefaultVessel() <em>Default Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected Vessel defaultVessel;
+
+	/**
+	 * The default value of the '{@link #getDefaultVesselCharterInRate() <em>Default Vessel Charter In Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultVesselCharterInRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DEFAULT_VESSEL_CHARTER_IN_RATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDefaultVesselCharterInRate() <em>Default Vessel Charter In Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultVesselCharterInRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected String defaultVesselCharterInRate = DEFAULT_VESSEL_CHARTER_IN_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -172,6 +205,65 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Vessel getDefaultVessel() {
+		if (defaultVessel != null && defaultVessel.eIsProxy()) {
+			InternalEObject oldDefaultVessel = (InternalEObject)defaultVessel;
+			defaultVessel = (Vessel)eResolveProxy(oldDefaultVessel);
+			if (defaultVessel != oldDefaultVessel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL, oldDefaultVessel, defaultVessel));
+			}
+		}
+		return defaultVessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Vessel basicGetDefaultVessel() {
+		return defaultVessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefaultVessel(Vessel newDefaultVessel) {
+		Vessel oldDefaultVessel = defaultVessel;
+		defaultVessel = newDefaultVessel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL, oldDefaultVessel, defaultVessel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getDefaultVesselCharterInRate() {
+		return defaultVesselCharterInRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefaultVesselCharterInRate(String newDefaultVesselCharterInRate) {
+		String oldDefaultVesselCharterInRate = defaultVesselCharterInRate;
+		defaultVesselCharterInRate = newDefaultVesselCharterInRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE, oldDefaultVesselCharterInRate, defaultVesselCharterInRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -201,6 +293,11 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 				return getConstraints();
 			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
 				return getVesselEvents();
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL:
+				if (resolve) return getDefaultVessel();
+				return basicGetDefaultVessel();
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE:
+				return getDefaultVesselCharterInRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -229,6 +326,12 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 				getVesselEvents().clear();
 				getVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
 				return;
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL:
+				setDefaultVessel((Vessel)newValue);
+				return;
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE:
+				setDefaultVesselCharterInRate((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -253,6 +356,12 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
 				getVesselEvents().clear();
 				return;
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL:
+				setDefaultVessel((Vessel)null);
+				return;
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE:
+				setDefaultVesselCharterInRate(DEFAULT_VESSEL_CHARTER_IN_RATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -273,6 +382,10 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 				return constraints != null && !constraints.isEmpty();
 			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
 				return vesselEvents != null && !vesselEvents.isEmpty();
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL:
+				return defaultVessel != null;
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE:
+				return DEFAULT_VESSEL_CHARTER_IN_RATE_EDEFAULT == null ? defaultVesselCharterInRate != null : !DEFAULT_VESSEL_CHARTER_IN_RATE_EDEFAULT.equals(defaultVesselCharterInRate);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -286,9 +399,11 @@ public class FleetProfileImpl extends EObjectImpl implements FleetProfile {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (includeEnabledCharterMarkets: ");
 		result.append(includeEnabledCharterMarkets);
+		result.append(", defaultVesselCharterInRate: ");
+		result.append(defaultVesselCharterInRate);
 		result.append(')');
 		return result.toString();
 	}

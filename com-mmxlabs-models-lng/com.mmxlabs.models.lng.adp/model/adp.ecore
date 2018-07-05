@@ -26,6 +26,19 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvents" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultVesselCharterInRate"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+          <details key="type" value="charter"/>
+        </eAnnotations>
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ContractProfile">
     <eTypeParameters name="T">
@@ -128,11 +141,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="IntervalType">
-    <eLiterals name="QUARTERLY"/>
+    <eLiterals name="WEEKLY"/>
     <eLiterals name="MONTHLY" value="1"/>
-    <eLiterals name="WEEKLY" value="2"/>
-    <eLiterals name="YEARLY" value="3"/>
-    <eLiterals name="BIMONTHLY" value="4" literal="BIMONTHLY"/>
+    <eLiterals name="BIMONTHLY" value="2" literal="BIMONTHLY"/>
+    <eLiterals name="QUARTERLY" value="3"/>
+    <eLiterals name="YEARLY" value="4"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FlowType" eSuperTypes="#//SubProfileConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="SupplyFromFlow" eSuperTypes="#//FlowType"/>

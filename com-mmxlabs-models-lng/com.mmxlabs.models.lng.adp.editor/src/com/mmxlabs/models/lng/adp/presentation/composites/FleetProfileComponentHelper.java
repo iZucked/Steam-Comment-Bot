@@ -71,6 +71,8 @@ public class FleetProfileComponentHelper extends BaseComponentHelper {
 		add_includeEnabledCharterMarketsEditor(detailComposite, topClass);
 		add_constraintsEditor(detailComposite, topClass);
 		add_vesselEventsEditor(detailComposite, topClass);
+		add_defaultVesselEditor(detailComposite, topClass);
+		add_defaultVesselCharterInRateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vesselAvailabilities feature on FleetProfile
@@ -106,5 +108,23 @@ public class FleetProfileComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselEventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS));
+	}
+
+	/**
+	 * Create the editor for the defaultVessel feature on FleetProfile
+	 *
+	 * @generated
+	 */
+	protected void add_defaultVesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL));
+	}
+
+	/**
+	 * Create the editor for the defaultVesselCharterInRate feature on FleetProfile
+	 *
+	 * @generated
+	 */
+	protected void add_defaultVesselCharterInRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE));
 	}
 }

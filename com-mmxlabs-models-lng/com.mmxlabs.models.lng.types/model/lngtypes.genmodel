@@ -27,6 +27,11 @@
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//VolumeUnits/M3"/>
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//VolumeUnits/MMBTU"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//TimePeriod">
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//TimePeriod/HOURS"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//TimePeriod/DAYS"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//TimePeriod/MONTHS"/>
+    </genEnums>
     <genDataTypes ecoreDataType="lngtypes.ecore#//Iterable">
       <genTypeParameters ecoreTypeParameter="lngtypes.ecore#//Iterable/T"/>
     </genDataTypes>

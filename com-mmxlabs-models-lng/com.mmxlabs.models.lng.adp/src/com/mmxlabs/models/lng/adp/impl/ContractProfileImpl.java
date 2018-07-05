@@ -536,7 +536,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (contractCode: ");
 		result.append(contractCode);
 		result.append(", custom: ");

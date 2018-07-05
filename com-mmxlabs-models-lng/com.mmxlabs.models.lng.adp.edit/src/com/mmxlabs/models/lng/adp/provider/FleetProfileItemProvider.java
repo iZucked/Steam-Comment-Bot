@@ -67,6 +67,8 @@ public class FleetProfileItemProvider
 			super.getPropertyDescriptors(object);
 
 			addIncludeEnabledCharterMarketsPropertyDescriptor(object);
+			addDefaultVesselPropertyDescriptor(object);
+			addDefaultVesselCharterInRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -89,6 +91,50 @@ public class FleetProfileItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FleetProfile_defaultVessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetProfile_defaultVessel_feature", "_UI_FleetProfile_type"),
+				 ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default Vessel Charter In Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultVesselCharterInRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FleetProfile_defaultVesselCharterInRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetProfile_defaultVesselCharterInRate_feature", "_UI_FleetProfile_type"),
+				 ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -162,6 +208,7 @@ public class FleetProfileItemProvider
 
 		switch (notification.getFeatureID(FleetProfile.class)) {
 			case ADPPackage.FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS:
+			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ADPPackage.FLEET_PROFILE__VESSEL_AVAILABILITIES:

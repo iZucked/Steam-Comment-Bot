@@ -167,6 +167,7 @@ public class ADPActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
+		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("adp-settings"));
 		toolBarManager.add(new Separator("adp-additions"));
 	}

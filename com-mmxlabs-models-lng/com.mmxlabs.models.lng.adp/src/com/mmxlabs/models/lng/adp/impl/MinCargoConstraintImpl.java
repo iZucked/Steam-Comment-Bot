@@ -205,7 +205,7 @@ public class MinCargoConstraintImpl extends ProfileConstraintImpl implements Min
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (minCargoes: ");
 		result.append(minCargoes);
 		result.append(", intervalType: ");
