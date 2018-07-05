@@ -62,14 +62,15 @@ public class LNGParallelOptimiserTransformerUnit extends AbstractLNGOptimiserTra
 		hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 		return AbstractLNGOptimiserTransformerUnit.chain(chainBuilder, stage, userSettings, executorService, progressTicks, hints, (initialSequences, inputState, monitor) -> {
-			LNGParallelOptimiserTransformerUnit unit = new LNGParallelOptimiserTransformerUnit(chainBuilder.getDataTransformer(), stage, userSettings, stageSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints, executorService);
+			final LNGParallelOptimiserTransformerUnit unit = new LNGParallelOptimiserTransformerUnit(chainBuilder.getDataTransformer(), stage, userSettings, stageSettings,
+					initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints, executorService);
 			return unit.run(new SubProgressMonitor(monitor, 100));
 		});
 	}
 
 	public LNGParallelOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
+			@NonNull final Collection<@NonNull String> hints, final CleanableExecutorService executorService) {
 		super(dataTransformer, stage, userSettings, stageSettings, initialSequences, inputSequences, hints, executorService);
 	}
 
@@ -83,7 +84,7 @@ public class LNGParallelOptimiserTransformerUnit extends AbstractLNGOptimiserTra
 		try (PerChainUnitScopeImpl scope = getInjector().getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 
-			LocalSearchOptimiser optimiser = getInjector().getInstance(ProcessorAgnosticParallelLSO.class);
+			final LocalSearchOptimiser optimiser = getInjector().getInstance(ProcessorAgnosticParallelLSO.class);
 			optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 			optimiser.init();
 
@@ -95,21 +96,22 @@ public class LNGParallelOptimiserTransformerUnit extends AbstractLNGOptimiserTra
 			return optimiser;
 		}
 	}
-	
+
 	@Override
 	protected List<Module> createModules(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
+			@NonNull final Collection<@NonNull String> hints, final CleanableExecutorService executorService) {
 		final List<Module> modules = new LinkedList<>();
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
 		addDefaultModules(modules, dataTransformer, stage, userSettings, stageSettings, initialSequences, inputSequences, hints, executorService);
-		
+
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_AnnealingSettingsModule(stageSettings.getSeed(), stageSettings.getAnnealingSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
-		
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(CollectionsUtil.makeLinkedList(new LNGOptimisationModule(), new LocalSearchOptimiserModule()), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(CollectionsUtil.makeLinkedList(new LNGOptimisationModule(), new LocalSearchOptimiserModule()), services,
+				IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
 		modules.add(new AbstractModule() {
 
@@ -133,14 +135,17 @@ public class LNGParallelOptimiserTransformerUnit extends AbstractLNGOptimiserTra
 			}
 
 		});
-		
+
 		return modules;
 	}
-	
-	protected void threadCleanup(PerChainUnitScopeImpl scope) {
+
+	@Override
+	protected void threadCleanup(final PerChainUnitScopeImpl scope) {
 		this.executorService.clean();
 		for (final Thread thread : threadCache.keySet()) {
-			scope.exit(thread);
+			if (thread != null) {
+				scope.exit(thread);
+			}
 		}
 		threadCache.clear();
 	}
