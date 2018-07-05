@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -13,15 +12,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class SimpleCleanableExecutorService implements CleanableExecutorService {
-	ExecutorService delegate;
-	List<Future> futures = new LinkedList<>();
+	private final ExecutorService delegate;
+	private final List<Future<?>> futures = new LinkedList<>();
 
-	public SimpleCleanableExecutorService(ExecutorService delegate) {
+	public SimpleCleanableExecutorService(final ExecutorService delegate) {
 		this.delegate = delegate;
 	}
 
 	@Override
-	public void execute(Runnable command) {
+	public void execute(final Runnable command) {
 		delegate.execute(command);
 	}
 
@@ -46,54 +45,53 @@ public class SimpleCleanableExecutorService implements CleanableExecutorService 
 	}
 
 	@Override
-	public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+	public boolean awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
 		return delegate.awaitTermination(timeout, unit);
 	}
 
 	@Override
-	public <T> Future<T> submit(Callable<T> task) {
+	public <T> Future<T> submit(final Callable<T> task) {
 		return storeAndReturn(delegate.submit(task));
 	}
 
 	@Override
-	public <T> Future<T> submit(Runnable task, T result) {
+	public <T> Future<T> submit(final Runnable task, final T result) {
 		return storeAndReturn(delegate.submit(task, result));
 	}
 
 	@Override
-	public Future<?> submit(Runnable task) {
+	public Future<?> submit(final Runnable task) {
 		return storeAndReturn(delegate.submit(task));
 	}
 
 	@Override
-	public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
+	public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks) throws InterruptedException {
 		return delegate.invokeAll(tasks);
 	}
 
 	@Override
-	public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
+	public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException {
 		return delegate.invokeAll(tasks, timeout, unit);
 	}
 
 	@Override
-	public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
+	public <T> T invokeAny(final Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
 		return delegate.invokeAny(tasks);
 	}
 
 	@Override
-	public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-		// TODO Auto-generated method stub
+	public <T> T invokeAny(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
 		return delegate.invokeAny(tasks, timeout, unit);
 	}
 
-	private <T> Future<T> storeAndReturn(Future<T> f) {
+	private <T> Future<T> storeAndReturn(final Future<T> f) {
 		futures.add(f);
 		return f;
 	}
 
 	@Override
 	public void checkIfDone() {
-		for (Future future : futures) {
+		for (final Future<?> future : futures) {
 			if (!future.isDone()) {
 				System.out.println("not done!");
 			}
@@ -102,29 +100,23 @@ public class SimpleCleanableExecutorService implements CleanableExecutorService 
 
 	@Override
 	public void clean() {
-		Iterator<Future> iterator = futures.iterator();
+		final Iterator<Future<?>> iterator = futures.iterator();
 		while (iterator.hasNext()) {
-			Future future = iterator.next();
-			if (!future.isCancelled()) {
-				try {
-					future.get();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
-				}  catch (CancellationException e) {
-					e.printStackTrace();
-				}
+			final Future<?> future = iterator.next();
+			try {
+				future.get();
+			} catch (final Exception e) {
+				// We don't care about exceptions here, we are just trying to ensure all jobs have finished
 			}
 			iterator.remove();
 		}
 	}
-	
+
 	@Override
 	public void removeCompleted() {
-		Iterator<Future> iterator = futures.iterator();
+		final Iterator<Future<?>> iterator = futures.iterator();
 		while (iterator.hasNext()) {
-			Future future = iterator.next();
+			final Future<?> future = iterator.next();
 			if (future.isDone()) {
 				iterator.remove();
 			}
