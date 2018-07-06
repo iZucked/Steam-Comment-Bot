@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -156,6 +155,30 @@ public class SequenceHelper {
 				continue;
 			}
 			return addSequence(sequences, injector, o_resource, o_vesselAvailability, cargoes);
+		}
+		assert false : "Unable to find spot market vessel";
+		throw new IllegalStateException();
+	}
+
+	public static @NonNull IVesselAvailability findVesselAvailability(final @NonNull Injector injector, final CharterInMarket charterInMarket, final int spotIndex) {
+
+		@NonNull
+		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
+
+		final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
+
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+
+		for (final IResource o_resource : optimisationData.getResources()) {
+			final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
+			if (o_vesselAvailability.getSpotCharterInMarket() != market) {
+				continue;
+			}
+			if (o_vesselAvailability.getSpotIndex() != spotIndex) {
+				continue;
+			}
+			return o_vesselAvailability;
 		}
 		assert false : "Unable to find spot market vessel";
 		throw new IllegalStateException();

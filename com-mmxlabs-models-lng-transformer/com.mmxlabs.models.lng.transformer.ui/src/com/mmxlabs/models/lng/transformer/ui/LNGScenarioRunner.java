@@ -58,7 +58,7 @@ public class LNGScenarioRunner {
 	@Nullable
 	private final ScenarioInstance scenarioInstance;
 
-	private @NonNull final ExecutorService executorService;
+	private @NonNull final CleanableExecutorService executorService;
 
 	public LNGScenarioRunner(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
@@ -188,7 +188,7 @@ public class LNGScenarioRunner {
 		scenarioToOptimiserBridge.getDataTransformer().setRunnerHook(runnerHook);
 	}
 
-	public ExecutorService getExecutorService() {
+	public CleanableExecutorService getExecutorService() {
 		return executorService;
 	}
 }

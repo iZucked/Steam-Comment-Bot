@@ -97,17 +97,17 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS).build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPort("Barcelona LNG"), null, entity, "7").withWindowSize(1, TimePeriod.MONTHS).build();
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
+				.build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPort("Barcelona LNG"), null, entity, "7")
+				.withWindowSize(1, TimePeriod.MONTHS).build();
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2016, 3, 1), portFinder.findPort("Hammerfest LNG"), null, entity, "5") //
-				.withWindowSize(1, TimePeriod.MONTHS)
-				.build() //
+				.withWindowSize(1, TimePeriod.MONTHS).build() //
 				.makeDESSale("D1", LocalDate.of(2016, 4, 1), portFinder.findPort("Incheon"), null, entity, "7") //
-				.withWindowSize(1, TimePeriod.MONTHS)
-				.build() //
+				.withWindowSize(1, TimePeriod.MONTHS).build() //
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(true, false) //
 				.build();
@@ -117,13 +117,13 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
 			final LightWeightSchedulerOptimiserUnit lightWeightSchedulerOptimiserUnit = getOptimiser(scenarioRunner);
-
-			final IMultiStateResult result1 = lightWeightSchedulerOptimiserUnit.run(new NullProgressMonitor());
+			IMultiStateResult initialResult = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult();
+			final IMultiStateResult result1 = lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 			Assert.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = lightWeightSchedulerOptimiserUnit.run(new NullProgressMonitor());
+			final IMultiStateResult result2 = lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
 			Assert.assertNotNull(result2);
 			Assert.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -152,8 +152,8 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 
 		final LightWeightSchedulerOptimiserUnit slotInserter = new LightWeightSchedulerOptimiserUnit(dataTransformer, dataTransformer.getUserSettings(), constraintAndFitnessSettings,
-				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), lngScenarioModel, dataTransformer.getInitialResult(), Collections.emptyList());
-		
+				scenarioRunner.getExecutorService(), lngScenarioModel, Collections.emptyList());
+
 		return slotInserter;
 	}
 

@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightConstraintChecker;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightOptimisationData;
@@ -33,7 +35,7 @@ public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceO
 	public
 	List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData,
 			List<ILightWeightConstraintChecker> constraintCheckers,
-			List<ILightWeightFitnessFunction> fitnessFunctions) {
+			List<ILightWeightFitnessFunction> fitnessFunctions, IProgressMonitor monitor) {
 		
 		// Data Transform
 	     List<List<IPortSlot>> cargoes = lightWeightOptimisationData.getCargoes();

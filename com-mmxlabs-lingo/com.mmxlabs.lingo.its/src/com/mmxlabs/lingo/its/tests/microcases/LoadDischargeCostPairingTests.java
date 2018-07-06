@@ -28,9 +28,11 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairValueCalculatorUnit;
+import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairValueCalculatorStep;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossExtractor;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 
@@ -96,13 +98,14 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 					iterator.remove();
 				}
 			}
-			final LoadDischargePairValueCalculatorUnit calculator = new LoadDischargePairValueCalculatorUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(),
-					constraintAndFitnessSettings, scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());
+			final LoadDischargePairValueCalculatorStep calculator = new LoadDischargePairValueCalculatorStep(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(),
+					constraintAndFitnessSettings, dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());
 			final AtomicLong counter = new AtomicLong();
-			calculator.run(charterInMarket_1, new NullProgressMonitor(), new ProfitAndLossExtractor((load, discharge, value) -> {
+			IVesselAvailability defaultVessel = SequenceHelper.findVesselAvailability(dataTransformer.getInjector(), charterInMarket_1, -1);
+			calculator.run(defaultVessel, new ProfitAndLossExtractor((load, discharge, value) -> {
 				System.out.printf("%s -> %s == %,d\n", load.getId(), discharge.getId(), value);
 				counter.getAndIncrement();
-			}));
+			}), scenarioRunner.getExecutorService(), new NullProgressMonitor());
 			System.out.printf("Found %d values\n", counter.get());
 
 		}, null);

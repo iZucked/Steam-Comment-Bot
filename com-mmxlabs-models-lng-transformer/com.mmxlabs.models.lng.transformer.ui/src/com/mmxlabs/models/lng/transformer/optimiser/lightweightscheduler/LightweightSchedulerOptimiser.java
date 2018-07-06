@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Sets;
@@ -50,11 +51,11 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class LightweightSchedulerOptimiser {
 
 	@interface NonLDD {
-		
+
 	}
 
 	private static final boolean DEBUG = false;
-	
+
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
@@ -66,40 +67,43 @@ public class LightweightSchedulerOptimiser {
 
 	@Inject
 	private ILightWeightSequenceOptimiser lightWeightSequenceOptimiser;
-	
+
 	@Inject
 	private ILightWeightOptimisationData lightWeightOptimisationData;
 
 	@Inject
 	private List<ILightWeightConstraintChecker> constraintCheckers;
-	
+
 	@Inject
 	private List<ILightWeightFitnessFunction> fitnessFunctions;
 
 	@Inject
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
-	ISequences initialSequences;
-	
-	private static Set<VesselInstanceType> ALLOWED_VESSEL_TYPES = Sets.newHashSet(VesselInstanceType.FLEET, VesselInstanceType.SPOT_CHARTER, VesselInstanceType.TIME_CHARTER);
+	private ISequences initialSequences;
+
+	@Inject
+	@Named(OptimiserConstants.DEFAULT_VESSEL)
+	private IVesselAvailability pnlVesselAvailability;
 
 	/**
 	 * Perform a long term (nominal) trading optimisation
+	 * 
+	 * @param monitor
 	 * 
 	 * @param executorService
 	 * @param dataTransformer
 	 * @param charterInMarket
 	 * @return
 	 */
-	public Pair<ISequences, Long> optimise(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
-		
-		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fitnessFunctions);
-		
+	public Pair<ISequences, Long> optimise(final IVesselAvailability pnlVessel, @NonNull IProgressMonitor monitor) {
+		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, monitor);
+
 		int totalCount = 0;
 		for (List<Integer> s : sequences) {
 			totalCount += s.size();
 		}
-		System.out.println("counts:"+totalCount);
-		
+		System.out.println("counts:" + totalCount);
+
 		if (DEBUG) {
 			try {
 				sequences = getStoredSequences("/tmp/gurobiOutput.gb");
@@ -110,24 +114,20 @@ public class LightweightSchedulerOptimiser {
 
 		// (5) Export the pairings matrix to the raw sequences
 		ModifiableSequences rawSequences = new ModifiableSequences(initialSequences);
-		
-		@NonNull
-		IVesselAvailability pnlVessel = LightWeightOptimiserHelper.getPNLVessel(dataTransformer, charterInMarket, vesselProvider);
 
 		// update shipped
-		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getCargoes(),
-				lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getPairingsMap());
+		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getPairingsMap());
 		// update non-shipped
-		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getPairingsMap(),
-				vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
+		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getPairingsMap(), vesselProvider.getResource(pnlVessel), portSlotProvider,
+				virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
 		HashMap<ILoadOption, IDischargeOption> ununsedMap = new HashMap<>(lightWeightOptimisationData.getPairingsMap());
 		for (List<Integer> sequence : sequences) {
 			for (Integer idx : sequence) {
 				ununsedMap.remove(lightWeightOptimisationData.getCargoes().get(idx).get(0));
 			}
 		}
-		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, ununsedMap, vesselProvider.getResource(pnlVessel),
-				portSlotProvider, virtualVesselSlotProvider, vesselProvider, ShippingType.SHIPPED);
+		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, ununsedMap, vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider,
+				ShippingType.SHIPPED);
 		return new Pair<>(rawSequences, 0L);
 	}
 
@@ -136,7 +136,7 @@ public class LightweightSchedulerOptimiser {
 		long[] pnl = new long[cargoes.size()];
 		int idx = 0;
 		for (List<IPortSlot> cargo : cargoes) {
-			pnl[idx++] = profit[loads.indexOf(cargo.get(0))][discharges.indexOf(cargo.get(cargo.size() - 1))]/pnlVessel.getVessel().getCargoCapacity();
+			pnl[idx++] = profit[loads.indexOf(cargo.get(0))][discharges.indexOf(cargo.get(cargo.size() - 1))] / pnlVessel.getVessel().getCargoCapacity();
 		}
 		return pnl;
 	}
@@ -145,14 +145,15 @@ public class LightweightSchedulerOptimiser {
 	 * Updates the raw sequences given an allocations matrix
 	 * 
 	 * @param rawSequences
-	 * @param sequences 
-	 * @param cargoes 
+	 * @param sequences
+	 * @param cargoes
 	 * @param vessels
 	 * @param pairingsMap
 	 * @param nominal
 	 */
 	@NonLDD
-	private void updateSequences(@NonNull IModifiableSequences rawSequences, List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap) {
+	private void updateSequences(@NonNull IModifiableSequences rawSequences, List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels,
+			@NonNull Map<ILoadOption, IDischargeOption> pairingsMap) {
 		LightWeightOptimiserHelper.moveElementsToUnusedList(rawSequences, portSlotProvider);
 		for (int vesselIndex = 0; vesselIndex < vessels.size(); vesselIndex++) {
 			IVesselAvailability vesselAvailability = vessels.get(vesselIndex);

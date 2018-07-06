@@ -38,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Long term optimisation. Drives a long term optimisation using an {@link ILongTermMatrixOptimiser}.
+ * 
  * @author achurchill
  *
  */
@@ -65,6 +66,7 @@ public class LongTermOptimiser {
 
 	/**
 	 * Perform a long term (nominal) trading optimisation
+	 * 
 	 * @param executorService
 	 * @param dataTransformer
 	 * @param charterInMarket
@@ -77,21 +79,25 @@ public class LongTermOptimiser {
 		List<ILoadOption> loads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
 		List<IDischargeOption> discharges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
 		optimiserRecorder.init(loads, discharges);
-		
+
+		if (true) {
+			throw new UnsupportedOperationException("Long term optimiser not supported");
+		}
 		// (2) Generate S2S bindings matrix for LT slots
 		ExecutorService es = Executors.newSingleThreadExecutor();
-		LongTermOptimiserHelper.getS2SBindings(loads, discharges, charterInMarket, es, dataTransformer, optimiserRecorder);
+		// LongTermOptimiserHelper.getS2SBindings(loads, discharges, charterInMarket, es, dataTransformer, optimiserRecorder);
 		// now using our profits recorder we have a full matrix of constraints
 		// and pnl
 		Long[][] profit = optimiserRecorder.getProfit();
-		
+
 		// (3) Optimise matrix
 		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
-				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(), optimiserRecorder.getMinLoadGroupCount());
+				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(),
+				optimiserRecorder.getMinLoadGroupCount());
 		if (pairingsMatrix == null) {
 			return null;
 		}
-		
+
 		// (4) Export the pairings matrix to a Map
 		Map<ILoadOption, IDischargeOption> pairingsMap = new HashMap<>();
 		for (ILoadOption load : loads) {
@@ -102,7 +108,7 @@ public class LongTermOptimiser {
 			// print pairings for debug
 			LongTermOptimiserHelper.printPairings(loads, pairingsMatrix, optimiserRecorder);
 		}
-		
+
 		// (5) Export the pairings matrix to the raw sequences
 		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
 		IResource nominal = LongTermOptimiserHelper.getNominal(rawSequences, charterInMarket, vesselProvider);
@@ -113,6 +119,7 @@ public class LongTermOptimiser {
 
 	/**
 	 * Updates the raw sequences given an allocations matrix
+	 * 
 	 * @param rawSequences
 	 * @param pairingsMap
 	 * @param nominal
@@ -122,8 +129,7 @@ public class LongTermOptimiser {
 		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
 		int insertIndex = 0;
 		for (int i = 0; i < modifiableSequence.size(); i++) {
-			if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) != null
-					&& portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() == PortType.End) {
+			if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) != null && portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() == PortType.End) {
 				break;
 			}
 			insertIndex++;

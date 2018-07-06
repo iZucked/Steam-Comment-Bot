@@ -58,11 +58,11 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
-import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
@@ -78,6 +78,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -120,6 +121,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 		hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		final String[] initialHints = hints.toArray(new String[hints.size()]);
+		CharterInMarket defaultMarket = createDefaultMarket(adpModel.getFleetProfile());
 
 		// Generate internal data
 		final SimpleCleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
@@ -133,8 +135,8 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 					null, // Bootstrap module
 					OptimiserInjectorServiceMaker.begin()//
 							.withModuleBindInstance(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPModel.class, adpModel)//
-							.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, createExtraDataModule(adpModel))//
-							.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, createInitialSolutionModule(adpModel))//
+							.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, createExtraDataModule(adpModel, defaultMarket))//
+							.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, createInitialSolutionModule(adpModel, defaultMarket))//
 							.make(), //
 					true, false, //
 					initialHints // Hints? No Caching?
@@ -193,7 +195,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 		}
 	}
 
-	private Module createInitialSolutionModule(final @NonNull ADPModel adpModel) {
+	private Module createInitialSolutionModule(final @NonNull ADPModel adpModel, CharterInMarket defaultMarket) {
 		return new PrivateModule() {
 
 			@Override
@@ -287,6 +289,15 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 						}
 					}
 				}
+				{
+					final ISpotCharterInMarketProvider spotCharterInMarketProvider = injector.getInstance(ISpotCharterInMarketProvider.class);
+
+					{
+						final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(defaultMarket, ISpotCharterInMarket.class);
+						final IVesselAvailability o_availability = spotCharterInMarketProvider.getSpotMarketAvailability(market, -1);
+						resources.add(vesselProvider.getResource(o_availability));
+					}
+				}
 
 				for (final VesselAvailability vesselAvailability : fleetProfile.getVesselAvailabilities()) {
 					final IVesselAvailability o_availability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
@@ -325,10 +336,11 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 
 				return new MultiStateResult(sequences, new HashMap<>());
 			}
+
 		};
 	}
 
-	private Module createExtraDataModule(final @NonNull ADPModel adpModel) {
+	private Module createExtraDataModule(final @NonNull ADPModel adpModel, CharterInMarket defaultMarket) {
 		final List<VesselAvailability> extraAvailabilities = new LinkedList<>();
 		final List<VesselEvent> extraVesselEvents = new LinkedList<>();
 		final List<CharterInMarketOverride> extraCharterInMarketOverrides = new LinkedList<>();
@@ -352,12 +364,35 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			}
 		}
 
-		if (adpModel.getFleetProfile() != null) {
-			extraAvailabilities.addAll(adpModel.getFleetProfile().getVesselAvailabilities());
-			extraVesselEvents.addAll(adpModel.getFleetProfile().getVesselEvents());
+		FleetProfile fleetProfile = adpModel.getFleetProfile();
+		if (fleetProfile != null) {
+			extraAvailabilities.addAll(fleetProfile.getVesselAvailabilities());
+			extraVesselEvents.addAll(fleetProfile.getVesselEvents());
+
+			extraCharterInMarkets.add(defaultMarket);
+		} else {
+			throw new IllegalStateException();
 		}
 
 		return new AbstractModule() {
+
+			@Provides
+			@Named(OptimiserConstants.DEFAULT_VESSEL)
+			private IVesselAvailability provideDefaultVessel(ModelEntityMap modelEntityMap, IVesselProvider vesselProvider, IOptimisationData optimisationData) {
+				final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(defaultMarket, ISpotCharterInMarket.class);
+
+				for (final IResource o_resource : optimisationData.getResources()) {
+					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
+					if (o_vesselAvailability.getSpotCharterInMarket() != market) {
+						continue;
+					}
+					if (o_vesselAvailability.getSpotIndex() == -1) {
+						return o_vesselAvailability;
+					}
+
+				}
+				throw new IllegalStateException();
+			}
 
 			@Override
 			protected void configure() {
@@ -400,6 +435,18 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 				return extraDischarges;
 			}
 		};
+	}
+
+	private CharterInMarket createDefaultMarket(FleetProfile fleetProfile) {
+		final CharterInMarket defaultMarket;
+		defaultMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+
+		defaultMarket.setVessel(fleetProfile.getDefaultVessel());
+		defaultMarket.setCharterInRate(fleetProfile.getDefaultVesselCharterInRate());
+		defaultMarket.setNominal(true);
+		defaultMarket.setEnabled(true);
+		defaultMarket.setName("ADP Default Vessel");
+		return defaultMarket;
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -43,7 +44,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
-public class LoadDischargePairValueCalculatorUnit {
+public class LoadDischargePairValueCalculatorStep {
 
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
@@ -51,25 +52,13 @@ public class LoadDischargePairValueCalculatorUnit {
 	@NonNull
 	private final Injector injector;
 
-	@NonNull
-	private final IMultiStateResult inputState;
-
-	@NonNull
-	private final String phase;
-
 	private final Map<Thread, LoadDischargePairValueCalculator> threadCache = new ConcurrentHashMap<>(100);
 
-	private @NonNull ExecutorService executorService;
-
-	private IVesselAvailability nominalMarketAvailability;
-
 	@SuppressWarnings("null")
-	public LoadDischargePairValueCalculatorUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
-			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
+	public LoadDischargePairValueCalculatorStep(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
+			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final ISequences initialSequences, @NonNull final IMultiStateResult inputState,
+			@NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
-		this.phase = phase;
-		this.executorService = executorService;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -103,37 +92,29 @@ public class LoadDischargePairValueCalculatorUnit {
 		});
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
-
-		this.inputState = inputState;
 	}
 
-	public void run(final @NonNull CharterInMarket nominalMarket, @NonNull final IProgressMonitor monitor, final ProfitAndLossExtractor recorder) {
+	public void run(final @NonNull IVesselAvailability nominalMarketAvailability, //
+			final ProfitAndLossExtractor recorder, //
+			@NonNull final CleanableExecutorService executorService, //
+			@NonNull final IProgressMonitor monitor) {
 		final IPhaseOptimisationData optimisationData = injector.getInstance(IPhaseOptimisationData.class);
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 
 		final List<ILoadOption> loads = LoadDischargePairValueCalculator.findPurchases(optimisationData, portSlotProvider);
 		final List<IDischargeOption> discharges = LoadDischargePairValueCalculator.findSales(optimisationData, portSlotProvider);
 
-		run(nominalMarket, loads, discharges, monitor, recorder);
+		run(nominalMarketAvailability, loads, discharges, recorder, executorService, monitor);
 	}
-	
-	public void run(final @NonNull CharterInMarket nominalMarket, final List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull final IProgressMonitor monitor, final ProfitAndLossExtractor recorder) {
+
+	public void run(final @NonNull IVesselAvailability nominalMarketAvailability, //
+			final List<ILoadOption> loads, List<IDischargeOption> discharges, //
+			final ProfitAndLossExtractor recorder, //
+			@NonNull final CleanableExecutorService executorService, //
+			@NonNull final IProgressMonitor monitor) {
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 			try {
-				final IPhaseOptimisationData optimisationData = injector.getInstance(IPhaseOptimisationData.class);
-				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
-
-				final ISpotCharterInMarket o_nominalMarket = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(nominalMarket, ISpotCharterInMarket.class);
-				for (final IResource resource : optimisationData.getResources()) {
-					final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-					if (vesselAvailability.getSpotCharterInMarket() == o_nominalMarket && vesselAvailability.getSpotIndex() == -1) {
-						nominalMarketAvailability = vesselAvailability;
-						break;
-					}
-				}
-				assert nominalMarketAvailability != null;
-
 				final int vesselCount = 1;
 				final int totalWork = loads.size() * discharges.size() * vesselCount;
 				monitor.beginTask("Generate cost pairs", totalWork);
@@ -151,7 +132,6 @@ public class LoadDischargePairValueCalculatorUnit {
 							}));
 						}
 					}
-					executorService.shutdown();
 					// Block until all futures completed
 					for (final Future<?> f : futures) {
 						try {
@@ -167,6 +147,8 @@ public class LoadDischargePairValueCalculatorUnit {
 				}
 
 			} finally {
+				executorService.clean();
+
 				// Clean up thread-locals created in the scope object
 				for (final Thread thread : threadCache.keySet()) {
 					scope.exit(thread);

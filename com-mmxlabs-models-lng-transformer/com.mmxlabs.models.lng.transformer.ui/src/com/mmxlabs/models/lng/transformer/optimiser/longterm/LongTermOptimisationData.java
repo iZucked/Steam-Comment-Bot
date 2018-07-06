@@ -27,18 +27,19 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
  * Data structures for performing a long term optimisation
+ * 
  * @author achurchill
  *
  */
 public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	@Inject
-	IPhaseOptimisationData phaseOptimisationData;
+	private IPhaseOptimisationData phaseOptimisationData;
 	@Inject
-	IPortSlotProvider portSlotProvider;
+	private IPortSlotProvider portSlotProvider;
 	@Inject
-	IMaxSlotCountConstraintDataProvider maxSlotCountConstraint;
-	@Inject(optional=true)
-	ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider;
+	private IMaxSlotCountConstraintDataProvider maxSlotCountConstraint;
+	@Inject(optional = true)
+	private ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider;
 
 	Long[][] profit;
 	private boolean[][] valid;
@@ -53,19 +54,19 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	private List<Map<String, List<Integer>>> minDischargeGroupCount;
 	private List<Map<String, List<Integer>>> maxLoadGroupCount;
 	private List<Map<String, List<Integer>>> minLoadGroupCount;
-	
+
 	private int[] vesselDesiredNumberSlots;
 
 	public LongTermOptimisationData() {
-		
+
 	}
-	
+
 	public void init(final List<ILoadOption> loadsUnsorted, final List<IDischargeOption> dischargesUnsorted) {
 		// sort slots
 		this.setSortedLoads(new LinkedList<>(loadsUnsorted));
-		this.getSortedLoads().sort((a,b)->a.getId().compareTo(b.getId()));
+		this.getSortedLoads().sort((a, b) -> a.getId().compareTo(b.getId()));
 		this.setSortedDischarges(new LinkedList<>(dischargesUnsorted));
-		this.getSortedDischarges().sort((a,b)->a.getId().compareTo(b.getId()));
+		this.getSortedDischarges().sort((a, b) -> a.getId().compareTo(b.getId()));
 		{
 			int index = 0;
 			for (final ILoadOption iLoadOption : getSortedLoads()) {
@@ -89,14 +90,15 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 		setMaxLoadGroupCount();
 		setMinLoadGroupCount();
 	}
-	
+
 	@Override
 	public void record(@NonNull final ILoadOption load, @NonNull final IDischargeOption discharge, final long profitAndLoss) {
 		profit[loadMap.get(load)][dischargeMap.get(discharge)] = profitAndLoss;
 	}
-	
+
 	/**
-	 * Finds the allocated discharge for a given load 
+	 * Finds the allocated discharge for a given load
+	 * 
 	 * @param load
 	 * @param allocations
 	 * @return
@@ -109,7 +111,7 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 		}
 		return null;
 	}
-	
+
 	public Long[][] getProfit() {
 		return profit;
 	}
@@ -117,27 +119,27 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	public boolean[] getOptionalLoads() {
 		return optionalLoads;
 	}
-	
+
 	public void setOptionalLoads(boolean[] optionalLoads) {
 		this.optionalLoads = optionalLoads;
 	}
-	
+
 	public boolean[] getOptionalDischarges() {
 		return optionalDischarges;
 	}
-	
+
 	private void setOptionalLoads() {
 		optionalLoads = new boolean[this.getSortedLoads().size()];
 		for (int i = 0; i < getSortedLoads().size(); i++) {
-			optionalLoads[i] = phaseOptimisationData.isElementOptional(portSlotProvider.getElement(getSortedLoads().get(i))) && !phaseOptimisationData.getSoftRequiredElements().contains(portSlotProvider.getElement(getSortedLoads().get(i)));
+			optionalLoads[i] = phaseOptimisationData.isElementOptional(portSlotProvider.getElement(getSortedLoads().get(i)))
+					&& !phaseOptimisationData.getSoftRequiredElements().contains(portSlotProvider.getElement(getSortedLoads().get(i)));
 		}
 	}
 
 	private void setOptionalDischarges() {
 		optionalDischarges = new boolean[this.getSortedDischarges().size()];
 		for (int i = 0; i < getSortedDischarges().size(); i++) {
-			optionalDischarges[i] = phaseOptimisationData
-					.isElementOptional(portSlotProvider.getElement(getSortedDischarges().get(i)))
+			optionalDischarges[i] = phaseOptimisationData.isElementOptional(portSlotProvider.getElement(getSortedDischarges().get(i)))
 					&& !phaseOptimisationData.getSoftRequiredElements().contains(portSlotProvider.getElement(getSortedDischarges().get(i)));
 		}
 	}
@@ -157,12 +159,12 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 				} else {
 					valid[i][j] = true;
 				}
-			}			
+			}
 		}
 	}
-	
+
 	public long[][] getProfitAsPrimitive() {
-		long[][] profitL= new long[profit.length][profit[0].length];
+		long[][] profitL = new long[profit.length][profit[0].length];
 		for (int i = 0; i < profit.length; i++) {
 			for (int j = 0; j < profit[i].length; j++) {
 				profitL[i][j] = profit[i][j] != null ? profit[i][j] : 0L;
@@ -179,10 +181,11 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	public void setValid(boolean[][] valid) {
 		this.valid = valid;
 	}
-	
+
 	public int getIndex(ILoadOption load) {
 		return loadMap.get(load);
 	}
+
 	public int getIndex(IDischargeOption discharge) {
 		return dischargeMap.get(discharge);
 	}
@@ -202,15 +205,14 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 
 	public void setMinDischargeGroupCount() {
 		List<Pair<Set<IDischargeOption>, Integer>> allMinDischargeGroupCounts = maxSlotCountConstraint.getAllMinDischargeGroupCounts();
-		minDischargeGroupCount = createJSONMapFromConstraint(allMinDischargeGroupCounts);;
+		minDischargeGroupCount = createJSONMapFromConstraint(allMinDischargeGroupCounts);
+		;
 	}
 
 	private List<Map<String, List<Integer>>> createJSONMapFromConstraint(List<Pair<Set<IDischargeOption>, Integer>> allMaxDischargeGroupCounts) {
 		List<Map<String, List<Integer>>> dischargeCountConstraintJSON = new LinkedList<>();
 		for (Pair<Set<IDischargeOption>, Integer> entry : allMaxDischargeGroupCounts) {
-			List<Integer> slots = entry.getFirst().stream()
-					.map(dis -> (Integer) getIndex(dis))
-					.collect(Collectors.toList());
+			List<Integer> slots = entry.getFirst().stream().map(dis -> (Integer) getIndex(dis)).collect(Collectors.toList());
 			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getSecond());
 			Map<String, List<Integer>> map = new LinkedHashMap<>();
 			map.put("discharges", slots);
@@ -235,15 +237,14 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 
 	public void setMinLoadGroupCount() {
 		List<Pair<Set<ILoadOption>, Integer>> allMinLoadGroupCounts = maxSlotCountConstraint.getAllMinLoadGroupCounts();
-		minLoadGroupCount = createLoadJSONMapFromConstraint(allMinLoadGroupCounts);;
+		minLoadGroupCount = createLoadJSONMapFromConstraint(allMinLoadGroupCounts);
+		;
 	}
 
 	private List<Map<String, List<Integer>>> createLoadJSONMapFromConstraint(List<Pair<Set<ILoadOption>, Integer>> allMaxLoadGroupCounts) {
 		List<Map<String, List<Integer>>> dischargeCountConstraintJSON = new LinkedList<>();
 		for (Pair<Set<ILoadOption>, Integer> entry : allMaxLoadGroupCounts) {
-			List<Integer> slots = entry.getFirst().stream()
-					.map(dis -> (Integer) getIndex(dis))
-					.collect(Collectors.toList());
+			List<Integer> slots = entry.getFirst().stream().map(dis -> (Integer) getIndex(dis)).collect(Collectors.toList());
 			List<Integer> count = CollectionsUtil.makeLinkedList(entry.getSecond());
 			Map<String, List<Integer>> map = new LinkedHashMap<>();
 			map.put("loads", slots);
@@ -252,9 +253,7 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 		}
 		return dischargeCountConstraintJSON;
 	}
-	
-	
-	
+
 	public int[] getVesselDesiredNumberSlots() {
 		return vesselDesiredNumberSlots;
 	}
@@ -274,5 +273,5 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	public void setSortedDischarges(List<IDischargeOption> sortedDischarges) {
 		this.sortedDischarges = sortedDischarges;
 	}
-	
+
 }

@@ -5,9 +5,9 @@
 package com.mmxlabs.models.lng.transformer.extensions.adp;
 
 import java.time.YearMonth;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.FleetConstraint;
+import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
 import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
 import com.mmxlabs.models.lng.adp.MinCargoConstraint;
@@ -32,8 +33,10 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -52,10 +55,10 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Inject
 	private SchedulerCalculationUtils scheduleCalculationUtils;
-	
+
 	@Inject
 	private CalendarMonthMapper calendarMonthMapper;
 
@@ -67,6 +70,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 
 	@Inject(optional = true)
 	private ADPModel adpModel;
+
+	@Inject
+	private @NonNull IAllowedVesselProviderEditor allowedVesselProviderEditor;
 
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
@@ -81,12 +87,14 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 		}
 
 		final YearMonth end = adpModel.getYearEnd();
+		final FleetProfile fleetProfile = adpModel.getFleetProfile();
+		final IVessel iDefaultVessel = modelEntityMap.getOptimiserObjectNullChecked(fleetProfile.getDefaultVessel(), IVessel.class);
 
 		for (final PurchaseContractProfile contractProfile : adpModel.getPurchaseContractProfiles()) {
 			if (!contractProfile.isEnabled()) {
 				continue;
 			}
-			 YearMonth start = contractProfile.getContract().getStartDate();
+			YearMonth start = contractProfile.getContract().getStartDate();
 			if (start == null) {
 				start = adpModel.getYearStart();
 			}
@@ -98,6 +106,16 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			final List<ILoadOption> o_slots = slots.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class)) //
 					.collect(Collectors.toList());
+
+			// Forcibly add in the default vessel to the allowed vessels list.
+			// Note: This is *vessel* not market!
+			for (final IPortSlot slot : o_slots) {
+				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot);
+				if (permittedVessels != null) {
+					permittedVessels.add(iDefaultVessel);
+				}
+			}
+
 			for (final ProfileConstraint profileConstraint : contractProfile.getConstraints()) {
 				if (profileConstraint instanceof MinCargoConstraint) {
 					final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) profileConstraint;
@@ -159,6 +177,16 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			final List<IDischargeOption> o_slots = slots.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class)) //
 					.collect(Collectors.toList());
+
+			// Forcibly add in the default vessel to the allowed vessels list.
+			// Note: This is *vessel* not market!
+			for (final IPortSlot slot : o_slots) {
+				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot);
+				if (permittedVessels != null) {
+					permittedVessels.add(iDefaultVessel);
+				}
+			}
+
 			for (final ProfileConstraint profileConstraint : contractProfile.getConstraints()) {
 				if (profileConstraint instanceof MinCargoConstraint) {
 					final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) profileConstraint;
@@ -204,18 +232,34 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 		}
 		handleVesselConstraints(adpModel);
 	}
-	
-	public void handleVesselConstraints(@NonNull ADPModel model) {
-		if (model.getFleetProfile() != null && model.getFleetProfile().getConstraints() != null) {
-			for (FleetConstraint fleetConstraint : model.getFleetProfile().getConstraints()) {
+
+	public void handleVesselConstraints(@NonNull final ADPModel model) {
+
+		final FleetProfile fleetProfile = model.getFleetProfile();
+		if (fleetProfile != null && fleetProfile.getConstraints() != null) {
+			for (final FleetConstraint fleetConstraint : fleetProfile.getConstraints()) {
 				if (fleetConstraint instanceof TargetCargoesOnVesselConstraint) {
-					IVessel iVessel = modelEntityMap.getOptimiserObjectNullChecked(((TargetCargoesOnVesselConstraint) fleetConstraint).getVessel(), IVessel.class);
-					List<IVesselAvailability> availabilities = scheduleCalculationUtils.getAllVesselAvailabilities()
-							.stream().filter(v->v.getVessel() == iVessel).collect(Collectors.toList());
-					for (IVesselAvailability availability : availabilities) {
-						longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(availability,
-								((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
-								(long) ((TargetCargoesOnVesselConstraint) fleetConstraint).getWeight());
+					{
+						final IVessel iVessel = modelEntityMap.getOptimiserObjectNullChecked(((TargetCargoesOnVesselConstraint) fleetConstraint).getVessel(), IVessel.class);
+
+						final List<IVesselAvailability> availabilities = scheduleCalculationUtils.getAllVesselAvailabilities().stream() //
+								.filter(v -> (v.getVessel() == iVessel)) //
+								.collect(Collectors.toList());
+
+						for (final IVesselAvailability availability : availabilities) {
+							longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(availability, ((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
+									(long) ((TargetCargoesOnVesselConstraint) fleetConstraint).getWeight());
+						}
+					}
+					final IVessel iDefaultVessel = modelEntityMap.getOptimiserObjectNullChecked(fleetProfile.getDefaultVessel(), IVessel.class);
+					for (final IVesselAvailability vesselAvailability : scheduleCalculationUtils.getAllVesselAvailabilities()) {
+						if (vesselAvailability.getVessel() == iDefaultVessel) {
+							if (vesselAvailability.getSpotIndex() == -1) {
+								// Not strictly correct yet!
+								// longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(vesselAvailability, ((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
+								// (long) ((TargetCargoesOnVesselConstraint) fleetConstraint).getWeight());
+							}
+						}
 					}
 				}
 			}

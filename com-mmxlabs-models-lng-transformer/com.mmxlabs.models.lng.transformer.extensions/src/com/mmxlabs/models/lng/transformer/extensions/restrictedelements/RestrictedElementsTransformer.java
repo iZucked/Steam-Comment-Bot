@@ -124,7 +124,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 
 			// take the complement of the list if the list is a permissive (as opposed to prohibitive) one
 			if (isPermissive) {
-				final Set<ISequenceElement> permissive = new HashSet<ISequenceElement>(allElements);
+				final Set<ISequenceElement> permissive = new HashSet<>(allElements);
 				permissive.removeAll(restrictedElements);
 				restrictedElements = permissive;
 			} else {
