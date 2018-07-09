@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -38,6 +39,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
@@ -278,6 +280,24 @@ public class FleetPage extends ADPComposite {
 
 							}
 						};
+						{
+							Action packAction = new Action("Pack") {
+								@Override
+								public void run() {
+
+									if (availabilityViewer != null && !availabilityViewer.getControl().isDisposed()) {
+										final GridColumn[] columns = availabilityViewer.getGrid().getColumns();
+										for (final GridColumn c : columns) {
+											if (c.getResizeable()) {
+												c.pack();
+											}
+										}
+									}
+								}
+							};
+							packAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "/icons/pack.gif"));
+							buttonManager.getToolbarManager().add(packAction);
+						}
 						deleteAvailabilityAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
 						buttonManager.getToolbarManager().add(deleteAvailabilityAction);
 					}
@@ -407,6 +427,24 @@ public class FleetPage extends ADPComposite {
 
 							}
 						};
+						{
+							Action packAction = new Action("Pack") {
+								@Override
+								public void run() {
+
+									if (eventsViewer != null && !eventsViewer.getControl().isDisposed()) {
+										final GridColumn[] columns = eventsViewer.getGrid().getColumns();
+										for (final GridColumn c : columns) {
+											if (c.getResizeable()) {
+												c.pack();
+											}
+										}
+									}
+								}
+							};
+							packAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "/icons/pack.gif"));
+							buttonManager.getToolbarManager().add(packAction);
+						}
 						deleteEventAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
 						buttonManager.getToolbarManager().add(deleteEventAction);
 					}

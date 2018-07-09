@@ -64,11 +64,13 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
@@ -530,6 +532,18 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 					} else if (m instanceof FOBSalesMarket) {
 						marketsModel.getFobSalesSpotMarket().getMarkets().add(m);
 					}
+				}
+				
+				{
+					final CharterInMarket defaultMarket;
+					defaultMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+
+					defaultMarket.setVessel(copyADP.getFleetProfile().getDefaultVessel());
+					defaultMarket.setCharterInRate(copyADP.getFleetProfile().getDefaultVesselCharterInRate());
+					defaultMarket.setNominal(true);
+					defaultMarket.setEnabled(true);
+					defaultMarket.setName("ADP Default Vessel");
+					marketsModel.getCharterInMarkets().add(defaultMarket);
 				}
 
 				final ClonedScenarioDataProvider scenarioDataProvider = ClonedScenarioDataProvider.make(copy, getScenarioDataProvider());

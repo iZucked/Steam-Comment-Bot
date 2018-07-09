@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -43,6 +44,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
@@ -255,6 +257,25 @@ public class ContractPage extends ADPComposite {
 					};
 					deleteSlotAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
 					removeButtonManager.getToolbarManager().add(deleteSlotAction);
+					{
+						Action packAction = new Action("Pack") {
+							@Override
+							public void run() {
+
+								if (previewViewer != null && !previewViewer.getControl().isDisposed()) {
+									final GridColumn[] columns = previewViewer.getGrid().getColumns();
+									for (final GridColumn c : columns) {
+										if (c.getResizeable()) {
+											c.pack();
+										}
+									}
+								}
+							}
+						};
+						packAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "/icons/pack.gif"));
+						removeButtonManager.getToolbarManager().add(packAction);
+					}
+
 					removeButtonManager.getToolbarManager().update(true);
 				}
 			}
