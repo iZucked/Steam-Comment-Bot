@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -74,6 +73,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 
 public class ContractPage extends ADPComposite {
 
@@ -208,7 +208,6 @@ public class ContractPage extends ADPComposite {
 			rhsScrolledComposite.setLayoutData(GridDataFactory.fillDefaults()//
 					.grab(false, true)//
 					.hint(200, SWT.DEFAULT) //
-					// .span(1, 1) //
 					.align(SWT.FILL, SWT.FILL).create());
 
 			rhsScrolledComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -216,10 +215,7 @@ public class ContractPage extends ADPComposite {
 			rhsScrolledComposite.setLayout(GridLayoutFactory.swtDefaults().margins(0, 0).create());
 			rhsScrolledComposite.setExpandHorizontal(true);
 			rhsScrolledComposite.setExpandVertical(true);
-			// lhsScrolledComposite.setMinSize(400, 400);
 			rhsComposite = new Composite(rhsScrolledComposite, SWT.NONE);
-			// centralComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-			// centralComposite.setBackgroundMode(SWT.INHERIT_FORCE);
 			rhsScrolledComposite.setBackgroundMode(SWT.INHERIT_FORCE);
 			rhsScrolledComposite.setContent(rhsComposite);
 
@@ -233,11 +229,6 @@ public class ContractPage extends ADPComposite {
 					previewGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 
 					previewGroup.setText("Preview");
-					// toolkit.adapt(previewGroup);
-
-					if (editorData.getEditingDomain() != null) {
-						// constructPreviewViewer(editorData, previewGroup);
-					}
 
 					final DetailToolbarManager removeButtonManager = new DetailToolbarManager(previewGroup, SWT.TOP);
 
@@ -245,13 +236,13 @@ public class ContractPage extends ADPComposite {
 						@Override
 						public void run() {
 							if (previewViewer != null) {
-								ISelection selection = previewViewer.getSelection();
+								final ISelection selection = previewViewer.getSelection();
 								if (selection instanceof IStructuredSelection) {
-									IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-									CompoundCommand c = new CompoundCommand();
-									Iterator<Object> itr = iStructuredSelection.iterator();
+									final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
+									final CompoundCommand c = new CompoundCommand();
+									final Iterator<?> itr = iStructuredSelection.iterator();
 									while (itr.hasNext()) {
-										Object o = itr.next();
+										final Object o = itr.next();
 										c.append(DeleteCommand.create(editorData.getEditingDomain(), o));
 									}
 									editorData.getEditingDomain().getCommandStack().execute(c);
@@ -265,8 +256,6 @@ public class ContractPage extends ADPComposite {
 					deleteSlotAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
 					removeButtonManager.getToolbarManager().add(deleteSlotAction);
 					removeButtonManager.getToolbarManager().update(true);
-					// toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
-
 				}
 			}
 		}
@@ -275,7 +264,7 @@ public class ContractPage extends ADPComposite {
 
 	private ScenarioTableViewer constructPreviewViewer(final ADPEditorData editorData, final Group previewGroup) {
 
-		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.NONE, editorData);
+		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL, editorData);
 		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), new EReference[0]);
 		previewViewer.setContentProvider(new ContentProvider());
 		GridViewerHelper.configureLookAndFeel(previewViewer);
@@ -288,14 +277,12 @@ public class ContractPage extends ADPComposite {
 
 		previewViewer.getGrid().setHeaderVisible(true);
 
-		// previewViewer.setContentProvider(new ArrayContentProvider());
-
 		previewViewer.addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editorData.getEditingDomain()));
 		previewViewer.addTypicalColumn("Port",
 				new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), editorData.getReferenceValueProviderCache(), editorData.getEditingDomain()));
 
 		// TODO: Groups
-		GridColumnGroup windowGroup = new GridColumnGroup(previewViewer.getGrid(), SWT.NONE);
+		final GridColumnGroup windowGroup = new GridColumnGroup(previewViewer.getGrid(), SWT.NONE);
 		windowGroup.setText("Window");
 		GridViewerHelper.configureLookAndFeel(windowGroup);
 		previewViewer.addTypicalColumn("Date", windowGroup, new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editorData.getEditingDomain()));
@@ -306,7 +293,7 @@ public class ContractPage extends ADPComposite {
 		previewViewer.addTypicalColumn("Duration", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editorData.getEditingDomain()));
 
 		// TODO: Groups
-		GridColumnGroup quantityGroup = new GridColumnGroup(previewViewer.getGrid(), SWT.NONE);
+		final GridColumnGroup quantityGroup = new GridColumnGroup(previewViewer.getGrid(), SWT.NONE);
 		quantityGroup.setText("Quantity");
 		GridViewerHelper.configureLookAndFeel(quantityGroup);
 		previewViewer.addTypicalColumn("Min", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), editorData.getEditingDomain()));
@@ -332,7 +319,7 @@ public class ContractPage extends ADPComposite {
 		previewViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
+			public void selectionChanged(final SelectionChangedEvent event) {
 				deleteSlotAction.setEnabled(!event.getSelection().isEmpty());
 			}
 		});
@@ -342,9 +329,7 @@ public class ContractPage extends ADPComposite {
 
 	@Override
 	public void refresh() {
-		if (previewViewer != null) {
-			previewViewer.refresh();
-		}
+		ViewerHelper.refresh(previewViewer, true);
 	}
 
 	@Override
@@ -363,6 +348,7 @@ public class ContractPage extends ADPComposite {
 		if (scenarioModel != null) {
 			previewViewer = constructPreviewViewer(editorData, previewGroup);
 			previewGroup.layout();
+			rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		}
 		final List<Object> objects = new LinkedList<>();
 		if (scenarioModel != null && adpModel != null) {
@@ -380,7 +366,6 @@ public class ContractPage extends ADPComposite {
 		objectSelector.setSelection(selection);
 
 		detailComposite.getComposite().setEnabled(adpModel != null);
-		// generateButton.setEnabled(adpModel != null);
 		mainComposite.setVisible(adpModel != null);
 		objectSelector.getControl().setEnabled(adpModel != null);
 		if (adpModel == null) {
@@ -438,7 +423,7 @@ public class ContractPage extends ADPComposite {
 		updatePreviewPaneInput(target);
 	}
 
-	private void updatePreviewPaneInput(EObject target) {
+	private void updatePreviewPaneInput(final EObject target) {
 		if (previewViewer != null) {
 			if (target instanceof PurchaseContractProfile) {
 				final PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile) target;
