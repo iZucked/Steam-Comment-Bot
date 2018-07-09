@@ -264,7 +264,7 @@ public class ContractPage extends ADPComposite {
 
 	private ScenarioTableViewer constructPreviewViewer(final ADPEditorData editorData, final Group previewGroup) {
 
-		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL, editorData);
+		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.MULTI, editorData);
 		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), new EReference[0]);
 		previewViewer.setContentProvider(new ContentProvider());
 		GridViewerHelper.configureLookAndFeel(previewViewer);
@@ -305,7 +305,7 @@ public class ContractPage extends ADPComposite {
 
 			@Override
 			public void doubleClick(final DoubleClickEvent event) {
-				final ISelection selection = event.getSelection();
+				final ISelection selection = previewViewer.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection ss = (IStructuredSelection) selection;
 					DetailCompositeDialogUtil.editSelection(editorData, ss);

@@ -419,7 +419,7 @@ public class FleetPage extends ADPComposite {
 
 	private ScenarioTableViewer constructFleetViewer(final ADPEditorData editorData, final Group previewGroup) {
 
-		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.NONE, editorData);
+		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.MULTI, editorData);
 		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), ADPPackage.Literals.FLEET_PROFILE__VESSEL_AVAILABILITIES);
 		GridViewerHelper.configureLookAndFeel(previewViewer);
 
@@ -476,7 +476,7 @@ public class FleetPage extends ADPComposite {
 
 			@Override
 			public void doubleClick(final DoubleClickEvent event) {
-				final ISelection selection = event.getSelection();
+				final ISelection selection = previewViewer.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection ss = (IStructuredSelection) selection;
 					DetailCompositeDialogUtil.editSelection(editorData, ss);
@@ -499,7 +499,7 @@ public class FleetPage extends ADPComposite {
 
 	private ScenarioTableViewer constructEventsViewer(final ADPEditorData editorData, final Group previewGroup) {
 
-		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.NONE, editorData);
+		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.MULTI, editorData);
 		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS);
 		GridViewerHelper.configureLookAndFeel(previewViewer);
 
@@ -543,7 +543,7 @@ public class FleetPage extends ADPComposite {
 
 			@Override
 			public void doubleClick(final DoubleClickEvent event) {
-				final ISelection selection = event.getSelection();
+				final ISelection selection = previewViewer.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection ss = (IStructuredSelection) selection;
 					DetailCompositeDialogUtil.editSelection(editorData, ss);
