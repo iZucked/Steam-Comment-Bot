@@ -118,6 +118,14 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 				return createEntryPointAdapter();
 			}
 			@Override
+			public Adapter caseContingencyMatrix(ContingencyMatrix object) {
+				return createContingencyMatrixAdapter();
+			}
+			@Override
+			public Adapter caseContingencyMatrixEntry(ContingencyMatrixEntry object) {
+				return createContingencyMatrixEntryAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -284,6 +292,34 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEntryPointAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.port.ContingencyMatrix <em>Contingency Matrix</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrix
+	 * @generated
+	 */
+	public Adapter createContingencyMatrixAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.port.ContingencyMatrixEntry <em>Contingency Matrix Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.port.ContingencyMatrixEntry
+	 * @generated
+	 */
+	public Adapter createContingencyMatrixEntryAdapter() {
 		return null;
 	}
 

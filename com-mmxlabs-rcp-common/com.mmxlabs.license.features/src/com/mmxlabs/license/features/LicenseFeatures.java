@@ -31,7 +31,6 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.license.features.internal.FeatureEnablementExtension;
 import com.mmxlabs.license.features.internal.FeatureEnablementModule;
-import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 
 public class LicenseFeatures {
 
@@ -85,13 +84,11 @@ public class LicenseFeatures {
 										if (date != null && now != null) {
 											if (!now.isAfter(date)) {
 												sai.addStringPermission(permissionKey);
-											} else {
-												// LOG.warn("Feature %s has expired.", feature);
 											}
 										}
 									} catch (final IllegalArgumentException e) {
 										// Unable to parse string
-										LOG.error("Features: Unable to parse date %s", expiryDate);
+										LOG.error("Features: Unable to parse date {}", expiryDate);
 									}
 								} else {
 									// No expiry date, so permit now
@@ -101,7 +98,6 @@ public class LicenseFeatures {
 						}
 					}
 				}
-				// if (extraEnablements != null) {
 				for (final String feature : extraEnablementsSet) {
 					if (feature != null) {
 						final String permissionKey = "features:" + clean(feature);
@@ -109,7 +105,6 @@ public class LicenseFeatures {
 
 					}
 				}
-				// }
 
 				return sai;
 			}
@@ -121,7 +116,6 @@ public class LicenseFeatures {
 			}
 		}
 		final MyAuthRealm realm = new MyAuthRealm();
-		// injector.injectMembers(realm);
 
 		// Disable caching for immediate updates
 		realm.setAuthorizationCachingEnabled(false);
@@ -135,6 +129,7 @@ public class LicenseFeatures {
 		if (!subject.isAuthenticated()) {
 			subject.login(new UsernamePasswordToken("user", "password"));
 		}
+
 		return subject.isPermitted(feature);
 
 	}

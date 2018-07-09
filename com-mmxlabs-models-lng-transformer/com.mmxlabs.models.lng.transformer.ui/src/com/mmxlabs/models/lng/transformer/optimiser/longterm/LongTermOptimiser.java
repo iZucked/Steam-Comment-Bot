@@ -112,7 +112,9 @@ public class LongTermOptimiser {
 		// (5) Export the pairings matrix to the raw sequences
 		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
 		IResource nominal = LongTermOptimiserHelper.getNominal(rawSequences, charterInMarket, vesselProvider);
-		assert nominal != null;
+		if (nominal == null) {
+			throw new IllegalStateException();
+		}
 		updateSequences(rawSequences, pairingsMap, nominal);
 		return new Pair<>(rawSequences, 0L);
 	}

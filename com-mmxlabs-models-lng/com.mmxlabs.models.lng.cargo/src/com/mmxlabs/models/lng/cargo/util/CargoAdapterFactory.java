@@ -218,6 +218,18 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createCharterInMarketOverrideAdapter();
 			}
 			@Override
+			public Adapter casePaperDeal(PaperDeal object) {
+				return createPaperDealAdapter();
+			}
+			@Override
+			public Adapter caseBuyPaperDeal(BuyPaperDeal object) {
+				return createBuyPaperDealAdapter();
+			}
+			@Override
+			public Adapter caseSellPaperDeal(SellPaperDeal object) {
+				return createSellPaperDealAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -738,6 +750,48 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCharterInMarketOverrideAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.PaperDeal <em>Paper Deal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal
+	 * @generated
+	 */
+	public Adapter createPaperDealAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.BuyPaperDeal <em>Buy Paper Deal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.BuyPaperDeal
+	 * @generated
+	 */
+	public Adapter createBuyPaperDealAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.SellPaperDeal <em>Sell Paper Deal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.SellPaperDeal
+	 * @generated
+	 */
+	public Adapter createSellPaperDealAdapter() {
 		return null;
 	}
 

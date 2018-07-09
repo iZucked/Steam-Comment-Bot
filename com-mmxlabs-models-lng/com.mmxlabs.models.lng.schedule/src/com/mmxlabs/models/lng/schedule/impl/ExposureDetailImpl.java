@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.schedule.impl;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import com.mmxlabs.models.lng.types.DealType;
 import java.time.YearMonth;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -33,6 +34,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getNativeValue <em>Native Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getVolumeUnit <em>Volume Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getCurrencyUnit <em>Currency Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getDealType <em>Deal Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -197,6 +199,26 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * @ordered
 	 */
 	protected String currencyUnit = CURRENCY_UNIT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDealType() <em>Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDealType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final DealType DEAL_TYPE_EDEFAULT = DealType.PHYSICAL;
+
+	/**
+	 * The cached value of the '{@link #getDealType() <em>Deal Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDealType()
+	 * @generated
+	 * @ordered
+	 */
+	protected DealType dealType = DEAL_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -390,6 +412,27 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public DealType getDealType() {
+		return dealType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDealType(DealType newDealType) {
+		DealType oldDealType = dealType;
+		dealType = newDealType == null ? DEAL_TYPE_EDEFAULT : newDealType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE, oldDealType, dealType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -409,6 +452,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return getVolumeUnit();
 			case SchedulePackage.EXPOSURE_DETAIL__CURRENCY_UNIT:
 				return getCurrencyUnit();
+			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
+				return getDealType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -444,6 +489,9 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return;
 			case SchedulePackage.EXPOSURE_DETAIL__CURRENCY_UNIT:
 				setCurrencyUnit((String)newValue);
+				return;
+			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
+				setDealType((DealType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -481,6 +529,9 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 			case SchedulePackage.EXPOSURE_DETAIL__CURRENCY_UNIT:
 				setCurrencyUnit(CURRENCY_UNIT_EDEFAULT);
 				return;
+			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
+				setDealType(DEAL_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -509,6 +560,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return VOLUME_UNIT_EDEFAULT == null ? volumeUnit != null : !VOLUME_UNIT_EDEFAULT.equals(volumeUnit);
 			case SchedulePackage.EXPOSURE_DETAIL__CURRENCY_UNIT:
 				return CURRENCY_UNIT_EDEFAULT == null ? currencyUnit != null : !CURRENCY_UNIT_EDEFAULT.equals(currencyUnit);
+			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
+				return dealType != DEAL_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -539,6 +592,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 		result.append(volumeUnit);
 		result.append(", currencyUnit: ");
 		result.append(currencyUnit);
+		result.append(", dealType: ");
+		result.append(dealType);
 		result.append(')');
 		return result.toString();
 	}

@@ -25,6 +25,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnusedElements <em>Unused Elements</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getInventoryLevels <em>Inventory Levels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getPaperDealAllocations <em>Paper Deal Allocations</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule()
@@ -159,6 +160,22 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	EList<InventoryEvents> getInventoryLevels();
+
+	/**
+	 * Returns the value of the '<em><b>Paper Deal Allocations</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.PaperDealAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Paper Deal Allocations</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Paper Deal Allocations</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_PaperDealAllocations()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PaperDealAllocation> getPaperDealAllocations();
 
 } // end of  Schedule
 

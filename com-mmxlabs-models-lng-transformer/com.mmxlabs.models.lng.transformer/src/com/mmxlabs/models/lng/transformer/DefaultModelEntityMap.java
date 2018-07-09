@@ -35,10 +35,10 @@ public class DefaultModelEntityMap implements ModelEntityMap {
 	private final DateAndCurveHelper dateHelper;
 
 	@NonNull
-	private final Map<Object, Object> modelToOptimiser = new HashMap<Object, Object>();
+	private final Map<Object, Object> modelToOptimiser = new HashMap<>();
 
 	@NonNull
-	private final Map<Object, Object> optimiserToModel = new HashMap<Object, Object>();
+	private final Map<Object, Object> optimiserToModel = new HashMap<>();
 
 	@Inject
 	public DefaultModelEntityMap(@NonNull final DateAndCurveHelper dateHelper) {
@@ -95,7 +95,7 @@ public class DefaultModelEntityMap implements ModelEntityMap {
 	 */
 	public <T extends EObject> Collection<@NonNull T> getAllModelObjects(@NonNull final Class<? extends T> clz) {
 
-		final List<T> objects = new LinkedList<T>();
+		final List<T> objects = new LinkedList<>();
 		for (final Object obj : modelToOptimiser.keySet()) {
 			if (clz.isInstance(obj)) {
 				objects.add(clz.cast(obj));

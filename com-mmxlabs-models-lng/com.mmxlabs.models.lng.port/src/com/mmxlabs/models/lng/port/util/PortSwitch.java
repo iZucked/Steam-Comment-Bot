@@ -166,6 +166,18 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PortPackage.CONTINGENCY_MATRIX: {
+				ContingencyMatrix contingencyMatrix = (ContingencyMatrix)theEObject;
+				T1 result = caseContingencyMatrix(contingencyMatrix);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PortPackage.CONTINGENCY_MATRIX_ENTRY: {
+				ContingencyMatrixEntry contingencyMatrixEntry = (ContingencyMatrixEntry)theEObject;
+				T1 result = caseContingencyMatrixEntry(contingencyMatrixEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -302,6 +314,36 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseEntryPoint(EntryPoint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Contingency Matrix</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Contingency Matrix</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseContingencyMatrix(ContingencyMatrix object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Contingency Matrix Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Contingency Matrix Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseContingencyMatrixEntry(ContingencyMatrixEntry object) {
 		return null;
 	}
 

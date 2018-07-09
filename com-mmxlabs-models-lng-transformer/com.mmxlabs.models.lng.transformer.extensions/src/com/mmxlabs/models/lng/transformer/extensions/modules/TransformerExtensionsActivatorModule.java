@@ -8,12 +8,14 @@ import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.mmxlabs.models.lng.transformer.extensions.actuals.ActualsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.adp.ADPTransformerModule;
+import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeModule;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.inventory.InventoryLevelsOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
+import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealsScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
@@ -32,6 +34,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 	@Override
 	protected void configure() {
 		install(new RestrictedElementsModule());
+		install(new ContingencyIdleTimeModule());		
 		install(new PanamaSlotsModule());
 		install(new ADPTransformerModule());
 		install(new ShippingTypeRequirementModule());
@@ -49,6 +52,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		bindService(VesselAvailabilityEntityTransformerExtensionFactory.class).export();
 		
 		bindService(ExposuresOutputScheduleProcessorFactory.class).export();
+		bindService(PaperDealsScheduleProcessorFactory.class).export();
 		bindService(InventoryLevelsOutputScheduleProcessorFactory.class).export();
 	}
 

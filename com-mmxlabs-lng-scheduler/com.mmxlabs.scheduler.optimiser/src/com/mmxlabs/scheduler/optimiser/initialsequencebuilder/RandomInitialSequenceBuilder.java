@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.initialsequencebuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,21 +44,19 @@ public class RandomInitialSequenceBuilder implements IInitialSequenceBuilder {
 	public ISequences createInitialSequences(final IPhaseOptimisationData data, final ISequences suggestion, final Map<ISequenceElement, IResource> resourceSuggestion,
 			final Map<ISequenceElement, ISequenceElement> pairingHints) {
 
-		final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>(data.getSequenceElements());
+		final List<ISequenceElement> sequenceElements = new ArrayList<>(data.getSequenceElements());
 
 		// sort sequence elements by their load time
-		Collections.sort(sequenceElements, new Comparator<ISequenceElement>() {
-			@Override
-			public int compare(final ISequenceElement o1, final ISequenceElement o2) {
-				final int s1 = slotProvider.getPortSlot(o1).getTimeWindow().getInclusiveStart();
-				final int s2 = slotProvider.getPortSlot(o2).getTimeWindow().getInclusiveStart();
-				if (s1 < s2) {
-					return -1;
-				} else if (s1 > s2) {
-					return 1;
-				}
-				return 0;
+		Collections.sort(sequenceElements, (o1, o2) -> {
+			final int s1 = slotProvider.getPortSlot(o1).getTimeWindow().getInclusiveStart();
+			final int s2 = slotProvider.getPortSlot(o2).getTimeWindow().getInclusiveStart();
+			if (s1 < s2) {
+				return -1;
+			} else if (s1 > s2) {
+				return 1;
 			}
+			return 0;
+
 		});
 
 		final List<IResource> resources = data.getResources();

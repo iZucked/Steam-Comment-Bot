@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,10 +29,8 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -63,9 +62,11 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -84,55 +85,50 @@ public class InventoryReport extends ViewPart {
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
 	private Color color_Orange;
+
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
-			final Runnable r = new Runnable() {
+			final Runnable r = () -> {
 
-				@Override
-				public void run() {
+				selectedInventory = null;
 
-					selectedInventory = null;
+				currentResult = pinned;
+				if (currentResult == null && !others.isEmpty()) {
+					currentResult = others.iterator().next();
+				}
 
-					currentResult = pinned;
-					if (currentResult == null) {
-						for (final ScenarioResult other : others) {
-							currentResult = other;
-							break;
-						}
-					}
+				if (currentResult != null) {
+					final LNGScenarioModel scenarioModel = (LNGScenarioModel) currentResult.getRootObject();
+					assert scenarioModel != null;
+					final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 
-					if (currentResult != null) {
-						final LNGScenarioModel scenarioModel = (LNGScenarioModel) currentResult.getRootObject();
-						final CargoModel cargoModel = scenarioModel.getCargoModel();
-						// Inventory inventory = null;
+					final List<Inventory> models = cargoModel.getInventoryModels().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
+					comboViewer.setInput(models);
+					if (!models.isEmpty()) {
+						if (lastFacility != null) {
+							final Optional<Inventory> match = cargoModel.getInventoryModels().stream() //
+									.filter(inventory -> lastFacility.equals(inventory.getName())) //
+									.findFirst();
 
-						final List<Inventory> models = cargoModel.getInventoryModels().stream().filter(i -> i.getName() != null && !i.getName().isEmpty()).collect(Collectors.toList());
-						comboViewer.setInput(models);
-						if (!models.isEmpty()) {
-							if (lastFacility != null) {
-								for (final Inventory inventory : cargoModel.getInventoryModels()) {
-									if (lastFacility.equals(inventory.getName())) {
-										selectedInventory = inventory;
-										break;
-									}
-								}
+							if (match.isPresent()) {
+								selectedInventory = match.get();
 							}
-							if (selectedInventory == null) {
-								selectedInventory = cargoModel.getInventoryModels().get(0);
-							}
-							lastFacility = selectedInventory.getName();
-							comboViewer.setSelection(new StructuredSelection(selectedInventory));
-							updatePlots(Collections.singleton(selectedInventory), currentResult);
-						} else {
-							updatePlots(Collections.emptyList(), currentResult);
 						}
+						if (selectedInventory == null) {
+							selectedInventory = cargoModel.getInventoryModels().get(0);
+						}
+						lastFacility = selectedInventory.getName();
+						comboViewer.setSelection(new StructuredSelection(selectedInventory));
+						updatePlots(Collections.singleton(selectedInventory), currentResult);
 					} else {
-						comboViewer.setInput(Collections.emptyList());
-						updatePlots(Collections.emptyList(), null);
+						updatePlots(Collections.emptyList(), currentResult);
 					}
+				} else {
+					comboViewer.setInput(Collections.emptyList());
+					updatePlots(Collections.emptyList(), null);
 				}
 			};
 			RunnerHelper.exec(r, block);
@@ -146,12 +142,6 @@ public class InventoryReport extends ViewPart {
 	private String lastFacility = null;
 
 	/**
-	 * The constructor.
-	 */
-	public InventoryReport() {
-	}
-
-	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
@@ -159,7 +149,7 @@ public class InventoryReport extends ViewPart {
 
 		color_Orange = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(255, 200, 15));
 
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
 		parent.setLayout(new GridLayout(1, true));
 		{
 
@@ -177,18 +167,14 @@ public class InventoryReport extends ViewPart {
 					return ((Inventory) element).getName();
 				}
 			});
-			comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-				@Override
-				public void selectionChanged(final SelectionChangedEvent event) {
-					selectedInventory = (Inventory) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
-					if (selectedInventory != null) {
-						lastFacility = selectedInventory.getName();
-					} else {
-						lastFacility = null;
-					}
-					updatePlots(Collections.singleton(selectedInventory), currentResult);
+			comboViewer.addSelectionChangedListener(event -> {
+				selectedInventory = (Inventory) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
+				if (selectedInventory != null) {
+					lastFacility = selectedInventory.getName();
+				} else {
+					lastFacility = null;
 				}
+				updatePlots(Collections.singleton(selectedInventory), currentResult);
 			});
 		}
 
@@ -222,7 +208,9 @@ public class InventoryReport extends ViewPart {
 				createColumn("Type", 150, o -> o.type);
 				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
-				// createColumn("Date", o -> o.toString());
+				createColumn("Vessel", 150, o -> o.vessel);
+				createColumn("D-ID", 150, o -> o.dischargeId);
+				createColumn("Port", 150, o -> o.dischargePort);
 				tableItem.setControl(tableViewer.getControl());
 
 			}
@@ -231,70 +219,10 @@ public class InventoryReport extends ViewPart {
 
 		folder.setSelection(0);
 
-		// Create the help context id for the viewer's control
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_Fitness");
-		// makeActions();
-		// hookContextMenu();
-		// contributeToActionBars();
-
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 
 	}
-
-	// private void hookContextMenu() {
-	// final MenuManager menuMgr = new MenuManager("#PopupMenu");
-	// menuMgr.setRemoveAllWhenShown(true);
-	// menuMgr.addMenuListener(new IMenuListener() {
-	// @Override
-	// public void menuAboutToShow(final IMenuManager manager) {
-	// InventoryReport.this.fillContextMenu(manager);
-	// }
-	// });
-	// final Menu menu = menuMgr.createContextMenu(viewer.getControl());
-	// viewer.getControl().setMenu(menu);
-	// getSite().registerContextMenu(menuMgr, viewer);
-	// }
-	//
-	// private void contributeToActionBars() {
-	// final IActionBars bars = getViewSite().getActionBars();
-	// fillLocalPullDown(bars.getMenuManager());
-	// fillLocalToolBar(bars.getToolBarManager());
-	// }
-	//
-	// private void fillLocalPullDown(final IMenuManager manager) {
-	// manager.add(new Separator());
-	// }
-	//
-	// private void fillContextMenu(final IMenuManager manager) {
-	//
-	// manager.add(new GroupMarker("pack"));
-	// // Other plug-ins can contribute there actions here
-	// manager.add(new GroupMarker("additions"));
-	// manager.add(new GroupMarker("edit"));
-	// manager.add(new GroupMarker("copy"));
-	// manager.add(new GroupMarker("importers"));
-	// manager.add(new GroupMarker("exporters"));
-	// }
-	//
-	// private void fillLocalToolBar(final IToolBarManager manager) {
-	// manager.add(new GroupMarker("pack"));
-	// // Other plug-ins can contribute there actions here
-	// manager.add(new GroupMarker("additions"));
-	// manager.add(new GroupMarker("edit"));
-	// manager.add(new GroupMarker("copy"));
-	// manager.add(new GroupMarker("importers"));
-	// manager.add(new GroupMarker("exporters"));
-	//
-	// manager.appendToGroup("pack", packColumnsAction);
-	// manager.appendToGroup("copy", copyTableAction);
-	// }
-	//
-	// private void makeActions() {
-	// packColumnsAction = new PackGridTableColumnsAction(viewer);
-	// copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
-	// getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
-	// }
 
 	/**
 	 * Passing the focus request to the viewer's control.
@@ -323,11 +251,14 @@ public class InventoryReport extends ViewPart {
 			for (final ISeries s : seriesSet.getSeries()) {
 				names.add(s.getId());
 			}
-			names.forEach(s -> seriesSet.deleteSeries(s));
+			names.forEach(seriesSet::deleteSeries);
 		}
+
 		LocalDate minDate = null;
 		LocalDate maxDate = null;
+
 		final List<InventoryLevel> tableLevels = new LinkedList<>();
+		Optional<InventoryChangeEvent> firstInventoryData = Optional.empty();
 
 		if (toDisplay != null) {
 			final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
@@ -336,6 +267,19 @@ public class InventoryReport extends ViewPart {
 				if (schedule != null) {
 					for (final InventoryEvents inventoryEvents : schedule.getInventoryLevels()) {
 						final Inventory inventory = inventoryEvents.getFacility();
+
+						// Find the date of the latest position/cargo
+						final Optional<LocalDateTime> latestLoad = inventoryEvents.getEvents().stream() //
+								.filter(evt -> evt.getSlotAllocation() != null || evt.getOpenSlotAllocation() != null) //
+								.map(InventoryChangeEvent::getDate) //
+								.reduce((a, b) -> a.isAfter(b) ? a : b);
+
+						// Find the first inventory feed event
+						firstInventoryData = inventoryEvents.getEvents().stream() //
+								.filter(evt -> evt.getSlotAllocation() == null && evt.getOpenSlotAllocation() == null)
+								// .map(x -> x.getDate())
+								.reduce((a, b) -> a.getDate().isAfter(b.getDate()) ? b : a);
+
 						if (!inventoryModels.contains(inventory)) {
 							continue;
 						}
@@ -343,8 +287,9 @@ public class InventoryReport extends ViewPart {
 						if (inventory.getName() == null) {
 							continue;
 						}
-						{
 
+						{
+							final Optional<InventoryChangeEvent> firstInventoryDataFinal = firstInventoryData;
 							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
 									.collect(Collectors.toMap( //
 											InventoryChangeEvent::getDate, //
@@ -352,7 +297,12 @@ public class InventoryReport extends ViewPart {
 											(a, b) -> (b), // Take latest value
 											LinkedHashMap::new))
 									.entrySet().stream() //
-									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
+									.filter(x -> {
+										if (latestLoad.isPresent() && firstInventoryDataFinal.isPresent()) {
+											return x.getKey().isBefore(latestLoad.get()) && x.getKey().isAfter(firstInventoryDataFinal.get().getDate());
+										}
+										return false;
+									}).map(e -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
 								final ILineSeries series = createSmoothLineSeries(seriesSet, "Inventory", inventoryLevels);
@@ -365,19 +315,27 @@ public class InventoryReport extends ViewPart {
 								inventoryEvents.getEvents().forEach(e -> {
 									String type = "Unknown";
 									if (e.getSlotAllocation() != null) {
-										type = "SCHEDULE";
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity());
-										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-										tableLevels.add(lvl);
+										type = "Cargo";
+										final String vessel = e.getSlotAllocation().getCargoAllocation().getEvents().get(0).getSequence().getName();
 
-									} else if (e.getOpenSlotAllocation() != null) {
-										type = "OPEN";
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity());
+										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getName();
+										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getPort().getName();
+										
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId, dischargePort);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										
+										tableLevels.add(lvl);
+									} else if (e.getOpenSlotAllocation() != null) {
+										type = "Open";
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null);
+										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										
 										tableLevels.add(lvl);
 									} else if (e.getEvent() != null) {
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity());
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
+										InventoryChangeEvent first = firstInventoryDataFinal.get();
+										
 										tableLevels.add(lvl);
 									}
 								});
@@ -392,7 +350,7 @@ public class InventoryReport extends ViewPart {
 											(a, b) -> (b), // Take latest value
 											LinkedHashMap::new))
 									.entrySet().stream() //
-									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
+									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
 								final ILineSeries series = createStepLineSeries(seriesSet, "Tank min", inventoryLevels);
@@ -411,7 +369,7 @@ public class InventoryReport extends ViewPart {
 											(a, b) -> (b), // Take latest value
 											LinkedHashMap::new))
 									.entrySet().stream() //
-									.map((e) -> new Pair<>(e.getKey(), e.getValue())) //
+									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
 
@@ -426,7 +384,7 @@ public class InventoryReport extends ViewPart {
 
 							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
 									.filter(evt -> evt.getSlotAllocation() != null) //
-									.map((e) -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
+									.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
 									.collect(Collectors.toList());
 							if (!values.isEmpty()) {
 
@@ -438,7 +396,7 @@ public class InventoryReport extends ViewPart {
 						{
 							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
 									.filter(evt -> evt.getOpenSlotAllocation() != null) //
-									.map((e) -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
+									.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
 									.collect(Collectors.toList());
 							if (!values.isEmpty()) {
 
@@ -452,7 +410,7 @@ public class InventoryReport extends ViewPart {
 								final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
 										.filter(evt -> evt.getEvent() != null) //
 										.filter(evt -> evt.getEvent().getPeriod() == InventoryFrequency.CARGO) //
-										.map((e) -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
+										.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
 										.collect(Collectors.toList());
 								if (!values.isEmpty()) {
 
@@ -468,8 +426,6 @@ public class InventoryReport extends ViewPart {
 		}
 		final IAxisSet axisSet = chartViewer.getAxisSet();
 
-		// viewer.getTitle().setText("Inventory");
-		// viewer.getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartViewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartViewer.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartViewer.getAxisSet().getXAxis(0).getTitle().setText("Date");
@@ -500,11 +456,12 @@ public class InventoryReport extends ViewPart {
 
 		chartViewer.redraw();
 
-		Collections.sort(tableLevels, (a, b) -> a.date.compareTo(b.date));
-
-		// inventoryLevels.sort((a,b) -> a.getFirst().compareTo(b.getFirst()));
-
 		int total = 0;
+		if (firstInventoryData.isPresent()) {
+			// Set the current level to the first data in the list. Remove the change quantity so the first iteration of the loop tallies.
+			final InventoryChangeEvent evt = firstInventoryData.get();
+			total = evt.getCurrentLevel() - evt.getChangeQuantity();
+		}
 		for (final InventoryLevel lvl : tableLevels) {
 			lvl.runningTotal = total + lvl.changeInM3;
 			total = lvl.runningTotal;
@@ -610,20 +567,29 @@ public class InventoryReport extends ViewPart {
 		public final LocalDate date;
 		public final int changeInM3;
 		public final String type;
+		public final String vessel;
+		public final String dischargeId;
+		public final String dischargePort;
+		
 		public int runningTotal = 0;
 		public boolean breach = false;
 
-		public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3) {
+		public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort) {
 			this.date = date;
 			this.type = type.toString();
 			this.changeInM3 = changeInM3;
-
+			this.vessel = vessel;
+			this.dischargeId = dischargeId;
+			this.dischargePort = dischargePort;
 		}
 
-		public InventoryLevel(final LocalDate date, final String type, final int changeInM3) {
+		public InventoryLevel(final LocalDate date, final String type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort) {
 			this.date = date;
 			this.type = type;
 			this.changeInM3 = changeInM3;
+			this.vessel = vessel;
+			this.dischargeId = dischargeId;
+			this.dischargePort = dischargePort;
 		}
 
 	}

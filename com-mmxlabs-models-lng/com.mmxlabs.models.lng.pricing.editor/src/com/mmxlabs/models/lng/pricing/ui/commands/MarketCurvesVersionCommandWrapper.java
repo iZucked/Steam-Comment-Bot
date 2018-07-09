@@ -23,6 +23,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.pricing.DatePoint;
+import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
@@ -102,6 +104,10 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 					changedRef[0] = true;
 				} else if (notification.getNotifier() instanceof UnitConversion) {
 					changedRef[0] = true;
+				} else if (notification.getNotifier() instanceof DatePoint) {
+					changedRef[0] = true;
+				} else if (notification.getNotifier() instanceof DatePointContainer) {
+					changedRef[0] = true;
 				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES) {
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES) {
@@ -111,6 +117,8 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS) {
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES) {
+					changedRef[0] = true;
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES) {
 					changedRef[0] = true;
 				}
 
@@ -136,11 +144,17 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 						final Notifier notifier = i.next();
 						if (notifier instanceof UnitConversion //
 								|| notifier instanceof NamedIndexContainer //
+								|| notifier instanceof DatePointContainer //
 						) {
 							addAdapter(notifier);
 						}
 					}
 				} else if (target instanceof NamedIndexContainer) {
+					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
+						final Notifier notifier = i.next();
+						addAdapter(notifier);
+					}
+				} else if (target instanceof DatePointContainer) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						addAdapter(notifier);
@@ -159,11 +173,17 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 						final Notifier notifier = i.next();
 						if (notifier instanceof UnitConversion //
 								|| notifier instanceof NamedIndexContainer //
+								|| notifier instanceof DatePointContainer //
 						) {
 							removeAdapter(notifier, false, true);
 						}
 					}
-				} else if (target instanceof Port) {
+				} else if (target instanceof NamedIndexContainer) {
+					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
+						final Notifier notifier = i.next();
+						removeAdapter(notifier, false, true);
+					}
+				} else if (target instanceof DatePointContainer) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						removeAdapter(notifier, false, true);

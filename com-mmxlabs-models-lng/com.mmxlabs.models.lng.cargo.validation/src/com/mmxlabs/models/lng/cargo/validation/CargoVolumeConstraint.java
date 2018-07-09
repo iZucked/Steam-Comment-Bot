@@ -9,8 +9,8 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
-import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
@@ -35,18 +35,23 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
+	private static final String COMPLEX_CARGO = "Complex cargo";
+
 	@Override
-	protected String validate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof Cargo) {
 
 			final Cargo cargo = (Cargo) object;
 
+			final DetailConstraintStatusFactory factoryBase = DetailConstraintStatusFactory.makeStatus()//
+					.withTypedName("Cargo", cargo.getLoadName());
+
 			int loadMinVolume = 0;
 			int loadMaxVolume = 0;
 			int dischargeMinVolume = 0;
 			int dischargeMaxVolume = 0;
-			int numberOfSlots = cargo.getSlots().size();
+			final int numberOfSlots = cargo.getSlots().size();
 			VolumeUnits dischargeUnits = null;
 			VolumeUnits loadUnits = null;
 			double cv = 0;
@@ -73,9 +78,9 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 						dischargeUnits = slot.getSlotOrDelegateVolumeLimitsUnit();
 					}
 					if (numberOfSlots > 2) {
-						checkComplexDischargeLimitsSet(ctx, failures, cargo, slot);
-						checkComplexDischargeLimitsIdentical(ctx, failures, cargo, slot);
-						checkComplexDischargeLimitUnitsIdentical(ctx, failures, cargo, dischargeUnits, slot);
+						checkComplexDischargeLimitsSet(factoryBase, ctx, failures, cargo, slot);
+						checkComplexDischargeLimitsIdentical(factoryBase, ctx, failures, cargo, slot);
+						checkComplexDischargeLimitUnitsIdentical(factoryBase, ctx, failures, cargo, dischargeUnits, slot);
 					}
 					if (slot.getSlotOrDelegateMaxQuantity() == Integer.MAX_VALUE) {
 						maxDischargeValid = false;
@@ -84,7 +89,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-			if (loadUnits != dischargeUnits && !(cv > 0)) {
+			if (loadUnits != dischargeUnits && (cv <= 0)) {
 				// no cv value, can't convert
 				return Activator.PLUGIN_ID;
 			}
@@ -96,15 +101,15 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 				dischargeMinVolume = (int) (dischargeMinVolume * cv);
 				dischargeMaxVolume = (int) (dischargeMaxVolume * cv);
 			}
-			String unitsWarning = getUnitsWarningString(dischargeUnits, loadUnits);
-			checkMinAndMaxVolumes(ctx, failures, cargo, loadMinVolume, loadMaxVolume, dischargeMinVolume, dischargeMaxVolume, unitsWarning, maxLoadValid, maxDischargeValid);
-			checkMinAndMaxVolumesAgainstVesselCapacity(ctx, failures, cargo, loadMinVolume, loadMaxVolume, dischargeMinVolume, dischargeMaxVolume, cv, unitsWarning);
+			final String unitsWarning = getUnitsWarningString(dischargeUnits, loadUnits);
+			checkMinAndMaxVolumes(factoryBase, ctx, failures, cargo, loadMinVolume, loadMaxVolume, dischargeMinVolume, dischargeMaxVolume, unitsWarning, maxLoadValid, maxDischargeValid);
+			checkMinAndMaxVolumesAgainstVesselCapacity(factoryBase, ctx, failures, cargo, loadMinVolume, loadMaxVolume, dischargeMinVolume, dischargeMaxVolume, cv, unitsWarning);
 		}
 
 		return Activator.PLUGIN_ID;
 	}
 
-	private String getUnitsWarningString(VolumeUnits dischargeUnits, VolumeUnits loadUnits) {
+	private String getUnitsWarningString(final VolumeUnits dischargeUnits, final VolumeUnits loadUnits) {
 		String unitsWarning = "";
 		if (loadUnits != dischargeUnits) {
 			unitsWarning = String.format(". Note that load units [%s] are different to discharge units [%s]", loadUnits, dischargeUnits);
@@ -112,47 +117,52 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 		return unitsWarning;
 	}
 
-	private void checkMinAndMaxVolumes(IValidationContext ctx, List<IStatus> failures, final Cargo cargo, int loadMinVolume, int loadMaxVolume, int dischargeMinVolume, int dischargeMaxVolume,
-			String unitsWarning, boolean maxLoadValid, boolean maxDischargeValid) {
-		if (maxLoadValid && loadMaxVolume < dischargeMinVolume) {
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] Max load volume less than min discharge" + unitsWarning + ")."), IStatus.WARNING);
+	private void checkMinAndMaxVolumes(final DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo, final int loadMinVolume,
+			final int loadMaxVolume, final int dischargeMinVolume, final int dischargeMaxVolume, final String unitsWarning, final boolean maxLoadValid, final boolean maxDischargeValid) {
+			if (maxLoadValid && loadMaxVolume < dischargeMinVolume) {
+			final DetailConstraintStatusFactory factory = factoryBase.copyName() //
+					.withFormattedMessage("Max load volume less than min discharge %s", unitsWarning) //
+					.withSeverity(IStatus.WARNING);
 
 			for (final Slot slot : cargo.getSlots()) {
 				if (slot instanceof LoadSlot) {
-					status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 				} else if (slot instanceof DischargeSlot) {
-					status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 
 				}
 			}
-
-			failures.add(status);
+			factory.make(ctx, failures);
 		}
 		if (maxDischargeValid && loadMinVolume > dischargeMaxVolume) {
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] Min load volume greater than max discharge" + unitsWarning + ")."), IStatus.WARNING);
-			for (final Slot slot : cargo.getSlots()) {
-				if (slot instanceof LoadSlot) {
-					status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-				} else if (slot instanceof DischargeSlot) {
-					status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+			if (!LicenseFeatures.isPermitted("features:heelrollover")) {
 
+				final DetailConstraintStatusFactory factory = factoryBase //
+						.copyName() //
+						.withFormattedMessage("Min load volume greater than max discharge %s", unitsWarning) //
+						.withSeverity(IStatus.WARNING);
+
+				for (final Slot slot : cargo.getSlots()) {
+					if (slot instanceof LoadSlot) {
+						factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					} else if (slot instanceof DischargeSlot) {
+						factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					}
 				}
+				factory.make(ctx, failures);
 			}
-
-			failures.add(status);
 		}
+
 	}
 
-	private int getVesselCapacity(Cargo cargo) {
-		VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+	private int getVesselCapacity(final Cargo cargo) {
+		final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
 		if (vesselAssignmentType == null) {
-			if (cargo.getSortedSlots().size() > 0) {
+			if (!cargo.getSortedSlots().isEmpty()) {
 				if (cargo.getSortedSlots().get(0) instanceof LoadSlot) {
-					LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
+					final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
 					if (loadSlot.isDESPurchase()) {
-						Vessel vessel = loadSlot.getNominatedVessel();
+						final Vessel vessel = loadSlot.getNominatedVessel();
 						if (vessel != null) {
 							// get the capacity directly
 							return vessel.getVesselOrDelegateCapacity();
@@ -165,21 +175,21 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 		int capacity = -1;
 		if (vesselAssignmentType instanceof VesselAvailability) {
-			VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 
-			Vessel vessel = vesselAvailability.getVessel();
+			final Vessel vessel = vesselAvailability.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
 			}
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
-			CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 			final Vessel vessel = charterInMarket.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
 			}
 		} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
-			CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
-			CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
+			final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+			final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 			final Vessel vessel = charterInMarket.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
@@ -191,74 +201,83 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 		return capacity;
 	}
 
-	private void checkMinAndMaxVolumesAgainstVesselCapacity(IValidationContext ctx, List<IStatus> failures, final Cargo cargo, int loadMinVolume, int loadMaxVolume, int dischargeMinVolume,
-			int dischargeMaxVolume, double cv, String unitsWarning) {
-		int vesselCapacity = getVesselCapacity(cargo);
+	private void checkMinAndMaxVolumesAgainstVesselCapacity(DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo,
+			final int loadMinVolume, final int loadMaxVolume, final int dischargeMinVolume, final int dischargeMaxVolume, final double cv, final String unitsWarning) {
+		final int vesselCapacity = getVesselCapacity(cargo);
 		if (vesselCapacity > -1 && (cv > 0)) {
 			// convert to MMBTU
-			int convertedVesselCapacity = (int) (vesselCapacity * cv);
+			final int convertedVesselCapacity = (int) (vesselCapacity * cv);
 			if (loadMinVolume > convertedVesselCapacity) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] minimum load volume is greater than the capacity of current vessel assignment."),
-						IStatus.WARNING);
+
+				final DetailConstraintStatusFactory factory = factoryBase//
+						.copyName() //
+						.withMessage("minimum load volume is greater than the capacity of current vessel assignment") //
+						.withSeverity(IStatus.WARNING);
 
 				for (final Slot slot : cargo.getSlots()) {
 					if (slot instanceof LoadSlot) {
-						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+						factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					}
 				}
-				failures.add(status);
+				factory.make(ctx, failures);
 			}
 			if (dischargeMinVolume > convertedVesselCapacity) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] minimum discharge volume is greater than the capacity of current vessel assignment."),
-						IStatus.WARNING);
+
+				final DetailConstraintStatusFactory factory = factoryBase//
+						.copyName() //
+						.withMessage("minimum discharge volume is greater than the capacity of current vessel assignment") //
+						.withSeverity(IStatus.WARNING);
+
 				for (final Slot slot : cargo.getSlots()) {
 					if (slot instanceof DischargeSlot) {
-						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+						factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					}
 				}
-
-				failures.add(status);
+				factory.make(ctx, failures);
 			}
 		}
 	}
 
-	private void checkComplexDischargeLimitUnitsIdentical(IValidationContext ctx, List<IStatus> failures, final Cargo cargo, VolumeUnits dischargeUnits, final Slot slot) {
+	private void checkComplexDischargeLimitUnitsIdentical(final DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo,
+			final VolumeUnits dischargeUnits, final Slot slot) {
 		if (slot.getSlotOrDelegateVolumeLimitsUnit() != dischargeUnits) {
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("Complex Cargo|" + cargo.getLoadName() + " requires volume limit units to be identical"));
-			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
-			failures.add(status);
+			factoryBase.copyName() //
+					.withTypedName(COMPLEX_CARGO, cargo.getLoadName()) //
+					.withMessage("requires volume limit units to be identical") //
+					.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit()) //
+					.make(ctx, failures);
 		}
 	}
 
-	private void checkComplexDischargeLimitsIdentical(IValidationContext ctx, List<IStatus> failures, final Cargo cargo, final Slot slot) {
+	private void checkComplexDischargeLimitsIdentical(final DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo, final Slot slot) {
 		// Check fields are the same
 		if (slot.isSetMaxQuantity() && slot.isSetMinQuantity()) {
 			if (slot.getMinQuantity() != slot.getMaxQuantity()) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus("Complex Cargo|" + cargo.getLoadName() + " requires min and max discharge volumes to be specified and identical"));
-
-				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-				failures.add(status);
+				factoryBase.copyName() //
+						.withTypedName(COMPLEX_CARGO, cargo.getLoadName()) //
+						.withMessage("requires min and max discharge volumes to be specified and identical") //
+						.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity()) //
+						.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity()) //
+						.make(ctx, failures);
 			}
 		}
 	}
 
-	private void checkComplexDischargeLimitsSet(IValidationContext ctx, List<IStatus> failures, final Cargo cargo, final Slot slot) {
+	private void checkComplexDischargeLimitsSet(final DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo, final Slot slot) {
 		// Check fields are set
 		if (!slot.isSetMaxQuantity() || !slot.isSetMinQuantity()) {
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("Complex Cargo|" + cargo.getLoadName() + " requires min and max discharge volumes to be specified and identical"));
+
+			final DetailConstraintStatusFactory factory = factoryBase.copyName() //
+					.withTypedName(COMPLEX_CARGO, cargo.getLoadName()) //
+					.withMessage("requires min and max discharge volumes to be specified and identical");
 
 			if (!slot.isSetMaxQuantity()) {
-				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+				factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 			} else if (!slot.isSetMinQuantity()) {
-				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+				factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 			}
-			failures.add(status);
+
+			factory.make(ctx, failures);
 		}
 	}
 }

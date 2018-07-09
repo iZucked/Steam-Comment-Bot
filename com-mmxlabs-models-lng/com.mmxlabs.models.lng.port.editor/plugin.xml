@@ -69,6 +69,18 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.port.EntryPoint">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.port.presentation.composites.ContingencyMatrixComponentHelper"
+        id="com.mmxlabs.models.lng.port.presentation.composites.ContingencyMatrixComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.port.ContingencyMatrix">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.port.presentation.composites.ContingencyMatrixEntryComponentHelper"
+        id="com.mmxlabs.models.lng.port.presentation.composites.ContingencyMatrixEntryComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.port.ContingencyMatrixEntry">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -202,6 +214,12 @@
           eClass="com.mmxlabs.models.lng.port.Route"
           factory="com.mmxlabs.models.lng.port.ui.editors.RouteDisplayCompositeFactory"
           id="com.mmxlabs.models.lng.port.ui.editors.RouteDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.port.ContingencyMatrix"
+          factory="com.mmxlabs.models.lng.port.ui.editors.ContingencyMatrixDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.port.ui.editors.ContingencyMatrixDisplayCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
  </extension>

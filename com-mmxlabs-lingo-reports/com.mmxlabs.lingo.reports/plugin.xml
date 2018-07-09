@@ -829,6 +829,10 @@
             feature="inventory-model"
             plugin.xml="inventory.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="paperdeals"
+            plugin.xml="paperdeals.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="com.mmxlabs.rcp.common.ReplaceableView">

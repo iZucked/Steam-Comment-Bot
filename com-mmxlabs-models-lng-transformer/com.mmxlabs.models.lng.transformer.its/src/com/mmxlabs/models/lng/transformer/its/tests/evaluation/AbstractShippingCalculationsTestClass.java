@@ -99,15 +99,16 @@ public class AbstractShippingCalculationsTestClass {
 		case PILOT_USAGE:
 			return getFuelConsumption(event, Fuel.PILOT_LIGHT);
 		case OVERHEAD_COSTS: {
-			if (event instanceof Journey)
+			if (event instanceof Journey) {
 				return ((Journey) event).getToll();
-			else if (event instanceof Cooldown)
+			} else if (event instanceof Cooldown) {
 				return ((Cooldown) event).getCost();
-			else if (event instanceof SlotVisit) {
+			} else if (event instanceof SlotVisit) {
 				return ((SlotVisit) event).getPortCost();
-			} else
+			} else {
 				// TODO: extract the overhead costs or revenue for drydock events, charter outs etc.
 				return null;
+			}
 		}
 		case COOLDOWN_VIOLATION: {
 			if (event instanceof CapacityViolationsHolder) {
@@ -193,7 +194,7 @@ public class AbstractShippingCalculationsTestClass {
 	public List<String> checkValues(final Expectations field, final List<? extends Event> events, final Integer[] values) {
 		Assert.assertEquals(values.length, events.size());
 
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 
 		for (int i = 0; i < values.length; i++) {
 			final Event event = events.get(i);
@@ -266,7 +267,7 @@ public class AbstractShippingCalculationsTestClass {
 	 * @return
 	 */
 	public PnlChunkIndexData[] getPnlChunks(final List<? extends Event> events) {
-		final ArrayList<Integer> boundaries = new ArrayList<Integer>();
+		final ArrayList<Integer> boundaries = new ArrayList<>();
 		int index = 0;
 		GroupProfitAndLoss lastGroup = null;
 
@@ -303,7 +304,7 @@ public class AbstractShippingCalculationsTestClass {
 	}
 
 	public List<String> checkPnlValues(final List<? extends Event> events, final PnlChunkIndexData[] indices, final Integer[] pnls) {
-		final List<String> failures = new ArrayList<String>();
+		final List<String> failures = new ArrayList<>();
 
 		if (pnls != null) {
 			Assert.assertEquals(indices.length, pnls.length);
@@ -319,7 +320,7 @@ public class AbstractShippingCalculationsTestClass {
 							// }
 							// allow small rounding error due to floating point arithmetic
 							if (Math.abs((int) pnls[i] - pnl.intValue()) > 1) {
-//								failures.add(String.format("PnL expected %d was %d for [%d] %s", pnls[i], pnl.intValue(), j, event.toString()));
+								// failures.add(String.format("PnL expected %d was %d for [%d] %s", pnls[i], pnl.intValue(), j, event.toString()));
 							}
 							continue;
 						}
@@ -350,7 +351,7 @@ public class AbstractShippingCalculationsTestClass {
 
 	@SuppressWarnings("unchecked")
 	public <T> List<T> extractObjectsOfClass(final EList<? extends Object> objects, final Class<T> clazz) {
-		final LinkedList<T> result = new LinkedList<T>();
+		final List<T> result = new LinkedList<>();
 		for (final Object object : objects) {
 			if (clazz.isInstance(object)) {
 				result.add((T) object);
@@ -436,7 +437,7 @@ public class AbstractShippingCalculationsTestClass {
 
 	public class SequenceTester {
 		/** The expected values for each event in the sequence, keyed by expected field */
-		private final Map<Expectations, Integer[]> expectedArrays = new HashMap<Expectations, Integer[]>();
+		private final Map<Expectations, Integer[]> expectedArrays = new HashMap<>();
 		/** The expected PnL values for each PnL group */
 		private Integer[] expectedPnlValues = null;
 		/** The expected classes of each event in the sequence */
@@ -474,7 +475,7 @@ public class AbstractShippingCalculationsTestClass {
 		}
 
 		private <T> List<Integer> getValueIndices(final T[] array, final T value) {
-			final ArrayList<Integer> result = new ArrayList<Integer>();
+			final List<Integer> result = new ArrayList<>();
 			for (int i = 0; i < array.length; i++) {
 				if (array[i] == value) {
 					result.add(i);
@@ -554,7 +555,7 @@ public class AbstractShippingCalculationsTestClass {
 		@SuppressWarnings("unchecked")
 		public void check(final Sequence sequence) {
 			final EList<Event> events = sequence.getEvents();
-			final List<String> failures = new ArrayList<String>();
+			final List<String> failures = new ArrayList<>();
 
 			checkClasses(events, classes);
 

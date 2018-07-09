@@ -22,14 +22,9 @@ import com.mmxlabs.common.Pair;
 /**
  * Nautical distance matrix calculator which models the earth as a sphere.
  * 
- * Given a bitmap of passable/impassable terrain (passable = false, impassable =
- * true), finds all the "coastal" pixels (passable with impassable in one of the
- * cardinal directions), and then computes line-of-sight distances by sweeping
- * out a great circle between pairs of coastal pixels and testing for impassable
- * terrain in between them. Finally, given the line-of-sight great-circle
- * distances uses Dijkstra's algorithm to find the shortest navigable path
- * between pairs of coastal points. Not very fast, because of lots of matrix
- * maths.
+ * Given a bitmap of passable/impassable terrain (passable = false, impassable = true), finds all the "coastal" pixels (passable with impassable in one of the cardinal directions), and then computes
+ * line-of-sight distances by sweeping out a great circle between pairs of coastal pixels and testing for impassable terrain in between them. Finally, given the line-of-sight great-circle distances
+ * uses Dijkstra's algorithm to find the shortest navigable path between pairs of coastal points. Not very fast, because of lots of matrix maths.
  * 
  * Copyright (C) Minimax Labs Ltd., 2010 All rights reserved.
  * 
@@ -53,12 +48,12 @@ public class AccurateNauticalDistanceCalculator {
 
 		final double maxProjectedLat = Math.log(Math.tan(maxLatitude) + (1 / Math.cos(maxLatitude)));
 
-		coast = new ArrayList<double[]>();
+		coast = new ArrayList<>();
 		for (final Pair<Integer, Integer> coastxy : findCoastalPixels(mercatorLandMatrix)) {
-			coast.add(pixelTo3dPoint(coastxy, width, height, maxLatitude, maxProjectedLat));
+			coast.add(pixelTo3dPoint(coastxy, width, height, maxProjectedLat));
 		}
 
-		log.info("Coast has " + coast.size() + " points");
+		log.info("Coast has {} points", coast.size());
 
 		// now fill distance matrix for these points
 		distanceMatrix = new int[coast.size()][coast.size()];
@@ -69,7 +64,7 @@ public class AccurateNauticalDistanceCalculator {
 			final int newPercent = (100 * i) / coast.size();
 			if (newPercent != percent) {
 				percent = newPercent;
-				log.info("" + percent + "% ");
+				log.info("{}%", percent);
 			}
 			for (int j = 0; j < i; j++) {
 				if (lineOfSight(coast.get(i), coast.get(j), mercatorLandMatrix, maxLatitude, maxProjectedLat)) {
@@ -83,12 +78,9 @@ public class AccurateNauticalDistanceCalculator {
 			distanceMatrix[i][i] = 0;
 		}
 
-		// for (int[] x : distanceMatrix) {
-		// log.info(Arrays.toString(x));
-		// }
 		int sum = badEdges + goodEdges;
 		if (sum != 0) {
-			log.info("Sparseness = " + (goodEdges / (double) sum));
+			log.info("Sparseness = {}", (goodEdges / (double) sum));
 		} else {
 			log.info("Sparseness = NaN");
 		}
@@ -96,12 +88,9 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	/**
-	 * Get the shortest distances from origin to each point in the list, after
-	 * snapping all points to their nearest (by great-circle distance) coastal
-	 * points.
+	 * Get the shortest distances from origin to each point in the list, after snapping all points to their nearest (by great-circle distance) coastal points.
 	 * 
-	 * In principle runs the risk of snapping a point to something on the other side
-	 * of a landmass, but so far I haven't seen that happen.
+	 * In principle runs the risk of snapping a point to something on the other side of a landmass, but so far I haven't seen that happen.
 	 * 
 	 * @param origin
 	 * @param latLonPairs
@@ -121,13 +110,10 @@ public class AccurateNauticalDistanceCalculator {
 		Arrays.fill(distances, Integer.MAX_VALUE);
 		distances[startPoint] = 0;
 
-		final Comparator<Integer> comparator = new Comparator<Integer>() {
-			@Override
-			public int compare(final Integer o1, final Integer o2) {
-				final Integer v1 = distances[o1];
-				final Integer v2 = distances[o2];
-				return v1.compareTo(v2);
-			}
+		final Comparator<Integer> comparator = (o1, o2) -> {
+			final Integer v1 = distances[o1];
+			final Integer v2 = distances[o2];
+			return v1.compareTo(v2);
 		};
 
 		final PriorityQueue<Integer> queue = new PriorityQueue<>(coast.size(), comparator);
@@ -169,7 +155,7 @@ public class AccurateNauticalDistanceCalculator {
 
 	private boolean allTrue(final boolean[] marks, final int[] endPoints) {
 		for (final int p : endPoints) {
-			if (marks[p] == false) {
+			if (!marks[p]) {
 				return false;
 			}
 		}
@@ -177,9 +163,9 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	public List<double[]> shortestPath(final Pair<Double, Double> from, final Pair<Double, Double> to) {
-		final ArrayList<double[]> result = new ArrayList<double[]>();
+		final List<double[]> result = new ArrayList<>();
 
-		final int before[] = new int[coast.size()];
+		final int[] before = new int[coast.size()];
 
 		final int startPoint = snap(from);
 		int endPoint = snap(to);
@@ -190,13 +176,10 @@ public class AccurateNauticalDistanceCalculator {
 		Arrays.fill(distances, Integer.MAX_VALUE);
 		distances[startPoint] = 0;
 
-		final Comparator<Integer> comparator = new Comparator<Integer>() {
-			@Override
-			public int compare(final Integer o1, final Integer o2) {
-				final Integer v1 = distances[o1];
-				final Integer v2 = distances[o2];
-				return v1.compareTo(v2);
-			}
+		final Comparator<Integer> comparator = (o1, o2) -> {
+			final Integer v1 = distances[o1];
+			final Integer v2 = distances[o2];
+			return Integer.compare(v1, v2);
 		};
 
 		final PriorityQueue<Integer> queue = new PriorityQueue<>(coast.size(), comparator);
@@ -244,8 +227,7 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	/**
-	 * Snap a lat/lon pair to a coast point. Input are in degrees, coast in radians.
-	 * find nearest coast point
+	 * Snap a lat/lon pair to a coast point. Input are in degrees, coast in radians. find nearest coast point
 	 * 
 	 * @param pair
 	 * @return
@@ -267,16 +249,11 @@ public class AccurateNauticalDistanceCalculator {
 			}
 		}
 
-		// System.err.println("Snapped " + Arrays.toString(xyz) + " to " +
-		// Arrays.toString(coast.get(winner)));
-
 		return winner;
 	}
 
 	/**
-	 * Compute the great-circle distance in nautical miles between the two points
-	 * represented as vectors to points on the unit sphere (scaled up to earth
-	 * radius)
+	 * Compute the great-circle distance in nautical miles between the two points represented as vectors to points on the unit sphere (scaled up to earth radius)
 	 * 
 	 * @param pair
 	 * @param pair2
@@ -284,9 +261,6 @@ public class AccurateNauticalDistanceCalculator {
 	 */
 	private int greatCircleDistance(final double[] p1, final double[] p2) {
 		// length of arc between them, scaled up. always the inner angle.
-		// final double angle = angleBetween(p1, p2);
-		// return (int) Math.floor(RAD_KNOTS * angle); // radians, yay
-
 		return (int) Math.floor(RAD_KNOTS * latLonDistance(cartesianToLatLon(p1), cartesianToLatLon(p2)));
 	}
 
@@ -301,9 +275,7 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	/**
-	 * Test all the pixels between cartesian normal sphere points v1 and v2 in the
-	 * given mercator matrix, and return true if and only if they are all sea
-	 * pixels.
+	 * Test all the pixels between cartesian normal sphere points v1 and v2 in the given mercator matrix, and return true if and only if they are all sea pixels.
 	 * 
 	 * @param v1
 	 * @param v2
@@ -315,9 +287,9 @@ public class AccurateNauticalDistanceCalculator {
 	 * @throws IOException
 	 */
 	private boolean lineOfSight(final double[] v1, final double[] v2, final boolean[][] mercatorLandMatrix, final double maxLatitude, final double maxProjectedLatitude) {
-		// find angle between v1 and v2;
+		// find angle between v1 and v2
 		final double angle = angleBetween(v1, v2);
-		// System.err.println("Angle = " + angle);
+
 		// sweep along great circle by rotating v1 by a small quantity until it
 		// coincides with v2
 
@@ -336,8 +308,7 @@ public class AccurateNauticalDistanceCalculator {
 
 		double f = 0;
 		final double deltaf = rotationAngle / angle;
-		// StringBuffer buffer = new StringBuffer();
-		// buffer.append("0,0,0\n");
+
 		while (f < 1) {
 			final double A = Math.sin((1 - f) * d) / sind;
 			final double B = Math.sin(f * d) / sind;
@@ -348,78 +319,13 @@ public class AccurateNauticalDistanceCalculator {
 			final double lat = Math.atan2(z, Math.sqrt((x * x) + (y * y)));
 			final double lon = Math.atan2(y, x);
 
-			// buffer.append(x+","+y+","+z+"\n");
-
 			if (getMercatorPoint(mercatorLandMatrix, maxLatitude, lat, lon, maxProjectedLatitude)) {
 				return false;
 			}
 
 			f += deltaf;
 		}
-		// loslog.write(buffer.toString());
 		return true;
-
-		// if (angle < 3 * rotationAngle)
-		// return true;
-		//
-		// double[] axis = cross(v1, v2);
-		// normalise(axis);
-		//
-		// double[][] rotationMatrix = rotator(axis, rotationAngle);
-		//
-		// double[] pt = v1;
-		// // System.err.println("Sweeping through "+angle + " rads in " +
-		// // rotationAngle + " jumps");
-		//
-		// // System.err
-		// // .println("Sweep from " + Arrays.toString(v1) + " to "
-		// // + Arrays.toString(v2) + " " + rotationAngle
-		// // + " rads at a time");
-		//
-		// int bad = 0;
-		// // StringBuffer sb = new StringBuffer();
-		// // sb.append(pt[0] + ", " + pt[1] + ", "+pt[2] +"\n");
-		//
-		// int applications = 0;
-		//
-		// // loslog.write(pt[0] + "," + pt[1] + "," + pt[2] + "\n");
-		// while (angle > rotationAngle * 3) {
-		// applications++;
-		// if (applications >= 10) {
-		// //Reset matrix, due to cumulative drift problems.
-		// //this ensure that the matrix always points towards the destination
-		// axis = cross(pt, v2);
-		// rotationMatrix = rotator(axis, rotationAngle);
-		// }
-		//
-		// pt = applyMatrix(rotationMatrix, pt);
-		// normalise(pt);// /just in case
-		// // sb.append(pt[0] + ", " + pt[1] + ", "+pt[2] +"\n");
-		// // loslog.write(pt[0] + ", " + pt[1] + ", " + pt[2] + "\n");
-		// // project out point and test land/sea. should be fine as pt is
-		// // unitary
-		// final double lat = Math.asin(pt[2]);
-		// final double lon = Math.atan2(pt[1], pt[0]);
-		//
-		// // System.err.println("Testing point " + Arrays.toString(pt) + " ("
-		// // + lat + ", " + lon + ")");
-		//
-		// // System.err.println("Sweep : " + lat + ", " + lon);
-		// if (getMercatorPoint(mercatorLandMatrix, maxLatitude, lat, lon,
-		// maxProjectedLatitude)) {
-		// bad++;
-		// if (bad > 0)
-		// return false;
-		// } else {
-		// bad = 0;
-		// }
-		//
-		// angle = angleBetween(pt, v2);
-		// }
-		// // loslog.write("0,0,0\n");
-		// // sb.append(v2[0] + ", " + v2[1] + ", "+v2[2] +"\n");
-		// // loslog.write(sb.toString());
-		// return true;
 	}
 
 	private boolean getMercatorPoint(final boolean[][] mercatorLandMatrix, final double maxLatitude, final double lat, final double lon, final double maxProjectedLatitude) {
@@ -434,16 +340,11 @@ public class AccurateNauticalDistanceCalculator {
 		}
 		// compute mercator position
 		final double px = ((lon / Math.PI) + 1) / 2;
-		final double py = (((((Math.log(Math.tan(lat) + (1 / Math.cos(lat))) / maxProjectedLatitude)) // -1..1
-		) * -1) // upside down
+		final double py = (((Math.log(Math.tan(lat) + (1 / Math.cos(lat))) / maxProjectedLatitude) // -1..1
+				* -1) // upside down
 				+ 1) / 2; // all positive, scaled to fit in unit
 
-		final boolean answer = mercatorLandMatrix[(int) Math.floor(px * mapWidth)][(int) Math.floor(py * mapHeight)];
-
-		// System.err.println(lat + ", " + lon + " => " + px + ", " + px
-		// * mapWidth + ", " + py * mapHeight + " = " + answer);
-
-		return answer;
+		return mercatorLandMatrix[(int) Math.floor(px * mapWidth)][(int) Math.floor(py * mapHeight)];
 	}
 
 	/**
@@ -522,7 +423,7 @@ public class AccurateNauticalDistanceCalculator {
 		return Math.acos(dot / (l1 * l2));
 	}
 
-	private double[] pixelTo3dPoint(final Pair<Integer, Integer> xy, final int w, final int h, final double maxLatitude, final double maxProjectedLat) {
+	private double[] pixelTo3dPoint(final Pair<Integer, Integer> xy, final int w, final int h, final double maxProjectedLat) {
 		// undo mercator projection
 		final double lon = Math.PI * 2 * ((xy.getFirst() / (double) w) - 0.5);
 		final double y = maxProjectedLat * 2 * ((1 - (xy.getSecond() / (double) h)) - 0.5); // flip
@@ -542,7 +443,7 @@ public class AccurateNauticalDistanceCalculator {
 
 		for (int x = 0; x < landMatrix.length; x++) {
 			for (int y = 0; y < landMatrix[0].length; y++) {
-				if ((landMatrix[x][y] == false) && hasLandNeighbour(landMatrix, x, y)) {
+				if ((!landMatrix[x][y]) && hasLandNeighbour(landMatrix, x, y)) {
 					result.add(new Pair<>(x, y));
 				}
 			}
@@ -560,8 +461,6 @@ public class AccurateNauticalDistanceCalculator {
 		final int xu = clip(width, x + 1);
 		final int xd = clip(width, x - 1);
 
-		// return m[x][yu] || m[x][yd] || m[xu][y] || m[xu][yu] || m[xu][yd]
-		// || m[xd][y] || m[xd][yu] || m[xd][yd];
 		return m[xd][y] || m[xu][y] || m[x][yd] || m[x][yu];
 	}
 
@@ -581,7 +480,7 @@ public class AccurateNauticalDistanceCalculator {
 		}
 	}
 
-	public void writeSnappedPoints(final BufferedWriter output, final BufferedWriter realValues, final ArrayList<Pair<Double, Double>> otherPorts) throws IOException {
+	public void writeSnappedPoints(final BufferedWriter output, final BufferedWriter realValues, final List<Pair<Double, Double>> otherPorts) throws IOException {
 		for (final Pair<Double, Double> pt : otherPorts) {
 			final double[] ptxyz = coast.get(snap(pt));
 			final double lat = (pt.getFirst() * Math.PI) / 180;

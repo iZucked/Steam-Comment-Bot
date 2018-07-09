@@ -37,12 +37,13 @@ class HeadlineReportTransformer {
 
 	public static class RowData {
 
-		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long upside, final Long upstreamDownstreamPNL, final Long mtmPnl,
-				final Long idleTime, final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex,
-				Long purchaseCost, Long salesRevenue) {
+		public RowData(final String scheduleName, final Long totalPNL, final Long totalPaperPNL, final Long tradingPNL, final Long shippingPNL, final Long upside, final Long upstreamDownstreamPNL,
+				final Long mtmPnl, final Long idleTime, final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex,
+				final Long latenessExcludingFlex, Long purchaseCost, Long salesRevenue) {
 			super();
 			this.scheduleName = scheduleName;
 			this.totalPNL = totalPNL;
+			this.paperPNL = totalPaperPNL;
 			this.tradingPNL = tradingPNL;
 			this.shippingPNL = shippingPNL;
 			this.upside = upside;
@@ -62,6 +63,7 @@ class HeadlineReportTransformer {
 			super();
 			this.scheduleName = "";
 			this.totalPNL = null;
+			this.paperPNL = null;
 			this.tradingPNL = null;
 			this.shippingPNL = null;
 			this.upside = null;
@@ -80,6 +82,7 @@ class HeadlineReportTransformer {
 		public final String scheduleName;
 		public final Long totalPNL;
 		public final Long tradingPNL;
+		public final Long paperPNL;
 		public final Long shippingPNL;
 		public final Long upside;
 		public final Long upstreamDownstreamPNL;
@@ -148,15 +151,18 @@ class HeadlineReportTransformer {
 		final long totalLatenessHoursIncludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WTH_FLEX_IDX];
 
 		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
-
+		final long totalPaperPNL = Math.round(schedule.getPaperDealAllocations().stream() //
+				.flatMap(a -> a.getEntries().stream()) //
+				.mapToDouble(e -> e.getValue()) //
+				.sum());
 		ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
-		return augment(schedule, scenarioResult, totalSalesRevenue, totalPurchaseCost, totalMtMPNL, totalIdleHours, totalGCOHours, totalGCORevenue, totalTradingPNL, totalShippingPNL, totalUpstreamPNL,
-				totalUpside, totalLatenessHoursExcludingFlex, totalLatenessHoursIncludingFlex, totalCapacityViolationCount, modelRecord);
+		return augment(schedule, scenarioResult, totalSalesRevenue, totalPurchaseCost, totalMtMPNL, totalIdleHours, totalGCOHours, totalGCORevenue, totalPaperPNL, totalTradingPNL, totalShippingPNL,
+				totalUpstreamPNL, totalUpside, totalLatenessHoursExcludingFlex, totalLatenessHoursIncludingFlex, totalCapacityViolationCount, modelRecord);
 	}
 
-	private RowData augment(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult, long totalSalesRevenue, long totalPurchaseCost, long totalMtMPNL, long totalIdleHours,
-			long totalGCOHours, long totalGCORevenue, long totalTradingPNL, long totalShippingPNL, long totalUpstreamPNL, long totalUpside, long totalLatenessHoursExcludingFlex,
-			long totalLatenessHoursIncludingFlex, long totalCapacityViolationCount, ScenarioModelRecord modelRecord) {
+	private @NonNull RowData augment(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult, long totalSalesRevenue, long totalPurchaseCost, long totalMtMPNL,
+			long totalIdleHours, long totalGCOHours, long totalGCORevenue, long totalPaperPNL, long totalTradingPNL, long totalShippingPNL, long totalUpstreamPNL, long totalUpside,
+			long totalLatenessHoursExcludingFlex, long totalLatenessHoursIncludingFlex, long totalCapacityViolationCount, ScenarioModelRecord modelRecord) {
 
 		long totalPNL = totalTradingPNL + totalShippingPNL + totalUpstreamPNL;
 		Iterable<IHeadlineValueExtender> columnExtendeders = HeadlineValueExtenderExtensionUtil.getColumnExtendeders();
@@ -196,6 +202,9 @@ class HeadlineReportTransformer {
 					case VALUE_TRADING:
 						totalTradingPNL += extra;
 						break;
+					case VALUE_PAPER:
+						totalPaperPNL += extra;
+						break;
 					case VALUE_UPSIDE:
 						totalUpside += extra;
 						break;
@@ -212,7 +221,7 @@ class HeadlineReportTransformer {
 			}
 		}
 
-		return new RowData(modelRecord.getName(), totalPNL, totalTradingPNL, totalShippingPNL, totalUpside, totalUpstreamPNL, totalMtMPNL, totalIdleHours, totalGCOHours, totalGCORevenue,
-				totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex, totalPurchaseCost, totalSalesRevenue);
+		return new RowData(modelRecord.getName(), totalPNL, totalPaperPNL, totalTradingPNL, totalShippingPNL, totalUpside, totalUpstreamPNL, totalMtMPNL, totalIdleHours, totalGCOHours,
+				totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex, totalPurchaseCost, totalSalesRevenue);
 	}
 }

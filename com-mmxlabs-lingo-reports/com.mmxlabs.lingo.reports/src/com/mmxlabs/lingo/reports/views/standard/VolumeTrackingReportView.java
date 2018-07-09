@@ -7,10 +7,8 @@ package com.mmxlabs.lingo.reports.views.standard;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
-import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -44,12 +42,12 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * @author Simon McGregor
  */
 public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrackingReportView.VolumeData> {
-	private final static Month DEFAULT_MONTH = Month.OCTOBER;
-	
+	private static final Month DEFAULT_MONTH = Month.OCTOBER;
+
 	private final Pair<Year, Year> dateRange = new Pair<>();
 
 	private enum ValueMode {
-		VOLUME_MMBTU, VOLUME_M3, /* VOLUME_NATIVE -- link to exposures calcs, needs volume unit set on contract */
+		VOLUME_MMBTU, VOLUME_M3, VOLUME_CARGO /* VOLUME_NATIVE -- link to exposures calcs, needs volume unit set on contract */
 	}
 
 	private ValueMode mode = ValueMode.VOLUME_MMBTU;
@@ -105,7 +103,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
+				// Nothing to handle here
 			}
 		};
 
@@ -184,6 +182,9 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						case VOLUME_MMBTU:
 							volume = sa.getEnergyTransferred();
 							break;
+						case VOLUME_CARGO:
+							volume = 1;
+							break;
 						default:
 							throw new IllegalArgumentException();
 						}
@@ -231,7 +232,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			protected @NonNull VolumeData createDiffData(final VolumeData pinData, final VolumeData otherData) {
 
 				final VolumeData modelData = pinData != null ? pinData : otherData;
-				final Map<Year, Long> volumes = new HashMap<Year, Long>();
+				final Map<Year, Long> volumes = new HashMap<>();
 				final VolumeData newData = new VolumeData(null, null, modelData.purchase, modelData.contract, volumes);
 
 				if (pinData != null) {
@@ -252,7 +253,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 			@Override
 			public List<ColumnManager<VolumeData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
-				final ArrayList<ColumnManager<VolumeData>> result = new ArrayList<ColumnManager<VolumeData>>();
+				final ArrayList<ColumnManager<VolumeData>> result = new ArrayList<>();
 
 				if (selectedDataProvider.getScenarioResults().size() > 1) {
 					result.add(new ColumnManager<VolumeData>("Scenario") {
@@ -301,7 +302,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					}
 				});
 
-				if (dateRange != null && dateRange.getFirst() != null) {
+				if (dateRange.getFirst() != null) {
 					Year year = dateRange.getFirst();
 					while (!year.isAfter(dateRange.getSecond())) {
 						final Year fYear = year;
@@ -329,10 +330,13 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		};
 	}
 
+	@Override
 	protected void makeActions() {
 		super.makeActions();
 
 		final Action modeToggle = new Action("Volume:", Action.AS_PUSH_BUTTON) {
+
+			@Override
 			public void run() {
 
 				final int modeIdx = (mode.ordinal() + 1) % ValueMode.values().length;
@@ -358,6 +362,9 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			break;
 		case VOLUME_M3:
 			modeStr = "m³";
+			break;
+		case VOLUME_CARGO:
+			modeStr = "Count";
 			break;
 		default:
 			assert false;

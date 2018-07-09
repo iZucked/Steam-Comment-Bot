@@ -73,6 +73,7 @@ public class ExposureDetailItemProvider
 			addNativeValuePropertyDescriptor(object);
 			addVolumeUnitPropertyDescriptor(object);
 			addCurrencyUnitPropertyDescriptor(object);
+			addDealTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -254,6 +255,28 @@ public class ExposureDetailItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Deal Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDealTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ExposureDetail_dealType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ExposureDetail_dealType_feature", "_UI_ExposureDetail_type"),
+				 SchedulePackage.Literals.EXPOSURE_DETAIL__DEAL_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns ExposureDetail.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -299,6 +322,7 @@ public class ExposureDetailItemProvider
 			case SchedulePackage.EXPOSURE_DETAIL__NATIVE_VALUE:
 			case SchedulePackage.EXPOSURE_DETAIL__VOLUME_UNIT:
 			case SchedulePackage.EXPOSURE_DETAIL__CURRENCY_UNIT:
+			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

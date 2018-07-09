@@ -165,13 +165,26 @@
                   label="Import charter curves"
                   style="push">
             </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.settledprices"
+                  label="Import settled prices"
+                  style="push">
+ 				<visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>                  
+            </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
                locationURI="menu:data?after=additions">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
-                  label="Import Cargoes"
+                  label="Import cargoes"
                   style="push">
             </command>
             <command
@@ -227,6 +240,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.basefuel"
                name="Bulk import base fuel curves from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.settledprices.ImportSettledPricesHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.settledprices"
+               name="Import settled prices from CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportUnifiedCurvesHandler"

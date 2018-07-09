@@ -141,6 +141,9 @@
                <target
                      class="PortCost">
                </target>
+               <target
+                     class="CostModel">
+               </target>
             </constraint>
              <constraint
                    class="com.mmxlabs.models.lng.pricing.validation.UnitConversionConstraint"

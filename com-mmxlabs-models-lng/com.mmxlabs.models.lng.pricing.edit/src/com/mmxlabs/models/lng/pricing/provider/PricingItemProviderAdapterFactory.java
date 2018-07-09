@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.util.PricingAdapterFactory;
 
@@ -616,6 +617,52 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.DatePointContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DatePointContainerItemProvider datePointContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.DatePointContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDatePointContainerAdapter() {
+		if (datePointContainerItemProvider == null) {
+			datePointContainerItemProvider = new DatePointContainerItemProvider(this);
+		}
+
+		return datePointContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.DatePoint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DatePointItemProvider datePointItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.DatePoint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDatePointAdapter() {
+		if (datePointItemProvider == null) {
+			datePointItemProvider = new DatePointItemProvider(this);
+		}
+
+		return datePointItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -764,6 +811,8 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (suezCanalTariffItemProvider != null) suezCanalTariffItemProvider.dispose();
 		if (suezCanalTariffBandItemProvider != null) suezCanalTariffBandItemProvider.dispose();
 		if (unitConversionItemProvider != null) unitConversionItemProvider.dispose();
+		if (datePointContainerItemProvider != null) datePointContainerItemProvider.dispose();
+		if (datePointItemProvider != null) datePointItemProvider.dispose();
 	}
 
 }

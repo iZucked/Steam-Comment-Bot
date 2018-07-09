@@ -10,12 +10,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
@@ -214,8 +212,7 @@ public class JourneyEventExporter {
 
 	private List<FuelQuantity> exportFuelData(final VoyageDetails details) {
 
-		return FuelExportHelper.exportFuelData(details, details.getOptions().getVessel(), FuelExportHelper.travelFuelComponentNames, (d, fk) -> {
-			return d.getFuelConsumption(fk) + d.getRouteAdditionalConsumption(fk);
-		}, VoyageDetails::getFuelUnitPrice, modelEntityMap);
+		return FuelExportHelper.exportFuelData(details, details.getOptions().getVessel(), FuelExportHelper.travelFuelComponentNames,
+				(d, fk) -> d.getFuelConsumption(fk) + d.getRouteAdditionalConsumption(fk), VoyageDetails::getFuelUnitPrice, modelEntityMap);
 	}
 }

@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -13,15 +14,17 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public class HashMapShippingTypeRequirementProvider implements IShippingTypeRequirementProviderEditor {
 
-	final HashMap<ISequenceElement, CargoDeliveryType> salesSlotsShippingRequirements = new HashMap<ISequenceElement, CargoDeliveryType>();
-	final HashMap<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingTypes = new HashMap<ISequenceElement, CargoDeliveryType>();
-	final HashMap<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingRequirements = new HashMap<ISequenceElement, CargoDeliveryType>();
-	final HashMap<ISequenceElement, CargoDeliveryType> salesSlotsShippingTypes = new HashMap<ISequenceElement, CargoDeliveryType>();
+	private final Map<ISequenceElement, CargoDeliveryType> salesSlotsShippingRequirements = new HashMap<>();
+	private final Map<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingTypes = new HashMap<>();
+	private final Map<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingRequirements = new HashMap<>();
+	private final Map<ISequenceElement, CargoDeliveryType> salesSlotsShippingTypes = new HashMap<>();
 
+	@Override
 	public void setPurchaseSlotDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
 		purchaseSlotsShippingTypes.put(element, cargoType);
 	}
 
+	@Override
 	public void setSalesSlotRequiredDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
 		salesSlotsShippingRequirements.put(element, cargoType);
 	}
@@ -36,10 +39,12 @@ public class HashMapShippingTypeRequirementProvider implements IShippingTypeRequ
 		return salesSlotsShippingRequirements.get(element);
 	}
 
+	@Override
 	public void setSalesSlotDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
 		salesSlotsShippingTypes.put(element, cargoType);
 	}
 
+	@Override
 	public void setPurchaseSlotRequiredDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
 		purchaseSlotsShippingRequirements.put(element, cargoType);
 	}

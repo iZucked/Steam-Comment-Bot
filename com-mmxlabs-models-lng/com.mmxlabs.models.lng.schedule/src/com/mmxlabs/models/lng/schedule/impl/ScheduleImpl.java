@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -41,6 +42,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getUnusedElements <em>Unused Elements</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getInventoryLevels <em>Inventory Levels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getPaperDealAllocations <em>Paper Deal Allocations</em>}</li>
  * </ul>
  *
  * @generated
@@ -125,6 +127,16 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected EList<InventoryEvents> inventoryLevels;
+
+	/**
+	 * The cached value of the '{@link #getPaperDealAllocations() <em>Paper Deal Allocations</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPaperDealAllocations()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PaperDealAllocation> paperDealAllocations;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -246,6 +258,18 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<PaperDealAllocation> getPaperDealAllocations() {
+		if (paperDealAllocations == null) {
+			paperDealAllocations = new EObjectContainmentEList<PaperDealAllocation>(PaperDealAllocation.class, this, SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS);
+		}
+		return paperDealAllocations;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -263,6 +287,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return ((InternalEList<?>)getFitnesses()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
 				return ((InternalEList<?>)getInventoryLevels()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
+				return ((InternalEList<?>)getPaperDealAllocations()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -291,6 +317,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return getUnusedElements();
 			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
 				return getInventoryLevels();
+			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
+				return getPaperDealAllocations();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -336,6 +364,10 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				getInventoryLevels().clear();
 				getInventoryLevels().addAll((Collection<? extends InventoryEvents>)newValue);
 				return;
+			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
+				getPaperDealAllocations().clear();
+				getPaperDealAllocations().addAll((Collection<? extends PaperDealAllocation>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -372,6 +404,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
 				getInventoryLevels().clear();
 				return;
+			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
+				getPaperDealAllocations().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -400,6 +435,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return unusedElements != null && !unusedElements.isEmpty();
 			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
 				return inventoryLevels != null && !inventoryLevels.isEmpty();
+			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
+				return paperDealAllocations != null && !paperDealAllocations.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

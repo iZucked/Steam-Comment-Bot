@@ -231,6 +231,24 @@ public interface PricingFactory extends EFactory {
 	UnitConversion createUnitConversion();
 
 	/**
+	 * Returns a new object of class '<em>Date Point Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Date Point Container</em>'.
+	 * @generated
+	 */
+	DatePointContainer createDatePointContainer();
+
+	/**
+	 * Returns a new object of class '<em>Date Point</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Date Point</em>'.
+	 * @generated
+	 */
+	DatePoint createDatePoint();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

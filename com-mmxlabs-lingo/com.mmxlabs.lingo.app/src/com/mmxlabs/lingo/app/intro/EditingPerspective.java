@@ -47,12 +47,14 @@ public class EditingPerspective implements IPerspectiveFactory {
 		final IFolderLayout physicalFolder = layout.createFolder("physicalFolder", IPageLayout.TOP, 0.75f, IPageLayout.ID_EDITOR_AREA);
 		physicalFolder.addView("com.mmxlabs.models.lng.port.editor.views.PortView");
 		physicalFolder.addView("com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView");
+		physicalFolder.addView("com.mmxlabs.models.lng.pricing.editor.SettledPricesView");
 
 		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, IPageLayout.ID_EDITOR_AREA);
 		miscFolder.addView("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
 
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.port.editor.views.PortView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView");
+		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.SettledPricesView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.CanalCostsView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.PortCostsView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.CooldownCostsView");

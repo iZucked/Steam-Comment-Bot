@@ -37,8 +37,8 @@ public class CounterCharterOutMoveGenerator implements IMoveGenerator {
 
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
-		final List<Map.Entry<IResource, ISequence>> nonEmptyBadSequences = new ArrayList<Map.Entry<IResource, ISequence>>();
-		final List<Map.Entry<IResource, ISequence>> goodSequences = new ArrayList<Map.Entry<IResource, ISequence>>();
+		final List<Map.Entry<IResource, ISequence>> nonEmptyBadSequences = new ArrayList<>();
+		final List<Map.Entry<IResource, ISequence>> goodSequences = new ArrayList<>();
 		Move3over2 result = null;
 		for (final Map.Entry<IResource, ISequence> entry : rawSequences.getSequences().entrySet()) {
 			if (badResources.contains(entry.getKey())) {
@@ -50,7 +50,7 @@ public class CounterCharterOutMoveGenerator implements IMoveGenerator {
 			}
 		}
 
-		if (nonEmptyBadSequences.size() > 0) {
+		if (!nonEmptyBadSequences.isEmpty()) {
 			final Map.Entry<IResource, ISequence> bad = RandomHelper.chooseElementFrom(random, nonEmptyBadSequences);
 			final Map.Entry<IResource, ISequence> good = RandomHelper.chooseElementFrom(random, goodSequences);
 

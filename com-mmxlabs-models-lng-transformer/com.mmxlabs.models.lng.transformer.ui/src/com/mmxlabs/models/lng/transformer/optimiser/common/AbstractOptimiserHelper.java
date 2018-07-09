@@ -139,22 +139,10 @@ abstract public class AbstractOptimiserHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		ObjectOutputStream oos = null;
-		FileOutputStream fout = null;
-		try {
-			fout = new FileOutputStream(path, false);
-			oos = new ObjectOutputStream(fout);
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path, false))) {
 			oos.writeObject(serializable);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		} finally {
-			if (oos != null) {
-				try {
-					oos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -166,18 +154,11 @@ abstract public class AbstractOptimiserHelper {
 	}
 
 	public static <T> T getPrestoredData(String path) throws IOException {
-		ObjectInputStream objectinputstream = null;
 		T readCase = null;
-		try {
-			FileInputStream streamIn = new FileInputStream(path);
-			objectinputstream = new ObjectInputStream(streamIn);
+		try (ObjectInputStream objectinputstream = new ObjectInputStream(new FileInputStream(path))) {
 			readCase = (T) objectinputstream.readObject();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (objectinputstream != null) {
-				objectinputstream.close();
-			}
 		}
 		return readCase;
 	}

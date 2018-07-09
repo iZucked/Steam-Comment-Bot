@@ -22,11 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class SimpleHTTPPostRequester {
 	private static final boolean DEBUG = false;
-	ObjectMapper mapper = new ObjectMapper();
+	private ObjectMapper mapper = new ObjectMapper();
 
-    public SimpleHTTPPostRequester() {        
-    }
- 
+
     /**
      * Performs HTTP post.
      * @param url http resource to post
@@ -43,17 +41,17 @@ public class SimpleHTTPPostRequester {
 			throw new IOException();
 		}
 
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(url);
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String responseBody = null;
-        try {
-            StringEntity stringEntity = new StringEntity(jsonRequest);
-            httpPost.setEntity(stringEntity);
-            httpPost.setHeader("Content-type", "application/json");
-            responseBody = httpClient.execute(httpPost, responseHandler);
-        } catch (IOException e) {
-            throw e;
-        }
-        return responseBody;
-    }}
+		try (DefaultHttpClient httpClient = new DefaultHttpClient()) {
+			HttpPost httpPost = new HttpPost(url);
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			String responseBody = null;
+
+			StringEntity stringEntity = new StringEntity(jsonRequest);
+			httpPost.setEntity(stringEntity);
+			httpPost.setHeader("Content-type", "application/json");
+			responseBody = httpClient.execute(httpPost, responseHandler);
+
+			return responseBody;
+		}
+	}
+}

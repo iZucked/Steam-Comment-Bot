@@ -24,11 +24,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public class DeletedScenarioServiceListener extends ScenarioServiceListener {
 
-	private final Set<IScenarioService> scenarioServices = new HashSet<IScenarioService>();
+	private final Set<IScenarioService> scenarioServices = new HashSet<>();
 	private IEclipseJobManager eclipseJobManager;
-
-	public DeletedScenarioServiceListener() {
-	}
 
 	@Override
 	public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {

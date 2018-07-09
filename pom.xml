@@ -5,8 +5,19 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.master</groupId>
 	<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>4.5.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
+	<scm>
+		<connection>scm:git:git@gitlab.com:mmxlabs/LiNGO/LiNGO.git</connection>
+		<developerConnection>scm:git:git@gitlab.com:mmxlabs/LiNGO/LiNGO.git</developerConnection>
+		<url>https://gitlab.com/mmxlabs/LiNGO/LiNGO</url>
+	</scm>
+
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://kubera.mmxlabs.lan/jenkins/job/master/job/LiNGO-master/</url>
+	</ciManagement>
 
 	<modules>
 		<module>com-mmxlabs-lingo-common-target</module>

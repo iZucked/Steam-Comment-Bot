@@ -73,7 +73,7 @@ public class LNGScenarioUtils {
 //		 round down earliest time
 //		earliestTime = DateAndCurveHelper.roundTimeDown(earliestTime);
 		latestTime = allDates.isEmpty() ? EarliestDate : Collections.max(allDates);
-		return new Pair<ZonedDateTime, ZonedDateTime>(earliestTime, latestTime);
+		return new Pair<>(earliestTime, latestTime);
 	}
 
 }

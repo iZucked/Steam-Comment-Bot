@@ -312,9 +312,7 @@ public class SlotInsertionOptimiserUnit {
 						if (s != null) {
 							results.add(s);
 						}
-					} catch (final InterruptedException e) {
-						e.printStackTrace();
-					} catch (final ExecutionException e) {
+					} catch (final InterruptedException | ExecutionException e) {
 						e.printStackTrace();
 					}
 				}

@@ -5,11 +5,13 @@
 package com.mmxlabs.models.lng.pricing.util;
 
 import java.lang.ref.SoftReference;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -28,6 +30,8 @@ import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.DatePoint;
+import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
@@ -43,7 +47,11 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 	private SoftReference<Map<@NonNull PriceIndexType, @NonNull SeriesParser>> cache = new SoftReference<>(null);
 
+	private SoftReference<Map<@NonNull String, Map<@NonNull LocalDate, Double>>> settledPriceCache = new SoftReference<>(null);
+
 	private SoftReference<Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth>> earlyDateCache = new SoftReference<>(null);
+
+	private SoftReference<Map<@NonNull String, @Nullable LocalDate>> earlySettledDateCache = new SoftReference<>(null);
 
 	private SoftReference<LookupData> expressionToIndexUseCache = new SoftReference<>(null);
 
@@ -86,7 +94,25 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		cacheObj.put(PriceIndexType.CHARTER, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CHARTER));
 		cacheObj.put(PriceIndexType.BUNKERS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.BUNKERS));
 		cacheObj.put(PriceIndexType.CURRENCY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CURRENCY));
+
 		return cacheObj;
+	}
+
+	public synchronized Map<String, Map<LocalDate, Double>> buildSettledPriceCache() {
+		final Map<String, Map<LocalDate, Double>> settledPrices = new HashMap<>();
+		for (final DatePointContainer c : pricingModel.getSettledPrices()) {
+			if (c.getName() == null || c.getName().isEmpty()) {
+				continue;
+			}
+			final Map<LocalDate, Double> m = new HashMap<>();
+			for (final DatePoint p : c.getPoints()) {
+				m.put(p.getDate(), p.getValue());
+			}
+			settledPrices.put(c.getName().toLowerCase(), m);
+		}
+		settledPriceCache = new SoftReference<>(settledPrices);
+
+		return settledPrices;
 	}
 
 	public synchronized Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> buildDateCache() {
@@ -116,10 +142,34 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		return cacheObj;
 	}
 
+	public synchronized Map<@NonNull String, @Nullable LocalDate> buildSettledDateCache() {
+		final Map<@NonNull String, @Nullable LocalDate> cacheObj = new HashMap<>();
+		earlySettledDateCache = new SoftReference<>(cacheObj);
+		final Function<DatePointContainer, @Nullable LocalDate> finder = (curve) -> {
+			final List<DatePoint> points = curve.getPoints();
+			final Optional<?> min = points.stream() //
+					.min((p1, p2) -> {
+						return p1.getDate().compareTo(p2.getDate());
+					});
+			// No data check
+			if (min.isPresent()) {
+				return ((DatePoint) min.get()).getDate();
+			}
+			return null;
+		};
+
+		pricingModel.getSettledPrices().forEach(c -> cacheObj.put(c.getName().toLowerCase(), finder.apply(c)));
+
+		return cacheObj;
+	}
+
 	public synchronized void clearCache() {
 		cache.clear();
 		earlyDateCache.clear();
 		expressionToIndexUseCache.clear();
+
+		settledPriceCache.clear();
+		earlySettledDateCache.clear();
 	}
 
 	public @NonNull SeriesParser getSeriesParser(final @NonNull PriceIndexType marketIndexType) {
@@ -131,6 +181,15 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 	}
 
+	public @Nullable Map<LocalDate, Double> getSettledPrices(final String indexName) {
+		Map<String, Map<LocalDate, Double>> map = settledPriceCache.get();
+		if (map == null) {
+			map = buildSettledPriceCache();
+		}
+		return map.get(indexName.toLowerCase());
+
+	}
+
 	public @Nullable YearMonth getEarliestDate(final @NonNull NamedIndexContainer<?> index) {
 
 		Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> map = earlyDateCache.get();
@@ -138,6 +197,15 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 			map = buildDateCache();
 		}
 		return map.getOrDefault(index, null);
+	}
+
+	public @Nullable LocalDate getEarliestSettledDate(final @NonNull String indexName) {
+
+		Map<@NonNull String, @Nullable LocalDate> map = earlySettledDateCache.get();
+		if (map == null) {
+			map = buildSettledDateCache();
+		}
+		return map.getOrDefault(indexName.toLowerCase(), null);
 	}
 
 	private static class LookupData {
@@ -305,6 +373,29 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 			s.addAll(collectIndicies(child, lookupData));
 		}
 		return s;
+	}
+
+	public NamedIndexContainer<?> getCurve(PriceIndexType priceIndexType, String name) {
+		LookupData lookupData = expressionToIndexUseCache.get();
+		if (lookupData == null) {
+			lookupData = createLookupData(pricingModel);
+			expressionToIndexUseCache = new SoftReference<>(lookupData);
+		}
+
+		switch (priceIndexType) {
+		case BUNKERS:
+			return lookupData.baseFuelMap.get(name.toLowerCase());
+		case CHARTER:
+			return lookupData.charterMap.get(name.toLowerCase());
+		case COMMODITY:
+			return lookupData.commodityMap.get(name.toLowerCase());
+		case CURRENCY:
+			return lookupData.currencyMap.get(name.toLowerCase());
+		default:
+			break;
+
+		}
+		return null;
 	}
 
 }

@@ -75,7 +75,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	private List<String> provideEnabledEvaluatedStateConstraintNames(final IEvaluatedStateConstraintCheckerRegistry registry) {
 		// settings.getConstraints().stream().filter(c -> c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
 
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 		for (final IEvaluatedStateConstraintCheckerFactory f : registry.getConstraintCheckerFactories()) {
 			result.add(f.getName());
 		}
@@ -92,7 +92,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	@Singleton
 	@Named(EvaluationProcessInstantiatorModule.ENABLED_EVALUATION_PROCESS_NAMES)
 	private List<String> provideEnabledEvaluationProcessNames(final IEvaluationProcessRegistry registry) {
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 
 		// registry.getEvaluationProcessNames().stream()//.filter(c->c.isEnabled())
 		// .map(IEvaluationProcessFactory::getName()).collect(Collectors.toList());
@@ -116,7 +116,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	private List<String> provideEnabledConstraintNames() {
 		// settings.getConstraints().stream().filter(c -> c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
 
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 
 		for (final Constraint c : constraintAndFitnessSettings.getConstraints()) {
 			if (c.isEnabled()) {
@@ -131,7 +131,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	@Singleton
 	@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES)
 	private List<String> provideEnabledFitnessFunctionNames() {
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 
 		for (final Objective o : constraintAndFitnessSettings.getObjectives()) {
 			if (o.isEnabled() && o.getWeight() > 0) {
@@ -146,7 +146,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP)
 	Map<String, Double> provideLSOFitnessWeights(@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
 
-		final Map<String, Double> weightsMap = new HashMap<String, Double>();
+		final Map<String, Double> weightsMap = new HashMap<>();
 		for (final String component : enabledFitnessNames) {
 			if (component != null) {
 				weightsMap.put(component, 0.0);
@@ -166,7 +166,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	@Provides
 	@Named(LocalSearchOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_NAMES)
 	List<String> provideMultiObjectiveFitnessComponentNames(@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
-		LinkedList<String> objectiveNames = new LinkedList<String>(Arrays.asList("SimilarityFitnessCore"));
+		LinkedList<String> objectiveNames = new LinkedList<>(Arrays.asList("SimilarityFitnessCore"));
 		assert (enabledFitnessNames.containsAll(objectiveNames));
 		return objectiveNames;
 	}

@@ -102,7 +102,7 @@ public final class JobStore {
 	 */
 	public List<File> getFiles() {
 		// Clear existing pending jobs
-		if (!foundBranch && pendingJobs.size() > 0) {
+		if (!foundBranch && !pendingJobs.isEmpty()) {
 			finishFile();
 		}
 

@@ -8,12 +8,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -24,11 +22,11 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -41,7 +39,11 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author hinton
  * 
  */
-public class TransformerUtils {
+public final class TransformerUtils {
+	private TransformerUtils() {
+
+	}
+
 	/**
 	 * Serialize an EObject into a byte array; currently EMF generated models do not serialize properly, particularly models with complicated containment going on.
 	 * 
@@ -98,21 +100,6 @@ public class TransformerUtils {
 		return (T) clazz.getInstanceClass().cast(resource.getContents().get(0));
 	}
 
-	//
-	// public static <T> T readObjectFromFile(final String filepath, final Class<? extends T> clazz) {
-	// ResourceSet resourceSet = new ResourceSetImpl();
-	// resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-	// resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI, ScenarioPackage.eINSTANCE);
-	//
-	// Resource resource = resourceSet.getResource(URI.createFileURI(filepath), true);
-	// for (EObject e : resource.getContents()) {
-	// if (clazz.isInstance(e)) {
-	// return clazz.cast(e);
-	// }
-	// }
-	// return null;
-	// }
-
 	/**
 	 * Iterate through all the attributes of the given EObject and find the earliest and latest dates
 	 * 
@@ -120,7 +107,7 @@ public class TransformerUtils {
 	 * @return a pair, first element containing the earliest date and second the latest
 	 */
 	public static Pair<Date, Date> findMinMaxDateAttributes(final EObject object) {
-		final Pair<Date, Date> result = new Pair<Date, Date>();
+		final Pair<Date, Date> result = new Pair<>();
 
 		findMinMaxDateAttributes(object, result);
 
@@ -266,23 +253,6 @@ public class TransformerUtils {
 			}
 		}
 		return input;
-	}
-
-	/**
-	 * Fix any dates which are null; dates shouldn't be null
-	 * 
-	 * @param input
-	 * @return the input
-	 */
-	public static EObject fixNullDates(final EObject input) {
-		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		calendar.setTime(new Date());
-		calendar.clear(Calendar.MINUTE);
-		calendar.clear(Calendar.SECOND);
-		calendar.clear(Calendar.MILLISECOND);
-		final Date date = calendar.getTime();
-		// final DateAndOptionalTime daot = new DateAndOptionalTime(date, true);
-		return unsetOrSetNullValues(input, EcorePackage.eINSTANCE.getEDate(), date);
 	}
 
 	/**

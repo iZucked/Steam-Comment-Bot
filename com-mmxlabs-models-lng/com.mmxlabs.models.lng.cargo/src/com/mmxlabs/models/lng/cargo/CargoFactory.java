@@ -267,6 +267,24 @@ public interface CargoFactory extends EFactory {
 	CharterInMarketOverride createCharterInMarketOverride();
 
 	/**
+	 * Returns a new object of class '<em>Buy Paper Deal</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Buy Paper Deal</em>'.
+	 * @generated
+	 */
+	BuyPaperDeal createBuyPaperDeal();
+
+	/**
+	 * Returns a new object of class '<em>Sell Paper Deal</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sell Paper Deal</em>'.
+	 * @generated
+	 */
+	SellPaperDeal createSellPaperDeal();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

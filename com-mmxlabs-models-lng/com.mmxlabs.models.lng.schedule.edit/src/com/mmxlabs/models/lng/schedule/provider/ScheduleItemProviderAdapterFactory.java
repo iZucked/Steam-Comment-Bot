@@ -962,6 +962,52 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.PaperDealAllocation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PaperDealAllocationItemProvider paperDealAllocationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.PaperDealAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPaperDealAllocationAdapter() {
+		if (paperDealAllocationItemProvider == null) {
+			paperDealAllocationItemProvider = new PaperDealAllocationItemProvider(this);
+		}
+
+		return paperDealAllocationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PaperDealAllocationEntryItemProvider paperDealAllocationEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPaperDealAllocationEntryAdapter() {
+		if (paperDealAllocationEntryItemProvider == null) {
+			paperDealAllocationEntryItemProvider = new PaperDealAllocationEntryItemProvider(this);
+		}
+
+		return paperDealAllocationEntryItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1125,6 +1171,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (canalBookingEventItemProvider != null) canalBookingEventItemProvider.dispose();
 		if (inventoryEventsItemProvider != null) inventoryEventsItemProvider.dispose();
 		if (inventoryChangeEventItemProvider != null) inventoryChangeEventItemProvider.dispose();
+		if (paperDealAllocationItemProvider != null) paperDealAllocationItemProvider.dispose();
+		if (paperDealAllocationEntryItemProvider != null) paperDealAllocationEntryItemProvider.dispose();
 	}
 
 }

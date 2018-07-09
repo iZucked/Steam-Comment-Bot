@@ -6,39 +6,33 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lngdataserver</groupId>
 	<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
-	<version>4.4.15-SNAPSHOT</version>
+	<version>4.5.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>36</version>
+		<version>37</version>
 	</parent>
-
-	<scm>
-		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lngdataserver.git</connection>
-		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lngdataserver.git</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-lngdataserver</url>
-	</scm>
 
 	<modules>
 		<module>com.mmxlabs.lngdataserver.lib</module>
 		<module>com.mmxlabs.lngdataserver.lib.test</module>
 		<module>com.mmxlabs.lngdataserver.commons</module>
 		<module>com.mmxlabs.lngdataserver.server</module>
-		<module>com.mmxlabs.lngdataserver.vessels</module>
-		<module>com.mmxlabs.lngdataserver.ports</module>
-		<module>com.mmxlabs.lngdataserver.distances</module>
-		<module>com.mmxlabs.lngdataserver.distances.tests</module>
+
+		<module>com.mmxlabs.lngdataserver.integration.vessels</module>
+		<module>com.mmxlabs.lngdataserver.integration.ports</module>
+		<module>com.mmxlabs.lngdataserver.integration.distances</module>
+		<module>com.mmxlabs.lngdataserver.integration.distances.tests</module>
+		<module>com.mmxlabs.lngdataserver.integration.pricing</module>
+		<module>com.mmxlabs.lngdataserver.integration.pricing.tests</module>
+		<module>com.mmxlabs.lngdataserver.integration.ui</module>
+		<module>com.mmxlabs.lngdataserver.integration.ui.scenarios</module>
+
 		<module>com.mmxlabs.lngdataserver.lng.importers</module>
 		<module>com.mmxlabs.lngdataserver.lng.importers.tests</module>
-
-		<module>com.mmxlabs.lngdataserver.pricing</module>
-		<module>com.mmxlabs.lngdataserver.pricing.tests</module>
-
-		<module>com.mmxlabs.lngdataserver.ui</module>
-		<module>com.mmxlabs.lngdataserver.ui.scenarios</module>
 		<module>com.mmxlabs.lngdataserver.browser</module>
 		<module>com.mmxlabs.lngdataserver.browser.edit</module>
 		<module>com.mmxlabs.lngdataserver.browser.ui</module>

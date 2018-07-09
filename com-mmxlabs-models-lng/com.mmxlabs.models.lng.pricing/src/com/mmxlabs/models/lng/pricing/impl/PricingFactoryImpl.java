@@ -96,6 +96,8 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.SUEZ_CANAL_TARIFF: return createSuezCanalTariff();
 			case PricingPackage.SUEZ_CANAL_TARIFF_BAND: return createSuezCanalTariffBand();
 			case PricingPackage.UNIT_CONVERSION: return createUnitConversion();
+			case PricingPackage.DATE_POINT_CONTAINER: return createDatePointContainer();
+			case PricingPackage.DATE_POINT: return createDatePoint();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -329,6 +331,26 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public UnitConversion createUnitConversion() {
 		UnitConversionImpl unitConversion = new UnitConversionImpl();
 		return unitConversion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DatePointContainer createDatePointContainer() {
+		DatePointContainerImpl datePointContainer = new DatePointContainerImpl();
+		return datePointContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DatePoint createDatePoint() {
+		DatePointImpl datePoint = new DatePointImpl();
+		return datePoint;
 	}
 
 	/**

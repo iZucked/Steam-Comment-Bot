@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
@@ -25,19 +26,31 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class PricingModelEditorContribution extends BaseJointModelEditorContribution<PricingModel> {
 	private IndexPane indexPane;
+//	private SettledPricesPane settledPricesPane;
 
 	private int indexPage = -1;
+//	private int settledPricesPage = -1;
 
 	@Override
 	public void addPages(final Composite parent) {
+		{
+			indexPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			indexPane.createControl(parent);
+			indexPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+			indexPane.setInput(modelObject);
 
-		indexPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		indexPane.createControl(parent);
-		indexPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()), editorPart.getAdapterFactory(), editorPart.getModelReference());
-		indexPane.setInput(modelObject);
-
-		indexPage = editorPart.addPage(indexPane.getControl());
-		editorPart.setPageText(indexPage, "Curves");
+			indexPage = editorPart.addPage(indexPane.getControl());
+			editorPart.setPageText(indexPage, "Curves");
+		}
+//		if (LicenseFeatures.isPermitted("features:paperdeals")) {
+//			settledPricesPane = new SettledPricesPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+//			settledPricesPane.createControl(parent);
+//			settledPricesPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_SettledPrices()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+//			settledPricesPane.setInput(modelObject);
+//
+//			settledPricesPage = editorPart.addPage(settledPricesPane.getControl());
+//			editorPart.setPageText(settledPricesPage, "Settled Prices");
+//		}
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(indexPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Markets");
 	}
 
@@ -46,6 +59,9 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		if (indexPane != null) {
 			indexPane.setLocked(locked);
 		}
+//		if (settledPricesPane != null) {
+//			settledPricesPane.setLocked(locked);
+//		}
 	}
 
 	@Override

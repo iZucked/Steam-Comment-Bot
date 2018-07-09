@@ -52,9 +52,6 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 	private static final Logger log = LoggerFactory.getLogger(InsertEventContextMenuExtension.class);
 
-	public InsertEventContextMenuExtension() {
-	}
-
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final VesselEvent vesselEvent, @NonNull final MenuManager menuManager) {
 
@@ -100,7 +97,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 				}
 			}
 
-			if (events.size() > 0) {
+			if (!events.isEmpty()) {
 				final InsertEventAction action = new InsertEventAction(scenarioEditingLocation, events);
 
 				for (final VesselEvent event : events) {

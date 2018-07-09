@@ -4,26 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo</groupId>
 	<artifactId>com.mmxlabs.lingo.parent</artifactId>
-	<version>4.4.15-SNAPSHOT</version>
+	<version>4.5.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>36</version>
+		<version>37</version>
 		<relativePath />
 	</parent>
-
-	<scm>
-		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lingo.git</connection>
-		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lingo.git</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-lingo</url>
-	</scm>
-
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.lingo/</url>
-	</ciManagement>
 
 	<modules>
 		<module>com.mmxlabs.lingo.target-definition</module>

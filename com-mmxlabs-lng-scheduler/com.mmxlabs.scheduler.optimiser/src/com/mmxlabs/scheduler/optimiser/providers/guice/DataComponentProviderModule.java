@@ -53,6 +53,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
@@ -120,6 +122,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEdito
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDataProviderEditor;
@@ -405,6 +408,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultAllowedVesselProvider.class).in(Singleton.class);
 		bind(IAllowedVesselProvider.class).to(DefaultAllowedVesselProvider.class);
 		bind(IAllowedVesselProviderEditor.class).to(DefaultAllowedVesselProvider.class);
+
+		bind(DefaultExtraIdleTimeProviderEditor.class).in(Singleton.class);
+		bind(IExtraIdleTimeProvider.class).to(DefaultExtraIdleTimeProviderEditor.class);
+		bind(IExtraIdleTimeProviderEditor.class).to(DefaultExtraIdleTimeProviderEditor.class);
 
 		// Lightweight/longterm/ADP
 		bind(DefaultMaxSlotConstraintDataProviderEditor.class).in(Singleton.class);

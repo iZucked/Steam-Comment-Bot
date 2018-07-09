@@ -34,7 +34,7 @@ public class ExporterExtensionsModule extends AbstractModule {
 
 	@Provides
 	private List<IExporterExtension> provideExporterExtensions(final Injector injector, final Iterable<IExporterExtensionFactory> extensionFactories) {
-		final List<IExporterExtension> extensions = new ArrayList<IExporterExtension>();
+		final List<IExporterExtension> extensions = new ArrayList<>();
 		for (final IExporterExtensionFactory factory : extensionFactories) {
 			final IExporterExtension instance = factory.createInstance();
 			injector.injectMembers(instance);
@@ -42,10 +42,10 @@ public class ExporterExtensionsModule extends AbstractModule {
 		}
 		return extensions;
 	}
-	
+
 	@Provides
 	private List<IOutputScheduleProcessor> provideExtensions(final Injector injector, final Iterable<IOutputScheduleProcessorFactory> extensionFactories) {
-		final List<IOutputScheduleProcessor> extensions = new ArrayList<IOutputScheduleProcessor>();
+		final List<IOutputScheduleProcessor> extensions = new ArrayList<>();
 		for (final IOutputScheduleProcessorFactory factory : extensionFactories) {
 			final IOutputScheduleProcessor instance = factory.createInstance();
 			injector.injectMembers(instance);
@@ -53,5 +53,5 @@ public class ExporterExtensionsModule extends AbstractModule {
 		}
 		return extensions;
 	}
-	 
+
 }

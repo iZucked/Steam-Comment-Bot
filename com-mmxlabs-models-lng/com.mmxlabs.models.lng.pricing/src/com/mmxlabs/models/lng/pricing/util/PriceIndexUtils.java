@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.Comparator;
@@ -206,6 +207,10 @@ public class PriceIndexUtils {
 	 */
 	public static int convertTime(final YearMonth earliest, final YearMonth windowStart) {
 		return Hours.between(earliest, windowStart);
+	}
+	
+	public static int convertTime(final YearMonth earliest, final LocalDate windowStart) {
+		return Hours.between(earliest.atDay(1), windowStart);
 	}
 
 	public static @Nullable String createConversionFactorName(@NonNull final UnitConversion factor) {

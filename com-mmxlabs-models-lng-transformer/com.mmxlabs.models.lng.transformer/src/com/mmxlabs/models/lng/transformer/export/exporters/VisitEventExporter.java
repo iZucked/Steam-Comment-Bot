@@ -186,7 +186,6 @@ public class VisitEventExporter {
 				portSlotEventProvider.addEventToPortSlot(slot, GeneratedCharterOut.class, generatedCharterOutEvent);
 
 			} else {
-				// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
 				final VesselEvent event = modelEntityMap.getModelObject(slot, VesselEvent.class);
 				if (event == null)
 					return null;
@@ -198,9 +197,6 @@ public class VisitEventExporter {
 					if (ePort != charterOut.getEndPort()) {
 						return null;
 					}
-					// final CharterOutVisit cov = factory.createCharterOutVisit();
-					// vev = cov;
-					// cov.setCharterOut(charterOut);
 					vev = ScheduleFactory.eINSTANCE.createVesselEventVisit();
 				} else {
 					vev = ScheduleFactory.eINSTANCE.createVesselEventVisit();

@@ -24,7 +24,7 @@ public class CSVWriter {
 	private final char separator; // this is the character which appears between fields
 	private final char delimiter; // this is the character which appears either end of a field
 	private final String escapedDelimiter; // this is the string with which the delimiter is replaced inside a field
-	private final String newLine = "\n"; // this is the character which terminates a row
+	private static final String NEW_LINE = "\n"; // this is the character which terminates a row
 
 	private final String separatorString; // String version of the separator for convenience
 	private final String delimiterString; // String version of the delimiter for convenience
@@ -63,12 +63,12 @@ public class CSVWriter {
 	}
 
 	public void endRow() throws IOException {
-		writer.write(newLine);
+		writer.write(NEW_LINE);
 		rowStarted = false;
 	}
 
 	private String escape(final String value) {
-		if (value.contains(delimiterString) || value.contains(separatorString) || value.contains(newLine)) {
+		if (value.contains(delimiterString) || value.contains(separatorString) || value.contains(NEW_LINE)) {
 			return delimiterString + value.replace("" + delimiter, escapedDelimiter) + delimiterString;
 		}
 		return value;

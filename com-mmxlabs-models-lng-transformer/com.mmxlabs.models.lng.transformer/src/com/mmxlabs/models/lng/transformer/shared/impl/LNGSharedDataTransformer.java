@@ -42,7 +42,7 @@ public class LNGSharedDataTransformer {
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
-		final Association<Port, IPort> portAssociation = new Association<Port, IPort>();
+		final Association<Port, IPort> portAssociation = new Association<>();
 
 		// Hint to pre-allocate ram
 		portDistanceBuilder.setExpectPortCount(portModel.getPorts().size());

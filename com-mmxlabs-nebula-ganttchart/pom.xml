@@ -6,13 +6,13 @@
 
 	<groupId>org.eclipse.nebula.widgets</groupId>
 	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.parent</artifactId>
-	<version>4.4.15-SNAPSHOT</version>
+	<version>4.5.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>36</version>
+		<version>37</version>
 		<relativePath />
 	</parent>
 

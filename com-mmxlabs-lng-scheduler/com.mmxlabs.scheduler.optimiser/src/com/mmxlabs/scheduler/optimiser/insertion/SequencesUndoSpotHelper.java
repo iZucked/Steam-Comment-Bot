@@ -46,7 +46,7 @@ public class SequencesUndoSpotHelper {
 
 		final IModifiableSequences revertedSeq = new ModifiableSequences(current);
 
-		IResource changedResources[] = new IResource[2];
+		IResource[] changedResources = new IResource[2];
 
 		for (final IResource r : revertedSeq.getResources()) {
 			final IModifiableSequence seq = revertedSeq.getModifiableSequence(r);

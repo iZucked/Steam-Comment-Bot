@@ -320,7 +320,7 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 							.collect(Collectors.toList());
 					best = solutions.get(0);
 				} else {
-					NonNullPair<ISequences, Map<String, Object>> initial = new NonNullPair<ISequences, Map<String, Object>>(inputRawSequences, new HashMap<>());
+					NonNullPair<ISequences, Map<String, Object>> initial = new NonNullPair<>(inputRawSequences, new HashMap<>());
 					solutions.add(initial);
 				}
 				assert best != null;

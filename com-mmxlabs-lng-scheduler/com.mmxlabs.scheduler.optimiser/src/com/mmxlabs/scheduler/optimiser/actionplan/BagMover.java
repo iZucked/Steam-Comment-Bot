@@ -537,7 +537,6 @@ public class BagMover {
 		ISequenceElement originalDischarge = null;
 		ISequenceElement otherLoad = null;
 		IResource otherResource = null;
-		ISequence otherResourceSequence = null;
 		int firstDischargeSwapIdx = -1;
 		LOOP: for (final IResource r : copy.getResources()) {
 			assert r != null;
@@ -553,7 +552,6 @@ public class BagMover {
 					otherResource = r;
 					s.set(j, current);
 					firstDischargeSwapIdx = j;
-					otherResourceSequence = s;
 					swapped = true;
 					break LOOP;
 				}
@@ -679,7 +677,7 @@ public class BagMover {
 			if (similarityState.getLoadForDischarge(discharge) != null && !differences.contains(dischargeNeedsInserting)) {
 				differences.add(dischargeNeedsInserting);
 			}
-			if (similarityState.getDischargeForLoad(load) != null & !differences.contains(loadNeedsInserting)) {
+			if (similarityState.getDischargeForLoad(load) != null && !differences.contains(loadNeedsInserting)) {
 				differences.add(loadNeedsInserting);
 			}
 			for (final Difference d : new LinkedList<>(differences)) {
@@ -762,7 +760,6 @@ public class BagMover {
 			} else {
 				// FOB SALE OR DES PURCHASE
 				final IModifiableSequences copy = new ModifiableSequences(currentSequences);
-				final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
 				final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedElement);
 				assert allowedResources != null && allowedResources.size() == 1;
 

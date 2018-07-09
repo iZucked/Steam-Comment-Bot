@@ -14,14 +14,10 @@ import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class JobStatePropertyTester extends PropertyTester {
-	public JobStatePropertyTester() {
-	}
 
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
-		boolean b = reallyTest(receiver, property, expectedValue);
-		// if (receiver instanceof ScenarioInstance) System.err.println(((ScenarioInstance) receiver).getName() + "." + property + "=" + b);
-		return b;
+		return reallyTest(receiver, property, expectedValue);
 	}
 
 	private boolean reallyTest(final Object receiver, final String property, final Object expectedValue) {

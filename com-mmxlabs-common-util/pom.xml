@@ -4,28 +4,17 @@
 	<groupId>com.mmxlabs.common</groupId>
 	<artifactId>common-util-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>4.4.15-SNAPSHOT</version>
+	<version>4.5.3-SNAPSHOT</version>
 	<name>Common Util: Parent</name>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>36</version>
+		<version>37</version>
 	</parent>
 
 	<description>Project containing commonly used classes and utility functions.</description>
-
-	<scm>
-		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-common-util.git</connection>
-		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-common-util.git</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-common-util/</url>
-	</scm>
-
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.common.util/</url>
-	</ciManagement>
 
 	<modules>
 		<module>com.mmxlabs.common.common-util</module>

@@ -118,7 +118,6 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		// fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[1], transferPort, postLoadDate, originPort, postDischargeDate);
 
 		loadCargo.setVesselAssignmentType(vesselAvailabilities[0]);
-
 		/*
 		 * assignment = AssignmentFactory.eINSTANCE.createElementAssignment(); assignment.setAssignedObject(dischargeCargo); assignment.setAssignment(vessels[1]);
 		 * assignmentModel.getElementAssignments().add(assignment);

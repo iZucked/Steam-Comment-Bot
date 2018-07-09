@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.license.ssl;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +15,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
@@ -41,9 +41,12 @@ public final class LicenseChecker {
 
 	/**
 	 */
-	public static enum LicenseState {
-		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid(
-				"License is not valid yet. Please contact Minimax Labs."), KeystoreNotFound("Unable to find license file");
+	public enum LicenseState {
+		Valid, //
+		Expired("License has expired. Please contact Minimax Labs."), //
+		Unknown("Unkown problem validating license file."), //
+		NotYetValid("License is not valid yet. Please contact Minimax Labs."), //
+		KeystoreNotFound("Unable to find license file");
 
 		private final String message;
 
@@ -63,8 +66,8 @@ public final class LicenseChecker {
 	// Hardcoded keystore password - only storing public key so not really an issue - although tampering may be an issue
 	private static final String password = "Lok3pDTS";
 
-	private static String CACERTS_PATH = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security" + File.separatorChar + "cacerts"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
-	private static String CACERTS_TYPE = "JKS"; //$NON-NLS-1$
+	private static final String CACERTS_PATH = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security" + File.separatorChar + "cacerts"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
+	private static final String CACERTS_TYPE = "JKS"; //$NON-NLS-1$
 
 	public static LicenseState checkLicense() {
 
@@ -122,9 +125,7 @@ public final class LicenseChecker {
 				final char[] pass = defaultStorePassword == null ? null : defaultStorePassword.toCharArray();
 
 				final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
-				FileInputStream fis = null;
-				try {
-					fis = new FileInputStream(defaultStorePath);
+				try (FileInputStream fis = new FileInputStream(defaultStorePath)) {
 					defaultStore.load(fis, pass);
 					final Enumeration<String> enumerator = defaultStore.aliases();
 					while (enumerator.hasMoreElements()) {
@@ -133,14 +134,6 @@ public final class LicenseChecker {
 					}
 				} catch (final IOException e) {
 					log.error(e.getMessage(), e);
-				} finally {
-					if (fis != null) {
-						try {
-							fis.close();
-						} catch (final IOException e) {
-							// Ignore
-						}
-					}
 				}
 			}
 
@@ -155,13 +148,11 @@ public final class LicenseChecker {
 				// Create copies of the keystores in a known place on filesystem so we can reference them
 				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
 				final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
-				FileOutputStream stream = null;
-				try {
-					stream = new FileOutputStream(keyStoreFile);
-					licenseKeystore.store(stream, password.toCharArray());
-					stream.close();
 
-					stream = new FileOutputStream(trustStoreFile);
+				try (FileOutputStream stream = new FileOutputStream(keyStoreFile)) {
+					licenseKeystore.store(stream, password.toCharArray());
+				}
+				try (FileOutputStream stream = new FileOutputStream(trustStoreFile)) {
 					keyStore.store(stream, password.toCharArray());
 					System.setProperty("javax.net.ssl.keyStore", keyStoreFile.toString());
 					System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
@@ -171,10 +162,7 @@ public final class LicenseChecker {
 					System.setProperty("javax.net.ssl.trustStorePassword", password);
 
 					return LicenseState.Valid;
-				} finally {
-					if (stream != null) {
-						stream.close();
-					}
+
 				}
 			}
 
@@ -190,54 +178,36 @@ public final class LicenseChecker {
 	}
 
 	private static KeyStore getUserDataLicense() {
-		FileInputStream inStream = null;
-		try {
-			// final Certificate licenseCertificate;
 
-			final String userHome = System.getProperty("user.home");
-			if (userHome != null) {
-				final File f = new File(userHome + "/mmxlabs/license.p12");
-				// final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-				inStream = new FileInputStream(f);
+		final String userHome = System.getProperty("user.home");
+		if (userHome != null) {
+			final File f = new File(userHome + "/mmxlabs/license.p12");
+			try (FileInputStream inStream = new FileInputStream(f)) {
 				final KeyStore instance = KeyStore.getInstance("PKCS12");
 				instance.load(inStream, password.toCharArray());
 				return instance;
-			}
-		} catch (final Exception e) {
-		} finally {
-			if (inStream != null) {
-				try {
-					inStream.close();
-				} catch (final IOException e) {
-					// Ignore
-				}
+			} catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
+				// Ignore
+				// Maybe better to catch some of these exception types and feedback to user?
 			}
 		}
 		return null;
 	}
 
-	private static KeyStore getEclipseHomeLicense() throws CertificateException, FileNotFoundException {
+	private static KeyStore getEclipseHomeLicense() throws CertificateException {
 
-		InputStream inStream = null;
-		try {
-			// final Certificate licenseCertificate;
-			final String userHome = System.getProperty("eclipse.home.location");
-			if (userHome != null) {
+		final String userHome = System.getProperty("eclipse.home.location");
+		if (userHome != null) {
+			try {
 				final URL url = new URL(userHome + "/license.p12");
-				// final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-				inStream = url.openStream();
-				final KeyStore instance = KeyStore.getInstance("PKCS12");
-				instance.load(inStream, password.toCharArray());
-				return instance;
-			}
-		} catch (final Exception e) {
-		} finally {
-			if (inStream != null) {
-				try {
-					inStream.close();
-				} catch (final IOException e) {
-					// Ignore
+				try (InputStream inStream = url.openStream()) {
+					final KeyStore instance = KeyStore.getInstance("PKCS12");
+					instance.load(inStream, password.toCharArray());
+					return instance;
 				}
+			} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
+				// Ignore
+				// Maybe better to catch some of these exception types and feedback to user?
 			}
 		}
 		return null;
@@ -252,7 +222,7 @@ public final class LicenseChecker {
 	 * @throws FileNotFoundException
 	 * @throws KeyStoreException
 	 */
-	public static @Nullable X509Certificate getClientLicense() throws CertificateException, FileNotFoundException, KeyStoreException {
+	public static @Nullable X509Certificate getClientLicense() throws CertificateException, KeyStoreException {
 		// Load the license file
 		KeyStore licenseKeystore = null;
 		{
@@ -279,10 +249,8 @@ public final class LicenseChecker {
 	private static void importExtraCertsFromHome(final KeyStore keystore) {
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
-			File f;
 			try {
-				f = new File(new URI(userHome + "/cacerts/"));
-
+				File f = new File(new URI(userHome + "/cacerts/"));
 				if (f.exists() && f.isDirectory()) {
 					for (final File certFile : f.listFiles()) {
 						if (certFile.isFile()) {
@@ -296,7 +264,8 @@ public final class LicenseChecker {
 						}
 					}
 				}
-			} catch (URISyntaxException e1) {
+			} catch (final URISyntaxException e1) {
+				// Ignore
 			}
 		}
 	}

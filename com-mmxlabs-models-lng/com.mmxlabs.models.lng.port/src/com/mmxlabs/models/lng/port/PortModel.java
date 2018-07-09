@@ -24,6 +24,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortCountryGroups <em>Port Country Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortDataVersion <em>Port Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion <em>Distance Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getContingencyMatrix <em>Contingency Matrix</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel()
@@ -162,5 +163,31 @@ public interface PortModel extends UUIDObject {
 	 * @generated
 	 */
 	void setDistanceDataVersion(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Contingency Matrix</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contingency Matrix</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contingency Matrix</em>' containment reference.
+	 * @see #setContingencyMatrix(ContingencyMatrix)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_ContingencyMatrix()
+	 * @model containment="true"
+	 * @generated
+	 */
+	ContingencyMatrix getContingencyMatrix();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getContingencyMatrix <em>Contingency Matrix</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contingency Matrix</em>' containment reference.
+	 * @see #getContingencyMatrix()
+	 * @generated
+	 */
+	void setContingencyMatrix(ContingencyMatrix value);
 
 } // PortModel

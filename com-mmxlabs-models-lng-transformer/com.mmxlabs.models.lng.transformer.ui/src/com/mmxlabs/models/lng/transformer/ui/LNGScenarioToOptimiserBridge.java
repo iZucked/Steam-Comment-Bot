@@ -71,8 +71,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  */
 public class LNGScenarioToOptimiserBridge {
 
-	private static final Logger log = LoggerFactory.getLogger(LNGScenarioToOptimiserBridge.class);
-
 	@NonNull
 	private final IScenarioDataProvider originalScenarioDataProvider;
 
@@ -109,9 +107,9 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	private int overwriteCommandStackCounter = 0;
 
-	private @NonNull final UserSettings userSettings;
+	private final @NonNull UserSettings userSettings;
 
-	private @NonNull final SolutionBuilderSettings solutionBuilderSettings;
+	private final @NonNull SolutionBuilderSettings solutionBuilderSettings;
 
 	private PeriodExporter periodExporter;
 
@@ -136,10 +134,7 @@ public class LNGScenarioToOptimiserBridge {
 
 		// Trigger initial evaluation - note no fitness state is saved
 		if (initialEvaluation) {
-
-			RunnerHelper.syncExecDisplayOptional(() -> {
-				overwrite(0, originalDataTransformer.getInitialSequences(), null);
-			});
+			RunnerHelper.syncExecDisplayOptional(() -> overwrite(0, originalDataTransformer.getInitialSequences(), null));
 		}
 		if (!evaluationOnly) {
 			final Triple<com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance,
@@ -164,8 +159,6 @@ public class LNGScenarioToOptimiserBridge {
 			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenarioDataProvider, userSettings, solutionBuilderSettings, hints, services);
 
 			periodExporter = new PeriodExporter(originalDataTransformer, optimiserDataTransformer, periodMapping);
-		} else {
-			optimiserDataTransformer = originalDataTransformer;
 		}
 
 		// Reset flag as calls to #overwrite will have set this to false, but these should not have invalidated the internal state

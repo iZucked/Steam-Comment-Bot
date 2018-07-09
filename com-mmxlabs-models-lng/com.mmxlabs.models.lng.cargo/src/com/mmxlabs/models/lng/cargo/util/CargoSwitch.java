@@ -356,6 +356,32 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.PAPER_DEAL: {
+				PaperDeal paperDeal = (PaperDeal)theEObject;
+				T1 result = casePaperDeal(paperDeal);
+				if (result == null) result = caseNamedObject(paperDeal);
+				if (result == null) result = caseMMXObject(paperDeal);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.BUY_PAPER_DEAL: {
+				BuyPaperDeal buyPaperDeal = (BuyPaperDeal)theEObject;
+				T1 result = caseBuyPaperDeal(buyPaperDeal);
+				if (result == null) result = casePaperDeal(buyPaperDeal);
+				if (result == null) result = caseNamedObject(buyPaperDeal);
+				if (result == null) result = caseMMXObject(buyPaperDeal);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.SELL_PAPER_DEAL: {
+				SellPaperDeal sellPaperDeal = (SellPaperDeal)theEObject;
+				T1 result = caseSellPaperDeal(sellPaperDeal);
+				if (result == null) result = casePaperDeal(sellPaperDeal);
+				if (result == null) result = caseNamedObject(sellPaperDeal);
+				if (result == null) result = caseMMXObject(sellPaperDeal);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -822,6 +848,51 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseCharterInMarketOverride(CharterInMarketOverride object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Paper Deal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Paper Deal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 casePaperDeal(PaperDeal object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Buy Paper Deal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Buy Paper Deal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseBuyPaperDeal(BuyPaperDeal object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sell Paper Deal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sell Paper Deal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSellPaperDeal(SellPaperDeal object) {
 		return null;
 	}
 

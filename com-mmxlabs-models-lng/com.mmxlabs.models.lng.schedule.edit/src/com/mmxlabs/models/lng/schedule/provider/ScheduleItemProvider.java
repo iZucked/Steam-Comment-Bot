@@ -118,6 +118,7 @@ public class ScheduleItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESSES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__INVENTORY_LEVELS);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__PAPER_DEAL_ALLOCATIONS);
 		}
 		return childrenFeatures;
 	}
@@ -175,6 +176,7 @@ public class ScheduleItemProvider
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__FITNESSES:
 			case SchedulePackage.SCHEDULE__INVENTORY_LEVELS:
+			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -221,6 +223,11 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__INVENTORY_LEVELS,
 				 ScheduleFactory.eINSTANCE.createInventoryEvents()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__PAPER_DEAL_ALLOCATIONS,
+				 ScheduleFactory.eINSTANCE.createPaperDealAllocation()));
 	}
 
 }

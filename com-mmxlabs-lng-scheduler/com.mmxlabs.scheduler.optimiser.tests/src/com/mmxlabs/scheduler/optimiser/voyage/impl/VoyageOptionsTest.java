@@ -28,6 +28,15 @@ public class VoyageOptionsTest {
 	}
 
 	@Test
+	public void testGetSetExtraIdleTime() {
+		final int value = 100;
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
+		Assert.assertEquals(0, options.getExtraIdleTime());
+		options.setExtraIdleTime(value);
+		Assert.assertEquals(value, options.getExtraIdleTime());
+	}
+
+	@Test
 	public void testGetSetFromPortSlot() {
 		final IPortSlot slot = Mockito.mock(IPortSlot.class);
 

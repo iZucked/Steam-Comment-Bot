@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -96,6 +97,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EEnum timePeriodEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum dealTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -272,6 +280,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getDealType() {
+		return dealTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getIterable() {
 		return iterableEDataType;
 	}
@@ -322,6 +339,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		cargoDeliveryTypeEEnum = createEEnum(CARGO_DELIVERY_TYPE);
 		volumeUnitsEEnum = createEEnum(VOLUME_UNITS);
 		timePeriodEEnum = createEEnum(TIME_PERIOD);
+		dealTypeEEnum = createEEnum(DEAL_TYPE);
 
 		// Create data types
 		iterableEDataType = createEDataType(ITERABLE);
@@ -430,6 +448,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		addEEnumLiteral(timePeriodEEnum, TimePeriod.HOURS);
 		addEEnumLiteral(timePeriodEEnum, TimePeriod.DAYS);
 		addEEnumLiteral(timePeriodEEnum, TimePeriod.MONTHS);
+
+		initEEnum(dealTypeEEnum, DealType.class, "DealType");
+		addEEnumLiteral(dealTypeEEnum, DealType.PHYSICAL);
+		addEEnumLiteral(dealTypeEEnum, DealType.FINANCIAL);
 
 		// Initialize data types
 		initEDataType(iterableEDataType, Iterable.class, "Iterable", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

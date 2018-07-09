@@ -21,9 +21,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public abstract class AbstractPerRouteSchedulerFitnessComponent extends AbstractSchedulerFitnessComponent {
-	private final Map<IResource, Long> evaluatedFitnesses = new HashMap<IResource, Long>();
+	private final Map<IResource, Long> evaluatedFitnesses = new HashMap<>();
 
-	private final Map<IResource, Long> acceptedFitnesses = new HashMap<IResource, Long>();
+	private final Map<IResource, Long> acceptedFitnesses = new HashMap<>();
 
 	protected IResource currentResource;
 	private long evaluationAccumulator = 0;

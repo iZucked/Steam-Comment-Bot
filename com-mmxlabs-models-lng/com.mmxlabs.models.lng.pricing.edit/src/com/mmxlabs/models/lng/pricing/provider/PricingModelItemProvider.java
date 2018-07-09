@@ -94,6 +94,7 @@ public class PricingModelItemProvider
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES);
 		}
 		return childrenFeatures;
 	}
@@ -156,6 +157,7 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
 			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -197,6 +199,11 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS,
 				 PricingFactory.eINSTANCE.createUnitConversion()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES,
+				 PricingFactory.eINSTANCE.createDatePointContainer()));
 	}
 
 }

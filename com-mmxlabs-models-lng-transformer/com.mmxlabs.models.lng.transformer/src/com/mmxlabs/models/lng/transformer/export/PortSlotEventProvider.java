@@ -11,16 +11,15 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 public class PortSlotEventProvider implements IPortSlotEventProvider {
-	Map<Pair<IPortSlot, Class>, Object> portSlotToEventMap = new HashMap<Pair<IPortSlot, Class>, Object>();
-	
+	private final Map<Pair<IPortSlot, Class<?>>, Object> portSlotToEventMap = new HashMap<>();
+
 	@Override
-	public <T> void addEventToPortSlot(IPortSlot portSlot, Class<T> clazz, T o) {
-		portSlotToEventMap.put(new Pair<IPortSlot, Class>(portSlot, clazz), o);
+	public <T> void addEventToPortSlot(final IPortSlot portSlot, final Class<T> clazz, final T o) {
+		portSlotToEventMap.put(new Pair<>(portSlot, clazz), o);
 	}
-	
+
 	@Override
-	public <T> T getEventFromPortSlot(IPortSlot portSlot, Class<T> clazz) {
-		T o = (T) portSlotToEventMap.get(new Pair<IPortSlot, Class>(portSlot, clazz));
-		return o;
+	public <T> T getEventFromPortSlot(final IPortSlot portSlot, final Class<T> clazz) {
+		return clazz.cast(portSlotToEventMap.get(new Pair<>(portSlot, clazz)));
 	}
 }

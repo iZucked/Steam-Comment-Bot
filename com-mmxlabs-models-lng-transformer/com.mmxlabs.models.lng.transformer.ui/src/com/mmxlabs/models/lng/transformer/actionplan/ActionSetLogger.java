@@ -307,7 +307,7 @@ public class ActionSetLogger implements ILoggingDataStore {
 	}
 
 	public String jobStateStringVerbose(JobState jobState) {
-		List<String> file = new LinkedList<String>();
+		List<String> file = new LinkedList< >();
 		int changeSetNo = 0;
 		for (ChangeSet cs : jobState.changeSetsAsList) {
 			file.add(String.format(
@@ -323,7 +323,7 @@ public class ActionSetLogger implements ILoggingDataStore {
 	}
 
 	public String jobStateStringCompact(JobState jobState) {
-		List<String> file = new LinkedList<String>();
+		List<String> file = new LinkedList<>();
 		for (ChangeSet cs : jobState.changeSetsAsList) {
 			String[] row = new String[] { "" + cs.changesList.size(), "" + cs.metricDelta[MetricType.PNL.ordinal()],
 					"" + cs.metricDeltaToBase[MetricType.PNL.ordinal()],

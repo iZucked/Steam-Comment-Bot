@@ -22,40 +22,28 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEditorActionDelegate {
 
-	private IEditorPart editor;
-
-	private IAction action;
-
-	/**
-	 * The constructor.
-	 */
-	public StopOptimisationEditorActionDelegate() {
-	}
-
 	@Override
 	public void run(final IAction action) {
 
-		if (editor != null) {
-			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
-				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
+		if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+			final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
 
-				if (instance.isReadonly()) {
-					action.setEnabled(false);
-					return;
-				}
+			if (instance.isReadonly()) {
+				action.setEnabled(false);
+				return;
+			}
 
-				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-				final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
-				final IJobControl control = jobManager.getControlForJob(job);
+			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+			final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
+			final IJobControl control = jobManager.getControlForJob(job);
 
-				if (control != null) {
-					final EJobState jobState = control.getJobState();
+			if (control != null) {
+				final EJobState jobState = control.getJobState();
 
-					// Can job still be cancelled?
-					if (!((jobState == EJobState.CANCELLED) || (jobState == EJobState.CANCELLING) || (jobState == EJobState.COMPLETED))) {
-						control.cancel();
-					}
+				// Can job still be cancelled?
+				if (!((jobState == EJobState.CANCELLED) || (jobState == EJobState.CANCELLING) || (jobState == EJobState.COMPLETED))) {
+					control.cancel();
 				}
 			}
 		}
@@ -103,8 +91,7 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
-		this.editor = targetEditor;
-		this.action = action;
+		super.setActiveEditor(action, targetEditor);
 
 		if (action != null && targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();

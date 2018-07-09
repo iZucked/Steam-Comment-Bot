@@ -128,7 +128,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		injector.injectMembers(elementSwapMoveGenerator);
 
 		if (phaseOptimisationData != null) {
-			if (phaseOptimisationData.getOptionalElements().size() > 0) {
+			if (!phaseOptimisationData.getOptionalElements().isEmpty()) {
 				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit();
 				injector.injectMembers(optionalMoveGenerator);
 			} else {

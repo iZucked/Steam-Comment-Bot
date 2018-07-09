@@ -137,7 +137,7 @@ public class VesselExistenceCheckTest {
 		}
 
 		Assert.assertEquals("Number of vessels in input same as number of vessels in output", expectedNumOfVessels, numOfVesselsInOutput);
-		Assert.assertEquals("All vessels were used in the output", inputVessels.size(), 0);
+		Assert.assertEquals("All vessels were used in the output", 0L, inputVessels.size());
 	}
 
 	/**

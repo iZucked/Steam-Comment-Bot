@@ -295,6 +295,52 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.port.ContingencyMatrix} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ContingencyMatrixItemProvider contingencyMatrixItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.port.ContingencyMatrix}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createContingencyMatrixAdapter() {
+		if (contingencyMatrixItemProvider == null) {
+			contingencyMatrixItemProvider = new ContingencyMatrixItemProvider(this);
+		}
+
+		return contingencyMatrixItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.port.ContingencyMatrixEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ContingencyMatrixEntryItemProvider contingencyMatrixEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.port.ContingencyMatrixEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createContingencyMatrixEntryAdapter() {
+		if (contingencyMatrixEntryItemProvider == null) {
+			contingencyMatrixEntryItemProvider = new ContingencyMatrixEntryItemProvider(this);
+		}
+
+		return contingencyMatrixEntryItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -429,6 +475,8 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (locationItemProvider != null) locationItemProvider.dispose();
 		if (portCountryGroupItemProvider != null) portCountryGroupItemProvider.dispose();
 		if (entryPointItemProvider != null) entryPointItemProvider.dispose();
+		if (contingencyMatrixItemProvider != null) contingencyMatrixItemProvider.dispose();
+		if (contingencyMatrixEntryItemProvider != null) contingencyMatrixEntryItemProvider.dispose();
 	}
 
 }

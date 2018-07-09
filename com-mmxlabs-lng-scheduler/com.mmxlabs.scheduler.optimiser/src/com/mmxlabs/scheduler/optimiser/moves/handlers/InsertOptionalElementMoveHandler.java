@@ -18,7 +18,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -31,7 +30,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertSegmentMove;
-import com.mmxlabs.scheduler.optimiser.lso.moves.InsertOptionalElements;
 import com.mmxlabs.scheduler.optimiser.lso.moves.MoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ReplaceMoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapOptionalElements;
@@ -80,7 +78,7 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 		// }
 		// }
 		
-		if(phaseOptimisationData.getOptionalElements().size() == 0){
+		if(phaseOptimisationData.getOptionalElements().isEmpty()){
 			return new NullMove("InsertOptionalElement", "No Optional Elements");
 		}
 

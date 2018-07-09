@@ -440,6 +440,16 @@ public interface TypesPackage extends EPackage {
 	int TIME_PERIOD = 8;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.DealType <em>Deal Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.DealType
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getDealType()
+	 * @generated
+	 */
+	int DEAL_TYPE = 9;
+
+	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -447,7 +457,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 9;
+	int ITERABLE = 10;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
@@ -558,6 +568,16 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getTimePeriod();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.DealType <em>Deal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Deal Type</em>'.
+	 * @see com.mmxlabs.models.lng.types.DealType
+	 * @generated
+	 */
+	EEnum getDealType();
 
 	/**
 	 * Returns the meta object for data type '{@link java.lang.Iterable <em>Iterable</em>}'.
@@ -698,6 +718,16 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum TIME_PERIOD = eINSTANCE.getTimePeriod();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.DealType <em>Deal Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.DealType
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getDealType()
+		 * @generated
+		 */
+		EEnum DEAL_TYPE = eINSTANCE.getDealType();
 
 		/**
 		 * The meta object literal for the '<em>Iterable</em>' data type.

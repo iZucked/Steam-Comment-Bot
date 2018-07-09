@@ -43,11 +43,12 @@ import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.types.DealType;
 
 /**
- * JUnit tests for the exposures calculations.
+ * JUnit tests for the financial exposures calculations.
  * 
- * @author Simon McGregor
+ * @author Simon McGregor, Simon Goodall
  * 
  */
 @RunWith(value = Parameterized.class)
@@ -204,12 +205,12 @@ public class ExposuresTest {
 						calcExpected("HH", YearMonth.of(2016, 4), 5.0, 1.0, LocalDate.of(2016, 4, 4)) //
 				), //
 						indiciesOf(//
-								makeHH(), makeBrent())}, //
+								makeHH(), makeBrent()) }, //
 				{ "SplitMonth Exposure 2", "SPLITMONTH(HH, Brent, 2)", "HH", single(//
 						calcExpected("Brent", YearMonth.of(2016, 4), 90, 1.0, LocalDate.of(2016, 4, 4)) //
 				), //
 						indiciesOf(//
-								makeHH(), makeBrent())}, //
+								makeHH(), makeBrent()) }, //
 
 				{ "Currency data - missing", "GAS_NBP_GBP*therm_to_mmBtu/p_to_USD", "GAS_NBP_GBP", //
 						single(calcExpected("GAS_NBP_GBP", pricingDate, 5, 10.0, 0.0)), //
@@ -279,9 +280,11 @@ public class ExposuresTest {
 		makeFXCurve("EURO", "USD", 1.111, pricingModel);
 
 		final double volume = defaultVolumeInMMBTU;
-		final boolean isPurchase = true;
-		@NonNull
-		final LookupData lookupData = Exposures.createLookupData(pricingModel);
+
+		// Sale
+		final boolean isPurchase = false;
+
+		final @NonNull LookupData lookupData = Exposures.createLookupData(pricingModel);
 
 		final Collection<ExposureDetail> details = Exposures.calculateExposure(expression, pricingDate, volume, isPurchase, lookupData, pricingDay);
 		checker.validate(details, expression, lookupData);
@@ -428,12 +431,14 @@ public class ExposuresTest {
 				assert r.expectedDate != null;
 				m.put(new Pair<>(r.index, r.expectedDate), r);
 			}
-			
+
 			if (details != null) {
 				for (final ExposureDetail detail : details) {
-					final ExpectedResult r = m.remove(new Pair<>(detail.getIndexName(), detail.getDate()));
-					Assert.assertNotNull(r);
-					r.validate(detail, expression, lookupData);
+					if (detail.getDealType() == DealType.FINANCIAL) {
+						final ExpectedResult r = m.remove(new Pair<>(detail.getIndexName(), detail.getDate()));
+						Assert.assertNotNull(r);
+						r.validate(detail, expression, lookupData);
+					}
 				}
 			}
 			Assert.assertTrue(m.isEmpty());
@@ -475,7 +480,7 @@ public class ExposuresTest {
 			this.expectedValue = OptionalDouble.of(expectedValue);
 			this.expectedExpressionValue = OptionalDouble.empty();
 		}
-		
+
 		public ExpectedResult(String index, final YearMonth date, final double expectedVolume, final double expectedValue, LocalDate pricingDate) {
 			this.index = index;
 			expectedDate = date;
@@ -521,7 +526,7 @@ public class ExposuresTest {
 			if (expectedExpressionValue.isPresent()) {
 				final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
 				final ISeries series = p.parse(expression).evaluate();
-				
+
 				Number evaluate;
 				// "Magic" date constant used in PriceIndexUtils for date zero
 				if (pricingDateOverride != null) {
@@ -529,7 +534,7 @@ public class ExposuresTest {
 				} else {
 					evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateZero, pricingDate));
 				}
-				
+
 				final double val = evaluate.doubleValue() * defaultVolumeInMMBTU;
 				Assert.assertEquals("Expr Value", expectedExpressionValue.getAsDouble(), val, delta);
 			}

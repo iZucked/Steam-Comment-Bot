@@ -709,6 +709,52 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.BuyPaperDeal} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BuyPaperDealItemProvider buyPaperDealItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.BuyPaperDeal}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBuyPaperDealAdapter() {
+		if (buyPaperDealItemProvider == null) {
+			buyPaperDealItemProvider = new BuyPaperDealItemProvider(this);
+		}
+
+		return buyPaperDealItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.SellPaperDeal} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SellPaperDealItemProvider sellPaperDealItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.SellPaperDeal}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSellPaperDealAdapter() {
+		if (sellPaperDealItemProvider == null) {
+			sellPaperDealItemProvider = new SellPaperDealItemProvider(this);
+		}
+
+		return sellPaperDealItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -861,6 +907,8 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (voyageSpecificationItemProvider != null) voyageSpecificationItemProvider.dispose();
 		if (slotSpecificationItemProvider != null) slotSpecificationItemProvider.dispose();
 		if (charterInMarketOverrideItemProvider != null) charterInMarketOverrideItemProvider.dispose();
+		if (buyPaperDealItemProvider != null) buyPaperDealItemProvider.dispose();
+		if (sellPaperDealItemProvider != null) sellPaperDealItemProvider.dispose();
 	}
 
 }

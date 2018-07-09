@@ -357,6 +357,24 @@ public interface ScheduleFactory extends EFactory {
 	InventoryChangeEvent createInventoryChangeEvent();
 
 	/**
+	 * Returns a new object of class '<em>Paper Deal Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Paper Deal Allocation</em>'.
+	 * @generated
+	 */
+	PaperDealAllocation createPaperDealAllocation();
+
+	/**
+	 * Returns a new object of class '<em>Paper Deal Allocation Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Paper Deal Allocation Entry</em>'.
+	 * @generated
+	 */
+	PaperDealAllocationEntry createPaperDealAllocationEntry();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

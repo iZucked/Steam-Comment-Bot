@@ -59,13 +59,13 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IMoveGenerator {
 			return null;
 		}
 		// Get a list of all the elements for outer loop
-		final List<ISequenceElement> sequenceElementsAsList = new ArrayList<ISequenceElement>(sequence.size());
+		final List<ISequenceElement> sequenceElementsAsList = new ArrayList<>(sequence.size());
 		for (final ISequenceElement e : sequence) {
 			sequenceElementsAsList.add(e);
 		}
 
 		// Clone list for inner loop
-		final List<ISequenceElement> bucket = new ArrayList<ISequenceElement>(sequenceElementsAsList);
+		final List<ISequenceElement> bucket = new ArrayList<>(sequenceElementsAsList);
 		// Randomise orders independently
 		Collections.shuffle(sequenceElementsAsList, random);
 		Collections.shuffle(bucket, random);

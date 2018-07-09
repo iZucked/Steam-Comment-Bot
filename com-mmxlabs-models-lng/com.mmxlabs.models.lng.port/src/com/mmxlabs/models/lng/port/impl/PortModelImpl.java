@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -39,6 +40,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortCountryGroups <em>Port Country Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortDataVersion <em>Port Data Version</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getDistanceDataVersion <em>Distance Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getContingencyMatrix <em>Contingency Matrix</em>}</li>
  * </ul>
  *
  * @generated
@@ -133,6 +135,16 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * @ordered
 	 */
 	protected String distanceDataVersion = DISTANCE_DATA_VERSION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getContingencyMatrix() <em>Contingency Matrix</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContingencyMatrix()
+	 * @generated
+	 * @ordered
+	 */
+	protected ContingencyMatrix contingencyMatrix;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -260,6 +272,49 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ContingencyMatrix getContingencyMatrix() {
+		return contingencyMatrix;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetContingencyMatrix(ContingencyMatrix newContingencyMatrix, NotificationChain msgs) {
+		ContingencyMatrix oldContingencyMatrix = contingencyMatrix;
+		contingencyMatrix = newContingencyMatrix;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__CONTINGENCY_MATRIX, oldContingencyMatrix, newContingencyMatrix);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setContingencyMatrix(ContingencyMatrix newContingencyMatrix) {
+		if (newContingencyMatrix != contingencyMatrix) {
+			NotificationChain msgs = null;
+			if (contingencyMatrix != null)
+				msgs = ((InternalEObject)contingencyMatrix).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.PORT_MODEL__CONTINGENCY_MATRIX, null, msgs);
+			if (newContingencyMatrix != null)
+				msgs = ((InternalEObject)newContingencyMatrix).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.PORT_MODEL__CONTINGENCY_MATRIX, null, msgs);
+			msgs = basicSetContingencyMatrix(newContingencyMatrix, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__CONTINGENCY_MATRIX, newContingencyMatrix, newContingencyMatrix));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -273,6 +328,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return ((InternalEList<?>)getSpecialPortGroups()).basicRemove(otherEnd, msgs);
 			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
 				return ((InternalEList<?>)getPortCountryGroups()).basicRemove(otherEnd, msgs);
+			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
+				return basicSetContingencyMatrix(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -299,6 +356,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return getPortDataVersion();
 			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
 				return getDistanceDataVersion();
+			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
+				return getContingencyMatrix();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -338,6 +397,9 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
 				setDistanceDataVersion((String)newValue);
 				return;
+			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
+				setContingencyMatrix((ContingencyMatrix)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -371,6 +433,9 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
 				setDistanceDataVersion(DISTANCE_DATA_VERSION_EDEFAULT);
 				return;
+			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
+				setContingencyMatrix((ContingencyMatrix)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -397,6 +462,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return PORT_DATA_VERSION_EDEFAULT == null ? portDataVersion != null : !PORT_DATA_VERSION_EDEFAULT.equals(portDataVersion);
 			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
 				return DISTANCE_DATA_VERSION_EDEFAULT == null ? distanceDataVersion != null : !DISTANCE_DATA_VERSION_EDEFAULT.equals(distanceDataVersion);
+			case PortPackage.PORT_MODEL__CONTINGENCY_MATRIX:
+				return contingencyMatrix != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -410,7 +477,7 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (portDataVersion: ");
 		result.append(portDataVersion);
 		result.append(", distanceDataVersion: ");

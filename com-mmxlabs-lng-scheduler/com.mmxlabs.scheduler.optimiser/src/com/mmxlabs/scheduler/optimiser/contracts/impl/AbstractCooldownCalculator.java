@@ -8,12 +8,9 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
-/**
- */
 public abstract class AbstractCooldownCalculator implements ICooldownCalculator {
 
 	protected final ICurve expressionCurve;
@@ -33,7 +30,4 @@ public abstract class AbstractCooldownCalculator implements ICooldownCalculator 
 	protected int calculateUnitPriceAtUTCTime(final int localTime, final IPort port) {
 		return expressionCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(localTime, port));
 	}
-
-	@Override
-	public abstract long calculateCooldownCost(IVessel vessel, IPort port, int cv, int localTime);
 }

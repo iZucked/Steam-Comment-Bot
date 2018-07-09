@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  *
  * @generated
  */
-public abstract class APortSetImpl<U> extends ObjectSetImpl<APortSet<U>, U>implements APortSet<U> {
+public abstract class APortSetImpl<U> extends ObjectSetImpl<APortSet<U>, U> implements APortSet<U> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

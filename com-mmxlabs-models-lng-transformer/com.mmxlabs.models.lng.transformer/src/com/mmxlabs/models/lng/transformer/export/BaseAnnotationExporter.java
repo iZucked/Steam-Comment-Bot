@@ -26,6 +26,11 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	protected final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
 	@Override
+	public void init() {
+		// Sub-classes can override
+	}
+
+	@Override
 	public void setAnnotatedSolution(final IAnnotatedSolution annotatedSolution) {
 		this.annotatedSolution = annotatedSolution;
 	}

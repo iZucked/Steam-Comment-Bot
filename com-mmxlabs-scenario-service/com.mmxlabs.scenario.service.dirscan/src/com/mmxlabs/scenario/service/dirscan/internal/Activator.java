@@ -163,7 +163,7 @@ public class Activator extends AbstractUIPlugin {
 				return;
 			}
 
-			final Hashtable<String, String> props = new Hashtable<String, String>();
+			final Hashtable<String, String> props = new Hashtable<>();
 			props.put(PreferenceConstants.P_NAME_KEY, serviceName);
 			props.put(PreferenceConstants.P_PATH_KEY, path);
 			// used internally by eclipse/OSGi

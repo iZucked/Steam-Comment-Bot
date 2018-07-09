@@ -70,6 +70,7 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 		add_baseFuelPricesEditor(detailComposite, topClass);
 		add_conversionFactorsEditor(detailComposite, topClass);
 		add_marketCurveDataVersionEditor(detailComposite, topClass);
+		add_settledPricesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the currencyIndices feature on PricingModel
@@ -121,5 +122,14 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_marketCurveDataVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION));
+	}
+
+	/**
+	 * Create the editor for the settledPrices feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_settledPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES));
 	}
 }

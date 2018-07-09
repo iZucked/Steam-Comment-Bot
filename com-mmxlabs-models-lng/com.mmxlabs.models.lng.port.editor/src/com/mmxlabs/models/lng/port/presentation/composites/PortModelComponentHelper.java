@@ -71,6 +71,7 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 		add_portCountryGroupsEditor(detailComposite, topClass);
 		add_portDataVersionEditor(detailComposite, topClass);
 		add_distanceDataVersionEditor(detailComposite, topClass);
+		add_contingencyMatrixEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on PortModel
@@ -132,5 +133,14 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_distanceDataVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION));
+	}
+
+	/**
+	 * Create the editor for the contingencyMatrix feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_contingencyMatrixEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__CONTINGENCY_MATRIX));
 	}
 }

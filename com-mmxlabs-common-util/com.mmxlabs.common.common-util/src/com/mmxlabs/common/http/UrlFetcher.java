@@ -21,6 +21,10 @@ import org.apache.http.impl.client.HttpClients;
 
 public class UrlFetcher {
 
+	private UrlFetcher() {
+
+	}
+
 	/**
 	 * Fetch the content of a URL.
 	 * 
@@ -30,7 +34,7 @@ public class UrlFetcher {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static String fetchUrlContent(final String url) throws AuthenticationException, ClientProtocolException, IOException {
+	public static String fetchUrlContent(final String url) throws AuthenticationException, IOException {
 		return fetchURLContent(url, null, null);
 	}
 
@@ -45,7 +49,7 @@ public class UrlFetcher {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	public static String fetchURLContent(final String url, final String username, final String password) throws ClientProtocolException, IOException, AuthenticationException {
+	public static String fetchURLContent(final String url, final String username, final String password) throws IOException, AuthenticationException {
 		try (final CloseableHttpClient client = HttpClients.createDefault()) {
 
 			final HttpGet request = new HttpGet(url);

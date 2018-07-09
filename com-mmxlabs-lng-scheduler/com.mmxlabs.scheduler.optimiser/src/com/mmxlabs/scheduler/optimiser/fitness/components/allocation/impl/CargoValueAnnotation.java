@@ -224,6 +224,11 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
+	public int getSlotExtraIdleTime(final IPortSlot slot) {
+		return allocationAnnotation.getSlotExtraIdleTime(slot);
+	}
+
+	@Override
 	public long getCommercialSlotVolumeInMMBTu(final IPortSlot slot) {
 		return allocationAnnotation.getCommercialSlotVolumeInMMBTu(slot);
 	}
@@ -244,7 +249,12 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	public void setSlotDuration(final IPortSlot slot, final int duration) {
 		assert !locked;
 		allocationAnnotation.setSlotDuration(slot, duration);
+	}
 
+	@Override
+	public void setSlotExtraIdleTime(final IPortSlot slot, final int extraIdleTime) {
+		assert !locked;
+		allocationAnnotation.setSlotExtraIdleTime(slot, extraIdleTime);
 	}
 
 	@Override

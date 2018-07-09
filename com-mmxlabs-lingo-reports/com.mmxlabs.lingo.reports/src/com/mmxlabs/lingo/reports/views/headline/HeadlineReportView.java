@@ -92,6 +92,7 @@ public class HeadlineReportView extends ViewPart {
 	 */
 	public enum ColumnDefinition {
 		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_PAPER(ColumnType.Label, "Paper", null), VALUE_PAPER(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_UPSIDE(ColumnType.Label, "Upside", null, "features:report-headline-upside"), VALUE_UPSIDE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
@@ -249,6 +250,8 @@ public class HeadlineReportView extends ViewPart {
 				return d.shippingPNL;
 			case VALUE_TRADING:
 				return d.tradingPNL;
+			case VALUE_PAPER:
+				return d.paperPNL;
 			case VALUE_UPSIDE:
 				return d.upside;
 			case VALUE_EQUITY:
@@ -337,6 +340,13 @@ public class HeadlineReportView extends ViewPart {
 						color = SWT.COLOR_BLACK;
 					} else {
 						color = (d.tradingPNL - pinD.tradingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case VALUE_PAPER:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						color = (d.paperPNL - pinD.paperPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
 				case VALUE_SHIPPING:

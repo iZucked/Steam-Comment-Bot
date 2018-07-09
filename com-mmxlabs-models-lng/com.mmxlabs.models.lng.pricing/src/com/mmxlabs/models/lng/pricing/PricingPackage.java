@@ -142,13 +142,22 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__MARKET_CURVE_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Settled Prices</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__SETTLED_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -1398,6 +1407,98 @@ public interface PricingPackage extends EPackage {
 	int UNIT_CONVERSION_FEATURE_COUNT = 3;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.DatePointContainerImpl <em>Date Point Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.DatePointContainerImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePointContainer()
+	 * @generated
+	 */
+	int DATE_POINT_CONTAINER = 24;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_POINT_CONTAINER__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_POINT_CONTAINER__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_POINT_CONTAINER__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_POINT_CONTAINER__POINTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Date Point Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_POINT_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.DatePointImpl <em>Date Point</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.DatePointImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePoint()
+	 * @generated
+	 */
+	int DATE_POINT = 25;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_POINT__DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_POINT__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Date Point</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_POINT_FEATURE_COUNT = 2;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1472,6 +1573,17 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPricingModel_MarketCurveDataVersion();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPrices <em>Settled Prices</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Settled Prices</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getSettledPrices()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_SettledPrices();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -2287,6 +2399,59 @@ public interface PricingPackage extends EPackage {
 	EAttribute getUnitConversion_Factor();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DatePointContainer <em>Date Point Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Date Point Container</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DatePointContainer
+	 * @generated
+	 */
+	EClass getDatePointContainer();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.DatePointContainer#getPoints <em>Points</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Points</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DatePointContainer#getPoints()
+	 * @see #getDatePointContainer()
+	 * @generated
+	 */
+	EReference getDatePointContainer_Points();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DatePoint <em>Date Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Date Point</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DatePoint
+	 * @generated
+	 */
+	EClass getDatePoint();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.DatePoint#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DatePoint#getDate()
+	 * @see #getDatePoint()
+	 * @generated
+	 */
+	EAttribute getDatePoint_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.DatePoint#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DatePoint#getValue()
+	 * @see #getDatePoint()
+	 * @generated
+	 */
+	EAttribute getDatePoint_Value();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2365,6 +2530,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PRICING_MODEL__MARKET_CURVE_DATA_VERSION = eINSTANCE.getPricingModel_MarketCurveDataVersion();
+
+		/**
+		 * The meta object literal for the '<em><b>Settled Prices</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__SETTLED_PRICES = eINSTANCE.getPricingModel_SettledPrices();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -3019,6 +3192,50 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute UNIT_CONVERSION__FACTOR = eINSTANCE.getUnitConversion_Factor();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DatePointContainerImpl <em>Date Point Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.DatePointContainerImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePointContainer()
+		 * @generated
+		 */
+		EClass DATE_POINT_CONTAINER = eINSTANCE.getDatePointContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Points</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DATE_POINT_CONTAINER__POINTS = eINSTANCE.getDatePointContainer_Points();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DatePointImpl <em>Date Point</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.DatePointImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePoint()
+		 * @generated
+		 */
+		EClass DATE_POINT = eINSTANCE.getDatePoint();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DATE_POINT__DATE = eINSTANCE.getDatePoint_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DATE_POINT__VALUE = eINSTANCE.getDatePoint_Value();
 
 	}
 

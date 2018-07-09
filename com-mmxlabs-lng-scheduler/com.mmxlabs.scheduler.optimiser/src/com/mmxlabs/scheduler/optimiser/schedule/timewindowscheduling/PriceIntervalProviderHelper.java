@@ -585,7 +585,7 @@ public class PriceIntervalProviderHelper {
 	List<int @NonNull []> getFeasibleIntervalSubSet(final int inclusiveStart, final int exclusiveEnd, @NonNull final List<int @NonNull []> intervals) {
 		final List<int @NonNull []> list = new LinkedList<>();
 		for (int i = 0; i < intervals.size(); i++) {
-			if (list.size() == 0) {
+			if (list.isEmpty()) {
 				// first interval
 				if (intervals.get(i)[0] == inclusiveStart) {
 					// easy case
@@ -607,7 +607,7 @@ public class PriceIntervalProviderHelper {
 				list.add(intervals.get(i));
 			}
 		}
-		if (list.size() == 0) {
+		if (list.isEmpty()) {
 			// start is greater than all intervals we have in the list
 			list.add(new int[] { inclusiveStart, intervals.get(intervals.size() - 1)[1] });
 		}

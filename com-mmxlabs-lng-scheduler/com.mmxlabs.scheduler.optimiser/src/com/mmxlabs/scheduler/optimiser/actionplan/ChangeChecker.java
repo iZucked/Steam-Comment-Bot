@@ -51,7 +51,7 @@ public class ChangeChecker {
 	}
 
 	private List<Difference> findAllDifferences(final ISequences rawSequences) {
-		final List<Difference> differences = new ArrayList<Difference>();
+		final List<Difference> differences = new ArrayList<>();
 		int differenceCount = 0;
 		boolean different = false;
 		for (final IResource resource : rawSequences.getResources()) {
@@ -135,8 +135,8 @@ public class ChangeChecker {
 			}
 		}
 
-		final Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(rawSequences.getUnusedElements());
-		while (unusedElements.size() > 0) {
+		final Deque<ISequenceElement> unusedElements = new LinkedList<>(rawSequences.getUnusedElements());
+		while (!unusedElements.isEmpty()) {
 			final ISequenceElement element = unusedElements.pop();
 			if (portTypeProvider.getPortType(element).equals(PortType.Load) && target.getDischargeForLoad(element) != null) {
 				differences.add(new Difference(DifferenceType.LOAD_UNUSED_IN_BASE, element, null, null));
@@ -156,7 +156,7 @@ public class ChangeChecker {
 
 	public ChangeChecker(final ChangeChecker original) {
 		this(original.base, original.target, original.baseRawSequences);
-		this.fullDifferences = new ArrayList<Difference>();
+		this.fullDifferences = new ArrayList<>();
 		for (final Difference d : original.fullDifferences) {
 			this.fullDifferences.add(new Difference(d.move, d.load, d.discharge, d.currentResource));
 		}
@@ -170,7 +170,7 @@ public class ChangeChecker {
 		return copy;
 	}
 
-	public static enum DifferenceType {
+	public enum DifferenceType {
 		CARGO_WRONG_VESSEL, DISCHARGE_WRONG_VESSEL, LOAD_WRONG_VESSEL, CARGO_WRONG_WIRING, CARGO_NOT_IN_TARGET, UNUSED_DISCHARGE_IN_TARGET, UNUSED_LOAD_IN_TARGET, DISCHARGE_UNUSED_IN_BASE, LOAD_UNUSED_IN_BASE,
 	}
 }

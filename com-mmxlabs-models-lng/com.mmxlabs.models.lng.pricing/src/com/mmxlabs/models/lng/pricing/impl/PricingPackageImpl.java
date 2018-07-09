@@ -24,6 +24,8 @@ import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.DatePoint;
+import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
@@ -221,6 +223,20 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	private EClass unitConversionEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass datePointContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass datePointEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -349,6 +365,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EAttribute getPricingModel_MarketCurveDataVersion() {
 		return (EAttribute)pricingModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_SettledPrices() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -1040,6 +1065,51 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getDatePointContainer() {
+		return datePointContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDatePointContainer_Points() {
+		return (EReference)datePointContainerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getDatePoint() {
+		return datePointEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDatePoint_Date() {
+		return (EAttribute)datePointEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDatePoint_Value() {
+		return (EAttribute)datePointEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -1070,6 +1140,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(pricingModelEClass, PRICING_MODEL__BASE_FUEL_PRICES);
 		createEReference(pricingModelEClass, PRICING_MODEL__CONVERSION_FACTORS);
 		createEAttribute(pricingModelEClass, PRICING_MODEL__MARKET_CURVE_DATA_VERSION);
+		createEReference(pricingModelEClass, PRICING_MODEL__SETTLED_PRICES);
 
 		dataIndexEClass = createEClass(DATA_INDEX);
 		createEReference(dataIndexEClass, DATA_INDEX__POINTS);
@@ -1169,6 +1240,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(unitConversionEClass, UNIT_CONVERSION__FROM);
 		createEAttribute(unitConversionEClass, UNIT_CONVERSION__TO);
 		createEAttribute(unitConversionEClass, UNIT_CONVERSION__FACTOR);
+
+		datePointContainerEClass = createEClass(DATE_POINT_CONTAINER);
+		createEReference(datePointContainerEClass, DATE_POINT_CONTAINER__POINTS);
+
+		datePointEClass = createEClass(DATE_POINT);
+		createEAttribute(datePointEClass, DATE_POINT__DATE);
+		createEAttribute(datePointEClass, DATE_POINT__VALUE);
 	}
 
 	/**
@@ -1245,6 +1323,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		cooldownPriceEClass.getESuperTypes().add(this.getPortsExpressionMap());
 		portsExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portsSplitExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		datePointContainerEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		datePointContainerEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1254,6 +1334,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPricingModel_BaseFuelPrices(), this.getBaseFuelIndex(), null, "baseFuelPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_ConversionFactors(), this.getUnitConversion(), null, "conversionFactors", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPricingModel_MarketCurveDataVersion(), ecorePackage.getEString(), "marketCurveDataVersion", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_SettledPrices(), this.getDatePointContainer(), null, "settledPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndexPoint());
@@ -1393,6 +1474,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getUnitConversion_From(), ecorePackage.getEString(), "from", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitConversion_To(), ecorePackage.getEString(), "to", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitConversion_Factor(), ecorePackage.getEDouble(), "factor", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(datePointContainerEClass, DatePointContainer.class, "DatePointContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDatePointContainer_Points(), this.getDatePoint(), null, "points", null, 1, -1, DatePointContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(datePointEClass, DatePoint.class, "DatePoint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDatePoint_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, DatePoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDatePoint_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, DatePoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

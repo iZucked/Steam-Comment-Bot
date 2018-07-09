@@ -95,7 +95,6 @@ public class ScheduleSpecificationTransformer {
 				int spotIndex = vesselSpecificiation.getSpotIndex();
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
 
-				final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 				for (final IResource o_resource : optimisationData.getResources()) {
 					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
 					ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();

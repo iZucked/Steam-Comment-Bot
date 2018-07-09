@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -76,7 +77,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private VesselViewerPane_Editor vesselViewerPane;
 	// private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
+	private PaperDealsPane paperDealsPane;
+
 	private int eventPage;
+	private int paperDealsPage;
 	private MarketOverrideViewerPane_Editor marketOverrideViewerPane;
 	private int overridePage;
 
@@ -300,6 +304,18 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			modelObject.eAdapters().add(inventoryListener);
 
 		}
+
+		if (LicenseFeatures.isPermitted("features:paperdeals")) {
+			paperDealsPane = new PaperDealsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			paperDealsPane.createControl(parent);
+			paperDealsPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_PaperDeals()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+
+			paperDealsPane.getViewer().setInput(modelObject);
+
+			paperDealsPage = editorPart.addPage(paperDealsPane.getControl());
+			editorPart.setPageText(paperDealsPage, "Paper");
+
+		}
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(tradesViewer.getControl(), "com.mmxlabs.lingo.doc.Editor_Trades");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(vesselViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(eventViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
@@ -343,10 +359,13 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		if (inventoryCapacityPane != null) {
 			inventoryCapacityPane.setLocked(locked);
 		}
+		if (paperDealsPane != null) {
+			paperDealsPane.setLocked(locked);
+		}
 	}
 
 	private static final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, StartHeelOptions.class, EndHeelOptions.class, Cargo.class, LoadSlot.class,
-			DischargeSlot.class, SlotContractParams.class, SlotVisit.class, EndEvent.class };
+			DischargeSlot.class, SlotContractParams.class, SlotVisit.class, EndEvent.class, PaperDeal.class };
 	private RunnableAction toggleAction;
 	private ComboViewer inventorySelectionViewer;
 
@@ -453,7 +472,12 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 					return;
 				}
 			}
-
+			if (target instanceof PaperDeal && paperDealsPane != null) {
+				editorPart.setActivePage(paperDealsPage);
+				PaperDeal paperDeal = (PaperDeal) target;
+				paperDealsPane.getScenarioViewer().setSelection(new StructuredSelection(paperDeal), true);
+				return;
+			}
 			editorPart.setActivePage(eventPage);
 
 			// extract viewable target from a faulty HeelOptions object

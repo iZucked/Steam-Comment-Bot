@@ -25,9 +25,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  */
 public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventImpl implements IFuelUsingEvent {
 
-	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
+	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<>(FuelComponent.values().length, FuelUnit.values().length);
 
-	private final LongFastEnumMap<FuelComponent> fuelCost = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
+	private final LongFastEnumMap<FuelComponent> fuelCost = new LongFastEnumMap<>(FuelComponent.values().length);
 
 	private final Map<IBaseFuel, Integer> fuelPricePerUnit = new HashMap<>();
 

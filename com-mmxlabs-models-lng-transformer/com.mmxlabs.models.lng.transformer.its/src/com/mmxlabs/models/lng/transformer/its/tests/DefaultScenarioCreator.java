@@ -780,11 +780,10 @@ public class DefaultScenarioCreator {
 		return false;
 	}
 
-	private boolean scenarioFleetModelContainsVessel(final Vessel vc) {
+	protected boolean scenarioFleetModelContainsVessel(final Vessel vessel) {
 
-		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
-		for (final Vessel v : fleetModel.getVessels()) {
-			if (v.equals(vc)) {
+		for (final Vessel v : scenarioModelBuilder.getFleetModelBuilder().getFleetModel().getVessels()) {
+			if (v.equals(vessel)) {
 				return true;
 			}
 		}

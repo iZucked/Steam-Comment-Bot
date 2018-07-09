@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;
+import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
@@ -37,6 +38,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getConversionFactors <em>Conversion Factors</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettledPrices <em>Settled Prices</em>}</li>
  * </ul>
  *
  * @generated
@@ -111,6 +113,16 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @ordered
 	 */
 	protected String marketCurveDataVersion = MARKET_CURVE_DATA_VERSION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getSettledPrices() <em>Settled Prices</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSettledPrices()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<DatePointContainer> settledPrices;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -217,6 +229,18 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<DatePointContainer> getSettledPrices() {
+		if (settledPrices == null) {
+			settledPrices = new EObjectContainmentEList<DatePointContainer>(DatePointContainer.class, this, PricingPackage.PRICING_MODEL__SETTLED_PRICES);
+		}
+		return settledPrices;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -230,6 +254,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return ((InternalEList<?>)getBaseFuelPrices()).basicRemove(otherEnd, msgs);
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				return ((InternalEList<?>)getConversionFactors()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
+				return ((InternalEList<?>)getSettledPrices()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -254,6 +280,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getConversionFactors();
 			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
 				return getMarketCurveDataVersion();
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
+				return getSettledPrices();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -290,6 +318,10 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
 				setMarketCurveDataVersion((String)newValue);
 				return;
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
+				getSettledPrices().clear();
+				getSettledPrices().addAll((Collection<? extends DatePointContainer>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -320,6 +352,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
 				setMarketCurveDataVersion(MARKET_CURVE_DATA_VERSION_EDEFAULT);
 				return;
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
+				getSettledPrices().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -344,6 +379,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return conversionFactors != null && !conversionFactors.isEmpty();
 			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
 				return MARKET_CURVE_DATA_VERSION_EDEFAULT == null ? marketCurveDataVersion != null : !MARKET_CURVE_DATA_VERSION_EDEFAULT.equals(marketCurveDataVersion);
+			case PricingPackage.PRICING_MODEL__SETTLED_PRICES:
+				return settledPrices != null && !settledPrices.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

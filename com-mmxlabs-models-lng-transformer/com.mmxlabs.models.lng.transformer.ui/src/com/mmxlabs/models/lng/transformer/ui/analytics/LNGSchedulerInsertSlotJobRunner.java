@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.util.OpenStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +34,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
-import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -57,14 +53,10 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
-import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGSchedulerInsertSlotJobRunner {
@@ -179,18 +171,14 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		performBreakEven = false;
 		for (final Slot slot : targetOptimiserSlots) {
-			if (slot.getPriceExpression() != null) {
-				if (slot.getPriceExpression().contains("?")) {
-					performBreakEven = true;
-				}
+			if (slot.getPriceExpression() != null && slot.getPriceExpression().contains("?")) {
+				performBreakEven = true;
 			}
 		}
-
-		// setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 	}
 
 	private IOptimiserInjectorService buildSpotSlotLimitModule() {
-		final IOptimiserInjectorService extraService = new IOptimiserInjectorService() {
+		return new IOptimiserInjectorService() {
 
 			@Override
 			public @Nullable Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
@@ -214,7 +202,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 			}
 
 		};
-		return extraService;
 	}
 
 	public void prepare() {
@@ -230,7 +217,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 			final IMultiStateResult results = runInsertion(subMonitor.split(90));
 			if (results == null) {
-				System.out.printf("Found no solutions\n");
+				System.out.println("Found no solutions");
 				return null;
 			}
 
@@ -240,7 +227,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
 			if (solutions.size() < 2) {
-				System.out.printf("Found no solutions\n");
+				System.out.println("Found no solutions");
 				return null;
 			}
 
@@ -259,8 +246,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), insertionStage,
 				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 
-		final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, progressMonitor);
-		return results;
+		return slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, progressMonitor);
 	}
 
 	public SlotInsertionOptions exportSolutions(final @NonNull IMultiStateResult results, final long targetPNL, final @NonNull IProgressMonitor monitor) {
@@ -275,8 +261,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final OptionalLong portfolioBreakEvenTarget = performBreakEven ? OptionalLong.of(targetPNL) : OptionalLong.empty();
 		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> plan, portfolioBreakEvenTarget);
 
-		SequencesContainer initialSequencesContainer = initialSequencesContainer = new SequencesContainer(
-				scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
+		SequencesContainer initialSequencesContainer = new SequencesContainer(scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
 		link.run(initialSequencesContainer, results, monitor);
 
 		return plan;

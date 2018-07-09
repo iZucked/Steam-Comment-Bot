@@ -106,6 +106,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// Actuals mode, take values directly from sale
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(salesSlot));
 			annotation.setSlotDuration(slot, 0);
+			annotation.setSlotExtraIdleTime(slot, 0);
 			annotation.setRouteOptionBooking(slot, allocationRecord.portTimesRecord.getRouteOptionBooking(slot));
 			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot), allocationRecord.portTimesRecord.getSlotNextVoyagePanamaPeriod(slot));
 
@@ -156,6 +157,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			assert allocationRecord.portTimesRecord.getSlotDuration(slot) == (isFOBOrDES ? 0 : actualsDataProvider.getVisitDuration(slot));
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
+			annotation.setSlotExtraIdleTime(slot, allocationRecord.portTimesRecord.getSlotExtraIdleTime(slot));
 			annotation.setRouteOptionBooking(slot, allocationRecord.portTimesRecord.getRouteOptionBooking(slot));
 			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot), allocationRecord.portTimesRecord.getSlotNextVoyagePanamaPeriod(slot));
 
@@ -521,6 +523,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.getSlots().add(slot);
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
+			annotation.setSlotExtraIdleTime(slot, allocationRecord.portTimesRecord.getSlotExtraIdleTime(slot));
 			annotation.setRouteOptionBooking(slot, allocationRecord.portTimesRecord.getRouteOptionBooking(slot));
 			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot), allocationRecord.portTimesRecord.getSlotNextVoyagePanamaPeriod(slot));
 

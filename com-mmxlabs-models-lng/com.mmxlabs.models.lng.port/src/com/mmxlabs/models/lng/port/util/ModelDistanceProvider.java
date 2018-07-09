@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.port.RouteOption;
 public class ModelDistanceProvider extends EContentAdapter {
 
 	private final @Nullable PortModel portModel;
-	// private final @Nullable IDistanceProvider distanceProvider;
 
 	private SoftReference<@Nullable Map<RouteOption, Map<Pair<String, String>, Integer>>> distanceCache = new SoftReference<>(null);
 
@@ -77,14 +76,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 
 	public ModelDistanceProvider(final PortModel portModel) {
 		this.portModel = portModel;
-		// this.distanceProvider = null;
 	}
-
-	// public ModelDistanceProvider(final IDistanceProvider distanceProvider) {
-	// this.portModel = null;
-	// this.distanceModel = null;
-	// this.distanceProvider = distanceProvider;
-	// }
 
 	public int getMinDistance(final Port from, final Port to) {
 
@@ -174,30 +166,15 @@ public class ModelDistanceProvider extends EContentAdapter {
 	}
 
 	public String getVersion() {
-		// if (distanceProvider != null) {
-		// return distanceProvider.getVersion();
-		// } else {
 		return portModel.getDistanceDataVersion();
-		// }
 	}
-	// public static Via mapVia(final RouteOption routeOption) {
-	// switch (routeOption) {
-	// case DIRECT:
-	// return Via.Direct;
-	// case PANAMA:
-	// return Via.PanamaCanal;
-	// case SUEZ:
-	// return Via.SuezCanal;
-	// }
-	// throw new IllegalStateException();
-	// }
 
 	@Override
 	public void notifyChanged(final @Nullable Notification notification) {
 
 		super.notifyChanged(notification);
 
-		if (notification.isTouch()) {
+		if (notification == null || notification.isTouch()) {
 			return;
 		}
 		clearCache();
@@ -210,7 +187,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 
 	@Override
 	public void setTarget(final @Nullable Notifier newTarget) {
-
+		// Override default impl and do nothing
 	}
 
 	public boolean hasAnyDistance(final Port from, final Port to) {
@@ -245,7 +222,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 		}
 		return "";
 	}
-	
+
 	public static String getCanalEntranceName(PortModel portModel, RouteOption routeOption, CanalEntry canalEntry) {
 		for (Route r : portModel.getRoutes()) {
 			if (r.getRouteOption() == routeOption) {

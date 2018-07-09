@@ -19,7 +19,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
-import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -47,12 +46,11 @@ public class SequencesHitchHikerHelper {
 	@Inject
 	private Provider<LookupManager> lookupManagerProvider;
 
-	
 	private ISequences __undoUnrelatedChanges(final ISequences source, final ISequences target, final Collection<ISequenceElement> initialElements) {
 
 		final ILookupManager sourceLookup = lookupManagerProvider.get();
 		sourceLookup.createLookup(source);
-		
+
 		final ILookupManager targetLookup = lookupManagerProvider.get();
 		targetLookup.createLookup(target);
 

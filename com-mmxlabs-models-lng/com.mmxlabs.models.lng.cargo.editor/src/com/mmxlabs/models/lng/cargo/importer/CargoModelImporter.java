@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -28,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -57,16 +59,21 @@ public class CargoModelImporter implements ISubmodelImporter {
 	private final @NonNull Map<String, String> inputs = new HashMap<>();
 	private IClassImporter vesselAvailabilityImporter;
 	private IClassImporter vesselEventImporter;
+	private IClassImporter paperDealsImporter;
 	private final CanalBookingImporter canalBookingsImporter = new CanalBookingImporter();
 	public static final @NonNull String EVENTS_KEY = "EVENTS";
 	public static final @NonNull String CANAL_BOOKINGS_KEY = "CANAL_BOOKINGS";
 	public static final @NonNull String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";
+	public static final @NonNull String PAPER_DEALS_KEY = "PAPER_DEALS";
 	{
 		inputs.put(CARGO_KEY, "Cargoes");
 		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
 		inputs.put(VESSEL_AVAILABILITY_KEY, "Vessel Availability");
 		inputs.put(EVENTS_KEY, "Events");
 		inputs.put(CANAL_BOOKINGS_KEY, "Canal Bookings");
+		if (LicenseFeatures.isPermitted("features:paperdeals")) {
+			inputs.put(PAPER_DEALS_KEY, "Paper Deals");
+		}
 	}
 
 	/**
@@ -88,6 +95,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoImporter.setImporterRegistry(importerRegistry);
 			vesselAvailabilityImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselAvailability());
 			vesselEventImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselEvent());
+			paperDealsImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getPaperDeal());
 		}
 	}
 
@@ -180,12 +188,15 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoModel.getCargoGroups().addAll((Collection<? extends CargoGroup>) values);
 		}
 
-		if (inputs.containsKey(VESSEL_AVAILABILITY_KEY))
+		if (inputs.containsKey(VESSEL_AVAILABILITY_KEY)) {
 			cargoModel.getVesselAvailabilities().addAll(
 					(Collection<? extends VesselAvailability>) vesselAvailabilityImporter.importObjects(CargoPackage.eINSTANCE.getVesselAvailability(), inputs.get(VESSEL_AVAILABILITY_KEY), context));
-
+		}
 		if (inputs.containsKey(EVENTS_KEY)) {
 			cargoModel.getVesselEvents().addAll((Collection<? extends VesselEvent>) vesselEventImporter.importObjects(CargoPackage.eINSTANCE.getVesselEvent(), inputs.get(EVENTS_KEY), context));
+		}
+		if (inputs.containsKey(PAPER_DEALS_KEY)) {
+			cargoModel.getPaperDeals().addAll((Collection<? extends PaperDeal>) paperDealsImporter.importObjects(CargoPackage.eINSTANCE.getPaperDeal(), inputs.get(PAPER_DEALS_KEY), context));
 		}
 		CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		cargoModel.setCanalBookings(canalBookings);
@@ -216,6 +227,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), context));
 		output.put(VESSEL_AVAILABILITY_KEY, vesselAvailabilityImporter.exportObjects(cargoModel.getVesselAvailabilities(), context));
 		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(cargoModel.getVesselEvents(), context));
+		output.put(PAPER_DEALS_KEY, paperDealsImporter.exportObjects(cargoModel.getPaperDeals(), context));
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			final List<EObject> l = new LinkedList<>();

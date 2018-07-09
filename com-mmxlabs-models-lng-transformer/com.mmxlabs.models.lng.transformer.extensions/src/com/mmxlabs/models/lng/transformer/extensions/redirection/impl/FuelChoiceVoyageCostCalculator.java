@@ -50,8 +50,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 /**
  * A {@link IVoyageCostCalculator} allowing control over fuel choices. This implementation links the FBO choice between laden and ballast legs (assumes NBO all through the ballast). The fuel choice be
  * be set by the user by calling {@link #setFuelChoice(VoyageCalculatorFuelChoice)} - and indeed must be called prior to calling
- * {@link #calculateShippingCosts(IPort, IPort, int, int, int, int, int, IVessel, long, int, String, int, int)}. If {@link VoyageCalculatorFuelChoice#Optimal} is used, a {@link IVoyagePlanOptimiser} is used to pick
- * the optimal choice and this can be returned via {@link #getFuelChoice()}.
+ * {@link #calculateShippingCosts(IPort, IPort, int, int, int, int, int, IVessel, long, int, String, int, int)}. If {@link VoyageCalculatorFuelChoice#Optimal} is used, a {@link IVoyagePlanOptimiser}
+ * is used to pick the optimal choice and this can be returned via {@link #getFuelChoice()}.
  * 
  * Note: This class is *NOT* thread safe
  */
@@ -184,6 +184,10 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
+
+		portTimesRecord.setSlotExtraIdleTime(notionalLoadSlot, 0);
+		portTimesRecord.setSlotExtraIdleTime(notionalDischargeSlot, 0);
+
 		return portTimesRecord;
 	}
 

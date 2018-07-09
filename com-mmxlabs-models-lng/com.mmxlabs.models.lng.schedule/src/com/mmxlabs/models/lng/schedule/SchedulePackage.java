@@ -245,13 +245,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__INVENTORY_LEVELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Paper Deal Allocations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__PAPER_DEAL_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4470,13 +4479,22 @@ public interface SchedulePackage extends EPackage {
 	int EXPOSURE_DETAIL__CURRENCY_UNIT = 7;
 
 	/**
+	 * The feature id for the '<em><b>Deal Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__DEAL_TYPE = 8;
+
+	/**
 	 * The number of structural features of the '<em>Exposure Detail</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPOSURE_DETAIL_FEATURE_COUNT = 8;
+	int EXPOSURE_DETAIL_FEATURE_COUNT = 9;
 
 	/**
 	 * The number of operations of the '<em>Exposure Detail</em>' class.
@@ -5287,6 +5305,134 @@ public interface SchedulePackage extends EPackage {
 	int INVENTORY_CHANGE_EVENT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationImpl <em>Paper Deal Allocation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocation()
+	 * @generated
+	 */
+	int PAPER_DEAL_ALLOCATION = 40;
+
+	/**
+	 * The feature id for the '<em><b>Paper Deal</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION__PAPER_DEAL = 0;
+
+	/**
+	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION__ENTRIES = 1;
+
+	/**
+	 * The number of structural features of the '<em>Paper Deal Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Paper Deal Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl <em>Paper Deal Allocation Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY = 41;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__QUANTITY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__PRICE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__VALUE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Settled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__SETTLED = 4;
+
+	/**
+	 * The feature id for the '<em><b>Exposures</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES = 5;
+
+	/**
+	 * The number of structural features of the '<em>Paper Deal Allocation Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY_FEATURE_COUNT = 6;
+
+	/**
+	 * The number of operations of the '<em>Paper Deal Allocation Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5294,7 +5440,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 42;
+	int FUEL_UNIT = 44;
 
 
 	/**
@@ -5305,7 +5451,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 41;
+	int FUEL = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -5315,7 +5461,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 40;
+	int SEQUENCE_TYPE = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -5325,7 +5471,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 43;
+	int CAPACITY_VIOLATION_TYPE = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -5335,7 +5481,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 44;
+	int PORT_VISIT_LATENESS_TYPE = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -5345,7 +5491,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 45;
+	int SLOT_ALLOCATION_TYPE = 47;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -5355,7 +5501,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 46;
+	int PANAMA_BOOKING_PERIOD = 48;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -5365,7 +5511,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 47;
+	int CALENDAR = 49;
 
 
 	/**
@@ -5376,7 +5522,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 48;
+	int ITERABLE = 50;
 
 
 	/**
@@ -5387,7 +5533,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 49;
+	int OBJECT = 51;
 
 
 	/**
@@ -5519,6 +5665,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_InventoryLevels();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getPaperDealAllocations <em>Paper Deal Allocations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Paper Deal Allocations</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Schedule#getPaperDealAllocations()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_PaperDealAllocations();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Sequence <em>Sequence</em>}'.
@@ -7163,6 +7320,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getExposureDetail_CurrencyUnit();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getDealType <em>Deal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Deal Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getDealType()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_DealType();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails <em>Ballast Bonus Fee Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7541,6 +7709,114 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getInventoryChangeEvent_BreachedMax();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocation <em>Paper Deal Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Paper Deal Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocation
+	 * @generated
+	 */
+	EClass getPaperDealAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocation#getPaperDeal <em>Paper Deal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Paper Deal</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocation#getPaperDeal()
+	 * @see #getPaperDealAllocation()
+	 * @generated
+	 */
+	EReference getPaperDealAllocation_PaperDeal();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocation#getEntries <em>Entries</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entries</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocation#getEntries()
+	 * @see #getPaperDealAllocation()
+	 * @generated
+	 */
+	EReference getPaperDealAllocation_Entries();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry <em>Paper Deal Allocation Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Paper Deal Allocation Entry</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry
+	 * @generated
+	 */
+	EClass getPaperDealAllocationEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getDate()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getQuantity <em>Quantity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Quantity</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getQuantity()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_Quantity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getPrice <em>Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getPrice()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_Price();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getValue()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_Value();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#isSettled <em>Settled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Settled</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#isSettled()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_Settled();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getExposures <em>Exposures</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Exposures</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getExposures()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EReference getPaperDealAllocationEntry_Exposures();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7764,6 +8040,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__INVENTORY_LEVELS = eINSTANCE.getSchedule_InventoryLevels();
+
+		/**
+		 * The meta object literal for the '<em><b>Paper Deal Allocations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__PAPER_DEAL_ALLOCATIONS = eINSTANCE.getSchedule_PaperDealAllocations();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -9052,6 +9336,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute EXPOSURE_DETAIL__CURRENCY_UNIT = eINSTANCE.getExposureDetail_CurrencyUnit();
 
 		/**
+		 * The meta object literal for the '<em><b>Deal Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__DEAL_TYPE = eINSTANCE.getExposureDetail_DealType();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.BallastBonusFeeDetailsImpl <em>Ballast Bonus Fee Details</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -9344,6 +9636,90 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INVENTORY_CHANGE_EVENT__BREACHED_MAX = eINSTANCE.getInventoryChangeEvent_BreachedMax();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationImpl <em>Paper Deal Allocation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocation()
+		 * @generated
+		 */
+		EClass PAPER_DEAL_ALLOCATION = eINSTANCE.getPaperDealAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Paper Deal</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL_ALLOCATION__PAPER_DEAL = eINSTANCE.getPaperDealAllocation_PaperDeal();
+
+		/**
+		 * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL_ALLOCATION__ENTRIES = eINSTANCE.getPaperDealAllocation_Entries();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl <em>Paper Deal Allocation Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocationEntry()
+		 * @generated
+		 */
+		EClass PAPER_DEAL_ALLOCATION_ENTRY = eINSTANCE.getPaperDealAllocationEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__DATE = eINSTANCE.getPaperDealAllocationEntry_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Quantity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__QUANTITY = eINSTANCE.getPaperDealAllocationEntry_Quantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__PRICE = eINSTANCE.getPaperDealAllocationEntry_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__VALUE = eINSTANCE.getPaperDealAllocationEntry_Value();
+
+		/**
+		 * The meta object literal for the '<em><b>Settled</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__SETTLED = eINSTANCE.getPaperDealAllocationEntry_Settled();
+
+		/**
+		 * The meta object literal for the '<em><b>Exposures</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES = eINSTANCE.getPaperDealAllocationEntry_Exposures();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

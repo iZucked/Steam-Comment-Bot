@@ -65,4 +65,8 @@
     <eLiterals name="DAYS" value="1"/>
     <eLiterals name="MONTHS" value="2"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DealType">
+    <eLiterals name="PHYSICAL"/>
+    <eLiterals name="FINANCIAL" value="1"/>
+  </eClassifiers>
 </ecore:EPackage>

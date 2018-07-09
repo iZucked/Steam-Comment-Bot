@@ -12,7 +12,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ISimpleCostsProviderEditor;
 
 public abstract class AHashMapSimpleCostsProviderEditor implements ISimpleCostsProviderEditor {
 
-	private final Map<IPortSlot, Long> map = new HashMap<IPortSlot, Long>();
+	private final Map<IPortSlot, Long> map = new HashMap<>();
 	
 	@Override
 	public long getCostsValue(final IPortSlot portSlot) {

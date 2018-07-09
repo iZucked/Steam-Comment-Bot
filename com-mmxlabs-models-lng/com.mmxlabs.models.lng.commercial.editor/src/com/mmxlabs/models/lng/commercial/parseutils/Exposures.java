@@ -43,15 +43,17 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.rcp.common.ServiceHelper;
 
 /**
- * Utility class to calculate schedule exposure to market indices. Provides
- * static methods
+ * Utility class to calculate schedule exposure to market indices. Provides static methods
  * 
  * @author Simon McGregor
  */
@@ -110,7 +112,8 @@ public class Exposures {
 					continue;
 				}
 
-				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, slot instanceof LoadSlot, lookupData, pricingFullDate.getDayOfMonth());
+				final boolean isPurchase = slot instanceof LoadSlot;
+				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
 				if (exposureDetail != null && !exposureDetail.isEmpty()) {
 
 					for (final ExposureDetail d : exposureDetail) {
@@ -130,6 +133,19 @@ public class Exposures {
 						}
 					}
 					slotAllocation.getExposures().addAll(exposureDetail);
+					{
+						final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
+						physical.setDealType(DealType.PHYSICAL);
+
+						physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
+						physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
+						physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slotAllocation.getVolumeValue());
+						physical.setVolumeUnit("mmBtu");
+						physical.setIndexName("Physical");
+						physical.setDate(YearMonth.from(slotAllocation.getSlotVisit().getStart().toLocalDate()));
+
+						slotAllocation.getExposures().add(physical);
+					}
 				}
 			}
 		}
@@ -148,16 +164,12 @@ public class Exposures {
 		final Node p = parse.evaluate();
 		final Node node = expandNode(p, lookupData);
 		final MarkedUpNode markedUpNode = markupNodes(node, lookupData);
-		if (markedUpNode == null) {
-			return null;
-		}
 		return createExposureDetail(markedUpNode, date, volumeInMMBTu, isPurchase, lookupData, dayOfMonth);
 	}
 
 	/**
-	 * Expands the node tree. Returns a new node if the parentNode has change and
-	 * needs to be replaced in the upper chain. Returns null if the node does not
-	 * need replacing (note: the children may still have changed).
+	 * Expands the node tree. Returns a new node if the parentNode has change and needs to be replaced in the upper chain. Returns null if the node does not need replacing (note: the children may
+	 * still have changed).
 	 * 
 	 * @param exposedIndexToken
 	 * @param parentNode
@@ -196,8 +208,6 @@ public class Exposures {
 				}
 			}
 			return parentNode;
-
-			// return null;
 		} else {
 			// We have children, token *should* be an operator, expand out the child nodes
 			for (int i = 0; i < parentNode.children.length; ++i) {
@@ -208,12 +218,10 @@ public class Exposures {
 			}
 			return parentNode;
 		}
-		// return null;
 	}
 
 	/**
-	 * Determines the amount of exposure to a particular index which is created by a
-	 * specific contract.
+	 * Determines the amount of exposure to a particular index which is created by a specific contract.
 	 * 
 	 * @param contract
 	 * @param index
@@ -274,15 +282,14 @@ public class Exposures {
 				final MarkedUpNode markedUpNode = markupNodes(node, lookupData);
 				lookupData.expressionCache2.put(priceExpression, markedUpNode);
 				return markedUpNode;
-				// return getExposureCoefficient(markedUpNode, index, date);
 			}
 		}
 
 		return null;
 	}
 
-	public static MarkedUpNode markupNodes(@NonNull final Node parentNode, final LookupData lookupData) {
-		MarkedUpNode n;
+	public static @NonNull MarkedUpNode markupNodes(@NonNull final Node parentNode, final LookupData lookupData) {
+		final @NonNull MarkedUpNode n;
 
 		if (parentNode.token.equalsIgnoreCase("MAX")) {
 			n = new MaxFunctionNode();
@@ -320,11 +327,6 @@ public class Exposures {
 			} else {
 				throw new IllegalStateException();
 			}
-			// = Integer.parseInt(parentNode.children[1].token);
-			// for (final Node child : parentNode.children) {
-			// }
-			// n = new
-			// CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
 			n = new ShiftNode(child, (int) Math.round(shift));
 			return n;
 		} else if (parentNode.token.equalsIgnoreCase("DATEDAVG")) {
@@ -391,9 +393,8 @@ public class Exposures {
 	}
 
 	/**
-	 * Calculates the exposure of a given schedule to a given index. Depends on the
-	 * getExposureCoefficient method to correctly determine the exposure per cubic
-	 * metre associated with a load or discharge slot.
+	 * Calculates the exposure of a given schedule to a given index. Depends on the getExposureCoefficient method to correctly determine the exposure per cubic metre associated with a load or
+	 * discharge slot.
 	 * 
 	 * @param schedule
 	 * @param index
@@ -434,6 +435,34 @@ public class Exposures {
 				}
 			}
 		}
+		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+			for (final PaperDealAllocationEntry paperDealAllocationEntry : paperDealAllocation.getEntries()) {
+				if (!filterOn.isEmpty()) {
+					final boolean include = false;
+					if (!include) {
+						continue;
+					}
+				}
+
+				for (final ExposureDetail detail : paperDealAllocationEntry.getExposures()) {
+					if (Objects.equals(detail.getIndexName(), index.getName())) {
+						switch (mode) {
+						case VOLUME_MMBTU:
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+							break;
+						case VOLUME_NATIVE:
+							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+							break;
+						case NATIVE_VALUE:
+							result.merge(detail.getDate(), detail.getNativeValue(), (a, b) -> (a + b));
+							break;
+						default:
+							throw new IllegalArgumentException();
+						}
+					}
+				}
+			}
+		}
 
 		return result;
 
@@ -450,6 +479,7 @@ public class Exposures {
 			final ExposureRecords exposureRecords = (ExposureRecords) enode;
 			for (final ExposureRecord record : exposureRecords.records) {
 				final ExposureDetail exposureDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
+				exposureDetail.setDealType(DealType.FINANCIAL);
 
 				exposureDetail.setIndexName(record.index.getName());
 				exposureDetail.setCurrencyUnit(record.index.getCurrencyUnit());
@@ -458,16 +488,16 @@ public class Exposures {
 				exposureDetail.setDate(record.date);
 				exposureDetail.setUnitPrice(record.unitPrice);
 
-				exposureDetail.setVolumeInMMBTU(isPurchase ? record.mmbtuVolume : -record.mmbtuVolume);
+				exposureDetail.setVolumeInMMBTU(isPurchase ? -record.mmbtuVolume : record.mmbtuVolume);
 
 				// Is the record unit in mmBtu? Then either it always was mmBtu OR we have
 				// converted the native units to mmBtu
 				if (record.volumeUnit == null || record.volumeUnit.isEmpty() || "mmbtu".equalsIgnoreCase(record.volumeUnit)) {
-					exposureDetail.setVolumeInNativeUnits(isPurchase ? record.nativeVolume : -record.nativeVolume);
-					exposureDetail.setNativeValue(isPurchase ? record.nativeValue : -record.nativeValue);
+					exposureDetail.setVolumeInNativeUnits(isPurchase ? -record.nativeVolume : record.nativeVolume);
+					exposureDetail.setNativeValue(isPurchase ? -record.nativeValue : record.nativeValue);
 				} else {
 					// Not mmBtu? then the mmBtu field is still really native units
-					exposureDetail.setVolumeInNativeUnits(isPurchase ? record.mmbtuVolume : -record.mmbtuVolume);
+					exposureDetail.setVolumeInNativeUnits(isPurchase ? -record.mmbtuVolume : record.mmbtuVolume);
 					// Perform units conversion - compute mmBtu equivalent of exposed native volume
 					double mmbtuVolume = record.mmbtuVolume;
 					for (final UnitConversion factor : lookupData.pricingModel.getConversionFactors()) {
@@ -478,7 +508,7 @@ public class Exposures {
 							}
 						}
 					}
-					exposureDetail.setVolumeInMMBTU(isPurchase ? mmbtuVolume : -mmbtuVolume);
+					exposureDetail.setVolumeInMMBTU(isPurchase ? -mmbtuVolume : mmbtuVolume);
 
 					final double nativeValue = exposureDetail.getVolumeInNativeUnits() * exposureDetail.getUnitPrice();
 					exposureDetail.setNativeValue(nativeValue);
@@ -556,7 +586,6 @@ public class Exposures {
 		double volumeInMMBTU;
 	}
 
-	// private void evaluate(MarkedUpNode node, String indexName, YearMonth date) {
 	private static @NonNull Pair<Double, IExposureNode> getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, final YearMonth date, final LookupData lookupData,
 			int dayOfMonth) {
 		if (node instanceof ShiftNode) {
@@ -628,9 +657,7 @@ public class Exposures {
 				if (c0 instanceof Constant && c1 instanceof Constant) {
 					return new Pair<>(pc0.getFirst() - pc1.getFirst(), new Constant(((Constant) c0).getConstant() - ((Constant) c1).getConstant(), ""));
 				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
-					return new Pair<>(pc0.getFirst() - pc1.getFirst(), c0);// modify((ExposureRecords) c0, c -> new ExposureRecord(c.index, c.unitPrice,
-																			// -c.nativeVolume, -c.nativeValue,
-																			// -c.mmbtuVolume, c.date));
+					return new Pair<>(pc0.getFirst() - pc1.getFirst(), c0);
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
 					return new Pair<>(pc0.getFirst() - pc1.getFirst(),
 							modify((ExposureRecords) c1, c -> new ExposureRecord(c.index, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date, c.volumeUnit)));
