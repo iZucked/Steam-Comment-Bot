@@ -122,7 +122,7 @@ public class LoadTriggerHelper {
 
 	private void moveAndMatchSlotsLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int cargoVolume, LocalDate start) {
 		List<LoadSlot> sortedSlots = model.getCargoModel().getLoadSlots().stream() //
-				.filter(l->l.getPort() == port && l.getWindowStart().isAfter(start)) //
+				.filter(l->l.getPort() == port && (l.getWindowStart().isAfter(start) || l.getWindowStart().isEqual(start))) //
 				.sorted((a,b) -> a.getWindowStart().compareTo(b.getWindowStart())) //
 				.collect(Collectors.toList());
 		
