@@ -25,7 +25,7 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	 */
 	final int RESTRICTION_UNDEFINED = 0;
 
-	boolean isDivertable(@NonNull ISequenceElement element);
+	boolean isDivertible(@NonNull ISequenceElement element);
 
 	/**
 	 * Returns the number of hours for the shipping restriction. If not specified, then {@link #RESTRICTION_UNDEFINED} will be returned.
@@ -52,8 +52,8 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	int getReferenceSpeed(@NonNull IVessel vessel, @NonNull VesselState vesselState);
 
 	@NonNull
-	Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull ILoadOption desPurchase);
+	Collection<ERouteOption> getDivertibleDESAllowedRoutes(@NonNull ILoadOption desPurchase);
 	
 	@NonNull
-	Collection<ERouteOption> getDivertableFOBAllowedRoutes(@NonNull IDischargeOption fobSale);
+	Collection<ERouteOption> getDivertibleFOBAllowedRoutes(@NonNull IDischargeOption fobSale);
 }

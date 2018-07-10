@@ -111,7 +111,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 							if (slot instanceof LoadSlot) {
 								final LoadSlot loadSlot = (LoadSlot) slot;
 								if (loadSlot.getPort() != dischargeSlot.getPort()) {
-									final String message = String.format("FOB Sale|%s is not divertable, but is linked to a FOB Purchase at a different load port", dischargeSlot.getName());
+									final String message = String.format("FOB Sale|%s is not divertible, but is linked to a FOB Purchase at a different load port", dischargeSlot.getName());
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.ERROR);
 									dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
@@ -165,9 +165,9 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 									@NonNull
 									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-									final int ladenTravelTimeInHours = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(desPurchase, desPurchase, dischargeSlot, shippingDaysSpeedProvider,
+									final int ladenTravelTimeInHours = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(desPurchase, desPurchase, dischargeSlot, shippingDaysSpeedProvider,
 											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vessel, true), modelDistanceProvider);
-									final int ballastTravelTimeInHours = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(desPurchase, dischargeSlot, desPurchase, shippingDaysSpeedProvider,
+									final int ballastTravelTimeInHours = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(desPurchase, dischargeSlot, desPurchase, shippingDaysSpeedProvider,
 											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vessel, false), modelDistanceProvider);
 
 									// Calculate minimum time due to slot windows
@@ -260,10 +260,10 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 									@NonNull
 									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-									final int ladenTravelTimeInHours = CargoTravelTimeUtils.getDivertableFOBMinRouteTimeInHours(fobSale, fobPurchase, fobSale, shippingDaysSpeedProvider, portModel,
+									final int ladenTravelTimeInHours = CargoTravelTimeUtils.getDivertibleFOBMinRouteTimeInHours(fobSale, fobPurchase, fobSale, shippingDaysSpeedProvider, portModel,
 											vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, fobSale, vessel, true), modelDistanceProvider);
 
-									final int ballastTravelTimeInHours = CargoTravelTimeUtils.getDivertableFOBMinRouteTimeInHours(fobSale, fobSale, fobPurchase, shippingDaysSpeedProvider, portModel,
+									final int ballastTravelTimeInHours = CargoTravelTimeUtils.getDivertibleFOBMinRouteTimeInHours(fobSale, fobSale, fobPurchase, shippingDaysSpeedProvider, portModel,
 											vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, fobSale, vessel, false), modelDistanceProvider);
 
 									// Calculate minimum time due to slot windows

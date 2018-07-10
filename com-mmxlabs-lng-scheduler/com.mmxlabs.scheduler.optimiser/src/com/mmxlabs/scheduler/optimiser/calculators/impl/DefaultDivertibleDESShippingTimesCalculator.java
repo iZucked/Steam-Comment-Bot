@@ -18,10 +18,11 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -31,7 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 
-public class DefaultDivertableFOBShippingTimesCalculator implements IDivertableFOBShippingTimesCalculator {
+public class DefaultDivertibleDESShippingTimesCalculator implements IDivertibleDESShippingTimesCalculator {
 
 	@Inject
 	private IElementDurationProvider durationProvider;
@@ -48,44 +49,43 @@ public class DefaultDivertableFOBShippingTimesCalculator implements IDivertableF
 	@Inject
 	private IDistanceProvider distanceProvider;
 
-	@Override
-	public Triple<@NonNull Integer, @NonNull Integer, @NonNull Integer> getDivertableFOBTimes(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption,
+	private Pair<@NonNull Integer, @NonNull ERouteOption> getDischargeTimeAndRoute(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption,
 			final @NonNull IVessel nominatedVessel, final @NonNull IResource resource) {
+		final ISequenceElement buyElement = portSlotProvider.getElement(buyOption);
+		final int fobLoadTime = shippingHoursRestrictionProvider.getBaseTime(buyElement).getInclusiveStart();
+		final int loadDuration = durationProvider.getElementDuration(buyElement, resource);
 
-		final Triple<Integer, ERouteOption, Integer> ladenDistanceData = getShortestTravelTimeToPort(sellOption, buyOption.getPort(), sellOption.getPort(), nominatedVessel,
-				getReferenceSpeed(nominatedVessel, VesselState.Laden));
-		if (ladenDistanceData == null) {
+		final Triple<Integer, ERouteOption, Integer> distanceData = getShortestTravelTimeToPort(buyOption, buyOption.getPort(), sellOption.getPort(), nominatedVessel,
+				getReferenceSpeed(buyOption, nominatedVessel, VesselState.Laden));
+		if (distanceData == null) {
 			throw new IllegalStateException(String.format("No distance between %s and %s", buyOption.getPort().getName(), sellOption.getPort().getName()));
 		}
-		final int notionalLadenTime = ladenDistanceData.getThird();
+		final int notionalLadenTime = distanceData.getThird();
+		final ERouteOption route = distanceData.getSecond();
 
-		final Triple<Integer, ERouteOption, Integer> ballastDistanceData = getShortestTravelTimeToPort(sellOption, buyOption.getPort(), sellOption.getPort(), nominatedVessel,
-				getReferenceSpeed(nominatedVessel, VesselState.Ballast));
-		if (ballastDistanceData == null) {
-			throw new IllegalStateException(String.format("No distance between %s and %s", sellOption.getPort().getName(), buyOption.getPort().getName()));
-		}
-		final int notionalBallastTime = ballastDistanceData.getThird();
+		final int notionalDischargeTime = fobLoadTime + loadDuration + notionalLadenTime;
+		final ITimeWindow sellWindow = sellOption.getTimeWindow();
 
-		final ISequenceElement buyElement = portSlotProvider.getElement(buyOption);
-		final int loadDuration = durationProvider.getElementDuration(buyElement, resource);
+		return new Pair<>(Math.max(notionalDischargeTime, sellWindow.getInclusiveStart()), route);
+	}
+
+	@Override
+	public Pair<@NonNull Integer, @NonNull Integer> getDivertibleDESTimes(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption, final @NonNull IVessel nominatedVessel,
+			final @NonNull IResource resource) {
+		final Pair<Integer, ERouteOption> dischargeJourney = getDischargeTimeAndRoute(buyOption, sellOption, nominatedVessel, resource);
+		final ERouteOption ballastRoute = dischargeJourney.getSecond();
 
 		final ISequenceElement sellElement = portSlotProvider.getElement(sellOption);
 		final int dischargeDuration = durationProvider.getElementDuration(sellElement, resource);
 
-		ITimeWindow baseTime = shippingHoursRestrictionProvider.getBaseTime(sellElement);
-		int earlyFOBDischargeTime = buyOption.getTimeWindow().getInclusiveStart() + loadDuration + notionalLadenTime;
-		if (earlyFOBDischargeTime >= baseTime.getInclusiveStart()) {
-			// Arriva after window start (or may even by late)
-			int startOfDischarge = earlyFOBDischargeTime;
-			int returnTime = startOfDischarge + dischargeDuration + notionalBallastTime;
-			return new Triple<>(buyOption.getTimeWindow().getInclusiveStart(), startOfDischarge, returnTime);
-		} else {
-			// Arrive before window, so depart as late as possible and arrive at discharge window start
-			int fobTime = Math.min(baseTime.getInclusiveStart() - notionalLadenTime - loadDuration, buyOption.getTimeWindow().getExclusiveEnd() - 1);
-			int dischargeTime = baseTime.getInclusiveStart();
-			int returnTime = dischargeTime + dischargeDuration + notionalBallastTime;
-			return new Triple<>(fobTime, dischargeTime, returnTime);
-		}
+		final int ballastDistance = distanceProvider.getDistance(ballastRoute, sellOption.getPort(), buyOption.getPort(), nominatedVessel);
+		// Get notional speed
+		final int referenceSpeed = getReferenceSpeed(buyOption, nominatedVessel, VesselState.Ballast);
+
+		final int minBallastReturnTime = dischargeJourney.getFirst() + dischargeDuration + Calculator.getTimeFromSpeedDistance(referenceSpeed, ballastDistance)
+				+ routeCostProvider.getRouteTransitTime(ballastRoute, nominatedVessel);
+
+		return new Pair<>(dischargeJourney.getFirst(), minBallastReturnTime);
 	}
 
 	/**
@@ -98,12 +98,12 @@ public class DefaultDivertableFOBShippingTimesCalculator implements IDivertableF
 	 * @return
 	 */
 	@Nullable
-	private Triple<Integer, ERouteOption, Integer> getShortestTravelTimeToPort(@NonNull final IDischargeOption fobSale, final @NonNull IPort to, final @NonNull IPort from, final IVessel vessel,
+	private Triple<Integer, ERouteOption, Integer> getShortestTravelTimeToPort(@NonNull final ILoadOption loadOption, final @NonNull IPort to, final @NonNull IPort from, final IVessel vessel,
 			final int referenceSpeed) {
 		int distance = Integer.MAX_VALUE;
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
-		final Collection<ERouteOption> allowedRoutes = shippingHoursRestrictionProvider.getDivertableFOBAllowedRoutes(fobSale);
+		final Collection<ERouteOption> allowedRoutes = shippingHoursRestrictionProvider.getDivertibleDESAllowedRoutes(loadOption);
 		final List<DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(to, from, vessel);
 		for (final DistanceMatrixEntry d : distances) {
 			final ERouteOption routeOption = d.getRoute();
@@ -126,7 +126,7 @@ public class DefaultDivertableFOBShippingTimesCalculator implements IDivertableF
 		return new Triple<>(distance, route, shortestTime);
 	}
 
-	protected int getReferenceSpeed(final @NonNull IVessel nominatedVessel, final @NonNull VesselState vesselState) {
+	protected int getReferenceSpeed(final @NonNull IPortSlot slot, final @NonNull IVessel nominatedVessel, final @NonNull VesselState vesselState) {
 		return shippingHoursRestrictionProvider.getReferenceSpeed(nominatedVessel, vesselState);
 	}
 

@@ -151,13 +151,13 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the divertable feature on Slot
+	 * Create the editor for the divertible feature on Slot
 	 * 
 	 * @generated NOT
 	 */
 	protected void add_divertibleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__DIVERTIBLE);
-		editor.addNotificationChangedListener(new SlotDivertableInlineEditorChangedListener());
+		editor.addNotificationChangedListener(new SlotDivertibleInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
 

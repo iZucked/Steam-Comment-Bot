@@ -98,13 +98,13 @@ public class PortTimesRecordMaker {
 			// Determine transfer time
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 
-				// Find latest window start for all slots in FOB/DES combo. However if DES divertable, ignore.
+				// Find latest window start for all slots in FOB/DES combo. However if DES divertible, ignore.
 				@Nullable
 				final ITimeWindow timeWindow = thisPortSlot.getTimeWindow();
 				assert timeWindow != null;
 				if (thisPortSlot instanceof ILoadOption) {
 					// Divertible DES has real time window.
-					if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+					if (!shippingHoursRestrictionProvider.isDivertible(element)) {
 						if (actualsDataProvider.hasActuals(thisPortSlot)) {
 							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 						} else {
@@ -119,7 +119,7 @@ public class PortTimesRecordMaker {
 					} else {
 						// Divertible FOB has sales time window
 						// TODO: Consider ship days restriction...
-						if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+						if (!shippingHoursRestrictionProvider.isDivertible(element)) {
 							final int windowStart = timeWindow.getInclusiveStart();
 							startTime = Math.max(windowStart, startTime);
 						}

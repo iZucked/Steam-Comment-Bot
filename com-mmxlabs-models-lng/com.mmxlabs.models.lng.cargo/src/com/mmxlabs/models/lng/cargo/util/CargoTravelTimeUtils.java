@@ -38,7 +38,7 @@ public class CargoTravelTimeUtils {
 
 	public static final List<RouteOption> EMPTY_ROUTES = Collections.emptyList();
 
-	public static int getDivertableDESMinRouteTimeInHours(final LoadSlot desPurchase, final Slot from, final Slot to, final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider,
+	public static int getDivertibleDESMinRouteTimeInHours(final LoadSlot desPurchase, final Slot from, final Slot to, final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider,
 			final PortModel portModel, final Vessel vessel, final double referenceSpeed, final ModelDistanceProvider modelDistanceProvider) {
 
 		Collection<Route> allowedRoutes = null;
@@ -52,7 +52,7 @@ public class CargoTravelTimeUtils {
 		return minDuration;
 	}
 
-	public static int getDivertableFOBMinRouteTimeInHours(final DischargeSlot fobSale, final Slot from, final Slot to, final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider,
+	public static int getDivertibleFOBMinRouteTimeInHours(final DischargeSlot fobSale, final Slot from, final Slot to, final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider,
 			final PortModel portModel, final Vessel vessel, final double referenceSpeed, final ModelDistanceProvider modelDistanceProvider) {
 
 		Collection<Route> allowedRoutes = null;

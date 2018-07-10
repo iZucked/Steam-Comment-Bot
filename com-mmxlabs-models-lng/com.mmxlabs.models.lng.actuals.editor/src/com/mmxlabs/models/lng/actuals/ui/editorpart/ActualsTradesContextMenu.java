@@ -167,7 +167,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 				final Map<Slot, SlotActuals> slotActualMap = new HashMap<>();
 
 				// True if DES and divertible -- need to look up distances!
-				boolean isDivertableDESPurchase = false;
+				boolean isDivertibleDESPurchase = false;
 
 				Port loadPort = null;
 				Port dischargePort = null;
@@ -180,7 +180,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 						loadPort = loadSlot.getPort();
 						slotActuals = ActualsFactory.eINSTANCE.createLoadActuals();
 						if (loadSlot.isDESPurchase()) {
-							isDivertableDESPurchase = loadSlot.isDivertible();
+							isDivertibleDESPurchase = loadSlot.isDivertible();
 							cargoActuals.setVessel(slot.getNominatedVessel());
 						}
 						slotActuals.setCV(((LoadSlot) slot).getSlotOrDelegateCV());
@@ -275,8 +275,8 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 								}
 							}
 
-							// Look up distances for divertable des cargoes
-							if (isDivertableDESPurchase && portModel != null && loadPort != null && dischargePort != null) {
+							// Look up distances for divertible des cargoes
+							if (isDivertibleDESPurchase && portModel != null && loadPort != null && dischargePort != null) {
 
 								final ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
@@ -357,7 +357,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 								// In the past to trigger validation error.
 								returnActuals.setOperationsStart(LocalDateTime.now().withYear(2010));
 
-								if (isDivertableDESPurchase && loadPort != null) {
+								if (isDivertibleDESPurchase && loadPort != null) {
 									returnActuals.setTitleTransferPoint(loadPort);
 								}
 							}

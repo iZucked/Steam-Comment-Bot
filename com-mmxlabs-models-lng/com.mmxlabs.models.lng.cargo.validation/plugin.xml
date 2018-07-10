@@ -709,11 +709,11 @@
                </constraint>
                <constraint
                      class="com.mmxlabs.models.lng.cargo.validation.DivertibleSlotConstraint"
-                     id="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.DivertibleSlotConstraint"
                      isEnabledByDefault="true"
                      lang="java"
                      mode="Batch"
-                     name="DivertableSlotConstraint"
+                     name="DivertibleSlotConstraint"
                      severity="ERROR"
                      statusCode="1">
                   <message>

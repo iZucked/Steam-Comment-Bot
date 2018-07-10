@@ -58,7 +58,7 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	}
 
 	@Override
-	public boolean isDivertable(@NonNull final ISequenceElement element) {
+	public boolean isDivertible(@NonNull final ISequenceElement element) {
 		return hoursMap.containsKey(element);
 	}
 
@@ -82,17 +82,17 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	}
 
 	@Override
-	public Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull final ILoadOption loadOption) {
+	public Collection<ERouteOption> getDivertibleDESAllowedRoutes(@NonNull final ILoadOption loadOption) {
 		return allowedDESRoutes.getOrDefault(loadOption, defaultAllowedRoutes);
 	}
 
 	@Override
-	public Collection<ERouteOption> getDivertableFOBAllowedRoutes(@NonNull final IDischargeOption fobSale) {
+	public Collection<ERouteOption> getDivertibleFOBAllowedRoutes(@NonNull final IDischargeOption fobSale) {
 		return allowedFOBRoutes.getOrDefault(fobSale, defaultAllowedRoutes);
 	}
 
 	@Override
-	public void setDivertableDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final ERouteOption route) {
+	public void setDivertibleDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final ERouteOption route) {
 		if (!allowedDESRoutes.containsKey(loadOption)) {
 			allowedDESRoutes.put(loadOption, new LinkedList<>());
 		}
@@ -100,7 +100,7 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	}
 
 	@Override
-	public void setDivertableFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull final ERouteOption route) {
+	public void setDivertibleFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull final ERouteOption route) {
 		if (!allowedFOBRoutes.containsKey(fobSale)) {
 			allowedFOBRoutes.put(fobSale, new LinkedList<>());
 		}

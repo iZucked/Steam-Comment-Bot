@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursRestrictionProvider {
 
 	/**
-	 * Set shipping hours restrictions. Implies {@link IShippingHoursRestrictionProvider#isDivertable(ISequenceElement)} will be true for this element
+	 * Set shipping hours restrictions. Implies {@link IShippingHoursRestrictionProvider#isDivertible(ISequenceElement)} will be true for this element
 	 * 
 	 * @param element
 	 * @param baseTimeWindow
@@ -39,12 +39,12 @@ public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursR
 	 * 
 	 * @param route
 	 */
-	void setDivertableDESAllowedRoute(@NonNull ILoadOption desPurchase, @NonNull ERouteOption route);
+	void setDivertibleDESAllowedRoute(@NonNull ILoadOption desPurchase, @NonNull ERouteOption route);
 
 	/**
 	 * Add an allowed route that a FOB sale cargo can follow
 	 * 
 	 * @param route
 	 */
-	void setDivertableFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull ERouteOption route);
+	void setDivertibleFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull ERouteOption route);
 }

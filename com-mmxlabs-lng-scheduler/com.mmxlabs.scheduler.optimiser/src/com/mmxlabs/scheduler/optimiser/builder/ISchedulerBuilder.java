@@ -680,8 +680,8 @@ public interface ISchedulerBuilder {
 	@NonNull
 	SequenceElement createSequenceElement(@NonNull String name);
 
-	void setDivertableDESAllowedRoute(@NonNull ILoadOption desPurchase, @NonNull List<ERouteOption> allowedRoutes);
-	void setDivertableFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull List<ERouteOption> allowedRoutes);
+	void setDivertibleDESAllowedRoute(@NonNull ILoadOption desPurchase, @NonNull List<ERouteOption> allowedRoutes);
+	void setDivertibleFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull List<ERouteOption> allowedRoutes);
 
 	@NonNull
 	IVesselAvailability createRoundTripCargoVessel(@NonNull String name, @NonNull ISpotCharterInMarket market);

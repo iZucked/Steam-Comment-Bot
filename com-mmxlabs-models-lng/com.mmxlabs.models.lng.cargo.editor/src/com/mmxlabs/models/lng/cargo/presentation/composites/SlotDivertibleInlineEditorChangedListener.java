@@ -23,7 +23,7 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListe
  * @author Simon Goodall
  * 
  */
-public class SlotDivertableInlineEditorChangedListener implements IInlineEditorExternalNotificationListener {
+public class SlotDivertibleInlineEditorChangedListener implements IInlineEditorExternalNotificationListener {
 
 	private IInlineEditor editor;
 	private EObject input;

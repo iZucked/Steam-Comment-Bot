@@ -192,7 +192,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 					// See ShippingHoursRestrictions otherwise
 					// if (slot1.getPort() == slot2.getPort()) {
-					if (!shippingHoursRestrictionProvider.isDivertable(first)) {
+					if (!shippingHoursRestrictionProvider.isDivertible(first)) {
 						if (tw1.getInclusiveStart() <= tw2.getInclusiveStart() && tw1.getExclusiveEnd() > tw2.getInclusiveStart()) {
 							return true;
 						}

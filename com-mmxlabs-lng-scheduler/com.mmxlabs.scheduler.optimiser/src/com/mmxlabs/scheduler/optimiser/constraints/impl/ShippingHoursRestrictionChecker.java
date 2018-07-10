@@ -20,8 +20,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
-import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
-import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -62,11 +62,11 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 
 	@Inject
 	@NonNull
-	private IDivertableDESShippingTimesCalculator dischargeTimeCalculator;
+	private IDivertibleDESShippingTimesCalculator dischargeTimeCalculator;
 
 	@Inject
 	@NonNull
-	private IDivertableFOBShippingTimesCalculator fobSaleTimeCalculator;
+	private IDivertibleFOBShippingTimesCalculator fobSaleTimeCalculator;
 
 	@Override
 	@NonNull
@@ -137,7 +137,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 				final ILoadOption desPurchase = (ILoadOption) firstSlot;
 				final IDischargeSlot desSale = (IDischargeSlot) secondSlot;
 
-				if (shippingHoursRestrictionProvider.isDivertable(first)) {
+				if (shippingHoursRestrictionProvider.isDivertible(first)) {
 					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(first);
 					if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
 						// No
@@ -154,7 +154,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					if (nominatedVessel == null) {
 						return false;
 					}
-					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertableDESTimes(desPurchase, desSale, nominatedVessel, resource);
+					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertibleDESTimes(desPurchase, desSale, nominatedVessel, resource);
 					if (desTimes == null) {
 						return false;
 					}
@@ -170,7 +170,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 				final ILoadSlot fobPurchase = (ILoadSlot) firstSlot;
 				final IDischargeOption fobSale = (IDischargeOption) secondSlot;
 
-				if (shippingHoursRestrictionProvider.isDivertable(second)) {
+				if (shippingHoursRestrictionProvider.isDivertible(second)) {
 					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(second);
 					if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
 						// Assume that we have a windows overlap case
@@ -192,7 +192,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					if (nominatedVessel == null) {
 						return false;
 					}
-					final Triple<Integer, Integer, Integer> desTimes = fobSaleTimeCalculator.getDivertableFOBTimes(fobPurchase, fobSale, nominatedVessel, resource);
+					final Triple<Integer, Integer, Integer> desTimes = fobSaleTimeCalculator.getDivertibleFOBTimes(fobPurchase, fobSale, nominatedVessel, resource);
 					if (desTimes == null) {
 						return false;
 					}

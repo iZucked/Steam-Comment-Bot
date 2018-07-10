@@ -1481,7 +1481,7 @@ public class LNGScenarioTransformer {
 						allowedRoutes.add(mapRouteOption(route));
 					}
 				}
-				builder.setDivertableFOBAllowedRoute(discharge, allowedRoutes);
+				builder.setDivertibleFOBAllowedRoute(discharge, allowedRoutes);
 
 			} else {
 				// Bind to current port only
@@ -1550,7 +1550,7 @@ public class LNGScenarioTransformer {
 					allowedRoutes.add(mapRouteOption(route));
 				}
 			}
-			builder.setDivertableDESAllowedRoute(load, allowedRoutes);
+			builder.setDivertibleDESAllowedRoute(load, allowedRoutes);
 
 		}
 	}
@@ -1679,7 +1679,7 @@ public class LNGScenarioTransformer {
 			final boolean slotLocked = dischargeSlot.isLocked() || shippingOnly && dischargeSlot.getCargo() == null;
 			if (dischargeSlot.isFOBSale()) {
 				final ITimeWindow localTimeWindow;
-				// if (dischargeSlot.isDivertable()) {
+				// if (dischargeSlot.isDivertible()) {
 				// // Extend window out to cover whole shipping days restriction
 				// localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
 				// } else

@@ -20,7 +20,7 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category(MicroTest.class)
-	public void divertableFOBSale_SimpleSwap() throws Exception {
+	public void divertibleFOBSale_SimpleSwap() throws Exception {
 
 		// Create the required basic elements
 		final Vessel nominatedVessel = fleetModelFinder.findVessel("STEAM-145");
@@ -55,7 +55,7 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category(MicroTest.class)
-	public void divertableFOBSale_SimpleSwap_NoDays() throws Exception {
+	public void divertibleFOBSale_SimpleSwap_NoDays() throws Exception {
 
 		// Create the required basic elements
 		final Vessel nominatedVessel = fleetModelFinder.findVessel("STEAM-145");
@@ -91,7 +91,7 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category(MicroTest.class)
-	public void divertableFOBSale_SimpleSwap_OnlyLadenDays() throws Exception {
+	public void divertibleFOBSale_SimpleSwap_OnlyLadenDays() throws Exception {
 
 		// Create the required basic elements
 		final Vessel nominatedVessel = fleetModelFinder.findVessel("STEAM-145");

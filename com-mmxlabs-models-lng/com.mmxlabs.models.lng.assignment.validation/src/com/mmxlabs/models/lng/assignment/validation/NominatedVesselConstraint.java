@@ -37,7 +37,7 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 			if (slot.getNominatedVessel() == null) {
 				final String type = slot.isDESPurchase() ? "DES" : "FOB";
 				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-						"Divertable %s Purchase|%s needs a nominated vessel", type, slot.getName())));
+						"Divertible %s Purchase|%s needs a nominated vessel", type, slot.getName())));
 				failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 				failures.add(failure);
 			}

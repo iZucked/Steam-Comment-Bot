@@ -58,7 +58,7 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ QuickTest.class, MicroTest.class })
 	@Ignore("This is unexpected as the load is in the window, but as the sale is outside (and locked) and it is a DES Purchase, this is a fixed cargo and it does not matter if it is included or not")
-	public void testDivertableDES() throws Exception {
+	public void testDivertibleDES() throws Exception {
 
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();

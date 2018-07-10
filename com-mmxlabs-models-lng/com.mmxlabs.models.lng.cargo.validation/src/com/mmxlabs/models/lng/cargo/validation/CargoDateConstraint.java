@@ -241,7 +241,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					prevSlot = slot;
 				}
 			} else if (constraintID.equals(NON_SHIPPED_TRAVEL_TIME_ID)) {
-				// Divertable DES and FOB Sale
+				// Divertible DES and FOB Sale
 				if (cargo.getSortedSlots().size() == 2) {
 					final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
 					final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSortedSlots().get(1);
@@ -275,7 +275,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		} else {
 			ServiceHelper.withCheckedServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
-				int travelTime = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
+				int travelTime = CargoTravelTimeUtils.getDivertibleDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
 						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
 						extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
 				if (travelTime + from.getSlotOrDelegateDuration() > windowLength) {

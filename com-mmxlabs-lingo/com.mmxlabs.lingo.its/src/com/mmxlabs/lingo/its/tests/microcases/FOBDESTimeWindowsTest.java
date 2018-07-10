@@ -33,7 +33,7 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateChecker;
 
 /**
- * Test cases to ensure "standard" (not-divertable) FOB or DES cargoes are scheduled with the compatible time window.
+ * Test cases to ensure "standard" (not-divertible) FOB or DES cargoes are scheduled with the compatible time window.
  * 
  * @author Simon Goodall
  *

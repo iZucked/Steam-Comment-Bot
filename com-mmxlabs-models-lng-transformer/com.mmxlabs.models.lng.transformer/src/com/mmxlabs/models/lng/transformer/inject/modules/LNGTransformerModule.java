@@ -48,10 +48,10 @@ import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
-import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
-import com.mmxlabs.scheduler.optimiser.calculators.IDivertableFOBShippingTimesCalculator;
-import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
-import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertibleDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertibleFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
@@ -203,11 +203,11 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 
-		bind(IDivertableDESShippingTimesCalculator.class).to(DefaultDivertableDESShippingTimesCalculator.class);
-		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
+		bind(IDivertibleDESShippingTimesCalculator.class).to(DefaultDivertibleDESShippingTimesCalculator.class);
+		bind(DefaultDivertibleDESShippingTimesCalculator.class).in(Singleton.class);
 
-		bind(IDivertableFOBShippingTimesCalculator.class).to(DefaultDivertableFOBShippingTimesCalculator.class);
-		bind(DefaultDivertableFOBShippingTimesCalculator.class).in(Singleton.class);
+		bind(IDivertibleFOBShippingTimesCalculator.class).to(DefaultDivertibleFOBShippingTimesCalculator.class);
+		bind(DefaultDivertibleFOBShippingTimesCalculator.class).in(Singleton.class);
 
 		// Register default implementations
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);

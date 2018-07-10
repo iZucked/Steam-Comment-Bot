@@ -37,7 +37,7 @@ public class CargoTypeUtil {
 	}
 
 	public static enum DetailedCargoType {
-		UNKNOWN, SHIPPED, OPEN_FOB_PURCHASE, OPEN_DES_SALE, FOB_SALE, DIVERTABLE_FOB_SALE, DES_PURCHASE, DIVERTABLE_DES_PURCHASE
+		UNKNOWN, SHIPPED, OPEN_FOB_PURCHASE, OPEN_DES_SALE, FOB_SALE, DIVERTIBLE_FOB_SALE, DES_PURCHASE, DIVERTIBLE_DES_PURCHASE
 	}
 
 	@NonNull
@@ -57,7 +57,7 @@ public class CargoTypeUtil {
 	}
 
 	/**
-	 * Determines a more detailed cargo type analysis of the given slots. This will return more specifically whether or not a non-shipped cargo is divertable or not. This method will indicate an open
+	 * Determines a more detailed cargo type analysis of the given slots. This will return more specifically whether or not a non-shipped cargo is divertible or not. This method will indicate an open
 	 * shipped position, but not an open non-shipped position.
 	 * 
 	 * @param slots
@@ -74,16 +74,16 @@ public class CargoTypeUtil {
 			if (slot instanceof ILoadOption) {
 				if (slot instanceof ILoadSlot) {
 					return DetailedCargoType.OPEN_FOB_PURCHASE;
-				} else if (shippingHoursRestrictionProvider.isDivertable(portSlotProvider.getElement(slot))) {
-					return DetailedCargoType.DIVERTABLE_DES_PURCHASE;
+				} else if (shippingHoursRestrictionProvider.isDivertible(portSlotProvider.getElement(slot))) {
+					return DetailedCargoType.DIVERTIBLE_DES_PURCHASE;
 				} else {
 					return DetailedCargoType.DES_PURCHASE;
 				}
 			} else if (slot instanceof IDischargeOption) {
 				if (slot instanceof IDischargeSlot) {
 					return DetailedCargoType.OPEN_DES_SALE;
-				} else if (shippingHoursRestrictionProvider.isDivertable(portSlotProvider.getElement(slot))) {
-					return DetailedCargoType.DIVERTABLE_FOB_SALE;
+				} else if (shippingHoursRestrictionProvider.isDivertible(portSlotProvider.getElement(slot))) {
+					return DetailedCargoType.DIVERTIBLE_FOB_SALE;
 				} else {
 					return DetailedCargoType.FOB_SALE;
 				}
@@ -100,8 +100,8 @@ public class CargoTypeUtil {
 				if (slot instanceof ILoadSlot) {
 					// Might be shipped, depends on other parts of the cargo
 					type = DetailedCargoType.SHIPPED;
-				} else if (shippingHoursRestrictionProvider.isDivertable(portSlotProvider.getElement(slot))) {
-					return DetailedCargoType.DIVERTABLE_DES_PURCHASE;
+				} else if (shippingHoursRestrictionProvider.isDivertible(portSlotProvider.getElement(slot))) {
+					return DetailedCargoType.DIVERTIBLE_DES_PURCHASE;
 				} else {
 					return DetailedCargoType.DES_PURCHASE;
 				}
@@ -109,8 +109,8 @@ public class CargoTypeUtil {
 				if (slot instanceof IDischargeSlot) {
 					// Might be shipped, depends on other parts of the cargo
 					type = DetailedCargoType.SHIPPED;
-				} else if (shippingHoursRestrictionProvider.isDivertable(portSlotProvider.getElement(slot))) {
-					return DetailedCargoType.DIVERTABLE_FOB_SALE;
+				} else if (shippingHoursRestrictionProvider.isDivertible(portSlotProvider.getElement(slot))) {
+					return DetailedCargoType.DIVERTIBLE_FOB_SALE;
 				} else {
 					return DetailedCargoType.FOB_SALE;
 				}

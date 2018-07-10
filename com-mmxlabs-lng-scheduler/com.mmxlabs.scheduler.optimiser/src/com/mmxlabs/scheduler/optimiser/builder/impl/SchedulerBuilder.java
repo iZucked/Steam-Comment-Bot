@@ -1865,18 +1865,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setDivertableDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final List<ERouteOption> allowedRoutes) {
+	public void setDivertibleDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final List<ERouteOption> allowedRoutes) {
 		for (final ERouteOption route : allowedRoutes) {
 			assert route != null;
-			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(loadOption, route);
+			shippingHoursRestrictionProviderEditor.setDivertibleDESAllowedRoute(loadOption, route);
 		}
 	}
 
 	@Override
-	public void setDivertableFOBAllowedRoute(@NonNull final IDischargeOption fobSale, @NonNull final List<ERouteOption> allowedRoutes) {
+	public void setDivertibleFOBAllowedRoute(@NonNull final IDischargeOption fobSale, @NonNull final List<ERouteOption> allowedRoutes) {
 		for (final ERouteOption route : allowedRoutes) {
 			assert route != null;
-			shippingHoursRestrictionProviderEditor.setDivertableFOBAllowedRoute(fobSale, route);
+			shippingHoursRestrictionProviderEditor.setDivertibleFOBAllowedRoute(fobSale, route);
 		}
 	}
 

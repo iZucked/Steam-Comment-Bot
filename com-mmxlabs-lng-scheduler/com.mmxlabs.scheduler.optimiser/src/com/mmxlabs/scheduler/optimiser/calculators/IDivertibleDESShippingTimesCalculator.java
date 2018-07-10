@@ -13,12 +13,12 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
- * This is used to calculate the discharge/return time mainly for divertable DES cargoes
+ * This is used to calculate the discharge/return time mainly for divertible DES cargoes
  * 
  * @author achurchill
  * 
  */
-public interface IDivertableDESShippingTimesCalculator {
+public interface IDivertibleDESShippingTimesCalculator {
 
-	Pair<@NonNull Integer, @NonNull Integer> getDivertableDESTimes(@NonNull ILoadOption buyOption, @NonNull IDischargeOption sellOption, @NonNull IVessel nominatedVessel, @NonNull IResource resource);
+	Pair<@NonNull Integer, @NonNull Integer> getDivertibleDESTimes(@NonNull ILoadOption buyOption, @NonNull IDischargeOption sellOption, @NonNull IVessel nominatedVessel, @NonNull IResource resource);
 }

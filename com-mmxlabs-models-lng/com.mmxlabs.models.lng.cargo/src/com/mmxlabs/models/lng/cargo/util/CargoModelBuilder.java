@@ -134,11 +134,11 @@ public class CargoModelBuilder {
 		return slot;
 	}
 
-	public @NonNull LoadSlot createDESPurchase(@NonNull final String name, final boolean divertable, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public @NonNull LoadSlot createDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Double cv,
 			@Nullable final Vessel nominatedVessel) {
 
-		validatePortCapability(port, divertable ? PortCapability.LOAD : PortCapability.DISCHARGE);
+		validatePortCapability(port, divertible ? PortCapability.LOAD : PortCapability.DISCHARGE);
 
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		configureSlot(slot, name, windowStart, port, purchaseContract, entity, priceExpression);
@@ -147,11 +147,11 @@ public class CargoModelBuilder {
 		}
 
 		slot.setDESPurchase(true);
-		slot.setDivertible(divertable);
+		slot.setDivertible(divertible);
 		if (nominatedVessel != null) {
 			slot.setNominatedVessel(nominatedVessel);
-		} else if (divertable) {
-			// throw new IllegalArgumentException("Divertable DES Purchases need a nominated vessel");
+		} else if (divertible) {
+			// throw new IllegalArgumentException("Divertible DES Purchases need a nominated vessel");
 		}
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -203,10 +203,10 @@ public class CargoModelBuilder {
 		return slot;
 	}
 
-	public @NonNull DischargeSlot createFOBSale(@NonNull final String name, final boolean divertable, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public @NonNull DischargeSlot createFOBSale(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
 
-		if (!divertable) {
+		if (!divertible) {
 			validatePortCapability(port, PortCapability.LOAD);
 		}
 
@@ -214,11 +214,11 @@ public class CargoModelBuilder {
 		configureSlot(slot, name, windowStart, port, salesContract, entity, priceExpression);
 		if (nominatedVessel != null) {
 			slot.setNominatedVessel(nominatedVessel);
-		} else if (divertable) {
-			// throw new IllegalArgumentException("Divertable FOB sale need a nominated vessel");
+		} else if (divertible) {
+			// throw new IllegalArgumentException("Divertible FOB sale need a nominated vessel");
 		}
 		slot.setFOBSale(true);
-		slot.setDivertible(divertable);
+		slot.setDivertible(divertible);
 		cargoModel.getDischargeSlots().add(slot);
 
 		return slot;

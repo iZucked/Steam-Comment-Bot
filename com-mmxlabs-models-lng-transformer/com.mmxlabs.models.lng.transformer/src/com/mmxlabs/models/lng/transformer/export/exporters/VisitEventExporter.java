@@ -139,10 +139,10 @@ public class VisitEventExporter {
 				case DES_PURCHASE:
 					cargoType = CargoType.DES;
 					break;
-				case DIVERTABLE_DES_PURCHASE:
+				case DIVERTIBLE_DES_PURCHASE:
 					cargoType = CargoType.DES;
 					break;
-				case DIVERTABLE_FOB_SALE:
+				case DIVERTIBLE_FOB_SALE:
 					cargoType = CargoType.FOB;
 					break;
 				case FOB_SALE:

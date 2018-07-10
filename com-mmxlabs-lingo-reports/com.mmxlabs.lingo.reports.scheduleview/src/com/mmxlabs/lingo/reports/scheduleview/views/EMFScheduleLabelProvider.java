@@ -443,7 +443,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				eventText.append(" \n");
 
 				boolean checkLateness = true;
-				// Do not check divertable slots
+				// Do not check divertible slots
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
