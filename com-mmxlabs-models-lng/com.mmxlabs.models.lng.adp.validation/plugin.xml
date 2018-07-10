@@ -10,14 +10,9 @@
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category
-            id="com.mmxlabs.models.lng.adp.validation.base"
+            id="com.mmxlabs.models.lng.adp.validation.adp"
             mandatory="true"
             name="ADP Validation">
-      </category>
-      <category
-            id="com.mmxlabs.models.lng.adp.validation.optimisation"
-            mandatory="true"
-            name="ADP Validation (Optimisation Only)">
       </category>
       <constraintProvider
             cache="true">
@@ -25,7 +20,7 @@
                namespaceUri="http://www.mmxlabs.com/models/lng/adp/1/">
          </package>
          <constraints
-               categories=" com.mmxlabs.models.lng.adp.validation.base">
+               categories=" com.mmxlabs.models.lng.adp.validation.adp">
             <constraint
                   class="com.mmxlabs.models.lng.adp.validation.ShippingOptionConstraint"
                   id="com.mmxlabs.models.lng.adp.validation.ShippingOptionConstraint"
@@ -179,7 +174,7 @@
                namespaceUri="http://www.mmxlabs.com/models/lng/adp/1/">
          </package>
          <constraints
-               categories="com.mmxlabs.models.lng.adp.validation.optimisation">
+               categories="com.mmxlabs.models.lng.adp.validation.adp">
            
          </constraints>
       </constraintProvider>
@@ -192,7 +187,7 @@
                namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
          </package>
          <constraints
-               categories=" com.mmxlabs.models.lng.adp.validation.base">
+               categories=" com.mmxlabs.models.lng.adp.validation.adp">
             <constraint
                   class="com.mmxlabs.models.lng.adp.validation.ADPSlotConstraint"
                   id="com.mmxlabs.models.lng.adp.validation.ADPSlotConstraint"

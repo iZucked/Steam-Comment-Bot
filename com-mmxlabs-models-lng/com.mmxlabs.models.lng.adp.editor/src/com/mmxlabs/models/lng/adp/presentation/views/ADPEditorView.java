@@ -14,10 +14,17 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.validation.model.Category;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.IConstraintDescriptor;
+import org.eclipse.emf.validation.service.IConstraintFilter;
+import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -30,6 +37,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -38,13 +46,16 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.models.datetime.ui.formatters.YearMonthTextFormatter;
@@ -60,6 +71,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.scenario.LNGScenarioModelValidationTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -73,15 +85,21 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.ScenarioInstanceStatusProvider;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
+import com.mmxlabs.models.ui.validation.IValidationService;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
+import com.mmxlabs.models.ui.validation.impl.Multi;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
@@ -102,6 +120,8 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
+
 		editorData = new ADPEditorData(this);
 
 		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
@@ -265,7 +285,10 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 		{
 			btn_optimise = new Button(bottomBar, SWT.PUSH);
-			btn_optimise.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+			btn_optimise.setLayoutData(GridDataFactory.fillDefaults() //
+					.span(2, 1) //
+					.hint(100, SWT.DEFAULT) //
+					.create());
 			btn_optimise.setText("Optimise");
 			btn_optimise.addSelectionListener(new SelectionAdapter() {
 
@@ -322,6 +345,15 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 		@Override
 		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
+			RunnerHelper.syncExec(() -> {
+				btn_optimise.setImage(status.getSeverity() < IStatus.ERROR ? null : imgError);
+				btn_optimise.setEnabled(status.getSeverity() < IStatus.ERROR);
+				if (status.isOK()) {
+					btn_optimise.setToolTipText(null);
+				} else {
+					btn_optimise.setToolTipText(DialogValidationSupport.processMessages(status));
+				}
+			});
 			RunnerHelper.runNowOrAsync(() -> refreshValidation(status));
 		}
 	};
@@ -449,8 +481,16 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 		};
 	};
 
+	private Image imgError;
+
 	@Override
 	public void dispose() {
+
+		if (imgError != null) {
+			imgError.dispose();
+			imgError = null;
+		}
+
 		if (releaseAdaptersRunnable != null) {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
@@ -533,7 +573,7 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 						marketsModel.getFobSalesSpotMarket().getMarkets().add(m);
 					}
 				}
-				
+
 				{
 					final CharterInMarket defaultMarket;
 					defaultMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
@@ -587,6 +627,10 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 	}
 
 	private void optimiseScenario() {
+
+		if (!validateScenario(getScenarioDataProvider(), editorData.adpModel)) {
+			return;
+		}
 
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
 		try {
@@ -651,5 +695,87 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 		});
 
 		return formattedText;
+	}
+
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, ADPModel adpModel) {
+		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		validator.addConstraintFilter(new IConstraintFilter() {
+
+			@Override
+			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
+
+				for (final Category cat : constraint.getCategories()) {
+					if (cat.getId().endsWith(".base")) {
+						return true;
+					} else if (cat.getId().endsWith(".optimisation")) {
+						return true;
+					} else if (cat.getId().endsWith(".adp")) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+		});
+		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
+		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, false);
+			return helper.runValidation(validator, extraContext, new LNGScenarioModelValidationTransformer(), rootObject, adpModel);
+		});
+
+		if (status == null) {
+			return false;
+		}
+
+		if (status.isOK() == false) {
+
+			// See if this command was executed in the UI thread - if so fire up the dialog box.
+			if (Display.getCurrent() != null) {
+
+				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
+
+				// Wait for use to press a button before continuing.
+				dialog.setBlockOnOpen(true);
+
+				if (dialog.open() == Window.CANCEL) {
+					return false;
+				}
+			}
+		}
+
+		if (status.getSeverity() == IStatus.ERROR) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	protected ScenarioInstanceStatusProvider createScenarioValidationProvider(final ScenarioInstance instance) {
+		return new ScenarioInstanceStatusProvider(instance) {
+			@Override
+			public void fireStatusChanged(IStatus status) {
+				if (!(status instanceof Multi)) {
+					if (editorData.adpModel != null) {
+						status = ADPEditorValidatorUtil.mergeWithADPValidation(status, editorData.getScenarioDataProvider(), editorData.adpModel);
+					}
+				}
+				super.fireStatusChanged(status);
+			}
+
+			@Override
+			public IStatus getStatus() {
+				IStatus status = super.getStatus();
+
+				if (!(status instanceof Multi)) {
+					if (editorData.adpModel != null) {
+						status = ADPEditorValidatorUtil.mergeWithADPValidation(status, editorData.getScenarioDataProvider(), editorData.adpModel);
+					}
+				}
+				return status;
+			}
+		};
 	}
 }

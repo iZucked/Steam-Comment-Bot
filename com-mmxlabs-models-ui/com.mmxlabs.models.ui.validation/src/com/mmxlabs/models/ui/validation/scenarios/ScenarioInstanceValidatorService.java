@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IValidationRootObjectTransformerService;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
@@ -23,11 +24,8 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
- * The {@link ScenarioInstanceValidatorService} is an
- * {@link IScenarioServiceListener} implementation intended to be registered as
- * a OSGi service. It adds itself a a listener to {@link IScenarioService}s and
- * hooks in to the post load event. It will then attach a
- * {@link ScenarioInstanceValidator} to loaded {@link ScenarioInstance}s.
+ * The {@link ScenarioInstanceValidatorService} is an {@link IScenarioServiceListener} implementation intended to be registered as a OSGi service. It adds itself a a listener to
+ * {@link IScenarioService}s and hooks in to the post load event. It will then attach a {@link ScenarioInstanceValidator} to loaded {@link ScenarioInstance}s.
  * 
  * @author Simon Goodall
  * 
@@ -35,6 +33,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 public class ScenarioInstanceValidatorService implements IPostChangeHook {
 
 	private IValidationService validationService;
+	private IValidationRootObjectTransformerService objectTransformerService;
 
 	public void start() {
 		SSDataManager.Instance.registerChangeHook(this, SSDataManager.PostChangeHookPhase.VALIDATION);
@@ -52,6 +51,14 @@ public class ScenarioInstanceValidatorService implements IPostChangeHook {
 		this.validationService = null;
 	}
 
+	public void bindRootObjectTransformerService(final IValidationRootObjectTransformerService objectTransformerService) {
+		this.objectTransformerService = objectTransformerService;
+	}
+
+	public void unbindRootObjectTransformerService(final IValidationRootObjectTransformerService objectTransformerService) {
+		this.objectTransformerService = null;
+	}
+
 	@Override
 	public void changed(@NonNull final ScenarioModelRecord modelRecord) {
 
@@ -62,8 +69,17 @@ public class ScenarioInstanceValidatorService implements IPostChangeHook {
 			final IExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
 
 			final IValidationService pValidationService = validationService;
+			final IValidationRootObjectTransformerService pObjectTransformerService = objectTransformerService;
 			if (pValidationService != null) {
-				final IStatus status = pValidationService.runValidation(createValidator(), extraContext, Collections.singleton(scenarioDataProvider.getScenario()));
+
+				final IValidationRootObjectTransformerService transformer;
+				if (pObjectTransformerService != null) {
+					transformer = pObjectTransformerService;
+				} else {
+					transformer = root -> Collections.singleton(root);
+				}
+
+				final IStatus status = pValidationService.runValidation(createValidator(), extraContext, transformer, scenarioDataProvider.getScenario(), null);
 				if (status != null) {
 					modelRecord.setValidationStatus(status);
 				}

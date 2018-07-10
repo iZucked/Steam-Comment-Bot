@@ -32,7 +32,7 @@ public final class ADPEditorData implements IScenarioEditingLocation {
 		return scenarioModel;
 	}
 
-	public void setScenarioModel(LNGScenarioModel scenarioModel) {
+	public void setScenarioModel(final LNGScenarioModel scenarioModel) {
 		this.scenarioModel = scenarioModel;
 	}
 
@@ -40,13 +40,13 @@ public final class ADPEditorData implements IScenarioEditingLocation {
 		return adpModel;
 	}
 
-	public void setAdpModel(ADPModel adpModel) {
+	public void setAdpModel(final ADPModel adpModel) {
 		this.adpModel = adpModel;
 	}
 
 	public final Map<Object, IStatus> validationErrors = new HashMap<>();
 
-	public ADPEditorData(IScenarioEditingLocation scenarioEditingLocation) {
+	public ADPEditorData(final IScenarioEditingLocation scenarioEditingLocation) {
 		this.delegate = scenarioEditingLocation;
 
 	}
@@ -62,7 +62,7 @@ public final class ADPEditorData implements IScenarioEditingLocation {
 	}
 
 	@Override
-	public void pushExtraValidationContext(IExtraValidationContext context) {
+	public void pushExtraValidationContext(final IExtraValidationContext context) {
 		delegate.pushExtraValidationContext(context);
 	}
 
@@ -102,17 +102,17 @@ public final class ADPEditorData implements IScenarioEditingLocation {
 	}
 
 	@Override
-	public void setDisableCommandProviders(boolean disable) {
+	public void setDisableCommandProviders(final boolean disable) {
 		delegate.setDisableCommandProviders(disable);
 	}
 
 	@Override
-	public void setDisableUpdates(boolean disable) {
+	public void setDisableUpdates(final boolean disable) {
 		delegate.setDisableUpdates(disable);
 	}
 
 	@Override
-	public void setCurrentViewer(Viewer viewer) {
+	public void setCurrentViewer(final Viewer viewer) {
 		delegate.setCurrentViewer(viewer);
 
 	}
@@ -141,4 +141,7 @@ public final class ADPEditorData implements IScenarioEditingLocation {
 	public @NonNull IScenarioDataProvider getScenarioDataProvider() {
 		return delegate.getScenarioDataProvider();
 	}
+	
+	
+	
 }

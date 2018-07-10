@@ -70,7 +70,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.scenario.LNGScenarioModelTransformer;
+import com.mmxlabs.models.lng.scenario.LNGScenarioModelValidationTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -1185,7 +1185,7 @@ public final class OptimisationHelper {
 		final MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
-			return helper.runValidation(validator, extraContext, new LNGScenarioModelTransformer(), root, null);
+			return helper.runValidation(validator, extraContext, new LNGScenarioModelValidationTransformer(), root, null);
 		});
 
 		if (status == null) {

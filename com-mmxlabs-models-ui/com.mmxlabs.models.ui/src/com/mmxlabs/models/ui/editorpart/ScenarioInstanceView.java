@@ -163,7 +163,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		resetState();
 
 		if (instance != null) {
-			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(instance);
+			scenarioInstanceStatusProvider = createScenarioValidationProvider(instance);
 			this.scenarioInstance = instance;
 			this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 			this.modelReference = modelRecord.aquireReference("ScenarioInstanceView:1");
@@ -187,6 +187,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			valueProviderCache = null;
 			doDisplayScenarioInstance(null, null);
 		}
+	}
+
+	protected ScenarioInstanceStatusProvider createScenarioValidationProvider(final ScenarioInstance instance) {
+		return new ScenarioInstanceStatusProvider(instance);
 	}
 
 	private void resetState() {
