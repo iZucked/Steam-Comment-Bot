@@ -68,4 +68,6 @@ public interface IMMXImportContext extends IImportContext {
 	 */
 	void registerNamedObject(@NonNull NamedObject object);
 
+	void registerNamedObjectWithNames(@NonNull NamedObject object, String... names);
+
 }

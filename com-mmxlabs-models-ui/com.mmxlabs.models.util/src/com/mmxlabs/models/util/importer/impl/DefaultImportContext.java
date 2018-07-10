@@ -129,6 +129,16 @@ public class DefaultImportContext implements IMMXImportContext {
 	}
 
 	@Override
+	public void registerNamedObjectWithNames(final NamedObject object, final String... names) {
+
+		for (final String name : names) {
+			if (name.equalsIgnoreCase(name) == false) {
+				registerObjectWithName(object, name.toLowerCase());
+			}
+		}
+	}
+
+	@Override
 	public void doLater(final IDeferment deferment) {
 		if (running) {
 			reschedule.add(deferment);

@@ -128,7 +128,7 @@ public class PortModelImporter implements ISubmodelImporter {
 		final PortModel result = PortFactory.eINSTANCE.createPortModel();
 
 		final PortModel portModel = result;
-		final @NonNull List<Route> importedRoutes = new ArrayList<Route>();
+		final @NonNull List<Route> importedRoutes = new ArrayList<>();
 
 		if (inputs.containsKey(PORT_KEY)) {
 			final CSVReader reader = inputs.get(PORT_KEY);
@@ -164,9 +164,9 @@ public class PortModelImporter implements ISubmodelImporter {
 					location = PortFactory.eINSTANCE.createLocation();
 					port.setLocation(location);
 				}
-				// if (location.getMmxId() == null || location.getMmxId().isEmpty()) {
-				// location.setMmxId(port.getName());
-				// }
+				for (final String otherName : location.getOtherNames()) {
+					context.registerNamedObjectWithNames(port, otherName);
+				}
 			}
 		}
 		if (inputs.containsKey(PORT_GROUP_KEY)) {
