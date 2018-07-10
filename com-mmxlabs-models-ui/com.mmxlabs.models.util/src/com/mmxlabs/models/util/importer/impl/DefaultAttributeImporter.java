@@ -12,6 +12,8 @@ import java.time.YearMonth;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.NonNull;
@@ -93,8 +95,16 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 				return importNumberDataType(dt, attribute, value, context);
 			} else if (isDateDataType(dt)) {
 				return importDateDataType(dt, value, context);
-
 			} else {
+				// Special case for enums to permit case insensitive matching.
+				if (dt instanceof EEnum) {
+					final EEnum eEnum = (EEnum) dt;
+					for (final EEnumLiteral l : eEnum.getELiterals()) {
+						if (l.getLiteral().equalsIgnoreCase(value)) {
+							return l.getInstance();
+						}
+					}
+				}
 				return dt.getEPackage().getEFactoryInstance().createFromString(dt, value);
 			}
 		} catch (final Exception ex) {
@@ -114,7 +124,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		if (value == null) {
 			return "";
 		}
-		
+
 		if (dt == EcorePackage.Literals.ESTRING) {
 			return EncoderUtil.encode((String) value);
 		} else if (isNumberDataType(dt)) {
@@ -146,7 +156,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return false;
 	}
 
-	protected Object importNumberDataType(@NonNull final EDataType dt, @NonNull EAttribute attribute, @NonNull final String value, @NonNull final IMMXImportContext context) throws ParseException {
+	protected Object importNumberDataType(@NonNull final EDataType dt, @NonNull final EAttribute attribute, @NonNull final String value, @NonNull final IMMXImportContext context) throws ParseException {
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 		if (dt == EcorePackage.Literals.EINT || dt == EcorePackage.Literals.EINTEGER_OBJECT) {
@@ -160,7 +170,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return null;
 	}
 
-	protected String exportNumberDataType(@NonNull final EDataType dt, @NonNull EAttribute attribute, @NonNull final Object value, @NonNull final IMMXExportContext context) {
+	protected String exportNumberDataType(@NonNull final EDataType dt, @NonNull final EAttribute attribute, @NonNull final Object value, @NonNull final IMMXExportContext context) {
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 		if (dt == EcorePackage.Literals.EINT || dt == EcorePackage.Literals.EINTEGER_OBJECT) {
