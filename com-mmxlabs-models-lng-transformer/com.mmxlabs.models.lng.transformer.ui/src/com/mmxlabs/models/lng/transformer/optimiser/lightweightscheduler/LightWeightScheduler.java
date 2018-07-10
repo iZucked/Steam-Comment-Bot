@@ -75,35 +75,14 @@ public class LightWeightScheduler {
 
 	public ILightWeightOptimisationData calculateLightWeightOptimisationData(IVesselAvailability pnlVessel, LoadDischargePairValueCalculatorStep calculator, CleanableExecutorService executorService,
 			IProgressMonitor monitor) {
-		// (1) Identify LT slots
-		@NonNull
-		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
-
-		List<ILoadOption> longtermLoads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
-		List<IDischargeOption> longTermDischarges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
-
-		optimiserRecorder.init(longtermLoads, longTermDischarges);
-
-		// (2) Generate S2S bindings matrix for LT slots
-		// ExecutorService es = Executors.newSingleThreadExecutor();
-
-		calculator.run(pnlVessel, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), new ProfitAndLossExtractor(optimiserRecorder), executorService, monitor);
-
-		// now using our profits recorder we have a full matrix of constraints and pnl
-		Long[][] profit = optimiserRecorder.getProfit();
-
-		// LightWeightOptimiserHelper.produceDataForGurobi(optimiserRecorder, "/tmp/");
-
-		// (3) Optimise matrix
-		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
-				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(),
-				optimiserRecorder.getMinLoadGroupCount());
+		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
+		boolean[][] pairingsMatrix = getSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
 
 		if (pairingsMatrix == null) {
 			return null;
 		}
 
-		// (4) Export the pairings matrix to a Map
+		// Export the pairings matrix to a Map
 		Map<ILoadOption, IDischargeOption> pairingsMap = new LinkedHashMap<>();
 		for (ILoadOption load : optimiserRecorder.getSortedLoads()) {
 			pairingsMap.put(load, optimiserRecorder.getPairedDischarge(load, pairingsMatrix));
@@ -168,7 +147,7 @@ public class LightWeightScheduler {
 		}).toArray(LightWeightCargoDetails[]::new);
 
 		// Cargo PNL
-		long[] cargoPNL = LightWeightOptimiserHelper.getCargoPNL(profit, shippedCargoes, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pnlVessel, cargoDetails);
+		long[] cargoPNL = LightWeightOptimiserHelper.getCargoPNL(optimiserRecorder.getProfit(), shippedCargoes, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pnlVessel, cargoDetails);
 
 		// Min Travel Time
 		int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
@@ -198,6 +177,34 @@ public class LightWeightScheduler {
 				cargoCharterCostPerAvailability, cargoIndexes, eventIndexes);
 
 		return lightWeightOptimisationData;
+	}
+
+	/**
+	 * Get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
+	 * @param pnlVessel
+	 * @param calculator
+	 * @param executorService
+	 * @param monitor
+	 * @return
+	 */
+	public boolean[][] getSlotPairingMatrix(IVesselAvailability pnlVessel, LoadDischargePairValueCalculatorStep calculator, CleanableExecutorService executorService, IProgressMonitor monitor) {
+		// (1) Identify LT slots
+		@NonNull
+		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
+
+		List<ILoadOption> longtermLoads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
+		List<IDischargeOption> longTermDischarges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
+
+		optimiserRecorder.init(longtermLoads, longTermDischarges);
+
+		// (2) Generate Slot to Slot bindings matrix for LT slots
+		calculator.run(pnlVessel, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), new ProfitAndLossExtractor(optimiserRecorder), executorService, monitor);
+
+		// (3) Optimise matrix
+		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(),
+				optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCount(), optimiserRecorder.getMinDischargeGroupCount(), optimiserRecorder.getMaxLoadGroupCount(),
+				optimiserRecorder.getMinLoadGroupCount());
+		return pairingsMatrix;
 	}
 
 	private void printPairings(Map<ILoadOption, IDischargeOption> pairingsMap) {
