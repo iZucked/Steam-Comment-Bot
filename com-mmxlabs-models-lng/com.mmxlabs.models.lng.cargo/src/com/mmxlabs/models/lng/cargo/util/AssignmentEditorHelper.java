@@ -369,7 +369,7 @@ public class AssignmentEditorHelper {
 			} else {
 				final List<AVesselSet<Vessel>> slotVessels = slot.getAllowedVessels();
 				if (slotVessels == null || slotVessels.isEmpty()) {
-					return true;
+					return false;
 				}
 				allowedVessels.addAll(slotVessels);
 				return false;
