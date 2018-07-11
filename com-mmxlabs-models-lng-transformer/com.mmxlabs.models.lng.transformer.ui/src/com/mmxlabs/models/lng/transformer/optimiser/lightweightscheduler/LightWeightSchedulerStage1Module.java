@@ -31,7 +31,7 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
@@ -60,7 +60,7 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 
 	@Provides
 	@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT)
-	private int[] getDesiredNumberSlotsPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels, ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
+	private int[] getDesiredNumberSlotsPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels, IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
 		int[] desiredVesselCargoCount = new int[vessels.size()];
 		if (vesselSlotCountFitnessProvider != null) {
 			for (int i = 0; i < vessels.size(); i++) {
@@ -73,7 +73,7 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 	@Provides
 	@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT)
 	private long[] getDesiredNumberSlotsWeightingPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels,
-			ILongTermVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
+			IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
 		long[] vesselReward = new long[vessels.size()];
 		if (vesselSlotCountFitnessProvider != null) {
 			for (int i = 0; i < vessels.size(); i++) {

@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
 
-public class DefaultLongTermVesselSlotCountFitnessProvider implements ILongTermVesselSlotCountFitnessProviderEditor {
+public class DefaultLongTermVesselSlotCountFitnessProvider implements IVesselSlotCountFitnessProviderEditor {
 
 	Map<IVesselAvailability, Integer> vesselCountMap = new HashMap<>();
 	Map<IVesselAvailability, Long> vesselWeightMap = new HashMap<>();

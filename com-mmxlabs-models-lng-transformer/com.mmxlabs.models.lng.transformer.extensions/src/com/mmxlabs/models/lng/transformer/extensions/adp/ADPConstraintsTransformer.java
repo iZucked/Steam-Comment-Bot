@@ -37,7 +37,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ILongTermVesselSlotCountFitnessProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
@@ -51,7 +51,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 	private IMaxSlotConstraintDataProviderEditor maxSlotConstraintDataTransformer;
 
 	@Inject
-	private ILongTermVesselSlotCountFitnessProviderEditor longTermVesselSlotCountFitnessProviderEditor;
+	private IVesselSlotCountFitnessProviderEditor longTermVesselSlotCountFitnessProviderEditor;
 
 	@Inject
 	private IVesselProvider vesselProvider;

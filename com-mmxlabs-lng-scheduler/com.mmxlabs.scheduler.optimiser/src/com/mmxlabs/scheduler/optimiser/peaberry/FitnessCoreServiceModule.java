@@ -13,6 +13,7 @@ import com.google.inject.name.Names;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.VesselUtilisationFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 /**
@@ -33,5 +34,8 @@ public class FitnessCoreServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IFitnessCoreFactory.class)).annotatedWith(Names.named(SimilarityFitnessCoreFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(SimilarityFitnessCoreFactory.class).export());
+		
+		bind(TypeLiterals.export(IFitnessCoreFactory.class)).annotatedWith(Names.named(VesselUtilisationFitnessCoreFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(VesselUtilisationFitnessCoreFactory.class).export());
 	}
 }
