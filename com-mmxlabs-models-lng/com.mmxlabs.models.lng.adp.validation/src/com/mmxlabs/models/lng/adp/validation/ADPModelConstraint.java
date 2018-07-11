@@ -10,6 +10,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
+import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
@@ -70,6 +72,23 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
+			int slotCount = 0;
+			for (PurchaseContractProfile p : adpModel.getPurchaseContractProfiles()) {
+				if (!p.isEnabled()) {
+					continue;
+				}
+				for (SubContractProfile<?> sp : p.getSubProfiles()) {
+					slotCount += sp.getSlots().size();
+				}
+			}
+			if (slotCount == 0) {
+				factory.copyName() //
+						.withObjectAndFeature(adpModel, ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES) //
+						.withObjectAndFeature(adpModel, ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES) //
+						.withMessage("No slots to generate") //
+						.make(ctx, statuses);
+			}
+
 		}
 
 		return Activator.PLUGIN_ID;
