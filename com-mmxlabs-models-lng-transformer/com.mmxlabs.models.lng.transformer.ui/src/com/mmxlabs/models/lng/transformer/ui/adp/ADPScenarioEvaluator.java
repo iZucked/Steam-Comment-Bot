@@ -30,6 +30,7 @@ import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
@@ -124,7 +125,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 		CharterInMarket defaultMarket = createDefaultMarket(adpModel.getFleetProfile());
 
 		// Generate internal data
-		final SimpleCleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService();
 		try {
 
 			final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
