@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.port.importer;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
@@ -62,7 +62,9 @@ public class PortModelImporter implements ISubmodelImporter {
 	public static final String SUEZ_KEY = "SUEZ";
 	public static final String PANAMA_KEY = "PANAMA";
 	public static final String CANAL_PORTS_KEY = "CANALPORTS";
-	public static final HashMap<String, String> inputs = new LinkedHashMap<String, String>();
+	public static final String CONTINGENCY_MATRIX_KEY = "CONTINGENCY_MATRIX";
+
+	public static final Map<String, String> inputs = new LinkedHashMap<>();
 
 	static {
 		inputs.put(PORT_KEY, "Ports");
@@ -73,6 +75,9 @@ public class PortModelImporter implements ISubmodelImporter {
 		if (LicenseFeatures.isPermitted("features:panama-canal")) {
 			inputs.put(PANAMA_KEY, "Panama Distance Matrix");
 		}
+		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+			inputs.put(CONTINGENCY_MATRIX_KEY, "Contingency Matrix");
+		}
 	}
 
 	@Inject
@@ -81,13 +86,11 @@ public class PortModelImporter implements ISubmodelImporter {
 	private IClassImporter portImporter;
 	private IClassImporter portGroupImporter;
 	private final RouteImporter routeImporter = new RouteImporter();
+	private final ContingencyMatrixImporter contingencyMatrixImporter = new ContingencyMatrixImporter();
 
 	private final DefaultClassImporter canalPortsImporter = new DefaultClassImporter() {
 
-		protected boolean shouldImportReference(final org.eclipse.emf.ecore.EReference reference) {
-			return shouldExportFeature(reference);
-		};
-
+		@Override
 		protected boolean shouldExportFeature(final org.eclipse.emf.ecore.EStructuralFeature feature) {
 			if (feature == PortPackage.Literals.ROUTE__ROUTE_OPTION) {
 				return false;
@@ -212,6 +215,14 @@ public class PortModelImporter implements ISubmodelImporter {
 				}
 			}
 		}
+		if (LicenseFeatures.isPermitted("features:contingency-idle-time")) {
+			if (inputs.containsKey(CONTINGENCY_MATRIX_KEY)) {
+				final ContingencyMatrix contingencymatrix = contingencyMatrixImporter.importMatrix(inputs.get(CONTINGENCY_MATRIX_KEY), context);
+				if (contingencymatrix != null) {
+					portModel.setContingencyMatrix(contingencymatrix);
+				}
+			}
+		}
 
 		if (portModel != null) {
 
@@ -290,7 +301,9 @@ public class PortModelImporter implements ISubmodelImporter {
 
 	@Override
 	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
-		for (final Route r : ((PortModel) model).getRoutes()) {
+		PortModel portModel = (PortModel) model;
+
+		for (final Route r : portModel.getRoutes()) {
 			final Collection<Map<String, String>> result = routeImporter.exportRoute(r, context);
 			if (r.getRouteOption() == RouteOption.DIRECT) {
 				output.put(DISTANCES_KEY, result);
@@ -303,9 +316,12 @@ public class PortModelImporter implements ISubmodelImporter {
 				output.put(r.getName(), result);
 			}
 		}
-		output.put(PORT_KEY, portImporter.exportObjects(((PortModel) model).getPorts(), context));
-		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(((PortModel) model).getPortGroups(), context));
-		output.put(CANAL_PORTS_KEY, canalPortsImporter.exportObjects(((PortModel) model).getRoutes(), context));
+		output.put(PORT_KEY, portImporter.exportObjects(portModel.getPorts(), context));
+		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(portModel.getPortGroups(), context));
+		output.put(CANAL_PORTS_KEY, canalPortsImporter.exportObjects(portModel.getRoutes(), context));
+		if (portModel.getContingencyMatrix() != null) {
+			output.put(CONTINGENCY_MATRIX_KEY, contingencyMatrixImporter.exportMatrix(portModel.getContingencyMatrix(), context));
+		}
 	}
 
 	@Override

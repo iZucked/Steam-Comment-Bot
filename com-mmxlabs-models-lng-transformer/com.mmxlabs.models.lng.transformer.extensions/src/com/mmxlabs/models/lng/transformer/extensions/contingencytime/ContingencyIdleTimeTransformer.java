@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
@@ -51,7 +52,9 @@ public class ContingencyIdleTimeTransformer implements ISlotTransformer {
 
 	@Override
 	public void finishTransforming() {
-
+		if (!LicenseFeatures.isPermitted("features:contingency-idle-time")) {
+			return;
+		}
 		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
 		final ContingencyMatrix matrix = portModel.getContingencyMatrix();
 		if (matrix != null) {

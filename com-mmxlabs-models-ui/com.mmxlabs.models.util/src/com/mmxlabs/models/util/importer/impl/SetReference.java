@@ -34,6 +34,9 @@ public class SetReference implements IDeferment {
 		this.name = nameOrNames;
 		this.linkType = eReferenceLinkType;
 		this.problem = context.createProblem("Could not resolve " + linkType.getName() + " with name(s) " + nameOrNames, true, true, true);
+		if (nameOrNames == null) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	@Override

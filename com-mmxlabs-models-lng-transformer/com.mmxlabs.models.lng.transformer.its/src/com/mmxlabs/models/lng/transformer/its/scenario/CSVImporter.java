@@ -105,6 +105,7 @@ public class CSVImporter {
 		dataMap.put(PortModelImporter.SUEZ_KEY, createURL(urlRoot, "Suez Distance Matrix.csv"));
 		dataMap.put(PortModelImporter.PANAMA_KEY, createURL(urlRoot, "Panama Distance Matrix.csv"));
 		dataMap.put(PortModelImporter.CANAL_PORTS_KEY, createURL(urlRoot, "Canal Ports.csv"));
+		dataMap.put(PortModelImporter.CONTINGENCY_MATRIX_KEY, createURL(urlRoot, "Contingency Matrix.csv"));
 	}
 
 	public void importFleetData(@NonNull final String urlRoot) throws MalformedURLException {

@@ -27,6 +27,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -150,10 +151,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					};
 					addActionToMenu(canalEditor, menu);
 				}
-				// if (LicenseFeatures.isPermitted("features:contingency-time"))
-				{
+				if (LicenseFeatures.isPermitted("features:contingency-idle-time")) {
 					addActionToMenu(new ContingencyMatrixEditorAction(portModel), menu);
-
 				}
 			}
 		};
