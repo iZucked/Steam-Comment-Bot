@@ -62,7 +62,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 						noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, slot);
 					}
 
-					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
+					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
 					// filter the global list by the object's allowed values
 					if (allowedVessels != null) {
 
@@ -76,7 +76,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 						}
 					}
 					// create list to populate
-					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
+					final ArrayList<Pair<String, EObject>> result = new ArrayList<>();
 					final Pair<String, EObject> none = getEmptyObject();
 					if (none != null) {
 						result.add(0, none);
@@ -90,7 +90,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 						boolean display = !noVesselsAllowed && (
 						// show the option if the cargo allows this vessel-set
 						// (an empty list of allowed vessels means "all vessels")
-								expandedVessels.isEmpty() || expandedVessels.contains(vessel));
+						expandedVessels.isEmpty() || expandedVessels.contains(vessel));
 
 						// Always show the option if the option is the null option
 						// or the current value for the cargo is set to this vessel-set
@@ -110,7 +110,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 
 			// @Override
 			protected Pair<String, EObject> getEmptyObject() {
-				return new Pair<String, EObject>("<Unassigned>", null);
+				return new Pair<>("<Unassigned>", null);
 			}
 
 			@Override

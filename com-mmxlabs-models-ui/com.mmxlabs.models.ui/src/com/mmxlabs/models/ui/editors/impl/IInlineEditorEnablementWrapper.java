@@ -236,4 +236,4 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	public Object createLayoutData(final MMXRootObject root, final EObject value, final Control control) {
 		return wrapped.createLayoutData(root, value, control);
 	}
-};
+}
