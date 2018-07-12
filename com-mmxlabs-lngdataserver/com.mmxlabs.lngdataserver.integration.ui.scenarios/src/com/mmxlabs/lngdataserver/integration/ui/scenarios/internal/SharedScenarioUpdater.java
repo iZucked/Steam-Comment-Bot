@@ -372,8 +372,8 @@ public class SharedScenarioUpdater {
 			if (m != null) {
 				if (m.isAfter(lastModified)) {
 					final Pair<String, Instant> scenariosPair = client.getScenarios();
-					final List<Pair<String, String>> scenariosList = client.parseScenariosJSONData(scenariosPair.getFirst());
 					if (scenariosPair != null) {
+						final List<Pair<String, String>> scenariosList = client.parseScenariosJSONData(scenariosPair.getFirst());
 						update(scenariosList);
 						Files.write(scenariosPair.getFirst(), new File(basePath.getAbsolutePath() + "/scenarios.json"), Charsets.UTF_8);
 						lastModified = scenariosPair.getSecond();
