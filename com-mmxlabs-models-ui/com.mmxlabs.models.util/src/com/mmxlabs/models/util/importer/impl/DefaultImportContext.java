@@ -52,14 +52,11 @@ public class DefaultImportContext implements IMMXImportContext {
 	}
 
 	@Override
-	public NamedObject getNamedObject(@NonNull final String name, final EClass preferredType) {
-		final List<NamedObject> matches = namedObjects.get(name);
+	public NamedObject getNamedObject(@NonNull final String _name, final EClass preferredType) {
+		final String lowerName = _name.toLowerCase();
+		final List<NamedObject> matches = namedObjects.get(lowerName);
 		if (matches == null) {
-			log.warn("No objects with name " + name + " have been imported");
-			final String lowerName = name.toLowerCase();
-			if (!lowerName.equals(name)) {
-				return getNamedObject(lowerName, preferredType);
-			}
+			log.warn("No objects with name " + lowerName + " have been imported");
 			return null;
 		}
 		int match = Integer.MAX_VALUE;
@@ -79,15 +76,16 @@ public class DefaultImportContext implements IMMXImportContext {
 			for (final NamedObject o : matches) {
 				typeNames.add(o.eClass().getName());
 			}
-			log.warn("Could not locate instance of " + preferredType.getName() + " with name " + name + ". " + "Objects with that name are of types " + typeNames);
+			log.warn("Could not locate instance of " + preferredType.getName() + " with name " + lowerName + ". " + "Objects with that name are of types " + typeNames);
 		}
 
 		return best;
 	}
 
 	@Override
-	public Collection<NamedObject> getNamedObjects(final String name) {
-		final List<NamedObject> c = namedObjects.get(name);
+	public Collection<NamedObject> getNamedObjects(final String _name) {
+		final String lowerName = _name.toLowerCase();
+		final List<NamedObject> c = namedObjects.get(lowerName);
 		if (c == null) {
 			return Collections.emptySet();
 		}
@@ -112,29 +110,26 @@ public class DefaultImportContext implements IMMXImportContext {
 		}
 	}
 
-	private void registerObjectWithName(final NamedObject object, final String name) {
-		if (name == null) {
+	private void registerObjectWithName(final NamedObject object, final String _name) {
+		if (_name == null) {
 			return;
 		}
-		List<NamedObject> others = namedObjects.get(name);
+		final String lowerName = _name.toLowerCase();
+
+		List<NamedObject> others = namedObjects.get(lowerName);
 		if (others == null) {
-			others = new LinkedList<NamedObject>();
-			namedObjects.put(name, others);
+			others = new LinkedList<>();
+			namedObjects.put(lowerName, others);
 		}
 		others.add(object);
 
-		if (name.equals(name.toLowerCase()) == false) {
-			registerObjectWithName(object, name.toLowerCase());
-		}
 	}
 
 	@Override
 	public void registerNamedObjectWithNames(final NamedObject object, final String... names) {
 
 		for (final String name : names) {
-			if (name.equalsIgnoreCase(name) == false) {
-				registerObjectWithName(object, name.toLowerCase());
-			}
+			registerObjectWithName(object, name.toLowerCase());
 		}
 	}
 
@@ -173,7 +168,7 @@ public class DefaultImportContext implements IMMXImportContext {
 		running = false;
 	}
 
-	private final Stack<CSVReader> readerStack = new Stack<CSVReader>();
+	private final Stack<CSVReader> readerStack = new Stack<>();
 
 	@Override
 	public void pushReader(final CSVReader reader) {
@@ -319,7 +314,7 @@ public class DefaultImportContext implements IMMXImportContext {
 
 	@Override
 	public List<IImportProblem> getProblems() {
-		return new ArrayList<IImportProblem>(problems);
+		return new ArrayList<>(problems);
 	}
 
 	@Override
