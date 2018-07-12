@@ -97,7 +97,6 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							}
 							events.add(evt);
 						}
-						events.add(evt);
 					} else {
 						maxDate = f_maxDate.apply(maxDate, r.getEndDate());
 
@@ -286,7 +285,9 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						}
 					}
 					if (isLevel) {
+						int delta =  evt.getChangeQuantity() - inventoryLevel;
 						inventoryLevel = evt.getChangeQuantity();
+						evt.setChangeQuantity(delta);
 					} else {
 						inventoryLevel += evt.getChangeQuantity();
 					}
