@@ -87,12 +87,15 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 					maxDate = f_maxDate.apply(maxDate, r.getStartDate());
 
 					if (r.getPeriod() == InventoryFrequency.LEVEL || r.getPeriod() == InventoryFrequency.CARGO) {
-						final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
-						evt.setEvent(r);
-						evt.setDate(r.getStartDate().atStartOfDay());
-						evt.setChangeQuantity(r.getReliableVolume());
-						if (r.getPeriod() == InventoryFrequency.LEVEL) {
-							maxLevelDate = f_maxDate.apply(maxLevelDate, r.getStartDate());
+						if (r.getStartDate() != null) {
+							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
+							evt.setEvent(r);
+							evt.setDate(r.getStartDate().atStartOfDay());
+							evt.setChangeQuantity(r.getReliableVolume());
+							if (r.getPeriod() == InventoryFrequency.LEVEL) {
+								maxLevelDate = f_maxDate.apply(maxLevelDate, r.getStartDate());
+							}
+							events.add(evt);
 						}
 						events.add(evt);
 					} else {
