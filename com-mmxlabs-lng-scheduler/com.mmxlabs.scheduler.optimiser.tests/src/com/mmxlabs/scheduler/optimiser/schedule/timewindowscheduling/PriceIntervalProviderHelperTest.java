@@ -596,6 +596,7 @@ public class PriceIntervalProviderHelperTest {
 				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
 				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
 				bind(IVesselBaseFuelCalculator.class).toInstance(vesselBaseFuelCalculator);
+				bind(ICharterRateCalculator.class).toInstance(Mockito.mock(ICharterRateCalculator.class));
 			}
 		});
 
@@ -634,6 +635,7 @@ public class PriceIntervalProviderHelperTest {
 				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
 				bind(IVesselBaseFuelCalculator.class).toInstance(vbfc);
 				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
+				bind(ICharterRateCalculator.class).toInstance(Mockito.mock(ICharterRateCalculator.class));
 			}
 		});
 
