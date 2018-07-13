@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -70,6 +71,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		final IVesselProvider vp = Mockito.mock(IVesselProvider.class, "vp");
 		final INominatedVesselProvider nvp = Mockito.mock(INominatedVesselProvider.class, "nvp");
 		final IDivertibleDESShippingTimesCalculator divertibleDESShippingTimesCalculator = Mockito.mock(IDivertibleDESShippingTimesCalculator.class);
+		final IDivertibleFOBShippingTimesCalculator divertibleFOBShippingTimesCalculator = Mockito.mock(IDivertibleFOBShippingTimesCalculator.class);
 
 		// check empty behaviour
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -108,13 +110,13 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		Mockito.when(nvp.getNominatedVessel(Matchers.any(ISequenceElement.class))).thenReturn(vessel);
 
 		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = createChecker(portSlotProvider, actualsDataProvider, shippingHoursRestrictionProvider, vp, nvp,
-				divertibleDESShippingTimesCalculator);
+				divertibleDESShippingTimesCalculator, divertibleFOBShippingTimesCalculator);
 		return new Pair<>(new ISequenceElement[] { o1, o2 }, shippingHoursRestrictionChecker);
 	}
 
 	private ShippingHoursRestrictionChecker createChecker(final IPortSlotProviderEditor portSlotProvider, final IActualsDataProvider actualsDataProvider,
 			final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider, final IVesselProvider vp, final INominatedVesselProvider nvp,
-			final IDivertibleDESShippingTimesCalculator divertibleDESShippingTimesCalculator) {
+			final IDivertibleDESShippingTimesCalculator divertibleDESShippingTimesCalculator, IDivertibleFOBShippingTimesCalculator divertibleFOBShippingTimesCalculator) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -125,6 +127,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 				bind(IVesselProvider.class).toInstance(vp);
 				bind(INominatedVesselProvider.class).toInstance(nvp);
 				bind(IDivertibleDESShippingTimesCalculator.class).toInstance(divertibleDESShippingTimesCalculator);
+				bind(IDivertibleFOBShippingTimesCalculator.class).toInstance(divertibleFOBShippingTimesCalculator);
 			}
 
 			@Provides
