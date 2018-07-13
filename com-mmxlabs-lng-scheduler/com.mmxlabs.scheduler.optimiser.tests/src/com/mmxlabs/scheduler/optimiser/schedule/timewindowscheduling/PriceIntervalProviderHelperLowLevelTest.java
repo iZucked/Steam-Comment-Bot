@@ -18,6 +18,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
@@ -149,6 +150,7 @@ public class PriceIntervalProviderHelperLowLevelTest {
 				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
 				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
 				bind(IVesselBaseFuelCalculator.class).toInstance(Mockito.mock(IVesselBaseFuelCalculator.class));
+				bind(ICharterRateCalculator.class).toInstance(Mockito.mock(ICharterRateCalculator.class));
 			}
 		});
 
