@@ -10,9 +10,10 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -27,11 +28,14 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -39,8 +43,11 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.SpotMarketsProfile;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -65,7 +72,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulator;
-import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 
 public class MarketsPage extends ADPComposite {
 
@@ -181,102 +188,129 @@ public class MarketsPage extends ADPComposite {
 					}
 
 					final DetailToolbarManager buttonManager = new DetailToolbarManager(previewGroup, SWT.TOP);
+
 					{
-						final Action action = new Action("New FOB Purchase Market") {
+						final AbstractMenuLockableAction menu = new AbstractMenuLockableAction("New") {
+							@Override
+							public void runWithEvent(Event e) {
+								final IMenuCreator mc = getMenuCreator();
+								if (mc != null) {
+									final Menu m = mc.getMenu(buttonManager.getToolbarManager().getControl());
+									if (m != null) {
+										// position the menu below the drop down item
+										final Point point = buttonManager.getToolbarManager().getControl().toDisplay(new Point(e.x, e.y));
+										m.setLocation(point.x, point.y);
+										m.setVisible(true);
+										return;
+									}
+								}
+							}
 
 							@Override
-							public void run() {
-								SpotMarket market = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
-								market.setEnabled(true);
-								market.setPriceInfo(CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters());
-								CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
-								if (commercialModel.getEntities().size() == 1) {
-									market.setEntity(commercialModel.getEntities().get(0));
+							protected void populate(final Menu menu) {
+
+								{
+									final Action action = new Action("FOB Purchase") {
+
+										@Override
+										public void run() {
+											SpotMarket market = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
+											market.setEnabled(true);
+											market.setPriceInfo(CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters());
+											CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
+											if (commercialModel.getEntities().size() == 1) {
+												market.setEntity(commercialModel.getEntities().get(0));
+											}
+											Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getSpotMarketsProfile(),
+													ADPPackage.Literals.SPOT_MARKETS_PROFILE__SPOT_MARKETS, market);
+											editorData.getEditingDomain().getCommandStack().execute(c);
+											DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, market, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+											if (previewViewer != null) {
+												previewViewer.refresh();
+											}
+										}
+									};
+									final ActionContributionItem aci = new ActionContributionItem(action);
+									aci.fill(menu, -1);
 								}
-								Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getSpotMarketsProfile(), ADPPackage.Literals.SPOT_MARKETS_PROFILE__SPOT_MARKETS,
-										market);
-								editorData.getEditingDomain().getCommandStack().execute(c);
-								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, market, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
-								if (previewViewer != null) {
-									previewViewer.refresh();
+								{
+									final Action action = new Action("DES Purchase") {
+
+										@Override
+										public void run() {
+											SpotMarket market = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
+											market.setEnabled(true);
+											market.setPriceInfo(CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters());
+											CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
+											if (commercialModel.getEntities().size() == 1) {
+												market.setEntity(commercialModel.getEntities().get(0));
+											}
+											Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getSpotMarketsProfile(),
+													ADPPackage.Literals.SPOT_MARKETS_PROFILE__SPOT_MARKETS, market);
+											editorData.getEditingDomain().getCommandStack().execute(c);
+											DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, market, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+											if (previewViewer != null) {
+												previewViewer.refresh();
+											}
+										}
+									};
+									final ActionContributionItem aci = new ActionContributionItem(action);
+									aci.fill(menu, -1);
+								}
+								{
+									final Action action = new Action("DES Sale") {
+
+										@Override
+										public void run() {
+											SpotMarket market = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
+											market.setEnabled(true);
+											market.setPriceInfo(CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters());
+											CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
+											if (commercialModel.getEntities().size() == 1) {
+												market.setEntity(commercialModel.getEntities().get(0));
+											}
+											Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getSpotMarketsProfile(),
+													ADPPackage.Literals.SPOT_MARKETS_PROFILE__SPOT_MARKETS, market);
+											editorData.getEditingDomain().getCommandStack().execute(c);
+											DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, market, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+											if (previewViewer != null) {
+												previewViewer.refresh();
+											}
+										}
+									};
+									final ActionContributionItem aci = new ActionContributionItem(action);
+									aci.fill(menu, -1);
+								}
+								{
+									final Action action = new Action("FOB Sale") {
+
+										@Override
+										public void run() {
+											SpotMarket market = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
+											market.setEnabled(true);
+											market.setPriceInfo(CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters());
+											CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
+											if (commercialModel.getEntities().size() == 1) {
+												market.setEntity(commercialModel.getEntities().get(0));
+											}
+											Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getSpotMarketsProfile(),
+													ADPPackage.Literals.SPOT_MARKETS_PROFILE__SPOT_MARKETS, market);
+											editorData.getEditingDomain().getCommandStack().execute(c);
+											DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, market, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+											if (previewViewer != null) {
+												previewViewer.refresh();
+											}
+										}
+									};
+									final ActionContributionItem aci = new ActionContributionItem(action);
+									aci.fill(menu, -1);
 								}
 							}
 						};
-						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-						buttonManager.getToolbarManager().add(action);
+						menu.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+						buttonManager.getToolbarManager().add(menu);
 					}
-					{
-						final Action action = new Action("New DES Purchase Market") {
 
-							@Override
-							public void run() {
-								SpotMarket market = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
-								market.setEnabled(true);
-								market.setPriceInfo(CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters());
-								CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
-								if (commercialModel.getEntities().size() == 1) {
-									market.setEntity(commercialModel.getEntities().get(0));
-								}
-								Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getSpotMarketsProfile(), ADPPackage.Literals.SPOT_MARKETS_PROFILE__SPOT_MARKETS,
-										market);
-								editorData.getEditingDomain().getCommandStack().execute(c);
-								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, market, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
-								if (previewViewer != null) {
-									previewViewer.refresh();
-								}
-							}
-						};
-						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-						buttonManager.getToolbarManager().add(action);
-					}
-					{
-						final Action action = new Action("New DES Sale Market") {
-
-							@Override
-							public void run() {
-								SpotMarket market = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
-								market.setEnabled(true);
-								market.setPriceInfo(CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters());
-								CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
-								if (commercialModel.getEntities().size() == 1) {
-									market.setEntity(commercialModel.getEntities().get(0));
-								}
-								Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getSpotMarketsProfile(), ADPPackage.Literals.SPOT_MARKETS_PROFILE__SPOT_MARKETS,
-										market);
-								editorData.getEditingDomain().getCommandStack().execute(c);
-								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, market, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
-								if (previewViewer != null) {
-									previewViewer.refresh();
-								}
-							}
-						};
-						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-						buttonManager.getToolbarManager().add(action);
-					}
-					{
-						final Action action = new Action("New FOB Sale Market") {
-
-							@Override
-							public void run() {
-								SpotMarket market = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
-								market.setEnabled(true);
-								market.setPriceInfo(CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters());
-								CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
-								if (commercialModel.getEntities().size() == 1) {
-									market.setEntity(commercialModel.getEntities().get(0));
-								}
-								Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getSpotMarketsProfile(), ADPPackage.Literals.SPOT_MARKETS_PROFILE__SPOT_MARKETS,
-										market);
-								editorData.getEditingDomain().getCommandStack().execute(c);
-								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, market, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
-								if (previewViewer != null) {
-									previewViewer.refresh();
-								}
-							}
-						};
-						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-						buttonManager.getToolbarManager().add(action);
-					}
 					{
 
 						deleteSlotAction = new Action("Delete") {
