@@ -467,9 +467,12 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			adpModel.eAdapters().add(adpModelAdapter);
 			releaseAdaptersRunnable = () -> adpModel.eAdapters().remove(adpModelAdapter);
 		}
+		
+		statusChangedListener.onStatusChanged(getStatusProvider(), getStatusProvider().getStatus());
 	}
 
 	private final AdapterImpl adpModelAdapter = new AdapterImpl() {
+		@Override
 		public void notifyChanged(org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.isTouch()) {
 				return;
