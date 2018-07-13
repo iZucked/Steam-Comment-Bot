@@ -311,7 +311,7 @@ public class FleetPage extends ADPComposite {
 					eventsGroup.setLayout(new GridLayout(1, false));
 					eventsGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 
-					eventsGroup.setText("Events");
+					eventsGroup.setText("Charter-out events");
 					// toolkit.adapt(previewGroup);
 
 					if (editorData.getEditingDomain() != null) {
@@ -320,7 +320,7 @@ public class FleetPage extends ADPComposite {
 
 					final DetailToolbarManager buttonManager = new DetailToolbarManager(eventsGroup, SWT.TOP);
 
-					{
+				if (false)	{
 						final AbstractMenuLockableAction menu = new AbstractMenuLockableAction("New") {
 							@Override
 							public void runWithEvent(Event e) {
@@ -361,7 +361,7 @@ public class FleetPage extends ADPComposite {
 									final ActionContributionItem aci = new ActionContributionItem(action);
 									aci.fill(menu, -1);
 								}
-								{
+							if (false)	{
 									final Action action = new Action("Drydock") {
 
 										@Override
@@ -402,6 +402,26 @@ public class FleetPage extends ADPComposite {
 						};
 						menu.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 						buttonManager.getToolbarManager().add(menu);
+					} else {
+						final Action action = new Action("Charter out") {
+
+							@Override
+							public void run() {
+								final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
+								event.setAvailableHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+								event.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+
+								final Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getAdpModel().getFleetProfile(),
+										ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS, event);
+								editorData.getEditingDomain().getCommandStack().execute(c);
+								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, event, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+								if (eventsViewer != null) {
+									eventsViewer.refresh();
+								}
+							}
+						};
+						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+						buttonManager.getToolbarManager().add(action);
 					}
 
 					{
