@@ -11,11 +11,13 @@ import java.util.Map;
 import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.scenario.PhaseOptimisationData;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
@@ -39,6 +41,7 @@ import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.IThresholder;
@@ -170,6 +173,10 @@ public final class GeneralTestUtils {
 	private static LinearSimulatedAnnealingFitnessEvaluator createFitnessEvaluatorInstance(@NonNull final IFitnessCombiner fitnessCombiner, @NonNull final IThresholder thresholder,
 			@NonNull final IFitnessHelper fitnessHelper, @NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses,
 			IOptimisationData optimisationData) {
+		
+		
+		PhaseOptimisationData phaseOptimisationData = new PhaseOptimisationData();
+		
 		return Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -178,6 +185,8 @@ public final class GeneralTestUtils {
 				bind(IThresholder.class).toInstance(thresholder);
 				bind(IFitnessHelper.class).toInstance(fitnessHelper);
 				bind(IOptimisationData.class).toInstance(optimisationData);
+				bind(IOptionalElementsProvider.class).toInstance(Mockito.mock(IOptionalElementsProvider.class));
+				bind(IPhaseOptimisationData.class).toInstance(phaseOptimisationData);
 			}
 
 			@Provides

@@ -28,7 +28,7 @@ public final class PhaseOptimisationData implements IPhaseOptimisationData {
 
 	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
-	
+
 	private List<IResource> resources = new ArrayList<>();
 
 	private List<ISequenceElement> sequenceElements = new ArrayList<>();
@@ -36,9 +36,6 @@ public final class PhaseOptimisationData implements IPhaseOptimisationData {
 	private final List<@NonNull ISequenceElement> optionalList = new ArrayList<>();
 	private final List<@NonNull ISequenceElement> softRequiredList = new ArrayList<>();
 	private final IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<>();
-
-	public PhaseOptimisationData() {
-	}
 
 	@Override
 	public List<ISequenceElement> getSequenceElements() {

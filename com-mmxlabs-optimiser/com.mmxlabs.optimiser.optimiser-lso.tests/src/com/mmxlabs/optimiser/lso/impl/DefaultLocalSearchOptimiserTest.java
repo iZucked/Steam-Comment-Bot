@@ -48,41 +48,12 @@ public class DefaultLocalSearchOptimiserTest {
 		final IEvaluationProcessRegistry evaluationProcessRegistry = GeneralTestUtils.createEvaluationProcessRegistry();
 		final IEvaluatedStateConstraintCheckerRegistry evaluatedStateConstraintCheckerRegistry = GeneralTestUtils.createEvaluatedStateConstraintCheckerRegistry();
 
-		final List<String> constraintCheckerNames = new ArrayList<String>(checkerRegistry.getConstraintCheckerNames());
-		// final ConstraintCheckerInstantiator constraintCheckerInstantiator =
-		// new ConstraintCheckerInstantiator();
-		// final List<IConstraintChecker> constraintCheckers =
-		// constraintCheckerInstantiator
-		// .instantiateConstraintCheckers(checkerRegistry,
-		// constraintCheckerNames);
-		//
-		final List<String> fitnessComponentNames = new ArrayList<String>(fitnessRegistry.getFitnessComponentNames());
-		// final FitnessComponentInstantiator fitnessComponentInstantiator = new
-		// FitnessComponentInstantiator();
-		// final List<IFitnessComponent> fitnessComponents =
-		// fitnessComponentInstantiator
-		// .instantiateFitnesses(fitnessRegistry, fitnessComponentNames);
+		final List<String> constraintCheckerNames = new ArrayList<>(checkerRegistry.getConstraintCheckerNames());
+		final List<String> fitnessComponentNames = new ArrayList<>(fitnessRegistry.getFitnessComponentNames());
 
-		final List<String> evaluationProcessNames = new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames());
+		final List<String> evaluationProcessNames = new ArrayList<>(evaluationProcessRegistry.getEvaluationProcessNames());
 
-		final List<String> evaluatedStateConstraintCheckerNames = new ArrayList<String>(evaluatedStateConstraintCheckerRegistry.getConstraintCheckerNames());
-
-		//
-		// final LinearSimulatedAnnealingFitnessEvaluator
-		// fitnessEvaluator = TestUtils
-		// .createLinearSAFitnessEvaluator(1, numberOfIterations,
-		// fitnessComponents);
-		// final IMoveGenerator moveGenerator = TestUtils
-		// .createRandomMoveGenerator(random);
-		//
-		// final DefaultLocalSearchOptimiser lso = new
-		// DefaultLocalSearchOptimiser();
-
-		// lso.setNumberOfIterations(numberOfIterations);
-		// lso.setSequenceManipulator(new NullSequencesManipulator());
-		// lso.setMoveGenerator(moveGenerator);
-		// lso.setFitnessEvaluator(fitnessEvaluator);
-		// lso.setConstraintCheckers(constraintCheckers);
+		final List<String> evaluatedStateConstraintCheckerNames = new ArrayList<>(evaluatedStateConstraintCheckerRegistry.getConstraintCheckerNames());
 
 		// Create an initial set of sequences.
 

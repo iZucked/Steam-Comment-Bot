@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.IThresholder;
 
@@ -186,6 +187,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 				bind(IThresholder.class).toInstance(thresholder);
 				bind(IFitnessHelper.class).toInstance(fitnessHelper);
 				bind(IOptimisationData.class).toInstance(Mockito.mock(IOptimisationData.class));
+				bind(IPhaseOptimisationData.class).toInstance(Mockito.mock(IPhaseOptimisationData.class));
 			}
 
 			@Provides
