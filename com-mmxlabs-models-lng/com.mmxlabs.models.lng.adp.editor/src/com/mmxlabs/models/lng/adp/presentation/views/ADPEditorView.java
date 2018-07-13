@@ -348,10 +348,11 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			RunnerHelper.syncExec(() -> {
 				btn_optimise.setImage(status.getSeverity() < IStatus.ERROR ? null : imgError);
 				btn_optimise.setEnabled(status.getSeverity() < IStatus.ERROR);
+				// Large tooltip covers the button and stop user being able to press it.
 				if (status.isOK()) {
-					btn_optimise.setToolTipText(null);
+//					btn_optimise.setToolTipText(null);
 				} else {
-					btn_optimise.setToolTipText(DialogValidationSupport.processMessages(status));
+//					btn_optimise.setToolTipText(DialogValidationSupport.processMessages(status));
 				}
 			});
 			RunnerHelper.runNowOrAsync(() -> refreshValidation(status));
@@ -467,8 +468,11 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			adpModel.eAdapters().add(adpModelAdapter);
 			releaseAdaptersRunnable = () -> adpModel.eAdapters().remove(adpModelAdapter);
 		}
-		
-		statusChangedListener.onStatusChanged(getStatusProvider(), getStatusProvider().getStatus());
+
+		IStatusProvider statusProvider = getStatusProvider();
+		if (statusProvider != null) {
+			statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
+		}
 	}
 
 	private final AdapterImpl adpModelAdapter = new AdapterImpl() {
