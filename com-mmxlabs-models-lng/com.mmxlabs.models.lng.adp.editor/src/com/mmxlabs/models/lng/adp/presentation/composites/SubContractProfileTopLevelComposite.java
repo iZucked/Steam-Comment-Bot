@@ -199,7 +199,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 			// Initialise middle composite
 			constraintComposite = new Group(this, SWT.NONE);
-			constraintComposite.setText("Constraints");
+			constraintComposite.setText("Volume constraints");
 			toolkit.adapt(constraintComposite);
 
 			int numChildren = createChildConstraintsCompsiteSection(dialogContext, root, object, range, dbc, eClass, constraintComposite);

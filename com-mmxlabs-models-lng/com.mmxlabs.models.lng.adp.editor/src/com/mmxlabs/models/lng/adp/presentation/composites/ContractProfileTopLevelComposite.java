@@ -147,7 +147,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 		{
 			// Initialise middle composite
 			final Group constraintComposite = new Group(this, SWT.NONE);
-			constraintComposite.setText("Constraints");
+			constraintComposite.setText("Profile constraints");
 			toolkit.adapt(constraintComposite);
 			constraintComposite.setLayout(new GridLayout(1, false));
 			constraintComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
