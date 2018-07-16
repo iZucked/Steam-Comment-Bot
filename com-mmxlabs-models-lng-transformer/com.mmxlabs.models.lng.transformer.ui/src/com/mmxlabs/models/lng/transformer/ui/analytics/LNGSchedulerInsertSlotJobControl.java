@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -30,7 +31,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	private final IScenarioDataProvider scenarioDataProvider;
 
 	private final LNGSchedulerInsertSlotJobRunner runner;
-	private final ExecutorService executorService;
+	private final CleanableExecutorService executorService;
 	private SlotInsertionOptions slotInsertionPlan;
 	private String taskName;
 

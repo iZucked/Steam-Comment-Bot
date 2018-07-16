@@ -167,7 +167,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 										if (date == null) {
 											statuses.add(baseFactory.copyName() //
 													.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
-													.withMessage(String.format("There is no base fuel cost pricing data for curve %s", date.getYear(), index.getName())) //
+													.withMessage(String.format("There is no base fuel cost pricing data for curve %s", index.getName())) //
 													.make(ctx));
 										} else if (date.isAfter(key)) {
 											statuses.add(baseFactory.copyName() //

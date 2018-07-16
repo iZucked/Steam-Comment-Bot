@@ -65,7 +65,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 
 		g.setText("Contract");
 		g.setLayout(new FillLayout());
-		g.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING|GridData.FILL_HORIZONTAL));
+		g.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		// Create the directly rather than go through the registry. True indicates this is the top section. The bottom will be created later on
@@ -75,20 +75,20 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Initialise middle composite
 		middle = toolkit.createComposite(this);
+		int numChildren = createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, middle);
 
-		createChildComposites(root, object, eClass, middle);
 		// We know there are n slots, so n columns
-		middle.setLayout(new GridLayout(childObjects.size(), true));
+		middle.setLayout(new GridLayout(numChildren, true));
 		middle.setLayoutData(new GridData(GridData.FILL_BOTH));
 		middle.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
+
 		final Group g2 = new Group(this, SWT.NONE);
 
 		toolkit.adapt(g2);
 
 		g2.setText("Restrictions");
 		g2.setLayout(new FillLayout());
-		g2.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING|GridData.FILL_HORIZONTAL));
+		g2.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		bottomLevel = new ContractDetailComposite(g2, SWT.NONE, false, toolkit);
@@ -97,21 +97,15 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.display(dialogContext, root, object, range, dbc);
 		bottomLevel.display(dialogContext, root, object, range, dbc);
 
-		final Iterator<EReference> refs = childReferences.iterator();
-		final Iterator<IDisplayComposite> children = childComposites.iterator();
-
-		while (refs.hasNext()) {
-			children.next().display(dialogContext, root, (EObject) object.eGet(refs.next()), range, dbc);
-		}
-//
-//		// Overrides default layout factory so we get a single column rather than multiple columns and one row
+		//
+		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(3, false));
 	}
 
-//	 @Override
-//	 protected boolean shouldDisplay(final EReference ref) {
-//	 return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() || ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
-//	 }
+	// @Override
+	// protected boolean shouldDisplay(final EReference ref) {
+	// return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() || ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
+	// }
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {

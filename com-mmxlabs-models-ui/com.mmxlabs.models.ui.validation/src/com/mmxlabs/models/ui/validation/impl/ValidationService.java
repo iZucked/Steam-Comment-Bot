@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.models.ui.validation.impl;
 
-import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IValidationRootObjectTransformerService;
 import com.mmxlabs.models.ui.validation.IValidationService;
 
 /**
@@ -31,7 +33,7 @@ import com.mmxlabs.models.ui.validation.IValidationService;
 public class ValidationService implements IValidationService {
 	private static final Logger log = LoggerFactory.getLogger(ValidationService.class);
 
-	private ValidationInputService validationInputService = new ValidationInputService();
+	private final ValidationInputService validationInputService = new ValidationInputService();
 
 	private ThreadPoolExecutor executor;
 
@@ -39,7 +41,7 @@ public class ValidationService implements IValidationService {
 
 		// Previously we used Executors.newSingleThreadExecutor() to create our pool. However this tended to result in a memory leak with the ThreadLocals pool resulting out of EMF Validation. This
 		// implementation instead is permitted to kill off the thread when inactive thus freeing up the thread local pool, but still maintain the maximum of one thread.
-		executor = new ThreadPoolExecutor(1, 1, 1000L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()) {
+		executor = new ThreadPoolExecutor(1, 1, 1000L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>()) {
 			@Override
 			protected void finalize() {
 				shutdown();
@@ -54,14 +56,21 @@ public class ValidationService implements IValidationService {
 	}
 
 	@Override
-	public IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final Collection<? extends EObject> targets) {
-		final FutureTask<IStatus> validationTask = new FutureTask<IStatus>(new Callable<IStatus>() {
+	public IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final IValidationRootObjectTransformerService transformer, final EObject rootObject,
+			final EObject extraTarget) {
+		final List<EObject> targets = new LinkedList<>();
+		targets.addAll(transformer.getTargets(rootObject));
+		if (extraTarget != null) {
+			targets.add(extraTarget);
+		}
+		final FutureTask<IStatus> validationTask = new FutureTask<>(new Callable<IStatus>() {
 			@Override
 			public IStatus call() throws Exception {
 				try {
 					validationInputService.setExtraContext(extraContext);
+
 					return validator.validate(targets);
-				} catch (Throwable t) {
+				} catch (final Throwable t) {
 					t.printStackTrace();
 					throw t;
 				} finally {

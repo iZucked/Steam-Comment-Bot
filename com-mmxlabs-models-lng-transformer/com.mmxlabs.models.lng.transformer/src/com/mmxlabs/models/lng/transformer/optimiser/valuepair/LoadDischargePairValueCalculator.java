@@ -36,6 +36,8 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -87,6 +89,13 @@ public class LoadDischargePairValueCalculator {
 			if (checker instanceof TravelTimeConstraintChecker) {
 				((TravelTimeConstraintChecker) checker).setMaxLateness(0);
 			}
+			if (checker instanceof LadenIdleTimeConstraintChecker) {
+				((LadenIdleTimeConstraintChecker) checker).setMaxIdleTimeInHours(8);
+			}
+			if (checker instanceof LadenLegLimitConstraintChecker) {
+				((LadenLegLimitConstraintChecker) checker).setMaxLadenDuration(32 * 24);
+			}
+
 		}
 	}
 
@@ -131,15 +140,21 @@ public class LoadDischargePairValueCalculator {
 	private ISequences createSequences(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vesselAvailability) {
 		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
 		final IResource target_resource = vesselProvider.getResource(vesselAvailability);
+
+		boolean foundTarget = false;
 		for (final IResource resource : optimisationData.getResources()) {
 			final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(resource);
 
 			modifiableSequence.add(startEndRequirementProvider.getStartElement(resource));
 			if (resource == target_resource) {
+				foundTarget = true;
 				modifiableSequence.add(portSlotProvider.getElement(load));
 				modifiableSequence.add(portSlotProvider.getElement(discharge));
 			}
 			modifiableSequence.add(startEndRequirementProvider.getEndElement(resource));
+		}
+		if (!foundTarget) {
+			throw new IllegalStateException();
 		}
 
 		return sequences;
@@ -186,10 +201,10 @@ public class LoadDischargePairValueCalculator {
 			if (result != null) {
 				recorder.record(loadOption, dischargeOption, vesselAvailability, result);
 			} else {
-//				System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
+				// System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
 			}
 		} else {
-//			System.out.printf("Invalid Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
+			// System.out.printf("Invalid Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
 		}
 	}
 }

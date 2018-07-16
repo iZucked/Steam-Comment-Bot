@@ -22,6 +22,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.common.util.CheckedFunction;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -71,8 +73,8 @@ public class LNGScenarioRunnerCreator {
 		});
 	}
 
-	public static <E extends Exception> void withExecutorService(final CheckedConsumer<@NonNull ExecutorService, E> consumer) throws E {
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+	public static <E extends Exception> void withExecutorService(final CheckedConsumer<@NonNull CleanableExecutorService, E> consumer) throws E {
+		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 			consumer.accept(executorService);
 		} finally {

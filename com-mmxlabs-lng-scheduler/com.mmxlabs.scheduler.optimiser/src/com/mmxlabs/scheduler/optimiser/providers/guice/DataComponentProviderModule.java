@@ -61,8 +61,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProvider;
@@ -120,6 +124,8 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPermissionProviderEditor;
@@ -402,10 +408,19 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultAllowedVesselProvider.class).in(Singleton.class);
 		bind(IAllowedVesselProvider.class).to(DefaultAllowedVesselProvider.class);
 		bind(IAllowedVesselProviderEditor.class).to(DefaultAllowedVesselProvider.class);
-		
-		
+
 		bind(DefaultExtraIdleTimeProviderEditor.class).in(Singleton.class);
 		bind(IExtraIdleTimeProvider.class).to(DefaultExtraIdleTimeProviderEditor.class);
 		bind(IExtraIdleTimeProviderEditor.class).to(DefaultExtraIdleTimeProviderEditor.class);
+
+		// Lightweight/longterm/ADP
+		bind(DefaultMaxSlotConstraintDataProviderEditor.class).in(Singleton.class);
+		bind(IMaxSlotCountConstraintDataProvider.class).to(DefaultMaxSlotConstraintDataProviderEditor.class);
+		bind(IMaxSlotConstraintDataProviderEditor.class).to(DefaultMaxSlotConstraintDataProviderEditor.class);
+		
+		bind(DefaultLongTermVesselSlotCountFitnessProvider.class).in(Singleton.class);
+		bind(IVesselSlotCountFitnessProvider.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
+		bind(IVesselSlotCountFitnessProviderEditor.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
+
 	}
 }

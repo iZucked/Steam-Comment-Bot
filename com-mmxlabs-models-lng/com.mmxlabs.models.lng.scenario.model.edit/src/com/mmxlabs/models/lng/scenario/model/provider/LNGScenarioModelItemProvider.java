@@ -19,6 +19,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.actuals.ActualsFactory;
+import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -148,6 +149,7 @@ public class LNGScenarioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModels());
 		}
 		return childrenFeatures;
 	}
@@ -213,6 +215,7 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -259,6 +262,11 @@ public class LNGScenarioModelItemProvider
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel(),
 				 AnalyticsFactory.eINSTANCE.createAnalyticsModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModels(),
+				 ADPFactory.eINSTANCE.createADPModel()));
 	}
 
 }

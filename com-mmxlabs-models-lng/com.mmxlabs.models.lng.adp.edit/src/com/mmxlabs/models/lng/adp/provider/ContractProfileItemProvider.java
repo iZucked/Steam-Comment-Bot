@@ -183,7 +183,7 @@ public class ContractProfileItemProvider
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -222,8 +222,8 @@ public class ContractProfileItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ADPPackage.Literals.CONTRACT_PROFILE__DISTRIBUTION_MODEL);
 			childrenFeatures.add(ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES);
+			childrenFeatures.add(ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS);
 		}
 		return childrenFeatures;
 	}
@@ -286,8 +286,8 @@ public class ContractProfileItemProvider
 			case ADPPackage.CONTRACT_PROFILE__VOLUME_UNIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL:
 			case ADPPackage.CONTRACT_PROFILE__SUB_PROFILES:
+			case ADPPackage.CONTRACT_PROFILE__CONSTRAINTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -307,28 +307,18 @@ public class ContractProfileItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ADPPackage.Literals.CONTRACT_PROFILE__DISTRIBUTION_MODEL,
-				 ADPFactory.eINSTANCE.createCargoSizeDistributionModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.CONTRACT_PROFILE__DISTRIBUTION_MODEL,
-				 ADPFactory.eINSTANCE.createCargoNumberDistributionModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.CONTRACT_PROFILE__DISTRIBUTION_MODEL,
-				 ADPFactory.eINSTANCE.createCargoByQuarterDistributionModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.CONTRACT_PROFILE__DISTRIBUTION_MODEL,
-				 ADPFactory.eINSTANCE.createCargoIntervalDistributionModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES,
 				 ADPFactory.eINSTANCE.createSubContractProfile()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createMinCargoConstraint()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createMaxCargoConstraint()));
 	}
 
 	/**

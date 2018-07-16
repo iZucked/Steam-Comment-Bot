@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Display;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.integration.ports.PortsClient;
@@ -45,6 +46,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -105,7 +107,7 @@ public class ScenarioServicePublishAction {
 				// try (IScenarioDataProvider o_scenarioDataProvider =
 				// modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL"))
 				// {
-				final ExecutorService executorService = Executors.newSingleThreadExecutor();
+				final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 
 				try {
 					final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
@@ -188,7 +190,7 @@ public class ScenarioServicePublishAction {
 			SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
 				// response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, portsVersionUUID, fleetVersionUUID, pricingVersionUUID, distancesVersionUUID);
-				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, pricingVersionUUID, scenarioInstance.getName(), wrapMonitor(uploadMonitor));
+				response = baseCaseServiceClient.uploadBaseCase(tmpScenarioFile, scenarioInstance.getName(), pricingVersionUUID, wrapMonitor(uploadMonitor));
 			} catch (IOException e) {
 				System.out.println("Error uploading the basecase scenario");
 				e.printStackTrace();

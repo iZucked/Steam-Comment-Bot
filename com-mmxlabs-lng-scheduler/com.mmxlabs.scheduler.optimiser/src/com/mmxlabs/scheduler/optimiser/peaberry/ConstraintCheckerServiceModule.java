@@ -17,7 +17,9 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
@@ -102,8 +104,14 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(LadenLegLimitConstraintCheckerFactory.class.getCanonicalName()))
 				.toProvider(Peaberry.service(new LadenLegLimitConstraintCheckerFactory()).export());
 
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(LadenIdleTimeConstraintCheckerFactory.class.getCanonicalName()))
+		.toProvider(Peaberry.service(new LadenIdleTimeConstraintCheckerFactory()).export());
+
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(MinMaxVolumeConstraintCheckerFactory.class.getCanonicalName()))
 		.toProvider(Peaberry.service(new MinMaxVolumeConstraintCheckerFactory()).export());
+		
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(MinMaxSlotGroupConstraintCheckerFactory.class.getCanonicalName()))
+		.toProvider(Peaberry.service(new MinMaxSlotGroupConstraintCheckerFactory()).export());
 
 	}
 }

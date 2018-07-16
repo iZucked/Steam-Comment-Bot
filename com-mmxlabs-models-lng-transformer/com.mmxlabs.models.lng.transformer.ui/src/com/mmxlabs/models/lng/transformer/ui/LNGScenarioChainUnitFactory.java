@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
@@ -41,8 +42,8 @@ import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.ResetInitialSequencesUnit;
-import com.mmxlabs.models.lng.transformer.longterm.LightWeightSchedulerOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
+import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.LightWeightSchedulerOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser.LNGParallelHillClimbingOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser.LNGParallelMultiObjectiveOptimiserTransformerUnit;
@@ -60,18 +61,12 @@ public class LNGScenarioChainUnitFactory {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
-	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final @NonNull ExecutorService executorService,
+	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final @NonNull CleanableExecutorService executorService,
 			final @NonNull OptimisationStage template, final int jobCount, final @NonNull UserSettings userSettings) {
 		if (template instanceof CleanStateOptimisationStage) {
 			final CleanStateOptimisationStage stage = (CleanStateOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
-
-				final int[] seeds = new int[jobCount];
-				for (int i = 0; i < jobCount; ++i) {
-					seeds[i] = stage.getSeed() + i;
-				}
-
-				LightWeightSchedulerOptimiserUnit.chainPool(builder, scenarioToOptimiserBridge, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, seeds);
+				LightWeightSchedulerOptimiserUnit.chain(builder, scenarioToOptimiserBridge, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, stage.getSeed());
 			}
 			return null;
 		} else if (template instanceof MultiobjectiveSimilarityOptimisationStage) {

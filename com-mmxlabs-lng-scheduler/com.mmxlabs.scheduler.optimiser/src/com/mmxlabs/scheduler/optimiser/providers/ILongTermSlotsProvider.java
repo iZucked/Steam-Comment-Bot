@@ -25,6 +25,14 @@ public interface ILongTermSlotsProvider extends IDataComponentProvider {
 	 */
 	@NonNull
 	Collection<IPortSlot> getLongTermSlots();
+	
+	/**
+	 * Returns the long term slots
+	 * 
+	 * @return
+	 */
+	@NonNull
+	Collection<IPortSlot> getLongTermEvents();
 
 	/**
 	 * Is this slot a long term slot?

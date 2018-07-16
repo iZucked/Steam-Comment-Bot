@@ -83,6 +83,7 @@ public interface CargoIntervalDistributionModel extends DistributionModel {
 
 	/**
 	 * Returns the value of the '<em><b>Spacing</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Spacing</em>' attribute isn't clear,
@@ -92,7 +93,7 @@ public interface CargoIntervalDistributionModel extends DistributionModel {
 	 * @return the value of the '<em>Spacing</em>' attribute.
 	 * @see #setSpacing(int)
 	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getCargoIntervalDistributionModel_Spacing()
-	 * @model
+	 * @model default="1"
 	 * @generated
 	 */
 	int getSpacing();

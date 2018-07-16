@@ -15,8 +15,8 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
+import org.osgi.framework.FrameworkUtil;
 
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.internal.Activator;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -35,9 +35,14 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 	 * @param extraContext
 	 * @param statuses
 	 *            Output: Overriding methods should store any created validation status objects in this list.
-	 * @return The calling Plugin/Bundle ID
 	 */
-	protected abstract String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses);
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	}
+
+	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+		doValidate(ctx, extraContext, statuses);
+		return FrameworkUtil.getBundle(getClass()).getSymbolicName();
+	}
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
@@ -48,7 +53,7 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 		final IExtraValidationContext extraValidationContext;
 		if (activator == null) {
 			// For unit tests outside of OSGi
-			extraValidationContext = new DefaultExtraValidationContext((IScenarioDataProvider)null, false, false);
+			extraValidationContext = new DefaultExtraValidationContext((IScenarioDataProvider) null, false, false);
 		} else {
 			extraValidationContext = activator.getExtraValidationContext();
 		}

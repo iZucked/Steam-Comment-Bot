@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -34,7 +35,9 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 		if (enabled) {
 			reallyNotifyChanged(notification);
 		} else {
-			missedNotifications.add(notification);
+			synchronized (missedNotifications) {
+				missedNotifications.add(notification);
+			}
 		}
 	}
 
@@ -49,7 +52,9 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 
 	@Override
 	public void disable() {
-		missedNotifications.clear();
+		synchronized (missedNotifications) {
+			missedNotifications.clear();
+		}
 		enabled = false;
 	}
 
@@ -59,11 +64,19 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	}
 
 	public void enable(final boolean skip) {
-		if (!missedNotifications.isEmpty()) {
+		final List<Notification> copy;
+		synchronized (missedNotifications) {
 			if (!skip) {
-				missedNotifications(Collections.unmodifiableList(missedNotifications));
+				copy = new ArrayList<>(missedNotifications);
+			} else {
+				copy = Collections.emptyList();
 			}
 			missedNotifications.clear();
+		}
+		if (!copy.isEmpty()) {
+			if (!skip) {
+				missedNotifications(copy);
+			}
 		}
 		enabled = true;
 	}

@@ -91,7 +91,7 @@ public class DetailCompositeDialogUtil {
 
 		return editInlock(scenarioEditingLocation, () -> {
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-			final int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(target), scenarioEditingLocation.isLocked());
+			final int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(target), false);
 			if (ret != Window.OK) {
 				if (notOkRunnable != null) {
 					notOkRunnable.run();
@@ -112,7 +112,7 @@ public class DetailCompositeDialogUtil {
 			if (structuredSelection.size() == 1) {
 				return editInlock(scenarioEditingLocation, () -> {
 					final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-					final int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioEditingLocation.isLocked());
+					final int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), false);
 					if (ret != Window.OK) {
 						if (notOKAction != null) {
 							notOKAction.run();

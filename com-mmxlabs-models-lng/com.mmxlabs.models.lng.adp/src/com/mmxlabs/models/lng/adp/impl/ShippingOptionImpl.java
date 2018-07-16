@@ -32,12 +32,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ShippingOptionImpl#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ShippingOptionImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ShippingOptionImpl#getVessel <em>Vessel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.ShippingOptionImpl#getMaxLadenIdleDays <em>Max Laden Idle Days</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
+public class ShippingOptionImpl extends SubProfileConstraintImpl implements ShippingOption {
 	/**
 	 * The cached value of the '{@link #getVesselAssignmentType() <em>Vessel Assignment Type</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -79,26 +78,6 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 	protected Vessel vessel;
 
 	/**
-	 * The default value of the '{@link #getMaxLadenIdleDays() <em>Max Laden Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMaxLadenIdleDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int MAX_LADEN_IDLE_DAYS_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getMaxLadenIdleDays() <em>Max Laden Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMaxLadenIdleDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected int maxLadenIdleDays = MAX_LADEN_IDLE_DAYS_EDEFAULT;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -122,6 +101,7 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VesselAssignmentType getVesselAssignmentType() {
 		if (vesselAssignmentType != null && vesselAssignmentType.eIsProxy()) {
 			InternalEObject oldVesselAssignmentType = (InternalEObject)vesselAssignmentType;
@@ -148,6 +128,7 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVesselAssignmentType(VesselAssignmentType newVesselAssignmentType) {
 		VesselAssignmentType oldVesselAssignmentType = vesselAssignmentType;
 		vesselAssignmentType = newVesselAssignmentType;
@@ -160,6 +141,7 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -169,6 +151,7 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
@@ -181,6 +164,7 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -207,32 +191,12 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SHIPPING_OPTION__VESSEL, oldVessel, vessel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getMaxLadenIdleDays() {
-		return maxLadenIdleDays;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setMaxLadenIdleDays(int newMaxLadenIdleDays) {
-		int oldMaxLadenIdleDays = maxLadenIdleDays;
-		maxLadenIdleDays = newMaxLadenIdleDays;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SHIPPING_OPTION__MAX_LADEN_IDLE_DAYS, oldMaxLadenIdleDays, maxLadenIdleDays));
 	}
 
 	/**
@@ -251,8 +215,6 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 			case ADPPackage.SHIPPING_OPTION__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
-			case ADPPackage.SHIPPING_OPTION__MAX_LADEN_IDLE_DAYS:
-				return getMaxLadenIdleDays();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -273,9 +235,6 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 				return;
 			case ADPPackage.SHIPPING_OPTION__VESSEL:
 				setVessel((Vessel)newValue);
-				return;
-			case ADPPackage.SHIPPING_OPTION__MAX_LADEN_IDLE_DAYS:
-				setMaxLadenIdleDays((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -298,9 +257,6 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 			case ADPPackage.SHIPPING_OPTION__VESSEL:
 				setVessel((Vessel)null);
 				return;
-			case ADPPackage.SHIPPING_OPTION__MAX_LADEN_IDLE_DAYS:
-				setMaxLadenIdleDays(MAX_LADEN_IDLE_DAYS_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -319,8 +275,6 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 				return spotIndex != SPOT_INDEX_EDEFAULT;
 			case ADPPackage.SHIPPING_OPTION__VESSEL:
 				return vessel != null;
-			case ADPPackage.SHIPPING_OPTION__MAX_LADEN_IDLE_DAYS:
-				return maxLadenIdleDays != MAX_LADEN_IDLE_DAYS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -334,11 +288,9 @@ public class ShippingOptionImpl extends EObjectImpl implements ShippingOption {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (spotIndex: ");
 		result.append(spotIndex);
-		result.append(", maxLadenIdleDays: ");
-		result.append(maxLadenIdleDays);
 		result.append(')');
 		return result.toString();
 	}

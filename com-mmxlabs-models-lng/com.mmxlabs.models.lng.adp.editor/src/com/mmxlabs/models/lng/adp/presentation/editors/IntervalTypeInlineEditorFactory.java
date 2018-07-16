@@ -23,6 +23,9 @@ public class IntervalTypeInlineEditorFactory implements IInlineEditorFactory {
 		for (final IntervalType type : IntervalType.values()) {
 			final String name;
 			switch (type) {
+			case YEARLY:
+				name = "Yearly";
+				break;
 			case MONTHLY:
 				name = "Monthly";
 				break;
@@ -31,6 +34,9 @@ public class IntervalTypeInlineEditorFactory implements IInlineEditorFactory {
 				break;
 			case WEEKLY:
 				name = "Weekly";
+				break;
+			case BIMONTHLY:
+				name = "Bimonthly";
 				break;
 			default:
 				name = type.getName();

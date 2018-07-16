@@ -31,24 +31,21 @@ public class EObjectTableViewerValidationSupport {
 
 		@Override
 		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-			// final HashSet<Object> updates = new HashSet<Object>();
-			// for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
-			// if (!entry.getValue().isOK())
-			// updates.add(entry.getKey());
-			// }
-
 			validationErrors.clear();
-			ViewerHelper.runIfViewerValid(viewer, false, (viewer) -> processStatus(status, true));
+			ViewerHelper.runIfViewerValid(viewer, false, viewer -> {
+				processStatus(status, true);
+				viewer.refresh(true);
+			});
 		}
 	};
 
 	private IStatusProvider statusProvider;
 
-	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
+	private final Map<Object, IStatus> validationErrors = new HashMap<>();
 
 	/**
 	 */
-	public EObjectTableViewerValidationSupport(ColumnViewer viewer) {
+	public EObjectTableViewerValidationSupport(final ColumnViewer viewer) {
 		this.viewer = viewer;
 	}
 
@@ -89,7 +86,7 @@ public class EObjectTableViewerValidationSupport {
 		}
 	}
 
-	public EObject getElementForValidationTarget(EObject e) {
+	public EObject getElementForValidationTarget(final EObject e) {
 		return e;
 	}
 
@@ -127,9 +124,9 @@ public class EObjectTableViewerValidationSupport {
 	}
 
 	public void dispose() {
-		validationErrors.clear();
 		if (statusProvider != null) {
 			statusProvider.removeStatusChangedListener(statusChangedListener);
 		}
+		validationErrors.clear();
 	}
 }

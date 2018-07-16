@@ -23,26 +23,6 @@ import org.eclipse.emf.common.util.Enumerator;
  */
 public enum IntervalType implements Enumerator {
 	/**
-	 * The '<em><b>QUARTERLY</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #QUARTERLY_VALUE
-	 * @generated
-	 * @ordered
-	 */
-	QUARTERLY(0, "QUARTERLY", "QUARTERLY"),
-
-	/**
-	 * The '<em><b>MONTHLY</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #MONTHLY_VALUE
-	 * @generated
-	 * @ordered
-	 */
-	MONTHLY(1, "MONTHLY", "MONTHLY"),
-
-	/**
 	 * The '<em><b>WEEKLY</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -50,22 +30,54 @@ public enum IntervalType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	WEEKLY(2, "WEEKLY", "WEEKLY");
+	WEEKLY(0, "WEEKLY", "WEEKLY"), /**
+	 * The '<em><b>MONTHLY</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #MONTHLY_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	MONTHLY(1, "MONTHLY", "MONTHLY"), /**
+	 * The '<em><b>BIMONTHLY</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #BIMONTHLY_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	BIMONTHLY(2, "BIMONTHLY", "BIMONTHLY"), /**
+	 * The '<em><b>QUARTERLY</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #QUARTERLY_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	QUARTERLY(3, "QUARTERLY", "QUARTERLY"), /**
+	 * The '<em><b>YEARLY</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #YEARLY_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	YEARLY(4, "YEARLY", "YEARLY");
 
 	/**
-	 * The '<em><b>QUARTERLY</b></em>' literal value.
+	 * The '<em><b>WEEKLY</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>QUARTERLY</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>WEEKLY</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #QUARTERLY
+	 * @see #WEEKLY
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int QUARTERLY_VALUE = 0;
+	public static final int WEEKLY_VALUE = 0;
 
 	/**
 	 * The '<em><b>MONTHLY</b></em>' literal value.
@@ -83,19 +95,49 @@ public enum IntervalType implements Enumerator {
 	public static final int MONTHLY_VALUE = 1;
 
 	/**
-	 * The '<em><b>WEEKLY</b></em>' literal value.
+	 * The '<em><b>BIMONTHLY</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>WEEKLY</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>BIMONTHLY</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #WEEKLY
+	 * @see #BIMONTHLY
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int WEEKLY_VALUE = 2;
+	public static final int BIMONTHLY_VALUE = 2;
+
+	/**
+	 * The '<em><b>QUARTERLY</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>QUARTERLY</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #QUARTERLY
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int QUARTERLY_VALUE = 3;
+
+	/**
+	 * The '<em><b>YEARLY</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>YEARLY</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #YEARLY
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int YEARLY_VALUE = 4;
 
 	/**
 	 * An array of all the '<em><b>Interval Type</b></em>' enumerators.
@@ -105,9 +147,11 @@ public enum IntervalType implements Enumerator {
 	 */
 	private static final IntervalType[] VALUES_ARRAY =
 		new IntervalType[] {
-			QUARTERLY,
-			MONTHLY,
 			WEEKLY,
+			MONTHLY,
+			BIMONTHLY,
+			QUARTERLY,
+			YEARLY,
 		};
 
 	/**
@@ -164,9 +208,11 @@ public enum IntervalType implements Enumerator {
 	 */
 	public static IntervalType get(int value) {
 		switch (value) {
-			case QUARTERLY_VALUE: return QUARTERLY;
-			case MONTHLY_VALUE: return MONTHLY;
 			case WEEKLY_VALUE: return WEEKLY;
+			case MONTHLY_VALUE: return MONTHLY;
+			case BIMONTHLY_VALUE: return BIMONTHLY;
+			case QUARTERLY_VALUE: return QUARTERLY;
+			case YEARLY_VALUE: return YEARLY;
 		}
 		return null;
 	}
@@ -209,6 +255,7 @@ public enum IntervalType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getValue() {
 	  return value;
 	}
@@ -218,6 +265,7 @@ public enum IntervalType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 	  return name;
 	}
@@ -227,6 +275,7 @@ public enum IntervalType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLiteral() {
 	  return literal;
 	}

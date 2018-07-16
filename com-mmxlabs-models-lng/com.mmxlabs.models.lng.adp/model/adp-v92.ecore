@@ -3,12 +3,42 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="adp" nsURI="http://www.mmxlabs.com/models/lng/adp/1/" nsPrefix="lng.adp">
   <eClassifiers xsi:type="ecore:EClass" name="ADPModel">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="yearStart" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="yearEnd" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="purchaseContractProfiles"
         upperBound="-1" eType="#//PurchaseContractProfile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="salesContractProfiles"
         upperBound="-1" eType="#//SalesContractProfile" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="bindingRules" upperBound="-1"
-        eType="#//BindingRule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="spotMarketsProfile" eType="#//SpotMarketsProfile"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fleetProfile" eType="#//FleetProfile"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="#//ADPModelResult"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FleetProfile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailabilities" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeEnabledCharterMarkets"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+        eType="#//FleetConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvents" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultVesselCharterInRate"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+          <details key="type" value="charter"/>
+        </eAnnotations>
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ContractProfile">
     <eTypeParameters name="T">
@@ -18,16 +48,23 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="custom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="distributionModel" eType="#//DistributionModel"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="#//LNGVolumeUnit"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subProfiles" upperBound="-1"
         containment="true">
       <eGenericType eClassifier="#//SubContractProfile">
         <eTypeArguments eTypeParameter="#//ContractProfile/T"/>
       </eGenericType>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+        eType="#//ProfileConstraint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpotMarketsProfile">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeEnabledSpotMarkets"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="spotMarkets" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PurchaseContractProfile">
     <eGenericSuperTypes eClassifier="#//ContractProfile">
@@ -45,8 +82,6 @@
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//ContractType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="distributionModel" eType="#//DistributionModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotTemplateId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -54,15 +89,20 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="shippingDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="customAttribs" eType="#//CustomSubProfileAttributes"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1"
+        containment="true">
       <eGenericType eTypeParameter="#//SubContractProfile/T"/>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+        eType="#//SubProfileConstraint" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CustomSubProfileAttributes" abstract="true"
       interface="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="DistributionModel" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DistributionModel" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumePerCargo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="#//LNGVolumeUnit"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CargoSizeDistributionModel" eSuperTypes="#//DistributionModel">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="exact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CargoNumberDistributionModel" eSuperTypes="#//DistributionModel">
@@ -77,30 +117,37 @@
   <eClassifiers xsi:type="ecore:EClass" name="CargoIntervalDistributionModel" eSuperTypes="#//DistributionModel">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="intervalType" eType="#//IntervalType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spacing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spacing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PreDefinedDistributionModel" eSuperTypes="#//DistributionModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dates" upperBound="-1"
+        eType="#//PreDefinedDate" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowSize" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="##,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowSizeUnits" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"
+        defaultValueLiteral="MONTHS">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="##,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PreDefinedDate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="IntervalType">
-    <eLiterals name="QUARTERLY"/>
+    <eLiterals name="WEEKLY"/>
     <eLiterals name="MONTHLY" value="1"/>
-    <eLiterals name="WEEKLY" value="2"/>
+    <eLiterals name="BIMONTHLY" value="2" literal="BIMONTHLY"/>
+    <eLiterals name="QUARTERLY" value="3"/>
+    <eLiterals name="YEARLY" value="4"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BindingRule">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="profile">
-      <eGenericType eClassifier="#//ContractProfile">
-        <eTypeArguments/>
-      </eGenericType>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subProfile">
-      <eGenericType eClassifier="#//SubContractProfile">
-        <eTypeArguments/>
-      </eGenericType>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="flowType" eType="#//FlowType"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="shippingOption" eType="#//ShippingOption"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FlowType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowType" eSuperTypes="#//SubProfileConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="SupplyFromFlow" eSuperTypes="#//FlowType"/>
   <eClassifiers xsi:type="ecore:EClass" name="DeliverToFlow" eSuperTypes="#//FlowType"/>
   <eClassifiers xsi:type="ecore:EClass" name="SupplyFromProfileFlow" eSuperTypes="#//SupplyFromFlow">
@@ -133,10 +180,49 @@
   <eClassifiers xsi:type="ecore:EClass" name="DeliverToSpotFlow" eSuperTypes="#//DeliverToFlow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="market" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ShippingOption">
+  <eClassifiers xsi:type="ecore:EClass" name="ProfileVesselRestriction" eSuperTypes="#//SubProfileConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ShippingOption" eSuperTypes="#//SubProfileConstraint">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAssignmentType" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxLadenIdleDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProfileConstraint" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubProfileConstraint" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MinCargoConstraint" eSuperTypes="#//ProfileConstraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCargoes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intervalType" eType="#//IntervalType"
+        defaultValueLiteral="YEARLY"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaxCargoConstraint" eSuperTypes="#//ProfileConstraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCargoes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intervalType" eType="#//IntervalType"
+        defaultValueLiteral="YEARLY"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ADPModelResult">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+      <details key="nonUniqueChildren" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraSlots" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LNGVolumeUnit">
+    <eLiterals name="M3" literal="m3"/>
+    <eLiterals name="MT" value="1" literal="MT"/>
+    <eLiterals name="MMBTU" value="2" literal="MMBTU"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FleetConstraint" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TargetCargoesOnVesselConstraint" eSuperTypes="#//FleetConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetNumberOfCargoes"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intervalType" eType="#//IntervalType"
+        defaultValueLiteral="YEARLY"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
 </ecore:EPackage>

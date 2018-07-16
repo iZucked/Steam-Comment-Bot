@@ -74,7 +74,6 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		// // START CUSTOM SECTION
 		// Initialise right composite
 		right = toolkit.createComposite(containerComposite);
-		createChildComposites(root, object, eClass, right);
 		// Single column
 		final GridLayout layout = GridLayoutFactory.swtDefaults() //
 				.numColumns(1) //
@@ -88,17 +87,19 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-		final Iterator<IDisplayComposite> children = childComposites.iterator();
-		final Iterator<EObject> childObjectsItr = childObjects.iterator();
-
-		while (childObjectsItr.hasNext()) {
-			EObject next = childObjectsItr.next();
-			if (!(next instanceof BallastBonusContract)) {
-				children.next().display(dialogContext, root, next, range, dbc);
-			}
-		}
-
-		// Overrides default layout factory so we get two columns columns
+		createDefaultChildCompsiteSection(dialogContext, root, object, range, dbc, eClass, right);
+//		int numChildren = createChildComposites(root, object, eClass, right);
+//		final Iterator<IDisplayComposite> children = childComposites.iterator();
+//		final Iterator<EObject> childObjectsItr = childObjects.iterator();
+//
+//		while (childObjectsItr.hasNext()) {
+//			EObject next = childObjectsItr.next();
+//			if (!(next instanceof BallastBonusContract)) {
+//				children.next().display(dialogContext, root, next, range, dbc);
+//			}
+//		}
+//
+//		// Overrides default layout factory so we get two columns columns
 		containerComposite.setLayout(new GridLayout(2, true));
 
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);

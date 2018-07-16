@@ -55,8 +55,8 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TimeSortConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TimeSortConstraintChecker.class);
 
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event1, event2), null));
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event2, event1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
 		});
 	}
 
@@ -85,8 +85,8 @@ public class TimeSortConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TimeSortConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TimeSortConstraintChecker.class);
 
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event1, event2), null));
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event2, event1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1), null));
 		});
 	}
 }

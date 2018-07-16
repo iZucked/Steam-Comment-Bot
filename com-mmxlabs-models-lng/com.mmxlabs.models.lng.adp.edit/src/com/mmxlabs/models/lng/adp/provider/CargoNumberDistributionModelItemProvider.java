@@ -65,6 +65,8 @@ public class CargoNumberDistributionModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addVolumePerCargoPropertyDescriptor(object);
+			addVolumeUnitPropertyDescriptor(object);
 			addNumberOfCargoesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -93,6 +95,50 @@ public class CargoNumberDistributionModelItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Volume Per Cargo feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumePerCargoPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DistributionModel_volumePerCargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumePerCargo_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DistributionModel_volumeUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DistributionModel_volumeUnit_feature", "_UI_DistributionModel_type"),
+				 ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CargoNumberDistributionModel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -112,7 +158,7 @@ public class CargoNumberDistributionModelItemProvider
 	@Override
 	public String getText(Object object) {
 		CargoNumberDistributionModel cargoNumberDistributionModel = (CargoNumberDistributionModel)object;
-		return getString("_UI_CargoNumberDistributionModel_type") + " " + cargoNumberDistributionModel.getNumberOfCargoes();
+		return getString("_UI_CargoNumberDistributionModel_type") + " " + cargoNumberDistributionModel.getVolumePerCargo();
 	}
 	
 
@@ -128,6 +174,8 @@ public class CargoNumberDistributionModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoNumberDistributionModel.class)) {
+			case ADPPackage.CARGO_NUMBER_DISTRIBUTION_MODEL__VOLUME_PER_CARGO:
+			case ADPPackage.CARGO_NUMBER_DISTRIBUTION_MODEL__VOLUME_UNIT:
 			case ADPPackage.CARGO_NUMBER_DISTRIBUTION_MODEL__NUMBER_OF_CARGOES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

@@ -79,8 +79,16 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createADPModelAdapter();
 			}
 			@Override
+			public Adapter caseFleetProfile(FleetProfile object) {
+				return createFleetProfileAdapter();
+			}
+			@Override
 			public <T extends Slot> Adapter caseContractProfile(ContractProfile<T> object) {
 				return createContractProfileAdapter();
+			}
+			@Override
+			public Adapter caseSpotMarketsProfile(SpotMarketsProfile object) {
+				return createSpotMarketsProfileAdapter();
 			}
 			@Override
 			public Adapter casePurchaseContractProfile(PurchaseContractProfile object) {
@@ -119,8 +127,12 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createCargoIntervalDistributionModelAdapter();
 			}
 			@Override
-			public Adapter caseBindingRule(BindingRule object) {
-				return createBindingRuleAdapter();
+			public Adapter casePreDefinedDistributionModel(PreDefinedDistributionModel object) {
+				return createPreDefinedDistributionModelAdapter();
+			}
+			@Override
+			public Adapter casePreDefinedDate(PreDefinedDate object) {
+				return createPreDefinedDateAdapter();
 			}
 			@Override
 			public Adapter caseFlowType(FlowType object) {
@@ -151,8 +163,40 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createDeliverToSpotFlowAdapter();
 			}
 			@Override
+			public Adapter caseProfileVesselRestriction(ProfileVesselRestriction object) {
+				return createProfileVesselRestrictionAdapter();
+			}
+			@Override
 			public Adapter caseShippingOption(ShippingOption object) {
 				return createShippingOptionAdapter();
+			}
+			@Override
+			public Adapter caseProfileConstraint(ProfileConstraint object) {
+				return createProfileConstraintAdapter();
+			}
+			@Override
+			public Adapter caseSubProfileConstraint(SubProfileConstraint object) {
+				return createSubProfileConstraintAdapter();
+			}
+			@Override
+			public Adapter caseMinCargoConstraint(MinCargoConstraint object) {
+				return createMinCargoConstraintAdapter();
+			}
+			@Override
+			public Adapter caseMaxCargoConstraint(MaxCargoConstraint object) {
+				return createMaxCargoConstraintAdapter();
+			}
+			@Override
+			public Adapter caseADPModelResult(ADPModelResult object) {
+				return createADPModelResultAdapter();
+			}
+			@Override
+			public Adapter caseFleetConstraint(FleetConstraint object) {
+				return createFleetConstraintAdapter();
+			}
+			@Override
+			public Adapter caseTargetCargoesOnVesselConstraint(TargetCargoesOnVesselConstraint object) {
+				return createTargetCargoesOnVesselConstraintAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -189,6 +233,20 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.FleetProfile <em>Fleet Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.FleetProfile
+	 * @generated
+	 */
+	public Adapter createFleetProfileAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.ContractProfile <em>Contract Profile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -199,6 +257,20 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createContractProfileAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.SpotMarketsProfile <em>Spot Markets Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.SpotMarketsProfile
+	 * @generated
+	 */
+	public Adapter createSpotMarketsProfileAdapter() {
 		return null;
 	}
 
@@ -329,16 +401,30 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.BindingRule <em>Binding Rule</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.PreDefinedDistributionModel <em>Pre Defined Distribution Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.adp.BindingRule
+	 * @see com.mmxlabs.models.lng.adp.PreDefinedDistributionModel
 	 * @generated
 	 */
-	public Adapter createBindingRuleAdapter() {
+	public Adapter createPreDefinedDistributionModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.PreDefinedDate <em>Pre Defined Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.PreDefinedDate
+	 * @generated
+	 */
+	public Adapter createPreDefinedDateAdapter() {
 		return null;
 	}
 
@@ -441,6 +527,20 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.ProfileVesselRestriction <em>Profile Vessel Restriction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.ProfileVesselRestriction
+	 * @generated
+	 */
+	public Adapter createProfileVesselRestrictionAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.ShippingOption <em>Shipping Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -451,6 +551,104 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createShippingOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.ProfileConstraint <em>Profile Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.ProfileConstraint
+	 * @generated
+	 */
+	public Adapter createProfileConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.SubProfileConstraint <em>Sub Profile Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.SubProfileConstraint
+	 * @generated
+	 */
+	public Adapter createSubProfileConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MinCargoConstraint <em>Min Cargo Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.MinCargoConstraint
+	 * @generated
+	 */
+	public Adapter createMinCargoConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MaxCargoConstraint <em>Max Cargo Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.MaxCargoConstraint
+	 * @generated
+	 */
+	public Adapter createMaxCargoConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.ADPModelResult <em>Model Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.ADPModelResult
+	 * @generated
+	 */
+	public Adapter createADPModelResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.FleetConstraint <em>Fleet Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.FleetConstraint
+	 * @generated
+	 */
+	public Adapter createFleetConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint <em>Target Cargoes On Vessel Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint
+	 * @generated
+	 */
+	public Adapter createTargetCargoesOnVesselConstraintAdapter() {
 		return null;
 	}
 

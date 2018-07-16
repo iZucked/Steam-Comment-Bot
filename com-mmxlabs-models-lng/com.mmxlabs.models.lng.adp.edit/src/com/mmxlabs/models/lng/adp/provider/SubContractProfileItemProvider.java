@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -70,12 +71,9 @@ public class SubContractProfileItemProvider
 
 			addNamePropertyDescriptor(object);
 			addContractTypePropertyDescriptor(object);
-			addTotalVolumePropertyDescriptor(object);
-			addVolumeUnitPropertyDescriptor(object);
 			addSlotTemplateIdPropertyDescriptor(object);
 			addNominatedVesselPropertyDescriptor(object);
 			addShippingDaysPropertyDescriptor(object);
-			addSlotsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -116,50 +114,6 @@ public class SubContractProfileItemProvider
 				 getString("_UI_SubContractProfile_contractType_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_contractType_feature", "_UI_SubContractProfile_type"),
 				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONTRACT_TYPE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Total Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addTotalVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SubContractProfile_totalVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_totalVolume_feature", "_UI_SubContractProfile_type"),
-				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__TOTAL_VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Volume Unit feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVolumeUnitPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SubContractProfile_volumeUnit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_volumeUnit_feature", "_UI_SubContractProfile_type"),
-				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__VOLUME_UNIT,
 				 true,
 				 false,
 				 false,
@@ -235,28 +189,6 @@ public class SubContractProfileItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Slots feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSlotsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SubContractProfile_slots_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_slots_feature", "_UI_SubContractProfile_type"),
-				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -270,6 +202,8 @@ public class SubContractProfileItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL);
 			childrenFeatures.add(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS);
+			childrenFeatures.add(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS);
+			childrenFeatures.add(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS);
 		}
 		return childrenFeatures;
 	}
@@ -327,14 +261,14 @@ public class SubContractProfileItemProvider
 		switch (notification.getFeatureID(SubContractProfile.class)) {
 			case ADPPackage.SUB_CONTRACT_PROFILE__NAME:
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONTRACT_TYPE:
-			case ADPPackage.SUB_CONTRACT_PROFILE__TOTAL_VOLUME:
-			case ADPPackage.SUB_CONTRACT_PROFILE__VOLUME_UNIT:
 			case ADPPackage.SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID:
 			case ADPPackage.SUB_CONTRACT_PROFILE__SHIPPING_DAYS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
+			case ADPPackage.SUB_CONTRACT_PROFILE__SLOTS:
+			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -371,6 +305,76 @@ public class SubContractProfileItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL,
 				 ADPFactory.eINSTANCE.createCargoIntervalDistributionModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL,
+				 ADPFactory.eINSTANCE.createPreDefinedDistributionModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
+				 CargoFactory.eINSTANCE.createLoadSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
+				 CargoFactory.eINSTANCE.createDischargeSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
+				 CargoFactory.eINSTANCE.createSpotLoadSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
+				 CargoFactory.eINSTANCE.createSpotDischargeSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createFlowType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createSupplyFromFlow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createDeliverToFlow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createSupplyFromProfileFlow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createDeliverToProfileFlow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createSupplyFromSpotFlow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createDeliverToSpotFlow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createProfileVesselRestriction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createShippingOption()));
 	}
 
 	/**

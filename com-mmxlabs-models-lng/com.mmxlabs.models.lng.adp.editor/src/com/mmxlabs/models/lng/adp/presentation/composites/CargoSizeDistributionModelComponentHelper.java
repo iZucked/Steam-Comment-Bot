@@ -68,16 +68,7 @@ public class CargoSizeDistributionModelComponentHelper extends BaseComponentHelp
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_cargoSizeEditor(detailComposite, topClass);
 		add_exactEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the cargoSize feature on CargoSizeDistributionModel
-	 *
-	 * @generated
-	 */
-	protected void add_cargoSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CARGO_SIZE_DISTRIBUTION_MODEL__CARGO_SIZE));
 	}
 	/**
 	 * Create the editor for the exact feature on CargoSizeDistributionModel

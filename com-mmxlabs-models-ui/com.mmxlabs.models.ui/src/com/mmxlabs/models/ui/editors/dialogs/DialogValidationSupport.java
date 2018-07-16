@@ -89,7 +89,7 @@ public class DialogValidationSupport {
 			// Should this be OK or CANCEL/ERROR?
 			return Status.OK_STATUS;
 		}
-		return validationService.runValidation(validator, validationContext, pVvalidationTargets);
+		return validationService.runValidation(validator, validationContext, (root) -> pVvalidationTargets, validationContext.getRootObject(), null);
 	}
 
 	public DefaultExtraValidationContext getValidationContext() {
@@ -104,11 +104,11 @@ public class DialogValidationSupport {
 		this.validationTargets = validationTargets;
 	}
 
-	public void processStatus(@Nullable final IStatus status, @NonNull final Map<Object, IStatus> validationErrors) {
+	public static void processStatus(@Nullable final IStatus status, @NonNull final Map<Object, IStatus> validationErrors) {
 		processStatus(status, validationErrors, new DefaultValidationTargetTransformer());
 	}
 
-	public void processStatus(@Nullable final IStatus status, @NonNull final Map<Object, IStatus> validationErrors, @NonNull final IValiationTargetTransformer vtt) {
+	public static void processStatus(@Nullable final IStatus status, @NonNull final Map<Object, IStatus> validationErrors, @NonNull final IValiationTargetTransformer vtt) {
 		if (status == null) {
 			return;
 		}
@@ -129,7 +129,7 @@ public class DialogValidationSupport {
 		}
 	}
 
-	private void setStatus(@Nullable final Object e, @NonNull final IStatus s, @NonNull final Map<Object, IStatus> validationErrors) {
+	private static void setStatus(@Nullable final Object e, @NonNull final IStatus s, @NonNull final Map<Object, IStatus> validationErrors) {
 		if (e == null) {
 			return;
 		}

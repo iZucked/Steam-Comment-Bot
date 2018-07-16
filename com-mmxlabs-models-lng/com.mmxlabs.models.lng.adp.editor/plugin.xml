@@ -24,6 +24,7 @@
       </editor>
    </extension>
  
+ 
 <extension
       point="com.mmxlabs.models.ui.componenthelpers">
    <componentHelper
@@ -123,10 +124,52 @@
          modelClass="com.mmxlabs.models.lng.adp.ShippingOption">
    </componentHelper>
    <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.BindingRuleComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.BindingRuleComponentHelper"
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MaxCargoConstraintComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MaxCargoConstraintComponentHelper"
          inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.BindingRule">
+         modelClass="com.mmxlabs.models.lng.adp.MaxCargoConstraint">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.PreDefinedDistributionModelComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.PreDefinedDistributionModelComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.PreDefinedDistributionModel">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.FleetProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.FleetProfileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.FleetProfile">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.DistributionModelComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.DistributionModelComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.DistributionModel">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MinCargoConstraintComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MinCargoConstraintComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.MinCargoConstraint">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.ProfileVesselRestrictionComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.ProfileVesselRestrictionComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.ProfileVesselRestriction">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.TargetCargoesOnVesselConstraintComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.TargetCargoesOnVesselConstraintComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SpotMarketsProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.SpotMarketsProfileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.SpotMarketsProfile">
    </componentHelper>
 </extension>
 <extension
@@ -138,15 +181,21 @@
          inheritable="true">
    </displayCompositeFactory>
    <displayCompositeFactory
-         eClass="com.mmxlabs.models.lng.adp.BindingRule"
-         factory="com.mmxlabs.models.lng.adp.presentation.composites.BindingRuleDisplayCompositeFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.BindingRuleDisplayCompositeFactory"
-         inheritable="true">
-   </displayCompositeFactory>
-   <displayCompositeFactory
          eClass="com.mmxlabs.models.lng.adp.SubContractProfile"
          factory="com.mmxlabs.models.lng.adp.presentation.composites.SubProfileDisplayCompositeFactory"
          id="com.mmxlabs.models.lng.adp.presentation.composites.SubProfileDisplayCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.FleetProfile"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.FleetProfileTopLevelCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.FleetProfileTopLevelCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.DistributionModel"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.DistributionModelTopLevelCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.DistributionModelTopLevelCompositeFactory"
          inheritable="true">
    </displayCompositeFactory>
 </extension>
@@ -162,9 +211,25 @@
          </EDataTypeIs>
       </FeatureAnyOf>
    </editorFactory>
+   <editorFactory
+         factoryClass="com.mmxlabs.models.lng.adp.presentation.editors.ProfileVolumeUnitInlineEditorFactory"
+         id="ProfileVolumeUnitInlineEditorFactory">
+      <FeatureAnyOf>
+         <EDataTypeIs
+               EDataTypeName="LNGVolumeUnit"
+               EDataTypeURI="http://www.mmxlabs.com/models/lng/adp/1/">
+         </EDataTypeIs>
+      </FeatureAnyOf>
+   </editorFactory>
 </extension>
 <extension
       point="com.mmxlabs.models.ui.valueproviders">
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory2"
+         ownerEClass="com.mmxlabs.models.lng.adp.ProfileVesselRestriction"
+         referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+   </valueProvider>
    <valueProvider
          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselAssignmentTypeValueProviderFactory"
          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselAssignmentTypeValueProviderFactory"
@@ -192,12 +257,6 @@
          referenceEClass="com.mmxlabs.models.lng.adp.SubContractProfile">
    </valueProvider>
    <valueProvider
-         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory"
-         ownerEClass="com.mmxlabs.models.lng.adp.ShippingOption"
-         referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
-   </valueProvider>
-   <valueProvider
          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory"
          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory.Supply"
          ownerEClass="com.mmxlabs.models.lng.adp.SupplyFromSpotFlow"
@@ -209,6 +268,12 @@
          ownerEClass="com.mmxlabs.models.lng.adp.DeliverToSpotFlow"
          referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
    </valueProvider>
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory3"
+         ownerEClass="com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint"
+         referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+   </valueProvider>
 </extension>
 <extension
       point="com.mmxlabs.license.features.PluginXMLEnablement">
@@ -216,6 +281,15 @@
          feature="adp"
          plugin.xml="adp.plugin.xml">
    </PluginXMLEnablement>
+</extension>
+<extension
+      point="org.eclipse.ui.views">
+   <view
+         class="com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView"
+         id="com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView"
+         name="ADP"
+         restorable="true">
+   </view>
 </extension>
 
 </plugin>

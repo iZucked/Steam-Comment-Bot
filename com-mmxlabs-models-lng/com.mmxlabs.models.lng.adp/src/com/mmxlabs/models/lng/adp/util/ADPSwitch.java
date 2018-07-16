@@ -79,9 +79,21 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ADPPackage.FLEET_PROFILE: {
+				FleetProfile fleetProfile = (FleetProfile)theEObject;
+				T1 result = caseFleetProfile(fleetProfile);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ADPPackage.CONTRACT_PROFILE: {
 				ContractProfile<?> contractProfile = (ContractProfile<?>)theEObject;
 				T1 result = caseContractProfile(contractProfile);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.SPOT_MARKETS_PROFILE: {
+				SpotMarketsProfile spotMarketsProfile = (SpotMarketsProfile)theEObject;
+				T1 result = caseSpotMarketsProfile(spotMarketsProfile);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -145,15 +157,23 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.BINDING_RULE: {
-				BindingRule bindingRule = (BindingRule)theEObject;
-				T1 result = caseBindingRule(bindingRule);
+			case ADPPackage.PRE_DEFINED_DISTRIBUTION_MODEL: {
+				PreDefinedDistributionModel preDefinedDistributionModel = (PreDefinedDistributionModel)theEObject;
+				T1 result = casePreDefinedDistributionModel(preDefinedDistributionModel);
+				if (result == null) result = caseDistributionModel(preDefinedDistributionModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.PRE_DEFINED_DATE: {
+				PreDefinedDate preDefinedDate = (PreDefinedDate)theEObject;
+				T1 result = casePreDefinedDate(preDefinedDate);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ADPPackage.FLOW_TYPE: {
 				FlowType flowType = (FlowType)theEObject;
 				T1 result = caseFlowType(flowType);
+				if (result == null) result = caseSubProfileConstraint(flowType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -161,6 +181,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				SupplyFromFlow supplyFromFlow = (SupplyFromFlow)theEObject;
 				T1 result = caseSupplyFromFlow(supplyFromFlow);
 				if (result == null) result = caseFlowType(supplyFromFlow);
+				if (result == null) result = caseSubProfileConstraint(supplyFromFlow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -168,6 +189,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				DeliverToFlow deliverToFlow = (DeliverToFlow)theEObject;
 				T1 result = caseDeliverToFlow(deliverToFlow);
 				if (result == null) result = caseFlowType(deliverToFlow);
+				if (result == null) result = caseSubProfileConstraint(deliverToFlow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -176,6 +198,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				T1 result = caseSupplyFromProfileFlow(supplyFromProfileFlow);
 				if (result == null) result = caseSupplyFromFlow(supplyFromProfileFlow);
 				if (result == null) result = caseFlowType(supplyFromProfileFlow);
+				if (result == null) result = caseSubProfileConstraint(supplyFromProfileFlow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -184,6 +207,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				T1 result = caseDeliverToProfileFlow(deliverToProfileFlow);
 				if (result == null) result = caseDeliverToFlow(deliverToProfileFlow);
 				if (result == null) result = caseFlowType(deliverToProfileFlow);
+				if (result == null) result = caseSubProfileConstraint(deliverToProfileFlow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -192,6 +216,7 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				T1 result = caseSupplyFromSpotFlow(supplyFromSpotFlow);
 				if (result == null) result = caseSupplyFromFlow(supplyFromSpotFlow);
 				if (result == null) result = caseFlowType(supplyFromSpotFlow);
+				if (result == null) result = caseSubProfileConstraint(supplyFromSpotFlow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -200,12 +225,66 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				T1 result = caseDeliverToSpotFlow(deliverToSpotFlow);
 				if (result == null) result = caseDeliverToFlow(deliverToSpotFlow);
 				if (result == null) result = caseFlowType(deliverToSpotFlow);
+				if (result == null) result = caseSubProfileConstraint(deliverToSpotFlow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.PROFILE_VESSEL_RESTRICTION: {
+				ProfileVesselRestriction profileVesselRestriction = (ProfileVesselRestriction)theEObject;
+				T1 result = caseProfileVesselRestriction(profileVesselRestriction);
+				if (result == null) result = caseSubProfileConstraint(profileVesselRestriction);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ADPPackage.SHIPPING_OPTION: {
 				ShippingOption shippingOption = (ShippingOption)theEObject;
 				T1 result = caseShippingOption(shippingOption);
+				if (result == null) result = caseSubProfileConstraint(shippingOption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.PROFILE_CONSTRAINT: {
+				ProfileConstraint profileConstraint = (ProfileConstraint)theEObject;
+				T1 result = caseProfileConstraint(profileConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.SUB_PROFILE_CONSTRAINT: {
+				SubProfileConstraint subProfileConstraint = (SubProfileConstraint)theEObject;
+				T1 result = caseSubProfileConstraint(subProfileConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.MIN_CARGO_CONSTRAINT: {
+				MinCargoConstraint minCargoConstraint = (MinCargoConstraint)theEObject;
+				T1 result = caseMinCargoConstraint(minCargoConstraint);
+				if (result == null) result = caseProfileConstraint(minCargoConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.MAX_CARGO_CONSTRAINT: {
+				MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint)theEObject;
+				T1 result = caseMaxCargoConstraint(maxCargoConstraint);
+				if (result == null) result = caseProfileConstraint(maxCargoConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.ADP_MODEL_RESULT: {
+				ADPModelResult adpModelResult = (ADPModelResult)theEObject;
+				T1 result = caseADPModelResult(adpModelResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.FLEET_CONSTRAINT: {
+				FleetConstraint fleetConstraint = (FleetConstraint)theEObject;
+				T1 result = caseFleetConstraint(fleetConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: {
+				TargetCargoesOnVesselConstraint targetCargoesOnVesselConstraint = (TargetCargoesOnVesselConstraint)theEObject;
+				T1 result = caseTargetCargoesOnVesselConstraint(targetCargoesOnVesselConstraint);
+				if (result == null) result = caseFleetConstraint(targetCargoesOnVesselConstraint);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -229,6 +308,21 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fleet Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fleet Profile</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseFleetProfile(FleetProfile object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Contract Profile</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -240,6 +334,21 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <T extends Slot> T1 caseContractProfile(ContractProfile<T> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Spot Markets Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Spot Markets Profile</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSpotMarketsProfile(SpotMarketsProfile object) {
 		return null;
 	}
 
@@ -379,17 +488,32 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Binding Rule</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Pre Defined Distribution Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Binding Rule</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Pre Defined Distribution Model</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseBindingRule(BindingRule object) {
+	public T1 casePreDefinedDistributionModel(PreDefinedDistributionModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Pre Defined Date</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Pre Defined Date</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 casePreDefinedDate(PreDefinedDate object) {
 		return null;
 	}
 
@@ -499,6 +623,21 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Profile Vessel Restriction</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Profile Vessel Restriction</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseProfileVesselRestriction(ProfileVesselRestriction object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Shipping Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -510,6 +649,111 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseShippingOption(ShippingOption object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Profile Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Profile Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseProfileConstraint(ProfileConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sub Profile Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sub Profile Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSubProfileConstraint(SubProfileConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Min Cargo Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Min Cargo Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseMinCargoConstraint(MinCargoConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Max Cargo Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Max Cargo Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseMaxCargoConstraint(MaxCargoConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Model Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Model Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseADPModelResult(ADPModelResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fleet Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fleet Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseFleetConstraint(FleetConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Target Cargoes On Vessel Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Target Cargoes On Vessel Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseTargetCargoesOnVesselConstraint(TargetCargoesOnVesselConstraint object) {
 		return null;
 	}
 

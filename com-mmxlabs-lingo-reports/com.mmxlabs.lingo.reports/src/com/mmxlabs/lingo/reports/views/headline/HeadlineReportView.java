@@ -190,6 +190,8 @@ public class HeadlineReportView extends ViewPart {
 								} else {
 									if (HeadlineReportView.this.scheduleModel != null && schedule == HeadlineReportView.this.scheduleModel.getSchedule()) {
 										rowElements.add(transformer.transform(schedule, other));
+									} else if (others.size() == 1 && pinned == null) {
+										rowElements.add(transformer.transform(schedule, other));
 									}
 								}
 							}

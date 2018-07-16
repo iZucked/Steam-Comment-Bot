@@ -160,6 +160,7 @@ public class SpotMarketsActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
+		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("spotmarkets-settings"));
 		toolBarManager.add(new Separator("spotmarkets-additions"));
 	}

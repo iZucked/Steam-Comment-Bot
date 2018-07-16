@@ -9,7 +9,6 @@ import java.util.Collection;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -21,14 +20,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.ui.contingencyeditor.ContingencyMatrixEditorComposite;
-import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorComposite;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
@@ -79,26 +72,5 @@ public class ContingencyMatrixLevelComposite extends DefaultTopLevelComposite {
 			super.display(dialogContext, root, object, range, dbc);
 		}
 	}
-
-	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, String groupName) {
-		if (value != null) {
-			final Group g2 = new Group(parent, SWT.NONE);
-			toolkit.adapt(g2);
-			g2.setText(groupName);
-			g2.setLayout(new FillLayout());
-			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
-
-			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(),
-					dialogContext, toolkit);
-
-			sub.setCommandHandler(commandHandler);
-			sub.setEditorWrapper(editorWrapper);
-			childReferences.add(ref);
-			childComposites.add(sub);
-			childObjects.add(value);
-
-			return sub;
-		}
-		return null;
-	}
+ 
 }

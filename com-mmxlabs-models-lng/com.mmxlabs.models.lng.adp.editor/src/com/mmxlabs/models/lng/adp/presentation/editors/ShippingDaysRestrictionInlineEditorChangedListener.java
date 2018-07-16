@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
+import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -37,6 +38,9 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 				if (subContractProfile.getContractType() == ContractType.DES && subContractProfile.eContainer() instanceof PurchaseContractProfile) {
 					editor.setEditorEnabled(true);
 					editor.setEditorVisible(true);
+				} else if (subContractProfile.getContractType() == ContractType.FOB && subContractProfile.eContainer() instanceof SalesContractProfile) {
+					editor.setEditorEnabled(true);
+					editor.setEditorVisible(true);
 				} else {
 					editor.setEditorEnabled(false);
 					editor.setEditorVisible(false);
@@ -52,6 +56,9 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		if (input instanceof SubContractProfile) {
 			SubContractProfile<?> subContractProfile = (SubContractProfile<?>) input;
 			if (subContractProfile.getContractType() == ContractType.DES && subContractProfile.eContainer() instanceof PurchaseContractProfile) {
+				editor.setEditorEnabled(true);
+				editor.setEditorVisible(true);
+			} else if (subContractProfile.getContractType() == ContractType.FOB && subContractProfile.eContainer() instanceof SalesContractProfile) {
 				editor.setEditorEnabled(true);
 				editor.setEditorVisible(true);
 			} else {

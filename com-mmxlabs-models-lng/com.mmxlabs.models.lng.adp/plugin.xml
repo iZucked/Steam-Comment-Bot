@@ -19,5 +19,4 @@
             class="com.mmxlabs.models.lng.adp.ADPPackage"
             genModel="model/adp.genmodel"/>
    </extension>
-
 </plugin>

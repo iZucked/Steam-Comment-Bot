@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,8 +15,6 @@ import java.util.concurrent.ExecutorService;
 
 import javax.inject.Singleton;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -29,25 +26,18 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
-import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
-import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
-import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
-import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_AnnealingSettingsModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.ui.transformerunits.AbstractLNGOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
-import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
@@ -57,7 +47,6 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
@@ -74,7 +63,7 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 
 	@NonNull
 	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings, @NonNull final HillClimbOptimisationStage stageSettings,
-			@Nullable final ExecutorService executorService, final int progressTicks) {
+			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
 		@NonNull
 		final Collection<@NonNull String> hints = new HashSet<>(chainBuilder.getDataTransformer().getHints());
 		if (userSettings.isGenerateCharterOuts()) {
@@ -92,7 +81,7 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 
 	public LNGParallelHillClimbingOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final HillClimbOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService) {
+			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
 		super(dataTransformer, stage, userSettings, stageSettings, initialSequences, inputSequences, hints, executorService);
 	}
 
@@ -122,7 +111,7 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 	@Override
 	protected List<Module> createModules(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
 			@NonNull final HillClimbOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService) {
+			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
 		final List<Module> modules = new LinkedList<>();
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
@@ -138,8 +127,7 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 
 			@Override
 			protected void configure() {
-				// TODO Auto-generated method stub
-				
+				bind(CleanableExecutorService.class).toInstance(executorService);
 			}
 			
 			@Provides

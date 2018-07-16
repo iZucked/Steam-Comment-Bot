@@ -8,7 +8,9 @@ package com.mmxlabs.models.lng.scenario.model;
 
 import java.time.LocalDate;
 
+import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -33,6 +35,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getReferenceModel <em>Reference Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModels <em>Adp Models</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel()
@@ -300,5 +303,21 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setAnalyticsModel(AnalyticsModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Adp Models</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.ADPModel}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Adp Models</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Adp Models</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_AdpModels()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<ADPModel> getAdpModels();
 
 } // LNGScenarioModel

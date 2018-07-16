@@ -169,7 +169,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link SpotMarketsPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -183,7 +183,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		if (isInited) return (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 
 		// Obtain or create and register package
-		SpotMarketsPackageImpl theSpotMarketsPackage = (SpotMarketsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SpotMarketsPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SpotMarketsPackageImpl());
+		Object registeredSpotMarketsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		SpotMarketsPackageImpl theSpotMarketsPackage = registeredSpotMarketsPackage instanceof SpotMarketsPackageImpl ? (SpotMarketsPackageImpl)registeredSpotMarketsPackage : new SpotMarketsPackageImpl();
 
 		isInited = true;
 
@@ -205,7 +206,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		// Mark meta-data to indicate it can't be changed
 		theSpotMarketsPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(SpotMarketsPackage.eNS_URI, theSpotMarketsPackage);
 		return theSpotMarketsPackage;
@@ -479,6 +479,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	public EReference getDESSalesMarket_NotionalPort() {
 		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDESSalesMarket_AllowedVessels() {
+		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -840,6 +849,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		desSalesMarketEClass = createEClass(DES_SALES_MARKET);
 		createEReference(desSalesMarketEClass, DES_SALES_MARKET__NOTIONAL_PORT);
+		createEReference(desSalesMarketEClass, DES_SALES_MARKET__ALLOWED_VESSELS);
 
 		fobPurchasesMarketEClass = createEClass(FOB_PURCHASES_MARKET);
 		createEReference(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__NOTIONAL_PORT);
@@ -913,9 +923,9 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
-		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -977,6 +987,10 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		initEClass(desSalesMarketEClass, DESSalesMarket.class, "DESSalesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDESSalesMarket_NotionalPort(), thePortPackage.getPort(), null, "notionalPort", null, 1, 1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAVesselSet());
+		g2 = createEGenericType(theFleetPackage.getVessel());
+		g1.getETypeArguments().add(g2);
+		initEReference(getDESSalesMarket_AllowedVessels(), g1, null, "allowedVessels", null, 0, -1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fobPurchasesMarketEClass, FOBPurchasesMarket.class, "FOBPurchasesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFOBPurchasesMarket_NotionalPort(), thePortPackage.getPort(), null, "notionalPort", null, 1, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1061,58 +1075,58 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getSpotMarket_MinQuantity(), 
-		   source, 
+		  (getSpotMarket_MinQuantity(),
+		   source,
 		   new String[] {
-			 "formatString", "#,###,##0"
-		   });	
+			   "formatString", "#,###,##0"
+		   });
 		addAnnotation
-		  (getSpotMarket_MaxQuantity(), 
-		   source, 
+		  (getSpotMarket_MaxQuantity(),
+		   source,
 		   new String[] {
-			 "formatString", "#,###,##0"
-		   });	
+			   "formatString", "#,###,##0"
+		   });
 		addAnnotation
-		  (getDESPurchaseMarket_Cv(), 
-		   source, 
+		  (getDESPurchaseMarket_Cv(),
+		   source,
 		   new String[] {
-			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "#0.###"
-		   });	
+			   "unit", "mmBtu/m\u00b3",
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getFOBPurchasesMarket_Cv(), 
-		   source, 
+		  (getFOBPurchasesMarket_Cv(),
+		   source,
 		   new String[] {
-			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "#0.###"
-		   });	
+			   "unit", "mmBtu/m\u00b3",
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getCharterOutMarket_CharterOutRate(), 
-		   source, 
+		  (getCharterOutMarket_CharterOutRate(),
+		   source,
 		   new String[] {
-			 "unit", "$/day"
-		   });	
+			   "unit", "$/day"
+		   });
 		addAnnotation
-		  (getCharterInMarket_CharterInRate(), 
-		   source, 
+		  (getCharterInMarket_CharterInRate(),
+		   source,
 		   new String[] {
-			 "unit", "$/day"
-		   });	
+			   "unit", "$/day"
+		   });
 		addAnnotation
-		  (getCharterInMarket_MinDuration(), 
-		   source, 
+		  (getCharterInMarket_MinDuration(),
+		   source,
 		   new String[] {
-			 "unit", "days",
-			 "formatString", "##0"
-		   });	
+			   "unit", "days",
+			   "formatString", "##0"
+		   });
 		addAnnotation
-		  (getCharterInMarket_MaxDuration(), 
-		   source, 
+		  (getCharterInMarket_MaxDuration(),
+		   source,
 		   new String[] {
-			 "unit", "days",
-			 "formatString", "##0"
+			   "unit", "days",
+			   "formatString", "##0"
 		   });
 	}
 
@@ -1123,18 +1137,18 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	protected void createExpressionTypeAnnotations() {
-		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";
 		addAnnotation
-		  (getCharterOutMarket_CharterOutRate(), 
-		   source, 
+		  (getCharterOutMarket_CharterOutRate(),
+		   source,
 		   new String[] {
-			 "type", "charter"
-		   });	
+			   "type", "charter"
+		   });
 		addAnnotation
-		  (getCharterInMarket_CharterInRate(), 
-		   source, 
+		  (getCharterInMarket_CharterInRate(),
+		   source,
 		   new String[] {
-			 "type", "charter"
+			   "type", "charter"
 		   });
 	}
 

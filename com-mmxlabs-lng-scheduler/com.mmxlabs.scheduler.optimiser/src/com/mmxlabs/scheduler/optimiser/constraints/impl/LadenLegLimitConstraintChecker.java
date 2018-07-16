@@ -51,7 +51,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
-	private final int maxLadenDuration = 60 * 24;
+	private int maxLadenDuration = 60 * 24;
 
 	public LadenLegLimitConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -157,5 +157,13 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	@Override
 	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		return null;
+	}
+
+	public int getMaxLadenDuration() {
+		return maxLadenDuration;
+	}
+
+	public void setMaxLadenDuration(int maxLadenDuration) {
+		this.maxLadenDuration = maxLadenDuration;
 	}
 }

@@ -36,6 +36,7 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -117,6 +118,29 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.FleetProfile} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FleetProfileItemProvider fleetProfileItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.FleetProfile}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFleetProfileAdapter() {
+		if (fleetProfileItemProvider == null) {
+			fleetProfileItemProvider = new FleetProfileItemProvider(this);
+		}
+
+		return fleetProfileItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.ContractProfile} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -137,6 +161,29 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		}
 
 		return contractProfileItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.SpotMarketsProfile} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SpotMarketsProfileItemProvider spotMarketsProfileItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.SpotMarketsProfile}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSpotMarketsProfileAdapter() {
+		if (spotMarketsProfileItemProvider == null) {
+			spotMarketsProfileItemProvider = new SpotMarketsProfileItemProvider(this);
+		}
+
+		return spotMarketsProfileItemProvider;
 	}
 
 	/**
@@ -301,26 +348,49 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.BindingRule} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.PreDefinedDistributionModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected BindingRuleItemProvider bindingRuleItemProvider;
+	protected PreDefinedDistributionModelItemProvider preDefinedDistributionModelItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.BindingRule}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.PreDefinedDistributionModel}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createBindingRuleAdapter() {
-		if (bindingRuleItemProvider == null) {
-			bindingRuleItemProvider = new BindingRuleItemProvider(this);
+	public Adapter createPreDefinedDistributionModelAdapter() {
+		if (preDefinedDistributionModelItemProvider == null) {
+			preDefinedDistributionModelItemProvider = new PreDefinedDistributionModelItemProvider(this);
 		}
 
-		return bindingRuleItemProvider;
+		return preDefinedDistributionModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.PreDefinedDate} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PreDefinedDateItemProvider preDefinedDateItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.PreDefinedDate}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPreDefinedDateAdapter() {
+		if (preDefinedDateItemProvider == null) {
+			preDefinedDateItemProvider = new PreDefinedDateItemProvider(this);
+		}
+
+		return preDefinedDateItemProvider;
 	}
 
 	/**
@@ -485,6 +555,29 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.ProfileVesselRestriction} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProfileVesselRestrictionItemProvider profileVesselRestrictionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.ProfileVesselRestriction}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProfileVesselRestrictionAdapter() {
+		if (profileVesselRestrictionItemProvider == null) {
+			profileVesselRestrictionItemProvider = new ProfileVesselRestrictionItemProvider(this);
+		}
+
+		return profileVesselRestrictionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.ShippingOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -505,6 +598,98 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		}
 
 		return shippingOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MinCargoConstraint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MinCargoConstraintItemProvider minCargoConstraintItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MinCargoConstraint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMinCargoConstraintAdapter() {
+		if (minCargoConstraintItemProvider == null) {
+			minCargoConstraintItemProvider = new MinCargoConstraintItemProvider(this);
+		}
+
+		return minCargoConstraintItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MaxCargoConstraint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MaxCargoConstraintItemProvider maxCargoConstraintItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MaxCargoConstraint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMaxCargoConstraintAdapter() {
+		if (maxCargoConstraintItemProvider == null) {
+			maxCargoConstraintItemProvider = new MaxCargoConstraintItemProvider(this);
+		}
+
+		return maxCargoConstraintItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.ADPModelResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ADPModelResultItemProvider adpModelResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.ADPModelResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createADPModelResultAdapter() {
+		if (adpModelResultItemProvider == null) {
+			adpModelResultItemProvider = new ADPModelResultItemProvider(this);
+		}
+
+		return adpModelResultItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected TargetCargoesOnVesselConstraintItemProvider targetCargoesOnVesselConstraintItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createTargetCargoesOnVesselConstraintAdapter() {
+		if (targetCargoesOnVesselConstraintItemProvider == null) {
+			targetCargoesOnVesselConstraintItemProvider = new TargetCargoesOnVesselConstraintItemProvider(this);
+		}
+
+		return targetCargoesOnVesselConstraintItemProvider;
 	}
 
 	/**
@@ -634,7 +819,9 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	 */
 	public void dispose() {
 		if (adpModelItemProvider != null) adpModelItemProvider.dispose();
+		if (fleetProfileItemProvider != null) fleetProfileItemProvider.dispose();
 		if (contractProfileItemProvider != null) contractProfileItemProvider.dispose();
+		if (spotMarketsProfileItemProvider != null) spotMarketsProfileItemProvider.dispose();
 		if (purchaseContractProfileItemProvider != null) purchaseContractProfileItemProvider.dispose();
 		if (salesContractProfileItemProvider != null) salesContractProfileItemProvider.dispose();
 		if (subContractProfileItemProvider != null) subContractProfileItemProvider.dispose();
@@ -642,7 +829,8 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (cargoNumberDistributionModelItemProvider != null) cargoNumberDistributionModelItemProvider.dispose();
 		if (cargoByQuarterDistributionModelItemProvider != null) cargoByQuarterDistributionModelItemProvider.dispose();
 		if (cargoIntervalDistributionModelItemProvider != null) cargoIntervalDistributionModelItemProvider.dispose();
-		if (bindingRuleItemProvider != null) bindingRuleItemProvider.dispose();
+		if (preDefinedDistributionModelItemProvider != null) preDefinedDistributionModelItemProvider.dispose();
+		if (preDefinedDateItemProvider != null) preDefinedDateItemProvider.dispose();
 		if (flowTypeItemProvider != null) flowTypeItemProvider.dispose();
 		if (supplyFromFlowItemProvider != null) supplyFromFlowItemProvider.dispose();
 		if (deliverToFlowItemProvider != null) deliverToFlowItemProvider.dispose();
@@ -650,7 +838,12 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (deliverToProfileFlowItemProvider != null) deliverToProfileFlowItemProvider.dispose();
 		if (supplyFromSpotFlowItemProvider != null) supplyFromSpotFlowItemProvider.dispose();
 		if (deliverToSpotFlowItemProvider != null) deliverToSpotFlowItemProvider.dispose();
+		if (profileVesselRestrictionItemProvider != null) profileVesselRestrictionItemProvider.dispose();
 		if (shippingOptionItemProvider != null) shippingOptionItemProvider.dispose();
+		if (minCargoConstraintItemProvider != null) minCargoConstraintItemProvider.dispose();
+		if (maxCargoConstraintItemProvider != null) maxCargoConstraintItemProvider.dispose();
+		if (adpModelResultItemProvider != null) adpModelResultItemProvider.dispose();
+		if (targetCargoesOnVesselConstraintItemProvider != null) targetCargoesOnVesselConstraintItemProvider.dispose();
 	}
 
 }

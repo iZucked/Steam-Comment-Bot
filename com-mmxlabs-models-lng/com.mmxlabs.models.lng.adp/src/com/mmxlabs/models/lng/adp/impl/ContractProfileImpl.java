@@ -10,6 +10,8 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.DistributionModel;
 
+import com.mmxlabs.models.lng.adp.ProfileConstraint;
+import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -43,8 +45,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl#getTotalVolume <em>Total Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl#getVolumeUnit <em>Volume Unit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl#getDistributionModel <em>Distribution Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl#getSubProfiles <em>Sub Profiles</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl#getConstraints <em>Constraints</em>}</li>
  * </ul>
  *
  * @generated
@@ -128,7 +130,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int TOTAL_VOLUME_EDEFAULT = 0;
+	protected static final double TOTAL_VOLUME_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getTotalVolume() <em>Total Volume</em>}' attribute.
@@ -138,7 +140,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected int totalVolume = TOTAL_VOLUME_EDEFAULT;
+	protected double totalVolume = TOTAL_VOLUME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
@@ -148,7 +150,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final VolumeUnits VOLUME_UNIT_EDEFAULT = VolumeUnits.M3;
+	protected static final LNGVolumeUnit VOLUME_UNIT_EDEFAULT = LNGVolumeUnit.M3;
 
 	/**
 	 * The cached value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
@@ -158,17 +160,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected VolumeUnits volumeUnit = VOLUME_UNIT_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getDistributionModel() <em>Distribution Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDistributionModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected DistributionModel distributionModel;
+	protected LNGVolumeUnit volumeUnit = VOLUME_UNIT_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getSubProfiles() <em>Sub Profiles</em>}' containment reference list.
@@ -179,6 +171,16 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @ordered
 	 */
 	protected EList<SubContractProfile<T>> subProfiles;
+
+	/**
+	 * The cached value of the '{@link #getConstraints() <em>Constraints</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getConstraints()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ProfileConstraint> constraints;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -244,6 +246,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getContractCode() {
 		return contractCode;
 	}
@@ -253,6 +256,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContractCode(String newContractCode) {
 		String oldContractCode = contractCode;
 		contractCode = newContractCode;
@@ -265,6 +269,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isCustom() {
 		return custom;
 	}
@@ -274,6 +279,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCustom(boolean newCustom) {
 		boolean oldCustom = custom;
 		custom = newCustom;
@@ -286,6 +292,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -295,6 +302,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEnabled(boolean newEnabled) {
 		boolean oldEnabled = enabled;
 		enabled = newEnabled;
@@ -308,7 +316,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 */
 	@Override
-	public int getTotalVolume() {
+	public double getTotalVolume() {
 		return totalVolume;
 	}
 
@@ -317,9 +325,8 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setTotalVolume(int newTotalVolume) {
-		int oldTotalVolume = totalVolume;
+	public void setTotalVolume(double newTotalVolume) {
+		double oldTotalVolume = totalVolume;
 		totalVolume = newTotalVolume;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.CONTRACT_PROFILE__TOTAL_VOLUME, oldTotalVolume, totalVolume));
@@ -331,7 +338,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 */
 	@Override
-	public VolumeUnits getVolumeUnit() {
+	public LNGVolumeUnit getVolumeUnit() {
 		return volumeUnit;
 	}
 
@@ -340,9 +347,8 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setVolumeUnit(VolumeUnits newVolumeUnit) {
-		VolumeUnits oldVolumeUnit = volumeUnit;
+	public void setVolumeUnit(LNGVolumeUnit newVolumeUnit) {
+		LNGVolumeUnit oldVolumeUnit = volumeUnit;
 		volumeUnit = newVolumeUnit == null ? VOLUME_UNIT_EDEFAULT : newVolumeUnit;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.CONTRACT_PROFILE__VOLUME_UNIT, oldVolumeUnit, volumeUnit));
@@ -354,74 +360,6 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * @generated
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
-	public DistributionModel getDistributionModel() {
-		if (distributionModel != null && distributionModel.eIsProxy()) {
-			InternalEObject oldDistributionModel = (InternalEObject)distributionModel;
-			distributionModel = (DistributionModel)eResolveProxy(oldDistributionModel);
-			if (distributionModel != oldDistributionModel) {
-				InternalEObject newDistributionModel = (InternalEObject)distributionModel;
-				NotificationChain msgs = oldDistributionModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL, null, null);
-				if (newDistributionModel.eInternalContainer() == null) {
-					msgs = newDistributionModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL, oldDistributionModel, distributionModel));
-			}
-		}
-		return distributionModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DistributionModel basicGetDistributionModel() {
-		return distributionModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetDistributionModel(DistributionModel newDistributionModel, NotificationChain msgs) {
-		DistributionModel oldDistributionModel = distributionModel;
-		distributionModel = newDistributionModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL, oldDistributionModel, newDistributionModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setDistributionModel(DistributionModel newDistributionModel) {
-		if (newDistributionModel != distributionModel) {
-			NotificationChain msgs = null;
-			if (distributionModel != null)
-				msgs = ((InternalEObject)distributionModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL, null, msgs);
-			if (newDistributionModel != null)
-				msgs = ((InternalEObject)newDistributionModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL, null, msgs);
-			msgs = basicSetDistributionModel(newDistributionModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL, newDistributionModel, newDistributionModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<SubContractProfile<T>> getSubProfiles() {
 		if (subProfiles == null) {
 			subProfiles = new EObjectContainmentEList.Resolving<SubContractProfile<T>>(SubContractProfile.class, this, ADPPackage.CONTRACT_PROFILE__SUB_PROFILES);
@@ -434,13 +372,25 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<ProfileConstraint> getConstraints() {
+		if (constraints == null) {
+			constraints = new EObjectContainmentEList.Resolving<ProfileConstraint>(ProfileConstraint.class, this, ADPPackage.CONTRACT_PROFILE__CONSTRAINTS);
+		}
+		return constraints;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL:
-				return basicSetDistributionModel(null, msgs);
 			case ADPPackage.CONTRACT_PROFILE__SUB_PROFILES:
 				return ((InternalEList<?>)getSubProfiles()).basicRemove(otherEnd, msgs);
+			case ADPPackage.CONTRACT_PROFILE__CONSTRAINTS:
+				return ((InternalEList<?>)getConstraints()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -466,11 +416,10 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 				return getTotalVolume();
 			case ADPPackage.CONTRACT_PROFILE__VOLUME_UNIT:
 				return getVolumeUnit();
-			case ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL:
-				if (resolve) return getDistributionModel();
-				return basicGetDistributionModel();
 			case ADPPackage.CONTRACT_PROFILE__SUB_PROFILES:
 				return getSubProfiles();
+			case ADPPackage.CONTRACT_PROFILE__CONSTRAINTS:
+				return getConstraints();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -497,17 +446,18 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 				setEnabled((Boolean)newValue);
 				return;
 			case ADPPackage.CONTRACT_PROFILE__TOTAL_VOLUME:
-				setTotalVolume((Integer)newValue);
+				setTotalVolume((Double)newValue);
 				return;
 			case ADPPackage.CONTRACT_PROFILE__VOLUME_UNIT:
-				setVolumeUnit((VolumeUnits)newValue);
-				return;
-			case ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL:
-				setDistributionModel((DistributionModel)newValue);
+				setVolumeUnit((LNGVolumeUnit)newValue);
 				return;
 			case ADPPackage.CONTRACT_PROFILE__SUB_PROFILES:
 				getSubProfiles().clear();
 				getSubProfiles().addAll((Collection<? extends SubContractProfile<T>>)newValue);
+				return;
+			case ADPPackage.CONTRACT_PROFILE__CONSTRAINTS:
+				getConstraints().clear();
+				getConstraints().addAll((Collection<? extends ProfileConstraint>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -539,11 +489,11 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 			case ADPPackage.CONTRACT_PROFILE__VOLUME_UNIT:
 				setVolumeUnit(VOLUME_UNIT_EDEFAULT);
 				return;
-			case ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL:
-				setDistributionModel((DistributionModel)null);
-				return;
 			case ADPPackage.CONTRACT_PROFILE__SUB_PROFILES:
 				getSubProfiles().clear();
+				return;
+			case ADPPackage.CONTRACT_PROFILE__CONSTRAINTS:
+				getConstraints().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -569,10 +519,10 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 				return totalVolume != TOTAL_VOLUME_EDEFAULT;
 			case ADPPackage.CONTRACT_PROFILE__VOLUME_UNIT:
 				return volumeUnit != VOLUME_UNIT_EDEFAULT;
-			case ADPPackage.CONTRACT_PROFILE__DISTRIBUTION_MODEL:
-				return distributionModel != null;
 			case ADPPackage.CONTRACT_PROFILE__SUB_PROFILES:
 				return subProfiles != null && !subProfiles.isEmpty();
+			case ADPPackage.CONTRACT_PROFILE__CONSTRAINTS:
+				return constraints != null && !constraints.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -586,7 +536,7 @@ public class ContractProfileImpl<T extends Slot> extends EObjectImpl implements 
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (contractCode: ");
 		result.append(contractCode);
 		result.append(", custom: ");

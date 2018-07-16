@@ -70,6 +70,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.scenario.LNGScenarioModelValidationTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -271,6 +272,7 @@ public final class OptimisationHelper {
 
 	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
 			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, NameProvider nameProvider) {
+
 		boolean optionAdded = false;
 		boolean enabledOptionAdded = false;
 
@@ -909,6 +911,7 @@ public final class OptimisationHelper {
 			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(constraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
+			plan.getStages().add(ParametersFactory.eINSTANCE.createResetInitialSequencesStage());
 		}
 		if (similarityMode != SimilarityMode.ALL) {
 			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings));
@@ -1182,7 +1185,7 @@ public final class OptimisationHelper {
 		final MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
-			return helper.runValidation(validator, extraContext, Collections.singleton(root));
+			return helper.runValidation(validator, extraContext, new LNGScenarioModelValidationTransformer(), root, null);
 		});
 
 		if (status == null) {

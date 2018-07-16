@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -165,6 +167,30 @@ public final class CollectionsUtil {
 		}
 		return map;
 	}
+	
+	/**
+	 * Create a new {@link HashMap} from the list of elements. This method assumes
+	 * an even number of elements in the form of { key1, value1, key2, value2,...}
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param elements
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@NonNull
+	public static <K, V> Map<K, V> makeLinkedHashMap(final Object... elements) {
+
+		final Map<K, V> map = new LinkedHashMap<>();
+
+		for (int i = 0; i < elements.length; i += 2) {
+			final K key = (K) elements[i];
+			final V value = (V) elements[i + 1];
+			map.put(key, value);
+		}
+		return map;
+	}
+
 
 	/**
 	 * Create a hash set containing the given elements
@@ -180,6 +206,22 @@ public final class CollectionsUtil {
 		}
 		return result;
 	}
+	
+	/**
+	 * Create a hash set containing the given elements
+	 * 
+	 * @param <T>
+	 * @param elements
+	 * @return
+	 */
+	public static <T> Set<@NonNull T> makeLinkedHashSet(final @NonNull T... elements) {
+		final Set<@NonNull T> result = new LinkedHashSet<>();
+		for (int i = 0; i < elements.length; i++) {
+			result.add(elements[i]);
+		}
+		return result;
+	}
+
 
 	@NonNull
 	public static <T> LinkedList<T> makeLinkedList(final @NonNull T... elements) {

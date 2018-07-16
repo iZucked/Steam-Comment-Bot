@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -332,7 +334,7 @@ public class PeriodOptimiserTest {
 		}
 
 		public void optimise() throws Exception {
-			ExecutorService executorService = Executors.newSingleThreadExecutor();
+			final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 			try {
 
 				final OptimisationPlan plan = getPlan();
@@ -370,7 +372,7 @@ public class PeriodOptimiserTest {
 		}
 
 		public void periodOptimise(final LocalDate start, final YearMonth end) throws Exception {
-			ExecutorService executorService = Executors.newSingleThreadExecutor();
+			final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 
 			try {
 

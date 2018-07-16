@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
@@ -30,6 +32,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUni
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGNoNominalInPromptTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 public class LNGScenarioChainBuilder {
 
@@ -49,7 +52,7 @@ public class LNGScenarioChainBuilder {
 	 * @return
 	 */
 	public static IChainRunner createStandardOptimisationChain(@NonNull final String resultName, @NonNull final LNGDataTransformer dataTransformer,
-			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final ExecutorService executorService,
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final CleanableExecutorService executorService,
 			@NonNull final String @Nullable... initialHints) {
 		boolean createOptimiser = false;
 
@@ -120,15 +123,65 @@ public class LNGScenarioChainBuilder {
 		return builder.build();
 	}
 
+	/**
+	 * Creates a {@link IChainRunner} for the "standard" optimisation process (as of 2015/11)
+	 * 
+	 * @param childName
+	 * @param dataTransformer
+	 * @param scenarioToOptimiserBridge
+	 * @param optimiserSettings
+	 * @param executorService
+	 *            Optional (for now) {@link ExecutorService} for parallelisation
+	 * @param initialHints
+	 * @return
+	 */
+	public static IChainRunner createADPOptimisationChain(@NonNull final String resultName, @NonNull final LNGDataTransformer dataTransformer,
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final CleanableExecutorService executorService,
+			IMultiStateResult initialSequences, @NonNull final String @Nullable... initialHints) {
+		boolean createOptimiser = false;
+
+		final Set<String> hints = LNGTransformerHelper.getHints(optimisationPlan.getUserSettings(), initialHints);
+		for (final String hint : hints) {
+			if (LNGTransformerHelper.HINT_OPTIMISE_LSO.equals(hint)) {
+				createOptimiser = true;
+			}
+		}
+
+		final ChainBuilder builder = new ChainBuilder(dataTransformer);
+		if (createOptimiser) {
+			if (hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)) {
+				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
+			}
+
+			if (!optimisationPlan.getStages().isEmpty()) {
+
+				UserSettings userSettings = optimisationPlan.getUserSettings();
+				for (final OptimisationStage stage : optimisationPlan.getStages()) {
+					if (stage instanceof ParallelOptimisationStage<?>) {
+						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
+						final OptimisationStage template = parallelOptimisationStage.getTemplate();
+						assert template != null;
+						LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
+					} else {
+						LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, stage, 1, userSettings);
+					}
+				}
+			}
+
+		}
+
+		return builder.build(initialSequences);
+	}
+
 	@NonNull
-	public static ExecutorService createExecutorService() {
+	public static CleanableExecutorService createExecutorService() {
 		final int cores = getNumberOfAvailableCores();
 		return createExecutorService(cores);
 	}
 
 	@NonNull
-	public static ExecutorService createExecutorService(final int nThreads) {
-		return Executors.newFixedThreadPool(nThreads);
+	public static CleanableExecutorService createExecutorService(final int nThreads) {
+		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(nThreads));
 	}
 
 	public static int getNumberOfAvailableCores() {

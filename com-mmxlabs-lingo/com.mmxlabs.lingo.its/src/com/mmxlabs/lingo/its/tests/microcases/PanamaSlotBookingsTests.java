@@ -157,7 +157,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
+			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
+			final Injector injector = MicroTestUtils.createEvaluationInjector(dataTransformer);
 
 			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 				scope.enter();
@@ -166,12 +167,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				injector.injectMembers(checker);
 
 				// Set blank sequences as initial state
-				checker.sequencesAccepted(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer()), SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer()));
+				checker.sequencesAccepted(SequenceHelper.createSequences(dataTransformer.getInjector()), SequenceHelper.createSequences(dataTransformer.getInjector()));
 
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo));
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer()), null);
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer.getInjector(), vesselAvailability, cargo));
+				checker.checkConstraints(SequenceHelper.createSequences(dataTransformer.getInjector()), null);
 				assertTrue(checker.checkConstraints(manipulatedSequences, null));
 			}
 		});
@@ -217,8 +219,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer, vesselAvailability, cargo));
-				SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability2, cargo2);
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer.getInjector(), vesselAvailability, cargo));
+				SequenceHelper.addSequence(manipulatedSequences, dataTransformer.getInjector(), vesselAvailability2, cargo2);
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -268,7 +271,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo));
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -317,7 +321,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo));
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -364,7 +369,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo));
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -411,7 +417,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo));
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -469,8 +476,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer, vesselAvailability, cargo));
-				SequenceHelper.addSequence(manipulatedSequences, dataTransformer, vesselAvailability2, cargo2);
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer.getInjector(), vesselAvailability, cargo));
+				SequenceHelper.addSequence(manipulatedSequences, dataTransformer.getInjector(), vesselAvailability2, cargo2);
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -523,7 +531,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo));
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -573,7 +582,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo));
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -624,7 +634,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo));
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -709,7 +720,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargo, cargo2));
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo, cargo2));
 				// SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability, cargo2);
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
@@ -784,7 +795,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, cargoUnrelevant, cargo));
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargoUnrelevant, cargo));
 				// SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability, cargo2);
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
@@ -855,7 +866,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, loadSlot, dischargeSlot));
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, loadSlot, dischargeSlot));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -872,7 +883,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer()), null);
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
 				assertFalse(checker.checkConstraints(manipulatedSequences, null));
 			}
 		});
@@ -933,7 +944,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, loadSlot, dischargeSlot));
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, loadSlot, dischargeSlot));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -950,7 +961,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer()), null);
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
 				assertTrue(checker.checkConstraints(manipulatedSequences, null));
 			}
 		});
@@ -1012,7 +1023,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, loadSlot, dischargeSlot));
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, loadSlot, dischargeSlot));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -1023,21 +1034,21 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final IResource r0 = manipulatedSequences.getResources().get(0);
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
-				
+
 				// make sure the 5 days are added
 				assertEquals(24 * 15, ptr_r0_cargo.getSlots().get(1).getTimeWindow().getInclusiveStart());
-				
+
 				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
 
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer()), null);
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
 				assertFalse(checker.checkConstraints(manipulatedSequences, null));
 			}
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void northbound_cant_direct_cant_panama() {
@@ -1094,7 +1105,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, loadSlot, dischargeSlot));
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, loadSlot, dischargeSlot));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -1105,7 +1116,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final IResource r0 = manipulatedSequences.getResources().get(0);
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
-				
+
 				// make sure the 5 days are NOT added
 				assertEquals(24 * 10, ptr_r0_cargo.getSlots().get(1).getTimeWindow().getInclusiveStart());
 
@@ -1113,7 +1124,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 	}
-
 
 	@Test
 	@Category({ MicroTest.class })
@@ -1169,7 +1179,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, loadSlot, dischargeSlot));
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, loadSlot, dischargeSlot));
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -1186,7 +1196,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer()), null);
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null);
 				assertTrue(checker.checkConstraints(manipulatedSequences, null));
 			}
 		});
