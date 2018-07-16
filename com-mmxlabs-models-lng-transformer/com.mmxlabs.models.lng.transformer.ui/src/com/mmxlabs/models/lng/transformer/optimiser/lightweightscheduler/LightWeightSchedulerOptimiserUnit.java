@@ -193,6 +193,35 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		return result;
 	}
+	
+	public boolean[][] runAndGetPairings(@NonNull final ISequences referenceSequences, @NonNull final IProgressMonitor monitor) {
+
+		// Convert the given monitor into a progress instance
+		final SubMonitor progress = SubMonitor.convert(monitor, 100);
+
+		final Injector stage1Injector = buildStage1Injector(referenceSequences);
+
+		prepareLongTermData(stage1Injector, referenceSequences);
+		progress.worked(1);
+
+		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_VESSEL)));
+
+		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
+
+		final LightWeightScheduler scheduler = stage1Injector.getInstance(LightWeightScheduler.class);
+
+		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
+
+		try {
+			return scheduler.getSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
+		} catch (Exception e) {
+			return null;
+		}
+		finally {
+			executorService.shutdown();
+		}
+	}
+
 
 	@NonNullByDefault
 	private Injector buildStage2Injector(final Injector stage1Injector, final ILightWeightOptimisationData lwOptimsdationData) {
