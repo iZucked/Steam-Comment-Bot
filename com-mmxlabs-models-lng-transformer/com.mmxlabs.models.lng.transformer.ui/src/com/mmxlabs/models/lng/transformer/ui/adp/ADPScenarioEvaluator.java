@@ -116,8 +116,8 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
 		// DEBUGGING
-		ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000);
-		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
+//		ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000);
+//		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
 
 		final List<String> hints = new LinkedList<>();
 		// TODO: Add hints
