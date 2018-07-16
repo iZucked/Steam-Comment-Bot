@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler;
 
 import static com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.LightWeightSchedulerStage2Module.LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES;
