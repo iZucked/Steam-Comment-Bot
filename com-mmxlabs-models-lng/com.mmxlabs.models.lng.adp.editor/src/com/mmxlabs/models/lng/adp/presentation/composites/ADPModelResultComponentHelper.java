@@ -69,6 +69,7 @@ public class ADPModelResultComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_extraSlotsEditor(detailComposite, topClass);
 		add_scheduleModelEditor(detailComposite, topClass);
+		add_extraSpotCharterMarketsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the extraSlots feature on ADPModelResult
@@ -85,5 +86,14 @@ public class ADPModelResultComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_scheduleModelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ADP_MODEL_RESULT__SCHEDULE_MODEL));
+	}
+
+	/**
+	 * Create the editor for the extraSpotCharterMarkets feature on ADPModelResult
+	 *
+	 * @generated
+	 */
+	protected void add_extraSpotCharterMarketsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS));
 	}
 }

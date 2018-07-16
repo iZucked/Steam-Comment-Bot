@@ -9,6 +9,7 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -82,6 +83,7 @@ public class ADPModelResultItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL_RESULT__EXTRA_SLOTS);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL_RESULT__SCHEDULE_MODEL);
+			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS);
 		}
 		return childrenFeatures;
 	}
@@ -136,6 +138,7 @@ public class ADPModelResultItemProvider
 		switch (notification.getFeatureID(ADPModelResult.class)) {
 			case ADPPackage.ADP_MODEL_RESULT__EXTRA_SLOTS:
 			case ADPPackage.ADP_MODEL_RESULT__SCHEDULE_MODEL:
+			case ADPPackage.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -177,6 +180,11 @@ public class ADPModelResultItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.ADP_MODEL_RESULT__SCHEDULE_MODEL,
 				 ScheduleFactory.eINSTANCE.createScheduleModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS,
+				 SpotMarketsFactory.eINSTANCE.createCharterInMarket()));
 	}
 
 	/**

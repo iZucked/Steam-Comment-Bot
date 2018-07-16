@@ -136,6 +136,7 @@
     <genClasses ecoreClass="adp.ecore#//ADPModelResult">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModelResult/extraSlots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModelResult/scheduleModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModelResult/extraSpotCharterMarkets"/>
     </genClasses>
     <genClasses image="false" ecoreClass="adp.ecore#//FleetConstraint"/>
     <genClasses ecoreClass="adp.ecore#//TargetCargoesOnVesselConstraint">

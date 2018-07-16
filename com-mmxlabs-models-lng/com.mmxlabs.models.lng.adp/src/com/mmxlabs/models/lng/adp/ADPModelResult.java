@@ -5,6 +5,8 @@ package com.mmxlabs.models.lng.adp;
 import com.mmxlabs.models.lng.cargo.Slot;
 
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -21,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModelResult#getExtraSlots <em>Extra Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModelResult#getScheduleModel <em>Schedule Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModelResult#getExtraSpotCharterMarkets <em>Extra Spot Charter Markets</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModelResult()
@@ -69,5 +72,21 @@ public interface ADPModelResult extends EObject {
 	 * @generated
 	 */
 	void setScheduleModel(ScheduleModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Extra Spot Charter Markets</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Extra Spot Charter Markets</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Extra Spot Charter Markets</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModelResult_ExtraSpotCharterMarkets()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<CharterInMarket> getExtraSpotCharterMarkets();
 
 } // ADPModelResult
