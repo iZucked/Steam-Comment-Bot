@@ -1265,6 +1265,15 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getADPModelResult_ExtraSpotCharterMarkets() {
+		return (EReference)adpModelResultEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getFleetConstraint() {
 		return fleetConstraintEClass;
 	}
@@ -1482,6 +1491,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		adpModelResultEClass = createEClass(ADP_MODEL_RESULT);
 		createEReference(adpModelResultEClass, ADP_MODEL_RESULT__EXTRA_SLOTS);
 		createEReference(adpModelResultEClass, ADP_MODEL_RESULT__SCHEDULE_MODEL);
+		createEReference(adpModelResultEClass, ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS);
 
 		fleetConstraintEClass = createEClass(FLEET_CONSTRAINT);
 
@@ -1702,6 +1712,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEClass(adpModelResultEClass, ADPModelResult.class, "ADPModelResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getADPModelResult_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, ADPModelResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getADPModelResult_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, ADPModelResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getADPModelResult_ExtraSpotCharterMarkets(), theSpotMarketsPackage.getCharterInMarket(), null, "extraSpotCharterMarkets", null, 0, -1, ADPModelResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fleetConstraintEClass, FleetConstraint.class, "FleetConstraint", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

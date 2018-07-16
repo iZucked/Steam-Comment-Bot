@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
 
@@ -31,7 +30,6 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPModelResult;
@@ -44,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -55,6 +54,7 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -115,14 +115,15 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
 		// DEBUGGING
-		// ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000);
+		ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000);
+		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
 
 		final List<String> hints = new LinkedList<>();
 		// TODO: Add hints
 		hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		final String[] initialHints = hints.toArray(new String[hints.size()]);
-		CharterInMarket defaultMarket = createDefaultMarket(adpModel.getFleetProfile());
+		final CharterInMarket defaultMarket = createDefaultMarket(adpModel.getFleetProfile());
 
 		// Generate internal data
 		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService();
@@ -145,8 +146,8 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			// Probably need to bring in the evaluation modules
 			final Collection<IOptimiserInjectorService> services = bridge.getDataTransformer().getModuleServices();
 
-			ISequences initialSequences = bridge.getDataTransformer().getInitialSequences();// injector.getInstance(Key.get(IMultiStateResult.class,
-																							// Names.named(OptimiserConstants.SEQUENCE_TYPE_SEQUENCE_BUILDER)));
+			final ISequences initialSequences = bridge.getDataTransformer().getInitialSequences();// injector.getInstance(Key.get(IMultiStateResult.class,
+			// Names.named(OptimiserConstants.SEQUENCE_TYPE_SEQUENCE_BUILDER)));
 
 			// FIXME: Create ADP chain
 			final IChainRunner chainRunner = LNGScenarioChainBuilder.createADPOptimisationChain(optimisationPlan.getResultName(), bridge.getDataTransformer(), bridge, optimisationPlan,
@@ -163,6 +164,16 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 
 			final ADPModelResult adpResult = ADPFactory.eINSTANCE.createADPModelResult();
 			adpResult.setScheduleModel(scheduleModel);
+
+			// Add new markets to extra bit
+			for (final Sequence seq : schedule.getSequences()) {
+				final CharterInMarket charterInMarket = seq.getCharterInMarket();
+				if (charterInMarket != null) {
+					if (charterInMarket.eContainer() == null) {
+						adpResult.getExtraSpotCharterMarkets().add(charterInMarket);
+					}
+				}
+			}
 
 			// New spot slots etc will need to be contained here.
 			for (final SlotAllocation a : schedule.getSlotAllocations()) {
@@ -196,7 +207,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 		}
 	}
 
-	private Module createInitialSolutionModule(final @NonNull ADPModel adpModel, CharterInMarket defaultMarket) {
+	private Module createInitialSolutionModule(final @NonNull ADPModel adpModel, final CharterInMarket defaultMarket) {
 		return new PrivateModule() {
 
 			@Override
@@ -207,7 +218,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			@Provides
 			@Singleton
 			@Named("ADP_SOLUTION")
-			private ISequences provideSequences(Injector injector, ModelEntityMap modelEntityMap, IScenarioDataProvider scenarioDataProvider, IOptimisationData data) {
+			private ISequences provideSequences(final Injector injector, final ModelEntityMap modelEntityMap, final IScenarioDataProvider scenarioDataProvider, final IOptimisationData data) {
 				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 				final List<IResource> resources = new LinkedList<>();
 
@@ -325,7 +336,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			@Singleton
 			@Named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)
 			@Exposed
-			private ISequences provideInitialSequences(@Named("ADP_SOLUTION") ISequences sequences) {
+			private ISequences provideInitialSequences(@Named("ADP_SOLUTION") final ISequences sequences) {
 				return sequences;
 			}
 
@@ -333,7 +344,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			@Singleton
 			@Named(LNGInitialSequencesModule.KEY_GENERATED_SOLUTION_PAIR)
 			@Exposed
-			private IMultiStateResult provideSolutionPair(@Named("ADP_SOLUTION") ISequences sequences) {
+			private IMultiStateResult provideSolutionPair(@Named("ADP_SOLUTION") final ISequences sequences) {
 
 				return new MultiStateResult(sequences, new HashMap<>());
 			}
@@ -341,7 +352,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 		};
 	}
 
-	private Module createExtraDataModule(final @NonNull ADPModel adpModel, CharterInMarket defaultMarket) {
+	private Module createExtraDataModule(final @NonNull ADPModel adpModel, final CharterInMarket defaultMarket) {
 		final List<VesselAvailability> extraAvailabilities = new LinkedList<>();
 		final List<VesselEvent> extraVesselEvents = new LinkedList<>();
 		final List<CharterInMarketOverride> extraCharterInMarketOverrides = new LinkedList<>();
@@ -365,7 +376,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			}
 		}
 
-		FleetProfile fleetProfile = adpModel.getFleetProfile();
+		final FleetProfile fleetProfile = adpModel.getFleetProfile();
 		if (fleetProfile != null) {
 			extraAvailabilities.addAll(fleetProfile.getVesselAvailabilities());
 			extraVesselEvents.addAll(fleetProfile.getVesselEvents());
@@ -379,7 +390,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 
 			@Provides
 			@Named(OptimiserConstants.DEFAULT_VESSEL)
-			private IVesselAvailability provideDefaultVessel(ModelEntityMap modelEntityMap, IVesselProvider vesselProvider, IOptimisationData optimisationData) {
+			private IVesselAvailability provideDefaultVessel(final ModelEntityMap modelEntityMap, final IVesselProvider vesselProvider, final IOptimisationData optimisationData) {
 				final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(defaultMarket, ISpotCharterInMarket.class);
 
 				for (final IResource o_resource : optimisationData.getResources()) {
@@ -438,7 +449,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 		};
 	}
 
-	private CharterInMarket createDefaultMarket(FleetProfile fleetProfile) {
+	private CharterInMarket createDefaultMarket(final FleetProfile fleetProfile) {
 		final CharterInMarket defaultMarket;
 		defaultMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 

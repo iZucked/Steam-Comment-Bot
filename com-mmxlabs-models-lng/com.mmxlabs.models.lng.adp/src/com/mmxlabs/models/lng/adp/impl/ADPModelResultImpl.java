@@ -8,6 +8,8 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -34,6 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelResultImpl#getExtraSlots <em>Extra Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelResultImpl#getScheduleModel <em>Schedule Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelResultImpl#getExtraSpotCharterMarkets <em>Extra Spot Charter Markets</em>}</li>
  * </ul>
  *
  * @generated
@@ -58,6 +61,16 @@ public class ADPModelResultImpl extends EObjectImpl implements ADPModelResult {
 	 * @ordered
 	 */
 	protected ScheduleModel scheduleModel;
+
+	/**
+	 * The cached value of the '{@link #getExtraSpotCharterMarkets() <em>Extra Spot Charter Markets</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraSpotCharterMarkets()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CharterInMarket> extraSpotCharterMarkets;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -161,6 +174,18 @@ public class ADPModelResultImpl extends EObjectImpl implements ADPModelResult {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<CharterInMarket> getExtraSpotCharterMarkets() {
+		if (extraSpotCharterMarkets == null) {
+			extraSpotCharterMarkets = new EObjectContainmentEList.Resolving<CharterInMarket>(CharterInMarket.class, this, ADPPackage.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS);
+		}
+		return extraSpotCharterMarkets;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -168,6 +193,8 @@ public class ADPModelResultImpl extends EObjectImpl implements ADPModelResult {
 				return ((InternalEList<?>)getExtraSlots()).basicRemove(otherEnd, msgs);
 			case ADPPackage.ADP_MODEL_RESULT__SCHEDULE_MODEL:
 				return basicSetScheduleModel(null, msgs);
+			case ADPPackage.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS:
+				return ((InternalEList<?>)getExtraSpotCharterMarkets()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -185,6 +212,8 @@ public class ADPModelResultImpl extends EObjectImpl implements ADPModelResult {
 			case ADPPackage.ADP_MODEL_RESULT__SCHEDULE_MODEL:
 				if (resolve) return getScheduleModel();
 				return basicGetScheduleModel();
+			case ADPPackage.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS:
+				return getExtraSpotCharterMarkets();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -205,6 +234,10 @@ public class ADPModelResultImpl extends EObjectImpl implements ADPModelResult {
 			case ADPPackage.ADP_MODEL_RESULT__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)newValue);
 				return;
+			case ADPPackage.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS:
+				getExtraSpotCharterMarkets().clear();
+				getExtraSpotCharterMarkets().addAll((Collection<? extends CharterInMarket>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -223,6 +256,9 @@ public class ADPModelResultImpl extends EObjectImpl implements ADPModelResult {
 			case ADPPackage.ADP_MODEL_RESULT__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)null);
 				return;
+			case ADPPackage.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS:
+				getExtraSpotCharterMarkets().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -239,6 +275,8 @@ public class ADPModelResultImpl extends EObjectImpl implements ADPModelResult {
 				return extraSlots != null && !extraSlots.isEmpty();
 			case ADPPackage.ADP_MODEL_RESULT__SCHEDULE_MODEL:
 				return scheduleModel != null;
+			case ADPPackage.ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS:
+				return extraSpotCharterMarkets != null && !extraSpotCharterMarkets.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
