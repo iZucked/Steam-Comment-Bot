@@ -106,6 +106,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			@NonNull final ADPModel adpModel, //
 			@NonNull final IProgressMonitor progressMonitor //
 	) {
+		final long start = System.currentTimeMillis();
 
 		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 
@@ -193,6 +194,7 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			throw new RuntimeException(e);
 		} finally {
 			executorService.shutdownNow();
+			System.out.println("done in:" + (System.currentTimeMillis() - start));
 		}
 	}
 
