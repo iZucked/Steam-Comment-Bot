@@ -1661,13 +1661,22 @@ public interface ADPPackage extends EPackage {
 	int ADP_MODEL_RESULT__SCHEDULE_MODEL = 1;
 
 	/**
+	 * The feature id for the '<em><b>Extra Spot Charter Markets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS = 2;
+
+	/**
 	 * The number of structural features of the '<em>Model Result</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL_RESULT_FEATURE_COUNT = 2;
+	int ADP_MODEL_RESULT_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Model Result</em>' class.
@@ -2775,6 +2784,17 @@ public interface ADPPackage extends EPackage {
 	EReference getADPModelResult_ScheduleModel();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.ADPModelResult#getExtraSpotCharterMarkets <em>Extra Spot Charter Markets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Extra Spot Charter Markets</em>'.
+	 * @see com.mmxlabs.models.lng.adp.ADPModelResult#getExtraSpotCharterMarkets()
+	 * @see #getADPModelResult()
+	 * @generated
+	 */
+	EReference getADPModelResult_ExtraSpotCharterMarkets();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.FleetConstraint <em>Fleet Constraint</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3674,6 +3694,14 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ADP_MODEL_RESULT__SCHEDULE_MODEL = eINSTANCE.getADPModelResult_ScheduleModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Spot Charter Markets</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS = eINSTANCE.getADPModelResult_ExtraSpotCharterMarkets();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.FleetConstraint <em>Fleet Constraint</em>}' class.
