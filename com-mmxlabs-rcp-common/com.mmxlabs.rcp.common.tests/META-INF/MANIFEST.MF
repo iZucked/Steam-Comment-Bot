@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Tests
 Bundle-SymbolicName: com.mmxlabs.rcp.common.tests
+Automatic-Module-Name: com.mmxlabs.rcp.common.tests
 Bundle-Version: 4.5.5.qualifier
 Bundle-Activator: com.mmxlabs.rcp.common.tests.internal.Activator
 Bundle-Vendor: Minimaxlabs Ltd.

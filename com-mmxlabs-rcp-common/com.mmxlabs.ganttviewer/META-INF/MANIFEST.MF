@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ganttviewer
 Bundle-SymbolicName: com.mmxlabs.ganttviewer
+Automatic-Module-Name: com.mmxlabs.ganttviewer
 Bundle-Version: 4.5.5.qualifier
 Bundle-Activator: com.mmxlabs.ganttviewer.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.

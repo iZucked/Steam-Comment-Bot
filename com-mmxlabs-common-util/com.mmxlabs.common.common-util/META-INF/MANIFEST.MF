@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Common-Util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.common.common-util
+Automatic-Module-Name: com.mmxlabs.common.common-util
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 4.5.5.qualifier
 Import-Package: javax.tools,
