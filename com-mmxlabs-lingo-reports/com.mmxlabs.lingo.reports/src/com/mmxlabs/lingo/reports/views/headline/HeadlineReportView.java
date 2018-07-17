@@ -92,7 +92,7 @@ public class HeadlineReportView extends ViewPart {
 	 */
 	public enum ColumnDefinition {
 		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
-		LABEL_PAPER(ColumnType.Label, "Paper", null), VALUE_PAPER(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_PAPER(ColumnType.Label, "Paper", null, "features:paperdeals"), VALUE_PAPER(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:paperdeals"), //
 		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_UPSIDE(ColumnType.Label, "Upside", null, "features:report-headline-upside"), VALUE_UPSIDE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
