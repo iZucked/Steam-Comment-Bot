@@ -345,6 +345,10 @@ public class PriceIntervalProviderHelper {
 		}
 		final int totalLegLengthInHours = (times[1] - times[0] - durationAtPort - canalTransitTime);
 
+		if (distance == 0 || totalLegLengthInHours == 0) {
+			return new long[] {0, 0};
+		}
+
 		// estimate speed and rate
 		final int nboSpeed = vessel.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor));
 		final int naturalSpeed = Calculator.speedFromDistanceTime(distance, totalLegLengthInHours);

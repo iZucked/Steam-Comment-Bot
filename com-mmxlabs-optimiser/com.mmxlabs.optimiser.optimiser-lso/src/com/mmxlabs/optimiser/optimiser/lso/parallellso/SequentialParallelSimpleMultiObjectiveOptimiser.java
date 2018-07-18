@@ -93,6 +93,8 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 				}
 				i++;
 				futureIdx++;
+				// clean up executor
+				this.executorService.removeCompleted();
 			}
 		}
 		if (DEBUG) {

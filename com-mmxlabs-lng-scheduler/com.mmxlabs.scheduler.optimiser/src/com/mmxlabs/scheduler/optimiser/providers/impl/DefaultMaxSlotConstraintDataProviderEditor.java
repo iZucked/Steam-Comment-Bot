@@ -145,7 +145,7 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerPeriod(final List<T> slots, final int startMonth, final int endMonthInclusive, final int limit, final int interval) {
 		final List<Pair<Set<T>, Integer>> slotsSets = new LinkedList<>();
 		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), a.getTimeWindow().getInclusiveStart()));
-		for (int month = startMonth; month < (endMonthInclusive + 2) - interval; month = month + interval) {
+		for (int month = startMonth; month < (endMonthInclusive + 2) - interval; month = month + 1) {
 			final Set<T> slotsSet = new LinkedHashSet<>();
 			for (final T slot : slots) {
 				if (getUTCMonth(slot) >= month && getUTCMonth(slot) < month + interval) {
