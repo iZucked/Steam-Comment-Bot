@@ -7,7 +7,6 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
@@ -20,6 +19,8 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.inject.Injector;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -51,8 +52,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 @RunWith(value = ShiroRunner.class)
 public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Override
-	protected @NonNull ExecutorService createExecutorService() {
-		return Executors.newFixedThreadPool(4);
+	protected @NonNull CleanableExecutorService createExecutorService() {
+		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(4));
 	}
 
 	@Test

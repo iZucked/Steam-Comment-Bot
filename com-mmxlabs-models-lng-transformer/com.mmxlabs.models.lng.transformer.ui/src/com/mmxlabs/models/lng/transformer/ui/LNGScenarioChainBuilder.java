@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.OptionalLong;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
@@ -47,7 +46,7 @@ public class LNGScenarioChainBuilder {
 	 * @param scenarioToOptimiserBridge
 	 * @param optimiserSettings
 	 * @param executorService
-	 *            Optional (for now) {@link ExecutorService} for parallelisation
+	 *            Optional (for now) {@link CleanableExecutorService} for parallelisation
 	 * @param initialHints
 	 * @return
 	 */
@@ -131,7 +130,7 @@ public class LNGScenarioChainBuilder {
 	 * @param scenarioToOptimiserBridge
 	 * @param optimiserSettings
 	 * @param executorService
-	 *            Optional (for now) {@link ExecutorService} for parallelisation
+	 *            Optional (for now) {@link CleanableExecutorService} for parallelisation
 	 * @param initialHints
 	 * @return
 	 */

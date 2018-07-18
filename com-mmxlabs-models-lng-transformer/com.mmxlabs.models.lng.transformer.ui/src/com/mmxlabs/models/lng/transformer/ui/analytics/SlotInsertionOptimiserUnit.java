@@ -17,7 +17,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -34,6 +33,7 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -95,13 +95,13 @@ public class SlotInsertionOptimiserUnit {
 	private final Map<Thread, SlotInsertionOptimiser> threadCache_SlotInsertionOptimiser = new ConcurrentHashMap<>(100);
 	private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
 
-	private @NonNull ExecutorService executorService;
+	private @NonNull CleanableExecutorService executorService;
 
 	private @NonNull InsertionOptimisationStage stage;
 
 	@SuppressWarnings("null")
 	public SlotInsertionOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final InsertionOptimisationStage stage, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences, @NonNull final IMultiStateResult inputState,
+			@NonNull final InsertionOptimisationStage stage, @NonNull final CleanableExecutorService executorService, @NonNull final ISequences initialSequences, @NonNull final IMultiStateResult inputState,
 			@NonNull final Collection<String> initialHints) {
 
 		this.stage = stage;

@@ -6,15 +6,12 @@ package com.mmxlabs.models.lng.transformer.ui.actionablesets;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -34,6 +31,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -63,10 +61,8 @@ import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
-import com.mmxlabs.optimiser.lso.impl.SimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
 import com.mmxlabs.scheduler.optimiser.actionableset.ActionableSetMover;
-import com.mmxlabs.scheduler.optimiser.actionableset.ActionableSetOptimiser;
 import com.mmxlabs.scheduler.optimiser.actionableset.GuidedMoveMultipleSolutionOptimiser;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.FitnessCalculator;
@@ -81,7 +77,7 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
 	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService, final int... seeds) {
+			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService, final int... seeds) {
 		final IChainLink link = new IChainLink() {
 
 			@Override
@@ -198,7 +194,7 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 	private final String stage;
 
 	public GuidedMoveTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, final int jobID, @NonNull final UserSettings userSettings,
-			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, ExecutorService executorService,
+			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, CleanableExecutorService executorService,
 			@NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.stage = stage;

@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 /**
- * A class that could be passed into an ExecutorService to attempt to apply a move and evaluate an ISequences state.
+ * A class that could be passed into a CleanableExecutorService to attempt to apply a move and evaluate an ISequences state.
  * 
  * @author AC
  *

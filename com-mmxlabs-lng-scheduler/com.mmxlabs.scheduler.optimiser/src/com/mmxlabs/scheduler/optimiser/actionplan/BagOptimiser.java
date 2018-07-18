@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -32,6 +31,7 @@ import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -99,7 +99,7 @@ public class BagOptimiser {
 	private IFitnessCombiner fitnessCombiner;
 
 	@Inject
-	ExecutorService executorService;
+	private CleanableExecutorService executorService;
 
 	@Inject
 	@NonNull

@@ -7,7 +7,6 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -18,6 +17,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -40,8 +41,8 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissio
 @RunWith(value = ShiroRunner.class)
 public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 	@Override
-	protected @NonNull ExecutorService createExecutorService() {
-		return Executors.newFixedThreadPool(4);
+	protected @NonNull CleanableExecutorService createExecutorService() {
+		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(4));
 	}
 
 	/**

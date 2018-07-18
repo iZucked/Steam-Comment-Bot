@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -23,6 +22,7 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.common.util.CheckedFunction;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
@@ -82,8 +82,8 @@ public class LNGScenarioRunnerCreator {
 		}
 	}
 
-	public static <T, E extends Exception> T withExecutorService(final CheckedFunction<@NonNull ExecutorService, T, E> func) throws E {
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+	public static <T, E extends Exception> T withExecutorService(final CheckedFunction<@NonNull CleanableExecutorService, T, E> func) throws E {
+		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newSingleThreadExecutor());
 		try {
 			return func.apply(executorService);
 		} finally {

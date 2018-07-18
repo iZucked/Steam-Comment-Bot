@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -31,14 +30,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
-import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.FleetProfile;
-import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
-import com.mmxlabs.models.lng.adp.SalesContractProfile;
-import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -49,7 +45,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -75,8 +70,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 @RunWith(value = ShiroRunner.class)
 public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	@Override
-	protected @NonNull ExecutorService createExecutorService() {
-		return Executors.newFixedThreadPool(4);
+	protected @NonNull CleanableExecutorService createExecutorService() {
+		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(4));
 	}
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
@@ -119,7 +114,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 		charterInMarket_1.setNominal(true);
-		
+
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPort("Barcelona LNG"), null, entity, "7")
@@ -150,7 +145,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 			Assert.assertNotNull(result2);
 			Assert.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
-		}, 		OptimiserInjectorServiceMaker.begin()//
+		}, OptimiserInjectorServiceMaker.begin()//
 				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, createExtraDataModule(charterInMarket_1))//
 				.make());
 	}
@@ -165,7 +160,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 		charterInMarket_1.setNominal(true);
-		
+
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPort("Darwin LNG"), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPort("Barcelona LNG"), null, entity, "7")
@@ -189,15 +184,15 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 			IMultiStateResult initialResult = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult();
 			final boolean[][] result1 = lightWeightSchedulerOptimiserUnit.runAndGetPairings(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
 			Assert.assertNotNull(result1);
-			Assert.assertArrayEquals(new boolean[][] {{false, true}, {true, false}}, result1);
-//			Assert.assertTrue(result1.getSolutions().size() == 2);
-//			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
-//
-//			final IMultiStateResult result2 = lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
-//			Assert.assertNotNull(result2);
-//			Assert.assertTrue(result2.getSolutions().size() == 2);
-//			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
-		}, 		OptimiserInjectorServiceMaker.begin()//
+			Assert.assertArrayEquals(new boolean[][] { { false, true }, { true, false } }, result1);
+			// Assert.assertTrue(result1.getSolutions().size() == 2);
+			// assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
+			//
+			// final IMultiStateResult result2 = lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
+			// Assert.assertNotNull(result2);
+			// Assert.assertTrue(result2.getSolutions().size() == 2);
+			// assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
+		}, OptimiserInjectorServiceMaker.begin()//
 				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, createExtraDataModule(charterInMarket_1))//
 				.make());
 	}
@@ -228,7 +223,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 
 		return slotInserter;
 	}
-	
+
 	private Module createExtraDataModule(CharterInMarket defaultMarket) {
 		final List<VesselAvailability> extraAvailabilities = new LinkedList<>();
 		final List<VesselEvent> extraVesselEvents = new LinkedList<>();
@@ -261,10 +256,9 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 			@Override
 			protected void configure() {
 				// TODO Auto-generated method stub
-				
+
 			}
 		};
 	}
-
 
 }

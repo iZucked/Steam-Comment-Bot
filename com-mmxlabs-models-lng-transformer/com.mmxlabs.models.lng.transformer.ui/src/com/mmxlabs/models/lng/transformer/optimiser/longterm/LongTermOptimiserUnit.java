@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -70,7 +70,7 @@ public class LongTermOptimiserUnit {
 
 	private final Map<Thread, LongTermOptimiser> threadCache = new ConcurrentHashMap<>(100);
 
-	private @NonNull ExecutorService executorService;
+	private @NonNull CleanableExecutorService executorService;
 
 	private IVesselAvailability nominalMarketAvailability;
 	
@@ -78,7 +78,7 @@ public class LongTermOptimiserUnit {
 
 	@SuppressWarnings("null")
 	public LongTermOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
+			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final CleanableExecutorService executorService, @NonNull final ISequences initialSequences,
 			LNGScenarioModel initialScenario, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;

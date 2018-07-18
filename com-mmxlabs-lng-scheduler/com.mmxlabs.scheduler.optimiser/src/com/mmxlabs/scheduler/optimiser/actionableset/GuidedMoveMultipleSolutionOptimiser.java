@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -19,6 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IProgressReporter;
@@ -41,7 +41,7 @@ public class GuidedMoveMultipleSolutionOptimiser {
 	private FitnessCalculator fitnessCalculator;
 
 	@Inject
-	private ExecutorService executorService;
+	private CleanableExecutorService executorService;
 
 	@Inject
 	private ISequencesManipulator manipulator;

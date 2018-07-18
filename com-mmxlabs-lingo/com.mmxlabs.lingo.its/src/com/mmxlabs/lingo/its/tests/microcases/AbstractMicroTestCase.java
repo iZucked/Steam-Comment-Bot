@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.net.MalformedURLException;
 import java.time.LocalDate;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -17,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
@@ -221,8 +221,8 @@ public abstract class AbstractMicroTestCase {
 		}
 	}
 
-	protected @NonNull ExecutorService createExecutorService() {
-		return Executors.newSingleThreadExecutor();
+	protected @NonNull CleanableExecutorService createExecutorService() {
+		return new SimpleCleanableExecutorService(Executors.newSingleThreadExecutor());
 	}
 
 	public void evaluateTest() {

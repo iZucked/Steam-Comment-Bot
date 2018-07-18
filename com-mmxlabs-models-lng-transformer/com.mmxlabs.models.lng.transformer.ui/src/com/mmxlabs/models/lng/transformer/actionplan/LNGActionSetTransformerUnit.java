@@ -24,6 +24,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
@@ -57,7 +58,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
 	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
-			@Nullable final ExecutorService executorService, final int progressTicks) {
+			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGActionSetTransformerUnit t;
@@ -105,7 +106,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
 	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
-			@Nullable final ExecutorService executorService, final int progressTicks) {
+			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGActionSetTransformerUnit t;
@@ -143,7 +144,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@SuppressWarnings("null")
 	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull ActionPlanOptimisationStage stageSettings, @Nullable final ExecutorService executorService, @NonNull ISequences initialSequences, @NonNull final IMultiStateResult inputState,
+			@NonNull ActionPlanOptimisationStage stageSettings, @Nullable final CleanableExecutorService executorService, @NonNull ISequences initialSequences, @NonNull final IMultiStateResult inputState,
 			@NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;

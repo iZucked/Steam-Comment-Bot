@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +16,8 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Singleton;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
@@ -113,7 +114,7 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 
 		// Do lookups in parallel
 		// TODO: Parameterise the thread count
-		final ExecutorService executor = createExecutorService();
+		final CleanableExecutorService executor = createExecutorService();
 
 		optimisationData.getSequenceElements().forEach(e1 -> {
 
@@ -192,14 +193,14 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
 
 	@NonNull
-	public static ExecutorService createExecutorService() {
+	public static CleanableExecutorService createExecutorService() {
 		final int cores = getNumberOfAvailableCores();
 		return createExecutorService(cores);
 	}
 
 	@NonNull
-	public static ExecutorService createExecutorService(final int nThreads) {
-		return Executors.newFixedThreadPool(nThreads);
+	public static CleanableExecutorService createExecutorService(final int nThreads) {
+		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(nThreads));
 	}
 
 	public static int getNumberOfAvailableCores() {

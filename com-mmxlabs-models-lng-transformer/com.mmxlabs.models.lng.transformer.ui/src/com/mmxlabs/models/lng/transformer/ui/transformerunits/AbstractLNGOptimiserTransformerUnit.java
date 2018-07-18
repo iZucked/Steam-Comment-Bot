@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.transformerunits;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -43,24 +42,20 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsAndFitnessSettingsStage> implements ILNGStateTransformerUnit {
 	@NonNull
-	protected
-	final LNGDataTransformer dataTransformer;
+	protected final LNGDataTransformer dataTransformer;
 
 	@NonNull
-	protected
-	final Injector injector;
+	protected final Injector injector;
 
 	@NonNull
-	protected
-	final String stage;
-	
+	protected final String stage;
+
 	protected final LocalSearchOptimiser optimiser;
 
 	protected CleanableExecutorService executorService;
 
-	public AbstractLNGOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
+	public AbstractLNGOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings, @NonNull final T stageSettings,
+			@NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
 		this.dataTransformer = dataTransformer;
 		this.stage = stage;
 		this.executorService = executorService;
@@ -74,10 +69,10 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 	}
 
 	protected abstract LocalSearchOptimiser createOptimiser(final LNGDataTransformer dataTransformer, final String stage, final ISequences inputSequences);
-	
+
 	protected abstract List<Module> createModules(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService);
+			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints,
+			CleanableExecutorService executorService);
 
 	@Override
 	@NonNull
@@ -127,54 +122,55 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 	protected abstract void threadCleanup(PerChainUnitScopeImpl scope);
 
 	@NonNull
-		public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings,
-				@Nullable final ExecutorService executorService, final int progressTicks, final Collection<@NonNull String> hints, final TriFunction<SequencesContainer, IMultiStateResult, IProgressMonitor, @NonNull IMultiStateResult> transformerUnitActor) {
-			final IChainLink link = new IChainLink() {
-	
-				@Override
-				public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-					final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
-					final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
-					if (runnerHook != null) {
-						runnerHook.beginStage(stage);
-	
-						final ISequences preloadedResult = runnerHook.getPrestoredSequences(stage, dataTransformer);
-						if (preloadedResult != null) {
-							monitor.beginTask("", 1);
-							try {
-								monitor.worked(1);
-								return new MultiStateResult(preloadedResult, new HashMap<>());
-							} finally {
-								runnerHook.endStage(stage);
-								monitor.done();
-							}
-						}
-					}
-	
-					monitor.beginTask("", 100);
-					try {
-						return transformerUnitActor.apply(initialSequences, inputState, monitor);
-					} finally {
-						if (runnerHook != null) {
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings, @Nullable final CleanableExecutorService executorService,
+			final int progressTicks, final Collection<@NonNull String> hints,
+			final TriFunction<SequencesContainer, IMultiStateResult, IProgressMonitor, @NonNull IMultiStateResult> transformerUnitActor) {
+		final IChainLink link = new IChainLink() {
+
+			@Override
+			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
+				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+				if (runnerHook != null) {
+					runnerHook.beginStage(stage);
+
+					final ISequences preloadedResult = runnerHook.getPrestoredSequences(stage, dataTransformer);
+					if (preloadedResult != null) {
+						monitor.beginTask("", 1);
+						try {
+							monitor.worked(1);
+							return new MultiStateResult(preloadedResult, new HashMap<>());
+						} finally {
 							runnerHook.endStage(stage);
+							monitor.done();
 						}
-	
-						monitor.done();
 					}
 				}
-	
-				@Override
-				public int getProgressTicks() {
-					return progressTicks;
+
+				monitor.beginTask("", 100);
+				try {
+					return transformerUnitActor.apply(initialSequences, inputState, monitor);
+				} finally {
+					if (runnerHook != null) {
+						runnerHook.endStage(stage);
+					}
+
+					monitor.done();
 				}
-			};
-			chainBuilder.addLink(link);
-			return link;
-		}
+			}
+
+			@Override
+			public int getProgressTicks() {
+				return progressTicks;
+			}
+		};
+		chainBuilder.addLink(link);
+		return link;
+	}
 
 	protected void addDefaultModules(@NonNull List<Module> modules, @NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints, ExecutorService executorService) {
+			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints,
+			CleanableExecutorService executorService) {
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 		modules.add(new InitialSequencesModule(initialSequences));
@@ -183,7 +179,7 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, stageSettings.getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-//		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 	}
 
 	public Injector getInjector() {

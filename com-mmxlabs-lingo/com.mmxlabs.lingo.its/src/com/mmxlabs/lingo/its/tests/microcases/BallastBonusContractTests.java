@@ -8,7 +8,6 @@ import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.emf.common.util.EList;
@@ -20,6 +19,8 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -52,8 +53,8 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @RunWith(value = ShiroRunner.class)
 public class BallastBonusContractTests extends AbstractMicroTestCase {
 	@Override
-	protected @NonNull ExecutorService createExecutorService() {
-		return Executors.newFixedThreadPool(4);
+	protected @NonNull CleanableExecutorService createExecutorService() {
+		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(4));
 	}
 
 	@Override
@@ -474,7 +475,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 
 			final List<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
-	Assert.assertEquals(0L, end.getGroupProfitAndLoss().getProfitAndLoss());
+			Assert.assertEquals(0L, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assert.assertEquals(cargoPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}

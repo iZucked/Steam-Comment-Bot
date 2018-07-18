@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,6 +30,7 @@ import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
@@ -64,7 +64,7 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 	@NonNull
 	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String stage, final @NonNull UserSettings userSettings,
-			@NonNull HillClimbOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService, boolean climbAll) {
+			@NonNull HillClimbOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService, boolean climbAll) {
 		final IChainLink link = new IChainLink() {
 
 			@Override

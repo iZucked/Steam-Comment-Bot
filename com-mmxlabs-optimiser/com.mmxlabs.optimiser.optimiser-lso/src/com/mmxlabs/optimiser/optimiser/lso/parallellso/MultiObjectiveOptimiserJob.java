@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 /**
- * A class that could be passed into an ExecutorService to attempt to apply a move and evaluate an ISequences state.
+ * A class that could be passed into a CleanableExecutorService to attempt to apply a move and evaluate an ISequences state.
  * 
  * @author AC
  *
@@ -28,8 +28,9 @@ public final class MultiObjectiveOptimiserJob implements Callable<MultiObjective
 	private @NonNull ISequences rawSequences;
 	private @NonNull IMoveGenerator moveGenerator;
 	private boolean failedInitialConstraintCheckers;
-	
-	public MultiObjectiveOptimiserJob(@NonNull final Injector injector, @NonNull final ISequences rawSequences, @NonNull final ILookupManager stateManager, @NonNull IMoveGenerator moveGenerator, final long seed, final boolean failedInitialConstraintCheckers) {
+
+	public MultiObjectiveOptimiserJob(@NonNull final Injector injector, @NonNull final ISequences rawSequences, @NonNull final ILookupManager stateManager, @NonNull IMoveGenerator moveGenerator,
+			final long seed, final boolean failedInitialConstraintCheckers) {
 		this.injector = injector;
 		this.rawSequences = rawSequences;
 		this.stateManager = stateManager;

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -17,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -44,9 +44,9 @@ public class MultiChainRunner implements IChainRunner {
 	private final IMultiStateResult initialState;
 
 	@NonNull
-	private final ExecutorService executorService;
+	private final CleanableExecutorService executorService;
 
-	public MultiChainRunner(@NonNull final LNGDataTransformer dataTransformer, @NonNull final List<IChainRunner> chains, @NonNull final ExecutorService executorService) {
+	public MultiChainRunner(@NonNull final LNGDataTransformer dataTransformer, @NonNull final List<IChainRunner> chains, @NonNull final CleanableExecutorService executorService) {
 		this.dataTransformer = dataTransformer;
 		this.chains = chains;
 		this.executorService = executorService;

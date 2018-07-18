@@ -7,10 +7,10 @@ package com.mmxlabs.scheduler.optimiser.actionableset;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import com.google.inject.Injector;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.IProgressReporter;
 
@@ -18,9 +18,9 @@ public class ActionableSetJobBatcher {
 	private List<ActionableSetJobState> states = new LinkedList<>();
 	private int index = 0; // index of next int
 	private final int batchSize;
-	private final ExecutorService executorService;
+	private final CleanableExecutorService executorService;
 
-	public ActionableSetJobBatcher(final ExecutorService executorService, final List<ActionableSetJobState> states, final int batchSize) {
+	public ActionableSetJobBatcher(final CleanableExecutorService executorService, final List<ActionableSetJobState> states, final int batchSize) {
 		this.states = states;
 		this.batchSize = batchSize;
 		this.executorService = executorService;

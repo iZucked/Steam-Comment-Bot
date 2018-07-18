@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -81,7 +80,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final LNGScenarioToOptimiserBridge optimiserBridge, @NonNull final String stage,
-			@NonNull final UserSettings userSettings, @NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService,
+			@NonNull final UserSettings userSettings, @NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService,
 			final int seed) {
 		final IChainLink link = new IChainLink() {
 
@@ -156,7 +155,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	@SuppressWarnings("null")
 	public LightWeightSchedulerOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final ExecutorService executorService, final LNGScenarioModel initialScenario,
+			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final CleanableExecutorService executorService, final LNGScenarioModel initialScenario,
 			@NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.userSettings = userSettings;

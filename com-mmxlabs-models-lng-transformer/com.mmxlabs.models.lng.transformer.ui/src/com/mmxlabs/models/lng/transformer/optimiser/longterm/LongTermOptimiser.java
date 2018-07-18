@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -72,7 +73,7 @@ public class LongTermOptimiser {
 	 * @param charterInMarket
 	 * @return
 	 */
-	public Pair<ISequences, Long> optimise(final ExecutorService executorService, final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
+	public Pair<ISequences, Long> optimise(final CleanableExecutorService executorService, final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
 		// (1) Identify LT slots
 		@NonNull
 		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
@@ -84,7 +85,7 @@ public class LongTermOptimiser {
 			throw new UnsupportedOperationException("Long term optimiser not supported");
 		}
 		// (2) Generate S2S bindings matrix for LT slots
-		ExecutorService es = Executors.newSingleThreadExecutor();
+//		ExecutorService es = Executors.newSingleThreadExecutor();
 		// LongTermOptimiserHelper.getS2SBindings(loads, discharges, charterInMarket, es, dataTransformer, optimiserRecorder);
 		// now using our profits recorder we have a full matrix of constraints
 		// and pnl

@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import javax.inject.Named;
@@ -18,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -35,18 +35,18 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 	private long seed;
 
 	@Inject
-	ExecutorService executorService;
+	private CleanableExecutorService executorService;
 
 	@Inject
 	@Named(ParallelLSOConstants.PARALLEL_MOO_BATCH_SIZE)
 	private int batchSize;
-	
+
 	@Inject
-	Injector injector;
+	private Injector injector;
 
-	private IncrementingRandomSeed incrementingRandomSeed = new IncrementingRandomSeed(seed);
+	private final IncrementingRandomSeed incrementingRandomSeed = new IncrementingRandomSeed(seed);
 
-	public SequentialParallelSimpleMultiObjectiveOptimiser(List<IFitnessComponent> fitnessComponents, Random random) {
+	public SequentialParallelSimpleMultiObjectiveOptimiser(final List<IFitnessComponent> fitnessComponents, final Random random) {
 		super(fitnessComponents, random);
 	}
 
@@ -55,16 +55,17 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		int i = 0;
-		MAIN_LOOP: while (i < iterationsThisStep) {
+		while (i < iterationsThisStep) {
 			initNextIteration();
 
 			// choose a solution from the archive
-			List<Future<MultiObjectiveJobState>> futures = new LinkedList<>();
+			final List<Future<MultiObjectiveJobState>> futures = new LinkedList<>();
 			// create and submit jobs
 			for (int b = 0; b < batchSize; b++) {
-				long seedd = incrementingRandomSeed.getSeed();
-				NonDominatedSolution nonDominatedSolution = getNonDominatedSolution(seedd);
-				MultiObjectiveOptimiserJob job = new MultiObjectiveOptimiserJob(injector, nonDominatedSolution.getSequences(), nonDominatedSolution.getManager(), getMoveGenerator(), seedd, failedInitialConstraintCheckers);
+				final long seedd = incrementingRandomSeed.getSeed();
+				final NonDominatedSolution nonDominatedSolution = getNonDominatedSolution(seedd);
+				final MultiObjectiveOptimiserJob job = new MultiObjectiveOptimiserJob(injector, nonDominatedSolution.getSequences(), nonDominatedSolution.getManager(), getMoveGenerator(), seedd,
+						failedInitialConstraintCheckers);
 				futures.add(executorService.submit(job));
 			}
 			int futureIdx = 0;
@@ -75,27 +76,28 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 				} catch (final ExecutionException | InterruptedException e) {
 					throw new RuntimeException(e);
 				}
-				
+
 				if (state.getStatus() == LSOJobStatus.Pass && state.getRawSequences() != null && state.getFitness() != null) {
-					boolean addedToArchive = addSolutionToNonDominatedArchive(state.getRawSequences(), state.getFitness());
+					final boolean addedToArchive = addSolutionToNonDominatedArchive(state.getRawSequences(), state.getFitness());
 					if (addedToArchive) {
 						if (DEBUG) {
-							System.out.println("new dom:"+state.getSeed());
+							System.out.println("new dom:" + state.getSeed());
 						}
 						incrementingRandomSeed.setSeed(state.getSeed());
-						for (int cancelIdx = futureIdx+1; cancelIdx < futures.size(); cancelIdx++) {
-							Future<MultiObjectiveJobState> futureToCancel = futures.get(cancelIdx);
+						for (int cancelIdx = futureIdx + 1; cancelIdx < futures.size(); cancelIdx++) {
+							final Future<MultiObjectiveJobState> futureToCancel = futures.get(cancelIdx);
 							futureToCancel.cancel(false);
 						}
 						break;
 					}
 				}
-				i++; futureIdx++;
+				i++;
+				futureIdx++;
 			}
 		}
 		if (DEBUG) {
 			System.out.println("-------------");
-			List<NonDominatedSolution> sortedValues = getSortedArchive(archive, 1);
+			final List<NonDominatedSolution> sortedValues = getSortedArchive(archive, 1);
 			sortedValues.forEach(v -> System.out.println(String.format("[%s-start,%s],", v.getFitnesses()[0] * -1, v.getFitnesses()[1])));
 		}
 		setNumberOfIterationsCompleted(numberOfMovesTried);
@@ -104,15 +106,16 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 		return iterationsThisStep;
 	}
 
-	private NonDominatedSolution getNonDominatedSolution(long seedd) {
+	private NonDominatedSolution getNonDominatedSolution(final long seedd) {
 		return archive.get(new Random(seedd).nextInt(archive.size()));
 	}
-	
-	protected boolean addSolutionToNonDominatedArchive(final ISequences pinnedPotentialRawSequences, long[] fitnesses) {
-		boolean nonDominated = isDominated(archive, fitnesses);
+
+	@Override
+	protected boolean addSolutionToNonDominatedArchive(final ISequences pinnedPotentialRawSequences, final long[] fitnesses) {
+		final boolean nonDominated = isDominated(archive, fitnesses);
 		if (nonDominated) {
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
-            lookupManager.createLookup(pinnedPotentialRawSequences);
+			lookupManager.createLookup(pinnedPotentialRawSequences);
 			archive.add(new NonDominatedSolution(new Sequences(pinnedPotentialRawSequences), fitnesses, lookupManager));
 		}
 		return nonDominated;
@@ -130,7 +133,7 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 					getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
 		}
 		if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
-			// this sets best fitness for the best solution	
+			// this sets best fitness for the best solution
 			getBestSolution();
 		}
 	}
