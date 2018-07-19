@@ -15,6 +15,7 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Exposed;
@@ -113,7 +114,7 @@ public class ADPScenarioModuleHelper {
 	// }
 	// }
 
-	public static Module createExtraDataModule(final @NonNull ADPModel adpModel) {
+	public static @NonNull Module createExtraDataModule(final @NonNull ADPModel adpModel) {
 
 		return new AbstractModule() {
 
@@ -145,7 +146,7 @@ public class ADPScenarioModuleHelper {
 		};
 	}
 
-	public static Module createEmptySolutionModule() {
+	public static @NonNull Module createEmptySolutionModule() {
 		return new PrivateModule() {
 
 			@Override

@@ -52,9 +52,10 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @SuppressWarnings("unused")
 @RunWith(value = ShiroRunner.class)
 public class BallastBonusContractTests extends AbstractMicroTestCase {
+
 	@Override
-	protected @NonNull CleanableExecutorService createExecutorService() {
-		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(4));
+	protected int getThreadCount() {
+		return 4;
 	}
 
 	@Override

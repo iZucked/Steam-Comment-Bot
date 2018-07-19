@@ -58,7 +58,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 
 	private final List<SimilarityFuture> jobs;
 	private final CleanableExecutorService controlService;
-	private final CleanableExecutorService runnerService;
 
 	private class SimilarityFuture implements Runnable {
 
@@ -78,7 +77,10 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			fork = ScenarioServiceModelUtils.fork(parent, name, new NullProgressMonitor());
 			forkRecord = SSDataManager.Instance.getModelRecord(fork);
 			this.forkScenarioDataProvider = forkRecord.aquireScenarioDataProvider("AbstractLNGRunMultipleForkedJobsControl:1");
-			this.runner = LNGScenarioRunner.make(runnerService, forkScenarioDataProvider, fork, optimisationPlan, forkScenarioDataProvider.getEditingDomain(), null, false, hints);
+			this.runner = LNGOptimisationBuilder.begin(forkScenarioDataProvider, fork) //
+					.withOptimisationPlan(optimisationPlan) //
+					.withHints(hints) //
+					.buildDefaultRunner().getScenarioRunner();
 			this.lock = forkScenarioDataProvider.getModelReference().getLock();
 			this.lock.lock();
 		}
@@ -108,6 +110,9 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			if (lock != null) {
 				lock.unlock();
 			}
+			if (runner != null) {
+				runner.getExecutorService().shutdownNow();
+			}
 			if (forkScenarioDataProvider != null) {
 				forkScenarioDataProvider.close();
 			}
@@ -136,8 +141,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 		// This executor is for the futures we create and execute here...
 		controlService = LNGScenarioChainBuilder.createExecutorService(numberOfThreads);
-		// .. this executor is for the optimisation itself to avoid blocking the control executor
-		runnerService = LNGScenarioChainBuilder.createExecutorService();
 		// Disable optimisation in P&L testing phase
 		if (LicenseFeatures.isPermitted("features:phase-pnl-testing") || LicenseFeatures.isPermitted("features:phase-limited-testing")) {
 			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
@@ -169,9 +172,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 
 	@Override
 	public void dispose() {
-		if (!runnerService.isShutdown()) {
-			runnerService.shutdownNow();
-		}
 		if (!controlService.isShutdown()) {
 			controlService.shutdownNow();
 		}
@@ -224,9 +224,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			}
 		} finally {
 			progressMonitor.done();
-			if (!runnerService.isShutdown()) {
-				runnerService.shutdownNow();
-			}
 			if (!controlService.isShutdown()) {
 				controlService.shutdownNow();
 			}

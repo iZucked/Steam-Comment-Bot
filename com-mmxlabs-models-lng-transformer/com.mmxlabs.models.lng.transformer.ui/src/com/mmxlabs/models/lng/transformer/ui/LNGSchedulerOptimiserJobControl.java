@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
@@ -27,7 +26,6 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
@@ -152,8 +150,13 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				}
 			};
 		}
-		scenarioRunner = LNGScenarioRunner.make(executorService, originalScenarioDataProvider, scenarioInstance, jobDescriptor.getOptimisationPlan(), originalEditingDomain, runnerHook, false,
-				LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+		scenarioRunner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+				.withOptimisationPlan(jobDescriptor.getOptimisationPlan()) //
+				.withRunnerHook(runnerHook) //
+				.withOptimiseHint() //
+				.buildDefaultRunner() //
+				.getScenarioRunner();
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 	}

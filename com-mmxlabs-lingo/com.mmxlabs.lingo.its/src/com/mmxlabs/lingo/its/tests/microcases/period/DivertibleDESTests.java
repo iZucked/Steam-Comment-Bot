@@ -38,10 +38,12 @@ import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -108,13 +110,16 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
+				.buildDefaultRunner();
 		try {
+			runner.evaluateInitialState();
 
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
@@ -131,7 +136,7 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 			// Validate the initial sequences are valid
 			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 }

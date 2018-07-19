@@ -10,13 +10,10 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-import javax.management.RuntimeErrorException;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -26,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
 import com.mmxlabs.lngdataserver.integration.ports.PortsClient;
@@ -50,8 +46,8 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -134,29 +130,24 @@ public class ScenarioServicePublishAction {
 				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
 
 				// Evaluate scenario
-				// try (IScenarioDataProvider o_scenarioDataProvider =
-				// modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL"))
-				// {
-				final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+				final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
+				assert optimisationPlan != null;
+
+				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
+				final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, scenarioInstance) //
+						.withThreadCount(1) //
+						.withOptimisationPlan(optimisationPlan) //
+						.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY) //
+						.buildDefaultRunner();
 
 				try {
-					final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
-
-					// final LNGScenarioModel o_scenarioModel =
-					// o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-					final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
-					assert optimisationPlan != null;
-
-					// Hack: Add on shipping only hint to avoid generating spot markets during eval.
-					final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, true,
-							LNGTransformerHelper.HINT_SHIPPING_ONLY);
 					scenarioDataProvider.setLastEvaluationFailed(true);
-					runner.evaluateInitialState();
+					runnerBuilder.evaluateInitialState();
 					scenarioDataProvider.setLastEvaluationFailed(false);
 				} catch (final Exception e) {
 					throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_TO_EVALUATE);
 				} finally {
-					executorService.shutdown();
+					runnerBuilder.dispose();
 				}
 			}
 

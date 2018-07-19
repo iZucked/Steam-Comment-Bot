@@ -7,25 +7,19 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
  * A simple {@link IJobControl} to evaluate a schedule.
@@ -37,7 +31,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	private final LinkedList<IJobControlListener> listeners = new LinkedList<>();
 
-	private LNGSchedulerJobDescriptor jobDescriptor;
+	private @NonNull LNGSchedulerJobDescriptor jobDescriptor;
 
 	private EJobState currentState = EJobState.UNKNOWN;
 
@@ -60,28 +54,27 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGSchedulerEvaluationJobControl")) {
-			final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
-
 			// Hack: Add on shipping only hint to avoid generating spot markets during eval.
-			final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true,
-					LNGTransformerHelper.HINT_SHIPPING_ONLY);
+
+			scenarioDataProvider.setLastEvaluationFailed(true);
+			LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider, scenarioInstance) //
+					.withThreadCount(1) //
+					.withOptimisationPlan(jobDescriptor.getOptimisationPlan()) //
+					.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY) //
+					.buildDefaultRunner();
 			try {
-				scenarioDataProvider.setLastEvaluationFailed(true);
 				runner.evaluateInitialState();
 				scenarioDataProvider.setLastEvaluationFailed(false);
 			} finally {
-				// runner.dispose();
+				runner.dispose();
 			}
 
 			setJobState(EJobState.COMPLETED);
 		} catch (final Throwable e) {
 			setJobState(EJobState.CANCELLED);
 			throw new RuntimeException(e);
-		} finally {
-			executorService.shutdownNow();
 		}
 	}
 
@@ -139,10 +132,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	@Override
 	public void dispose() {
-
-		jobDescriptor = null;
 		this.currentState = EJobState.UNKNOWN;
-
 	}
 
 	private synchronized void setJobState(final EJobState newState) {

@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.net.MalformedURLException;
 import java.time.LocalDate;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -15,8 +14,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -39,13 +36,11 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -59,8 +54,8 @@ public abstract class AbstractMicroTestCase {
 	protected FleetModelFinder fleetModelFinder;
 	protected PortModelBuilder portModelBuilder;
 	protected PortModelFinder portFinder;
-	protected CargoModelBuilder cargoModelBuilder;
 	protected CargoModelFinder cargoModelFinder;
+	protected CargoModelBuilder cargoModelBuilder;
 	protected CostModelBuilder costModelBuilder;
 	protected CommercialModelBuilder commercialModelBuilder;
 	protected FleetModelBuilder fleetModelBuilder;
@@ -104,6 +99,7 @@ public abstract class AbstractMicroTestCase {
 		scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
+		cargoModelFinder = scenarioModelFinder.getCargoModelFinder();
 		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
 		portModelBuilder = scenarioModelBuilder.getPortModelBuilder();
 		distanceModelBuilder = scenarioModelBuilder.getDistanceModelBuilder();
@@ -183,6 +179,12 @@ public abstract class AbstractMicroTestCase {
 
 	public void evaluateWithLSOTest(final boolean optimise, @Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
 			@NonNull final Consumer<LNGScenarioRunner> checker, IOptimiserInjectorService overrides) {
+		final Consumer<OptimisationPlan> planCustomiser;
+		if (tweaker != null) {
+			planCustomiser = tweaker;
+		} else {
+			planCustomiser = plan -> ScenarioUtils.setLSOStageIterations(plan, 10_000);
+		}
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -192,41 +194,21 @@ public abstract class AbstractMicroTestCase {
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
-		if (tweaker != null) {
-			tweaker.accept(optimisationPlan);
-		} else {
-			ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
-		}
+		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withOptimisationPlanCustomiser(planCustomiser) //
+				.withRunnerHookFactory(runnerHookFactory) //
+				.withUserSettings(userSettings) //
+				.withOptimiserInjectorService(overrides) //
+				.withOptimiseHint() //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
 
-		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
-
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(),
-					new TransformerExtensionTestBootstrapModule(), overrides, null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			if (runnerHookFactory != null) {
-				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
-				if (runnerHook != null) {
-					scenarioRunner.setRunnerHook(runnerHook);
-				}
-			}
-
-			scenarioRunner.evaluateInitialState();
-
-			if (optimise) {
-				scenarioRunner.runAndApplyBest();
-			}
-
-			checker.accept(scenarioRunner);
+			runnerBuilder.evaluateInitialState();
+			runnerBuilder.run(optimise, checker);
 		} finally {
-			executorService.shutdownNow();
+			runnerBuilder.dispose();
 		}
-	}
-
-	protected @NonNull CleanableExecutorService createExecutorService() {
-		return new SimpleCleanableExecutorService(Executors.newSingleThreadExecutor());
 	}
 
 	public void evaluateTest() {
@@ -244,29 +226,19 @@ public abstract class AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		if (tweaker != null) {
-			tweaker.accept(optimisationPlan);
-		}
+		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withOptimisationPlanCustomiser(tweaker) //
+				.withRunnerHookFactory(runnerHookFactory) //
+				.withUserSettings(userSettings) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(getThreadCount()) //
+				.buildDefaultRunner();
 
-		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
-
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
-
-			if (runnerHookFactory != null) {
-				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
-				if (runnerHook != null) {
-					scenarioRunner.setRunnerHook(runnerHook);
-				}
-			}
-
-			scenarioRunner.evaluateInitialState();
-
-			checker.accept(scenarioRunner);
+			runnerBuilder.evaluateInitialState();
+			runnerBuilder.run(false, checker);
 		} finally {
-			executorService.shutdownNow();
+			runnerBuilder.dispose();
 		}
 	}
 
@@ -279,31 +251,22 @@ public abstract class AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		final OptimisationPlan optimiserPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		if (tweaker != null) {
-			tweaker.accept(optimiserPlan);
-		}
+		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withOptimisationPlanCustomiser(tweaker) //
+				.withUserSettings(userSettings) //
+				.withOptimiserInjectorService(localOverrides) //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
 
-		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimiserPlan, scenarioDataProvider.getEditingDomain(), null, localOverrides,
-					null, true);
-
-			// final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, lngScenarioModel, optimiserSettings, null, localOverrides, true);
-			//
-			// if (runnerHookFactory != null) {
-			// final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
-			// if (runnerHook != null) {
-			// scenarioRunner.setRunnerHook(runnerHook);
-			// }
-			// }
-
-			scenarioRunner.evaluateInitialState();
-			checker.accept(scenarioRunner);
+			runnerBuilder.evaluateInitialState();
+			runnerBuilder.run(false, checker);
 		} finally {
-			executorService.shutdownNow();
+			runnerBuilder.dispose();
 		}
 	}
 
+	protected int getThreadCount() {
+		return 1;
+	}
 }

@@ -31,6 +31,8 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
@@ -339,17 +341,21 @@ public class PeriodOptimiserTest {
 
 				final OptimisationPlan plan = getPlan();
 
-				final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
-						LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+						.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+						.withOptimiseHint() //
+						.withOptimisationPlan(plan)//
+						.buildDefaultRunner();
+
 				runner.evaluateInitialState();
 				if (OUTPUT_SCENARIOS) {
-					save(runner.getScenarioDataProvider(), "c:/temp/scenario1.lingo");
+					save(runner.getScenarioRunner().getScenarioDataProvider(), "c:/temp/scenario1.lingo");
 				}
 
-				runner.runAndApplyBest();
+				runner.run(true);
 
 				if (OUTPUT_SCENARIOS) {
-					save(runner.getScenarioDataProvider(), "c:/temp/scenario2.lingo");
+					save(runner.getScenarioRunner().getScenarioDataProvider(), "c:/temp/scenario2.lingo");
 				}
 			} catch (final Exception er) {
 				// this exception should not occur
@@ -381,16 +387,21 @@ public class PeriodOptimiserTest {
 				plan.getUserSettings().setPeriodStartDate(start);
 				plan.getUserSettings().setPeriodEnd(end);
 
-				final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
-						LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+						.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+						.withOptimiseHint() //
+						.withOptimisationPlan(plan)//
+						.buildDefaultRunner();
+
 				runner.evaluateInitialState();
 
 				if (OUTPUT_SCENARIOS) {
-					save(runner.getScenarioDataProvider(), "c:/temp/scenario1p.lingo");
+					save(runner.getScenarioRunner().getScenarioDataProvider(), "c:/temp/scenario1p.lingo");
 				}
-				runner.runAndApplyBest();
+				runner.run(true);
+
 				if (OUTPUT_SCENARIOS) {
-					save(runner.getScenarioDataProvider(), "c:/temp/scenario2p.lingo");
+					save(runner.getScenarioRunner().getScenarioDataProvider(), "c:/temp/scenario2p.lingo");
 				}
 			} catch (final Exception er) {
 				er.printStackTrace();

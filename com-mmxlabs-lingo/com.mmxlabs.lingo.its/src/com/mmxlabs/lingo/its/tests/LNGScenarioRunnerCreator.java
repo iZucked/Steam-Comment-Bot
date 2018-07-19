@@ -31,6 +31,8 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
@@ -100,13 +102,18 @@ public class LNGScenarioRunnerCreator {
 
 	public static void withEvaluationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer) throws Exception {
-		withExecutorService(executorService -> {
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
-					createITSService(), null, false);
-
-			scenarioRunner.evaluateInitialState();
-			consumer.accept(scenarioRunner);
-		});
+		
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withOptimiserInjectorService(createITSService()) //
+				.withThreadCount(1)//
+				.buildDefaultRunner();
+		try {
+			runner.evaluateInitialState();
+			consumer.accept(runner.getScenarioRunner());
+		} finally {
+			runner.dispose();
+		}
 	}
 
 	public static void withEvaluationRunnerWithGCO(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer)
@@ -127,13 +134,19 @@ public class LNGScenarioRunnerCreator {
 
 	public static <E extends Exception> void withOptimisationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, E> consumer) throws E {
-		withExecutorService(executorService -> {
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
-					createITSService(), null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
-			scenarioRunner.evaluateInitialState();
-			consumer.accept(scenarioRunner);
-		});
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
+				.withOptimiserInjectorService(createITSService()) //
+				.withThreadCount(1)//
+				.buildDefaultRunner();
+		try {
+			runner.evaluateInitialState();
+			consumer.accept(runner.getScenarioRunner());
+		} finally {
+			runner.dispose();
+		}
 	}
 
 	public static <E extends Exception> void withOptimisationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
@@ -148,13 +161,18 @@ public class LNGScenarioRunnerCreator {
 			}
 		}
 
-		withExecutorService(executorService -> {
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
-					optimiserInjectorService, null, false, hints);
-
-			scenarioRunner.evaluateInitialState();
-			consumer.accept(scenarioRunner);
-		});
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withHints(hints) //
+				.withOptimiserInjectorService(optimiserInjectorService) //
+				.withThreadCount(1)//
+				.buildDefaultRunner();
+		try {
+			runner.evaluateInitialState();
+			consumer.accept(runner.getScenarioRunner());
+		} finally {
+			runner.dispose();
+		}
 	}
 
 	public static <E extends Exception> void withLegacyOptimisationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final Boolean withGCO,

@@ -42,10 +42,12 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -124,13 +126,16 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
 		try {
+			runner.evaluateInitialState();
 
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
@@ -163,7 +168,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 			// Validate the initial sequences are valid
 			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 
@@ -223,13 +228,16 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
 		try {
+			runner.evaluateInitialState();
 
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
@@ -261,7 +269,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 			// Validate the initial sequences are valid
 			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 
@@ -322,13 +330,17 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
-		try {
 
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
+		try {
+			runner.evaluateInitialState();
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
@@ -361,7 +373,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 			// Validate the initial sequences are valid
 			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 
@@ -448,13 +460,16 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
 		try {
+			runner.evaluateInitialState();
 
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
@@ -491,7 +506,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 			// Validate the initial sequences are valid
 			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 }

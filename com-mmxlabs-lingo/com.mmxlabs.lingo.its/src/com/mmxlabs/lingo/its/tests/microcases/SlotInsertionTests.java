@@ -52,8 +52,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 @RunWith(value = ShiroRunner.class)
 public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Override
-	protected @NonNull CleanableExecutorService createExecutorService() {
-		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(4));
+	protected int getThreadCount() {
+		return 4;
 	}
 
 	@Test

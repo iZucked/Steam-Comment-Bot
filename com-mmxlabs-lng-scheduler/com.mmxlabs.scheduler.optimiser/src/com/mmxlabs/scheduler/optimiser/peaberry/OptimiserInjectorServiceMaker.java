@@ -161,4 +161,11 @@ public class OptimiserInjectorServiceMaker {
 		}
 
 	}
+
+	public @Nullable IOptimiserInjectorService make(@Nullable IOptimiserInjectorService optimiserInjectorService) {
+		if (optimiserInjectorService != null) {
+			throw new UnsupportedOperationException();
+		}
+		return make();
+	}
 }

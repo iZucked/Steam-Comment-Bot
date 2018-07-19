@@ -41,8 +41,8 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissio
 @RunWith(value = ShiroRunner.class)
 public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 	@Override
-	protected @NonNull CleanableExecutorService createExecutorService() {
-		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(4));
+	protected int getThreadCount() {
+		return 4;
 	}
 
 	/**

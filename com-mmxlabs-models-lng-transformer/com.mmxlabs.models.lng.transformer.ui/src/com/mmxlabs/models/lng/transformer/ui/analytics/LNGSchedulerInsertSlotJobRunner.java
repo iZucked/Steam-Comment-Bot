@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalLong;
-import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -49,6 +48,8 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -132,10 +133,16 @@ public class LNGSchedulerInsertSlotJobRunner {
 			}
 		}
 
-		final String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
-
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
-		scenarioRunner = LNGScenarioRunner.make(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, hints);
+		final String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+				.withOptimisationPlan(LNGScenarioRunnerUtils.createDefaultOptimisationPlan()) //
+				.withOptimiserInjectorService(extraService) //
+				.withThreadCount(1)//
+				.withHints(hints) //
+				.buildDefaultRunner();
+
+		scenarioRunner = runner.getScenarioRunner();
 
 		if (userSettings.isSetPeriodStartDate() || userSettings.isSetPeriodEnd()) {
 			// Map between original and possible period scenario

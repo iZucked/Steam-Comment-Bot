@@ -71,12 +71,16 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -936,7 +940,7 @@ public class CompareViewTests {
 		return Executors.newSingleThreadExecutor();
 	}
 
-	public void evaluate(IScenarioDataProvider scenarioDataProvider, final LNGScenarioModel lngScenarioModel) {
+	public void evaluate(@NonNull IScenarioDataProvider scenarioDataProvider, final LNGScenarioModel lngScenarioModel) {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -948,12 +952,16 @@ public class CompareViewTests {
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.buildDefaultRunner();
 		try {
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
-			scenarioRunner.evaluateInitialState();
+			runner.evaluateInitialState();
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 }

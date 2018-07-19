@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -80,8 +81,6 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 	private final LNGScenarioRunner scenarioRunner;
 
-	private final CleanableExecutorService executorService;
-
 	private final EditingDomain originalEditingDomain;
 
 	private ActionableSetPlan actionableSetPlan = null;
@@ -96,17 +95,16 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		this.originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGActionPlanJobControl");
 		originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
 
-		// TODO: This should be static / central service?
-		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
-
 		final UserSettings userSettings = jobDescriptor.getUserSettings();
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 		plan.setUserSettings(EcoreUtil.copy(userSettings));
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
-		scenarioRunner = LNGScenarioRunner.make(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, false, //
-				LNGTransformerHelper.HINT_OPTIMISE_LSO);
+		scenarioRunner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+				.withOptimisationPlan(plan).withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
+				.buildDefaultRunner() //
+				.getScenarioRunner();
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 	}
@@ -280,15 +278,13 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 	@Override
 	public void dispose() {
-		executorService.shutdownNow();
-
+		if (scenarioRunner != null) {
+			scenarioRunner.getExecutorService().shutdownNow();
+		}
 		if (originalScenarioDataProvider != null) {
 			originalScenarioDataProvider.close();
 		}
 
-		// if (scenarioRunner != null) {
-		// scenarioRunner.dispose();
-		// }
 		super.dispose();
 	}
 

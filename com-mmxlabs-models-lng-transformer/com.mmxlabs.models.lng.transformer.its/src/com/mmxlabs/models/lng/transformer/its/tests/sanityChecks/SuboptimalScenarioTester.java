@@ -30,9 +30,11 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
@@ -129,23 +131,27 @@ public class SuboptimalScenarioTester {
 
 		final int n = loadPorts.length;
 
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
-		try {
-			// optimise the scenario
+		// optimise the scenario
 
-			final OptimisationPlan plan = LNGScenarioRunnerUtils.createDefaultOptimisationPlan();
-			for (OptimisationStage stage : plan.getStages()) {
-				if (stage instanceof LocalSearchOptimisationStage) {
-					LocalSearchOptimisationStage lsoStage = (LocalSearchOptimisationStage) stage;
-					lsoStage.getAnnealingSettings().setIterations(10_000);
-				}
+		final OptimisationPlan plan = LNGScenarioRunnerUtils.createDefaultOptimisationPlan();
+		for (OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof LocalSearchOptimisationStage) {
+				LocalSearchOptimisationStage lsoStage = (LocalSearchOptimisationStage) stage;
+				lsoStage.getAnnealingSettings().setIterations(10_000);
 			}
-			final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			runner.evaluateInitialState();
-			runner.runAndApplyBest();
+		}
 
-			final Schedule schedule = runner.getSchedule();
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(plan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
+				.buildDefaultRunner();
+		try {
+			runner.evaluateInitialState();
+			runner.run(true);
+
+			final Schedule schedule = runner.getScenarioRunner().getSchedule();
 			Assert.assertNotNull(schedule);
 
 			// set up an array storing whether load ports are assigned at all
@@ -176,7 +182,7 @@ public class SuboptimalScenarioTester {
 				Assert.assertTrue(String.format("Expected a wiring for load port '%s' but none assigned in solution.", loadPorts[i].getName()), found[i]);
 			}
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 
 	}

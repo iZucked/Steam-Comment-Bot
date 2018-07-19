@@ -49,7 +49,7 @@ public class LNGScenarioChainBuilder {
 	 * @param initialHints
 	 * @return
 	 */
-	public static IChainRunner createStandardOptimisationChain(@NonNull final String resultName, @NonNull final LNGDataTransformer dataTransformer,
+	public static @NonNull IChainRunner createStandardOptimisationChain(@NonNull final String resultName, @NonNull final LNGDataTransformer dataTransformer,
 			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final CleanableExecutorService executorService,
 			@NonNull final String @Nullable... initialHints) {
 		boolean createOptimiser = false;

@@ -7,15 +7,12 @@ package com.mmxlabs.lingo.its.tests.microcases.period;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
@@ -40,8 +37,8 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -121,13 +118,16 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 
 		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
 		try {
+			runner.evaluateInitialState();
 
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
@@ -139,10 +139,10 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			Assert.assertFalse(period_event.getAllowedVessels().isEmpty());
 			Assert.assertEquals(charter_1.getAllowedVessels().size(), period_event.getAllowedVessels().size());
 
-			scenarioRunner.runAndApplyBest();
+			runner.run(true);
 			Assert.assertSame(vesselAvailability_2, charter_1.getVesselAssignmentType());
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 
@@ -214,13 +214,16 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 
 		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
+		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
+				.withOptimisationPlan(optimisationPlan) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.withThreadCount(1)//
+				.withOptimiseHint() //
+				.buildDefaultRunner();
 		try {
+			runner.evaluateInitialState();
 
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
@@ -234,11 +237,11 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, period_event.getAllowedVessels().size());
 			Assert.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));
 
-			scenarioRunner.runAndApplyBest();
+			runner.run(true);
 			Assert.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());
 
 		} finally {
-			executorService.shutdownNow();
+			runner.dispose();
 		}
 	}
 }

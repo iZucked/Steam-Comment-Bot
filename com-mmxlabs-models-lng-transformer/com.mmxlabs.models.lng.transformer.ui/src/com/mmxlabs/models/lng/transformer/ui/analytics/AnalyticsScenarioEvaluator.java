@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
@@ -80,20 +81,17 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	public void evaluateBaseCase(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final ScenarioInstance parentForFork,
 			final boolean fork, final String forkName) {
 
+		@NonNull
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, scenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
 		// No optimisation going on, clear stages. Need better OptimisationHelper API?
 		optimisationPlan.getStages().clear();
 
-		// Generate internal data
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null, null,
-					false);
+			LNGOptimisationBuilder.quickEvaluation(scenarioDataProvider, optimisationPlan, null);
 
-			scenarioRunner.evaluateInitialState();
 			if (parentForFork != null && fork) {
 				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
 				scenarioService.copyInto(parentForFork, scenarioDataProvider, forkName, new NullProgressMonitor());
@@ -101,8 +99,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		} catch (final Exception e) {
 			e.printStackTrace();
-		} finally {
-			executorService.shutdownNow();
 		}
 
 	}
