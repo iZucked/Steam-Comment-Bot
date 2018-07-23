@@ -42,7 +42,7 @@ public final class TravelTimeUtils {
 		for (final Route route : portModel.getRoutes()) {
 			if (route.getRouteOption() == routeOption) {
 				final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
-				final int extraIdleTime = getContingencyIdleTimeInHours(route, fromPort, toPort, modelDistanceProvider);
+				final int extraIdleTime = getContingencyIdleTimeInHours(fromPort, toPort, modelDistanceProvider);
 
 				int extraTime = 0;
 				if (vessel != null) {
@@ -68,7 +68,7 @@ public final class TravelTimeUtils {
 			ModelDistanceProvider modelDistanceProvider) {
 
 		final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
-		final int extraIdleTime = getContingencyIdleTimeInHours(route, fromPort, toPort, modelDistanceProvider);
+		final int extraIdleTime = getContingencyIdleTimeInHours(fromPort, toPort, modelDistanceProvider);
 
 		int extraTime = 0;
 		if (vessel != null) {
@@ -93,9 +93,9 @@ public final class TravelTimeUtils {
 		return modelDistanceProvider.getDistance(from, to, route.getRouteOption());
 	}
 
-	public static int getContingencyIdleTimeInHours(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
+	public static int getContingencyIdleTimeInHours(@NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
 
-		return 4;// modelDistanceProvider.getDistance(from, to, route.getRouteOption());
+		return modelDistanceProvider.getPortToPortContingencyIdleTimeInHours(from, to);
 	}
 
 	public static String formatHours(final long hours) {

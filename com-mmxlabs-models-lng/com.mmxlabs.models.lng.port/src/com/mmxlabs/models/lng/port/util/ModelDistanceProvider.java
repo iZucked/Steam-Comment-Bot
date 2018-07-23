@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.port.util;
 
 import java.lang.ref.SoftReference;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.CanalEntry;
+import com.mmxlabs.models.lng.port.ContingencyMatrix;
+import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
@@ -31,8 +34,9 @@ public class ModelDistanceProvider extends EContentAdapter {
 	private final @Nullable PortModel portModel;
 
 	private SoftReference<@Nullable Map<RouteOption, Map<Pair<String, String>, Integer>>> distanceCache = new SoftReference<>(null);
+	private SoftReference<@Nullable Map<Pair<String, String>, Integer>> portToPortContingencyIdleTimeCache = new SoftReference<>(null);
 
-	public synchronized Map<RouteOption, Map<Pair<String, String>, Integer>> buildCache() {
+	public synchronized Map<RouteOption, Map<Pair<String, String>, Integer>> buildDistanceCache() {
 
 		final Map<String, Port> portMap = new HashMap<>();
 		for (final Port p : portModel.getPorts()) {
@@ -59,6 +63,32 @@ public class ModelDistanceProvider extends EContentAdapter {
 		return distanceCacheObj;
 	}
 
+	public synchronized Map<Pair<String, String>, Integer> buildContingnecyIdleTimeCache() {
+
+		ContingencyMatrix contingencyMatrix = portModel.getContingencyMatrix();
+		if (contingencyMatrix == null) {
+			return Collections.emptyMap();
+		}
+
+		final Map<String, Port> portMap = new HashMap<>();
+		for (final Port p : portModel.getPorts()) {
+			Location l = p.getLocation();
+			portMap.put(l.getTempMMXID(), p);
+		}
+
+		final Map<Pair<String, String>, Integer> cacheObj = new HashMap<>();
+
+		for (final ContingencyMatrixEntry entry : contingencyMatrix.getEntries()) {
+
+			String fromId = getId(entry.getFromPort());
+			String toId = getId(entry.getToPort());
+
+			cacheObj.put(new Pair<>(fromId, toId), entry.getDuration());
+		}
+		portToPortContingencyIdleTimeCache = new SoftReference<>(cacheObj);
+		return cacheObj;
+	}
+
 	private String getId(Port port) {
 		Location l = port.getLocation();
 		if (l != null) {
@@ -72,6 +102,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 
 	public synchronized void clearCache() {
 		distanceCache.clear();
+		portToPortContingencyIdleTimeCache.clear();
 	}
 
 	public ModelDistanceProvider(final PortModel portModel) {
@@ -139,7 +170,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 
 		Map<RouteOption, Map<Pair<String, String>, Integer>> map = distanceCache.get();
 		if (map == null) {
-			map = buildCache();
+			map = buildDistanceCache();
 		}
 		final Map<Pair<String, String>, Integer> matrix = map.get(routeOption);
 		if (matrix == null) {
@@ -260,5 +291,55 @@ public class ModelDistanceProvider extends EContentAdapter {
 			}
 		}
 		return null;
+	}
+
+	public int getPortToPortContingencyIdleTimeInHours(final Port from, final Port to) {
+		if (from == null || from.getLocation() == null) {
+			return 0;
+		}
+		if (to == null || to.getLocation() == null) {
+			return 0;
+		}
+		return getPortToPortContingencyIdleTimeInHours(from.getLocation(), to.getLocation());
+	}
+
+	public int getPortToPortContingencyIdleTimeInHours(final Location from, final Location to) {
+		if (from == null) {
+			return 0;
+		}
+		if (to == null) {
+			return 0;
+		}
+		return getPortToPortContingencyIdleTimeInHours(from.getTempMMXID(), to.getTempMMXID());
+	}
+
+	public int getPortToPortContingencyIdleTimeInHours(final String from, final String to) {
+
+		if (from == null) {
+			return 0;
+		}
+		if (to == null) {
+			return 0;
+		}
+
+		if (from.equals(to)) {
+			return 0;
+		}
+
+		assert portModel != null;
+
+		Map<Pair<String, String>, Integer> map = portToPortContingencyIdleTimeCache.get();
+		if (map == null) {
+			map = buildContingnecyIdleTimeCache();
+		}
+		final Pair<String, String> key = new Pair<>(from, to);
+		if (map.containsKey(key)) {
+			final Integer days = map.get(key);
+			if (days != null) {
+				return 24 * days.intValue();
+			}
+
+		}
+		return 0;
 	}
 }
