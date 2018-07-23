@@ -31,9 +31,9 @@ public class LightWeightSchedulerStage2Module extends AbstractModule {
 	public static final String LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT = "LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT";
 	public static final boolean DEBUG = false;
 
-	private Map<Thread, LightweightSchedulerOptimiser> threadCache;
+	private Map<Thread, LightWeightSchedulerOptimiser> threadCache;
 
-	public LightWeightSchedulerStage2Module(Map<Thread, LightweightSchedulerOptimiser> threadCache) {
+	public LightWeightSchedulerStage2Module(Map<Thread, LightWeightSchedulerOptimiser> threadCache) {
 		this.threadCache = threadCache;
 	}
 
@@ -46,11 +46,11 @@ public class LightWeightSchedulerStage2Module extends AbstractModule {
 	}
 
 	@Provides
-	private LightweightSchedulerOptimiser providePerThreadBagMover(@NonNull final Injector injector) {
+	private LightWeightSchedulerOptimiser providePerThreadBagMover(@NonNull final Injector injector) {
 
-		LightweightSchedulerOptimiser lightweightSchedulerOptimiser = threadCache.get(Thread.currentThread());
+		LightWeightSchedulerOptimiser lightweightSchedulerOptimiser = threadCache.get(Thread.currentThread());
 		if (lightweightSchedulerOptimiser == null) {
-			lightweightSchedulerOptimiser = new LightweightSchedulerOptimiser();
+			lightweightSchedulerOptimiser = new LightWeightSchedulerOptimiser();
 			injector.injectMembers(lightweightSchedulerOptimiser);
 			threadCache.put(Thread.currentThread(), lightweightSchedulerOptimiser);
 		}

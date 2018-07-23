@@ -48,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @author achurchill
  *
  */
-public class LightweightSchedulerOptimiser {
+public class LightWeightSchedulerOptimiser {
 
 	@interface NonLDD {
 

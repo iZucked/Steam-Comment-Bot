@@ -70,7 +70,7 @@ public class LightWeightSchedulerOptimiserUnit {
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
 
-	private final Map<Thread, LightweightSchedulerOptimiser> threadCache = new ConcurrentHashMap<>(100);
+	private final Map<Thread, LightWeightSchedulerOptimiser> threadCache = new ConcurrentHashMap<>(100);
 
 	private @NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings;
 
@@ -283,7 +283,7 @@ public class LightWeightSchedulerOptimiserUnit {
 	public @NonNull IMultiStateResult runStage2(final @NonNull IVesselAvailability pnlVessel, @NonNull final Injector stage2Injector, final @NonNull IProgressMonitor monitor) {
 		try {
 
-			final LightweightSchedulerOptimiser calculator = stage2Injector.getInstance(LightweightSchedulerOptimiser.class);
+			final LightWeightSchedulerOptimiser calculator = stage2Injector.getInstance(LightWeightSchedulerOptimiser.class);
 			final Pair<ISequences, Long> result = calculator.optimise(pnlVessel, monitor);
 
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = new LinkedList<>();
