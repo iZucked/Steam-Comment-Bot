@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
@@ -54,7 +55,8 @@ public class LoadTriggerHelper {
 			TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = new TreeMap<>();
 			
 			// add all feeds to map
-			addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts);
+			addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts, Function.identity());
+			addNetVolumes(inventory.getOfftakes(), capcityTreeMap, insAndOuts, a -> -a);
 			// modify to take into account start date
 			List<SlotAllocation> loadSlotsToConsider = getSortedFilteredLoadSlots(model, start, inventory, insAndOuts);
 			processWithLoadsAndStartDate(loadSlotsToConsider, insAndOuts, start);
@@ -155,7 +157,7 @@ public class LoadTriggerHelper {
 		}
 	}
 	
-	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts) {
+	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, Function<Integer, Integer> volumeFunction) {
 		for (InventoryEventRow inventoryEventRow : events) {
 			if (inventoryEventRow.getStartDate() != null) {
 				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(inventoryEventRow.getStartDate());
@@ -169,7 +171,7 @@ public class LoadTriggerHelper {
 					inventoryDailyEvent.maxVolume = capacityRow.getMaxVolume();
 					insAndOuts.put(inventoryEventRow.getStartDate(), inventoryDailyEvent);
 				}
-				inventoryDailyEvent.addVolume(inventoryEventRow.getReliableVolume());
+				inventoryDailyEvent.addVolume(volumeFunction.apply(inventoryEventRow.getReliableVolume()));
 			}
 		}
 	}

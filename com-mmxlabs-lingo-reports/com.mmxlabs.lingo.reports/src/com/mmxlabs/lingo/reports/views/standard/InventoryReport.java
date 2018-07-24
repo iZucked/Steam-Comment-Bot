@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
@@ -220,7 +221,9 @@ public class InventoryReport extends ViewPart {
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
 				createColumn("Vessel", 150, o -> o.vessel);
 				createColumn("D-ID", 150, o -> o.dischargeId);
-				createColumn("Port", 150, o -> o.dischargePort);
+				createColumn("Buyer", 150, o -> o.salesContract);
+				createColumn("Delivery date", 150, o -> o.salesDate != null ? o.salesDate.format(formatter) : null);
+				createColumn("Sales Port", 150, o -> o.dischargePort);
 				tableItem.setControl(tableViewer.getControl());
 
 			}
@@ -343,27 +346,47 @@ public class InventoryReport extends ViewPart {
 									if (e.getSlotAllocation() != null) {
 										type = "Cargo";
 										final String vessel = e.getSlotAllocation().getCargoAllocation().getEvents().get(0).getSequence().getName();
-
+										SlotAllocation allocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get();
 										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
 												.findFirst().get().getName();
 										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
 												.findFirst().get().getPort().getName();
 
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId, dischargePort);
+										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getName();
+										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getPort().getName();
+										Contract contract = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getContract();
+										String salesContract = "";
+										if (contract != null) {
+											salesContract = contract.getName();
+										}
+										ZonedDateTime time = allocation.getSlotVisit().getStart();
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId,
+												dischargePort, salesContract, time == null ? null : time.toLocalDate());
+										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getName();
+										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getPort().getName();
+										Contract contract = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getContract();
+										String salesContract = "";
+										if (contract != null) {
+											salesContract = contract.getName();
+										}
+										ZonedDateTime time = allocation.getSlotVisit().getStart();
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId,
+												dischargePort, salesContract, time == null ? null : time.toLocalDate());
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-
+										
 										tableLevels.add(lvl);
 									} else if (e.getOpenSlotAllocation() != null) {
 										type = "Open";
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null);
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-
+										
 										tableLevels.add(lvl);
 									} else if (e.getEvent() != null) {
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null);
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										InventoryChangeEvent first = firstInventoryDataFinal.get();
-
+										
 										tableLevels.add(lvl);
 									}
 								});
@@ -601,23 +624,22 @@ public class InventoryReport extends ViewPart {
 
 		public int runningTotal = 0;
 		public boolean breach = false;
+		private String salesContract;
+		private LocalDate salesDate;
 
-		public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort) {
-			this.date = date;
-			this.type = type.toString();
-			this.changeInM3 = changeInM3;
-			this.vessel = vessel;
-			this.dischargeId = dischargeId;
-			this.dischargePort = dischargePort;
+		public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort, final String salesContract, LocalDate salesDate) {
+			this(date, type.toString(), changeInM3, vessel, dischargeId, dischargePort, salesContract, salesDate);
 		}
 
-		public InventoryLevel(final LocalDate date, final String type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort) {
+		public InventoryLevel(final LocalDate date, final String type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort, final String salesContract, LocalDate salesDate) {
 			this.date = date;
 			this.type = type;
 			this.changeInM3 = changeInM3;
 			this.vessel = vessel;
 			this.dischargeId = dischargeId;
 			this.dischargePort = dischargePort;
+			this.salesContract = salesContract;
+			this.salesDate = salesDate;
 		}
 
 	}

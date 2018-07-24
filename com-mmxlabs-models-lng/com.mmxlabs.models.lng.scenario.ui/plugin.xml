@@ -187,6 +187,7 @@
                   label="Import cargoes"
                   style="push">
             </command>
+            <!--
             <command
                   commandId="com.mmxlabs.models.lng.scenario.ui.import.inventory"
                   label="Import inventory"
@@ -200,6 +201,7 @@
                   </test>
                </visibleWhen>
             </command>
+            !-->
          </menuContribution>
          <!--
           <menuContribution
@@ -211,7 +213,7 @@
                   style="push">
             </command>
          </menuContribution>
-         -->
+         !-->
 
      </extension>
       <extension
@@ -266,12 +268,13 @@
                  id="com.mmxlabs.models.lng.scenario.import.wizards.currency"
                  name="Bulk import currency curves from CSV">
            </command>
+           <!--
            <command
                  defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.inventory.ImportInventoryHandler"
                  id="com.mmxlabs.models.lng.scenario.ui.import.inventory"
                  name="Import inventory">
            </command>
-          
+          !-->
       </extension>
       <extension
             point="com.mmxlabs.models.util.import.extramodelimporters">
