@@ -38,6 +38,8 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridLayout;
@@ -74,6 +76,10 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
+import com.mmxlabs.rcp.common.actions.PackActionFactory;
+import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class InventoryReport extends ViewPart {
@@ -140,6 +146,10 @@ public class InventoryReport extends ViewPart {
 	private ComboViewer comboViewer;
 
 	private String lastFacility = null;
+
+	private PackGridTableColumnsAction packAction;
+
+	private CopyGridToClipboardAction copyAction;
 
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
@@ -222,6 +232,22 @@ public class InventoryReport extends ViewPart {
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 
+		packAction = PackActionFactory.createPackColumnsAction(tableViewer);
+		getViewSite().getActionBars().getToolBarManager().add(packAction);
+		packAction.setEnabled(folder.getSelectionIndex() == 1);
+		
+		copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(tableViewer);
+		getViewSite().getActionBars().getToolBarManager().add(copyAction);
+		copyAction.setEnabled(folder.getSelectionIndex() == 1);
+
+		folder.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				copyAction.setEnabled(folder.getSelectionIndex() == 1);
+				packAction.setEnabled(folder.getSelectionIndex() == 1);
+			}
+		});
+		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
 	/**
@@ -318,24 +344,26 @@ public class InventoryReport extends ViewPart {
 										type = "Cargo";
 										final String vessel = e.getSlotAllocation().getCargoAllocation().getEvents().get(0).getSequence().getName();
 
-										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getName();
-										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get().getPort().getName();
-										
+										final String dischargeId = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
+												.findFirst().get().getName();
+										final String dischargePort = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
+												.findFirst().get().getPort().getName();
+
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, dischargeId, dischargePort);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-										
+
 										tableLevels.add(lvl);
 									} else if (e.getOpenSlotAllocation() != null) {
 										type = "Open";
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
-										
+
 										tableLevels.add(lvl);
 									} else if (e.getEvent() != null) {
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										InventoryChangeEvent first = firstInventoryDataFinal.get();
-										
+
 										tableLevels.add(lvl);
 									}
 								});
@@ -570,7 +598,7 @@ public class InventoryReport extends ViewPart {
 		public final String vessel;
 		public final String dischargeId;
 		public final String dischargePort;
-		
+
 		public int runningTotal = 0;
 		public boolean breach = false;
 
