@@ -225,7 +225,7 @@ public class InventoryReport extends ViewPart {
 				createColumn("D-ID", 150, o -> o.dischargeId);
 				createColumn("Buyer", 150, o -> o.salesContract);
 				createColumn("Delivery date", 150, o -> o.salesDate != null ? o.salesDate.format(formatter) : null);
-				createColumn("Sales Port", 150, o -> o.dischargePort);
+				createColumn("Delivery port", 150, o -> o.dischargePort);
 				tableItem.setControl(tableViewer.getControl());
 
 			}
