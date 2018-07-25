@@ -41,7 +41,7 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 	public LoadTriggerDialog(Shell shell, LNGScenarioModel model, LocalDate promptStart) {
 		super(shell);
 		this.model = model;
-		this.selectedDate = promptStart;
+//		this.selectedDate = promptStart;
 	}
 	
     @Override
