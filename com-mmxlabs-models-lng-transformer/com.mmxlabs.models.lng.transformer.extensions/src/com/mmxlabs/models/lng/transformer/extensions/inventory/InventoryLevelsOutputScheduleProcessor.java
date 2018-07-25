@@ -201,8 +201,8 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 						if (slotAllocation.getPort() == facility.getPort()) {
 							final int change = (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) ? -slotAllocation.getPhysicalVolumeTransferred()
 									: slotAllocation.getPhysicalVolumeTransferred();
-							final ZonedDateTime start = slotAllocation.getSlotVisit().getStart();
-							final LocalDate date = start.toLocalDate();
+							final ZonedDateTime end = slotAllocation.getSlotVisit().getEnd();
+							final LocalDate date = end.toLocalDate();
 
 							// don't look at slots after end of inventory
 							if (maxDate.compareTo(date) < 0) {
@@ -212,13 +212,13 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 							final InventoryChangeEvent evt = ScheduleFactory.eINSTANCE.createInventoryChangeEvent();
 
 							if (latestLoad == null) {
-								latestLoad = start.toLocalDate();
+								latestLoad = end.toLocalDate();
 							} else {
-								latestLoad = f_maxDate.apply(latestLoad, start.toLocalDate());
+								latestLoad = f_maxDate.apply(latestLoad, end.toLocalDate());
 							}
 
 							evt.setSlotAllocation(slotAllocation);
-							evt.setDate(start.toLocalDateTime());
+							evt.setDate(end.toLocalDateTime());
 							evt.setChangeQuantity(change);
 							events.add(evt);
 						}
