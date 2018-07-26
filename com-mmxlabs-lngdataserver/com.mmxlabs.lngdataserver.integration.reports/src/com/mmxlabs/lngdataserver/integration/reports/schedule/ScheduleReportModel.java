@@ -1,8 +1,9 @@
+package com.mmxlabs.lngdataserver.integration.reports.schedule;
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.reports.schedule;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -14,6 +15,9 @@ public class ScheduleReportModel {
 	String name;
 	String type;
 	
+	String departurePort;
+	String arrivalPort;
+		
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@JsonSerialize(using = LocalDateSerializer.class)  
 	LocalDate startDate;
@@ -61,4 +65,21 @@ public class ScheduleReportModel {
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
+
+	public String getDeparturePort() {
+		return departurePort;
+	}
+
+	public void setDeparturePort(String departurePort) {
+		this.departurePort = departurePort;
+	}
+
+	public String getArrivalPort() {
+		return arrivalPort;
+	}
+
+	public void setArrivalPort(String arrivalPort) {
+		this.arrivalPort = arrivalPort;
+	}
+	
 }

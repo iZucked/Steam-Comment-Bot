@@ -1,8 +1,9 @@
+package com.mmxlabs.lngdataserver.integration.reports.longshort;
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.reports.longshort;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,8 +14,8 @@ public class LongShortReportModel {
 	
 	int year;
 	int month;
-	int count;
-	String cargoType;
+	int longs;
+	int shorts;
 	
 	public int getYear() {
 		return year;
@@ -28,16 +29,16 @@ public class LongShortReportModel {
 	public void setMonth(int month) {
 		this.month = month;
 	}
-	public int getCount() {
-		return count;
+	public int getLongs() {
+		return longs;
 	}
-	public void setCount(int count) {
-		this.count = count;
+	public void setLongs(int longs) {
+		this.longs = longs;
 	}
-	public String getCargoType() {
-		return cargoType;
+	public int getShorts() {
+		return shorts;
 	}
-	public void setCargoType(String cargoType) {
-		this.cargoType = cargoType;
-	}	
+	public void setShorts(int shorts) {
+		this.shorts = shorts;
+	}
 }

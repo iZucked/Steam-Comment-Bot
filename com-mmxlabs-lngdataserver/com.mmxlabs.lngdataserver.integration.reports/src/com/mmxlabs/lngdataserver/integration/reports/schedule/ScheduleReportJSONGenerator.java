@@ -1,8 +1,9 @@
+package com.mmxlabs.lngdataserver.integration.reports.schedule;
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.reports.schedule;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -20,14 +21,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl;
 import com.mmxlabs.models.lng.schedule.impl.IdleImpl;
 import com.mmxlabs.models.lng.schedule.impl.JourneyImpl;
+import com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl;
+import com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl;
 
 public class ScheduleReportJSONGenerator {
 	
@@ -36,10 +41,26 @@ public class ScheduleReportJSONGenerator {
 				scheduleReportModel.startDate = e.getStart().toLocalDate();
 				scheduleReportModel.endDate = e.getEnd().toLocalDate();
 				scheduleReportModel.type = type;
-
 				scheduleReportModel.vesselName = vesselName;
 				scheduleReportModel.name = "" + count;
 				
+				if (type.equals("laden") || type.equals("ballast")) {
+
+					if (e.getPort() != null) {
+						scheduleReportModel.departurePort = e.getPort().getName();
+					} 
+					
+					if (e.getNextEvent() != null && e.getNextEvent().getPort() != null) {
+						scheduleReportModel.arrivalPort = e.getNextEvent().getPort().getName();
+					}
+				} else {
+					if (e.getPort() != null) {
+						scheduleReportModel.departurePort = e.getPort().getName();
+					}
+					scheduleReportModel.arrivalPort = null;
+				}
+				
+	
 				return scheduleReportModel;
 	}
 
@@ -63,7 +84,8 @@ public class ScheduleReportJSONGenerator {
 			List<Event> ladenJourneys = sequence.getEvents().stream().filter(x -> x instanceof JourneyImpl).filter(x -> ((JourneyImpl) x).isLaden()).collect(Collectors.toList());
 			List<Event> ballastJourneys = sequence.getEvents().stream().filter(x -> x instanceof JourneyImpl).filter(x -> !((JourneyImpl) x).isLaden()).collect(Collectors.toList());
 			List<Event> idleJourneys = sequence.getEvents().stream().filter(x -> x instanceof IdleImpl).collect(Collectors.toList());
-			
+			List<Event> visitJourneys = sequence.getEvents().stream().filter(x -> x instanceof SlotVisitImpl).collect(Collectors.toList());
+			List<Event> charterJourneys = sequence.getEvents().stream().filter(x -> x instanceof GeneratedCharterOutImpl).collect(Collectors.toList());
 			
 			for(Event ladenJourney: ladenJourneys) {
 				schedulesReportModels.add(createScheduleReportModel(ladenJourney, "laden", vesselName, count++));
@@ -75,6 +97,14 @@ public class ScheduleReportJSONGenerator {
 
 			for(Event idleJourney: idleJourneys) {
 				schedulesReportModels.add(createScheduleReportModel(idleJourney, "idle", vesselName, count++));
+			}
+
+			for(Event visitJourney: visitJourneys) {
+				schedulesReportModels.add(createScheduleReportModel(visitJourney, "visit", vesselName, count++));
+			}
+
+			for(Event charterJourney: charterJourneys) {
+				schedulesReportModels.add(createScheduleReportModel(charterJourney, "charter", vesselName, count++));
 			}
 		}
 		

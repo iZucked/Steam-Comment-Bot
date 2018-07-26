@@ -1,8 +1,9 @@
+package com.mmxlabs.lngdataserver.integration.reports.longshort;
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.reports.longshort;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -12,23 +13,21 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.emf.common.util.EList;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 public class LongShortJSONGenerator {
 
@@ -36,39 +35,29 @@ public class LongShortJSONGenerator {
 		Map<YearMonth, Integer> shortsPerMonths = new HashMap<>(); 
 		Map<YearMonth, Integer> longsPerMonths = new HashMap<>();
 		
-		for (CargoAllocation cargoAllocation: scheduleModel.getSchedule().getCargoAllocations()) {
-			EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
-			List<SlotAllocation> collect = slotAllocations //
-											.stream() //
-											.filter(s->(s.getSlot() != null && (s.getSlot() instanceof LoadSlot))) //
-											.collect(Collectors.toList());
-			Optional<LoadSlot> loadOptional = slotAllocations //
-												.stream() //
-												.filter(s->(s.getSlot() != null && (s.getSlot() instanceof LoadSlot))) //
-												.map(s->(LoadSlot) s.getSlot()) //
-												.findFirst();
-			Optional<DischargeSlot> dischargeOptional = slotAllocations.stream() //
-					.filter(s->(s.getSlot() != null && s.getSlot() instanceof DischargeSlot)) //
-					.map(s->(DischargeSlot) s.getSlot()) //
-					.findFirst();
+		for (OpenSlotAllocation openSlotAllocation: scheduleModel.getSchedule().getOpenSlotAllocations()) {
+			Slot slot = openSlotAllocation.getSlot();
 			
 			// Long
-			if (!loadOptional.isPresent() && dischargeOptional.isPresent()) {
-				LocalDate dischargeDate = dischargeOptional.get().getWindowStart();
+			if (slot instanceof DischargeSlot) {
+				DischargeSlot discharge = (DischargeSlot) slot;
+
+				LocalDate dischargeDate = discharge.getWindowStart();
 				YearMonth key = YearMonth.of(dischargeDate.getYear(), dischargeDate.getMonth());
+				longsPerMonths.computeIfPresent(key, (k, v) -> ++v);
 				longsPerMonths.computeIfAbsent(key, (k) -> 1);
-				longsPerMonths.computeIfPresent(key, (k, v) -> v++);
 				continue;
-			}
-			
+			} 
+
 			// Short
-			if (loadOptional.isPresent() && !dischargeOptional.isPresent()) {
-				LocalDate loadDate = loadOptional.get().getWindowStart();
-				LocalDate dischargeDate = loadOptional.get().getWindowStart();
+			if (slot instanceof LoadSlot) {
+				LoadSlot load = (LoadSlot) slot;
+				
+				LocalDate loadDate = load.getWindowStart();
 				YearMonth key = YearMonth.of(loadDate.getYear(), loadDate.getMonth());
-				longsPerMonths.computeIfAbsent(key, (k) -> 1);
-				longsPerMonths.computeIfPresent(key, (k, v) ->longsPerMonths.get(key) + 1);
-			}
+				shortsPerMonths.computeIfPresent(key, (k, v) -> ++v);
+				shortsPerMonths.computeIfAbsent(key, (k) -> 1);
+			} 
 		}
 		
 		YearMonth min = findMinYearMonth(shortsPerMonths.keySet(), longsPerMonths.keySet());
@@ -86,28 +75,19 @@ public class LongShortJSONGenerator {
 
 	private static List<LongShortReportModel> fillLongShortReportModelRange(YearMonth min, YearMonth max, Map<YearMonth, Integer> shortsPerMonths, Map<YearMonth, Integer>longsPerMonths) {
 		
-		List<YearMonth> months = Stream.iterate(min, date -> date.plusMonths(1)).limit(ChronoUnit.MONTHS.between(min, max)).collect(Collectors.toList());
+		List<YearMonth> months = Stream.iterate(min, date -> date.plusMonths(1)).limit(ChronoUnit.MONTHS.between(min, max) + 1).collect(Collectors.toList());
 		List<LongShortReportModel> longShortReportModels = new ArrayList<>();
 		
 		for(YearMonth month: months) {
-			LongShortReportModel shortReportModel = new LongShortReportModel();
-			shortReportModel.month = month.getMonthValue();
-			shortReportModel.year = month.getMonthValue();
-			shortReportModel.cargoType = "short";
-			shortReportModel.count = shortsPerMonths.computeIfAbsent(month, key -> 0);
+			LongShortReportModel longShortReportModel = new LongShortReportModel();
+			longShortReportModel.month = month.getMonthValue();
+			longShortReportModel.year = month.getYear();
+			longShortReportModel.longs = longsPerMonths.computeIfAbsent(month, key -> 0);
+			longShortReportModel.shorts = shortsPerMonths.computeIfAbsent(month, key -> 0);
 			
-			longShortReportModels.add(shortReportModel);
+			longShortReportModels.add(longShortReportModel);
 		}
 		
-		for(YearMonth month: months) {
-			LongShortReportModel longReportModel = new LongShortReportModel();
-			longReportModel.month = month.getMonthValue();
-			longReportModel.year = month.getMonthValue();
-			longReportModel.cargoType = "long";
-			longReportModel.count = longsPerMonths.computeIfAbsent(month, key -> 0);
-			
-			longShortReportModels.add(longReportModel);
-		}
 		return longShortReportModels;
 	}
 	
