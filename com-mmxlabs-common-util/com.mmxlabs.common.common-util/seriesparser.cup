@@ -36,7 +36,7 @@ scan with {: return s.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
 terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, COMMA, PERCENT, QUESTION;
-terminal			MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH;
+terminal			MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S;
 
 terminal Integer    INTEGER;
 terminal Double    NUMBER;
@@ -72,6 +72,7 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpres
              | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(shiftMapper,e1,  -i1);       :}
              | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionConstructor(calendarMonthMapper, lhs, n1, n2, n3); :}
              | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionConstructor(calendarMonthMapper, e1, e2, s); :}
+             | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionConstructor(base, lower, higher, a1,b1,a2,b2,a3,b3); :}             
              | MINUS expr:e                 {: RESULT = new IExpression<ISeries>() {
 						@Override
 						public ISeries evaluate() {

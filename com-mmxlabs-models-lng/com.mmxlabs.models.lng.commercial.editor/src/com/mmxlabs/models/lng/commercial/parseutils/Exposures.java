@@ -1,5 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.parseutils;
@@ -157,7 +156,7 @@ public class Exposures {
 	 */
 
 	public static @Nullable Collection<ExposureDetail> calculateExposure(final @NonNull String priceExpression, final YearMonth date, final double volumeInMMBTu, final boolean isPurchase,
-			final @NonNull LookupData lookupData, int dayOfMonth) {
+			final @NonNull LookupData lookupData, final int dayOfMonth) {
 
 		// Parse the expression
 		final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
@@ -298,14 +297,7 @@ public class Exposures {
 		} else if (parentNode.token.equalsIgnoreCase("SPLITMONTH")) {
 			final MarkedUpNode splitPoint = markupNodes(parentNode.children[2], lookupData);
 			double splitPointValue = -1;
-
-			if (splitPoint instanceof ConstantNode) {
-				final ConstantNode constantNode = (ConstantNode) splitPoint;
-				splitPointValue = constantNode.getConstant();
-			} else {
-				throw new IllegalStateException();
-			}
-
+			splitPointValue = extractDoubleNode(splitPoint);
 			n = new SplitNode((int) splitPointValue);
 		} else if (parentNode.token.equalsIgnoreCase("SHIFT")) {
 			final MarkedUpNode child = markupNodes(parentNode.children[0], lookupData);
@@ -337,25 +329,24 @@ public class Exposures {
 			final double months;
 			final double lag;
 			final double reset;
-			if (monthsValue instanceof ConstantNode) {
-				final ConstantNode constantNode = (ConstantNode) monthsValue;
-				months = constantNode.getConstant();
-			} else {
-				throw new IllegalStateException();
-			}
-			if (lagValue instanceof ConstantNode) {
-				final ConstantNode constantNode = (ConstantNode) lagValue;
-				lag = constantNode.getConstant();
-			} else {
-				throw new IllegalStateException();
-			}
-			if (resetValue instanceof ConstantNode) {
-				final ConstantNode constantNode = (ConstantNode) resetValue;
-				reset = constantNode.getConstant();
-			} else {
-				throw new IllegalStateException();
-			}
+			months = extractDoubleNode(monthsValue);
+			lag = extractDoubleNode(lagValue);
+			reset = extractDoubleNode(resetValue);
 			n = new DatedAverageNode(child, (int) Math.round(months), (int) Math.round(lag), (int) Math.round(reset));
+			return n;
+		} else if (parentNode.token.equalsIgnoreCase("S")) {
+			final MarkedUpNode base = markupNodes(parentNode.children[0], lookupData);
+
+			final double lowerThan = extractDoubleNode(markupNodes(parentNode.children[1], lookupData));
+			final double higherThan = extractDoubleNode(markupNodes(parentNode.children[2], lookupData));
+			final double a1 = extractDoubleNode(markupNodes(parentNode.children[3], lookupData));
+			final double b1 = extractDoubleNode(markupNodes(parentNode.children[4], lookupData));
+			final double a2 = extractDoubleNode(markupNodes(parentNode.children[5], lookupData));
+			final double b2 = extractDoubleNode(markupNodes(parentNode.children[6], lookupData));
+			final double a3 = extractDoubleNode(markupNodes(parentNode.children[7], lookupData));
+			final double b3 = extractDoubleNode(markupNodes(parentNode.children[8], lookupData));
+
+			n = new SCurveNode(base, lowerThan, higherThan, a1, b1, a2, b2, a3, b3);
 			return n;
 		} else if (parentNode.token.equals("-") && parentNode.children.length == 1) {
 			// Prefix operator! - Convert to 0-expr
@@ -390,6 +381,14 @@ public class Exposures {
 			n.addChildNode(markupNodes(child, lookupData));
 		}
 		return n;
+	}
+
+	private static double extractDoubleNode(final MarkedUpNode lowerThanValue) {
+		if (lowerThanValue instanceof ConstantNode) {
+			final ConstantNode constantNode = (ConstantNode) lowerThanValue;
+			return constantNode.getConstant();
+		}
+		throw new IllegalStateException();
 	}
 
 	/**
@@ -469,7 +468,7 @@ public class Exposures {
 	}
 
 	private static Collection<ExposureDetail> createExposureDetail(final @NonNull MarkedUpNode node, final YearMonth pricingDate, final double volumeInMMBtu, final boolean isPurchase,
-			final LookupData lookupData, int dayOfMonth) {
+			final LookupData lookupData, final int dayOfMonth) {
 		final List<ExposureDetail> m = new LinkedList<>();
 
 		final InputRecord inputRecord = new InputRecord();
@@ -587,7 +586,7 @@ public class Exposures {
 	}
 
 	private static @NonNull Pair<Double, IExposureNode> getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, final YearMonth date, final LookupData lookupData,
-			int dayOfMonth) {
+			final int dayOfMonth) {
 		if (node instanceof ShiftNode) {
 			final ShiftNode shiftNode = (ShiftNode) node;
 			return getExposureNode(inputRecord, shiftNode.getChild(), date.minusMonths(shiftNode.getMonths()), lookupData, dayOfMonth);
@@ -611,6 +610,33 @@ public class Exposures {
 			}
 
 			return new Pair<>(price / months, records);
+		} else if (node instanceof SCurveNode) {
+			final SCurveNode scurveNode = (SCurveNode) node;
+
+			final Pair<Double, IExposureNode> baseNodeData = getExposureNode(inputRecord, scurveNode.getBase(), date, lookupData, dayOfMonth);
+
+			double timesValue;
+			double plusValue;
+			if (baseNodeData.getFirst() < scurveNode.getLowerThan()) {
+				timesValue = scurveNode.getA1();
+				plusValue = scurveNode.getB1();
+			} else if (baseNodeData.getFirst() > scurveNode.getHigherThan()) {
+				timesValue = scurveNode.getA3();
+				plusValue = scurveNode.getB3();
+			} else {
+				timesValue = scurveNode.getA2();
+				plusValue = scurveNode.getB2();
+			}
+
+			OperatorNode times = new OperatorNode("*");
+			times.addChildNode(new ConstantNode(timesValue));
+			times.addChildNode(scurveNode.getBase());
+
+			OperatorNode plus = new OperatorNode("+");
+			plus.addChildNode(times);
+			plus.addChildNode(new ConstantNode(scurveNode.getB1()));
+
+			return getExposureNode(inputRecord, plus, date, lookupData, dayOfMonth);
 		} else if (node instanceof ConstantNode) {
 			final ConstantNode constantNode = (ConstantNode) node;
 			return new Pair<>(constantNode.getConstant(), new Constant(constantNode.getConstant(), ""));

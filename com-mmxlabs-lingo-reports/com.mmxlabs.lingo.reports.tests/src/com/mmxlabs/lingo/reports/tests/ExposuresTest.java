@@ -226,6 +226,41 @@ public class ExposuresTest {
 						) //
 				},
 
+				{ "SCurve - (1)", "S(C, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "C", multi( //
+						calcExpected("C", YearMonth.of(2016, 4), 9 * 1, 1) //
+				), //
+					//
+						indiciesOf( //
+								makeIndex("C", "$", "mmbtu", YearMonth.of(2016, 4), 9) //
+						) //
+				}, //
+				{ "SCurve - (2)", "S(C, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "C", multi( //
+						calcExpected("C", YearMonth.of(2016, 4), 10, 3) //
+				), //
+					//
+						indiciesOf( //
+								makeIndex("C", "$", "mmbtu", YearMonth.of(2016, 4), 10) //
+						) //
+				}, //
+				{ "SCurve - (3)", "S(C, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "C", multi( //
+						calcExpected("C", YearMonth.of(2016, 4), 20, 3) //
+				), //
+					//
+						indiciesOf( //
+								makeIndex("C", "$", "mmbtu", YearMonth.of(2016, 4), 20) //
+
+						) //
+				}, //
+				{ "SCurve - (4)", "S(C, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "C", multi( //
+						calcExpected("C", YearMonth.of(2016, 4), 21, 5) //
+				), //
+					//
+						indiciesOf( //
+								makeIndex("C", "$", "mmbtu", YearMonth.of(2016, 4), 21) //
+
+						) //
+				}, //
+
 		});
 	}
 

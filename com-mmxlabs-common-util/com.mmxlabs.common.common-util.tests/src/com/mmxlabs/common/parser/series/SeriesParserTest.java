@@ -44,7 +44,7 @@ public class SeriesParserTest {
 				{ "SHIFT(HH,4)", 1.0 }, //
 
 				{ "DATEDAVG(HH,1,2,3)", 1.0 }, //
-				
+
 				// Testing the lowercase keyword
 				{ "max(1,max(2,3))", 3.0 }, //
 				{ "min(1,max(2,3))", 1.0 }, //
@@ -52,7 +52,7 @@ public class SeriesParserTest {
 				{ "shift(HH,4)", 1.0 }, //
 
 				{ "datedavg(HH,1,2,3)", 1.0 }, //
-				
+
 				// Testing mixed case
 				{ "Max(1,mAX(2,3))", 3.0 }, //
 				{ "miN(1,MAX(2,3))", 1.0 }, //
@@ -60,9 +60,14 @@ public class SeriesParserTest {
 				{ "ShIfT(HH,4)", 1.0 }, //
 
 				{ "datedAVG(HH,1,2,3)", 1.0 }, //
-				
+
 				// Testing split month function
 				{ "splitmonth(HH,HH2, 15)", 1.0 }, //
+				// S-Curve
+				{ "s(9, 10.0, 20.0, 1.0, 2.0, 3.0,4.0,5.0,6.0)", 9.0 * 1.0 + 2.0 }, //
+				{ "s(10, 10.0, 20.0, 1.0, 2.0, 3.0,4.0,5.0,6.0)", 10.0 * 3.0 + 4.0 }, //
+				{ "s(20, 10.0, 20.0, 1.0, 2.0, 3.0,4.0,5.0,6.0)", 20.0 * 3.0 + 4.0 }, //
+				{ "s(21, 10.0, 20.0, 1.0, 2.0, 3.0,4.0,5.0,6.0)", 21.0 * 5.0 + 6.0 }, //
 		});
 	}
 
@@ -84,6 +89,8 @@ public class SeriesParserTest {
 		SeriesParser parser = new SeriesParser();
 		parser.addSeriesExpression("HH", "1.0");
 		parser.addSeriesExpression("HH2", "2.0");
+		parser.addSeriesExpression("HH3", "3.0");
+		parser.addSeriesExpression("HH4", "4.0");
 
 		parser.setShiftMapper((a, b) -> a);
 		parser.setCalendarMonthMapper(new CalendarMonthMapper() {

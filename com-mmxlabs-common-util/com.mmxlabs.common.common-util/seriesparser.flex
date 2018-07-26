@@ -72,6 +72,7 @@ white_space = {new_line} | [ \t\f]
 "SHIFT"           { return symbol("shift",SHIFT); }
 "DATEDAVG"           { return symbol("datedavg",DATEDAVG); }
 "SPLITMONTH"           { return symbol("splitmonth", SPLITMONTH); }
+"S"           { return symbol("scurve", S); }
  
 /* separators */
   \"              { string.setLength(0); yybegin(STRING); }

@@ -1,0 +1,54 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
+package com.mmxlabs.common.parser.series;
+
+import java.time.ZonedDateTime;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.series.functions.SCurveSeries;
+
+public class SCurveFunctionConstructor implements IExpression<ISeries> {
+
+	private final IExpression<ISeries> base;
+	private final double lowerThan;
+	private final double higherThan;
+	private final IExpression<ISeries> lowerSeries;
+	private final IExpression<ISeries> series;
+	private final IExpression<ISeries> higherSeries;
+
+	public SCurveFunctionConstructor(IExpression<ISeries> base, final double lowerThan, final double higherThan, final double a1, final double b1, final double a2, final double b2, final double a3,
+			final double b3) {
+		this(base, lowerThan, higherThan, makeExpression(base, a1, b1), makeExpression(base, a2, b2), makeExpression(base, a3, b3));
+	}
+
+	public SCurveFunctionConstructor(IExpression<ISeries> base, final double lowerThan, final double higherThan, final IExpression<ISeries> lowerSeries, final IExpression<ISeries> series,
+			final IExpression<ISeries> higherSeries) {
+		this.base = base;
+		this.lowerThan = lowerThan;
+		this.higherThan = higherThan;
+		this.lowerSeries = lowerSeries;
+		this.series = series;
+		this.higherSeries = higherSeries;
+	}
+
+	@Override
+	public @NonNull ISeries evaluate() {
+		return new SCurveSeries(base.evaluate(), lowerThan, higherThan, lowerSeries.evaluate(), series.evaluate(), higherSeries.evaluate());
+	}
+
+	@Override
+	public @NonNull ISeries evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
+		return new SCurveSeries(base.evaluate(earliestAndLatestTime), lowerThan, higherThan, lowerSeries.evaluate(earliestAndLatestTime), series.evaluate(earliestAndLatestTime),
+				higherSeries.evaluate(earliestAndLatestTime));
+	}
+
+	private static IExpression<ISeries> makeExpression(IExpression<ISeries> x, double a, double b) {
+		return new SeriesOperatorExpression('+', //
+				new SeriesOperatorExpression('*', x, new ConstantSeriesExpression(Double.valueOf(a))), new ConstantSeriesExpression(Double.valueOf(b)));
+	}
+}
