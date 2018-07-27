@@ -98,6 +98,7 @@ import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.models.ui.validation.impl.Multi;
+import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -354,9 +355,9 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 				btn_optimise.setEnabled(status.getSeverity() < IStatus.ERROR);
 				// Large tooltip covers the button and stop user being able to press it.
 				if (status.isOK()) {
-//					btn_optimise.setToolTipText(null);
+					// btn_optimise.setToolTipText(null);
 				} else {
-//					btn_optimise.setToolTipText(DialogValidationSupport.processMessages(status));
+					// btn_optimise.setToolTipText(DialogValidationSupport.processMessages(status));
 				}
 			});
 			RunnerHelper.runNowOrAsync(() -> refreshValidation(status));
@@ -674,9 +675,14 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 					monitor.done();
 				}
 			});
-		} catch (InvocationTargetException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			if (e.getCause() instanceof InfeasibleSolutionException || e.getTargetException() instanceof InfeasibleSolutionException) {
+				MessageDialog.openError(getShell(), "Unable to generate solution", "Unable to generate a feasible schedule with the given constraints.");
+			} else {
+				e.printStackTrace();
+			}
+		} catch (InterruptedException e) {
+
 		}
 	}
 

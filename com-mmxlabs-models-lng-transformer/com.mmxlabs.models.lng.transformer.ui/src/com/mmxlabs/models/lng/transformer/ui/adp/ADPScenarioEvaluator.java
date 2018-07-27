@@ -80,6 +80,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -200,6 +201,8 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			}
 
 			return adpResult;
+		} catch (final InfeasibleSolutionException e) {
+			throw e;
 		} catch (final Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

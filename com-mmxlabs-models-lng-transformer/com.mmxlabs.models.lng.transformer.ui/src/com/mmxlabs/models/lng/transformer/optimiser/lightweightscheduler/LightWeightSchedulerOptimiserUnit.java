@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -178,7 +179,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		final ILightWeightOptimisationData lwOptimsdationData = computeStage1Data(stage1Injector, pnlVessel, progress.split(29));
 
 		if (lwOptimsdationData == null) {
-			throw new RuntimeException();
+			throw new InfeasibleSolutionException("No feasible solution found");
 		}
 		final Injector stage2Injector = buildStage2Injector(stage1Injector, lwOptimsdationData);
 		IMultiStateResult result = runStage2(pnlVessel, stage2Injector, progress.split(70));

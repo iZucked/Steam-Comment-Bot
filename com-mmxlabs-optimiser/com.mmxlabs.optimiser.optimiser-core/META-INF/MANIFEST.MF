@@ -20,6 +20,7 @@ Export-Package: com.mmxlabs.optimiser.core,
  com.mmxlabs.optimiser.core.constraints.impl,
  com.mmxlabs.optimiser.core.evaluation,
  com.mmxlabs.optimiser.core.evaluation.impl,
+ com.mmxlabs.optimiser.core.exceptions,
  com.mmxlabs.optimiser.core.fitness,
  com.mmxlabs.optimiser.core.fitness.impl,
  com.mmxlabs.optimiser.core.impl,
@@ -27,5 +28,5 @@ Export-Package: com.mmxlabs.optimiser.core,
  com.mmxlabs.optimiser.core.modules,
  com.mmxlabs.optimiser.core.moves,
  com.mmxlabs.optimiser.core.scenario,
- com.mmxlabs.optimiser.core.scenario.impl 
+ com.mmxlabs.optimiser.core.scenario.impl
 Bundle-ActivationPolicy: lazy
