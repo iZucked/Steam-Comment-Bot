@@ -145,7 +145,7 @@ public class CargoesPerContractJSONGenerator {
 		}
 
 		List<CargoesPerContractReportModel> cargoesPerContractReportModels = fillLongShortReportModelRange(min, max, purchaseContractPerMonths, sellContractPerMonths);
-		jsonOutput(cargoesPerContractReportModels);
+//		jsonOutput(cargoesPerContractReportModels);
 		return cargoesPerContractReportModels;
 	}
 
