@@ -110,7 +110,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	
 	@Override
 	public void contributeToCoolBar(ICoolBarManager coolBarManager) {
-		coolBarManager.add(new GroupMarker("additions"));
+//		coolBarManager.add(new GroupMarker("additions"));
 		coolBarManager.add(new GroupMarker("additions-end"));
 		super.contributeToCoolBar(coolBarManager);
 	}
