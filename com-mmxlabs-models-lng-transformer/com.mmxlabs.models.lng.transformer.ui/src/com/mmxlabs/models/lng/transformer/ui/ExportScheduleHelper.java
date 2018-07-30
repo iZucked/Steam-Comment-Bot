@@ -24,17 +24,17 @@ import com.mmxlabs.models.lng.adp.ADPModelResult;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -98,6 +98,18 @@ public class ExportScheduleHelper {
 			if (charterInMarket != null) {
 				if (charterInMarket.eContainer() == null || charterInMarket.eContainer() instanceof ADPModelResult) {
 					spotMarketsModel.getCharterInMarkets().add(charterInMarket);
+				}
+			}
+		}
+
+		for (final Sequence seq : schedule.getSequences()) {
+			for (final Event event : seq.getEvents()) {
+				if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+					if (!(vesselEvent.eContainer() instanceof CargoModel)) {
+						cargoModel.getVesselEvents().add(vesselEvent);
+					}
 				}
 			}
 		}
