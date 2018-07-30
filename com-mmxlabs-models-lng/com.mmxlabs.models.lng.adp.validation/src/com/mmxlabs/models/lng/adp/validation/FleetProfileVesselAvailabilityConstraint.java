@@ -47,7 +47,7 @@ public class FleetProfileVesselAvailabilityConstraint extends AbstractModelMulti
 			if (eContainer instanceof ADPModel) {
 				ADPModel adpModel = (ADPModel) eContainer;
 				LocalDateTime start = adpModel.getYearStart().atDay(1).atStartOfDay();
-				LocalDateTime end = adpModel.getYearEnd().atDay(1).atStartOfDay();
+				LocalDateTime end = adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay();
 				if (va.getStartAfter() == null || !va.getStartAfter().equals(start)) {
 					factory.copyName() //
 							.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) //
