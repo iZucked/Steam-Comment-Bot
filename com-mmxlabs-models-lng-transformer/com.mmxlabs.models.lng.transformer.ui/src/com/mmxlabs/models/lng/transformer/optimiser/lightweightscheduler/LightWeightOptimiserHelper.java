@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class LightWeightOptimiserHelper extends AbstractOptimiserHelper {
-	private static final long VESSEL_EVENT_PNL = 30_000_000;
+	private static final long VESSEL_EVENT_PNL = 400_000_000_00L;
 	public static long[] getCargoPNL(Long[][] profit, List<List<IPortSlot>> cargoes, List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull IVesselAvailability pnlVessel, LightWeightCargoDetails[] cargoDetails) {
 		long[] pnl = new long[cargoes.size()];
 		int idx = 0;

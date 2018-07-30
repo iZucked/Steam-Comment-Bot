@@ -168,6 +168,7 @@ public class LightWeightScheduler {
 		// Cargo Volume
 		long[] cargoesVolumes = shippedCargoes.stream().mapToLong(x -> {
 			if (!(x.get(0) instanceof ILoadOption)) {
+				// ALEX_NOTE: this gets divided by 1000, handle differently!
 				// volume of 1
 				return 1;
 			}
