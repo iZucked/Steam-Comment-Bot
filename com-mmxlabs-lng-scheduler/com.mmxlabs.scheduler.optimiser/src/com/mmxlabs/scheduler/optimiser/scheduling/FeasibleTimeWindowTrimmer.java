@@ -305,10 +305,6 @@ public class FeasibleTimeWindowTrimmer {
 					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration[index], index);
 				} else {
 					isRoundTripEnd[index] = true;
-					if (prevPortSlot != null) {
-
-						portTimeWindowsRecord.setSlotExtraIdleTime(prevPortSlot, extraIdleTime[index - 1]);
-					}
 				}
 			} else {
 				if (!(prevPortSlot instanceof RoundTripCargoEnd)) {
@@ -316,9 +312,6 @@ public class FeasibleTimeWindowTrimmer {
 				} else {
 					portTimeWindowsRecord = new PortTimeWindowsRecord();
 					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration[index], index);
-					if (prevPortSlot != null) {
-						portTimeWindowsRecord.setSlotExtraIdleTime(prevPortSlot, extraIdleTime[index - 1]);
-					}
 
 					isRoundTripEnd[index] = true;
 				}
@@ -952,7 +945,7 @@ public class FeasibleTimeWindowTrimmer {
 	private void setFeasibleTimeWindowsRoundTrip(final IPortTimeWindowsRecord portTimeWindowsRecord, final MinTravelTimeData travelTimeData) {
 		int prevFeasibleWindowStart = IPortSlot.NO_PRICING_DATE;
 		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
-			final TimeWindow timeWindow;
+			TimeWindow timeWindow;
 			int feasibleWindowStart;
 			int feasibleWindowEnd;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot)) {
@@ -961,10 +954,17 @@ public class FeasibleTimeWindowTrimmer {
 				feasibleWindowEnd = windowEndTime[portTimeWindowsRecord.getIndex(portSlot)];
 				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			} else {
+				try {
 				feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
 						prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 				feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
 				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
+				} catch (Exception e) {
+					feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
+							prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
+					feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
+					timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
+				}
 			}
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 			prevFeasibleWindowStart = feasibleWindowStart;
