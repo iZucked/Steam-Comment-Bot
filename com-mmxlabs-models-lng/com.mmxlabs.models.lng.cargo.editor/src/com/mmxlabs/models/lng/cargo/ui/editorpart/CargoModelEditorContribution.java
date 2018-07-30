@@ -218,7 +218,6 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						// TODO Auto-generated method stub
 						IStructuredSelection selection = inventorySelectionViewer.getStructuredSelection();
 						DetailCompositeDialogUtil.editSelection(editorPart, selection);
 						inventorySelectionViewer.refresh();
