@@ -75,6 +75,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.LNGScenarioModelValidationTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -474,7 +475,7 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			releaseAdaptersRunnable = () -> adpModel.eAdapters().remove(adpModelAdapter);
 		}
 
-		IStatusProvider statusProvider = getStatusProvider();
+		final IStatusProvider statusProvider = getStatusProvider();
 		if (statusProvider != null) {
 			statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
 		}
@@ -482,7 +483,7 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 	private final AdapterImpl adpModelAdapter = new AdapterImpl() {
 		@Override
-		public void notifyChanged(org.eclipse.emf.common.notify.Notification msg) {
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.isTouch()) {
 				return;
 			}
@@ -573,8 +574,8 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 				cargoModel.getVesselAvailabilities().addAll(copyADP.getFleetProfile().getVesselAvailabilities());
 				cargoModel.getVesselEvents().addAll(copyADP.getFleetProfile().getVesselEvents());
 
-				SpotMarketsModel marketsModel = ScenarioModelUtil.getSpotMarketsModel(copy);
-				for (SpotMarket m : new LinkedList<>(copyADP.getSpotMarketsProfile().getSpotMarkets())) {
+				final SpotMarketsModel marketsModel = ScenarioModelUtil.getSpotMarketsModel(copy);
+				for (final SpotMarket m : new LinkedList<>(copyADP.getSpotMarketsProfile().getSpotMarkets())) {
 					if (m instanceof DESSalesMarket) {
 						marketsModel.getDesSalesSpotMarket().getMarkets().add(m);
 					} else if (m instanceof DESPurchaseMarket) {
@@ -596,6 +597,18 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 					defaultMarket.setEnabled(true);
 					defaultMarket.setName("ADP Default Vessel");
 					marketsModel.getCharterInMarkets().add(defaultMarket);
+				}
+
+				// Clean up!
+				// Clear vessel assignment
+				for (final VesselEvent vesselEvent : cargoModel.getVesselEvents()) {
+					vesselEvent.setVesselAssignmentType(null);
+				}
+				for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+					slot.setCargo(null);
+				}
+				for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+					slot.setCargo(null);
 				}
 
 				final ClonedScenarioDataProvider scenarioDataProvider = ClonedScenarioDataProvider.make(copy, getScenarioDataProvider());
@@ -675,13 +688,13 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 					monitor.done();
 				}
 			});
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			if (e.getCause() instanceof InfeasibleSolutionException || e.getTargetException() instanceof InfeasibleSolutionException) {
 				MessageDialog.openError(getShell(), "Unable to generate solution", "Unable to generate a feasible schedule with the given constraints.");
 			} else {
 				e.printStackTrace();
 			}
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 
 		}
 	}
@@ -714,7 +727,7 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 		return formattedText;
 	}
 
-	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, ADPModel adpModel) {
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final ADPModel adpModel) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
