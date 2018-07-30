@@ -18,6 +18,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -194,11 +195,12 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			// TODO: CSV Import/Export
 			// TODO: Validation hooks and validation model
 
-			final Composite sash = new Composite(parent, SWT.NONE);
+			final Composite sectionParent = new Composite(parent, SWT.NONE);
+			sectionParent.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).create());
+			sectionParent.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-			sash.setLayout(new GridLayout(3, true));
-			final Composite selector = new Composite(sash, SWT.NONE);
-			selector.setLayoutData(GridDataFactory.fillDefaults().span(3, 1).create());
+			final Composite selector = new Composite(sectionParent, SWT.NONE);
+			selector.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).grab(true, false).create());
 
 			Button btn_new = new Button(selector, SWT.PUSH);
 			btn_new.setText("New");
@@ -228,6 +230,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 					}
 				});
 			}
+			final SashForm sash = new SashForm(sectionParent, SWT.HORIZONTAL);
+			sectionParent.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+			sash.setLayout(new GridLayout(3, true));
+			sash.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).grab(true, false).create());
 
 			inventoryFeedPane = new InventoryFeedPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			inventoryFeedPane.createControl(sash);
@@ -244,7 +250,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			inventoryCapacityPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Capacities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			inventoryCapacityPane.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-			inventoryPage = editorPart.addPage(sash);
+			inventoryPage = editorPart.addPage(sectionParent);
 			editorPart.setPageText(inventoryPage, "Inventory");
 
 			inventorySelectionViewer.setContentProvider(new ArrayContentProvider());
