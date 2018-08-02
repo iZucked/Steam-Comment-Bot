@@ -232,7 +232,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			final SashForm sash = new SashForm(sectionParent, SWT.HORIZONTAL);
 			sectionParent.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 			sash.setLayout(new GridLayout(3, true));
-			sash.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).grab(true, false).create());
+			sash.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).grab(true, true).create());
 
 			inventoryFeedPane = new InventoryFeedPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			inventoryFeedPane.createControl(sash);
