@@ -123,6 +123,7 @@ import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
+import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -399,7 +400,7 @@ public class ChangeSetView extends ViewPart {
 
 						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
-						ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
+						final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
 						final ChangeSetTableRoot tableRootDefault = changeSetToTableTransformer.createViewDataModel(newRoot, false, null, SortMode.BY_GROUP);
 						final ChangeSetTableRoot tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newRoot, true, null, SortMode.BY_GROUP);
 						changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
@@ -781,21 +782,21 @@ public class ChangeSetView extends ViewPart {
 		eventHandler = new EventHandler() {
 
 			@Override
-			public void handleEvent(org.osgi.service.event.Event event) {
+			public void handleEvent(final org.osgi.service.event.Event event) {
 				// event.getProperty(name)
-				Object o = event.getProperty("org.eclipse.e4.data");
+				final Object o = event.getProperty("org.eclipse.e4.data");
 				if (o instanceof ScenarioInstance) {
-					ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
 
 					onClosingScenario(scenarioInstance);
 				}
-				int ii = 0;
+				final int ii = 0;
 			}
 		};
-		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		eventBroker.subscribe(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE, eventHandler);
 
-		String secondaryId = getViewSite().getSecondaryId();
+		final String secondaryId = getViewSite().getSecondaryId();
 		if (!"Dynamic".equals(secondaryId)) {
 			scenarioComparisonService.addListener(listener);
 			scenarioComparisonService.triggerListener(listener);
@@ -914,6 +915,10 @@ public class ChangeSetView extends ViewPart {
 			filterMenu.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/filter.gif"));
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
+		{
+			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+			getViewSite().getActionBars().getToolBarManager().add(packAction);
+		}
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
@@ -996,7 +1001,7 @@ public class ChangeSetView extends ViewPart {
 
 	@PreDestroy
 	public void dispose() {
-		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		eventBroker.unsubscribe(eventHandler);
 
 		if (lastParent != null) {
