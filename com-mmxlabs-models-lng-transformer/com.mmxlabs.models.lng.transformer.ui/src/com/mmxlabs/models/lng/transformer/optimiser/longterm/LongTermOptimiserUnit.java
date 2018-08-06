@@ -101,7 +101,7 @@ public class LongTermOptimiserUnit {
 				HashSetLongTermSlotsEditor longTermSlotEditor = new HashSetLongTermSlotsEditor();
 				bind(ILongTermSlotsProvider.class).toInstance(longTermSlotEditor);
 				bind(ILongTermSlotsProviderEditor.class).toInstance(longTermSlotEditor);
-				LongTermMatrixOptimiser matrixOptimiser = new LongTermMatrixOptimiser();
+				GoogleORToolsLongTermMatrixOptimiser matrixOptimiser = new GoogleORToolsLongTermMatrixOptimiser();
 				bind(ILongTermMatrixOptimiser.class).toInstance(matrixOptimiser);
 			}
 

@@ -64,9 +64,7 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	public void init(final List<ILoadOption> loadsUnsorted, final List<IDischargeOption> dischargesUnsorted) {
 		// sort slots
 		this.setSortedLoads(new LinkedList<>(loadsUnsorted));
-		this.getSortedLoads().sort((a, b) -> a.getId().compareTo(b.getId()));
 		this.setSortedDischarges(new LinkedList<>(dischargesUnsorted));
-		this.getSortedDischarges().sort((a, b) -> a.getId().compareTo(b.getId()));
 		{
 			int index = 0;
 			for (final ILoadOption iLoadOption : getSortedLoads()) {
@@ -264,6 +262,7 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 
 	public void setSortedLoads(List<ILoadOption> sortedLoads) {
 		this.sortedLoads = sortedLoads;
+		this.sortedLoads.sort((a, b) -> a.getId().compareTo(b.getId()));
 	}
 
 	public List<IDischargeOption> getSortedDischarges() {
@@ -272,6 +271,7 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 
 	public void setSortedDischarges(List<IDischargeOption> sortedDischarges) {
 		this.sortedDischarges = sortedDischarges;
+		this.sortedDischarges.sort((a, b) -> a.getId().compareTo(b.getId()));
 	}
 
 }

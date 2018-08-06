@@ -24,10 +24,11 @@ import com.google.ortools.linearsolver.MPVariable;
  * Optimise cargo allocations with Google OR.
  * <p>
  */
-public class LongTermMatrixOptimiser implements ILongTermMatrixOptimiser {
+public class GoogleORToolsLongTermMatrixOptimiser implements ILongTermMatrixOptimiser {
 
 	private static final long NON_OPTIONAL_PENALTY = 36_000000000L;
-
+	private static final double SYMMETRY_CONSTANT = 0.1;
+	
 	public boolean[][] optimise(PairingData pairingData) {
 		long[][] pnl = pairingData.getPnl();
 		boolean[][] restricted = pairingData.getRestricted();
@@ -49,13 +50,7 @@ public class LongTermMatrixOptimiser implements ILongTermMatrixOptimiser {
 		// Set up non optional penalties - default 0
 		long[][] nonOptionalPenalty = new long[no_loads][no_discharges];
 
-		for (int i = 0; i < pnl.length; i++) {
-			for (int j = 0; j < pnl[i].length; j++) {
-				nonOptionalPenalty[i][j] = 0;
-			}
-		}
-
-		// Modify loads with a non-optional a penalty
+		// Modify loads with a non-optional penalty
 		for (int load_id = 0; load_id < no_loads; load_id++) {
 			if (!optionalLoads[load_id]) {
 				for (int discharge_id = 0; discharge_id < no_discharges; discharge_id++) {
@@ -64,11 +59,23 @@ public class LongTermMatrixOptimiser implements ILongTermMatrixOptimiser {
 			}
 		}
 
-		// Modify discharges with a non-optional a penalty
+		// Modify discharges with a non-optional penalty
 		for (int dischargeId = 0; dischargeId < no_discharges; dischargeId++) {
 			if (!optionalDischarges[dischargeId]) {
 				for (int loadId = 0; loadId < no_loads; loadId++) {
 					nonOptionalPenalty[loadId][dischargeId] += NON_OPTIONAL_PENALTY;
+				}
+			}
+		}
+
+		// Set up non optional penalties - default 0
+		double[][] symmetryPenalty = new double[no_loads][no_discharges];
+
+		// Modify loads with a non-optional penalty
+		for (int load_id = 0; load_id < no_loads; load_id++) {
+			if (!optionalLoads[load_id]) {
+				for (int discharge_id = 0; discharge_id < no_discharges; discharge_id++) {
+					symmetryPenalty[load_id][discharge_id] = ((double) load_id) * ((double) discharge_id) * SYMMETRY_CONSTANT;
 				}
 			}
 		}
@@ -162,7 +169,7 @@ public class LongTermMatrixOptimiser implements ILongTermMatrixOptimiser {
 
 		for (int i = 0; i < no_loads; i++) {
 			for (int j = 0; j < no_discharges; j++) {
-				obj.setCoefficient(vars[i][j], pnl[i][j] + nonOptionalPenalty[i][j]);
+				obj.setCoefficient(vars[i][j], pnl[i][j] + nonOptionalPenalty[i][j] + symmetryPenalty[i][j]);
 			}
 		}
 
