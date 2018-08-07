@@ -208,12 +208,12 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
 
-		final LightWeightScheduler scheduler = stage1Injector.getInstance(LightWeightScheduler.class);
+		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
 		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
 
 		try {
-			return scheduler.getSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
+			return scheduler.createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
 		} catch (Exception e) {
 			return null;
 		}
@@ -269,12 +269,12 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
 
-		final LightWeightScheduler scheduler = stage1Injector.getInstance(LightWeightScheduler.class);
+		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
 		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1));
 
 		try {
-			return scheduler.calculateLightWeightOptimisationData(pnlVessel, calculator, executorService, monitor);
+			return scheduler.createLightWeightOptimisationData(pnlVessel, calculator, executorService, monitor);
 		} finally {
 			executorService.shutdown();
 		}

@@ -96,49 +96,30 @@ public class LightWeightSchedulerOptimiser {
 	 * @return
 	 */
 	public Pair<ISequences, Long> optimise(final IVesselAvailability pnlVessel, @NonNull IProgressMonitor monitor) {
+		// Get optimised sequences from our injected sequences optimiser
 		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, monitor);
 
-		int totalCount = 0;
-		for (List<Integer> s : sequences) {
-			totalCount += s.size();
-		}
-		System.out.println("counts:" + totalCount);
-
-		if (DEBUG) {
-			try {
-				sequences = getStoredSequences("/tmp/gurobiOutput.gb");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		// (5) Export the pairings matrix to the raw sequences
+		// Export the pairings matrix to the raw sequences:
+		
 		ModifiableSequences rawSequences = new ModifiableSequences(initialSequences);
-
-		// update shipped
+		// (a) update shipped
 		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getPairingsMap());
-		// update non-shipped
+		
+		// (b) update non-shipped
 		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getPairingsMap(), vesselProvider.getResource(pnlVessel), portSlotProvider,
 				virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
-		HashMap<ILoadOption, IDischargeOption> ununsedMap = new HashMap<>(lightWeightOptimisationData.getPairingsMap());
+		
+		// (c) update unused
+		HashMap<ILoadOption, IDischargeOption> unusedMap = new HashMap<>(lightWeightOptimisationData.getPairingsMap());
 		for (List<Integer> sequence : sequences) {
 			for (Integer idx : sequence) {
-				ununsedMap.remove(lightWeightOptimisationData.getCargoes().get(idx).get(0));
+				unusedMap.remove(lightWeightOptimisationData.getCargoes().get(idx).get(0));
 			}
 		}
-		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, ununsedMap, vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider,
+		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, unusedMap, vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider,
 				ShippingType.SHIPPED);
+		
 		return new Pair<>(rawSequences, 0L);
-	}
-
-	@NonLDD
-	private long[] getCargoPNL(Long[][] profit, List<List<IPortSlot>> cargoes, List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull IVesselAvailability pnlVessel) {
-		long[] pnl = new long[cargoes.size()];
-		int idx = 0;
-		for (List<IPortSlot> cargo : cargoes) {
-			pnl[idx++] = profit[loads.indexOf(cargo.get(0))][discharges.indexOf(cargo.get(cargo.size() - 1))] / pnlVessel.getVessel().getCargoCapacity();
-		}
-		return pnl;
 	}
 
 	/**

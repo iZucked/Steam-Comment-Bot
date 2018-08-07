@@ -54,7 +54,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProvider
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-public class LightWeightScheduler {
+public class LightWeightOptimisationDataFactory {
 
 	@Inject
 	private LongTermOptimisationData optimiserRecorder;
@@ -77,10 +77,10 @@ public class LightWeightScheduler {
 	@Inject
 	private IAllowedVesselProvider allowedVesselProvider;
 
-	public ILightWeightOptimisationData calculateLightWeightOptimisationData(IVesselAvailability pnlVessel, LoadDischargePairValueCalculatorStep calculator, CleanableExecutorService executorService,
+	public ILightWeightOptimisationData createLightWeightOptimisationData(IVesselAvailability pnlVessel, LoadDischargePairValueCalculatorStep calculator, CleanableExecutorService executorService,
 			IProgressMonitor monitor) {
 		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
-		boolean[][] pairingsMatrix = getSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
+		boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
 
 		if (pairingsMatrix == null) {
 			return null;
@@ -96,59 +96,35 @@ public class LightWeightScheduler {
 			printPairings(pairingsMap);
 		}
 
-		Set<Integer> cargoIndexes = new HashSet<>();
-		Set<Integer> eventIndexes = new HashSet<>();
 
-		// create data for optimiser
-		// Cargoes
+		// Create data for optimiser
+		
+		// add cargoes
+		Set<Integer> cargoIndexes = new HashSet<>();
 		List<List<IPortSlot>> shippedCargoes = LongTermOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
 		for (int i = 0; i < shippedCargoes.size(); i++) {
 			cargoIndexes.add(i);
 		}
+		
 		// add events
+		Set<Integer> eventIndexes = new HashSet<>();
 		longTermSlotsProvider.getLongTermEvents().forEach(e -> {
 			shippedCargoes.add(CollectionsUtil.makeLinkedList(e));
 			eventIndexes.add(shippedCargoes.size() - 1);
 		});
 
-		// Now we add vessel events
+		// add vessels
+		List<@NonNull IVesselAvailability> vessels = getVessels();
 
-		// Vessel
-		List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
-				.sorted((a, b) -> a.getName().compareTo(b.getName())) //
-				.map(v -> vesselProvider.getVesselAvailability(v)) //
-				.filter(v -> LongTermOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
-
-		// Cost
+		// calculate shipping costs between two cargoes
 		Long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
 
-		// VesselRestriction
+		// set vessel restrictions
 		ArrayList<Set<Integer>> cargoVesselRestrictions = cargoVesselRestrictionsMatrixProducer.getIntegerCargoVesselRestrictions(shippedCargoes, vessels,
 				cargoVesselRestrictionsMatrixProducer.getCargoVesselRestrictions(shippedCargoes, vessels));
 
 		// Cargo Detail
-		LightWeightCargoDetails[] cargoDetails = shippedCargoes.stream().map(x -> {
-
-			// REVIEW: It is alright to only check the first element ?
-			// ALEX_NOTE: not sure this is necessary
-			PortType portType = x.get(0).getPortType();
-
-			if (portType == PortType.CharterOut || portType == PortType.DryDock) {
-				Collection<IVessel> permittedVessels = allowedVesselProvider.getPermittedVessels(x.get(0));
-				int index = -1;
-				for (int i = 0; i < vessels.size(); i++) {
-					if (permittedVessels.contains(vessels.get(i).getVessel())) {
-						index = i;
-					}
-				}
-				if (index != -1) {
-					return new LightWeightCargoDetails(x.get(0).getPortType(), index);
-				} else {
-					return new LightWeightCargoDetails(x.get(0).getPortType());
-				}
-			}
-			return new LightWeightCargoDetails(x.get(0).getPortType());
-		}).toArray(LightWeightCargoDetails[]::new);
+		LightWeightCargoDetails[] cargoDetails = getCargoDetails(shippedCargoes, vessels);
 
 		// Cargo PNL
 		long[] cargoPNL = LightWeightOptimiserHelper.getCargoPNL(optimiserRecorder.getProfit(), shippedCargoes, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pnlVessel, cargoDetails);
@@ -166,6 +142,16 @@ public class LightWeightScheduler {
 		double[] capacity = vessels.stream().mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000).toArray();
 
 		// Cargo Volume
+		long[] cargoesVolumes = getCargoVolumes(shippedCargoes);
+
+		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
+				minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes, cargoDetails,
+				cargoCharterCostPerAvailability, cargoIndexes, eventIndexes);
+
+		return lightWeightOptimisationData;
+	}
+
+	private long[] getCargoVolumes(List<List<IPortSlot>> shippedCargoes) {
 		long[] cargoesVolumes = shippedCargoes.stream().mapToLong(x -> {
 			if (!(x.get(0) instanceof ILoadOption)) {
 				// ALEX_NOTE: this gets divided by 1000, handle differently!
@@ -176,12 +162,37 @@ public class LightWeightScheduler {
 			long dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
 			return Math.min(loadVolume, dischargeVolume);
 		}).toArray();
+		return cargoesVolumes;
+	}
 
-		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
-				minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes, cargoDetails,
-				cargoCharterCostPerAvailability, cargoIndexes, eventIndexes);
+	private LightWeightCargoDetails[] getCargoDetails(List<List<IPortSlot>> shippedCargoes, List<@NonNull IVesselAvailability> vessels) {
+		LightWeightCargoDetails[] cargoDetails = shippedCargoes.stream().map(x -> {
+			PortType portType = x.get(0).getPortType();
+			if (portType == PortType.CharterOut || portType == PortType.DryDock) {
+				Collection<IVessel> permittedVessels = allowedVesselProvider.getPermittedVessels(x.get(0));
+				int index = -1;
+				for (int i = 0; i < vessels.size(); i++) {
+					if (permittedVessels.contains(vessels.get(i).getVessel())) {
+						index = i;
+					}
+				}
+				if (index != -1) {
+					return new LightWeightCargoDetails(x.get(0).getPortType(), index);
+				} else {
+					return new LightWeightCargoDetails(x.get(0).getPortType());
+				}
+			}
+			return new LightWeightCargoDetails(x.get(0).getPortType());
+		}).toArray(LightWeightCargoDetails[]::new);
+		return cargoDetails;
+	}
 
-		return lightWeightOptimisationData;
+	private List<@NonNull IVesselAvailability> getVessels() {
+		List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
+				.sorted((a, b) -> a.getName().compareTo(b.getName())) //
+				.map(v -> vesselProvider.getVesselAvailability(v)) //
+				.filter(v -> LongTermOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
+		return vessels;
 	}
 
 	/**
@@ -192,7 +203,7 @@ public class LightWeightScheduler {
 	 * @param monitor
 	 * @return
 	 */
-	public boolean[][] getSlotPairingMatrix(IVesselAvailability pnlVessel, LoadDischargePairValueCalculatorStep calculator, CleanableExecutorService executorService, IProgressMonitor monitor) {
+	public boolean[][] createSlotPairingMatrix(IVesselAvailability pnlVessel, LoadDischargePairValueCalculatorStep calculator, CleanableExecutorService executorService, IProgressMonitor monitor) {
 		// (1) Identify LT slots
 		@NonNull
 		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();

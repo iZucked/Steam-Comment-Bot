@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
-public class TabuLightWeightSequenceOptimiserDataTransformer {
+public class TabuLightWeightSequenceOptimiserData {
 	double[][][] cargoToCargoCostsProcessed;
 	List<List<Integer>> cargoVesselRestrictionAsList;
 	double[] capacity;
@@ -29,7 +29,7 @@ public class TabuLightWeightSequenceOptimiserDataTransformer {
 	private double[][] cargoDailyCharterCostPerAvailabilityProcessed;
 	private double[] cargoesVolumesProcessed;
 
-	TabuLightWeightSequenceOptimiserDataTransformer(ILightWeightOptimisationData lightWeightOptimisationData) {
+	TabuLightWeightSequenceOptimiserData(ILightWeightOptimisationData lightWeightOptimisationData) {
 		List<List<IPortSlot>> cargoes = lightWeightOptimisationData.getCargoes();
 		List<IVesselAvailability> vessels = lightWeightOptimisationData.getVessels();
 		long[] cargoPNL = lightWeightOptimisationData.getCargoPNL();

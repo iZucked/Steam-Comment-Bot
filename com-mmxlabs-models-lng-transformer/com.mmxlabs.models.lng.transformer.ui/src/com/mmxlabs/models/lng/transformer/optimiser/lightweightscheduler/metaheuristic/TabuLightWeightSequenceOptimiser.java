@@ -34,9 +34,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOptimiser {
-	public static final double LATENESS_FINE = 1_000_000;
-	public static final double UNFULFILLED_FINE = 10_000_000;
-
 	public static final double MINUTES = 1.0 / 60;
 	public static final double HOURS = 1.0 / 3600;
 
@@ -44,7 +41,6 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	private int maxAge;
 	private int search;
 	private int seed;
-	private Random r;
 
 	public static class Interval {
 		private final int start;
@@ -78,7 +74,6 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		this.search = searchIterations;
 		this.maxAge = maxAge;
 		this.seed = randomSeed;
-		this.r = new Random(seed);
 	}
 
 	public String getParams() {
@@ -91,21 +86,17 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		this.search = Integer.parseInt(params[1]);
 		this.maxAge = Integer.parseInt(params[2]);
 		this.seed = Integer.parseInt(params[3]);
-		this.r = new Random(seed);
 	}
 
 	public void setSeed(int seed) {
 		this.seed = seed;
-		r = new Random(seed);
 	}
 
 	@Override
 	public List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers,
 			List<ILightWeightFitnessFunction> fitnessFunctions, IProgressMonitor monitor) {
 
-		TabuLightWeightSequenceOptimiserDataTransformer dataTransformer = new TabuLightWeightSequenceOptimiserDataTransformer(lightWeightOptimisationData);
-
-		// createExternalData(lightWeightOptimisationData, dataTransformer);
+		TabuLightWeightSequenceOptimiserData dataTransformer = new TabuLightWeightSequenceOptimiserData(lightWeightOptimisationData);
 
 		return optimise(0, false, //
 				lightWeightOptimisationData.getCargoes().size(), //
@@ -117,7 +108,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	public List<List<Integer>> optimise(int id, boolean loggingFlag, //
 			int cargoCount, int vesselCount, //
 			ILightWeightOptimisationData lightWeightOptimisationData, //
-			TabuLightWeightSequenceOptimiserDataTransformer dataTransformer, //
+			TabuLightWeightSequenceOptimiserData dataTransformer, //
 			List<ILightWeightConstraintChecker> constraintCheckers, //
 			List<ILightWeightFitnessFunction> fitnessFunctions, IProgressMonitor monitor) {
 
@@ -292,7 +283,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 	public Double evaluate(List<List<Integer>> sequences, int cargoCount, //
 			ILightWeightOptimisationData lightWeightOptimisationData, //
-			TabuLightWeightSequenceOptimiserDataTransformer dataTransformer, //
+			TabuLightWeightSequenceOptimiserData dataTransformer, //
 			List<ILightWeightConstraintChecker> constraintCheckers, //
 			List<ILightWeightFitnessFunction> fitnessFunctions) {
 
@@ -337,7 +328,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	public Double finalPrint(List<List<Integer>> sequences, int cargoCount, int vesselCount, ILightWeightOptimisationData lightWeightOptimisationData,
-			TabuLightWeightSequenceOptimiserDataTransformer dataTransformer, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
+			TabuLightWeightSequenceOptimiserData dataTransformer, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions) {
 
 		Interval[] loads = dataTransformer.getLoads();
 		Interval[] discharges = dataTransformer.getDischarges();
@@ -426,7 +417,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		}
 	}
 
-	private void createExternalData(ILightWeightOptimisationData lightWeightOptimisationData, TabuLightWeightSequenceOptimiserDataTransformer dataTransformer) {
+	private void createExternalData(ILightWeightOptimisationData lightWeightOptimisationData, TabuLightWeightSequenceOptimiserData dataTransformer) {
 		Interval[] loads = dataTransformer.getLoads();
 		Interval[] discharges = dataTransformer.getDischarges();
 
