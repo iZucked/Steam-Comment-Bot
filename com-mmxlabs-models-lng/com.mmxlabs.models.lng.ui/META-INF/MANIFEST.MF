@@ -24,7 +24,9 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.datetime.ui;bundle-version="[2.1.0,3.0.0)",
  com.mmxlabs.models.lng.scenario.model,
- com.mmxlabs.scenario.service.util
+ com.mmxlabs.scenario.service.util,
+ org.eclipse.e4.ui.workbench,
+ org.eclipse.e4.ui.model.workbench;bundle-version="2.0.1"
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.lng.ui,
  com.mmxlabs.models.lng.ui.actions,

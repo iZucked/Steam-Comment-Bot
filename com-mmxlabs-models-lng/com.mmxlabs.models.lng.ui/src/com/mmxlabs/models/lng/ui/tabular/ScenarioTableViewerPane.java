@@ -12,6 +12,9 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -54,7 +57,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -127,16 +129,25 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
 
 		@Override
-		public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		public void selectionChanged(final MPart part, final Object selectedObject) {
+
+			{
+				final IWorkbenchPart view = SelectionHelper.getE3Part(part);
+
+				if (view == ScenarioTableViewerPane.this.part) {
+					return;
+				}
+				if (view instanceof PropertySheet) {
+					return;
+				}
+			}
+
+			// Convert selection
+			final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
+
 			// Avoid re-entrant selection changes.
 			if (inSelectionChanged.compareAndSet(false, true)) {
 				try {
-					if (part == ScenarioTableViewerPane.this.part) {
-						return;
-					}
-					if (part instanceof PropertySheet) {
-						return;
-					}
 					// Avoid cyclic selection changes
 					if (ScenarioTableViewerPane.this.page.getActivePart() == ScenarioTableViewerPane.this.part) {
 						return;
@@ -160,7 +171,9 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		super(page, part);
 		this.scenarioEditingLocation = location;
 		this.actionBars = actionBars;
-		page.addPostSelectionListener(selectionListener);
+		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
+		service.addPostSelectionListener(selectionListener);
+
 	}
 
 	public ScenarioTableViewer getScenarioViewer() {
@@ -177,9 +190,8 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 	@Override
 	public void dispose() {
-		if (page != null) {
-			page.removePostSelectionListener(selectionListener);
-		}
+		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
+		service.removePostSelectionListener(selectionListener);
 
 		if (externalToolbarManager != null) {
 			externalToolbarManager.removeAll();
