@@ -94,10 +94,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		final int additionalRouteTimeInHours = routeCostProvider.getRouteTransitTime(options.getRoute(), vessel);
 		int extraIdleTime = options.getExtraIdleTime();
-
-		if (extraIdleTime > 0) {
-			int ii = 0;
-		}
 		
 		/**
 		 * How much time is available to cover the distance, excluding time which must be spent traversing any canals
@@ -152,9 +148,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			long warmingHours = 0;
 			if (options.getIdleFuelChoice() == IdleFuelChoice.BUNKERS) {
 				warmingHours += idleTimeInHours;
+			} else {
+				warmingHours += idleTimeInHours - output.getIdleNBOHours();
 			}
 			if (options.getTravelFuelChoice() == TravelFuelChoice.BUNKERS) {
 				warmingHours += travelTimeInHours;
+			} else {
+				warmingHours += travelTimeInHours - output.getTravelNBOHours();
 			}
 			if (options.isWarm() || (warmingHours > vessel.getWarmupTime())) {
 				final long cooldownVolume = vessel.getCooldownVolume();
@@ -291,6 +291,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				nboHours = Calculator.getTimeFromRateQuantity(idleNBORateInM3PerDay, nboAvailableInM3 * 24L);
 			}
 
+			output.setIdleNBOHours(nboHours);
+
 			final long nboInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerDay, nboHours) / 24L;
 			final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
 
@@ -343,6 +345,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					nboHours = Calculator.getTimeFromRateQuantity(nboRateInM3PerDay, nboAvailableInM3 * 24L);
 				}
 			}
+
+			output.setTravelNBOHours(nboHours);
 
 			final long nboInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
 			final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);

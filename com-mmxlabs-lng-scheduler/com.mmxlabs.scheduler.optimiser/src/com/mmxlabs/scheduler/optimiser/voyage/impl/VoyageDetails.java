@@ -35,6 +35,12 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	private int speed;
 	private int startTime;
 	private boolean cooldownPerformed;
+	
+	/*
+	 * NBO travel times
+	 */
+	private int idleNBOHours;
+	private int travelNBOHours;
 
 	public VoyageDetails(@NonNull final VoyageOptions options) {
 		this.options = options;
@@ -42,12 +48,14 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	private VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
-			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed) {
+			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, int idleNBOHours, int travelNBOHours) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
 		this.startTime = startTime2;
 		this.options = options;
+		this.setIdleNBOHours(idleNBOHours);
+		this.setTravelNBOHours(travelNBOHours);
 		this.fuelConsumption.putAll(fuelConsumption2);
 		this.fuelUnitPrices.putAll(fuelUnitPrices2);
 		this.routeAdditionalConsumption.putAll(routeAdditionalConsumption2);
@@ -56,7 +64,8 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	@Override
 	public VoyageDetails clone() {
-		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, cooldownPerformed);
+		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption,
+				routeAdditionalConsumption, fuelUnitPrices, cooldownPerformed, getIdleNBOHours(), getTravelNBOHours());
 	}
 
 	public final long getFuelConsumption(final @NonNull FuelKey fuelKey) {
@@ -140,6 +149,8 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				&& Objects.equal(fuelUnitPrices,  d.fuelUnitPrices)
 				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
 				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
+				&& Objects.equal(getIdleNBOHours(),  d.getIdleNBOHours())
+				&& Objects.equal(getTravelNBOHours(),  d.getTravelNBOHours())
 				;
 				// @formatter:on
 		}
@@ -159,6 +170,8 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				.add("travelTime", travelTime)
 				.add("speed", speed)
 				.add("startTime", startTime)
+				.add("idleNBOHours", getIdleNBOHours())
+				.add("travelNBOHours", getTravelNBOHours())
 				.toString();
 		// @formatter:on
 	}
@@ -169,5 +182,21 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	public void setCooldownPerformed(final boolean cooldownPerformed) {
 		this.cooldownPerformed = cooldownPerformed;
+	}
+
+	public int getIdleNBOHours() {
+		return idleNBOHours;
+	}
+
+	public void setIdleNBOHours(int idleNBOHours) {
+		this.idleNBOHours = idleNBOHours;
+	}
+
+	public int getTravelNBOHours() {
+		return travelNBOHours;
+	}
+
+	public void setTravelNBOHours(int travelNBOHours) {
+		this.travelNBOHours = travelNBOHours;
 	}
 }
