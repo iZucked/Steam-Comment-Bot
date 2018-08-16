@@ -21,6 +21,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -105,6 +106,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	}
 
 	@Test
+	@Ignore
 	@Category({ MicroTest.class })
 	public void testInsertShippedPair_Open() throws Exception {
 
@@ -151,6 +153,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	}
 
 	@Test
+	@Ignore
 	@Category({ MicroTest.class })
 	public void testInsertShippedPair_Open2() throws Exception {
 
