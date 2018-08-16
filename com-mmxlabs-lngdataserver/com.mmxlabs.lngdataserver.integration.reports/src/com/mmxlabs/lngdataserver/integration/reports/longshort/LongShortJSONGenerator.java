@@ -68,7 +68,7 @@ public class LongShortJSONGenerator {
 		}
 		
 		List<LongShortReportModel> longShortReportModels = fillLongShortReportModelRange(min, max, shortsPerMonths, longsPerMonths);
-		jsonOutput(longShortReportModels);
+//		jsonOutput(longShortReportModels);
 		return longShortReportModels;
 	}
 	
