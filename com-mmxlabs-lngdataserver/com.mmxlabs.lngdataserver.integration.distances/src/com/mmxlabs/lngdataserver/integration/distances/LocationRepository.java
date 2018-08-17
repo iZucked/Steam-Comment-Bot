@@ -13,7 +13,7 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
+import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.port.Port;
 
 public class LocationRepository {
@@ -21,6 +21,6 @@ public class LocationRepository {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocationRepository.class);
 
 	public List<Port> getPorts(String version) throws AuthenticationException, ClientProtocolException, IOException, ParseException {
-		return UpstreamPortFetcher.getPorts(UpstreamUrlProvider.INSTANCE.getBaseURL(), version, UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+		return UpstreamPortFetcher.getPorts(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
 	}
 }

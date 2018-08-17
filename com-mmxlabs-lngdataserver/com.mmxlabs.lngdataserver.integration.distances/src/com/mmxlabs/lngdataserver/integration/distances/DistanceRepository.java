@@ -42,7 +42,7 @@ public class DistanceRepository extends AbstractDataRepository {
 	private static final String SYNC_VERSION_ENDPOINT = "/distances/sync/versions/";
 
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00");
-	
+
 	private final DistancesApi localApi;
 	private final DistancesApi upstreamApi;
 
@@ -124,8 +124,7 @@ public class DistanceRepository extends AbstractDataRepository {
 
 		try {
 
-			final Map<Via, Map<String, Map<String, Integer>>> result = UpstreamDistancesFetcher.getDistances(UpstreamUrlProvider.INSTANCE.getBaseURL(), version,
-					UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+			final Map<Via, Map<String, Map<String, Integer>>> result = UpstreamDistancesFetcher.getDistances(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
 			return new DefaultDistanceProvider(version, result);
 		} catch (AuthenticationException | IOException | ParseException e) {
 			LOG.error("Error fetching versions from upstream service", e);
@@ -156,8 +155,7 @@ public class DistanceRepository extends AbstractDataRepository {
 		final String version = versions.get(0).getIdentifier();
 
 		try {
-			final Map<Via, Map<String, Map<String, Integer>>> result = UpstreamDistancesFetcher.getDistances(UpstreamUrlProvider.INSTANCE.getBaseURL(), version,
-					UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword());
+			final Map<Via, Map<String, Map<String, Integer>>> result = UpstreamDistancesFetcher.getDistances(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
 			return new DefaultDistanceProvider(version, result);
 		} catch (AuthenticationException | IOException | ParseException e) {
 			LOG.error("Error fetching versions from upstream service", e);
