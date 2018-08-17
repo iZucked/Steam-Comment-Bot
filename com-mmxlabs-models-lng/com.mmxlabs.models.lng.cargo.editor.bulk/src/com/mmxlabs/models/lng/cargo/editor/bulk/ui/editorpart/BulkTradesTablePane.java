@@ -708,6 +708,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			@Override
 			public GridViewerColumn createColumn(ColumnHandler handler) {
 				GridViewerColumn gvc = super.createColumn(handler);
+				gvc.getColumn().setResizeable(true);
+
 				GridViewerHelper.configureLookAndFeel(gvc, GridViewerHelper.FLAGS_ROW_HOVER);
 				return gvc;
 			}
@@ -754,7 +756,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				// colRenderer.setWordWrap(true);
 				// column.setHeaderRenderer(colRenderer);
 				column.setMinimumWidth(70);
-				column.setResizeable(false);
 				handlerToColumnMap.put(handler, column);
 				if (column.getData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER) != null) {
 					scenarioViewer.getSortingSupport().addSortableColumn(scenarioViewer, handler.column, column);
