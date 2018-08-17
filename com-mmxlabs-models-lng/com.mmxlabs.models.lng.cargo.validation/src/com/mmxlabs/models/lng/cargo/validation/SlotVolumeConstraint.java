@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -50,6 +51,22 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 				testVolumeValueConstraint(ctx, failures, slot, name);
 				checkThatEverythingIsOverriddenWhenUnitsSet(ctx, failures, slot);
 				checkSensibleValues(ctx, failures, slot, name);
+				if (slot.isSetOperationalTolerance()) {
+					if (slot.getOperationalTolerance() < 0.0) {
+						final String failureMessage = String.format("operational tolerance is less than zero");
+
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(), failureMessage));
+						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE);
+						failures.add(dsd);
+					}
+					if (slot.getOperationalTolerance() > 1.0) {
+						final String failureMessage = String.format("operational tolerance is greater than 100%%");
+
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(), failureMessage));
+						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE);
+						failures.add(dsd);
+					}
+				}
 			}
 		}
 		return Activator.PLUGIN_ID;

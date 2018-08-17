@@ -160,6 +160,7 @@ public class CargoActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
+		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("cargo-settings"));
 		toolBarManager.add(new Separator("cargo-additions"));
 	}

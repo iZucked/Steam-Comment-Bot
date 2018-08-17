@@ -54,6 +54,7 @@ public class ContractItemProvider
 			addNamePropertyDescriptor(object);
 			addCodePropertyDescriptor(object);
 			addCounterpartyPropertyDescriptor(object);
+			addCnPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
@@ -62,6 +63,7 @@ public class ContractItemProvider
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
 			addVolumeLimitsUnitPropertyDescriptor(object);
+			addOperationalTolerancePropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
@@ -202,6 +204,28 @@ public class ContractItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Operational Tolerance feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOperationalTolerancePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_operationalTolerance_feature"),
+				 getString("_UI_Contract_operationalTolerance_description"),
+				 CommercialPackage.Literals.CONTRACT__OPERATIONAL_TOLERANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -449,6 +473,28 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cn feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCnPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_cn_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_cn_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__CN,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Start Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -562,11 +608,13 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__NAME:
 			case CommercialPackage.CONTRACT__CODE:
 			case CommercialPackage.CONTRACT__COUNTERPARTY:
+			case CommercialPackage.CONTRACT__CN:
 			case CommercialPackage.CONTRACT__START_DATE:
 			case CommercialPackage.CONTRACT__END_DATE:
 			case CommercialPackage.CONTRACT__MIN_QUANTITY:
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
+			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CommercialPackage.CONTRACT__NOTES:
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:

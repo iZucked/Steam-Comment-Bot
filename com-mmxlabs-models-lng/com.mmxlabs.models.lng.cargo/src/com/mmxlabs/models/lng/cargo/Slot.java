@@ -33,6 +33,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCounterparty <em>Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCn <em>Cn</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStartTime <em>Window Start Time</em>}</li>
@@ -44,6 +45,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getOperationalTolerance <em>Operational Tolerance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
@@ -175,6 +177,59 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetCounterparty();
+
+	/**
+	 * Returns the value of the '<em><b>Cn</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cn</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cn</em>' attribute.
+	 * @see #isSetCn()
+	 * @see #unsetCn()
+	 * @see #setCn(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Cn()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	String getCn();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCn <em>Cn</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cn</em>' attribute.
+	 * @see #isSetCn()
+	 * @see #unsetCn()
+	 * @see #getCn()
+	 * @generated
+	 */
+	void setCn(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCn <em>Cn</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCn()
+	 * @see #getCn()
+	 * @see #setCn(String)
+	 * @generated
+	 */
+	void unsetCn();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCn <em>Cn</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Cn</em>' attribute is set.
+	 * @see #unsetCn()
+	 * @see #getCn()
+	 * @see #setCn(String)
+	 * @generated
+	 */
+	boolean isSetCn();
 
 	/**
 	 * Returns the value of the '<em><b>Window Start</b></em>' attribute.
@@ -693,6 +748,60 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetMaxQuantity();
+
+	/**
+	 * Returns the value of the '<em><b>Operational Tolerance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Operational Tolerance</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Operational Tolerance</em>' attribute.
+	 * @see #isSetOperationalTolerance()
+	 * @see #unsetOperationalTolerance()
+	 * @see #setOperationalTolerance(double)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_OperationalTolerance()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='##0.#' unit='%' exportFormatString='#.###' unitPrefix='\261'"
+	 * @generated
+	 */
+	double getOperationalTolerance();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getOperationalTolerance <em>Operational Tolerance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Operational Tolerance</em>' attribute.
+	 * @see #isSetOperationalTolerance()
+	 * @see #unsetOperationalTolerance()
+	 * @see #getOperationalTolerance()
+	 * @generated
+	 */
+	void setOperationalTolerance(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getOperationalTolerance <em>Operational Tolerance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetOperationalTolerance()
+	 * @see #getOperationalTolerance()
+	 * @see #setOperationalTolerance(double)
+	 * @generated
+	 */
+	void unsetOperationalTolerance();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getOperationalTolerance <em>Operational Tolerance</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Operational Tolerance</em>' attribute is set.
+	 * @see #unsetOperationalTolerance()
+	 * @see #getOperationalTolerance()
+	 * @see #setOperationalTolerance(double)
+	 * @generated
+	 */
+	boolean isSetOperationalTolerance();
 
 	/**
 	 * Returns the value of the '<em><b>Optional</b></em>' attribute.
@@ -1394,6 +1503,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
+	double getSlotOrDelegateOperationalTolerance();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
 	VolumeUnits getSlotOrDelegateVolumeLimitsUnit();
 
 	/**
@@ -1509,6 +1626,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	String getSlotOrDelegateCounterparty();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getSlotOrDelegateCN();
 
 } // end of  Slot
 

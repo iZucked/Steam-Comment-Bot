@@ -36,6 +36,7 @@
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/code"/>
       <genFeatures createChild="false" propertyDescription="The name of the counterparty for this contract"
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/counterparty"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/cn"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/entity"/>
       <genFeatures createChild="false" propertyDescription="Optional date this contract is valid from"
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/startDate"/>
@@ -49,6 +50,8 @@
       <genFeatures createChild="false" propertyDescription="Max volume" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/maxQuantity"/>
       <genFeatures createChild="false" propertyDescription="The volume units for min/max quantity bounds"
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/volumeLimitsUnit"/>
+      <genFeatures createChild="false" propertyDescription="The operation tolerance around transfered volume"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/operationalTolerance"/>
       <genFeatures createChild="false" propertyDescription="When checked, restricted port and contract pairings are instead the only permitted options"
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/restrictedListsArePermissive"/>
       <genFeatures notify="false" createChild="false" propertyDescription="If set, these contracts cannot be paired to this contract"

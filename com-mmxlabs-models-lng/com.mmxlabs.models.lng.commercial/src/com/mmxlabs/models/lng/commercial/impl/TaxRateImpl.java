@@ -206,7 +206,7 @@ public class TaxRateImpl extends EObjectImpl implements TaxRate {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (date: ");
 		result.append(date);
 		result.append(", value: ");

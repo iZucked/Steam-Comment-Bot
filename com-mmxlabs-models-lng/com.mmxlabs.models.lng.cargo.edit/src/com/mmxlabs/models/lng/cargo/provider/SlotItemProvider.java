@@ -52,6 +52,7 @@ public class SlotItemProvider
 			addNamePropertyDescriptor(object);
 			addContractPropertyDescriptor(object);
 			addCounterpartyPropertyDescriptor(object);
+			addCnPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addWindowStartPropertyDescriptor(object);
 			addWindowStartTimePropertyDescriptor(object);
@@ -63,6 +64,7 @@ public class SlotItemProvider
 			addVolumeLimitsUnitPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
+			addOperationalTolerancePropertyDescriptor(object);
 			addOptionalPropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
 			addCargoPropertyDescriptor(object);
@@ -307,6 +309,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cn feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCnPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_cn_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_cn_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__CN,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Duration feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -390,6 +414,28 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Operational Tolerance feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOperationalTolerancePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_operationalTolerance_feature"),
+				 getString("_UI_Slot_operationalTolerance_description"),
+				 CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -851,6 +897,7 @@ public class SlotItemProvider
 		switch (notification.getFeatureID(Slot.class)) {
 			case CargoPackage.SLOT__NAME:
 			case CargoPackage.SLOT__COUNTERPARTY:
+			case CargoPackage.SLOT__CN:
 			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 			case CargoPackage.SLOT__WINDOW_SIZE:
@@ -861,6 +908,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
 			case CargoPackage.SLOT__MIN_QUANTITY:
 			case CargoPackage.SLOT__MAX_QUANTITY:
+			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
 			case CargoPackage.SLOT__OPTIONAL:
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 			case CargoPackage.SLOT__PRICING_EVENT:

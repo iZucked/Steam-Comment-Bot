@@ -15,4 +15,10 @@
 -->
 
 <plugin>
+ <extension
+	   point="com.mmxlabs.lngdataserver.browser.ui.DataBrowserExtension">
+		<DataBrowserExtension
+		      class="com.mmxlabs.lngdataserver.integration.distances.DistancesDataExtension">
+		</DataBrowserExtension>
+	 </extension>
 </plugin>

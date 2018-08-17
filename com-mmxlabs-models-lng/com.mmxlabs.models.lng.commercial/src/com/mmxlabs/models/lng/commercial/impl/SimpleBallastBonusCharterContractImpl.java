@@ -419,7 +419,7 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (minDuration: ");
 		if (minDurationESet) result.append(minDuration); else result.append("<unset>");
 		result.append(", maxDuration: ");

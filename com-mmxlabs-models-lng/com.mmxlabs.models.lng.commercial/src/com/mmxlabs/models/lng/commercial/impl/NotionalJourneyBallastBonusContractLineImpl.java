@@ -356,7 +356,7 @@ public class NotionalJourneyBallastBonusContractLineImpl extends BallastBonusCon
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (speed: ");
 		result.append(speed);
 		result.append(", fuelPriceExpression: ");

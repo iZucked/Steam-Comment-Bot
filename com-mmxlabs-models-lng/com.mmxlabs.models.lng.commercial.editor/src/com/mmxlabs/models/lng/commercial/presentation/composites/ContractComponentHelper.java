@@ -69,6 +69,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_codeEditor(detailComposite, topClass);
 		add_counterpartyEditor(detailComposite, topClass);
+		add_cnEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_startDateEditor(detailComposite, topClass);
 		add_endDateEditor(detailComposite, topClass);
@@ -77,6 +78,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
 		add_volumeLimitsUnitEditor(detailComposite, topClass);
+		add_operationalToleranceEditor(detailComposite, topClass);
 		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
 		add_restrictedPortsEditor(detailComposite, topClass);
@@ -156,6 +158,15 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the cn feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_cnEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CN));
+	}
+
+	/**
 	 * Create the editor for the startDate feature on Contract
 	 *
 	 * @generated NO
@@ -229,6 +240,15 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__MAX_QUANTITY));
+	}
+
+	/**
+	 * Create the editor for the operationalTolerance feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_operationalToleranceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__OPERATIONAL_TOLERANCE));
 	}
 
 	/**

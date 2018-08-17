@@ -160,6 +160,7 @@ public class CommercialActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
+		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("commercial-settings"));
 		toolBarManager.add(new Separator("commercial-additions"));
 	}

@@ -38,6 +38,7 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCode <em>Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCounterparty <em>Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCn <em>Cn</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEndDate <em>End Date</em>}</li>
@@ -46,6 +47,7 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getOperationalTolerance <em>Operational Tolerance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
@@ -118,6 +120,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected String counterparty = COUNTERPARTY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCn() <em>Cn</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCn()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CN_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCn() <em>Cn</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCn()
+	 * @generated
+	 * @ordered
+	 */
+	protected String cn = CN_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
@@ -266,6 +288,35 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected VolumeUnits volumeLimitsUnit = VOLUME_LIMITS_UNIT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getOperationalTolerance() <em>Operational Tolerance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationalTolerance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double OPERATIONAL_TOLERANCE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getOperationalTolerance() <em>Operational Tolerance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationalTolerance()
+	 * @generated
+	 * @ordered
+	 */
+	protected double operationalTolerance = OPERATIONAL_TOLERANCE_EDEFAULT;
+
+	/**
+	 * This is true if the Operational Tolerance attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean operationalToleranceESet;
 
 	/**
 	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
@@ -572,6 +623,52 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getOperationalTolerance() {
+		return operationalTolerance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOperationalTolerance(double newOperationalTolerance) {
+		double oldOperationalTolerance = operationalTolerance;
+		operationalTolerance = newOperationalTolerance;
+		boolean oldOperationalToleranceESet = operationalToleranceESet;
+		operationalToleranceESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE, oldOperationalTolerance, operationalTolerance, !oldOperationalToleranceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetOperationalTolerance() {
+		double oldOperationalTolerance = operationalTolerance;
+		boolean oldOperationalToleranceESet = operationalToleranceESet;
+		operationalTolerance = OPERATIONAL_TOLERANCE_EDEFAULT;
+		operationalToleranceESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE, oldOperationalTolerance, OPERATIONAL_TOLERANCE_EDEFAULT, oldOperationalToleranceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetOperationalTolerance() {
+		return operationalToleranceESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public VolumeUnits getVolumeLimitsUnit() {
 		return volumeLimitsUnit;
 	}
@@ -807,6 +904,27 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getCn() {
+		return cn;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCn(String newCn) {
+		String oldCn = cn;
+		cn = newCn;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__CN, oldCn, cn));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public YearMonth getStartDate() {
 		return startDate;
 	}
@@ -922,6 +1040,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getCode();
 			case CommercialPackage.CONTRACT__COUNTERPARTY:
 				return getCounterparty();
+			case CommercialPackage.CONTRACT__CN:
+				return getCn();
 			case CommercialPackage.CONTRACT__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
@@ -940,6 +1060,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getMaxQuantity();
 			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
 				return getVolumeLimitsUnit();
+			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
+				return getOperationalTolerance();
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return isRestrictedListsArePermissive();
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
@@ -978,6 +1100,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__COUNTERPARTY:
 				setCounterparty((String)newValue);
 				return;
+			case CommercialPackage.CONTRACT__CN:
+				setCn((String)newValue);
+				return;
 			case CommercialPackage.CONTRACT__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
 				return;
@@ -1002,6 +1127,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
 				setVolumeLimitsUnit((VolumeUnits)newValue);
+				return;
+			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
+				setOperationalTolerance((Double)newValue);
 				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive((Boolean)newValue);
@@ -1050,6 +1178,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__COUNTERPARTY:
 				setCounterparty(COUNTERPARTY_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__CN:
+				setCn(CN_EDEFAULT);
+				return;
 			case CommercialPackage.CONTRACT__ENTITY:
 				setEntity((BaseLegalEntity)null);
 				return;
@@ -1073,6 +1204,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
 				setVolumeLimitsUnit(VOLUME_LIMITS_UNIT_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
+				unsetOperationalTolerance();
 				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
@@ -1116,6 +1250,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return CODE_EDEFAULT == null ? code != null : !CODE_EDEFAULT.equals(code);
 			case CommercialPackage.CONTRACT__COUNTERPARTY:
 				return COUNTERPARTY_EDEFAULT == null ? counterparty != null : !COUNTERPARTY_EDEFAULT.equals(counterparty);
+			case CommercialPackage.CONTRACT__CN:
+				return CN_EDEFAULT == null ? cn != null : !CN_EDEFAULT.equals(cn);
 			case CommercialPackage.CONTRACT__ENTITY:
 				return entity != null;
 			case CommercialPackage.CONTRACT__START_DATE:
@@ -1132,6 +1268,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
 			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
 				return volumeLimitsUnit != VOLUME_LIMITS_UNIT_EDEFAULT;
+			case CommercialPackage.CONTRACT__OPERATIONAL_TOLERANCE:
+				return isSetOperationalTolerance();
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
@@ -1193,13 +1331,15 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", code: ");
 		result.append(code);
 		result.append(", counterparty: ");
 		result.append(counterparty);
+		result.append(", cn: ");
+		result.append(cn);
 		result.append(", startDate: ");
 		if (startDateESet) result.append(startDate); else result.append("<unset>");
 		result.append(", endDate: ");
@@ -1210,6 +1350,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(maxQuantity);
 		result.append(", volumeLimitsUnit: ");
 		result.append(volumeLimitsUnit);
+		result.append(", operationalTolerance: ");
+		if (operationalToleranceESet) result.append(operationalTolerance); else result.append("<unset>");
 		result.append(", restrictedListsArePermissive: ");
 		result.append(restrictedListsArePermissive);
 		result.append(", notes: ");

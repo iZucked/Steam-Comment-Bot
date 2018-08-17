@@ -248,7 +248,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 		tColumn.setMoveable(true);
 		tColumn.setText(columnName);
 		tColumn.pack();
-		// tColumn.setResizable(true);
 
 		// store the renderer here, so that we can use it in sorting later.
 		tColumn.setData(COLUMN_RENDERER, renderer);

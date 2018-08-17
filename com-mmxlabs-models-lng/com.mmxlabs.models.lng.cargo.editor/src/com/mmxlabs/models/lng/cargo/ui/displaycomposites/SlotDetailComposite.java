@@ -98,12 +98,13 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		mainFeatures = new ArrayList<EStructuralFeature[]>();
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity() });
-		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity(), CargoFeatures.getSlot_VolumeLimitsUnit() });
-		mainFeatures.add(new EStructuralFeature[] { CargoPackage.Literals.SLOT__COUNTERPARTY});
+		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity(), CargoFeatures.getSlot_VolumeLimitsUnit(),
+				CargoFeatures.getSlot_OperationalTolerance() });
+		mainFeatures.add(new EStructuralFeature[] { CargoPackage.Literals.SLOT__COUNTERPARTY, CargoPackage.Literals.SLOT__CN });
 		allFeatures.addAll(getAllFeatures(mainFeatures));
 
 		pricingFeatures = new ArrayList<EStructuralFeature[]>();
-		pricingFeatures.add(new EStructuralFeature[] { Contract , CargoPackage.Literals.SPOT_SLOT__MARKET});
+		pricingFeatures.add(new EStructuralFeature[] { Contract, CargoPackage.Literals.SPOT_SLOT__MARKET });
 		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingEvent(), CargoFeatures.getSlot_PricingDate() });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Hedges(), CargoFeatures.getSlot_MiscCosts(), CargoFeatures.getSlot_CancellationExpression() });
@@ -234,7 +235,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
 				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
 				final EStructuralFeature feature = editor.getFeature();
-				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
+				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY || feature == CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					// gd.widthHint = 80;
@@ -272,7 +273,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					gd.widthHint = 100;
-					
+
 					// FIXME: Hack pending proper APi to manipulate labels
 					if (feature == CargoPackage.Literals.SLOT__WINDOW_FLEX) {
 						final Label label = editor.getLabel();

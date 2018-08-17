@@ -245,6 +245,125 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					}));
 			break;
 		}
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.load-operationaltolerance": {
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Load Op. Tol.", "Load volume operational tolerance", ColumnType.NORMAL, new BaseFormatter() {
+
+				@Override
+				public Comparable getComparable(Object object) {
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
+						if (openSlotAllocation != null) {
+							return getValue(openSlotAllocation.getSlot());
+						}
+						final SlotAllocation slotAllocation = row.getLoadAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								return getValue(slot);
+							}
+						}
+					}
+					return null;
+				}
+
+				private Double getValue(final Slot slot) {
+					if (slot != null) {
+						if (slot.isSetOperationalTolerance()) {
+							return slot.getOperationalTolerance();
+						}
+						Contract c = slot.getContract();
+						if (c != null) {
+							if (c.isSetOperationalTolerance()) {
+								return c.getOperationalTolerance();
+							}
+						}
+					}
+					return null;
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							Double v = getValue(slot);
+							if (v != null) {
+								return new NumberOfDPFormatter(1).render(v * 100.0);
+							}
+						}
+						final SlotAllocation slotAllocation = row.getLoadAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								Double v = getValue(slot);
+								if (v != null) {
+									return new NumberOfDPFormatter(1).render(v * 100.0);
+								}
+							}
+						}
+					}
+					return "";
+				}
+			}));
+
+			break;
+		}
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.discharge-operationaltolerance": {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Discharge Op. Tol.", "Discharge volume operational tolerance", ColumnType.NORMAL,
+
+					new BaseFormatter() {
+
+						private Double getValue(final Slot slot) {
+							if (slot != null) {
+								if (slot.isSetOperationalTolerance()) {
+									return slot.getOperationalTolerance();
+								}
+								Contract c = slot.getContract();
+								if (c != null) {
+									if (c.isSetOperationalTolerance()) {
+										return c.getOperationalTolerance();
+									}
+								}
+							}
+							return null;
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							if (object instanceof Row) {
+								final Row row = (Row) object;
+								final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
+								if (openSlotAllocation != null) {
+									final Slot slot = openSlotAllocation.getSlot();
+									if (slot != null) {
+										Double v = getValue(slot);
+										if (v != null) {
+											return new NumberOfDPFormatter(1).render(v * 100.0);
+										}
+									}
+								}
+								final SlotAllocation slotAllocation = row.getDischargeAllocation();
+								if (slotAllocation != null) {
+									final Slot slot = slotAllocation.getSlot();
+									if (slot instanceof DischargeSlot) {
+										Double v = getValue(slot);
+										if (v != null) {
+											return new NumberOfDPFormatter(1).render(v * 100.0);
+										}
+									}
+								}
+							}
+							return "";
+						}
+					}));
+			break;
+		}
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate": {
 			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation_SlotVisit(), s.getEvent_Start() }, { targetObjectRef, s.getEvent_Start() } };
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Load/Start Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, paths));
@@ -1697,6 +1816,14 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sale_counterparty":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sale Counterparty", null, ColumnType.NORMAL, new BaseFormatter(), dischargeAllocationRef,
 					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegateCounterparty()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchase_cn":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase CN", null, ColumnType.NORMAL, new BaseFormatter(), loadAllocationRef,
+					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegateCN()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.sale_cn":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sale CN", null, ColumnType.NORMAL, new BaseFormatter(), dischargeAllocationRef,
+					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegateCN()));
 			break;
 		}
 	}

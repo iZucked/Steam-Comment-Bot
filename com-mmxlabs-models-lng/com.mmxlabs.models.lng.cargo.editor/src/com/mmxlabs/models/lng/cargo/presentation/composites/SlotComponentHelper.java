@@ -25,6 +25,7 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.LocalDateInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -83,6 +84,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
 		add_counterpartyEditor(detailComposite, topClass);
+		add_cnEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
 		add_windowStartEditor(detailComposite, topClass);
 		add_windowStartTimeEditor(detailComposite, topClass);
@@ -94,6 +96,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_volumeLimitsUnitEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
+		add_operationalToleranceEditor(detailComposite, topClass);
 		add_optionalEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);
 		add_cargoEditor(detailComposite, topClass);
@@ -359,6 +362,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the cn feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_cnEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new TextInlineEditor(CargoPackage.Literals.SLOT__CN));
+	}
+
+	/**
 	 * Create the editor for the duration feature on Slot
 	 * 
 	 * @generated
@@ -392,6 +404,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new VolumeInlineEditor(CargoPackage.Literals.SLOT__MAX_QUANTITY));
+	}
+
+	/**
+	 * Create the editor for the operationalTolerance feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_operationalToleranceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE));
 	}
 
 	/**

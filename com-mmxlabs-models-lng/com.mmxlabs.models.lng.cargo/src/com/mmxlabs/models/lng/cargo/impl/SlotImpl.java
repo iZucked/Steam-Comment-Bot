@@ -57,6 +57,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCounterparty <em>Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCn <em>Cn</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
@@ -68,6 +69,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getOperationalTolerance <em>Operational Tolerance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
@@ -158,6 +160,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean counterpartyESet;
+
+	/**
+	 * The default value of the '{@link #getCn() <em>Cn</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCn()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CN_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCn() <em>Cn</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCn()
+	 * @generated
+	 * @ordered
+	 */
+	protected String cn = CN_EDEFAULT;
+
+	/**
+	 * This is true if the Cn attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean cnESet;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -414,6 +445,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean maxQuantityESet;
+
+	/**
+	 * The default value of the '{@link #getOperationalTolerance() <em>Operational Tolerance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationalTolerance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double OPERATIONAL_TOLERANCE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getOperationalTolerance() <em>Operational Tolerance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationalTolerance()
+	 * @generated
+	 * @ordered
+	 */
+	protected double operationalTolerance = OPERATIONAL_TOLERANCE_EDEFAULT;
+
+	/**
+	 * This is true if the Operational Tolerance attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean operationalToleranceESet;
 
 	/**
 	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
@@ -1152,6 +1212,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getCn() {
+		return cn;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCn(String newCn) {
+		String oldCn = cn;
+		cn = newCn;
+		boolean oldCnESet = cnESet;
+		cnESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CN, oldCn, cn, !oldCnESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCn() {
+		String oldCn = cn;
+		boolean oldCnESet = cnESet;
+		cn = CN_EDEFAULT;
+		cnESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__CN, oldCn, CN_EDEFAULT, oldCnESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCn() {
+		return cnESet;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1321,6 +1427,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public boolean isSetMaxQuantity() {
 		return maxQuantityESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getOperationalTolerance() {
+		return operationalTolerance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOperationalTolerance(double newOperationalTolerance) {
+		double oldOperationalTolerance = operationalTolerance;
+		operationalTolerance = newOperationalTolerance;
+		boolean oldOperationalToleranceESet = operationalToleranceESet;
+		operationalToleranceESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__OPERATIONAL_TOLERANCE, oldOperationalTolerance, operationalTolerance, !oldOperationalToleranceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetOperationalTolerance() {
+		double oldOperationalTolerance = operationalTolerance;
+		boolean oldOperationalToleranceESet = operationalToleranceESet;
+		operationalTolerance = OPERATIONAL_TOLERANCE_EDEFAULT;
+		operationalToleranceESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__OPERATIONAL_TOLERANCE, oldOperationalTolerance, OPERATIONAL_TOLERANCE_EDEFAULT, oldOperationalToleranceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetOperationalTolerance() {
+		return operationalToleranceESet;
 	}
 
 	/**
@@ -1929,6 +2081,16 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	public double getSlotOrDelegateOperationalTolerance() {
+		return (Double) eGetWithDefault(CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE);
+
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
 	public VolumeUnits getSlotOrDelegateVolumeLimitsUnit() {
 		return (VolumeUnits) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT);
 	}
@@ -2164,6 +2326,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getSlotOrDelegateCN() {
+		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__CN);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -2224,6 +2395,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return basicGetContract();
 			case CargoPackage.SLOT__COUNTERPARTY:
 				return getCounterparty();
+			case CargoPackage.SLOT__CN:
+				return getCn();
 			case CargoPackage.SLOT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
@@ -2247,6 +2420,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				return getMaxQuantity();
+			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
+				return getOperationalTolerance();
 			case CargoPackage.SLOT__OPTIONAL:
 				return isOptional();
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
@@ -2309,6 +2484,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__COUNTERPARTY:
 				setCounterparty((String)newValue);
 				return;
+			case CargoPackage.SLOT__CN:
+				setCn((String)newValue);
+				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)newValue);
 				return;
@@ -2341,6 +2519,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
+				setOperationalTolerance((Double)newValue);
 				return;
 			case CargoPackage.SLOT__OPTIONAL:
 				setOptional((Boolean)newValue);
@@ -2422,6 +2603,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__COUNTERPARTY:
 				unsetCounterparty();
 				return;
+			case CargoPackage.SLOT__CN:
+				unsetCn();
+				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)null);
 				return;
@@ -2454,6 +2638,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				unsetMaxQuantity();
+				return;
+			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
+				unsetOperationalTolerance();
 				return;
 			case CargoPackage.SLOT__OPTIONAL:
 				setOptional(OPTIONAL_EDEFAULT);
@@ -2529,6 +2716,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetContract();
 			case CargoPackage.SLOT__COUNTERPARTY:
 				return isSetCounterparty();
+			case CargoPackage.SLOT__CN:
+				return isSetCn();
 			case CargoPackage.SLOT__PORT:
 				return port != null;
 			case CargoPackage.SLOT__WINDOW_START:
@@ -2551,6 +2740,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				return isSetMaxQuantity();
+			case CargoPackage.SLOT__OPERATIONAL_TOLERANCE:
+				return isSetOperationalTolerance();
 			case CargoPackage.SLOT__OPTIONAL:
 				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
@@ -2670,6 +2861,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrDelegateMinQuantity();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY:
 				return getSlotOrDelegateMaxQuantity();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_OPERATIONAL_TOLERANCE:
+				return getSlotOrDelegateOperationalTolerance();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_VOLUME_LIMITS_UNIT:
 				return getSlotOrDelegateVolumeLimitsUnit();
 			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME:
@@ -2700,6 +2893,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotContractParams();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_COUNTERPARTY:
 				return getSlotOrDelegateCounterparty();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_CN:
+				return getSlotOrDelegateCN();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -2714,11 +2909,13 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", counterparty: ");
 		if (counterpartyESet) result.append(counterparty); else result.append("<unset>");
+		result.append(", cn: ");
+		if (cnESet) result.append(cn); else result.append("<unset>");
 		result.append(", windowStart: ");
 		result.append(windowStart);
 		result.append(", windowStartTime: ");
@@ -2739,6 +2936,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (minQuantityESet) result.append(minQuantity); else result.append("<unset>");
 		result.append(", maxQuantity: ");
 		if (maxQuantityESet) result.append(maxQuantity); else result.append("<unset>");
+		result.append(", operationalTolerance: ");
+		if (operationalToleranceESet) result.append(operationalTolerance); else result.append("<unset>");
 		result.append(", optional: ");
 		result.append(optional);
 		result.append(", priceExpression: ");
@@ -2782,10 +2981,14 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MinQuantity(), (Integer) 0);
 		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) Integer.MAX_VALUE);
+		} else if (CargoPackage.eINSTANCE.getSlot_OperationalTolerance() == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_OperationalTolerance(), (Double) 0.0);
 		} else if (CargoPackage.Literals.SLOT__ENTITY == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
 		} else if (CargoPackage.Literals.SLOT__COUNTERPARTY == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Counterparty(), null);
+		} else if (CargoPackage.Literals.SLOT__CN == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Cn(), null);
 		} else if (CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationExpression(), (String)"");
 		} else if (CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT == feature) {

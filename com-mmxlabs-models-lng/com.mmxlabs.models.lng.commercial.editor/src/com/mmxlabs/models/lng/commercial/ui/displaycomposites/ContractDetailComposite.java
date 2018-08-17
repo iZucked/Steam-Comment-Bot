@@ -10,13 +10,22 @@ package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
  */
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
+import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 
 /**
  * @author Simon Goodall
@@ -75,5 +84,55 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 		}
 
 		return super.addInlineEditor(editor);
+	}
+
+	@Override
+	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+		return new DefaultDisplayCompositeLayoutProvider() {
+
+			@Override
+			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
+				return new GridLayout(8, false);
+			}
+
+			@Override
+			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
+
+				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
+				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
+				final EStructuralFeature feature = editor.getFeature();
+				if (feature == CommercialPackage.Literals.CONTRACT__MAX_QUANTITY || feature == CommercialPackage.Literals.CONTRACT__MIN_QUANTITY
+						|| feature == CommercialPackage.Literals.CONTRACT__VOLUME_LIMITS_UNIT || feature == CommercialPackage.Literals.CONTRACT__OPERATIONAL_TOLERANCE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					if (feature == CommercialPackage.Literals.CONTRACT__MAX_QUANTITY || feature == CommercialPackage.Literals.CONTRACT__MIN_QUANTITY) {
+						gd.widthHint = 80;
+					}
+
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CommercialPackage.Literals.CONTRACT__MIN_QUANTITY) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Volume");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.CONTRACT__COUNTERPARTY || feature == CommercialPackage.Literals.CONTRACT__CN) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 3;
+
+					return gd;
+				}
+
+				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+				gd.horizontalSpan = 7;
+				return gd;
+			}
+		};
 	}
 }

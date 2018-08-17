@@ -317,7 +317,7 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (minCvValue: ");
 		if (minCvValueESet) result.append(minCvValue); else result.append("<unset>");
 		result.append(", maxCvValue: ");

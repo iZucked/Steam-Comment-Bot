@@ -23,6 +23,7 @@ import java.time.YearMonth;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCode <em>Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCounterparty <em>Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCn <em>Cn</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEndDate <em>End Date</em>}</li>
@@ -31,6 +32,7 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getOperationalTolerance <em>Operational Tolerance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}</li>
@@ -168,6 +170,60 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setMaxQuantity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Operational Tolerance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Operational Tolerance</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Operational Tolerance</em>' attribute.
+	 * @see #isSetOperationalTolerance()
+	 * @see #unsetOperationalTolerance()
+	 * @see #setOperationalTolerance(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_OperationalTolerance()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='##0.#' unit='%' exportFormatString='#.###' unitPrefix='\261'"
+	 * @generated
+	 */
+	double getOperationalTolerance();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getOperationalTolerance <em>Operational Tolerance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Operational Tolerance</em>' attribute.
+	 * @see #isSetOperationalTolerance()
+	 * @see #unsetOperationalTolerance()
+	 * @see #getOperationalTolerance()
+	 * @generated
+	 */
+	void setOperationalTolerance(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getOperationalTolerance <em>Operational Tolerance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetOperationalTolerance()
+	 * @see #getOperationalTolerance()
+	 * @see #setOperationalTolerance(double)
+	 * @generated
+	 */
+	void unsetOperationalTolerance();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getOperationalTolerance <em>Operational Tolerance</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Operational Tolerance</em>' attribute is set.
+	 * @see #unsetOperationalTolerance()
+	 * @see #getOperationalTolerance()
+	 * @see #setOperationalTolerance(double)
+	 * @generated
+	 */
+	boolean isSetOperationalTolerance();
 
 	/**
 	 * Returns the value of the '<em><b>Volume Limits Unit</b></em>' attribute.
@@ -473,6 +529,32 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setCounterparty(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Cn</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cn</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cn</em>' attribute.
+	 * @see #setCn(String)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_Cn()
+	 * @model
+	 * @generated
+	 */
+	String getCn();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getCn <em>Cn</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cn</em>' attribute.
+	 * @see #getCn()
+	 * @generated
+	 */
+	void setCn(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Start Date</b></em>' attribute.

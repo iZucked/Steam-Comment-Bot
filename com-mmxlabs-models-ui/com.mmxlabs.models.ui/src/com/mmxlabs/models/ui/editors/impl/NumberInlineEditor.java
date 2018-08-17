@@ -224,7 +224,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	@Override
 	protected void updateValueDisplay(final Object value) {
 		if (text != null) {
-			updateBackgroundColour(text.isEmpty());
+			boolean a = !valueIsSet();
+			updateBackgroundColour(a || text.isEmpty());
 			text.setValue(scale(value));
 		}
 	}

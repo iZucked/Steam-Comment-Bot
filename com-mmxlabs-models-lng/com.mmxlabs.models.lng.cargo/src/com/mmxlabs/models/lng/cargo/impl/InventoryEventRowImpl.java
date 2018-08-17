@@ -445,7 +445,7 @@ public class InventoryEventRowImpl extends EObjectImpl implements InventoryEvent
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (startDate: ");
 		result.append(startDate);
 		result.append(", endDate: ");

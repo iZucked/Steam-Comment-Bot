@@ -30,6 +30,20 @@ public class ContractQuantityRangeConstraint extends AbstractModelMultiConstrain
 			if (rangeCheckDSD != null) {
 				failures.add(rangeCheckDSD);
 			}
+			if (contract.getOperationalTolerance() < 0.0) {
+				final String failureMessage = String.format("Contract '%s' operational tolerance is less than zero", contract.getName());
+
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+				dsd.addEObjectAndFeature(contract, CommercialPackage.Literals.CONTRACT__OPERATIONAL_TOLERANCE);
+				failures.add(dsd);
+			}
+			if (contract.getOperationalTolerance() > 1.0) {
+				final String failureMessage = String.format("Contract '%s' operational tolerance is greater than 100%%", contract.getName());
+
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+				dsd.addEObjectAndFeature(contract, CommercialPackage.Literals.CONTRACT__OPERATIONAL_TOLERANCE);
+				failures.add(dsd);
+			}
 		}
 
 		return Activator.PLUGIN_ID;
