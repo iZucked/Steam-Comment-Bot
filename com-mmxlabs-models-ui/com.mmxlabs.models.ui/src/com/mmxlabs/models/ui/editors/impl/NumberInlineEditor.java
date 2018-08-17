@@ -152,14 +152,14 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	}
 
 	@Override
-	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		isOverridable = false;
 		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
 		if (eAnnotation == null) {
 			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
 		}
 		if (eAnnotation != null) {
-			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+			for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
 				if (f.getName().equals(feature.getName() + "Override")) {
 					isOverridable = true;
 				}
@@ -174,9 +174,10 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	@Override
 	public Control createValueControl(Composite parent) {
 		if (unitPrefix != null || unitSuffix != null) {
+			final int cols = (unitPrefix != null && unitSuffix != null) ? 3 : 2;
 			// final Composite sub = new Composite(parent, SWT.NONE);
 			final Composite sub = toolkit.createComposite(parent, SWT.NONE);
-			final GridLayout layout = new GridLayout(2, false);
+			final GridLayout layout = new GridLayout(cols, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			sub.setLayout(layout);
 			parent = sub;
