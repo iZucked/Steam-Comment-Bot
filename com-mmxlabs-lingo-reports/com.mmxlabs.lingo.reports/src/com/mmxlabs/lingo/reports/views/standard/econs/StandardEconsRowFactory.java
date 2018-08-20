@@ -22,9 +22,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Sets;
-import com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReportComponent.CargoAllocationPair;
-import com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReportComponent.DeltaPair;
-import com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReportComponent.VesselEventVisitPair;
 import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;

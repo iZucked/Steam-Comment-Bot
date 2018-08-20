@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.standard.econs;
+package com.mmxlabs.lingo.reports.views.standard.pnlcalcs;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,8 +58,9 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
-import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions;
-import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
+import com.mmxlabs.lingo.reports.views.standard.econs.CargoAllocationPair;
+import com.mmxlabs.lingo.reports.views.standard.econs.DeltaPair;
+import com.mmxlabs.lingo.reports.views.standard.econs.VesselEventVisitPair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -94,13 +95,13 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
- * The {@link CargoEconsReportComponent} is a vertical report similar in concept to the Properties View. This table is the transpose of most other tables. Columns represent the input data and rows are
+ * The {@link PNLCalcsReportComponent} is a vertical report similar in concept to the Properties View. This table is the transpose of most other tables. Columns represent the input data and rows are
  * pre-defined.
  * 
  * @author Simon Goodall
  * 
  */
-public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart */ {
+public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart */ {
 
 	private Image cellImageSteadyArrow;
 	private Image cellImageGreenArrowDown;
@@ -115,10 +116,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	private SelectedScenariosService selectedScenariosService;
 	private List<Object> selectedObjects;
 
-	/**
-	 * The ID of the view as specified by the extension.
-	 */
-	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
 	private GridTableViewer viewer;
 	private final Collection<Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener>> selectionListeners = new ConcurrentLinkedQueue<>();
 
@@ -126,7 +123,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	 * List of dynamically generated columns to be disposed on selection changes
 	 */
 	private final List<GridViewerColumn> dataColumns = new LinkedList<GridViewerColumn>();
-	private final EconsOptions options = new EconsOptions();
 
 	private Map<String, GridColumnGroup> gridColumnGroupsMap = new HashMap<String, GridColumnGroup>();
 
@@ -139,26 +135,28 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
 		return imageDescriptor.createImage();
 	}
+
 	private CellLabelProvider createRowHeaderLabelProvider() {
 		return new CellLabelProvider() {
-			
+
 			@Override
 			public void update(ViewerCell cell) {
 				Object element = cell.getElement();
-				
+
 				if (element == null) {
 					return;
 				}
-				
-				if (!(element instanceof CargoEconsReportRow)) {
+
+				if (!(element instanceof PNLCalcsReportRow)) {
 					return;
 				}
-				
-				CargoEconsReportRow row = (CargoEconsReportRow) cell.getElement();
+
+				PNLCalcsReportRow row = (PNLCalcsReportRow) cell.getElement();
 				cell.setText(row.name);
 			}
 		};
 	}
+
 	@PostConstruct
 	public void createPartControl(final Composite parent) {
 
@@ -176,11 +174,11 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		viewer.getGrid().setRowHeaderVisible(true);
 		viewer.setContentProvider(new ArrayContentProvider());
-		
+
 		// Set row header column
 		viewer.setRowHeaderLabelProvider(createRowHeaderLabelProvider());
 		viewer.refreshRowHeaders(null);
-		
+
 		// Add the dummy name column to fix row height issue
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 		{
@@ -193,22 +191,22 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		// Our input!
 		// Array content provider as we pass in an array of enums
-		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
-		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
-			rows.addAll(factory.createRows(options, null));
+		final List<PNLCalcsReportRow> rows = new LinkedList<>();
+		ServiceHelper.withAllServices(IPNLCalcsRowFactory.class, null, factory -> {
+			rows.addAll(factory.createRows(null));
 			return true;
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
-		
+
 		viewer.setInput(rows);
 		viewer.getGrid().setHeaderVisible(true);
 
 		// If we have data, dispose of the dummy name column immediately
-		if (rows != null && rows.size() > 0) {
+		if (!rows.isEmpty()) {
 			gvc.getColumn().dispose();
 		}
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_CargoEcons");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_PNLCons");
 	}
 
 	@PreDestroy
@@ -262,7 +260,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	}
 
 	public void setSelectedObject(final Collection<Object> objects) {
-		selectedObjects = new ArrayList<Object>(objects);
+		selectedObjects = new ArrayList<>(objects);
 	}
 
 	public List<Object> getSelectedObject() {
@@ -287,22 +285,16 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		@Override
 		public String getText(final Object element) {
-			if (element instanceof CargoEconsReportRow) {
-				final CargoEconsReportRow fieldType = (CargoEconsReportRow) element;
-				return fieldType.name; // + " (" + fieldType.getUnit() + ")";
+			if (element instanceof PNLCalcsReportRow) {
+				final PNLCalcsReportRow fieldType = (PNLCalcsReportRow) element;
+				return fieldType.name;
 			}
 			return null;
 		}
-
-		// @Override
-		// public void update(final ViewerCell cell) {
-		// cell.setText(getText(cell.getElement()));
-		// }
-
 	}
 
 	/**
-	 * Label Provider created for each column. Returns text for the given {@link CargoEconsReportRow} enum (as the input element) for the {@link IFieldTypeMapper} object passed in during creation.
+	 * Label Provider created for each column. Returns text for the given {@link PNLCalcsReportRow} enum (as the input element) for the {@link IFieldTypeMapper} object passed in during creation.
 	 * 
 	 */
 	private class FieldTypeMapperLabelProvider extends ColumnLabelProvider {
@@ -320,8 +312,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		@Override
 		public String getText(final Object element) {
-			if (element instanceof CargoEconsReportRow) {
-				final CargoEconsReportRow row = (CargoEconsReportRow) element;
+			if (element instanceof PNLCalcsReportRow) {
+				final PNLCalcsReportRow row = (PNLCalcsReportRow) element;
 				if (row.includeUnits) {
 					String value = row.formatter.render(columnElement);
 					if (value != null) {
@@ -336,8 +328,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		@Override
 		public String getToolTipText(final Object element) {
-			if (element instanceof CargoEconsReportRow) {
-				final CargoEconsReportRow row = (CargoEconsReportRow) element;
+			if (element instanceof PNLCalcsReportRow) {
+				final PNLCalcsReportRow row = (PNLCalcsReportRow) element;
 				final Supplier<String> tooltip = row.tooltip;
 				if (tooltip != null) {
 					return tooltip.get();
@@ -348,8 +340,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		@Override
 		public Color getForeground(final Object element) {
-			if (element instanceof CargoEconsReportRow) {
-				final CargoEconsReportRow row = ((CargoEconsReportRow) element);
+			if (element instanceof PNLCalcsReportRow) {
+				final PNLCalcsReportRow row = ((PNLCalcsReportRow) element);
 				if (row.colourProvider != null) {
 					return row.colourProvider.getForeground(columnElement);
 				}
@@ -364,9 +356,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			cell.setBackground(getBackground(cell.getElement()));
 
 			final Object element = cell.getElement();
-			
-			if (element instanceof CargoEconsReportRow) {
-				final CargoEconsReportRow row = (CargoEconsReportRow) element;
+
+			if (element instanceof PNLCalcsReportRow) {
+				final PNLCalcsReportRow row = (PNLCalcsReportRow) element;
 
 				if (columnElement instanceof DeltaPair || columnElement instanceof List<?>) {
 					final String formattedValue = getText(element);
@@ -398,8 +390,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	public void setIncludedUnit(final boolean includeUnit) {
 		for (final GridItem item : viewer.getGrid().getItems()) {
 			final Object obj = item.getData();
-			if (obj instanceof CargoEconsReportRow) {
-				((CargoEconsReportRow) obj).includeUnits = includeUnit;
+			if (obj instanceof PNLCalcsReportRow) {
+				((PNLCalcsReportRow) obj).includeUnits = includeUnit;
 			}
 		}
 	}
@@ -409,7 +401,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	}
 
 	public void toggleCompare() {
-		final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 		final ScenarioResult scenario = selectedScenariosService.getPinnedScenario();
 
 		if (scenario != null) {
@@ -426,7 +417,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	 * @return
 	 */
 	private Collection<Object> processSelection(final IWorkbenchPart part, final ISelection selection) {
-		final Collection<Object> validObjects = new LinkedHashSet<Object>();
+		final Collection<Object> validObjects = new LinkedHashSet<>();
 
 		if (selection instanceof IStructuredSelection) {
 
@@ -598,7 +589,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				final IWorkbenchPart e3part = SelectionHelper.getE3Part(part);
 				{
 					// TODO: Ignore navigator
-					if (e3part == CargoEconsReportComponent.this) {
+					if (e3part == PNLCalcsReportComponent.this) {
 						return;
 					}
 					if (e3part instanceof PropertySheet) {
@@ -609,7 +600,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				final ISelection selection = SelectionHelper.adaptSelection(selectedObjects);
 
 				// Find valid, selected objects
-				final Collection<Object> validObjects = CargoEconsReportComponent.this.processSelection(e3part, selection);
+				final Collection<Object> validObjects = PNLCalcsReportComponent.this.processSelection(e3part, selection);
 				setSelectedObject(validObjects);
 
 				rebuild();
@@ -621,15 +612,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			selectionService.addPostSelectionListener(selectionListener);
 		}
 		selectionListeners.add(new Pair<>(partId, selectionListener));
-	}
-
-	/**
-	 * Adds a selection listener for the given partID. Listens to everything if null
-	 */
-	@SetEconsMarginMode
-	public void setMarginMode(final MarginBy mode) {
-		options.marginBy = mode;
-		ViewerHelper.refresh(getViewer(), false);
 	}
 
 	private void getValidObject(final IWorkbenchPart part, final Consumer<LNGScenarioModel> objectFinder) {
@@ -657,7 +639,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				if (scenarioInstance != null) {
 					@NonNull
 					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-					return modelRecord.aquireReference("CargoEconsReport");
+					return modelRecord.aquireReference("PNLConsReport");
 				}
 			}
 		}
@@ -760,17 +742,17 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		}
 
 		// Create the row object
-		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
-		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
-			rows.addAll(factory.createRows(options, validObjects));
+		final List<PNLCalcsReportRow> rows = new LinkedList<>();
+		ServiceHelper.withAllServices(IPNLCalcsRowFactory.class, null, factory -> {
+			rows.addAll(factory.createRows(validObjects));
 			return true;
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
 
 		viewer.setInput(rows);
-		if (compareMode == true) {
+		if (compareMode) {
 
-			if (onlyDiffMode == true) {
+			if (onlyDiffMode) {
 				validObjects.clear();
 			}
 
@@ -789,7 +771,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			validObjects.clear();
 			validObjects.addAll(sortedObjects);
 
-			final List<DeltaPair> aggregateList = new ArrayList(cargoAllocationPairs.size() + vesselEventVisitsPairs.size());
+			final List<DeltaPair> aggregateList = new ArrayList<>(cargoAllocationPairs.size() + vesselEventVisitsPairs.size());
 
 			// The finals aggregated elements
 			aggregateList.addAll(cargoAllocationPairs);
@@ -839,7 +821,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				// Diff of cargo
 			} else if (selectedObject instanceof DeltaPair) {
 				final DeltaPair pair = (DeltaPair) selectedObject;
-				if (pair.second() != null || onlyDiffMode == true) {
+				if (pair.second() != null || onlyDiffMode) {
 
 					final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(pair.getName());
 					final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);

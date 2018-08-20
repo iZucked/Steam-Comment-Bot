@@ -177,6 +177,13 @@
             name="Income Statement (Region)"
             restorable="true">
       </view>
+      <view
+            class="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
+            icon="icons/cview16/exec_statistic_view.gif"
+            id="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
+            name="PNL Calcs"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
