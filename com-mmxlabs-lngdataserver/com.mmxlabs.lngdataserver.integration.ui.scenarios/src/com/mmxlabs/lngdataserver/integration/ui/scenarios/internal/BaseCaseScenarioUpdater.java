@@ -155,11 +155,12 @@ public class BaseCaseScenarioUpdater {
 			}
 
 			final ScenarioInstance instance = mapping.computeIfAbsent(uuid, u -> loadScenarioFrom(f, u, name));
-
-			RunnerHelper.syncExecDisplayOptional(() -> {
-				instance.setName(name);
-				parent.getElements().add(instance);
-			});
+			if (instance != null) {
+				RunnerHelper.syncExecDisplayOptional(() -> {
+					instance.setName(name);
+					parent.getElements().add(instance);
+				});
+			}
 		}
 	}
 
@@ -321,7 +322,7 @@ public class BaseCaseScenarioUpdater {
 
 		if (available) {
 			final String currentUUID = client.getCurrentBaseCase();
-			if (currentUUID != null ) {
+			if (currentUUID != null) {
 				if (currentUUID.isEmpty()) {
 					update(null);
 					lastUUID = currentUUID;
