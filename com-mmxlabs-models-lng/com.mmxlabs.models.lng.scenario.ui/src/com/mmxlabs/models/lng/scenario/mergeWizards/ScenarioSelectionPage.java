@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -117,7 +117,7 @@ public class ScenarioSelectionPage extends WizardPage {
 	 * 
 	 */
 	class ScenarioContentProvider implements ITreeContentProvider {
-		EList<ScenarioService> services;
+		private List<ScenarioService> services;
 
 		public ScenarioContentProvider() {
 		}
@@ -129,7 +129,7 @@ public class ScenarioSelectionPage extends WizardPage {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-			services = (EList<ScenarioService>) newInput;
+			services = (List<ScenarioService>) newInput;
 		}
 
 		@Override
@@ -269,14 +269,14 @@ public class ScenarioSelectionPage extends WizardPage {
 	 * 
 	 * @return
 	 */
-	private EList<ScenarioService> getServices() {
+	private List<ScenarioService> getServices() {
 		final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(
 				Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 		final ScenarioModel scenarioModel = tracker.getService().getScenarioModel();
 		tracker.close();
 
-		return scenarioModel.getScenarioServices();
+		return scenarioModel.getScenarioServices().stream().filter(s -> s.isLocal()).collect(Collectors.toList());
 	}
 
 	/**
