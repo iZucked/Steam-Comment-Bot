@@ -15,7 +15,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -57,7 +57,7 @@ public class RestrictedElementsConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 		when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 		when(validationContext.createFailureStatus()).thenReturn(failureStatus);
-		when(validationContext.createFailureStatus(Matchers.any())).thenReturn(failureStatus);
+		when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(failureStatus);
 		when(successStatus.isOK()).thenReturn(true);
 		when(failureStatus.isOK()).thenReturn(false);
 		when(validationContext.getTarget()).thenReturn(cargo);
@@ -74,9 +74,9 @@ public class RestrictedElementsConstraintTest {
 		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(otherContract));
 		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(otherContract));
 
-		when(loadPort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
-		when(dischargePort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
-		when(otherPort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(otherPort));
+		when(loadPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
+		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
+		when(otherPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(otherPort));
 
 		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(otherPort));
 		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(otherPort));
@@ -124,15 +124,15 @@ public class RestrictedElementsConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 		when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 		when(validationContext.createFailureStatus()).thenReturn(failureStatus);
-		when(validationContext.createFailureStatus(Matchers.any())).thenReturn(failureStatus);
+		when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(failureStatus);
 		when(successStatus.isOK()).thenReturn(true);
 		when(failureStatus.isOK()).thenReturn(false);
 		when(validationContext.getTarget()).thenReturn(cargo);
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		when(loadPort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
-		when(dischargePort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
+		when(loadPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
+		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
 
 		// Set up the expected return values of methods.
 		when(loadSlot.getPort()).thenReturn(loadPort);
@@ -190,15 +190,15 @@ public class RestrictedElementsConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 		when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 		when(validationContext.createFailureStatus()).thenReturn(failureStatus);
-		when(validationContext.createFailureStatus(Matchers.any())).thenReturn(failureStatus);
+		when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(failureStatus);
 		when(successStatus.isOK()).thenReturn(true);
 		when(failureStatus.isOK()).thenReturn(false);
 		when(validationContext.getTarget()).thenReturn(cargo);
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		when(loadPort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
-		when(dischargePort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
+		when(loadPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
+		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
 
 		// Set up the expected return values of methods.
 		when(loadSlot.getPort()).thenReturn(loadPort);
@@ -255,15 +255,15 @@ public class RestrictedElementsConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 		when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 		when(validationContext.createFailureStatus()).thenReturn(failureStatus);
-		when(validationContext.createFailureStatus(Matchers.any())).thenReturn(failureStatus);
+		when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(failureStatus);
 		when(successStatus.isOK()).thenReturn(true);
 		when(failureStatus.isOK()).thenReturn(false);
 		when(validationContext.getTarget()).thenReturn(cargo);
 		when(successStatus.getSeverity()).thenReturn(IStatus.OK);
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
-		when(loadPort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
-		when(dischargePort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
+		when(loadPort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort));
+		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
 
 		// Set up the expected return values of methods.
 		when(loadSlot.getPort()).thenReturn(loadPort);
@@ -325,7 +325,7 @@ public class RestrictedElementsConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 		when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 		when(validationContext.createFailureStatus()).thenReturn(failureStatus);
-		when(validationContext.createFailureStatus(Matchers.any())).thenReturn(failureStatus);
+		when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(failureStatus);
 		when(successStatus.isOK()).thenReturn(true);
 		when(failureStatus.isOK()).thenReturn(false);
 		when(validationContext.getTarget()).thenReturn(cargo);
@@ -333,10 +333,10 @@ public class RestrictedElementsConstraintTest {
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
 		
-		when(loadPort1.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort1));
-		when(loadPort2.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort2));
-		when(dischargePort.collect(Matchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
-		when(portGroup.collect(Matchers.any())).thenReturn(ECollections.<Port>   asEList(loadPort1, loadPort2));
+		when(loadPort1.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort1));
+		when(loadPort2.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(loadPort2));
+		when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port> singletonEList(dischargePort));
+		when(portGroup.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port>   asEList(loadPort1, loadPort2));
 		
 		// Set up the expected return values of methods.
 		when(loadSlot.getPort()).thenReturn(loadPort1);
@@ -387,7 +387,7 @@ public class RestrictedElementsConstraintTest {
 		final Port loadPort = mock(Port.class);
 		final Port dischargePort = mock(Port.class);
 		
-		Mockito.when(dischargePort.collect(Matchers.any())).thenReturn(ECollections.<Port>newBasicEList(dischargePort));
+		Mockito.when(dischargePort.collect(ArgumentMatchers.any())).thenReturn(ECollections.<Port>newBasicEList(dischargePort));
 
 		final Contract loadContract = mock(Contract.class);
 		final Contract dischargeContract = mock(Contract.class);
@@ -397,7 +397,7 @@ public class RestrictedElementsConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 		when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 		when(validationContext.createFailureStatus()).thenReturn(failureStatus);
-		when(validationContext.createFailureStatus(Matchers.any())).thenReturn(failureStatus);
+		when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(failureStatus);
 		when(successStatus.isOK()).thenReturn(true);
 		when(failureStatus.isOK()).thenReturn(false);
 		when(validationContext.getTarget()).thenReturn(cargo);

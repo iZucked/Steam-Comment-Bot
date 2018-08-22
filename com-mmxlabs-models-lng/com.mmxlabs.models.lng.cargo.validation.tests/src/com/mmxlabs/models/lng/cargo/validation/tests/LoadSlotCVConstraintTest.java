@@ -12,7 +12,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -38,7 +38,7 @@ public class LoadSlotCVConstraintTest {
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
 		Mockito.when(ctx.getTarget()).thenReturn(slot);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
+		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
 		final LoadSlotCVConstraint constraint = new LoadSlotCVConstraint();
 		final IStatus status = constraint.validate(ctx);
@@ -61,7 +61,7 @@ public class LoadSlotCVConstraintTest {
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
 		Mockito.when(ctx.getTarget()).thenReturn(slot);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
+		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
 		final LoadSlotCVConstraint constraint = new LoadSlotCVConstraint();
 		final IStatus status = constraint.validate(ctx);
@@ -84,7 +84,7 @@ public class LoadSlotCVConstraintTest {
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
 		Mockito.when(ctx.getTarget()).thenReturn(slot);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
+		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
 		final LoadSlotCVConstraint constraint = new LoadSlotCVConstraint();
 		final IStatus status = constraint.validate(ctx);
@@ -112,7 +112,7 @@ public class LoadSlotCVConstraintTest {
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
 		Mockito.when(ctx.getTarget()).thenReturn(slot);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
+		Mockito.when(ctx.createFailureStatus(ArgumentMatchers.anyString())).thenReturn(failureStatus);
 
 		final LoadSlotCVConstraint constraint = new LoadSlotCVConstraint();
 		final IStatus status = constraint.validate(ctx);

@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.SlotVolumeConstraint;
@@ -118,7 +118,7 @@ public class SlotVolumeConstraintTest {
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 		} else {
-			when(validationContext.createFailureStatus(Matchers.anyVararg())).thenReturn(successStatus);
+			when(validationContext.createFailureStatus(ArgumentMatchers.any())).thenReturn(successStatus);
 		}
 
 		// validate the constraint using the mocked expected values set above
@@ -133,7 +133,7 @@ public class SlotVolumeConstraintTest {
 		verify(validationContext).getTarget();
 		verify(validationContext).getEventType();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
-		verify(validationContext, atLeast(0)).createFailureStatus(Matchers.anyVararg());
+		verify(validationContext, atLeast(0)).createFailureStatus(ArgumentMatchers.any());
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(slot);
 		verifyNoMoreInteractions(validationContext);
