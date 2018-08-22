@@ -6,9 +6,12 @@ package com.mmxlabs.scheduler.optimiser.providers.guice;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurationEditor;
@@ -21,7 +24,13 @@ public class DataComponentProviderModuleTest {
 	@Test
 	public void testDataComponentProviderModule() {
 
-		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new SharedDataModule());
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new SharedDataModule(), new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+			}
+		});
 
 		final IVesselProvider provider = injector.getInstance(IVesselProvider.class);
 		final IVesselProviderEditor editor = injector.getInstance(IVesselProviderEditor.class);
@@ -34,7 +43,13 @@ public class DataComponentProviderModuleTest {
 
 	@Test
 	public void testDataComponentProviderModuleBoolean_True() {
-		final Injector injector = Guice.createInjector(new DataComponentProviderModule(true), new SharedDataModule());
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule(true), new SharedDataModule(), new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+			}
+		});
 
 		final IElementDurationProviderEditor editor = injector.getInstance(IElementDurationProviderEditor.class);
 		Assert.assertNotNull(editor);
@@ -44,7 +59,13 @@ public class DataComponentProviderModuleTest {
 
 	@Test
 	public void testDataComponentProviderModuleBoolean_False() {
-		final Injector injector = Guice.createInjector(new DataComponentProviderModule(false), new SharedDataModule());
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule(false), new SharedDataModule(), new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+			}
+		});
 
 		final IElementDurationProviderEditor editor = injector.getInstance(IElementDurationProviderEditor.class);
 		Assert.assertNotNull(editor);

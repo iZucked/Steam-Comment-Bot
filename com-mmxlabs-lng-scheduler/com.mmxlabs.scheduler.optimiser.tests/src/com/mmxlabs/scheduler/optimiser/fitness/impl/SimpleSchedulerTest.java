@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.awt.color.CMMException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -13,14 +14,18 @@ import java.util.TreeMap;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
@@ -64,6 +69,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker.ModuleBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -226,7 +232,7 @@ public class SimpleSchedulerTest {
 
 		return data;
 	}
-	
+
 	private IPhaseOptimisationData createPhaseOptimisationData(Injector injector, IOptimisationData optimisationData) {
 		PhaseOptimisationData phase = injector.getInstance(PhaseOptimisationData.class);
 		phase.setSequenceElements(optimisationData.getSequenceElements());
@@ -325,7 +331,16 @@ public class SimpleSchedulerTest {
 	}
 
 	private @NonNull Injector createInjector() {
-		return Guice.createInjector(new DataComponentProviderModule(), new SharedDataModule());
+		return Guice.createInjector(new DataComponentProviderModule(), //
+				new SharedDataModule(), //
+				new AbstractModule() {
+
+					@Override
+					protected void configure() {
+						bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+					}
+				}
+		);
 	}
 
 	void printSequences(final Collection<ISequences> sequences) {

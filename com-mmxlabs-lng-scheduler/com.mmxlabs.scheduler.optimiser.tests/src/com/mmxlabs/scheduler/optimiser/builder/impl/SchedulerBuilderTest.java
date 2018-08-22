@@ -9,11 +9,13 @@ import static org.junit.Assert.fail;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
@@ -90,8 +92,7 @@ public class SchedulerBuilderTest {
 		final int safetyHeel = 4;
 
 		final SchedulerBuilder builder = createScheduleBuilder();
-		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, 0, 35353, 10101, 0,
-				false);
+		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, 0, 35353, 10101, 0, false);
 		Assert.assertEquals(baseFuel, vessel.getTravelBaseFuel());
 		Assert.assertEquals(idleBaseFuel, vessel.getIdleBaseFuel());
 		Assert.assertEquals(inPortBaseFuel, vessel.getInPortBaseFuel());
@@ -105,21 +106,20 @@ public class SchedulerBuilderTest {
 	}
 
 	private SchedulerBuilder createScheduleBuilder() {
-//		final SchedulerBuilder builder = new SchedulerBuilder();
+		// final SchedulerBuilder builder = new SchedulerBuilder();
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new SharedDataModule(), new AbstractModule() {
 
 			@Override
 			protected void configure() {
-				// TODO Auto-generated method stub
-
+				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 			}
-
 		});
+
 		final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
 
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
-		
-//		injector.injectMembers(builder);
+
+		// injector.injectMembers(builder);
 		return builder;
 	}
 }

@@ -26,6 +26,7 @@ import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -79,9 +80,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.GeneralTestUtils;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -1109,7 +1110,7 @@ public class TestCalculations {
 			protected void configure() {
 
 				install(new SharedDataModule());
-
+				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 				bind(ScheduleCalculator.class);
 				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 				bind(IVolumeAllocator.class).toInstance(volumeAllocator);
