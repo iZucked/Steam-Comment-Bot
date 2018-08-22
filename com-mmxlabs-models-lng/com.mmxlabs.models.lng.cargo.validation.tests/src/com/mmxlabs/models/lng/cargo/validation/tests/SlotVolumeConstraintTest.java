@@ -130,6 +130,7 @@ public class SlotVolumeConstraintTest {
 		verify(slot, atLeast(0)).getSlotOrDelegateMaxQuantity();
 		verify(slot, atLeast(0)).isSetVolumeLimitsUnit();
 		verify(slot, atLeast(0)).getSlotOrDelegateVolumeLimitsUnit();
+		verify(slot, atLeast(0)).isSetOperationalTolerance();
 		verify(validationContext).getTarget();
 		verify(validationContext).getEventType();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
