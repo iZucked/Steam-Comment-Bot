@@ -23,7 +23,7 @@ public class PortsSelectionPage extends WizardPage {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortsSelectionPage.class);
 
-	private final PortsRepository portsRepository = new PortsRepository(null, null);
+	private final PortsRepository portsRepository =   PortsRepository.INSTANCE;
 
 	private String versionTag;
 	private boolean isSelected = false;

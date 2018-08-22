@@ -34,19 +34,19 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private final CompositeNode portsDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private PortsRepository portsRepository;
+	private final CompositeNode dataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
+	private PortsRepository repository;
 	private boolean active;
 
 	/**
 	 * The constructor
 	 */
 	public Activator() {
-		Node loading = BrowserFactory.eINSTANCE.createLeaf();
+		final Node loading = BrowserFactory.eINSTANCE.createLeaf();
 		loading.setDisplayName("loading...");
-		portsDataRoot.setDisplayName("Ports (loading...)");
-		portsDataRoot.setType(LNGScenarioSharedModelTypes.LOCATIONS.getID());
-		portsDataRoot.getChildren().add(loading);
+		dataRoot.setDisplayName("Ports (loading...)");
+		dataRoot.setType(LNGScenarioSharedModelTypes.LOCATIONS.getID());
+		dataRoot.getChildren().add(loading);
 	}
 
 	/*
@@ -55,12 +55,12 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 
-		portsRepository = new PortsRepository(getPreferenceStore(), null);
-		portsDataRoot.setActionHandler(new PortsRepositoryActionHandler(portsRepository, portsDataRoot));
+		repository = PortsRepository.INSTANCE;
+		dataRoot.setActionHandler(new PortsRepositoryActionHandler(repository, dataRoot));
 
 		active = true;
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
@@ -72,14 +72,14 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception {
-		if (portsRepository != null) {
-			portsRepository.stopListeningForNewLocalVersions();
-			portsRepository = null;
+	public void stop(final BundleContext context) throws Exception {
+		if (repository != null) {
+			repository.stopListeningForNewLocalVersions();
+			repository = null;
 		}
-		portsDataRoot.setActionHandler(null);
-		portsDataRoot.getChildren().clear();
-		portsDataRoot.setCurrent(null);
+		dataRoot.setActionHandler(null);
+		dataRoot.getChildren().clear();
+		dataRoot.setCurrent(null);
 
 		plugin = null;
 		super.stop(context);
@@ -96,16 +96,16 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public CompositeNode getPortsDataRoot() {
-		return portsDataRoot;
+		return dataRoot;
 	}
 
 	private void loadVersions() {
 
-		while (!portsRepository.isReady() && active) {
+		while (!repository.isReady() && active) {
 			try {
 				LOGGER.debug("Port back-end not ready yet...");
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				LOGGER.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
@@ -114,37 +114,37 @@ public class Activator extends AbstractUIPlugin {
 		if (active) {
 			LOGGER.debug("Ports back-end ready, retrieving versions...");
 			try {
-				portsDataRoot.getChildren().clear();
+				dataRoot.getChildren().clear();
 				try {
-					List<DataVersion> versions = portsRepository.getVersions();
+					final List<DataVersion> versions = repository.getVersions();
 					if (versions != null) {
 						boolean first = true;
-						for (DataVersion v : versions) {
-							Node version = BrowserFactory.eINSTANCE.createLeaf();
-							version.setParent(portsDataRoot);
+						for (final DataVersion v : versions) {
+							final Node version = BrowserFactory.eINSTANCE.createLeaf();
+							version.setParent(dataRoot);
 							version.setDisplayName(v.getFullIdentifier());
 							version.setVersionIdentifier(v.getIdentifier());
 							version.setPublished(v.isPublished());
 							if (first) {
-								RunnerHelper.asyncExec(c -> portsDataRoot.setCurrent(version));
+								RunnerHelper.asyncExec(c -> dataRoot.setCurrent(version));
 							}
 							first = false;
-							RunnerHelper.asyncExec(c -> portsDataRoot.getChildren().add(version));
+							RunnerHelper.asyncExec(c -> dataRoot.getChildren().add(version));
 						}
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
-				portsDataRoot.setDisplayName("Ports");
-			} catch (Exception e) {
+				dataRoot.setDisplayName("Ports");
+			} catch (final Exception e) {
 				LOGGER.error("Error retrieving ports versions");
 			}
 
 			// register consumer to update on new version
-			portsRepository.registerLocalVersionListener(versionString -> {
+			repository.registerLocalVersionListener(versionString -> {
 				RunnerHelper.asyncExec(c -> {
 					// Check for existing versions
-					for (final Node n : portsDataRoot.getChildren()) {
+					for (final Node n : dataRoot.getChildren()) {
 						if (Objects.equals(versionString, n.getDisplayName())) {
 							return;
 						}
@@ -152,23 +152,23 @@ public class Activator extends AbstractUIPlugin {
 
 					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
 					newVersion.setDisplayName(versionString);
-					newVersion.setParent(portsDataRoot);
+					newVersion.setParent(dataRoot);
 					newVersion.setVersionIdentifier(versionString);
-					portsDataRoot.getChildren().add(0, newVersion);
+					dataRoot.getChildren().add(0, newVersion);
 				});
 			});
-			portsRepository.startListenForNewLocalVersions();
+			repository.startListenForNewLocalVersions();
 
-			portsRepository.registerUpstreamVersionListener(versionString -> {
+			repository.registerUpstreamVersionListener(versionString -> {
 				RunnerHelper.asyncExec(c -> {
 					try {
-						portsRepository.syncUpstreamVersion(versionString);
+						repository.syncUpstreamVersion(versionString);
 					} catch (final Exception e) {
 						e.printStackTrace();
 					}
 				});
 			});
-			portsRepository.startListenForNewUpstreamVersions();
+			repository.startListenForNewUpstreamVersions();
 		}
 	}
 }

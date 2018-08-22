@@ -57,7 +57,7 @@ public class PortsToScenarioImportWizard extends Wizard implements IImportWizard
 		IPortsProvider portsProvider;
 		if (versionIdentifier != null) {
 			try {
-				portsProvider = new PortsRepository(null, null).getPortsProvider(versionIdentifier);
+				portsProvider = PortsRepository.INSTANCE.getPortsProvider(versionIdentifier);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;

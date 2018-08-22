@@ -5,6 +5,7 @@
 package com.mmxlabs.lngdataserver.integration.distances.internal;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -33,8 +34,8 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private final CompositeNode distancesDataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
-	private DistanceRepository distanceRepository;
+	private final CompositeNode dataRoot = BrowserFactory.eINSTANCE.createCompositeNode();
+	private DistanceRepository repository;
 	private boolean active;
 
 	/**
@@ -43,9 +44,9 @@ public class Activator extends AbstractUIPlugin {
 	public Activator() {
 		final Node loading = BrowserFactory.eINSTANCE.createLeaf();
 		loading.setDisplayName("loading...");
-		distancesDataRoot.setDisplayName("Distances (loading...)");
-		distancesDataRoot.setType(LNGScenarioSharedModelTypes.DISTANCES.getID());
-		distancesDataRoot.getChildren().add(loading);
+		dataRoot.setDisplayName("Distances (loading...)");
+		dataRoot.setType(LNGScenarioSharedModelTypes.DISTANCES.getID());
+		dataRoot.getChildren().add(loading);
 	}
 
 	/*
@@ -58,8 +59,8 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		distanceRepository = DistanceRepository.INSTANCE;
-		distancesDataRoot.setActionHandler(new DistanceRepositoryActionHandler(distanceRepository, distancesDataRoot));
+		repository = DistanceRepository.INSTANCE;
+		dataRoot.setActionHandler(new DistanceRepositoryActionHandler(repository, dataRoot));
 
 		active = true;
 		BackEndUrlProvider.INSTANCE.addAvailableListener(() -> loadVersions());
@@ -73,13 +74,13 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-		if (distanceRepository != null) {
-			distanceRepository.stopListeningForNewLocalVersions();
-			distanceRepository = null;
+		if (repository != null) {
+			repository.stopListeningForNewLocalVersions();
+			repository = null;
 		}
-		distancesDataRoot.setActionHandler(null);
-		distancesDataRoot.getChildren().clear();
-		distancesDataRoot.setCurrent(null);
+		dataRoot.setActionHandler(null);
+		dataRoot.getChildren().clear();
+		dataRoot.setCurrent(null);
 
 		plugin = null;
 		super.stop(context);
@@ -96,15 +97,11 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public CompositeNode getDistancesDataRoot() {
-		return distancesDataRoot;
-	}
-
-	public DistanceRepository getDistanceRepository() {
-		return distanceRepository;
+		return dataRoot;
 	}
 
 	private void loadVersions() {
-		while (!distanceRepository.isReady() && active) {
+		while (!repository.isReady() && active) {
 			try {
 				LOGGER.debug("Distances back-end not ready yet...");
 				Thread.sleep(1000);
@@ -115,31 +112,39 @@ public class Activator extends AbstractUIPlugin {
 		}
 		if (active) {
 			LOGGER.debug("Distances back-end ready, retrieving versions...");
-			distancesDataRoot.getChildren().clear();
-			boolean first = true;
-			List<DataVersion> versions = distanceRepository.getVersions();
-			if (versions != null) {
-				for (final DataVersion v : versions) {
-					final Node version = BrowserFactory.eINSTANCE.createLeaf();
-					version.setParent(distancesDataRoot);
-					version.setDisplayName(v.getFullIdentifier());
-					version.setVersionIdentifier(v.getIdentifier());
-					version.setPublished(v.isPublished());
-					if (first) {
-						RunnerHelper.asyncExec(c -> distancesDataRoot.setCurrent(version));
-					}
-					first = false;
-					RunnerHelper.asyncExec(c -> distancesDataRoot.getChildren().add(version));
-				}
-			}
-			distancesDataRoot.setDisplayName("Distances");
+			try {
+				dataRoot.getChildren().clear();
+				boolean first = true;
+				try {
 
+					List<DataVersion> versions = repository.getVersions();
+					if (versions != null) {
+						for (final DataVersion v : versions) {
+							final Node version = BrowserFactory.eINSTANCE.createLeaf();
+							version.setParent(dataRoot);
+							version.setDisplayName(v.getFullIdentifier());
+							version.setVersionIdentifier(v.getIdentifier());
+							version.setPublished(v.isPublished());
+							if (first) {
+								RunnerHelper.asyncExec(c -> dataRoot.setCurrent(version));
+							}
+							first = false;
+							RunnerHelper.asyncExec(c -> dataRoot.getChildren().add(version));
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				dataRoot.setDisplayName("Distances");
+			} catch (Exception e) {
+				LOGGER.error("Error retrieving distance versions");
+			}
 			// register consumer to update on new version
-			distanceRepository.registerLocalVersionListener(versionString -> {
+			repository.registerLocalVersionListener(versionString -> {
 				RunnerHelper.asyncExec(c -> {
 					// Check for existing versions
-					for (final Node n : distancesDataRoot.getChildren()) {
-						if (versionString.contentEquals(n.getDisplayName())) {
+					for (final Node n : dataRoot.getChildren()) {
+						if (Objects.equals(versionString, n.getDisplayName())) {
 							return;
 						}
 					}
@@ -147,22 +152,22 @@ public class Activator extends AbstractUIPlugin {
 					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
 					newVersion.setDisplayName(versionString);
 					newVersion.setVersionIdentifier(versionString);
-					newVersion.setParent(distancesDataRoot);
-					distancesDataRoot.getChildren().add(0, newVersion);
+					newVersion.setParent(dataRoot);
+					dataRoot.getChildren().add(0, newVersion);
 				});
 			});
-			distanceRepository.startListenForNewLocalVersions();
+			repository.startListenForNewLocalVersions();
 
-			distanceRepository.registerUpstreamVersionListener(versionString -> {
+			repository.registerUpstreamVersionListener(versionString -> {
 				RunnerHelper.asyncExec(c -> {
 					try {
-						distanceRepository.syncUpstreamVersion(versionString);
+						repository.syncUpstreamVersion(versionString);
 					} catch (final Exception e) {
 						e.printStackTrace();
 					}
 				});
 			});
-			distanceRepository.startListenForNewUpstreamVersions();
+			repository.startListenForNewUpstreamVersions();
 		}
 	}
 

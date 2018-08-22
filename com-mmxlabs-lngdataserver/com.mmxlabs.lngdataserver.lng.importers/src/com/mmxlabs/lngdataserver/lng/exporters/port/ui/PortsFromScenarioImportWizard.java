@@ -59,7 +59,7 @@ public class PortsFromScenarioImportWizard extends Wizard implements IImportWiza
 								PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 								Version version = PortFromScenarioCopier.generateVersion(portModel);
 								try {
-									PortsRepository repo = new PortsRepository(null, null);
+									PortsRepository repo =  PortsRepository.INSTANCE;
 									repo.isReady();
 									repo.saveVersion(version);
 

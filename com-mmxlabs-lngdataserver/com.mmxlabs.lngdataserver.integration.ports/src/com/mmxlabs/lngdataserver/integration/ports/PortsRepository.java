@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,16 +28,20 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class PortsRepository extends AbstractDataRepository {
+	
+	public static PortsRepository INSTANCE = new PortsRepository();
+
 	private static final Logger LOG = LoggerFactory.getLogger(PortsRepository.class);
 
 	private static final OkHttpClient CLIENT = new OkHttpClient();
-	private static final String SYNC_VERSION_ENDPOINT = "/ports/sync/versions/";
+	private static final String SYNC_VERSION_ENDPOINT = "/ports/sync/versions";
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	private final PortApi localApi;
 	private final PortApi upstreamApi;
 
-	public PortsRepository(final IPreferenceStore preferenceStore, final String localUrl) {
+	
+	private PortsRepository() {
 		localApi = new PortApi(new ApiClient());
 		upstreamApi = new PortApi(new ApiClient());
 

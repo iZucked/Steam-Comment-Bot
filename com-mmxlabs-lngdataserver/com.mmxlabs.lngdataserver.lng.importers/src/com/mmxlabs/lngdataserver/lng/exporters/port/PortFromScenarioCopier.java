@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class PortFromScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortFromScenarioCopier.class);
 
-	public static Version generateVersion(PortModel portModel) {
+	public static @NonNull Version generateVersion(@NonNull PortModel portModel) {
 
 		Version version = new Version();
 
@@ -29,6 +30,7 @@ public class PortFromScenarioCopier {
 			Port port = new Port();
 			port.setLocationMmxId(lingo_port.getLocation().getMmxId());
 			port.setAllowCooldown(lingo_port.isAllowCooldown());
+			port.setDefaultStartTime(String.format("%02d:00:00", lingo_port.getDefaultStartTime()));
 			port.setBerths(lingo_port.getBerths());
 			port.setCvValue(lingo_port.getCvValue());
 			port.setLoadDuration(lingo_port.getLoadDuration());
@@ -73,7 +75,6 @@ public class PortFromScenarioCopier {
 		}
 		version.setIdentifier(portDataVersion);
 		version.setLocationVersion(portModel.getDistanceDataVersion());
-//		version.setCreatedAt(LocalDateTime.now());
 		version.setPorts(ports);
 
 		return version;
