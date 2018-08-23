@@ -171,7 +171,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 				com.mmxlabs.lngdataservice.client.ports.model.Version version = PortFromScenarioCopier.generateVersion(portModel);
 				try {
-					PortsRepository repo = new PortsRepository(null, null);
+					PortsRepository repo = PortsRepository.INSTANCE;
 					repo.isReady();
 					repo.saveVersion(version);
 				} catch (Exception e) {
