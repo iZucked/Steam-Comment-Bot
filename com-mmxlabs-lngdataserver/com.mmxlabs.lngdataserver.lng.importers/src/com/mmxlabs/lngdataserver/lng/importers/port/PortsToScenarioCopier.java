@@ -31,12 +31,12 @@ public class PortsToScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortsToScenarioCopier.class);
 
-	public static Command getUpdatePortsCommand(@NonNull final EditingDomain editingDomain, IPortsProvider portsProvider, @NonNull final PortModel portModel) {
+	public static Command getUpdatePortsCommand(@NonNull final EditingDomain editingDomain, final IPortsProvider portsProvider, @NonNull final PortModel portModel) {
 
 		final CompoundCommand cc = new CompoundCommand("Update Port");
-		Map<String, Port> portsMap = new HashMap<String, Port>();
+		final Map<String, Port> portsMap = new HashMap<>();
 
-		Map<String, List<Port>> locationToPort = portModel.getPorts().stream() //
+		final Map<String, List<Port>> locationToPort = portModel.getPorts().stream() //
 				.filter(p -> p.getLocation() != null) //
 				.filter(p -> p.getLocation().getMmxId() != null) //
 				.collect(Collectors.groupingBy(p -> p.getLocation().getMmxId()));
@@ -78,37 +78,37 @@ public class PortsToScenarioCopier {
 		// }
 		//
 		// Create all port update
-		for (com.mmxlabs.lngdataservice.client.ports.model.@NonNull Port port : portsProvider.getPorts()) {
+		for (final com.mmxlabs.lngdataservice.client.ports.model.@NonNull Port port : portsProvider.getPorts()) {
 
-			String mmxID = port.getLocationMmxId();
-			List<Port> lingo_ports = locationToPort.get(mmxID);
+			final String mmxID = port.getLocationMmxId();
+			final List<Port> lingo_ports = locationToPort.get(mmxID);
 			if (lingo_ports != null) {
-				for (Port lingo_port : lingo_ports) {
+				for (final Port lingo_port : lingo_ports) {
 
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__ALLOW_COOLDOWN, port.isAllowCooldown()));
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__BERTHS, port.getBerths()));
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__CV_VALUE, port.getCvValue()));
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__LOAD_DURATION, port.getLoadDuration()));
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__DISCHARGE_DURATION, port.getDischargeDuration()));
-					if (port.getMaxCvValue() == null|| port.getMaxCvValue() == 0.0) {
+					if (port.getMaxCvValue() == null || port.getMaxCvValue() == 0.0) {
 						cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__MAX_CV_VALUE, SetCommand.UNSET_VALUE));
 					} else {
 						cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__MAX_CV_VALUE, port.getMaxCvValue()));
 					}
-					if (port.getMinCvValue() == null  || port.getMinCvValue() == 0.0) {
+					if (port.getMinCvValue() == null || port.getMinCvValue() == 0.0) {
 						cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__MIN_CV_VALUE, SetCommand.UNSET_VALUE));
 					} else {
 						cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__MIN_CV_VALUE, port.getMinCvValue()));
 					}
 					{
-						LocalTime t = LocalTime.parse(port.getDefaultStartTime(), DateTimeFormatter.ofPattern("H:mm:ss"));
+						final LocalTime t = LocalTime.parse(port.getDefaultStartTime(), DateTimeFormatter.ofPattern("H:mm:ss"));
 						cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__DEFAULT_START_TIME, t.getHour()));
 					}
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__MMX_ID, port.getMmxId()));
 
-					Set<com.mmxlabs.models.lng.types.PortCapability> caps = new HashSet<>();
+					final Set<com.mmxlabs.models.lng.types.PortCapability> caps = new HashSet<>();
 					if (port.getCapabilities() != null) {
-						for (CapabilitiesEnum lingo_pc : port.getCapabilities()) {
+						for (final CapabilitiesEnum lingo_pc : port.getCapabilities()) {
 							switch (lingo_pc) {
 							case DISCHARGE:
 								caps.add(com.mmxlabs.models.lng.types.PortCapability.DISCHARGE);
@@ -129,7 +129,6 @@ public class PortsToScenarioCopier {
 						}
 					}
 					cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__CAPABILITIES, caps));
-					// cc.append(SetCommand.create(editingDomain, lingo_port, PortPackage.Literals.PORT__BERTHS, port.getDefaultStartTime()));
 				}
 
 			}
