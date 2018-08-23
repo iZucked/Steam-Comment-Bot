@@ -41,8 +41,6 @@ public class DistanceRepository extends AbstractDataRepository {
 	private static final String SYNC_ENDPOINT = "/distances/sync/publish";
 	private static final String SYNC_VERSION_ENDPOINT = "/distances/sync/versions/";
 
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00");
-
 	private final DistancesApi localApi;
 	private final DistancesApi upstreamApi;
 
@@ -112,11 +110,11 @@ public class DistanceRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			Version v = upstreamApi.getFullVersionUsingGET(identifier);
-			final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
 			return new DataVersion(v.getIdentifier(), createdAt, true);
 		} catch (final Exception e) {
-			LOG.error("Error fetching specific ports version" + e.getMessage());
-			throw new RuntimeException("Error fetching specific ports version", e);
+			LOG.error("Error fetching specific distances version" + e.getMessage());
+			throw new RuntimeException("Error fetching specific distances version", e);
 		}
 	}
 
@@ -134,11 +132,10 @@ public class DistanceRepository extends AbstractDataRepository {
 
 	@Override
 	public List<DataVersion> updateAvailable() throws ApiException {
-		final List<Version> upstreamVersions = upstreamApi.getVersionsUsingGET();
+		final List<DataVersion> upstreamVersions = getUpstreamVersions();
 		final Set<String> localVersions = getVersions().stream().map(v -> v.getIdentifier()).collect(Collectors.toSet());
 		upstreamVersions.removeIf(uv -> localVersions.contains(uv.getIdentifier()));
-		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), fromDateTimeAtUTC(v.getCreatedAt()), v.isPublished())).collect(Collectors.toList());
-		// return Collections.emptyList();
+		return upstreamVersions.stream().map(v -> new DataVersion(v.getIdentifier(), v.getCreatedAt(), v.isPublished())).collect(Collectors.toList());
 	}
 
 	public List<DataVersion> getUpstreamDistances() throws ApiException {
@@ -173,10 +170,6 @@ public class DistanceRepository extends AbstractDataRepository {
 			upstreamApi.getApiClient().setPassword(UpstreamUrlProvider.INSTANCE.getPassword());
 			upstreamApi.getApiClient().getHttpClient().setAuthenticator(getAuthenticator());
 		}
-	}
-
-	protected static LocalDateTime fromDateTimeAtUTC(final String dateTime) {
-		return LocalDateTime.parse(dateTime, formatter);
 	}
 
 	@Override

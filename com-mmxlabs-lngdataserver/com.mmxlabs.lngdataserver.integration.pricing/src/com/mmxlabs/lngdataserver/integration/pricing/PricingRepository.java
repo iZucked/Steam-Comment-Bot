@@ -70,8 +70,7 @@ public class PricingRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 				PricingVersion v =PricingClient.pullUpstreamVersion(getUpstreamUrl(), identifier);
-				final LocalDateTime createdAt = LocalDateTime.now();
-				// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = v.getCreatedAt();
 				return new DataVersion(v.getIdentifier(), createdAt, true);
 		} catch (final Exception e) {
 			LOG.error("Error fetching specific ports version" + e.getMessage());

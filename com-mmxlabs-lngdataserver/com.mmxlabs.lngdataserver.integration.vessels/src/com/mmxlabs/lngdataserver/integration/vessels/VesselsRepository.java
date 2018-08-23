@@ -83,7 +83,7 @@ public class VesselsRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return localApi.getVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.parse(v.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00"));// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
 				return new DataVersion(v.getIdentifier(), createdAt, false);
 			}).collect(Collectors.toList());
 		} catch (Exception e) {
@@ -92,24 +92,24 @@ public class VesselsRepository extends AbstractDataRepository {
 		}
 	}
 
-	@Override 
+	@Override
 	public DataVersion getUpstreamVersion(String identifier) {
 		ensureReady();
 		try {
-				Version v =	upstreamApi.getVersionUsingGET(identifier);
-				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
-				return new DataVersion(v.getIdentifier(), createdAt, true);
+			Version v = upstreamApi.getVersionUsingGET(identifier);
+			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
+			return new DataVersion(v.getIdentifier(), createdAt, true);
 		} catch (final Exception e) {
-			LOG.error("Error fetching specific ports version" + e.getMessage());
-			throw new RuntimeException("Error fetching specific ports version", e);
+			LOG.error("Error fetching specific vessels version" + e.getMessage());
+			throw new RuntimeException("Error fetching specific vessels version", e);
 		}
 	}
-	
+
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();
 		try {
 			return upstreamApi.getVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.parse(v.getCreatedAt());// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
 				return new DataVersion(v.getIdentifier(), createdAt, v.isPublished());
 			}).collect(Collectors.toList());
 		} catch (Exception e) {
@@ -164,7 +164,7 @@ public class VesselsRepository extends AbstractDataRepository {
 	protected String getSyncVersionEndpoint() {
 		return SYNC_VERSION_ENDPOINT;
 	}
-	
+
 	@Override
 	protected String getVersionNotificationEndpoint() {
 		return "/vessels/version_notification";

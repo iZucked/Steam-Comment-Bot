@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.lng.exporters.port;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataservice.client.ports.model.Port;
 import com.mmxlabs.lngdataservice.client.ports.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -74,6 +76,7 @@ public class PortFromScenarioCopier {
 			portModel.setPortDataVersion(portDataVersion);
 		}
 		version.setIdentifier(portDataVersion);
+		version.setCreatedAt(AbstractDataRepository.DATE_FORMATTER.format(LocalDateTime.now()));
 		version.setLocationVersion(portModel.getDistanceDataVersion());
 		version.setPorts(ports);
 

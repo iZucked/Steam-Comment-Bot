@@ -5,6 +5,7 @@
 package com.mmxlabs.lngdataserver.integration.ports;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class PortsRepository extends AbstractDataRepository {
-	
+
 	public static PortsRepository INSTANCE = new PortsRepository();
 
 	private static final Logger LOG = LoggerFactory.getLogger(PortsRepository.class);
@@ -40,7 +41,7 @@ public class PortsRepository extends AbstractDataRepository {
 	private final PortApi localApi;
 	private final PortApi upstreamApi;
 
-	
+
 	private PortsRepository() {
 		localApi = new PortApi(new ApiClient());
 		upstreamApi = new PortApi(new ApiClient());
@@ -77,7 +78,7 @@ public class PortsRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return localApi.fetchVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
 				return new DataVersion(v.getIdentifier(), createdAt, /* v.isPublished() */ false);
 			}).collect(Collectors.toList());
 		} catch (final Exception e) {
@@ -90,7 +91,7 @@ public class PortsRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			return upstreamApi.fetchVersionsUsingGET().stream().map(v -> {
-				final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+				final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
 				return new DataVersion(v.getIdentifier(), createdAt, /* v.isPublished() */ false);
 			}).collect(Collectors.toList());
 		} catch (final Exception e) {
@@ -104,7 +105,7 @@ public class PortsRepository extends AbstractDataRepository {
 		ensureReady();
 		try {
 			Version v = upstreamApi.fetchVersionUsingGET(identifier);
-			final LocalDateTime createdAt = LocalDateTime.now();// LocalDateTime.ofInstant(Instant.ofEpochMilli(v.getCreatedAt().getNano() / 1000L), ZoneId.of("UTC"));
+			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
 			return new DataVersion(v.getIdentifier(), createdAt, true);
 		} catch (final Exception e) {
 			LOG.error("Error fetching specific ports version" + e.getMessage());
@@ -176,5 +177,4 @@ public class PortsRepository extends AbstractDataRepository {
 	protected String getVersionNotificationEndpoint() {
 		return "/ports/version_notification";
 	}
-
 }

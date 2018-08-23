@@ -6,6 +6,8 @@ package com.mmxlabs.lngdataserver.commons.impl;
 
 import java.io.IOException;
 import java.net.Proxy;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -16,20 +18,17 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
 
-import okhttp3.Authenticator;
 import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.Route;
 
 /**
  * This implementation is not thread-safe.
@@ -58,6 +57,12 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	protected final OkHttpClient LONG_POLLING_CLIENT = new OkHttpClient().newBuilder() //
 			.readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS) //
 			.build();
+
+	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+00:00");
+
+	protected static LocalDateTime fromDateTimeAtUTC(final String dateTime) {
+		return LocalDateTime.parse(dateTime, DATE_FORMATTER);
+	}
 
 	public AbstractDataRepository() {
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(() -> doHandleUpstreamURLChange());
