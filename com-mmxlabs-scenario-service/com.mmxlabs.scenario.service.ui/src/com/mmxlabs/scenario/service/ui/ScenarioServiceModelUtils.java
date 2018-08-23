@@ -25,6 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
@@ -112,7 +113,7 @@ public final class ScenarioServiceModelUtils {
 
 					final IEditorReference[] editorReferences = page.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
 					if (editorReferences != null && editorReferences.length > 0) {
-						assert page.closeEditors(editorReferences, false);
+						RunnerHelper.syncExec(() -> page.closeEditors(editorReferences, false));
 					}
 				}
 			}
