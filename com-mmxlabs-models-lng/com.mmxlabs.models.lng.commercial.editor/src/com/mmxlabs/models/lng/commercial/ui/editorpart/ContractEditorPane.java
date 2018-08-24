@@ -35,6 +35,7 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Entity", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_Entity(), getReferenceValueProviderCache(), getEditingDomain()));
 		addTypicalColumn("Type", new ContractTypeEnumAttributeManipulator(CommercialPackage.eINSTANCE.getContract_ContractType(), getEditingDomain()));
+		addTypicalColumn("Volume", new VolumeAttributeManipulator(CommercialPackage.eINSTANCE.getContract_MaxQuantity(), getEditingDomain()));
 		addTypicalColumn("Price", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getExpressionPriceParameters_PriceExpression(), getEditingDomain()) {
 			@Override
 			public @Nullable String render(Object object) {
@@ -44,8 +45,6 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 				return super.render(object);
 			}
 		}, CommercialPackage.eINSTANCE.getContract_PriceInfo());
-
-		addTypicalColumn("Volume", new VolumeAttributeManipulator(CommercialPackage.eINSTANCE.getContract_MaxQuantity(), getEditingDomain()));
 
 		defaultSetTitle("Contracts");
 	}
