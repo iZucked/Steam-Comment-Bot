@@ -86,7 +86,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 				return renderUnsetValue(object, (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : null);
 			}
 		}
-		
+
 		if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
 			if (isOverridable) {
 				EList<EObject> references = overrideAnnotation.getReferences();
@@ -181,15 +181,19 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object == null) {
 			return null;
 		}
+		EObject eObject = (EObject) object;
+
 		if (overrideToggleFeature != null) {
-			if (!(Boolean) ((EObject) object).eGet(overrideToggleFeature)) {
+			if (!(Boolean) eObject.eGet(overrideToggleFeature)) {
 				return SetCommand.UNSET_VALUE;
 			}
 		}
 
-		if (field.isUnsettable() && ((EObject) object).eIsSet(field) == false)
+		if (field.isUnsettable() && eObject.eIsSet(field) == false) {
 			return SetCommand.UNSET_VALUE;
-		final Object result = ((EObject) object).eGet(field);
+		}
+
+		final Object result = eObject.eGet(field);
 		if ((result == null) && (field.getEType() == EcorePackage.eINSTANCE.getEString())) {
 			return "";
 		} else {
@@ -213,7 +217,13 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 	@Override
 	public boolean canEdit(final Object object) {
-		return object != null;
+		if (object == null) {
+			return false;
+		}
+		if (field != null && !field.getEContainingClass().isInstance(object)) {
+			return false;
+		}
+		return true;
 	}
 
 	@SuppressWarnings("rawtypes")

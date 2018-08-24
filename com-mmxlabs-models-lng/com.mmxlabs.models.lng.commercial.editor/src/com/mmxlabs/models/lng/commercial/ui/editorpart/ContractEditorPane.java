@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ui.manipulators.ContractTypeEnumAttributeManipulator;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
@@ -32,6 +33,9 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Entity", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_Entity(), getReferenceValueProviderCache(), getEditingDomain()));
 		addTypicalColumn("Type", new ContractTypeEnumAttributeManipulator(CommercialPackage.eINSTANCE.getContract_ContractType(), getEditingDomain()));
+		addTypicalColumn("Price", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getExpressionPriceParameters_PriceExpression(), getEditingDomain()),
+				CommercialPackage.eINSTANCE.getContract_PriceInfo());
+
 		addTypicalColumn("Volume", new VolumeAttributeManipulator(CommercialPackage.eINSTANCE.getContract_MaxQuantity(), getEditingDomain()));
 
 		defaultSetTitle("Contracts");
