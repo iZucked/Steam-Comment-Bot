@@ -25,6 +25,7 @@ import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.junit.Assert;
 
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.changeset.IActionPlanHandler;
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
@@ -76,10 +77,10 @@ public class ReportTesterHelper {
 	public static final String KPI_REPORT_ID = KPIReportView.ID;
 	public static final String KPI_REPORT_SHORTNAME = "KPIReport";
 
-	public static final String CHANGESET_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";
+	public static final String CHANGESET_REPORT_ID = ReportsConstants.VIEW_COMPARE_SCENARIOS_ID;
 	public static final String CHANGESET_REPORT_SHORTNAME = "ChangeSetReport";
 
-	public static final String ACTIONPLAN_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView:Dynamic";
+	public static final String ACTIONPLAN_REPORT_ID = ReportsConstants.VIEW_OPTIMISATIONS_ID;
 	public static final String ACTIONPLAN_REPORT_SHORTNAME = "ActionPlanReport";
 
 	public static final String EXPOSURES_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView";

@@ -22,7 +22,7 @@ public class EditingPerspective implements IPerspectiveFactory {
 		if (layout instanceof ModeledPageLayout) {
 			ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
 			modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);
-			modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_DYNAMIC_SECONDARY_ID, IPageLayout.ID_EDITOR_AREA, false);
+			modeledPageLayout.stackView(ReportsConstants.VIEW_OPTIMISATIONS_ID, IPageLayout.ID_EDITOR_AREA, false);
 		}
 
 		// final IFolderLayout costsFolder = layout.createFolder("costsFolder", IPageLayout.RIGHT, 0.75f, IPageLayout.ID_EDITOR_AREA);

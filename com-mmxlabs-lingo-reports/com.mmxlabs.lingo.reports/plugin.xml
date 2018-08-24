@@ -1070,12 +1070,19 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            allowMultiple="true"
+            allowMultiple="false"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
             icon="icons/cview16/changes_view.gif"
             id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView"
             name="Change Sets">
+      </view>
+      <view
+            class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
+            icon="icons/cview16/changes_view.gif"
+            id="com.mmxlabs.lingo.reports.views.changeset.OptimisationsView"
+            name="Optimisations"
+            restorable="true">
       </view>
    </extension>
 
