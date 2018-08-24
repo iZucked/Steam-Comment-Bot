@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class LoadTriggerHelper {
 
-	public void doLoadTrigger(LNGScenarioModel model, int cargoVolume, LocalDate start) {
+	public void doLoadTrigger(LNGScenarioModel model, int globalLoadTrigger, Integer cargoVolume, LocalDate start) {
 		EList<Inventory> inventoryModels = model.getCargoModel().getInventoryModels();
 		if (inventoryModels.size() != 1) {
 			throw new RuntimeException("Only 1 inventory model is supported at present.");
@@ -62,7 +62,7 @@ public class LoadTriggerHelper {
 			processWithLoadsAndStartDate(loadSlotsToConsider, insAndOuts, start);
 			// create new Loads
 			//standardLoadTrigger(model, port, insAndOuts, cargoVolume, start);
-			moveAndMatchSlotsLoadTrigger(model, port, insAndOuts, cargoVolume, start);
+			moveAndMatchSlotsLoadTrigger(model, port, insAndOuts, globalLoadTrigger, cargoVolume, start);
 		}
 	}
 
@@ -82,13 +82,23 @@ public class LoadTriggerHelper {
 		firstEvent.addVolume(totalInventoryVolume + totalVolumeOut);
 	}
 
-	private void standardLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int cargoVolume, LocalDate start) {
+	/**
+	 * Clears all existing slots and replaces with a slot whenever the volume reaches the global load trigger value.
+	 * Slots are assumed to be of cargoVolume size
+	 * @param model
+	 * @param port
+	 * @param insAndOuts
+	 * @param globalLoadTrigger
+	 * @param cargoVolume
+	 * @param start
+	 */
+	private void standardLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int globalLoadTrigger, int cargoVolume, LocalDate start) {
 		List<LocalDate> loadDates = new LinkedList<>();
 		int runningVolume = 0;
 		clearCargoesAndSchedule(model, start);
 		for (Entry<LocalDate, InventoryDailyEvent> entry : insAndOuts.entrySet()) {
 			runningVolume += entry.getValue().netVolumeIn;
-			if (runningVolume > entry.getValue().minVolume + cargoVolume) {
+			if (runningVolume > globalLoadTrigger) {
 				loadDates.add(entry.getKey());
 				runningVolume -= cargoVolume;
 			}
@@ -96,6 +106,15 @@ public class LoadTriggerHelper {
 		createLoadSlots(model, port, loadDates, cargoVolume, start, true);
 	}
 
+	/**
+	 * Identifies slot dates where inventory equals a global load trigger. Existing slots are moved to match these new dates, creating and removing slots as needed.
+	 * Slots are assumed to be of cargoVolume size.
+	 * @param model
+	 * @param port
+	 * @param insAndOuts
+	 * @param cargoVolume
+	 * @param start
+	 */
 	private void moveSlotsLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int cargoVolume, LocalDate start) {
 		List<LoadSlot> sortedSlots = model.getCargoModel().getLoadSlots().stream().filter(l->l.getPort() == port).sorted((a,b) -> a.getWindowStart().compareTo(b.getWindowStart())).collect(Collectors.toList());
 		List<LocalDate> loadDates = new LinkedList<>();
@@ -122,7 +141,17 @@ public class LoadTriggerHelper {
 		clearLoadSlots(sortedSlots, model.getCargoModel(), model);
 	}
 
-	private void moveAndMatchSlotsLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int cargoVolume, LocalDate start) {
+	/**
+	 * Identifies slot dates where inventory equals a global load trigger. Existing slots are moved to match these new dates, creating and removing slots as needed.
+	 * Slots are assumed to be of cargoVolume size.
+	 * @param model
+	 * @param port
+	 * @param insAndOuts
+	 * @param globalLoadTrigger
+	 * @param cargoVolume
+	 * @param start
+	 */
+	private void moveAndMatchSlotsLoadTrigger(LNGScenarioModel model, Port port, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, int globalLoadTrigger, Integer cargoVolume, LocalDate start) {
 		List<LoadSlot> sortedSlots = model.getCargoModel().getLoadSlots().stream() //
 				.filter(l->l.getPort() == port && (l.getWindowStart().isAfter(start) || l.getWindowStart().isEqual(start))) //
 				.sorted((a,b) -> a.getWindowStart().compareTo(b.getWindowStart())) //
@@ -133,7 +162,7 @@ public class LoadTriggerHelper {
 		int runningVolume = 0;
 		for (Entry<LocalDate, InventoryDailyEvent> entry : insAndOuts.entrySet()) {
 			runningVolume += entry.getValue().netVolumeIn;
-			if (runningVolume > entry.getValue().minVolume + cargoVolume) {
+			if (runningVolume > globalLoadTrigger) {
 				loadDates.add(entry.getKey());
 				runningVolume -= cargoVolume;
 			}

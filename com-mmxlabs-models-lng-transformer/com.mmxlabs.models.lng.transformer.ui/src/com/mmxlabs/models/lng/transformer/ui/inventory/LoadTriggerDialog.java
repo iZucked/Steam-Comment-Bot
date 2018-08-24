@@ -33,15 +33,16 @@ import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public class LoadTriggerDialog extends TitleAreaDialog {
+	private static final int DEFAULT_GLOBAL_LOAD_TRIGGER = 250_000;
 	private static final int DEFAULT_VOLUME = 158_000;
 	private LocalDate selectedDate = LocalDate.now();
+	private Integer globalLoadTrigger = DEFAULT_GLOBAL_LOAD_TRIGGER;
 	private Integer cargoVolume = DEFAULT_VOLUME;
 	private LNGScenarioModel model;
 	
 	public LoadTriggerDialog(Shell shell, LNGScenarioModel model, LocalDate promptStart) {
 		super(shell);
 		this.model = model;
-//		this.selectedDate = promptStart;
 	}
 	
     @Override
@@ -97,7 +98,38 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 		gdDate.horizontalSpan = 2;
 		importingDate.setLayoutData(gdDate);
 		
-		new Label(importingDate, SWT.NONE).setText("Cargo volume");
+		new Label(importingDate, SWT.NONE).setText("Global load trigger (m³)");
+	    Text loadTriggerText = new Text(importingDate, SWT.FILL | SWT.BORDER);
+	    loadTriggerText.setLayoutData(GridDataFactory.swtDefaults().minSize(10000, -1).create());
+	    loadTriggerText.setText(String.valueOf(DEFAULT_GLOBAL_LOAD_TRIGGER));
+	    loadTriggerText.addListener(SWT.Verify, new Listener() {
+			@Override
+			public void handleEvent(Event e) {
+				String string = e.text;
+				char[] chars = new char[string.length()];
+				string.getChars(0, chars.length, chars, 0);
+				for (int i = 0; i < chars.length; i++) {
+					if (!('0' <= chars[i] && chars[i] <= '9')) {
+						e.doit = false;
+						return;
+					}
+				}
+			}
+		});
+		
+	    loadTriggerText.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				String text = loadTriggerText.getText();
+				if (text.matches("[0-9]+")) {
+					setGlobalLoadTrigger(Integer.valueOf(text));
+				}
+			}
+		});
+
+		
+		new Label(importingDate, SWT.NONE).setText("Cargo volume  (m³)");
 	    Text cargoVolText = new Text(importingDate, SWT.FILL | SWT.BORDER);
 	    cargoVolText.setLayoutData(GridDataFactory.swtDefaults().minSize(10000, -1).create());
 	    cargoVolText.setText(String.valueOf(DEFAULT_VOLUME));
@@ -179,5 +211,13 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 
 	public void setCargoVolume(Integer cargoVolume) {
 		this.cargoVolume = cargoVolume;
+	}
+
+	public Integer getGlobalLoadTrigger() {
+		return globalLoadTrigger;
+	}
+
+	public void setGlobalLoadTrigger(Integer globalLoadTrigger) {
+		this.globalLoadTrigger = globalLoadTrigger;
 	}
 }
