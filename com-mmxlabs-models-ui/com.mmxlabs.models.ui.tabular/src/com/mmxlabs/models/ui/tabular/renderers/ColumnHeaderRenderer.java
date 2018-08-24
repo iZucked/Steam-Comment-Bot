@@ -41,9 +41,9 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 	int arrowMargin = 6;
 
 	int imageSpacing = 3;
-	
+
 	private boolean forceCenter = false;
-	
+
 	private SortArrowRenderer arrowRenderer = new SortArrowRenderer();
 
 	private TextLayout textLayout;
@@ -154,8 +154,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 			text = TextUtils.getShortString(gc, text, width);
 			// y -= gc.getFontMetrics().getHeight();
 		}
-		
-			
+
 		if (column.getAlignment() == SWT.CENTER || forceCenter) {
 			int len = gc.stringExtent(text).x;
 			if (len < width) {
@@ -166,7 +165,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 			if (len < width) {
 				x += width - len;
 			}
-		} 
+		}
 
 		if (!isWordWrap()) {
 			gc.drawString(text, getBounds().x + x + pushedDrawingOffset, y + pushedDrawingOffset, true);
@@ -300,11 +299,11 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 
 		return bounds;
 	}
-	
+
 	public void setCenter(boolean center) {
-		forceCenter = center; 
+		forceCenter = center;
 	}
-	
+
 	/**
 	 * @return the bounds reserved for the control
 	 */
@@ -335,11 +334,10 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 				}
 			});
 		}
-		
+
 		if (forceCenter) {
 			textLayout.setAlignment(SWT.CENTER);
-		}
-		else {
+		} else {
 			textLayout.setAlignment(column.getAlignment());
 		}
 	}

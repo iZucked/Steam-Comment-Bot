@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -288,6 +287,9 @@ public class ChangeSetView extends ViewPart {
 
 			columnHelper.updateVesselColumns(vesselnames);
 
+			for (GridColumn gc : viewer.getGrid().getColumns()) {
+				gc.setWidth(gc.getWidth());
+			}
 			// Force header size recalculation
 			viewer.getGrid().recalculateHeader();
 

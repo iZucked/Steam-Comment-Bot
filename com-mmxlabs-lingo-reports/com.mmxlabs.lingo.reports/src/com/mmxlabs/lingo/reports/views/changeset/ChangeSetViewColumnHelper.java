@@ -278,7 +278,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(
 					createDeltaLabelProvider(true, false, true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 75);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -291,7 +291,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(
 					createDeltaLabelProvider(true, true, true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -303,7 +303,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("- Ship FOB");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createShippingDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -315,7 +315,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("- Ship DES");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createAdditionalShippingPNLDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -329,7 +329,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.setLabelProvider(createAdditionalUpsidePNLDeltaLabelProvider());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -339,7 +339,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("+ Cargo other");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createCargoOtherPNLDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -351,7 +351,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("+ Equity");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createUpstreamDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -363,7 +363,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("+ Tax, etc.");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createTaxDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
 
@@ -378,7 +378,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("Days");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createShippingDaysDeltaLabelProvider(ShippingCostType.HOURS));
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -390,7 +390,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("- Hire");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createShippingCostDeltaLabelProvider(ShippingCostType.HIRE_COSTS));
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -402,7 +402,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("- Misc");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createShippingCostDeltaLabelProvider(ShippingCostType.COOLDOWN_COSTS, ShippingCostType.HEEL_COST, ShippingCostType.HEEL_REVENUE, ShippingCostType.OTHER_COSTS));
-			createWordWrapRenderer(gvc);
+			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
@@ -430,7 +430,6 @@ public class ChangeSetViewColumnHelper {
 			column_Violations.getColumn().setHeaderTooltip("Capacity Violations");
 			column_Violations.getColumn().setWidth(50);
 			column_Violations.setLabelProvider(createViolationsDeltaLabelProvider());
-			createWordWrapRenderer(column_Violations);
 			column_Violations.getColumn().setCellRenderer(createCellRenderer());
 
 			this.violationColumn = column_Violations;
@@ -836,10 +835,10 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	@SuppressWarnings("restriction")
-	private void createWordWrapRenderer(final GridViewerColumn gvc) {
+	private void createWordWrapRenderer(final GridViewerColumn gvc, final int minWidth) {
 		final WrappingColumnHeaderRenderer renderer = new WrappingColumnHeaderRenderer();
 		renderer.setWordWrap(true);
+		renderer.setMinWidth(minWidth);
 		gvc.getColumn().setHeaderRenderer(renderer);
 	}
 

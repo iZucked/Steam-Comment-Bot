@@ -28,6 +28,7 @@ public class PackGridTableColumnsAction extends Action {
 			for (final GridColumn c : columns) {
 				if (c.getResizeable()) {
 					c.pack();
+					c.setWidth(c.getWidth() + 4);
 				}
 			}
 		}

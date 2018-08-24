@@ -30,6 +30,8 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 @SuppressWarnings("restriction")
 public class WrappingColumnHeaderRenderer extends GridHeaderRenderer {
 
+	private int minWidth = 0;
+
 	int leftMargin = 6;
 
 	int rightMargin = 6;
@@ -66,11 +68,11 @@ public class WrappingColumnHeaderRenderer extends GridHeaderRenderer {
 			x += gc.stringExtent(column.getText()).x + rightMargin;
 		} else {
 			int plainTextWidth;
-			if (wHint == SWT.DEFAULT)
-				plainTextWidth = getBounds().width - x - rightMargin;
-			else
+			if (wHint == SWT.DEFAULT) {
+				plainTextWidth = (minWidth == 0? getBounds().width : minWidth)- x - rightMargin;
+			} else {
 				plainTextWidth = wHint - x - rightMargin;
-
+			}
 			getTextLayout(gc, column);
 			textLayout.setText(column.getText());
 			textLayout.setWidth(plainTextWidth < 1 ? 1 : plainTextWidth);
@@ -86,7 +88,7 @@ public class WrappingColumnHeaderRenderer extends GridHeaderRenderer {
 
 		y += computeControlSize(column).y;
 
-		return new Point(x, y);
+		return new Point(Math.max(minWidth, x), y);
 	}
 
 	/**
@@ -98,7 +100,7 @@ public class WrappingColumnHeaderRenderer extends GridHeaderRenderer {
 		// set the font to be used to display the text.
 		gc.setFont(column.getHeaderFont());
 
-		boolean flat = true;//(column.getParent().getCellSelectionEnabled() && !column.getMoveable());
+		boolean flat = true;// (column.getParent().getCellSelectionEnabled() && !column.getMoveable());
 
 		boolean drawSelected = ((isMouseDown() && isHover()));
 
@@ -332,5 +334,13 @@ public class WrappingColumnHeaderRenderer extends GridHeaderRenderer {
 			});
 		}
 		textLayout.setAlignment(column.getAlignment());
+	}
+
+	public int getMinWidth() {
+		return minWidth;
+	}
+
+	public void setMinWidth(int minWidth) {
+		this.minWidth = minWidth;
 	}
 }
