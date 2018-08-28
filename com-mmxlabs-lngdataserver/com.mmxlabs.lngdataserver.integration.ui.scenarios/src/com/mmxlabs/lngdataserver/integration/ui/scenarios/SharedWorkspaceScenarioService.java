@@ -11,17 +11,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePathUtils;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.SharedScenarioUpdater;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -64,7 +67,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 	private SharedScenarioUpdater updater;
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
+	public ScenarioInstance copyInto(final Container parent, final ScenarioModelRecord tmpRecord, final String name, @Nullable final IProgressMonitor progressMonitor) throws Exception {
 		if (serviceModel.isOffline()) {
 			return null;
 		}
@@ -73,20 +76,13 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			if (progressMonitor != null) {
 				// progressMonitor.beginTask("Copy", 1000);
 			}
-			StringBuilder path = new StringBuilder();
-			Container p = parent;
-			path.append(name);
-			while (p != null && !(p instanceof ScenarioService)) {
-				path.insert(0, p.getName() + "/");
-				p = p.getParent();
-			}
-
-			File f = ScenarioStorageUtil.storeToTemporaryFile(tmpRecord);
+			final String path = SharedWorkspacePathUtils.getPathFor(parent, name);
+			final File f = ScenarioStorageUtil.storeToTemporaryFile(tmpRecord);
 			try {
 				updater.pause();
-				String uuid = client.uploadScenario(f, path.toString(), wrapMonitor(progressMonitor));
+				final String uuid = client.uploadScenario(f, path, wrapMonitor(progressMonitor));
 				if (uuid != null) {
-					Path target = Paths.get(baseCaseFolder.getAbsolutePath(), String.format("%s.lingo", uuid));
+					final Path target = Paths.get(baseCaseFolder.getAbsolutePath(), String.format("%s.lingo", uuid));
 					Files.copy(f.toPath(), target);
 				}
 			} finally {
@@ -97,7 +93,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			}
 			try {
 				updater.refresh();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -111,7 +107,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
+	public ScenarioInstance copyInto(final Container parent, final IScenarioDataProvider scenarioDataProvider, final String name, @Nullable final IProgressMonitor progressMonitor) throws Exception {
 		try {
 			if (progressMonitor != null) {
 				progressMonitor.beginTask("Copy", 1);
@@ -129,42 +125,44 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		if (serviceModel.isOffline()) {
 			return;
 		}
-
-		List<String> uuidsToDelete = new LinkedList<>();
+		// Note: while this is recursive, we do assume a child first deletion set of calls as defined in DeleteScenarioCommandHandler
+		final List<String> uuidsToDelete = new LinkedList<>();
 		recursiveDelete(container, uuidsToDelete);
-		for (String uuid : uuidsToDelete) {
+		for (final String uuid : uuidsToDelete) {
+
 			try {
 				client.deleteScenario(uuid);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		if (container instanceof Folder) {
+		if (container instanceof Container) {
+			updater.removePath(SharedWorkspacePathUtils.getPathFor(container));
 			RunnerHelper.asyncExec(() -> container.getParent().getElements().remove(container));
 		}
 		try {
 			updater.refresh();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
-	private void recursiveDelete(Container parent, List<String> uuids) {
+	private void recursiveDelete(final Container parent, final List<String> uuids) {
 		if (parent instanceof ScenarioInstance) {
-			ScenarioInstance scenarioInstance = (ScenarioInstance) parent;
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) parent;
 			uuids.add(scenarioInstance.getExternalID());
 		}
-		for (Container c : parent.getElements()) {
+		for (final Container c : parent.getElements()) {
 			recursiveDelete(c, uuids);
 		}
 
 	}
 
 	@Override
-	public void fireEvent(ScenarioServiceEvent event, ScenarioInstance scenarioInstance) {
+	public void fireEvent(final ScenarioServiceEvent event, final ScenarioInstance scenarioInstance) {
 		super.fireEvent(event, scenarioInstance);
 	}
 
@@ -189,7 +187,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 	public void start() throws IOException {
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		File workspaceLocationFile = workspaceLocation.toFile();
+		final File workspaceLocationFile = workspaceLocation.toFile();
 
 		baseCaseFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "scenarios" + File.separator + "team");
 		if (!baseCaseFolder.exists()) {
@@ -221,25 +219,9 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		if (serviceModel.isOffline()) {
 			return;
 		}
-		String basePath = "";
-		final StringBuilder sb = new StringBuilder();
-		Container parent = destination;
-		boolean first = true;
-		while (parent != null && !(parent instanceof ScenarioService)) {
-			if (!first) {
-				sb.insert(0, "/");
-			}
+		final String basePath = SharedWorkspacePathUtils.getPathFor(destination);
 
-			sb.insert(0, parent.getName());
-			parent = parent.getParent();
-			first = false;
-		}
-		if (sb.length() > 0) {
-			sb.append("/");
-		}
-		basePath = sb.toString();
-
-		for (Container c : elements) {
+		for (final Container c : elements) {
 			if (isThisScenarioService(c)) {
 				recursiveMoveInto(c, basePath);
 			}
@@ -247,7 +229,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 		try {
 			updater.refresh();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -255,7 +237,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		return;
 	}
 
-	private boolean isThisScenarioService(Container c) {
+	private boolean isThisScenarioService(final Container c) {
 		Container parent = c;
 		while (parent != null) {
 			if (parent instanceof ScenarioService) {
@@ -266,33 +248,27 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		return false;
 	}
 
-	private void recursiveMoveInto(Container c, String basePath) {
+	private void recursiveMoveInto(final Container c, final String basePath) {
 		if (c instanceof ScenarioInstance) {
-			ScenarioInstance scenarioInstance = (ScenarioInstance) c;
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
 			try {
-				client.rename(scenarioInstance.getExternalID(), basePath + scenarioInstance.getName());
-			} catch (IOException e) {
+				client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(basePath, scenarioInstance.getName()));
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// client.uploadScenario(file, path);
 		}
 
-		for (Container child : c.getElements()) {
-			recursiveMoveInto(child, basePath + c.getName() + "/");
+		for (final Container child : c.getElements()) {
+			recursiveMoveInto(child, SharedWorkspacePathUtils.addChildSegment(basePath, c.getName()));
 		}
 
 	}
 
 	@Override
 	public void makeFolder(final Container parent, final String name) {
-
-		RunnerHelper.asyncExec(() -> {
-			Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
-			f.setName(name);
-			parent.getElements().add(f);
-			updater.registerFolder(f);
-		});
+		updater.createFolderFromUI(parent, name, true);
 		return;
 	}
 
@@ -301,8 +277,8 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		return "team-workspace-" + serviceName;
 	}
 
-	private ScenarioInstance constructInstance(File f) {
-		URI archiveURI = URI.createFileURI(f.getAbsolutePath());
+	private ScenarioInstance constructInstance(final File f) {
+		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
 		final Manifest manifest = ScenarioStorageUtil.loadManifest(f, getScenarioCipherProvider());
 		if (manifest != null) {
 			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -324,7 +300,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			scenarioInstance.setMetadata(meta);
 			meta.setContentType(manifest.getScenarioType());
 
-			ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, true, false, false, getScenarioCipherProvider());
+			final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, true, false, false, getScenarioCipherProvider());
 			if (modelRecord != null) {
 				modelRecord.setName(scenarioInstance.getName());
 				modelRecord.setScenarioInstance(scenarioInstance);
@@ -337,10 +313,10 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		return null;
 	}
 
-	private EContentAdapter serviceModelAdapter = new EContentAdapter() {
+	private final EContentAdapter serviceModelAdapter = new EContentAdapter() {
 
 		@Override
-		public void notifyChanged(org.eclipse.emf.common.notify.Notification notification) {
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 			super.notifyChanged(notification);
 
 			if (notification.isTouch()) {
@@ -359,7 +335,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 	};
 
-	protected void renameWalk(Container container, String oldName, String newName) {
+	protected void renameWalk(final Container container, final String oldName, final String newName) {
 		if (container instanceof ScenarioService) {
 			return;
 		}
@@ -382,10 +358,10 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		}
 		basePath = sb.toString();
 		if (container instanceof ScenarioInstance) {
-			ScenarioInstance scenarioInstance = (ScenarioInstance) container;
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) container;
 			try {
 				client.rename(scenarioInstance.getExternalID(), basePath + newName);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -394,14 +370,14 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		renameChildren(container, basePath + oldName, basePath + newName);
 	}
 
-	private void renameChildren(Container container, String oldBasePath, String newBasePath) {
+	private void renameChildren(final Container container, final String oldBasePath, final String newBasePath) {
 
-		for (Container c : container.getElements()) {
+		for (final Container c : container.getElements()) {
 			if (c instanceof ScenarioInstance) {
-				ScenarioInstance scenarioInstance = (ScenarioInstance) c;
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
 				try {
 					client.rename(scenarioInstance.getExternalID(), newBasePath + "/" + c.getName());
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -412,7 +388,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 	}
 
-	private IProgressListener wrapMonitor(IProgressMonitor monitor) {
+	private IProgressListener wrapMonitor(final IProgressMonitor monitor) {
 		if (monitor == null) {
 			return null;
 		}
@@ -421,7 +397,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			boolean firstCall = true;
 
 			@Override
-			public void update(long bytesRead, long contentLength, boolean done) {
+			public void update(final long bytesRead, final long contentLength, final boolean done) {
 				if (firstCall) {
 					int total = (int) (contentLength / 1000L);
 					if (total == 0) {
@@ -430,9 +406,22 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 					monitor.beginTask("Transfer", total);
 					firstCall = false;
 				}
-				int worked = (int) (bytesRead / 1000L);
+				final int worked = (int) (bytesRead / 1000L);
 				monitor.worked(worked);
 			}
 		};
+	}
+
+	@Override
+	public <U extends Container> @NonNull U executeAdd(@NonNull final Container viewInstance, @NonNull final Supplier<@NonNull U> factory) {
+		final @NonNull U child = factory.get();
+		if (child instanceof Folder) {
+			return (U) updater.createFolderFromUI(viewInstance, child.getName(), true);
+		} else {
+			RunnerHelper.syncExec(() -> {
+				viewInstance.getElements().add(child);
+			});
+		}
+		return child;
 	}
 }

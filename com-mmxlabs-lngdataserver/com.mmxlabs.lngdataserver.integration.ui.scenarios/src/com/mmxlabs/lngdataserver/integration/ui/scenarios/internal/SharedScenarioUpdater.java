@@ -7,6 +7,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.internal;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -22,11 +23,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePathUtils;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
 import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
@@ -56,7 +60,7 @@ public class SharedScenarioUpdater {
 	private final ScenarioService modelRoot;
 	private final File basePath;
 	private Instant lastModified = Instant.EPOCH;
-	private IUpstreamDetailChangedListener detailChangedListener = new IUpstreamDetailChangedListener() {
+	private final IUpstreamDetailChangedListener detailChangedListener = new IUpstreamDetailChangedListener() {
 
 		@Override
 		public void changed() {
@@ -67,7 +71,7 @@ public class SharedScenarioUpdater {
 	};
 
 	private Thread updateThread;
-	private ReentrantLock updateLock = new ReentrantLock();
+	private final ReentrantLock updateLock = new ReentrantLock();
 
 	public SharedScenarioUpdater(final ScenarioService modelRoot, final File basePath, final SharedWorkspaceServiceClient client) {
 		this.modelRoot = modelRoot;
@@ -93,7 +97,7 @@ public class SharedScenarioUpdater {
 				final String path = scenario.getSecond();
 
 				final Container parent = getContainer(path);
-				final String name = path.contains("/") ? path.substring(path.lastIndexOf("/") + 1) : path;
+				final String name = SharedWorkspacePathUtils.getLastName(path);
 
 				taskExecutor.execute(new AddScenarioTask(parent, name, uuid));
 				existingUUIDS.remove(uuid);
@@ -129,25 +133,21 @@ public class SharedScenarioUpdater {
 	}
 
 	private Container getContainer(final String path) {
-		final String[] segments = path.split("/");
+		final String[] segments = SharedWorkspacePathUtils.getSegments(path);
 		Container parent = modelRoot;
 
-		final StringBuilder pathBuilder = new StringBuilder();
 		for (int i = 0; i < segments.length - 1; ++i) {
-			if (i > 0) {
-				pathBuilder.append("/");
-			}
-			pathBuilder.append(segments[i]);
-
-			final String segmentPath = pathBuilder.toString();
-			if (pathMap.containsKey(segmentPath)) {
-				parent = pathMap.get(segmentPath);
-			} else {
-				final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
-				f.setName(segments[i]);
-				taskExecutor.execute(new AddFolderTask(parent, f));
-				pathMap.put(segmentPath, f);
-				parent = f;
+			final String segmentPath = SharedWorkspacePathUtils.compileSegments(Arrays.copyOf(segments, 1 + i));
+			synchronized (pathMap) {
+				if (pathMap.containsKey(segmentPath)) {
+					parent = pathMap.get(segmentPath);
+				} else {
+					final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
+					f.setName(segments[i]);
+					taskExecutor.execute(new AddFolderTask(parent, f));
+					pathMap.put(segmentPath, f);
+					parent = f;
+				}
 			}
 		}
 		return parent;
@@ -208,20 +208,15 @@ public class SharedScenarioUpdater {
 		}
 	}
 
-	private boolean downloadScenario(final String uuid, final File f, IProgressListener progressListener) throws IOException {
-		boolean[] ret = new boolean[1];
+	private boolean downloadScenario(final String uuid, final File f, final IProgressListener progressListener) throws IOException {
+		final boolean[] ret = new boolean[1];
 		final Job background = new Job("Download shared team scenario") {
 
 			@Override
 			public IStatus run(final IProgressMonitor monitor) {
-				// Having a method called "main" in the stacktrace stops SpringBoot throwing an exception in the logging framework
-				return main(monitor);
-			}
-
-			public IStatus main(final IProgressMonitor monitor) {
 				try {
 					ret[0] = client.downloadTo(uuid, f, wrapMonitor(monitor));
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					// return Status.
 				} finally {
 					monitor.done();
@@ -237,7 +232,7 @@ public class SharedScenarioUpdater {
 		background.schedule();
 		try {
 			background.join();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 
@@ -288,7 +283,7 @@ public class SharedScenarioUpdater {
 	}
 
 	public void start() {
-		File f = new File(basePath.getAbsolutePath() + "/scenarios.json");
+		final File f = new File(basePath.getAbsolutePath() + "/scenarios.json");
 		if (f.exists()) {
 			String json;
 			try {
@@ -298,7 +293,7 @@ public class SharedScenarioUpdater {
 				if (scenariosList != null) {
 					update(scenariosList);
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -336,33 +331,47 @@ public class SharedScenarioUpdater {
 	 * 
 	 * @param f
 	 */
-	public void registerFolder(final Folder f) {
+	public Container createFolderFromUI(final @NonNull Container parent, final @NonNull String name, boolean execNow) {
 
-		final StringBuilder sb = new StringBuilder();
-		Container parent = f;
-		boolean first = true;
-		while (parent != null && !(parent instanceof ScenarioService)) {
-			if (!first) {
-				sb.insert(0, "/");
+		final String path = SharedWorkspacePathUtils.getPathFor(parent, name);
+
+		synchronized (pathMap) {
+			if (pathMap.containsKey(path)) {
+				// Folder already exists
+				return pathMap.get(path);
+			} else {
+				final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
+				f.setName(name);
+				AddFolderTask task = new AddFolderTask(parent, f);
+				if (execNow) {
+					task.run();
+				} else {
+					taskExecutor.execute(task);
+				}
+				pathMap.put(path, f);
+				return f;
 			}
-
-			sb.insert(0, parent.getName());
-			parent = parent.getParent();
-			first = false;
 		}
-		pathMap.put(sb.toString(), f);
 	}
 
-	public void updatePath(String oldPath, String newPath) {
+	public @Nullable Container updatePath(final String oldPath, final String newPath) {
+		synchronized (pathMap) {
+			final Container value = pathMap.get(oldPath);
+			if (value != null) {
+				pathMap.put(newPath, value);
+			}
+			return value;
+		}
+	}
 
-		Container value = pathMap.get(oldPath);
-		if (value != null) {
-			pathMap.put(newPath, value);
+	public @Nullable Container removePath(final String oldPath) {
+		synchronized (pathMap) {
+			return pathMap.remove(oldPath);
 		}
 	}
 
 	public void refresh() throws IOException {
-		boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
 		if (!modelRoot.isOffline() != available) {
 			RunnerHelper.syncExecDisplayOptional(() -> modelRoot.setOffline(!available));
 		}
@@ -383,7 +392,7 @@ public class SharedScenarioUpdater {
 		}
 	};
 
-	private IProgressListener wrapMonitor(IProgressMonitor monitor) {
+	private IProgressListener wrapMonitor(final IProgressMonitor monitor) {
 		if (monitor == null) {
 			return null;
 		}
@@ -392,7 +401,7 @@ public class SharedScenarioUpdater {
 			boolean firstCall = true;
 
 			@Override
-			public void update(long bytesRead, long contentLength, boolean done) {
+			public void update(final long bytesRead, final long contentLength, final boolean done) {
 				if (firstCall) {
 					int total = (int) (contentLength / 1000L);
 					if (total == 0) {
@@ -401,7 +410,7 @@ public class SharedScenarioUpdater {
 					monitor.beginTask("Transfer", total);
 					firstCall = false;
 				}
-				int worked = (int) (bytesRead / 1000L);
+				final int worked = (int) (bytesRead / 1000L);
 				monitor.worked(worked);
 			}
 		};
