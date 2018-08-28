@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
-@SuppressWarnings("null")
 public class HashMapVesselEditorTest {
 
 	@Test

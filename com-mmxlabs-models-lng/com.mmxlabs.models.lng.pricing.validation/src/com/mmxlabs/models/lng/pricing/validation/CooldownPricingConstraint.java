@@ -163,7 +163,6 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 
 	}
 
-	@SuppressWarnings("null")
 	@NonNull
 	private String getPorts(@NonNull CooldownPrice c) {
 

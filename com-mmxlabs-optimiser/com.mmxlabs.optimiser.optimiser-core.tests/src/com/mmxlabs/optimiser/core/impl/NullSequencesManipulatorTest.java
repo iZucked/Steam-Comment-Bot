@@ -11,7 +11,6 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 
 public class NullSequencesManipulatorTest {
 
-	@SuppressWarnings("null")
 	@Test
 	public void testManipulate() {
 		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);

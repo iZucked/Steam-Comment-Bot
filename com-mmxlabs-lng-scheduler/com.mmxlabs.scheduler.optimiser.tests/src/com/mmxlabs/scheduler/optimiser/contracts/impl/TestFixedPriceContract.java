@@ -19,7 +19,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public class TestFixedPriceContract {
-	@SuppressWarnings("null")
 	@Test
 	public void testComputeFixedPrice() {
 

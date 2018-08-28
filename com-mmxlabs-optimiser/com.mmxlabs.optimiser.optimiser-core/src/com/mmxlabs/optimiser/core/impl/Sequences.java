@@ -89,7 +89,6 @@ public final class Sequences implements ISequences {
 		this.unusedElements.addAll(sequences.getUnusedElements());
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public List<@NonNull IResource> getResources() {
@@ -158,7 +157,6 @@ public final class Sequences implements ISequences {
 		return sequenceMap.hashCode();
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public List<@NonNull ISequenceElement> getUnusedElements() {

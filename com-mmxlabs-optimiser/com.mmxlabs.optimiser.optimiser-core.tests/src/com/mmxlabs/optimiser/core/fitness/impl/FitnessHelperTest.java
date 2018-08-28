@@ -22,7 +22,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
-@SuppressWarnings("null")
 public class FitnessHelperTest {
 
 	static class CoreWrapper implements IFitnessComponent {

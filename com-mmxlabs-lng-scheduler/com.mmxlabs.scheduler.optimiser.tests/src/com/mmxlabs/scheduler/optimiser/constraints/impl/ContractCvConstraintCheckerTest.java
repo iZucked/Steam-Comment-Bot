@@ -39,7 +39,6 @@ public class ContractCvConstraintCheckerTest {
 		Assert.assertSame(name, checker.getName());
 	}
 
-	@SuppressWarnings("null")
 	@Test
 	public void testConstraint() {
 		//

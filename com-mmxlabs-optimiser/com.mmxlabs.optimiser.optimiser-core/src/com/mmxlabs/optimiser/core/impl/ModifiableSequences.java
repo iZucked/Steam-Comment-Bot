@@ -71,7 +71,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	 * Constructor which creates a modifiable copy of the input {@link ISequences} object.
 	 * 
 	 * @param sequences
-	 *            Source {@link ISequences} object
+	 *                      Source {@link ISequences} object
 	 */
 	public ModifiableSequences(@NonNull final ISequences sequences) {
 
@@ -115,7 +115,6 @@ public final class ModifiableSequences implements IModifiableSequences {
 		return seq;
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public List<@NonNull IResource> getResources() {
@@ -203,11 +202,9 @@ public final class ModifiableSequences implements IModifiableSequences {
 
 	@Override
 	public int hashCode() {
-
 		return Objects.hashCode(this.resources, this.sequenceMap, new HashSet<>(this.unusedElements));
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public List<@NonNull ISequenceElement> getUnusedElements() {

@@ -83,7 +83,6 @@ public class DateAndCurveHelper {
 		return convertTime(earliest, yearMonthToDateTime(windowStart));
 	}
 
-	@SuppressWarnings("null")
 	@NonNull
 	protected ZonedDateTime yearMonthToDateTime(@NonNull final YearMonth windowStart) {
 		return ZonedDateTime.of(windowStart.getYear(), windowStart.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.of("UTC"));
@@ -219,7 +218,6 @@ public class DateAndCurveHelper {
 		return convertTime(yearMonthToDateTime(time));
 	}
 
-	@SuppressWarnings("null")
 	public int convertTime(@NonNull final LocalDate time) {
 		return convertTime(time.atStartOfDay(ZoneId.of("UTC")));
 	}

@@ -28,7 +28,6 @@ import com.mmxlabs.models.migration.impl.MigrationRegistry;
 import com.mmxlabs.models.migration.scenario.ScenarioInstanceMigrator;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
-@SuppressWarnings("null")
 public class ScenarioInstanceMigratorTest {
 
 	@Test

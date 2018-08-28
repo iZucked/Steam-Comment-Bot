@@ -144,7 +144,6 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
 		return Collections.<IFitnessComponent> singleton(this);

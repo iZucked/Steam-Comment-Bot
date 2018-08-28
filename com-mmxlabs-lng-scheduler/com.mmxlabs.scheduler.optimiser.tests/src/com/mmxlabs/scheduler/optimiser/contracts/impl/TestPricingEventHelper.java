@@ -27,7 +27,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class TestPricingEventHelper {
 
-	@SuppressWarnings("null")
 	@Test
 	public void testLoadSlotTimes() {
 

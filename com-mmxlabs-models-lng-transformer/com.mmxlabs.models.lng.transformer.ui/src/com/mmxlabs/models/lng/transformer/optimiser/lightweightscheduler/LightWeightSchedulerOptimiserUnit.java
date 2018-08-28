@@ -154,7 +154,6 @@ public class LightWeightSchedulerOptimiserUnit {
 		return link;
 	}
 
-	@SuppressWarnings("null")
 	public LightWeightSchedulerOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings,
 			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final CleanableExecutorService executorService, final LNGScenarioModel initialScenario,
 			@NonNull final Collection<String> hints) {

@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
-@SuppressWarnings("null")
 public class HashMapPortSlotEditorTest {
 
 	@Test

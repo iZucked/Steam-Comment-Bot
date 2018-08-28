@@ -88,7 +88,6 @@ public class TestPriceExpressionContract {
 		Assert.assertEquals(p2, price2);
 	}
 
-	@SuppressWarnings("null")
 	@Test
 	public void testCalculateLoadUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object

@@ -97,7 +97,6 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
 		return Collections.<IFitnessComponent> singleton(this);

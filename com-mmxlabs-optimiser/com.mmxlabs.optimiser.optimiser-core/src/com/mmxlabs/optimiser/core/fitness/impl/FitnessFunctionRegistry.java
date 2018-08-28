@@ -55,21 +55,18 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 		}
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getFitnessCoreFactoryNames() {
 		return coreFactoriesByCoreName.keySet();
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getFitnessComponentNames() {
 		return coreFactoriesByComponentName.keySet();
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<IFitnessCoreFactory> getFitnessCoreFactories() {

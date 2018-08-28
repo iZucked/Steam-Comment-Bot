@@ -18,7 +18,6 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
 
 public class RandomMoveGeneratorTest {
 
-	@SuppressWarnings("null")
 	@Test
 	public void testGenerateMove() {
 

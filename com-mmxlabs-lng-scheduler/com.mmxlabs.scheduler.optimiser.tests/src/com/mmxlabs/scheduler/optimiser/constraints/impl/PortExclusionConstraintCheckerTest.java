@@ -44,7 +44,6 @@ public class PortExclusionConstraintCheckerTest {
 		Assert.assertSame(name, checker.getName());
 	}
 
-	@SuppressWarnings("null")
 	@Test
 	public void testConstraint() {
 		//
@@ -97,7 +96,6 @@ public class PortExclusionConstraintCheckerTest {
 
 	}
 
-	@SuppressWarnings("null")
 	@Test
 	public void testConstraintNominatedVessel() {
 		//

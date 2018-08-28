@@ -39,7 +39,6 @@ public class InsertOptionalElements implements IMove {
 		this.insertedElements = insertedElements;
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public Collection<IResource> getAffectedResources() {
 		return Collections.singleton(resource);

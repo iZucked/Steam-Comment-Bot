@@ -21,7 +21,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public class OptimisationContextTest {
 
-	@SuppressWarnings("null")
 	@Test
 	public void testOptimisationContext() {
 
