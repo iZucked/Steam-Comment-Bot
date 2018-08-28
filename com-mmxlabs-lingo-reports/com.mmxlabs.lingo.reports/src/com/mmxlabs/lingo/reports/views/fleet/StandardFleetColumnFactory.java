@@ -96,12 +96,12 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.total_without_BOG":
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, 
-					new SimpleEmfBlockColumnFactory(columnID, "Total cost ($)", null, ColumnType.NORMAL, new TotalWithBOGFormatter(false, false, CostFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));
-			break;
+					new SimpleEmfBlockColumnFactory(columnID, "Sum - BOG($)", null, ColumnType.NORMAL, new TotalWithBOGFormatter(false, false, CostFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));
+			break; // Was Total cost before
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.total_with_BOG":
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, 
-					new SimpleEmfBlockColumnFactory(columnID, "Total cost BOG ($)", null, ColumnType.NORMAL, new TotalWithBOGFormatter(false, true, CostFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));
-			break;
+					new SimpleEmfBlockColumnFactory(columnID, "Sum ($)", null, ColumnType.NORMAL, new TotalWithBOGFormatter(false, true, CostFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));
+			break; // Was Total cost BOG
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.cooldowncosts":
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Cooldown ($)", "Total cooldown costs", ColumnType.NORMAL, new CooldownCostFormatter(false), ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES));

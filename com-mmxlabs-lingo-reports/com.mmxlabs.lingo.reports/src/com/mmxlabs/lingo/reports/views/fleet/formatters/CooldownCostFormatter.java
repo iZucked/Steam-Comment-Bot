@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 public class CooldownCostFormatter extends CostFormatter {
 
 	public CooldownCostFormatter(final boolean includeUnits) {
-		super(includeUnits);
+		super(includeUnits, CostFormatter.Type.COST);
 	}
 
 	@Override
