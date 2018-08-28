@@ -7,13 +7,12 @@ package com.mmxlabs.models.ui.forms;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.databinding.AggregateValidationStatus;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.ValidationStatusProvider;
-import org.eclipse.core.databinding.observable.value.IValueChangeListener;
-import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -126,12 +125,8 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 	protected final void hookAggregatedValidationStatus() {
 		// Link up form validation to the error message bar at the top
 		final AggregateValidationStatus aggregateStatus = new AggregateValidationStatus(dbc.getValidationStatusProviders(), AggregateValidationStatus.MAX_SEVERITY);
-		aggregateStatus.addValueChangeListener(new IValueChangeListener() {
-
-			@Override
-			public void handleValueChange(final ValueChangeEvent event) {
-				handleStateChange((IStatus) event.diff.getNewValue(), dbc);
-			}
+		aggregateStatus.addValueChangeListener(event -> {
+			handleStateChange(event.diff.getNewValue(), dbc);
 		});
 		observablesManager.addObservable(aggregateStatus);
 	}
@@ -139,14 +134,10 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 	protected final void hookAggregatedValidationStatusWithResize() {
 		// Link up form validation to the error message bar at the top
 		final AggregateValidationStatus aggregateStatus = new AggregateValidationStatus(dbc.getValidationStatusProviders(), AggregateValidationStatus.MAX_SEVERITY);
-		aggregateStatus.addValueChangeListener(new IValueChangeListener() {
-
-			@Override
-			public void handleValueChange(final ValueChangeEvent event) {
-				handleStateChange((IStatus) event.diff.getNewValue(), dbc);
-				if (!event.diff.getNewValue().equals(event.diff.getOldValue())) {
-					resizeAndCenter(true);
-				}
+		aggregateStatus.addValueChangeListener(event -> {
+			handleStateChange(event.diff.getNewValue(), dbc);
+			if (!Objects.equals(event.diff.getNewValue(), event.diff.getOldValue())) {
+				resizeAndCenter(true);
 			}
 		});
 		observablesManager.addObservable(aggregateStatus);
