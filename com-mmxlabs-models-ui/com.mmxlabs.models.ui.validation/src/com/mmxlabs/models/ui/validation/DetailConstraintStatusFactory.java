@@ -87,7 +87,7 @@ public class DetailConstraintStatusFactory {
 	}
 
 	public DetailConstraintStatusFactory withTypedName(@NonNull final String type, @NonNull final String name) {
-		this.name = String.format("%s|%s", type, name);
+		this.name = String.format("%s |'%s'", type, name);
 
 		return this;
 	}
@@ -114,7 +114,7 @@ public class DetailConstraintStatusFactory {
 	}
 
 	public DetailConstraintStatusDecorator make(final IValidationContext ctx) {
-		String finalMessage = name == null ? message : String.format("[%s] %s", name, message);
+		String finalMessage = name == null ? message : String.format("%s: %s", name, message);
 		if (prefix != null) {
 			finalMessage = prefix + finalMessage;
 		}

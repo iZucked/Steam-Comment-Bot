@@ -475,24 +475,6 @@
                      class="Slot">
                </target>
             </constraint>
-  <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.VesselDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.VesselDateConstraint"
-                  lang="Java"
-                  mode="Batch"
-                  name="Vessel date order"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  Vessel {0} has invalid start and end requirement dates - the start occurs after the end.
-               </message>
-               <description>
-                  The end requirement of the vessel should be after the start requirement.
-               </description>
-               <target
-                     class="VesselAvailability">
-               </target>
-            </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"

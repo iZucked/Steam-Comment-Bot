@@ -56,7 +56,8 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 
 				if ((s != null) && (e != null)) {
 					if (e.isBefore(s)) {
-						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(availability.getVessel().getName()));
+						String msg = String.format("Charter|'%s': Invalid start/end dates (start occurs after end).", availability.getVessel().getName());
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));						
 						if (startStart != null) {
 							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_StartAfter());
 						}

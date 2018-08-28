@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.HashSet;
@@ -80,7 +81,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					statuses.add(baseFactory.copyName() //
 							.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY) //
 							.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) //
-							.withMessage("Inconsistent start date range (the start date is after the end date)") //
+							.withMessage("Bad start window (window start date is after end date)") //
 							.make(ctx));
 
 				}
@@ -91,10 +92,43 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					statuses.add(baseFactory.copyName() //
 							.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY) //
 							.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER) //
-							.withMessage("Inconsistent end date range (the start date is after the end date)") //
+							.withMessage("Bad end window (window start date is after end date)") //
 							.make(ctx));
 				}
 			}
+			
+			
+			{
+				final LocalDateTime startStart = availability.getStartAfter();
+				final LocalDateTime startEnd = availability.getStartBy();
+
+				final LocalDateTime endStart = availability.getEndAfter();
+				final LocalDateTime endEnd = availability.getEndBy();
+
+				final LocalDateTime s = startStart == null ? startEnd : startStart;
+				final LocalDateTime e = endEnd == null ? endStart : endEnd;
+
+				if ((s != null) && (e != null)) {
+					if (e.isBefore(s)) {
+						String msg = "Invalid start and end dates (start window is after end window).";
+						DetailConstraintStatusFactory baseCopy = baseFactory.copyName().withMessage(msg);
+						if (startStart != null) {
+							baseCopy.withObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_StartAfter());
+						}
+						if (startEnd != null) {
+							baseCopy.withObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_StartBy());
+						}
+						if (endStart != null) {
+							baseCopy.withObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
+						}
+						if (endEnd != null) {
+							baseCopy.withObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_EndBy());
+						}
+						baseCopy.make(ctx, statuses);
+					}
+				}
+			}
+			
 			YearMonth earliestDate = null;
 			if (availability.isSetStartAfter()) {
 				earliestDate = YearMonth.from(availability.getStartAfter());
@@ -271,7 +305,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 				line.getPriceExpression(), PriceIndexType.COMMODITY);
 		if (!result.isOk()) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Ballast bonus lump sum is invalid", va.getVessel().getName())));
+					(IConstraintStatus) ctx.createFailureStatus(String.format("Charter |'%s': Ballast bonus lump sum is invalid", va.getVessel().getName())));
 			// dcsd.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
 			dcsd.addEObjectAndFeature(line, CommercialPackage.Literals.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION);
 			failures.add(dcsd);

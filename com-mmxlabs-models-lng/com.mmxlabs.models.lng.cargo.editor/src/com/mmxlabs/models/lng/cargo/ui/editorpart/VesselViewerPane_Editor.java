@@ -81,6 +81,6 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 
 		addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndBy(), jointModelEditor.getEditingDomain()));
 
-		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+		setTitle("Vessel Charters", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 }

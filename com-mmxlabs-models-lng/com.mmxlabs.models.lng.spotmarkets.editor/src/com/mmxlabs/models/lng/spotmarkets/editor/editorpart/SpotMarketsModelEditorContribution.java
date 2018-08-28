@@ -64,7 +64,7 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterOutMarketPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCharters");
 
 		indexPage = editorPart.addPage(sash);
-		editorPart.setPageText(indexPage, "Charters");
+		editorPart.setPageText(indexPage, "Charter Markets");
 	}
 
 	private void addSpotCargoMarketPage(final Composite parent) {
@@ -100,7 +100,7 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 		fobSalesPane.defaultSetTitle("FOB Sales");
 
 		spotCargoMarketsPage = editorPart.addPage(sash);
-		editorPart.setPageText(spotCargoMarketsPage, "Spot Cargoes");
+		editorPart.setPageText(spotCargoMarketsPage, "Cargo Markets");
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(fobPurchasesPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(desPurchasePane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");

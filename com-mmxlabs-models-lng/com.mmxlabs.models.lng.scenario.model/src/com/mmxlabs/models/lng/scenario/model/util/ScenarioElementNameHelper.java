@@ -45,7 +45,7 @@ public class ScenarioElementNameHelper {
 	private static final @NonNull String TYPE_PORT = "Port";
 	private static final @NonNull String TYPE_VESSEL = "Vessel";
 	private static final @NonNull String TYPE_VESSEL_EVENT = "Event";
-	private static final @NonNull String TYPE_VESSEL_AVAILABILITY = "Availability";
+	private static final @NonNull String TYPE_VESSEL_AVAILABILITY = "Charter";
 
 	public static @NonNull String getName(final @Nullable EObject target) {
 		return getName(target, "(unknown)");

@@ -60,7 +60,7 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(startDate)) {
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus(String.format("[Evaluated schedule][Availability|%s] There is no charter cost pricing data before %s %04d for curve %s",
+									(IConstraintStatus) ctx.createFailureStatus(String.format("[Evaluated schedule] Charter |'%s': There is no charter cost pricing data before %s %04d for curve %s",
 											vesselName, date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
 
 							dcsd.addEObjectAndFeature(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE);

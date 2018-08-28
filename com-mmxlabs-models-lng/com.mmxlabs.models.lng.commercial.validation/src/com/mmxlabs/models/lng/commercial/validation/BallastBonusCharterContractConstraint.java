@@ -72,11 +72,11 @@ public class BallastBonusCharterContractConstraint extends AbstractModelMultiCon
 //					final DetailConstraintStatusDecorator dcsd;
 //					if (anywhere) {
 //						dcsd = new DetailConstraintStatusDecorator(
-//								(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Port %s is not covered by the ballast bonus rules (note the vessel can end anywhere)",
+//								(IConstraintStatus) ctx.createFailureStatus(String.format("Charter |'%s': Port %s is not covered by the ballast bonus rules (note the vessel can end anywhere)",
 //										va.getVessel().getName(), endAtPort.getName())));
 //					} else {
 //						dcsd = new DetailConstraintStatusDecorator(
-//								(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Port %s is not covered by the ballast bonus rules",
+//								(IConstraintStatus) ctx.createFailureStatus(String.format("Charter |'%s': Port %s is not covered by the ballast bonus rules",
 //										va.getVessel().getName(), endAtPort.getName())));
 //					}
 //					
