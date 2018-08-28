@@ -35,6 +35,7 @@ public class TotalWithBOGFormatter extends CostFormatter {
 		costFormatters.add(new CharterCostFormatter(false, CostFormatter.Type.COST));
 		costFormatters.add(new PortCostFormatter(CostFormatter.Type.COST));
 		costFormatters.add(new RepositioningFeeFormatter(false, CostFormatter.Type.COST));
+		costFormatters.add(new CooldownCostFormatter(false));
 		if (withBOG) {
 			costFormatters.add(new LNGCostFormatter(CostFormatter.Type.COST));
 		}

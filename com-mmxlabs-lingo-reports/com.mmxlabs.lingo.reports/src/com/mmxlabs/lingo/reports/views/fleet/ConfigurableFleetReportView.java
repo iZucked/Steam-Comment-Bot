@@ -66,7 +66,6 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
-import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
@@ -170,13 +169,15 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 						secondIsComposite = true;
 					}
-
+					/** FM This will change the sorting order and will display the Total Delta at the top of the View
+					 * Changed Integer.MAX_VALUE to -1.
+					 */
 					if (e1 instanceof List) {
-						return Integer.MAX_VALUE;
+						return -1;
 					}
-
+					// FM Changed Integer.MIN_VALUE to 1.
 					if (e2 instanceof List) {
-						return Integer.MIN_VALUE;
+						return 1;
 					}
 
 					if (g1 == g2 && g1 != null) {
@@ -332,7 +333,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					
 					int numberOfRow = table.getRows().size();
 					if (pinned != null) {
-						numberOfRow += table.getCompositeRows().size() + 1;
+						numberOfRow += table.getCompositeRows().size();// + 1; FM removed extra row
 					}
 					
 					List<Object> rows = new ArrayList<>(numberOfRow);
@@ -359,7 +360,6 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					} else {
 						setDiffMode(false);
 					}
-					
 					
 					ViewerHelper.setInput(viewer, true, rows);
 				}

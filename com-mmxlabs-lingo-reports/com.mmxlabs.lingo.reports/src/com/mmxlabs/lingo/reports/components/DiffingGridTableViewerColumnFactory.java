@@ -342,7 +342,7 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 						setRowSpan(formatter, cell, pinnedElement);
 						cell.setText(deltaValue);
 						if (col.getText().equals("Scenario")) {
-							cell.setText("Δ Total");
+							cell.setText("Total Δ");// FM Changed to "Total Δ"
 						}
 						setIndicationArrow(cell, formatter);
 					}
