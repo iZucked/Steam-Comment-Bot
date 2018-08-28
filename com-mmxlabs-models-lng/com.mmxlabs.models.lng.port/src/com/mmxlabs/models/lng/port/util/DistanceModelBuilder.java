@@ -48,12 +48,12 @@ public class DistanceModelBuilder {
 			boolean foundForwardDistance = false;
 			boolean foundReverseDistance = false;
 			for (final RouteLine RouteLine : route.getLines()) {
-				if (Objects.equals(RouteLine.getFrom(), from.getName()) && Objects.equals(RouteLine.getTo(), to.getName())) {
+				if (Objects.equals(RouteLine.getFrom(), from) && Objects.equals(RouteLine.getTo(), to)) {
 					foundForwardDistance = true;
 					setDistance(directDistance, suezDistance, panamaDistance, route.getRouteOption(), RouteLine);
 				}
 				if (biDirectional) {
-					if (Objects.equals(RouteLine.getFrom(), to.getName()) && Objects.equals(RouteLine.getTo(), from.getName())) {
+					if (Objects.equals(RouteLine.getFrom(), to) && Objects.equals(RouteLine.getTo(), from)) {
 						foundReverseDistance = true;
 						setDistance(directDistance, suezDistance, panamaDistance, route.getRouteOption(), RouteLine);
 					}
