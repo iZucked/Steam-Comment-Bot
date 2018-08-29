@@ -7,6 +7,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.internal;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -119,6 +121,9 @@ public class SharedScenarioUpdater {
 				// TODO: Move .lingo file into delete queue
 			}
 		}
+
+		taskExecutor.execute(new CleanupFoldersTask(modelRoot));
+
 	}
 
 	private void recursiveUUIDCollector(final Container parent, final Collection<String> uuids) {
@@ -141,8 +146,14 @@ public class SharedScenarioUpdater {
 			synchronized (pathMap) {
 				if (pathMap.containsKey(segmentPath)) {
 					parent = pathMap.get(segmentPath);
+					// Convert folder to managed state (it may have been created by the user, but now we take it over
+					if (parent instanceof Folder) {
+						final Folder folder = (Folder) parent;
+						folder.setManaged(true);
+					}
 				} else {
 					final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
+					f.setManaged(true);
 					f.setName(segments[i]);
 					taskExecutor.execute(new AddFolderTask(parent, f));
 					pathMap.put(segmentPath, f);
@@ -205,6 +216,44 @@ public class SharedScenarioUpdater {
 					parent.getElements().add(instance);
 				});
 			}
+		}
+	}
+
+	private class CleanupFoldersTask implements Runnable {
+		private final Container root;
+
+		public CleanupFoldersTask(final Container root) {
+			this.root = root;
+		}
+
+		@Override
+		public void run() {
+
+			RunnerHelper.syncExecDisplayOptional(() -> recursiveDelete(root));
+		}
+
+		private void recursiveDelete(final Container parent) {
+			if (parent instanceof ScenarioInstance) {
+				return;
+			}
+			// Copy list as we modify the original
+			final List<Container> elements = new ArrayList<>(parent.getElements());
+			for (final Container c : elements) {
+				recursiveDelete(c);
+			}
+			if (parent instanceof Folder) {
+				final Folder folder = (Folder) parent;
+				if (folder.isManaged() && elements.isEmpty()) {
+					final Container parent2 = folder.getParent();
+					if (parent2 != null) {
+						synchronized (pathMap) {
+							pathMap.remove(SharedWorkspacePathUtils.getPathFor(folder));
+						}
+						parent2.getElements().remove(folder);
+					}
+				}
+			}
+
 		}
 	}
 
@@ -331,7 +380,7 @@ public class SharedScenarioUpdater {
 	 * 
 	 * @param f
 	 */
-	public Container createFolderFromUI(final @NonNull Container parent, final @NonNull String name, boolean execNow) {
+	public Container createFolderFromUI(final @NonNull Container parent, final @NonNull String name, final boolean execNow) {
 
 		final String path = SharedWorkspacePathUtils.getPathFor(parent, name);
 
@@ -342,7 +391,7 @@ public class SharedScenarioUpdater {
 			} else {
 				final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
 				f.setName(name);
-				AddFolderTask task = new AddFolderTask(parent, f);
+				final AddFolderTask task = new AddFolderTask(parent, f);
 				if (execNow) {
 					task.run();
 				} else {

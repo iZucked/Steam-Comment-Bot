@@ -216,13 +216,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int FOLDER__METADATA = CONTAINER_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Managed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__MANAGED = CONTAINER_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Folder</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FOLDER_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 1;
+	int FOLDER_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl <em>Scenario Service</em>}' class.
@@ -787,6 +796,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFolder_Metadata();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Folder#isManaged <em>Managed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Managed</em>'.
+	 * @see com.mmxlabs.scenario.service.model.Folder#isManaged()
+	 * @see #getFolder()
+	 * @generated
+	 */
+	EAttribute getFolder_Managed();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioService <em>Scenario Service</em>}'.

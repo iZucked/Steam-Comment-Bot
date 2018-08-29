@@ -19,12 +19,7 @@ public final class SharedWorkspacePathUtils {
 		if (sb.length() > 0) {
 			sb.append("/");
 		}
-		try {
-			sb.append(URLEncoder.encode(child, "UTF-8"));
-		} catch (final UnsupportedEncodingException e) {
-			// Java doc says to use UTF-8, so not expecting this to be thrown.
-			throw new RuntimeException(e);
-		}
+		sb.append(encode(child));
 		return sb.toString();
 	}
 
@@ -37,12 +32,8 @@ public final class SharedWorkspacePathUtils {
 				sb.insert(0, "/");
 			}
 
-			try {
-				sb.insert(0, URLEncoder.encode(c.getName(), "UTF-8"));
-			} catch (final UnsupportedEncodingException e) {
-				// Java doc says to use UTF-8, so not expecting this to be thrown.
-				throw new RuntimeException(e);
-			}
+			sb.insert(0, encode(c.getName()));
+
 			c = c.getParent();
 			first = false;
 		}
@@ -54,12 +45,7 @@ public final class SharedWorkspacePathUtils {
 		final String[] segments = path.split("/");
 
 		for (int i = 0; i < segments.length; ++i) {
-			try {
-				segments[i] = URLDecoder.decode(segments[i], "UTF-8");
-			} catch (final UnsupportedEncodingException e) {
-				// Java doc says to use UTF-8, so not expecting this to be thrown.
-				throw new RuntimeException(e);
-			}
+			segments[i] = decode(segments[i]);
 		}
 
 		return segments;
@@ -72,12 +58,7 @@ public final class SharedWorkspacePathUtils {
 			if (i > 0) {
 				sb.append("/");
 			}
-			try {
-				sb.append(URLEncoder.encode(segments[i], "UTF-8"));
-			} catch (final UnsupportedEncodingException e) {
-				// Java doc says to use UTF-8, so not expecting this to be thrown.
-				throw new RuntimeException(e);
-			}
+			sb.append(encode(segments[i]));
 		}
 
 		return sb.toString();
@@ -89,8 +70,21 @@ public final class SharedWorkspacePathUtils {
 	}
 
 	public static String addChildSegment(final @NonNull String basePath, final @NonNull String name) {
+		return (basePath.isEmpty() ? "" : basePath + "/") + encode(name);
+	}
+
+	public static String encode(final @NonNull String name) {
 		try {
-			return basePath + "/" + URLEncoder.encode(name, "UTF-8");
+			return URLEncoder.encode(name, "UTF-8");
+		} catch (final UnsupportedEncodingException e) {
+			// Java doc says to use UTF-8, so not expecting this to be thrown.
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static String decode(final @NonNull String name) {
+		try {
+			return URLDecoder.decode(name, "UTF-8");
 		} catch (final UnsupportedEncodingException e) {
 			// Java doc says to use UTF-8, so not expecting this to be thrown.
 			throw new RuntimeException(e);

@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -326,6 +327,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
 				if (notification.getNewStringValue().contains("/")) {
 					// Do not allow forward slashed in names - used as separator in service backend
+					// Note: This will trigger another notification to hit the else statemenet
 					RunnerHelper.asyncExec(() -> ((Container) notification.getNotifier()).setName(notification.getNewStringValue().replaceAll("/", "_")));
 				} else {
 					renameWalk((Container) notification.getNotifier(), notification.getOldStringValue(), notification.getNewStringValue());
@@ -335,57 +337,42 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
 	};
 
-	protected void renameWalk(final Container container, final String oldName, final String newName) {
+	protected void renameWalk(final @NonNull Container container, final @NonNull String oldName, final @NonNull String newName) {
 		if (container instanceof ScenarioService) {
 			return;
 		}
 
-		String basePath = "";
-		final StringBuilder sb = new StringBuilder();
-		Container parent = container.getParent();
-		boolean first = true;
-		while (parent != null && !(parent instanceof ScenarioService)) {
-			if (!first) {
-				sb.insert(0, "/");
-			}
+		final Container parent = container.getParent();
+		final String basePath = SharedWorkspacePathUtils.getPathFor(parent);
 
-			sb.insert(0, parent.getName());
-			parent = parent.getParent();
-			first = false;
-		}
-		if (sb.length() > 0) {
-			sb.append("/");
-		}
-		basePath = sb.toString();
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) container;
 			try {
-				client.rename(scenarioInstance.getExternalID(), basePath + newName);
+				client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(basePath, newName));
 			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		updater.updatePath(basePath + oldName, basePath + newName);
-		renameChildren(container, basePath + oldName, basePath + newName);
+
+		// updater.updatePath(SharedWorkspacePathUtils.addChildSegment(basePath, oldName), SharedWorkspacePathUtils.addChildSegment(basePath, newName));
+		renameChildren(container, SharedWorkspacePathUtils.addChildSegment(basePath, oldName), SharedWorkspacePathUtils.addChildSegment(basePath, newName));
 	}
 
-	private void renameChildren(final Container container, final String oldBasePath, final String newBasePath) {
+	private void renameChildren(final @NonNull Container container, final @NonNull String oldBasePath, final @NonNull String newBasePath) {
 
 		for (final Container c : container.getElements()) {
 			if (c instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
 				try {
-					client.rename(scenarioInstance.getExternalID(), newBasePath + "/" + c.getName());
+					client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(newBasePath, c.getName()));
 				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			renameChildren(c, oldBasePath + "/" + c.getName(), newBasePath + "/" + c.getName());
-
+			renameChildren(c, SharedWorkspacePathUtils.addChildSegment(oldBasePath, c.getName()), SharedWorkspacePathUtils.addChildSegment(newBasePath, c.getName()));
 		}
-
 	}
 
 	private IProgressListener wrapMonitor(final IProgressMonitor monitor) {

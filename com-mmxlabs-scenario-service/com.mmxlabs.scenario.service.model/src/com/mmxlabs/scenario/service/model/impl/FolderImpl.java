@@ -18,6 +18,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.FolderImpl#getMetadata <em>Metadata</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.FolderImpl#isManaged <em>Managed</em>}</li>
  * </ul>
  *
  * @generated
@@ -58,6 +59,24 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 */
 	public void setMetadata(Metadata newMetadata) {
 		eSet(ScenarioServicePackage.eINSTANCE.getFolder_Metadata(), newMetadata);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isManaged() {
+		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getFolder_Managed(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setManaged(boolean newManaged) {
+		eSet(ScenarioServicePackage.eINSTANCE.getFolder_Managed(), newManaged);
 	}
 
 } //FolderImpl

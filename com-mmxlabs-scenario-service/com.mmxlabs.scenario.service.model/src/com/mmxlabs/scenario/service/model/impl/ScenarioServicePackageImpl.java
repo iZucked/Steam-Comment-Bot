@@ -113,7 +113,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ScenarioServicePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -128,9 +128,9 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 			return (ScenarioServicePackage) EPackage.Registry.INSTANCE.getEPackage(ScenarioServicePackage.eNS_URI);
 
 		// Obtain or create and register package
-		ScenarioServicePackageImpl theScenarioServicePackage = (ScenarioServicePackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ScenarioServicePackageImpl
-				? EPackage.Registry.INSTANCE.get(eNS_URI)
-				: new ScenarioServicePackageImpl());
+		Object registeredScenarioServicePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ScenarioServicePackageImpl theScenarioServicePackage = registeredScenarioServicePackage instanceof ScenarioServicePackageImpl ? (ScenarioServicePackageImpl) registeredScenarioServicePackage
+				: new ScenarioServicePackageImpl();
 
 		isInited = true;
 
@@ -239,6 +239,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 */
 	public EReference getFolder_Metadata() {
 		return (EReference) folderEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFolder_Managed() {
+		return (EAttribute) folderEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -606,6 +615,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 		folderEClass = createEClass(FOLDER);
 		createEReference(folderEClass, FOLDER__METADATA);
+		createEAttribute(folderEClass, FOLDER__MANAGED);
 
 		scenarioServiceEClass = createEClass(SCENARIO_SERVICE);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__DESCRIPTION);
@@ -708,6 +718,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		initEClass(folderEClass, Folder.class, "Folder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFolder_Metadata(), this.getMetadata(), null, "metadata", null, 0, 1, Folder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFolder_Managed(), ecorePackage.getEBoolean(), "managed", null, 0, 1, Folder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
 
 		initEClass(scenarioServiceEClass, ScenarioService.class, "ScenarioService", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScenarioService_Description(), ecorePackage.getEString(), "description", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
