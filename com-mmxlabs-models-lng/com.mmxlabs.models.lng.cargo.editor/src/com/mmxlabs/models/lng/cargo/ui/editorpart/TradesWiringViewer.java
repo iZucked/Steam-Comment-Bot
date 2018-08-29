@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -981,7 +984,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final GridViewerColumn loadVol = addTradesColumn(loadColumns, "Vol", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		loadVol.getColumn().setHeaderTooltip("in m³ or mmBtu");
 
-		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Window", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
 				final String v = super.renderSetValue(owner, object);
@@ -1006,10 +1009,33 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}, new RowDataEMFPath(false, Type.LOAD));
 		loadDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.LOAD_OR_DISCHARGE));
-
+		
+		final SchedulePackage sp = SchedulePackage.eINSTANCE;
+		if (SecurityUtils.getSubject().isPermitted("features:report-arrivaltimes")) {
+		
+			final GridViewerColumn loadScheduledDate = addTradesColumn(loadColumns, "Arriving", 
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(sp.getEvent_Start(), editingDomain) {
+					
+				/**
+				* FM had to copy the entire code from
+				* com.mmxlabs.lingo.reports.views.formatters
+				* AsLocalDateFormatter from getLocalDate()
+				* to not create cross dependency
+				*/
+				@Override
+				public String renderSetValue(final Object owner, final Object object) {
+					if (object instanceof ZonedDateTime) {
+						return ((ZonedDateTime) object).toLocalDateTime().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+					}
+					return "";
+				}
+			}), new RowDataEMFPath(false, Type.LOAD_ALLOCATION,sp.getSlotAllocation_SlotVisit()));	
+			loadScheduledDate.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
+		}
+		
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
-		final GridViewerColumn dischargeDateColumn = addTradesColumn(dischargeColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+		final GridViewerColumn dischargeDateColumn = addTradesColumn(dischargeColumns, "Window", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 
 			@Override
 			public String renderSetValue(final Object owner, final Object object) {
@@ -1033,7 +1059,28 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}, new RowDataEMFPath(false, Type.DISCHARGE));
 		dischargeDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.DISCHARGE_OR_LOAD));
-
+		
+		if (SecurityUtils.getSubject().isPermitted("features:report-arrivaltimes")) {
+			final GridViewerColumn dischargeScheduledDate = addTradesColumn(loadColumns, "Arriving", 
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(sp.getEvent_Start(), editingDomain) {
+					
+					/**
+					 * FM had to copy the entire code from
+					 * com.mmxlabs.lingo.reports.views.formatters
+					 * AsLocalDateFormatter from getLocalDate()
+					 * to not create cross dependency
+					 */
+					@Override
+					public String renderSetValue(final Object owner, final Object object) {
+						if (object instanceof ZonedDateTime) {
+							return ((ZonedDateTime) object).toLocalDateTime().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+						}
+						return "";
+					}
+				}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION,sp.getSlotAllocation_SlotVisit()));	
+			dischargeScheduledDate.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
+		}
+		
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		if (SecurityUtils.getSubject().isPermitted("features:report-counterparty")) {
 			addTradesColumn(dischargeColumns, "Counterparty", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(pkg.getSlot_Counterparty(), editingDomain) {
