@@ -82,7 +82,7 @@ public class ParallelSimpleMultiObjectiveOptimiser extends SimpleMultiObjectiveO
 		}
 		if (DEBUG) {
 			System.out.println("-------------");
-			List<NonDominatedSolution> sortedValues = getSortedArchive(archive, 1);
+			List<NonDominatedSolution> sortedValues = getSortedArchiveWithEpsilonDominance(archive, 1);
 			sortedValues.forEach(v -> System.out.println(String.format("[%s-start,%s],", v.getFitnesses()[0] * -1, v.getFitnesses()[1])));
 		}
 		setNumberOfIterationsCompleted(numberOfMovesTried);

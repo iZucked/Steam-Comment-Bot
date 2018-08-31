@@ -52,6 +52,8 @@ import com.mmxlabs.optimiser.optimiser.lso.parallellso.MultiObjectiveUtils;
  */
 public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 
+	private static final int EPSILON_DOMINANCE_DOLLAR_PER_CHANGE_VALUE = 200_000;
+
 	@Inject
 	private Injector injector;
 
@@ -164,7 +166,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		}
 		if (DEBUG) {
 			System.out.println("-------------");
-			final List<NonDominatedSolution> sortedValues = getSortedArchive(archive, 1);
+			final List<NonDominatedSolution> sortedValues = getSortedArchiveWithEpsilonDominance(archive, 1);
 			sortedValues.forEach(v -> System.out.println(String.format("[%s-start,%s],", v.getFitnesses()[0] * -1, v.getFitnesses()[1])));
 		}
 		setNumberOfIterationsCompleted(numberOfMovesTried);
@@ -173,12 +175,19 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return iterationsThisStep;
 	}
 
-	protected List<NonDominatedSolution> getSortedArchive(final List<NonDominatedSolution> archive, final int objectiveIndex) {
+	/**
+	 * Returns solutions, filtered with an epsilon dominance factor, to remove solutions too similar
+	 * @param archive
+	 * @param objectiveIndex
+	 * @return
+	 */
+	protected List<NonDominatedSolution> getSortedArchiveWithEpsilonDominance(final List<NonDominatedSolution> archive, final int objectiveIndex) {
 		final List<NonDominatedSolution> sortedValues = archive.stream().sorted((a, b) -> Long.compare(a.getFitnesses()[objectiveIndex], b.getFitnesses()[objectiveIndex]))
 				.collect(Collectors.toList());
-		return MultiObjectiveUtils.filterArchive(archive, objectiveIndex, new long[] { 200_000, 0 });
+		return MultiObjectiveUtils.filterArchive(archive, objectiveIndex, new long[] { EPSILON_DOMINANCE_DOLLAR_PER_CHANGE_VALUE, 0 });
 	}
 
+	
 	long[] addSequenceToArchiveIfNonDominated(final ModifiableSequences pinnedPotentialRawSequences, final IMove move, final IModifiableSequences potentialFullSequences,
 			final IEvaluationState evaluationState) {
 		final long[] fitnesses = getMultiObjectiveFitnessEvaluator().getCombinedFitnessAndObjectiveValuesForComponentClasses(pinnedPotentialRawSequences, potentialFullSequences, evaluationState,
@@ -303,7 +312,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	}
 
 	public List<NonDominatedSolution> getSortedArchive() {
-		return getSortedArchive(archive, 0);
+		return getSortedArchiveWithEpsilonDominance(archive, 0);
 	}
 
 	public ISequences getBestRawSequences(final List<NonDominatedSolution> unsortedArchive, final int noGroups, final int objectiveIndex) {
@@ -444,7 +453,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	}
 
 	NonDominatedSolution findSolutionWhichReachesQuartile(final List<NonDominatedSolution> unsortedArchive, final int objectiveIndex, final eQuartile quartile, final boolean minimise) {
-		final List<NonDominatedSolution> sortedArchive = getSortedArchive(unsortedArchive, objectiveIndex);
+		final List<NonDominatedSolution> sortedArchive = getSortedArchiveWithEpsilonDominance(unsortedArchive, objectiveIndex);
 		long bestFitness;
 		long worstFitness;
 		// error checks
