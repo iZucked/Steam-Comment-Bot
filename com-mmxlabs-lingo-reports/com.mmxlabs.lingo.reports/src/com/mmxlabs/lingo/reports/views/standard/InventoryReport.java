@@ -218,7 +218,10 @@ public class InventoryReport extends ViewPart {
 			final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 			{
 				createColumn("Date", 150, o -> "" + o.date.format(formatter));
-				createColumn("Type", 150, o -> o.type);
+				//createColumn("Type", 150, o -> o.type);
+				createColumn("Total Feed In", 150, o -> String.format("%,d", o.feedIn));
+				createColumn("Total Feed Out", 150, o -> String.format("%,d", o.feedOut));
+				createColumn("Total Cargo Out", 150, o -> String.format("%,d", o.cargoOut));
 				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
 				createColumn("Vessel", 150, o -> o.vessel);
@@ -289,6 +292,7 @@ public class InventoryReport extends ViewPart {
 		LocalDate maxDate = null;
 
 		final List<InventoryLevel> tableLevels = new LinkedList<>();
+		
 		Optional<InventoryChangeEvent> firstInventoryData = Optional.empty();
 
 		if (toDisplay != null) {
@@ -361,19 +365,25 @@ public class InventoryReport extends ViewPart {
 												dischargePort, salesContract, time == null ? null : time.toLocalDate());
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										
-										tableLevels.add(lvl);
+										// FM cargo out happens only when there's a vessel
+										lvl.cargoOut = lvl.changeInM3;
+										addToInventoryLevelList(tableLevels, lvl);
 									} else if (e.getOpenSlotAllocation() != null) {
 										type = "Open";
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										
-										tableLevels.add(lvl);
+										// FM
+										setInventoryLevelFeed(lvl);
+										addToInventoryLevelList(tableLevels, lvl);
 									} else if (e.getEvent() != null) {
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										InventoryChangeEvent first = firstInventoryDataFinal.get();
 										
-										tableLevels.add(lvl);
+										// FM
+										setInventoryLevelFeed(lvl);
+										addToInventoryLevelList(tableLevels, lvl);
 									}
 								});
 							}
@@ -503,8 +513,31 @@ public class InventoryReport extends ViewPart {
 			lvl.runningTotal = total + lvl.changeInM3;
 			total = lvl.runningTotal;
 		}
-
+		
 		tableViewer.setInput(tableLevels);
+	}
+
+	private void addToInventoryLevelList(final List<InventoryLevel> tableLevels, final InventoryLevel lvl) {
+		//can swap with proper search through the list
+		final int i = tableLevels.size();
+		if (i > 0) {
+			final InventoryLevel tlvl = tableLevels.get(i-1);
+			if (tlvl.date.equals(lvl.date)) {
+				tlvl.merge(lvl);
+			} else {
+				tableLevels.add(lvl);
+			}
+		} else {
+			tableLevels.add(lvl);
+		}
+	}
+
+	private void setInventoryLevelFeed(final InventoryLevel lvl) {
+		if (lvl.changeInM3 > 0) {
+			lvl.feedIn = lvl.changeInM3;
+		}else {
+			lvl.feedOut = lvl.changeInM3;
+		}
 	}
 
 	private ILineSeries createSmoothLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
@@ -601,17 +634,41 @@ public class InventoryReport extends ViewPart {
 
 	private static class InventoryLevel {
 
-		public final LocalDate date;
-		public final int changeInM3;
-		public final String type;
-		public final String vessel;
-		public final String dischargeId;
-		public final String dischargePort;
+		public LocalDate date;
+		public int changeInM3; //FM - have to make it reset-able
+		public String type;
+		public String vessel;
+		public String dischargeId;
+		public String dischargePort;
+		public int feedIn = 0; //FM - adding a required field
+		public int feedOut = 0; //FM - adding a required field
+		public int cargoOut = 0; //FM - adding a required field
 
 		public int runningTotal = 0;
 		public boolean breach = false;
 		private String salesContract;
 		private LocalDate salesDate;
+		
+		public String getSalesContract() {
+			return this.salesContract;
+		}
+		
+		public LocalDate getSalesDate() {
+			return this.salesDate;
+		}
+		
+		public void merge(final InventoryLevel lvl) {
+			this.changeInM3 += lvl.changeInM3;
+			this.feedIn += lvl.feedIn;
+			this.feedOut += lvl.feedOut;
+			this.cargoOut += lvl.cargoOut;
+			this.vessel = lvl.vessel != null ? lvl.vessel : this.vessel;
+			this.dischargeId = lvl.dischargeId != null ? lvl.dischargeId : this.dischargeId;
+			this.dischargePort = lvl.dischargePort != null ? lvl.dischargePort : this.dischargePort;
+			this.salesContract = lvl.vessel != null ? lvl.getSalesContract() : this.getSalesContract();
+			this.salesDate = lvl.vessel != null ? lvl.getSalesDate() : this.getSalesDate();
+			this.breach = lvl.breach || this.breach;
+		}
 
 		public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3, final String vessel, final String dischargeId, final String dischargePort, final String salesContract, LocalDate salesDate) {
 			this(date, type.toString(), changeInM3, vessel, dischargeId, dischargePort, salesContract, salesDate);
