@@ -494,7 +494,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 						for (@SuppressWarnings("unused")
 						final ISequenceElement element : there) {
-							final IResource suggestedResource = resourceSuggestion.get(resource);
+							final IResource suggestedResource = resourceSuggestion.get(element);
 							if ((suggestedResource != null) && (suggestedResource != resource)) {
 								continue SECOND_INSERT_LOOP;
 							}

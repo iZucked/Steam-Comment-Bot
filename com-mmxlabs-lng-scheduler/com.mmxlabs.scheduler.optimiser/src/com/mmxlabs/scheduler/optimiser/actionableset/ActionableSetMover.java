@@ -54,7 +54,7 @@ public class ActionableSetMover {
 	private FitnessCalculator fitnessCalculator;
 
 	@Inject
-	public void initSearchProcesses(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialRawSequences) {
+	public void initSearchProcesses(final @NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialRawSequences) {
 
 		// Apply sequence manipulators
 		final IModifiableSequences currentFullSequences = new ModifiableSequences(initialRawSequences);
@@ -71,7 +71,7 @@ public class ActionableSetMover {
 		}
 
 		@Nullable
-		IEvaluationState evaluationState = evaluationHelper.evaluateSequence(currentFullSequences);
+		final IEvaluationState evaluationState = evaluationHelper.evaluateSequence(currentFullSequences);
 		if (evaluationState == null) {
 			throw new IllegalStateException("Unable to evaluate initial state");
 		}
@@ -81,16 +81,16 @@ public class ActionableSetMover {
 
 	}
 
-	public ActionableSetJobState search(@NonNull ActionableSetJobState state, long seed) {
+	public ActionableSetJobState search(@NonNull final ActionableSetJobState state, final long seed) {
 
-		IModifiableSequences rawSequences = new ModifiableSequences(state.getRawSequences());
+		final IModifiableSequences rawSequences = new ModifiableSequences(state.getRawSequences());
 		// String note = (String.format("s: %s move: %s", seed, move));
-		String note = null;
+		final String note = null;
 		final Random random = new Random(seed);
 		// For seed 0->4095 this will always return true, so kick it now it start introducing "more randomness"..
 		random.nextBoolean();
 
-		GuideMoveGeneratorOptions options = new GuideMoveGeneratorOptions();
+		final GuideMoveGeneratorOptions options = new GuideMoveGeneratorOptions();
 		// Only return moves which do not increase lateness/capacity (NOTE - may still allow floating about)
 		options.setCheckingMove(true);
 		options.setExtendSearch(random.nextBoolean());
@@ -105,7 +105,7 @@ public class ActionableSetMover {
 			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 		}
 		final IMove move = p.getMove();
-		HintManager mgr = p.getHintManager();
+		final HintManager mgr = p.getHintManager();
 		// Make sure the generator was able to generate a move
 		if (move == null || move instanceof INullMove) {
 			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
@@ -118,7 +118,6 @@ public class ActionableSetMover {
 
 		// Update potential sequences
 		move.apply(rawSequences);
-		final String moveName = move.getClass().getName();
 
 		// Apply sequence manipulators
 		final IModifiableSequences currentFullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
@@ -132,20 +131,20 @@ public class ActionableSetMover {
 			}
 		}
 
-		long @Nullable [] newMetrics = p.getMetrics();
+		final long @Nullable [] newMetrics = p.getMetrics();
 		if (newMetrics == null) {
 			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 
 		}
 		@Nullable
-		IEvaluationState evaluationState = evaluationHelper.evaluateSequence(currentFullSequences);
+		final IEvaluationState evaluationState = evaluationHelper.evaluateSequence(currentFullSequences);
 		if (evaluationState == null) {
 			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 		}
 
-		long fitness = fitnessCalculator.evaluateSequencesFitness(currentFullSequences, evaluationState, move.getAffectedResources());
+		final long fitness = fitnessCalculator.evaluateSequencesFitness(currentFullSequences, evaluationState, move.getAffectedResources());
 
-		ActionableSetJobState s = new ActionableSetJobState(rawSequences, fitness, newMetrics, ActionableSetJobState.Status.Pass, seed, note, state);
+		final ActionableSetJobState s = new ActionableSetJobState(rawSequences, fitness, newMetrics, ActionableSetJobState.Status.Pass, seed, note, state);
 		mgr.getUsedElements().forEach(e -> s.addUsedElements(e));
 		return s;
 	}

@@ -52,14 +52,10 @@ public class ChangeChecker {
 
 	private List<Difference> findAllDifferences(final ISequences rawSequences) {
 		final List<Difference> differences = new ArrayList<>();
-		int differenceCount = 0;
-		boolean different = false;
 		for (final IResource resource : rawSequences.getResources()) {
 			final ISequence sequence = rawSequences.getSequence(resource);
 			ISequenceElement prev = null;
-			int currIdx = -1;
 			for (final ISequenceElement current : sequence) {
-				currIdx++;
 				if (prev != null) {
 					// Currently only looking at LD style cargoes
 					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
@@ -109,8 +105,6 @@ public class ChangeChecker {
 						if (!wiringChange) {
 							assert prev != null;
 							if (target.getResourceForElement(prev) == null || target.getResourceForElement(prev) != resource) {
-								different = true;
-								differenceCount++;
 								// System.out.println("prev:"+prev);
 								// System.out.println("current:"+current);
 								// System.out.println("md:"+matchedDischarge);
@@ -138,6 +132,7 @@ public class ChangeChecker {
 		final Deque<ISequenceElement> unusedElements = new LinkedList<>(rawSequences.getUnusedElements());
 		while (!unusedElements.isEmpty()) {
 			final ISequenceElement element = unusedElements.pop();
+			assert element != null;
 			if (portTypeProvider.getPortType(element).equals(PortType.Load) && target.getDischargeForLoad(element) != null) {
 				differences.add(new Difference(DifferenceType.LOAD_UNUSED_IN_BASE, element, null, null));
 			} else if (portTypeProvider.getPortType(element).equals(PortType.Discharge) && target.getLoadForDischarge(element) != null) {
