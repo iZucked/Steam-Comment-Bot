@@ -94,4 +94,6 @@ public interface EObjectWrapper extends EObject {
 
 	boolean isSetFeature(String name);
 
+	double getAttribAsDouble(String name);
+
 }

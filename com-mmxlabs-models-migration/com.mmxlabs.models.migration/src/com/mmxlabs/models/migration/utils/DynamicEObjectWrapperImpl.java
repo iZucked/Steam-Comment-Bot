@@ -59,7 +59,7 @@ public class DynamicEObjectWrapperImpl extends DynamicEObjectImpl implements EOb
 	public boolean hasFeature(final String name) {
 		return eClass().getEStructuralFeature(name) != null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAttrib(final String name) {
@@ -85,6 +85,15 @@ public class DynamicEObjectWrapperImpl extends DynamicEObjectImpl implements EOb
 		assert !feature.isMany();
 		assert feature.getEType() == EcorePackage.Literals.EBOOLEAN;
 		return (Boolean) eGet(feature);
+	}
+
+	@Override
+	public double getAttribAsDouble(final String name) {
+		final EAttribute feature = (EAttribute) eClass().getEStructuralFeature(name);
+		assert feature != null;
+		assert !feature.isMany();
+		assert feature.getEType() == EcorePackage.Literals.EDOUBLE;
+		return (Double) eGet(feature);
 	}
 
 	@SuppressWarnings("unchecked")
