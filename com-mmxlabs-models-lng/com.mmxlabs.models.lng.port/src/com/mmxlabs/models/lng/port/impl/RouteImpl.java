@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.port.impl;
 
 import com.mmxlabs.models.lng.port.EntryPoint;
+import com.mmxlabs.models.lng.port.Port;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -34,8 +35,10 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRouteOption <em>Route Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getVirtualPort <em>Virtual Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getNorthEntrance <em>North Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getSouthEntrance <em>South Entrance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getDistance <em>Distance</em>}</li>
  * </ul>
  *
  * @generated
@@ -92,6 +95,16 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getVirtualPort() <em>Virtual Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVirtualPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port virtualPort;
+
+	/**
 	 * The cached value of the '{@link #getNorthEntrance() <em>North Entrance</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -110,6 +123,26 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * @ordered
 	 */
 	protected EntryPoint southEntrance;
+
+	/**
+	 * The default value of the '{@link #getDistance() <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double DISTANCE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getDistance() <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistance()
+	 * @generated
+	 * @ordered
+	 */
+	protected double distance = DISTANCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -182,6 +215,44 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ROUTE_OPTION, oldRouteOption, routeOption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port getVirtualPort() {
+		if (virtualPort != null && virtualPort.eIsProxy()) {
+			InternalEObject oldVirtualPort = (InternalEObject)virtualPort;
+			virtualPort = (Port)eResolveProxy(oldVirtualPort);
+			if (virtualPort != oldVirtualPort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.ROUTE__VIRTUAL_PORT, oldVirtualPort, virtualPort));
+			}
+		}
+		return virtualPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetVirtualPort() {
+		return virtualPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVirtualPort(Port newVirtualPort) {
+		Port oldVirtualPort = virtualPort;
+		virtualPort = newVirtualPort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__VIRTUAL_PORT, oldVirtualPort, virtualPort));
 	}
 
 	/**
@@ -275,6 +346,27 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getDistance() {
+		return distance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDistance(double newDistance) {
+		double oldDistance = distance;
+		distance = newDistance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__DISTANCE, oldDistance, distance));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -302,10 +394,15 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return getLines();
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				return getRouteOption();
+			case PortPackage.ROUTE__VIRTUAL_PORT:
+				if (resolve) return getVirtualPort();
+				return basicGetVirtualPort();
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				return getNorthEntrance();
 			case PortPackage.ROUTE__SOUTH_ENTRANCE:
 				return getSouthEntrance();
+			case PortPackage.ROUTE__DISTANCE:
+				return getDistance();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -329,11 +426,17 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				setRouteOption((RouteOption)newValue);
 				return;
+			case PortPackage.ROUTE__VIRTUAL_PORT:
+				setVirtualPort((Port)newValue);
+				return;
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				setNorthEntrance((EntryPoint)newValue);
 				return;
 			case PortPackage.ROUTE__SOUTH_ENTRANCE:
 				setSouthEntrance((EntryPoint)newValue);
+				return;
+			case PortPackage.ROUTE__DISTANCE:
+				setDistance((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -356,11 +459,17 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				setRouteOption(ROUTE_OPTION_EDEFAULT);
 				return;
+			case PortPackage.ROUTE__VIRTUAL_PORT:
+				setVirtualPort((Port)null);
+				return;
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				setNorthEntrance((EntryPoint)null);
 				return;
 			case PortPackage.ROUTE__SOUTH_ENTRANCE:
 				setSouthEntrance((EntryPoint)null);
+				return;
+			case PortPackage.ROUTE__DISTANCE:
+				setDistance(DISTANCE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -380,10 +489,14 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return lines != null && !lines.isEmpty();
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				return routeOption != ROUTE_OPTION_EDEFAULT;
+			case PortPackage.ROUTE__VIRTUAL_PORT:
+				return virtualPort != null;
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				return northEntrance != null;
 			case PortPackage.ROUTE__SOUTH_ENTRANCE:
 				return southEntrance != null;
+			case PortPackage.ROUTE__DISTANCE:
+				return distance != DISTANCE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

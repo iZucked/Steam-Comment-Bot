@@ -45,6 +45,7 @@ public class UpstreamDistancesFetcher {
 
 	/**
 	 * Returns the latest version of the distances
+	 * 
 	 * @param url
 	 * @param username
 	 * @param password
@@ -54,13 +55,14 @@ public class UpstreamDistancesFetcher {
 	 * @throws ParseException
 	 * @throws AuthenticationException
 	 */
-	public static Map<Via, Map<String, Map<String, Integer>>> getDistances(String baseUrl, String username, String password) throws ClientProtocolException, IOException, ParseException, AuthenticationException {
+	public static Map<Via, Map<String, Map<String, Double>>> getDistances(String baseUrl, String username, String password)
+			throws ClientProtocolException, IOException, ParseException, AuthenticationException {
 		return getDistances(baseUrl, null, username, password);
 	}
-	
-	
+
 	/**
 	 * Returns a specific version of the distances
+	 * 
 	 * @param baseUrl
 	 * @param version
 	 * @param username
@@ -71,18 +73,18 @@ public class UpstreamDistancesFetcher {
 	 * @throws ParseException
 	 * @throws AuthenticationException
 	 */
-	public static Map<Via, Map<String, Map<String, Integer>>> getDistances(String baseUrl, String version, String username, String password) throws ClientProtocolException, IOException, ParseException, AuthenticationException {
-		Map<Via, Map<String, Map<String, Integer>>> result = new EnumMap<>(Via.class);
+	public static Map<Via, Map<String, Map<String, Double>>> getDistances(String baseUrl, String version, String username, String password)
+			throws ClientProtocolException, IOException, ParseException, AuthenticationException {
+		Map<Via, Map<String, Map<String, Double>>> result = new EnumMap<>(Via.class);
 
-		
 		for (Entry<Via, String> ro : routeOpt.entrySet()) {
 			List<String> requestArgs = new LinkedList<>();
 			if (!ro.getValue().isEmpty()) {
 				requestArgs.add(ro.getValue());
 			}
 			requestArgs.add("v=" + version);
-			String url = baseUrl + DISTANCES_URL + "?" + Joiner.on("&").join(requestArgs) ;
-			
+			String url = baseUrl + DISTANCES_URL + "?" + Joiner.on("&").join(requestArgs);
+
 			String rawJSON = UrlFetcher.fetchURLContent(url, username, password);
 			JSONParser parser = new JSONParser();
 
@@ -96,17 +98,17 @@ public class UpstreamDistancesFetcher {
 		return result;
 	}
 
-	private static Map<String, Map<String, Integer>> createMatrix(Map<String, Object> distancesMap) {
-		Map<String, Map<String, Integer>> routeMap = new HashMap<String, Map<String, Integer>>();
+	private static Map<String, Map<String, Double>> createMatrix(Map<String, Object> distancesMap) {
+		Map<String, Map<String, Double>> routeMap = new HashMap<>();
 		for (Entry<String, Object> src : distancesMap.entrySet()) {
 			Map<String, Object> destinations = (Map<String, Object>) src.getValue();
-			routeMap.put(src.getKey(), new HashMap<String, Integer>());
+			routeMap.put(src.getKey(), new HashMap<String, Double>());
 
 			for (Entry<String, Object> dst : destinations.entrySet()) {
 				String distStr = (String) dst.getValue();
 				try {
-					float dist = Float.parseFloat(distStr);
-					routeMap.get(src.getKey()).put(dst.getKey(), Math.round(dist));
+					double dist = Double.parseDouble(distStr);
+					routeMap.get(src.getKey()).put(dst.getKey(), dist);
 				} catch (NumberFormatException e) {
 					// too many occurrences for logging
 					// LOGGER.info("Could not parse distance" + src.getKey() + " > " + dst.getKey() + ": " + distStr);

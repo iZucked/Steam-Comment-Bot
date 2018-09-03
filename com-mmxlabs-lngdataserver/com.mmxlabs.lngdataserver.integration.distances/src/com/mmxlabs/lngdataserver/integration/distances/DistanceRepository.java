@@ -122,7 +122,7 @@ public class DistanceRepository extends AbstractDataRepository {
 
 		try {
 
-			final Map<Via, Map<String, Map<String, Integer>>> result = UpstreamDistancesFetcher.getDistances(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
+			final Map<Via, Map<String, Map<String, Double>>> result = UpstreamDistancesFetcher.getDistances(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
 			return new DefaultDistanceProvider(version, result);
 		} catch (AuthenticationException | IOException | ParseException e) {
 			LOG.error("Error fetching versions from upstream service", e);
@@ -152,7 +152,7 @@ public class DistanceRepository extends AbstractDataRepository {
 		final String version = versions.get(0).getIdentifier();
 
 		try {
-			final Map<Via, Map<String, Map<String, Integer>>> result = UpstreamDistancesFetcher.getDistances(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
+			final Map<Via, Map<String, Map<String, Double>>> result = UpstreamDistancesFetcher.getDistances(BackEndUrlProvider.INSTANCE.getUrl(), version, "", "");
 			return new DefaultDistanceProvider(version, result);
 		} catch (AuthenticationException | IOException | ParseException e) {
 			LOG.error("Error fetching versions from upstream service", e);

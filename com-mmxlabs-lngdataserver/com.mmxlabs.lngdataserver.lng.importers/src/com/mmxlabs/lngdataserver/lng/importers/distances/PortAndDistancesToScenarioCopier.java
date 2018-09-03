@@ -26,6 +26,7 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
 import com.mmxlabs.lngdataserver.integration.distances.ILocationProvider;
 import com.mmxlabs.lngdataserver.integration.distances.UpstreamRoutingPointFetcher;
+import com.mmxlabs.lngdataserver.integration.distances.UpstreamRoutingPointFetcher.CanalInfo;
 import com.mmxlabs.lngdataserver.integration.distances.exceptions.LocationNotFoundException;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
 import com.mmxlabs.models.lng.port.EntryPoint;
@@ -112,7 +113,7 @@ public class PortAndDistancesToScenarioCopier {
 			cmd.append(DeleteCommand.create(editingDomain, portsToRemove));
 		}
 
-		List<Triple<String, String, String>> routingPoints;
+		List<CanalInfo> routingPoints;
 		try {
 			routingPoints = UpstreamRoutingPointFetcher.getRoutingPoints(BackEndUrlProvider.INSTANCE.getUrl(), distanceProvider.getVersion(), "", "");
 		} catch (Exception e1) {
@@ -148,6 +149,7 @@ public class PortAndDistancesToScenarioCopier {
 			} else {
 				cmd.append(RemoveCommand.create(editingDomain, route, PortPackage.Literals.ROUTE__LINES, route.getLines()));
 			}
+
 			final List<RouteLine> toAdd = new LinkedList<>();
 
 			for (final Port from : allPorts) {
@@ -162,8 +164,8 @@ public class PortAndDistancesToScenarioCopier {
 					try {
 						Location fromLoc = from.getLocation();
 						Location toLoc = to.getLocation();
-						final int distance = distanceProvider.getDistance(fromLoc.getMmxId(), toLoc.getMmxId(), ViaKeyMapper.mapVia(route));
-						if (distance != Integer.MAX_VALUE) {
+						final double distance = distanceProvider.getDistance(fromLoc.getMmxId(), toLoc.getMmxId(), ViaKeyMapper.mapVia(route));
+						if (distance != Double.MAX_VALUE) {
 							rl.setDistance(distance);
 							toAdd.add(rl);
 						}
@@ -177,12 +179,13 @@ public class PortAndDistancesToScenarioCopier {
 			}
 
 			if (option != RouteOption.DIRECT) {
+				cmd.append(SetCommand.create(editingDomain, route, PortPackage.Literals.ROUTE__DISTANCE, route.getDistance()));
 
-				for (Triple<String, String, String> t : routingPoints) {
-					String northSide = t.getSecond();
-					String southSide = t.getThird();
-					if (option == RouteOption.SUEZ && t.getFirst().equals("SUZ") || option == RouteOption.PANAMA && t.getFirst().equals("PAN")) {
-
+				for (CanalInfo t : routingPoints) {
+					String northSide = t.northernEntryId;
+					String southSide = t.southernEntryId;
+					if (option == RouteOption.SUEZ && t.rpName.equals("SUZ") || option == RouteOption.PANAMA && t.rpName.equals("PAN")) {
+						cmd.append(SetCommand.create(editingDomain, route, PortPackage.Literals.ROUTE__VIRTUAL_PORT, idToPort.get(t.virtualLocationId)));
 						{
 							EntryPoint north = route.getNorthEntrance();
 							if (north == null) {

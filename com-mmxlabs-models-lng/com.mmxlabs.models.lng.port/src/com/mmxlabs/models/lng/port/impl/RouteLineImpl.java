@@ -57,7 +57,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int DISTANCE_EDEFAULT = 0;
+	protected static final double DISTANCE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getDistance() <em>Distance</em>}' attribute.
@@ -67,7 +67,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * @generated
 	 * @ordered
 	 */
-	protected int distance = DISTANCE_EDEFAULT;
+	protected double distance = DISTANCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -169,7 +169,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 
@@ -178,8 +178,8 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDistance(int newDistance) {
-		int oldDistance = distance;
+	public void setDistance(double newDistance) {
+		double oldDistance = distance;
 		distance = newDistance;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE_LINE__DISTANCE, oldDistance, distance));
@@ -221,7 +221,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 				setTo((Port)newValue);
 				return;
 			case PortPackage.ROUTE_LINE__DISTANCE:
-				setDistance((Integer)newValue);
+				setDistance((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -275,7 +275,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (distance: ");
 		result.append(distance);
 		result.append(')');

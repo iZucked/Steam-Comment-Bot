@@ -33,8 +33,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -51,7 +54,6 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 public class DistanceEditorComposite extends DefaultDetailComposite {
 	public DistanceEditorComposite(Composite parent, int style, FormToolkit toolkit) {
 		super(parent, style, toolkit);
-		// TODO Auto-generated constructor stub
 	}
 
 	private static final String DISTANCE_EDITOR_TOOLBAR_ID = "toolbar:com.mmxlabs.models.lng.port.ui.distanceeditor.toolbar";
@@ -65,15 +67,16 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 
 	@Override
 	public void createControls(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject dm, final EMFDataBindingContext dbc) {
-
+		if (object instanceof Route && ((Route) object).getRouteOption() != RouteOption.DIRECT) {
+			super.createControls(dialogContext, root, dm, dbc);
+		}
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 		sel.getReferenceValueProviderCache();
 		this.editingDomain = sel.getEditingDomain();
-		currentEditingDomain = new WeakReference<EditingDomain>(editingDomain);
+		currentEditingDomain = new WeakReference<>(editingDomain);
 		this.distanceModel = (Route) dm;
-		// currentDistanceModel = new WeakReference<Route>(distanceModel);
 		this.rootObject = (LNGScenarioModel) sel.getRootObject();
-		currentPortModel = new WeakReference<PortModel>(rootObject.getReferenceModel().getPortModel());
+		currentPortModel = new WeakReference<>(rootObject.getReferenceModel().getPortModel());
 
 		final Composite c2 = new Composite(this, SWT.NONE) {
 
@@ -186,7 +189,7 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 		viewer.setInput(distanceModel);
 
 		viewer.refresh();
-		c2.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		c2.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
 
 		final GridLayout cLayout = (GridLayout) this.getLayout();
 
@@ -250,17 +253,20 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 
 	@Override
 	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject object, Collection<EObject> range, EMFDataBindingContext dbc) {
-		// TODO Auto-generated method stub
 		final EClass eClass = object.eClass();
 		this.object = object;
 		setLayout(layoutProvider.createDetailLayout(root, object));
-		// if (eClass != displayedClass) {
-		// clear();
-		// initialize(eClass);
-		createControls(dialogContext, root, object, dbc);
-		// }
-		for (final IInlineEditor editor : editors) {
-			// editor.display(dialogContext, root, object, range);
+		if (eClass != displayedClass) {
+			clear();
+			if (object instanceof Route && ((Route) object).getRouteOption() != RouteOption.DIRECT) {
+				initialize(eClass);
+			}
+			createControls(dialogContext, root, object, dbc);
+		}
+		if (object instanceof Route && ((Route) object).getRouteOption() != RouteOption.DIRECT) {
+			for (final IInlineEditor editor : editors) {
+				editor.display(dialogContext, root, object, range);
+			}
 		}
 		checkVisibility(dialogContext);
 
@@ -268,5 +274,20 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 
 		viewer.refresh();
 
+	}
+
+	@Override
+	public @Nullable IInlineEditor addInlineEditor(IInlineEditor editor) {
+		if (editor == null) {
+			return null;
+		}
+		if (editor.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+			return null;
+		}
+		if (editor.getFeature() == PortPackage.eINSTANCE.getRoute_RouteOption()) {
+			return null;
+		}
+
+		return super.addInlineEditor(editor);
 	}
 }

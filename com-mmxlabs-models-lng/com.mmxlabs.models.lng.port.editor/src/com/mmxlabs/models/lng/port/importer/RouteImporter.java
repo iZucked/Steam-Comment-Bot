@@ -132,13 +132,13 @@ public class RouteImporter {
 	 * @return
 	 */
 	public Collection<Map<String, String>> exportRoute(final Route r, IExportContext context) {
-		final Map<String, Map<String, String>> rows = new TreeMap<String, Map<String, String>>();
+		final Map<String, Map<String, String>> rows = new TreeMap<>();
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
 		for (final RouteLine line : r.getLines()) {
 			Map<String, String> row = rows.get(line.getFrom().getName());
 			if (row == null) {
-				row = new TreeMap<String, String>(new Comparator<String>() {
+				row = new TreeMap<>(new Comparator<String>() {
 					@Override
 					public int compare(final String o1, final String o2) {
 
@@ -163,10 +163,10 @@ public class RouteImporter {
 
 			}
 
-			row.put(line.getTo().getName(), nai.intToString(line.getDistance(), PortPackage.Literals.ROUTE_LINE__DISTANCE));
+			row.put(line.getTo().getName(), nai.doubleToString(line.getDistance(), PortPackage.Literals.ROUTE_LINE__DISTANCE));
 		}
 
-		final ArrayList<Map<String, String>> result = new ArrayList<Map<String, String>>(rows.values());
+		final ArrayList<Map<String, String>> result = new ArrayList<>(rows.values());
 		return result;
 	}
 }

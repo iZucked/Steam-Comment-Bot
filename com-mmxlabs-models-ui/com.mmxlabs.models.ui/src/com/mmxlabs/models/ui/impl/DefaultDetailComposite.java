@@ -42,7 +42,7 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 public class DefaultDetailComposite extends Composite implements IInlineEditorContainer, IDisplayComposite {
 
 	private ICommandHandler commandHandler;
-	private EClass displayedClass;
+	protected EClass displayedClass;
 	protected IDisplayCompositeLayoutProvider layoutProvider = createLayoutProvider();
 	private IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
 	/**
@@ -62,7 +62,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		return new DefaultDisplayCompositeLayoutProvider();
 	}
 
-	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
+	protected final LinkedList<IInlineEditor> editors = new LinkedList<>();
 	protected EObject object;
 
 	/**
@@ -136,7 +136,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		checkVisibility(dialogContext);
 	}
 
-	private void clear() {
+	protected void clear() {
 		editors.clear();
 		for (final Control c : getChildren()) {
 			c.dispose();
@@ -144,7 +144,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		// dialogContext -> removeControl
 	}
 
-	private void initialize(final EClass eClass) {
+	protected void initialize(final EClass eClass) {
 		this.displayedClass = eClass;
 		final List<IComponentHelper> helpers = Activator.getDefault().getComponentHelperRegistry().getComponentHelpers(displayedClass);
 		for (final IComponentHelper helper : helpers) {

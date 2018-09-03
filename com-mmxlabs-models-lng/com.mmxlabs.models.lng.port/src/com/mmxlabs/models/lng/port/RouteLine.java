@@ -86,12 +86,12 @@ public interface RouteLine extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Distance</em>' attribute.
-	 * @see #setDistance(int)
+	 * @see #setDistance(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getRouteLine_Distance()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getDistance();
+	double getDistance();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.RouteLine#getDistance <em>Distance</em>}' attribute.
@@ -101,6 +101,6 @@ public interface RouteLine extends MMXObject {
 	 * @see #getDistance()
 	 * @generated
 	 */
-	void setDistance(int value);
+	void setDistance(double value);
 
 } // RouteLine

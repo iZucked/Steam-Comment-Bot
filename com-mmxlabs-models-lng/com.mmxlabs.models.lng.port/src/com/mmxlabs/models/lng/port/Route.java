@@ -20,8 +20,10 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getRouteOption <em>Route Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getVirtualPort <em>Virtual Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getNorthEntrance <em>North Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getSouthEntrance <em>South Entrance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getDistance <em>Distance</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getRoute()
@@ -75,6 +77,32 @@ public interface Route extends NamedObject, UUIDObject {
 	void setRouteOption(RouteOption value);
 
 	/**
+	 * Returns the value of the '<em><b>Virtual Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Virtual Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Virtual Port</em>' reference.
+	 * @see #setVirtualPort(Port)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_VirtualPort()
+	 * @model
+	 * @generated
+	 */
+	Port getVirtualPort();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getVirtualPort <em>Virtual Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Virtual Port</em>' reference.
+	 * @see #getVirtualPort()
+	 * @generated
+	 */
+	void setVirtualPort(Port value);
+
+	/**
 	 * Returns the value of the '<em><b>North Entrance</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -125,5 +153,31 @@ public interface Route extends NamedObject, UUIDObject {
 	 * @generated
 	 */
 	void setSouthEntrance(EntryPoint value);
+
+	/**
+	 * Returns the value of the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Distance</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Distance</em>' attribute.
+	 * @see #setDistance(double)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_Distance()
+	 * @model required="true"
+	 * @generated
+	 */
+	double getDistance();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getDistance <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Distance</em>' attribute.
+	 * @see #getDistance()
+	 * @generated
+	 */
+	void setDistance(double value);
 
 } // Route

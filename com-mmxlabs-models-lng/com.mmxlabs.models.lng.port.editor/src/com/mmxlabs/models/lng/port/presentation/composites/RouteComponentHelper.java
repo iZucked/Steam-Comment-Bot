@@ -67,8 +67,10 @@ public class RouteComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_linesEditor(detailComposite, topClass);
 		add_routeOptionEditor(detailComposite, topClass);
+		add_virtualPortEditor(detailComposite, topClass);
 		add_northEntranceEditor(detailComposite, topClass);
 		add_southEntranceEditor(detailComposite, topClass);
+		add_distanceEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the lines feature on Route
@@ -89,6 +91,15 @@ public class RouteComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the virtualPort feature on Route
+	 *
+	 * @generated
+	 */
+	protected void add_virtualPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__VIRTUAL_PORT));
+	}
+
+	/**
 	 * Create the editor for the northEntrance feature on Route
 	 *
 	 * @generated
@@ -104,5 +115,14 @@ public class RouteComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_southEntranceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__SOUTH_ENTRANCE));
+	}
+
+	/**
+	 * Create the editor for the distance feature on Route
+	 *
+	 * @generated
+	 */
+	protected void add_distanceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__DISTANCE));
 	}
 }

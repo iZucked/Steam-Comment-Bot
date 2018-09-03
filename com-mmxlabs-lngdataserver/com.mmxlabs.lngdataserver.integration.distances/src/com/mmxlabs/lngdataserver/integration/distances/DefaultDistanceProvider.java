@@ -15,10 +15,10 @@ import org.eclipse.jdt.annotation.NonNull;
 
 public class DefaultDistanceProvider implements IDistanceProvider {
 	private final @NonNull String version;
-	private final @NonNull Map<Via, Map<String, Map<String, Integer>>> distances;
+	private final @NonNull Map<Via, Map<String, Map<String, Double>>> distances;
 	private final @NonNull Set<@NonNull String> knownPorts;
 
-	public DefaultDistanceProvider(@NonNull final String version, @NonNull final Map<Via, Map<String, Map<String, Integer>>> distances) {
+	public DefaultDistanceProvider(@NonNull final String version, @NonNull final Map<Via, Map<String, Map<String, Double>>> distances) {
 		this.version = version;
 		this.distances = distances;
 		final Set<String> tmpKnownPorts = new HashSet<>();
@@ -37,13 +37,13 @@ public class DefaultDistanceProvider implements IDistanceProvider {
 	}
 
 	@Override
-	public int getDistance(@NonNull final String from, @NonNull final String to, @NonNull final Via route) {
+	public double getDistance(@NonNull final String from, @NonNull final String to, @NonNull final Via route) {
 
 		if (distances.containsKey(route)) {
-			final Map<String, Map<String, Integer>> map = distances.get(route);
+			final Map<String, Map<String, Double>> map = distances.get(route);
 			if (map.containsKey(from)) {
-				final Map<String, Integer> map2 = map.get(from);
-				return map2.getOrDefault(to, Integer.MAX_VALUE);
+				final Map<String, Double> map2 = map.get(from);
+				return map2.getOrDefault(to, Double.MAX_VALUE);
 			}
 		}
 		return Integer.MAX_VALUE;

@@ -53,10 +53,10 @@ public class FetchUpstreamTests {
 
 	@Test
 	public void fetchDistancesTest() throws AuthenticationException, ClientProtocolException, IOException, ParseException {
-		Map<Via, Map<String, Map<String, Integer>>> distances = UpstreamDistancesFetcher.getDistances(SERVICE_URL, "user", "pw");
-		assertEquals(Integer.valueOf(15847), distances.get(Via.Direct).get("L_US_Sabin").get("L_JP_Himej"));
-		assertEquals(Integer.valueOf(9631), distances.get(Via.PanamaCanal).get("L_US_Sabin").get("L_JP_Himej"));
-		assertEquals(Integer.valueOf(14957), distances.get(Via.SuezCanal).get("L_US_Sabin").get("L_JP_Himej"));
+		Map<Via, Map<String, Map<String, Double>>> distances = UpstreamDistancesFetcher.getDistances(SERVICE_URL, "user", "pw");
+		assertEquals(Double.valueOf(15847.0), distances.get(Via.Direct).get("L_US_Sabin").get("L_JP_Himej"));
+		assertEquals(Double.valueOf(9631.0), distances.get(Via.PanamaCanal).get("L_US_Sabin").get("L_JP_Himej"));
+		assertEquals(Double.valueOf(14957.0), distances.get(Via.SuezCanal).get("L_US_Sabin").get("L_JP_Himej"));
 	}
 
 	@Test

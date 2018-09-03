@@ -17,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.http.UrlFetcher;
 import com.mmxlabs.common.json.JSONConverter;
 
@@ -39,9 +38,24 @@ public class UpstreamRoutingPointFetcher {
 	 * @throws ParseException
 	 * @throws AuthenticationException
 	 */
-	public static List<Triple<String, String, String>> getRoutingPoints(final String baseUrl, final String username, final String password)
-			throws ClientProtocolException, IOException, ParseException, AuthenticationException {
+	public static List<CanalInfo> getRoutingPoints(final String baseUrl, final String username, final String password) throws IOException, ParseException, AuthenticationException {
 		return getRoutingPoints(baseUrl, null, username, password);
+	}
+
+	public static final class CanalInfo {
+
+		public final String rpName;
+		public final String northernEntryId;;
+		public final String southernEntryId;
+		public final String virtualLocationId;
+
+		public CanalInfo(final String rpName, final String northernEntryId, final String southernEntryId, final String virtualLocationId) {
+			this.rpName = rpName;
+			this.northernEntryId = northernEntryId;
+			this.southernEntryId = southernEntryId;
+			this.virtualLocationId = virtualLocationId;
+
+		}
 	}
 
 	/**
@@ -57,9 +71,9 @@ public class UpstreamRoutingPointFetcher {
 	 * @throws ParseException
 	 * @throws AuthenticationException
 	 */
-	public static List<Triple<String, String, String>> getRoutingPoints(final String baseUrl, final String version, final String username, final String password)
-			throws ClientProtocolException, IOException, ParseException, AuthenticationException {
-		final List<Triple<String, String, String>> result = new ArrayList<>();
+	public static List<CanalInfo> getRoutingPoints(final String baseUrl, final String version, final String username, final String password)
+			throws IOException, ParseException, AuthenticationException {
+		final List<CanalInfo> result = new ArrayList<>();
 
 		String url = baseUrl + CANALS_URL;
 		if (version != null) {
@@ -85,8 +99,9 @@ public class UpstreamRoutingPointFetcher {
 			final String rpName = (String) currentMap.get("identifier");
 			final String north = (String) currentMap.get("northernEntry");
 			final String south = (String) currentMap.get("southernEntry");
+			final String virtualId = (String) ((Map) currentMap.get("virtualLocation")).get("mmxId");
 
-			result.add(new Triple<>(rpName, north, south));
+			result.add(new CanalInfo(rpName, north, south, virtualId));
 		}
 
 		return result;

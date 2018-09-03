@@ -88,7 +88,7 @@ public class ContingencyMatrixEntryItemProvider
 				 PortPackage.Literals.CONTINGENCY_MATRIX_ENTRY__FROM_PORT,
 				 true,
 				 false,
-				 false,
+				 true,
 				 null,
 				 null,
 				 null));
@@ -110,7 +110,7 @@ public class ContingencyMatrixEntryItemProvider
 				 PortPackage.Literals.CONTINGENCY_MATRIX_ENTRY__TO_PORT,
 				 true,
 				 false,
-				 false,
+				 true,
 				 null,
 				 null,
 				 null));
@@ -174,8 +174,6 @@ public class ContingencyMatrixEntryItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ContingencyMatrixEntry.class)) {
-			case PortPackage.CONTINGENCY_MATRIX_ENTRY__FROM_PORT:
-			case PortPackage.CONTINGENCY_MATRIX_ENTRY__TO_PORT:
 			case PortPackage.CONTINGENCY_MATRIX_ENTRY__DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

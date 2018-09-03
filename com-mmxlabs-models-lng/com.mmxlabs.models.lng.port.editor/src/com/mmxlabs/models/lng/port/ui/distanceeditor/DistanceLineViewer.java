@@ -168,11 +168,11 @@ public class DistanceLineViewer extends GridTableViewer {
 							dl = PortFactory.eINSTANCE.createRouteLine();
 							dl.setFrom(e.getFirst());
 							dl.setTo(p);
-							dl.setDistance(Integer.parseInt(stringValue));
+							dl.setDistance(Double.parseDouble(stringValue));
 							e.getSecond().put(p, dl);
 							command = AddCommand.create(editingDomain, getInput(), PortPackage.eINSTANCE.getRoute_Lines(), dl);
 						} else {
-							command = SetCommand.create(editingDomain, dl, PortPackage.eINSTANCE.getRouteLine_Distance(), Integer.parseInt(stringValue));
+							command = SetCommand.create(editingDomain, dl, PortPackage.eINSTANCE.getRouteLine_Distance(), Double.parseDouble(stringValue));
 						}
 					}
 					command.execute();
@@ -186,7 +186,7 @@ public class DistanceLineViewer extends GridTableViewer {
 					if (dl == null) {
 						return "";
 					}
-					return Integer.toString(dl.getDistance());
+					return Double.toString(dl.getDistance());
 				}
 
 				@Override
@@ -201,13 +201,13 @@ public class DistanceLineViewer extends GridTableViewer {
 								return null;
 							}
 							try {
-								final int i = Integer.parseInt(s);
-								if (i < 0) {
+								final double i = Double.parseDouble(s);
+								if (i < 0.0) {
 									return s + " is negative";
 								}
 								return null;
 							} catch (final NumberFormatException nfe) {
-								return s + " is not an integer";
+								return s + " is not a double";
 							}
 						}
 					});

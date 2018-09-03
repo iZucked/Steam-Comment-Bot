@@ -13,7 +13,7 @@ public interface IDistanceProvider {
 
 	String getVersion();
 
-	int getDistance(String from, String to, Via route);
+	double getDistance(String from, String to, Via route);
 
 	/**
 	 * Return a Collection of identifiers used as from or to ports.

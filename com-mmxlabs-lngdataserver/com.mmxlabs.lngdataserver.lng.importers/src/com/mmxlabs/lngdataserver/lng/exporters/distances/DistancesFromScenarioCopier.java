@@ -36,8 +36,8 @@ public class DistancesFromScenarioCopier {
 
 		final Version version = new Version();
 
-		int suezDistance = 0;
-		int panamaDistance = 0;
+		double suezDistance = 0;
+		double panamaDistance = 0;
 
 		String suezNorth = null;
 		String suezSouth = null;
@@ -70,7 +70,7 @@ public class DistancesFromScenarioCopier {
 				}
 
 				final Route versionRoute = new Route();
-				versionRoute.setDistance(Float.valueOf(l.getDistance()));
+				versionRoute.setDistance(Double.valueOf(l.getDistance()).floatValue());
 				routes.putRoutesItem(String.format("%s>%s", from, to), versionRoute);
 
 				if (from.equals(suezNorth) && to.equals(suezSouth)) {
@@ -152,7 +152,7 @@ public class DistancesFromScenarioCopier {
 			rp.setNorthernEntry(suezNorthernLocation);
 			rp.setSouthernEntry(suezSouthernLocation);
 			rp.setIdentifier("SUZ");
-			rp.setDistance(Float.valueOf(suezDistance));
+			rp.setDistance(Double.valueOf(suezDistance).floatValue());
 
 			routingPoints.add(rp);
 		}
@@ -163,7 +163,7 @@ public class DistancesFromScenarioCopier {
 			rp.setNorthernEntry(panamaNorthernLocation);
 			rp.setSouthernEntry(panamaSouthernLocation);
 			rp.setIdentifier("PAN");
-			rp.setDistance(Float.valueOf(panamaDistance));
+			rp.setDistance(Double.valueOf(panamaDistance).floatValue());
 
 			routingPoints.add(rp);
 		}

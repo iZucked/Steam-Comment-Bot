@@ -289,13 +289,22 @@ public interface PortPackage extends EPackage {
 	int ROUTE__ROUTE_OPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Virtual Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__VIRTUAL_PORT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>North Entrance</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__NORTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int ROUTE__NORTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>South Entrance</b></em>' containment reference.
@@ -304,7 +313,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__SOUTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int ROUTE__SOUTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__DISTANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Route</em>' class.
@@ -313,7 +331,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
@@ -1072,6 +1090,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getRoute_RouteOption();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.port.Route#getVirtualPort <em>Virtual Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Virtual Port</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getVirtualPort()
+	 * @see #getRoute()
+	 * @generated
+	 */
+	EReference getRoute_VirtualPort();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Route#getNorthEntrance <em>North Entrance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1092,6 +1121,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRoute_SouthEntrance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Route#getDistance <em>Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Distance</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getDistance()
+	 * @see #getRoute()
+	 * @generated
+	 */
+	EAttribute getRoute_Distance();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortGroup <em>Group</em>}'.
@@ -1638,6 +1678,14 @@ public interface PortPackage extends EPackage {
 		EAttribute ROUTE__ROUTE_OPTION = eINSTANCE.getRoute_RouteOption();
 
 		/**
+		 * The meta object literal for the '<em><b>Virtual Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROUTE__VIRTUAL_PORT = eINSTANCE.getRoute_VirtualPort();
+
+		/**
 		 * The meta object literal for the '<em><b>North Entrance</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1652,6 +1700,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROUTE__SOUTH_ENTRANCE = eINSTANCE.getRoute_SouthEntrance();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROUTE__DISTANCE = eINSTANCE.getRoute_Distance();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.

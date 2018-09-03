@@ -33,10 +33,10 @@ public class ModelDistanceProvider extends EContentAdapter {
 
 	private final @Nullable PortModel portModel;
 
-	private SoftReference<@Nullable Map<RouteOption, Map<Pair<String, String>, Integer>>> distanceCache = new SoftReference<>(null);
+	private SoftReference<@Nullable Map<RouteOption, Map<Pair<String, String>, Double>>> distanceCache = new SoftReference<>(null);
 	private SoftReference<@Nullable Map<Pair<String, String>, Integer>> portToPortContingencyIdleTimeCache = new SoftReference<>(null);
 
-	public synchronized Map<RouteOption, Map<Pair<String, String>, Integer>> buildDistanceCache() {
+	public synchronized Map<RouteOption, Map<Pair<String, String>, Double>> buildDistanceCache() {
 
 		final Map<String, Port> portMap = new HashMap<>();
 		for (final Port p : portModel.getPorts()) {
@@ -44,12 +44,12 @@ public class ModelDistanceProvider extends EContentAdapter {
 			portMap.put(l.getTempMMXID(), p);
 		}
 
-		final Map<RouteOption, Map<Pair<String, String>, Integer>> distanceCacheObj = new EnumMap<>(RouteOption.class);
+		final Map<RouteOption, Map<Pair<String, String>, Double>> distanceCacheObj = new EnumMap<>(RouteOption.class);
 		for (final Route route : portModel.getRoutes()) {
-			final Map<Pair<String, String>, Integer> distanceMatrixCacheObj = new HashMap<>();
+			final Map<Pair<String, String>, Double> distanceMatrixCacheObj = new HashMap<>();
 
 			for (final RouteLine rl : route.getLines()) {
-				if (rl.getDistance() != Integer.MAX_VALUE && rl.getDistance() >= 0) {
+				if (rl.getDistance() != Double.MAX_VALUE && rl.getDistance() >= 0.0) {
 
 					String fromId = getId(rl.getFrom());
 					String toId = getId(rl.getTo());
@@ -168,18 +168,18 @@ public class ModelDistanceProvider extends EContentAdapter {
 
 		assert portModel != null;
 
-		Map<RouteOption, Map<Pair<String, String>, Integer>> map = distanceCache.get();
+		Map<RouteOption, Map<Pair<String, String>, Double>> map = distanceCache.get();
 		if (map == null) {
 			map = buildDistanceCache();
 		}
-		final Map<Pair<String, String>, Integer> matrix = map.get(routeOption);
+		final Map<Pair<String, String>, Double> matrix = map.get(routeOption);
 		if (matrix == null) {
 			return Integer.MAX_VALUE;
 		}
 
 		final Pair<String, String> key = new Pair<>(from, to);
 		if (matrix.containsKey(key)) {
-			final Integer dist = matrix.get(key);
+			final Double dist = matrix.get(key);
 			if (dist != null) {
 				return dist.intValue();
 			}

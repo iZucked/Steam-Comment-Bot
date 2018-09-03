@@ -31,7 +31,7 @@ public class DefaultDistanceProviderTests {
 		InputStream suezStream = getClass().getResourceAsStream(String.format("/distances/tests/%s%%SUEZ.csv", version));
 		InputStream panamaStream = getClass().getResourceAsStream(String.format("/distances/tests/%s%%PANAMA.csv", version));
 
-		Map<Via, Map<String, Map<String, Integer>>> m = new EnumMap<>(Via.class);
+		Map<Via, Map<String, Map<String, Double>>> m = new EnumMap<>(Via.class);
 		m.put(Via.Direct, CsvDistancesImporter.importMatrix(new CSVReader(',', directStream), new DefaultImportContext('.')));
 		m.put(Via.SuezCanal, CsvDistancesImporter.importMatrix(new CSVReader(',', suezStream), new DefaultImportContext('.')));
 		m.put(Via.PanamaCanal, CsvDistancesImporter.importMatrix(new CSVReader(',', panamaStream), new DefaultImportContext('.')));
@@ -48,20 +48,20 @@ public class DefaultDistanceProviderTests {
 
 	@Test
 	public void getDistanceTest() throws Exception {
-		int dist = getDistanceProvider("1488467163%newest").getDistance("barrow island", "soyo", Via.Direct);
-		assertEquals(6952, dist);
+		double dist = getDistanceProvider("1488467163%newest").getDistance("barrow island", "soyo", Via.Direct);
+		assertEquals(6952.0, dist);
 	}
 
 	// @Test(expected = PortNotFoundException.class)
 	public void getNonExistingPort() throws Exception {
 
-		assertEquals(Integer.MAX_VALUE, getDistanceProvider("1488467163%newest").getDistance("Soyo", "Barrow", Via.Direct));
+		assertEquals(Double.MAX_VALUE, getDistanceProvider("1488467163%newest").getDistance("Soyo", "Barrow", Via.Direct));
 	}
 
 	@Test
 	public void testIdentityRoute() throws Exception {
 
-		int dist = getDistanceProvider("1488467163%newest").getDistance("pecem", "pecem", Via.Direct);
-		assertEquals(0, dist);
+		double dist = getDistanceProvider("1488467163%newest").getDistance("pecem", "pecem", Via.Direct);
+		assertEquals(0.0, dist);
 	}
 }

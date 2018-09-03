@@ -23,11 +23,11 @@ public class CsvDistancesImporter {
 	private static final String FROM = "from";
 
 	@SuppressWarnings("null")
-	public static Map<String, Map<String, Integer>> importMatrix(CSVReader reader, final IMMXImportContext context) {
+	public static Map<String, Map<String, Double>> importMatrix(CSVReader reader, final IMMXImportContext context) {
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
-		Map<String, Map<String, Integer>> result = new HashMap<String, Map<String, Integer>>();
+		Map<String, Map<String, Double>> result = new HashMap<>();
 
 		try {
 			context.pushReader(reader);
@@ -36,17 +36,17 @@ public class CsvDistancesImporter {
 			while (null != (row = reader.readRow(true))) {
 
 				String fromName = row.get(FROM).toLowerCase();
-				Map<String, Integer> rowMap = new HashMap<>();
+				Map<String, Double> rowMap = new HashMap<>();
 				for (final Entry<String, String> entry : row.entrySet()) {
 					try {
 						if ("from".equals(entry.getKey())) {
 							continue;
 						}
-						rowMap.put(entry.getKey(), nai.stringToInt(entry.getValue(), null));
+						rowMap.put(entry.getKey(), nai.stringToDouble(entry.getValue(), null));
 					} catch (ParseException e) {
 						if (entry.getValue().startsWith("e:") || entry.getValue().equals("")) {
 							// known error... just return int max value
-							rowMap.put(entry.getKey(), Integer.MAX_VALUE);
+							rowMap.put(entry.getKey(), Double.MAX_VALUE);
 						} else {
 							LOG.warn("Error parsing " + fromName + " > " + entry.getKey(), e);
 						}

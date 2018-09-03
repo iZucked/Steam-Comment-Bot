@@ -53,6 +53,8 @@ public class RouteItemProvider
 
 			addUuidPropertyDescriptor(object);
 			addRouteOptionPropertyDescriptor(object);
+			addVirtualPortPropertyDescriptor(object);
+			addDistancePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -97,6 +99,50 @@ public class RouteItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Virtual Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVirtualPortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Route_virtualPort_feature"),
+				 getString("_UI_Route_virtualPort_description"),
+				 PortPackage.Literals.ROUTE__VIRTUAL_PORT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Distance feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDistancePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Route_distance_feature"),
+				 getString("_UI_Route_distance_description"),
+				 PortPackage.Literals.ROUTE__DISTANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -172,6 +218,7 @@ public class RouteItemProvider
 		switch (notification.getFeatureID(Route.class)) {
 			case PortPackage.ROUTE__UUID:
 			case PortPackage.ROUTE__ROUTE_OPTION:
+			case PortPackage.ROUTE__DISTANCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.ROUTE__LINES:

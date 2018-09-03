@@ -48,8 +48,12 @@
     <genClasses ecoreClass="port.ecore#//Route">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Route/routeOption"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Virtual port representing the closest canal entry to another port"
+          propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//Route/virtualPort"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/northEntrance"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/southEntrance"/>
+      <genFeatures createChild="false" propertyDescription="Distance between canal entry points"
+          ecoreFeature="ecore:EAttribute port.ecore#//Route/distance"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//PortGroup">
       <genFeatures notify="false" createChild="false" propertyDescription="This port group will contain all ports set here, and the contents of all port groups set here."
@@ -68,6 +72,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portCountryGroups"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//PortModel/portDataVersion"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//PortModel/distanceDataVersion"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/contingencyMatrix"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//CapabilityGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//CapabilityGroup/capability"/>
@@ -84,6 +89,15 @@
     <genClasses ecoreClass="port.ecore#//PortCountryGroup"/>
     <genClasses ecoreClass="port.ecore#//EntryPoint">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//EntryPoint/port"/>
+    </genClasses>
+    <genClasses ecoreClass="port.ecore#//ContingencyMatrix">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//ContingencyMatrix/entries"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//ContingencyMatrix/defaultDuration"/>
+    </genClasses>
+    <genClasses ecoreClass="port.ecore#//ContingencyMatrixEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//ContingencyMatrixEntry/fromPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//ContingencyMatrixEntry/toPort"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//ContingencyMatrixEntry/duration"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

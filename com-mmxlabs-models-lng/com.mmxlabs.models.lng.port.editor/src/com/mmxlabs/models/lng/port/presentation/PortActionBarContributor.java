@@ -160,6 +160,7 @@ public class PortActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
+		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("port-settings"));
 		toolBarManager.add(new Separator("port-additions"));
 	}
