@@ -105,8 +105,8 @@ public class HeadlineReportView extends ViewPart {
 				"features:optimisation-charter-out-generation"), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:optimisation-charter-out-generation"), //
 		LABEL_PURCHASE_COST(ColumnType.Label, "P. Cost", null, "features:headline-purchase-cost"), VALUE_PURCHASE_COST(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST,
 				"features:headline-purchase-cost"), //
-		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
-		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
+		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME), //
+		LABEL_VIOLATIONS(ColumnType.Label, "Issues", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""); //
 
 		private final ColumnType columnType;
 		private final Object labelOrDefaultLong;
