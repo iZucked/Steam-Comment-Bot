@@ -133,9 +133,7 @@ public class ADPModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SPOT_MARKETS_PROFILE);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__RESULT);
 		}
 		return childrenFeatures;
 	}
@@ -198,9 +196,7 @@ public class ADPModelItemProvider
 				return;
 			case ADPPackage.ADP_MODEL__PURCHASE_CONTRACT_PROFILES:
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
-			case ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE:
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
-			case ADPPackage.ADP_MODEL__RESULT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -230,18 +226,8 @@ public class ADPModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__SPOT_MARKETS_PROFILE,
-				 ADPFactory.eINSTANCE.createSpotMarketsProfile()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE,
 				 ADPFactory.eINSTANCE.createFleetProfile()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__RESULT,
-				 ADPFactory.eINSTANCE.createADPModelResult()));
 	}
 
 	/**

@@ -94,7 +94,6 @@ public class SummaryPage extends ADPComposite {
 				}
 			});
 			createColumn(purchasesViewer, "Contract", (profile) -> profile.getContract().getName());
-			createColumn(purchasesViewer, "Num cargoes", (profile) -> profile.isEnabled() ? Integer.toString(profile.getSubProfiles().stream().mapToInt(sp -> sp.getSlots().size()).sum()) : "0");
 		}
 		{
 			salesViewer = new GridTableViewer(mainComposite);
@@ -124,7 +123,6 @@ public class SummaryPage extends ADPComposite {
 			});
 
 			createColumn(salesViewer, "Contract", (profile) -> profile.getContract().getName());
-			createColumn(salesViewer, "Num cargoes", (profile) -> profile.isEnabled() ? Integer.toString(profile.getSubProfiles().stream().mapToInt(sp -> sp.getSlots().size()).sum()) : "0");
 		}
 		{
 

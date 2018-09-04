@@ -149,6 +149,7 @@ public class LNGScenarioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModels());
 		}
 		return childrenFeatures;
@@ -215,6 +216,7 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODELS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -265,8 +267,36 @@ public class LNGScenarioModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(),
+				 ADPFactory.eINSTANCE.createADPModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModels(),
 				 ADPFactory.eINSTANCE.createADPModel()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel() ||
+			childFeature == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModels();
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

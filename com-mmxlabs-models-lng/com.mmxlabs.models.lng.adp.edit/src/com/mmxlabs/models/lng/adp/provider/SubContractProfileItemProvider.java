@@ -202,7 +202,6 @@ public class SubContractProfileItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL);
 			childrenFeatures.add(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS);
-			childrenFeatures.add(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS);
 			childrenFeatures.add(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONSTRAINTS);
 		}
 		return childrenFeatures;
@@ -267,7 +266,6 @@ public class SubContractProfileItemProvider
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
-			case ADPPackage.SUB_CONTRACT_PROFILE__SLOTS:
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -310,26 +308,6 @@ public class SubContractProfileItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL,
 				 ADPFactory.eINSTANCE.createPreDefinedDistributionModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
-				 CargoFactory.eINSTANCE.createLoadSlot()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
-				 CargoFactory.eINSTANCE.createDischargeSlot()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
-				 CargoFactory.eINSTANCE.createSpotLoadSlot()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.SUB_CONTRACT_PROFILE__SLOTS,
-				 CargoFactory.eINSTANCE.createSpotDischargeSlot()));
 
 		newChildDescriptors.add
 			(createChildParameter

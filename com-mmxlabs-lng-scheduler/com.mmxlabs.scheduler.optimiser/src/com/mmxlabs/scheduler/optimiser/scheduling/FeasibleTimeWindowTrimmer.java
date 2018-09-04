@@ -777,7 +777,7 @@ public class FeasibleTimeWindowTrimmer {
 									final int fromEntryPoint = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, panamaEntry, thisPortSlot.getPort());
 									final int endTime = windowEndTime[index + 1];
 
-									if (endTime != Integer.MAX_VALUE) {
+									if (endTime != Integer.MAX_VALUE && fromEntryPoint != Integer.MAX_VALUE) {
 										// Calculate latest panama arrival time. This includes excess delays. Will be adjusted based on available bookings later
 										int latestPanamaTime = endTime - fromEntryPoint;
 										if (northBound) {

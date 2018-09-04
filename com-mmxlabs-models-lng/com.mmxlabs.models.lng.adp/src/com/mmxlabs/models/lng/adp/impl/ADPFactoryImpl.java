@@ -65,7 +65,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.ADP_MODEL: return createADPModel();
 			case ADPPackage.FLEET_PROFILE: return createFleetProfile();
 			case ADPPackage.CONTRACT_PROFILE: return createContractProfile();
-			case ADPPackage.SPOT_MARKETS_PROFILE: return createSpotMarketsProfile();
 			case ADPPackage.PURCHASE_CONTRACT_PROFILE: return createPurchaseContractProfile();
 			case ADPPackage.SALES_CONTRACT_PROFILE: return createSalesContractProfile();
 			case ADPPackage.SUB_CONTRACT_PROFILE: return createSubContractProfile();
@@ -86,7 +85,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.SHIPPING_OPTION: return createShippingOption();
 			case ADPPackage.MIN_CARGO_CONSTRAINT: return createMinCargoConstraint();
 			case ADPPackage.MAX_CARGO_CONSTRAINT: return createMaxCargoConstraint();
-			case ADPPackage.ADP_MODEL_RESULT: return createADPModelResult();
 			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: return createTargetCargoesOnVesselConstraint();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -157,16 +155,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public <T extends Slot> ContractProfile<T> createContractProfile() {
 		ContractProfileImpl<T> contractProfile = new ContractProfileImpl<T>();
 		return contractProfile;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotMarketsProfile createSpotMarketsProfile() {
-		SpotMarketsProfileImpl spotMarketsProfile = new SpotMarketsProfileImpl();
-		return spotMarketsProfile;
 	}
 
 	/**
@@ -382,16 +370,6 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public MaxCargoConstraint createMaxCargoConstraint() {
 		MaxCargoConstraintImpl maxCargoConstraint = new MaxCargoConstraintImpl();
 		return maxCargoConstraint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ADPModelResult createADPModelResult() {
-		ADPModelResultImpl adpModelResult = new ADPModelResultImpl();
-		return adpModelResult;
 	}
 
 	/**

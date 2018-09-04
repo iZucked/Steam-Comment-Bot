@@ -71,9 +71,7 @@ public class ADPModelComponentHelper extends BaseComponentHelper {
 		add_yearEndEditor(detailComposite, topClass);
 		add_purchaseContractProfilesEditor(detailComposite, topClass);
 		add_salesContractProfilesEditor(detailComposite, topClass);
-		add_spotMarketsProfileEditor(detailComposite, topClass);
 		add_fleetProfileEditor(detailComposite, topClass);
-		add_resultEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the yearStart feature on ADPModel
@@ -112,29 +110,11 @@ public class ADPModelComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the spotMarketsProfile feature on ADPModel
-	 *
-	 * @generated
-	 */
-	protected void add_spotMarketsProfileEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ADP_MODEL__SPOT_MARKETS_PROFILE));
-	}
-
-	/**
 	 * Create the editor for the fleetProfile feature on ADPModel
 	 *
 	 * @generated
 	 */
 	protected void add_fleetProfileEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE));
-	}
-
-	/**
-	 * Create the editor for the result feature on ADPModel
-	 *
-	 * @generated
-	 */
-	protected void add_resultEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.ADP_MODEL__RESULT));
 	}
 }

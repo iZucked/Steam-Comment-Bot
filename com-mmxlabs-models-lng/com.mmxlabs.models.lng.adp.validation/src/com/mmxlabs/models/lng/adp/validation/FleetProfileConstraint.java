@@ -30,9 +30,9 @@ public class FleetProfileConstraint extends AbstractModelMultiConstraint {
 			DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
 					.withName("ADP Fleet profile");
 
-			if (profile.getDefaultVessel() == null) {
+			if (profile.getDefaultNominalMarket() == null) {
 				factory.copyName() //
-						.withObjectAndFeature(profile, ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL) //
+						.withObjectAndFeature(profile, ADPPackage.Literals.FLEET_PROFILE__DEFAULT_NOMINAL_MARKET) //
 						.withMessage("No default vessel specified") //
 						.make(ctx, statuses);
 			}

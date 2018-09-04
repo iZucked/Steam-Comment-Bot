@@ -47,7 +47,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getShippingDays <em>Shipping Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getCustomAttribs <em>Custom Attribs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getSlots <em>Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getConstraints <em>Constraints</em>}</li>
  * </ul>
  *
@@ -162,16 +161,6 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 	 * @ordered
 	 */
 	protected CustomSubProfileAttributes customAttribs;
-
-	/**
-	 * The cached value of the '{@link #getSlots() <em>Slots</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSlots()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<T> slots;
 
 	/**
 	 * The cached value of the '{@link #getConstraints() <em>Constraints</em>}' containment reference list.
@@ -476,19 +465,6 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EList<T> getSlots() {
-		if (slots == null) {
-			slots = new EObjectContainmentEList.Resolving<T>(Slot.class, this, ADPPackage.SUB_CONTRACT_PROFILE__SLOTS);
-		}
-		return slots;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<SubProfileConstraint> getConstraints() {
 		if (constraints == null) {
 			constraints = new EObjectContainmentEList.Resolving<SubProfileConstraint>(SubProfileConstraint.class, this, ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS);
@@ -508,8 +484,6 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 				return basicSetDistributionModel(null, msgs);
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				return basicSetCustomAttribs(null, msgs);
-			case ADPPackage.SUB_CONTRACT_PROFILE__SLOTS:
-				return ((InternalEList<?>)getSlots()).basicRemove(otherEnd, msgs);
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				return ((InternalEList<?>)getConstraints()).basicRemove(otherEnd, msgs);
 		}
@@ -541,8 +515,6 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				if (resolve) return getCustomAttribs();
 				return basicGetCustomAttribs();
-			case ADPPackage.SUB_CONTRACT_PROFILE__SLOTS:
-				return getSlots();
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				return getConstraints();
 		}
@@ -578,10 +550,6 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				setCustomAttribs((CustomSubProfileAttributes)newValue);
-				return;
-			case ADPPackage.SUB_CONTRACT_PROFILE__SLOTS:
-				getSlots().clear();
-				getSlots().addAll((Collection<? extends T>)newValue);
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				getConstraints().clear();
@@ -620,9 +588,6 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				setCustomAttribs((CustomSubProfileAttributes)null);
 				return;
-			case ADPPackage.SUB_CONTRACT_PROFILE__SLOTS:
-				getSlots().clear();
-				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				getConstraints().clear();
 				return;
@@ -652,8 +617,6 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 				return shippingDays != SHIPPING_DAYS_EDEFAULT;
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				return customAttribs != null;
-			case ADPPackage.SUB_CONTRACT_PROFILE__SLOTS:
-				return slots != null && !slots.isEmpty();
 			case ADPPackage.SUB_CONTRACT_PROFILE__CONSTRAINTS:
 				return constraints != null && !constraints.isEmpty();
 		}

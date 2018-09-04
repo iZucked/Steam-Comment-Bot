@@ -30,7 +30,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getShippingDays <em>Shipping Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getCustomAttribs <em>Custom Attribs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getSlots <em>Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.SubContractProfile#getConstraints <em>Constraints</em>}</li>
  * </ul>
  *
@@ -223,21 +222,6 @@ public interface SubContractProfile<T extends Slot> extends EObject {
 	 * @generated
 	 */
 	void setShippingDays(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Slots</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Slots</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Slots</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getSubContractProfile_Slots()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	EList<T> getSlots();
 
 	/**
 	 * Returns the value of the '<em><b>Constraints</b></em>' containment reference list.

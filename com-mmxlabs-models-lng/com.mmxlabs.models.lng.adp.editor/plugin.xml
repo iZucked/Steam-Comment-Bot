@@ -165,12 +165,6 @@
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint">
    </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SpotMarketsProfileComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.SpotMarketsProfileComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.SpotMarketsProfile">
-   </componentHelper>
 </extension>
 <extension
       point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -225,12 +219,6 @@
 <extension
       point="com.mmxlabs.models.ui.valueproviders">
    <valueProvider
-         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory2"
-         ownerEClass="com.mmxlabs.models.lng.adp.ProfileVesselRestriction"
-         referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
-   </valueProvider>
-   <valueProvider
          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.ShippingOptionVesselAssignmentTypeValueProviderFactory"
          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselAssignmentTypeValueProviderFactory"
          ownerEClass="com.mmxlabs.models.lng.adp.ShippingOption"
@@ -267,12 +255,6 @@
          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory.Deliver"
          ownerEClass="com.mmxlabs.models.lng.adp.DeliverToSpotFlow"
          referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
-   </valueProvider>
-   <valueProvider
-         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory"
-         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory3"
-         ownerEClass="com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint"
-         referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
    </valueProvider>
 </extension>
 <extension

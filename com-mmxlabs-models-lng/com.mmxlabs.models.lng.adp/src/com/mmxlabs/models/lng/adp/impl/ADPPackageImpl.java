@@ -10,7 +10,6 @@ import com.mmxlabs.models.datetime.DateTimePackage;
 
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.ADPModelResult;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel;
 import com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel;
@@ -37,7 +36,6 @@ import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.ShippingOption;
 
-import com.mmxlabs.models.lng.adp.SpotMarketsProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SubProfileConstraint;
 import com.mmxlabs.models.lng.adp.SupplyFromFlow;
@@ -93,13 +91,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	private EClass contractProfileEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass spotMarketsProfileEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -274,13 +265,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass adpModelResultEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass fleetConstraintEClass = null;
 
 	/**
@@ -431,26 +415,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getADPModel_SpotMarketsProfile() {
-		return (EReference)adpModelEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getADPModel_FleetProfile() {
-		return (EReference)adpModelEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getADPModel_Result() {
-		return (EReference)adpModelEClass.getEStructuralFeatures().get(6);
+		return (EReference)adpModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -467,7 +433,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getFleetProfile_VesselAvailabilities() {
+	public EReference getFleetProfile_Constraints() {
 		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -476,44 +442,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getFleetProfile_IncludeEnabledCharterMarkets() {
-		return (EAttribute)fleetProfileEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getFleetProfile_Constraints() {
-		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getFleetProfile_VesselEvents() {
-		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getFleetProfile_DefaultVessel() {
-		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getFleetProfile_DefaultVesselCharterInRate() {
-		return (EAttribute)fleetProfileEClass.getEStructuralFeatures().get(5);
+	public EReference getFleetProfile_DefaultNominalMarket() {
+		return (EReference)fleetProfileEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -603,33 +533,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 */
 	public EReference getContractProfile_Constraints() {
 		return (EReference)contractProfileEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getSpotMarketsProfile() {
-		return spotMarketsProfileEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSpotMarketsProfile_IncludeEnabledSpotMarkets() {
-		return (EAttribute)spotMarketsProfileEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSpotMarketsProfile_SpotMarkets() {
-		return (EReference)spotMarketsProfileEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -805,18 +708,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EReference getSubContractProfile_Slots() {
-		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getSubContractProfile_Constraints() {
-		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(8);
+		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -1238,42 +1131,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getADPModelResult() {
-		return adpModelResultEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getADPModelResult_ExtraSlots() {
-		return (EReference)adpModelResultEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getADPModelResult_ScheduleModel() {
-		return (EReference)adpModelResultEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getADPModelResult_ExtraSpotCharterMarkets() {
-		return (EReference)adpModelResultEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getFleetConstraint() {
 		return fleetConstraintEClass;
 	}
@@ -1376,17 +1233,11 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(adpModelEClass, ADP_MODEL__YEAR_END);
 		createEReference(adpModelEClass, ADP_MODEL__PURCHASE_CONTRACT_PROFILES);
 		createEReference(adpModelEClass, ADP_MODEL__SALES_CONTRACT_PROFILES);
-		createEReference(adpModelEClass, ADP_MODEL__SPOT_MARKETS_PROFILE);
 		createEReference(adpModelEClass, ADP_MODEL__FLEET_PROFILE);
-		createEReference(adpModelEClass, ADP_MODEL__RESULT);
 
 		fleetProfileEClass = createEClass(FLEET_PROFILE);
-		createEReference(fleetProfileEClass, FLEET_PROFILE__VESSEL_AVAILABILITIES);
-		createEAttribute(fleetProfileEClass, FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS);
 		createEReference(fleetProfileEClass, FLEET_PROFILE__CONSTRAINTS);
-		createEReference(fleetProfileEClass, FLEET_PROFILE__VESSEL_EVENTS);
-		createEReference(fleetProfileEClass, FLEET_PROFILE__DEFAULT_VESSEL);
-		createEAttribute(fleetProfileEClass, FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE);
+		createEReference(fleetProfileEClass, FLEET_PROFILE__DEFAULT_NOMINAL_MARKET);
 
 		contractProfileEClass = createEClass(CONTRACT_PROFILE);
 		createEReference(contractProfileEClass, CONTRACT_PROFILE__CONTRACT);
@@ -1397,10 +1248,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(contractProfileEClass, CONTRACT_PROFILE__VOLUME_UNIT);
 		createEReference(contractProfileEClass, CONTRACT_PROFILE__SUB_PROFILES);
 		createEReference(contractProfileEClass, CONTRACT_PROFILE__CONSTRAINTS);
-
-		spotMarketsProfileEClass = createEClass(SPOT_MARKETS_PROFILE);
-		createEAttribute(spotMarketsProfileEClass, SPOT_MARKETS_PROFILE__INCLUDE_ENABLED_SPOT_MARKETS);
-		createEReference(spotMarketsProfileEClass, SPOT_MARKETS_PROFILE__SPOT_MARKETS);
 
 		purchaseContractProfileEClass = createEClass(PURCHASE_CONTRACT_PROFILE);
 
@@ -1414,7 +1261,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__NOMINATED_VESSEL);
 		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__SHIPPING_DAYS);
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS);
-		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__SLOTS);
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__CONSTRAINTS);
 
 		customSubProfileAttributesEClass = createEClass(CUSTOM_SUB_PROFILE_ATTRIBUTES);
@@ -1488,11 +1334,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(maxCargoConstraintEClass, MAX_CARGO_CONSTRAINT__MAX_CARGOES);
 		createEAttribute(maxCargoConstraintEClass, MAX_CARGO_CONSTRAINT__INTERVAL_TYPE);
 
-		adpModelResultEClass = createEClass(ADP_MODEL_RESULT);
-		createEReference(adpModelResultEClass, ADP_MODEL_RESULT__EXTRA_SLOTS);
-		createEReference(adpModelResultEClass, ADP_MODEL_RESULT__SCHEDULE_MODEL);
-		createEReference(adpModelResultEClass, ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS);
-
 		fleetConstraintEClass = createEClass(FLEET_CONSTRAINT);
 
 		targetCargoesOnVesselConstraintEClass = createEClass(TARGET_CARGOES_ON_VESSEL_CONSTRAINT);
@@ -1531,12 +1372,11 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		// Obtain other dependent packages
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
-		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
-		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
-		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
+		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
-		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 
 		// Create type parameters
 		ETypeParameter contractProfileEClass_T = addETypeParameter(contractProfileEClass, "T");
@@ -1581,17 +1421,11 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getADPModel_YearEnd(), theDateTimePackage.getYearMonth(), "yearEnd", null, 0, 1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getADPModel_PurchaseContractProfiles(), this.getPurchaseContractProfile(), null, "purchaseContractProfiles", null, 0, -1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getADPModel_SalesContractProfiles(), this.getSalesContractProfile(), null, "salesContractProfiles", null, 0, -1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getADPModel_SpotMarketsProfile(), this.getSpotMarketsProfile(), null, "spotMarketsProfile", null, 0, 1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getADPModel_FleetProfile(), this.getFleetProfile(), null, "fleetProfile", null, 0, 1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getADPModel_Result(), this.getADPModelResult(), null, "result", null, 0, 1, ADPModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fleetProfileEClass, FleetProfile.class, "FleetProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFleetProfile_VesselAvailabilities(), theCargoPackage.getVesselAvailability(), null, "vesselAvailabilities", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getFleetProfile_IncludeEnabledCharterMarkets(), ecorePackage.getEBoolean(), "includeEnabledCharterMarkets", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFleetProfile_Constraints(), this.getFleetConstraint(), null, "constraints", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFleetProfile_VesselEvents(), theCargoPackage.getVesselEvent(), null, "vesselEvents", null, 0, -1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFleetProfile_DefaultVessel(), theFleetPackage.getVessel(), null, "defaultVessel", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getFleetProfile_DefaultVesselCharterInRate(), ecorePackage.getEString(), "defaultVesselCharterInRate", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFleetProfile_DefaultNominalMarket(), theSpotMarketsPackage.getCharterInMarket(), null, "defaultNominalMarket", null, 0, 1, FleetProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(contractProfileEClass, ContractProfile.class, "ContractProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContractProfile_Contract(), theCommercialPackage.getContract(), null, "contract", null, 0, 1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1606,10 +1440,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEReference(getContractProfile_SubProfiles(), g1, null, "subProfiles", null, 0, -1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContractProfile_Constraints(), this.getProfileConstraint(), null, "constraints", null, 0, -1, ContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(spotMarketsProfileEClass, SpotMarketsProfile.class, "SpotMarketsProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSpotMarketsProfile_IncludeEnabledSpotMarkets(), ecorePackage.getEBoolean(), "includeEnabledSpotMarkets", null, 0, 1, SpotMarketsProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpotMarketsProfile_SpotMarkets(), theSpotMarketsPackage.getSpotMarket(), null, "spotMarkets", null, 0, -1, SpotMarketsProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(purchaseContractProfileEClass, PurchaseContractProfile.class, "PurchaseContractProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(salesContractProfileEClass, SalesContractProfile.class, "SalesContractProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1622,8 +1452,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEReference(getSubContractProfile_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSubContractProfile_ShippingDays(), ecorePackage.getEInt(), "shippingDays", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSubContractProfile_CustomAttribs(), this.getCustomSubProfileAttributes(), null, "customAttribs", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		g1 = createEGenericType(subContractProfileEClass_T);
-		initEReference(getSubContractProfile_Slots(), g1, null, "slots", null, 0, -1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSubContractProfile_Constraints(), this.getSubProfileConstraint(), null, "constraints", null, 0, -1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(customSubProfileAttributesEClass, CustomSubProfileAttributes.class, "CustomSubProfileAttributes", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1709,11 +1537,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getMaxCargoConstraint_MaxCargoes(), ecorePackage.getEInt(), "maxCargoes", null, 0, 1, MaxCargoConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMaxCargoConstraint_IntervalType(), this.getIntervalType(), "intervalType", "YEARLY", 0, 1, MaxCargoConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(adpModelResultEClass, ADPModelResult.class, "ADPModelResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getADPModelResult_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, ADPModelResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getADPModelResult_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, ADPModelResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getADPModelResult_ExtraSpotCharterMarkets(), theSpotMarketsPackage.getCharterInMarket(), null, "extraSpotCharterMarkets", null, 0, -1, ADPModelResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(fleetConstraintEClass, FleetConstraint.class, "FleetConstraint", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(targetCargoesOnVesselConstraintEClass, TargetCargoesOnVesselConstraint.class, "TargetCargoesOnVesselConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1741,10 +1564,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
-		// http://www.mmxlabs.com/models/pricing/expressionType
-		createExpressionTypeAnnotations();
-		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
-		createNamedObjectAnnotations();
 	}
 
 	/**
@@ -1756,12 +1575,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	protected void createNumberFormatAnnotations() {
 		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getFleetProfile_DefaultVesselCharterInRate(),
-		   source,
-		   new String[] {
-			   "unit", "$/day"
-		   });
-		addAnnotation
 		  (getPreDefinedDistributionModel_WindowSize(),
 		   source,
 		   new String[] {
@@ -1772,45 +1585,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		   source,
 		   new String[] {
 			   "formatString", "##,##0"
-		   });
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/pricing/expressionType</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createExpressionTypeAnnotations() {
-		String source = "http://www.mmxlabs.com/models/pricing/expressionType";
-		addAnnotation
-		  (getFleetProfile_DefaultVesselCharterInRate(),
-		   source,
-		   new String[] {
-			   "type", "charter"
-		   });
-		addAnnotation
-		  (getFleetProfile_DefaultVesselCharterInRate(),
-		   new boolean[] { true },
-		   "http://www.mmxlabs.com/models/pricing/expressionType",
-		   new String[] {
-			   "type", "charter"
-		   });
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/mmxcore/validation/NamedObject</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createNamedObjectAnnotations() {
-		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";
-		addAnnotation
-		  (adpModelResultEClass,
-		   source,
-		   new String[] {
-			   "nonUniqueChildren", "true"
 		   });
 	}
 

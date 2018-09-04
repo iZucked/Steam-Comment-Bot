@@ -70,75 +70,29 @@ public class FleetProfileItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIncludeEnabledCharterMarketsPropertyDescriptor(object);
-			addDefaultVesselPropertyDescriptor(object);
-			addDefaultVesselCharterInRatePropertyDescriptor(object);
+			addDefaultNominalMarketPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Include Enabled Charter Markets feature.
+	 * This adds a property descriptor for the Default Nominal Market feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIncludeEnabledCharterMarketsPropertyDescriptor(Object object) {
+	protected void addDefaultNominalMarketPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_FleetProfile_includeEnabledCharterMarkets_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FleetProfile_includeEnabledCharterMarkets_feature", "_UI_FleetProfile_type"),
-				 ADPPackage.Literals.FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Default Vessel feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDefaultVesselPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_FleetProfile_defaultVessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FleetProfile_defaultVessel_feature", "_UI_FleetProfile_type"),
-				 ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL,
+				 getString("_UI_FleetProfile_defaultNominalMarket_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetProfile_defaultNominalMarket_feature", "_UI_FleetProfile_type"),
+				 ADPPackage.Literals.FLEET_PROFILE__DEFAULT_NOMINAL_MARKET,
 				 true,
 				 false,
 				 true,
 				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Default Vessel Charter In Rate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDefaultVesselCharterInRatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_FleetProfile_defaultVesselCharterInRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FleetProfile_defaultVesselCharterInRate_feature", "_UI_FleetProfile_type"),
-				 ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -155,9 +109,7 @@ public class FleetProfileItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ADPPackage.Literals.FLEET_PROFILE__VESSEL_AVAILABILITIES);
 			childrenFeatures.add(ADPPackage.Literals.FLEET_PROFILE__CONSTRAINTS);
-			childrenFeatures.add(ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS);
 		}
 		return childrenFeatures;
 	}
@@ -194,8 +146,7 @@ public class FleetProfileItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		FleetProfile fleetProfile = (FleetProfile)object;
-		return getString("_UI_FleetProfile_type") + " " + fleetProfile.isIncludeEnabledCharterMarkets();
+		return getString("_UI_FleetProfile_type");
 	}
 	
 
@@ -211,13 +162,7 @@ public class FleetProfileItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(FleetProfile.class)) {
-			case ADPPackage.FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS:
-			case ADPPackage.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case ADPPackage.FLEET_PROFILE__VESSEL_AVAILABILITIES:
 			case ADPPackage.FLEET_PROFILE__CONSTRAINTS:
-			case ADPPackage.FLEET_PROFILE__VESSEL_EVENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -237,28 +182,8 @@ public class FleetProfileItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ADPPackage.Literals.FLEET_PROFILE__VESSEL_AVAILABILITIES,
-				 CargoFactory.eINSTANCE.createVesselAvailability()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(ADPPackage.Literals.FLEET_PROFILE__CONSTRAINTS,
 				 ADPFactory.eINSTANCE.createTargetCargoesOnVesselConstraint()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS,
-				 CargoFactory.eINSTANCE.createMaintenanceEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS,
-				 CargoFactory.eINSTANCE.createDryDockEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS,
-				 CargoFactory.eINSTANCE.createCharterOutEvent()));
 	}
 
 	/**

@@ -91,12 +91,6 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.SPOT_MARKETS_PROFILE: {
-				SpotMarketsProfile spotMarketsProfile = (SpotMarketsProfile)theEObject;
-				T1 result = caseSpotMarketsProfile(spotMarketsProfile);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ADPPackage.PURCHASE_CONTRACT_PROFILE: {
 				PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile)theEObject;
 				T1 result = casePurchaseContractProfile(purchaseContractProfile);
@@ -269,12 +263,6 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.ADP_MODEL_RESULT: {
-				ADPModelResult adpModelResult = (ADPModelResult)theEObject;
-				T1 result = caseADPModelResult(adpModelResult);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ADPPackage.FLEET_CONSTRAINT: {
 				FleetConstraint fleetConstraint = (FleetConstraint)theEObject;
 				T1 result = caseFleetConstraint(fleetConstraint);
@@ -334,21 +322,6 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <T extends Slot> T1 caseContractProfile(ContractProfile<T> object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Spot Markets Profile</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Spot Markets Profile</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseSpotMarketsProfile(SpotMarketsProfile object) {
 		return null;
 	}
 
@@ -709,21 +682,6 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseMaxCargoConstraint(MaxCargoConstraint object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Model Result</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Model Result</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseADPModelResult(ADPModelResult object) {
 		return null;
 	}
 

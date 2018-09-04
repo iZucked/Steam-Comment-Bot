@@ -18,15 +18,16 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
-import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
 import com.mmxlabs.models.lng.adp.MinCargoConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
-import com.mmxlabs.models.lng.adp.SubContractProfile;
+import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -37,9 +38,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
@@ -74,8 +75,11 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 	@Inject
 	private @NonNull IAllowedVesselProviderEditor allowedVesselProviderEditor;
 
+	private LNGScenarioModel rootObject;
+
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
+		this.rootObject = rootObject;
 
 	}
 
@@ -88,7 +92,8 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 
 		final YearMonth end = adpModel.getYearEnd();
 		final FleetProfile fleetProfile = adpModel.getFleetProfile();
-		final IVessel iDefaultVessel = modelEntityMap.getOptimiserObjectNullChecked(fleetProfile.getDefaultVessel(), IVessel.class);
+		final IVessel iDefaultVessel = modelEntityMap.getOptimiserObjectNullChecked(fleetProfile.getDefaultNominalMarket().getVessel(), IVessel.class);
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(rootObject);
 
 		for (final PurchaseContractProfile contractProfile : adpModel.getPurchaseContractProfiles()) {
 			if (!contractProfile.isEnabled()) {
@@ -100,8 +105,10 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			}
 			final int startMonth = calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
 			final List<LoadSlot> slots = new LinkedList<>();
-			for (final SubContractProfile<LoadSlot> subProfile : contractProfile.getSubProfiles()) {
-				slots.addAll(subProfile.getSlots());
+			for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+				if (slot.getContract() == contractProfile.getContract()) {
+					slots.add(slot);
+				}
 			}
 			final List<ILoadOption> o_slots = slots.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class)) //
@@ -171,8 +178,10 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			final int startMonth = calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
 
 			final List<DischargeSlot> slots = new LinkedList<>();
-			for (final SubContractProfile<DischargeSlot> subProfile : contractProfile.getSubProfiles()) {
-				slots.addAll(subProfile.getSlots());
+			for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+				if (slot.getContract() == contractProfile.getContract()) {
+					slots.add(slot);
+				}
 			}
 			final List<IDischargeOption> o_slots = slots.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class)) //
@@ -251,7 +260,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 									(long) ((TargetCargoesOnVesselConstraint) fleetConstraint).getWeight());
 						}
 					}
-					final IVessel iDefaultVessel = modelEntityMap.getOptimiserObjectNullChecked(fleetProfile.getDefaultVessel(), IVessel.class);
+					final IVessel iDefaultVessel = modelEntityMap.getOptimiserObjectNullChecked(fleetProfile.getDefaultNominalMarket().getVessel(), IVessel.class);
 					for (final IVesselAvailability vesselAvailability : scheduleCalculationUtils.getAllVesselAvailabilities()) {
 						if (vesselAvailability.getVessel() == iDefaultVessel) {
 							if (vesselAvailability.getSpotIndex() == -1) {

@@ -7,13 +7,11 @@
 package com.mmxlabs.models.lng.adp.impl;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.ADPModelResult;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
-import com.mmxlabs.models.lng.adp.SpotMarketsProfile;
 import java.time.YearMonth;
 
 import java.util.Collection;
@@ -41,9 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getYearEnd <em>Year End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getPurchaseContractProfiles <em>Purchase Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getSpotMarketsProfile <em>Spot Markets Profile</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getFleetProfile <em>Fleet Profile</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getResult <em>Result</em>}</li>
  * </ul>
  *
  * @generated
@@ -110,16 +106,6 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 	protected EList<SalesContractProfile> salesContractProfiles;
 
 	/**
-	 * The cached value of the '{@link #getSpotMarketsProfile() <em>Spot Markets Profile</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSpotMarketsProfile()
-	 * @generated
-	 * @ordered
-	 */
-	protected SpotMarketsProfile spotMarketsProfile;
-
-	/**
 	 * The cached value of the '{@link #getFleetProfile() <em>Fleet Profile</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -128,16 +114,6 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 	 * @ordered
 	 */
 	protected FleetProfile fleetProfile;
-
-	/**
-	 * The cached value of the '{@link #getResult() <em>Result</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getResult()
-	 * @generated
-	 * @ordered
-	 */
-	protected ADPModelResult result;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -233,72 +209,6 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpotMarketsProfile getSpotMarketsProfile() {
-		if (spotMarketsProfile != null && spotMarketsProfile.eIsProxy()) {
-			InternalEObject oldSpotMarketsProfile = (InternalEObject)spotMarketsProfile;
-			spotMarketsProfile = (SpotMarketsProfile)eResolveProxy(oldSpotMarketsProfile);
-			if (spotMarketsProfile != oldSpotMarketsProfile) {
-				InternalEObject newSpotMarketsProfile = (InternalEObject)spotMarketsProfile;
-				NotificationChain msgs = oldSpotMarketsProfile.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE, null, null);
-				if (newSpotMarketsProfile.eInternalContainer() == null) {
-					msgs = newSpotMarketsProfile.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE, oldSpotMarketsProfile, spotMarketsProfile));
-			}
-		}
-		return spotMarketsProfile;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotMarketsProfile basicGetSpotMarketsProfile() {
-		return spotMarketsProfile;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetSpotMarketsProfile(SpotMarketsProfile newSpotMarketsProfile, NotificationChain msgs) {
-		SpotMarketsProfile oldSpotMarketsProfile = spotMarketsProfile;
-		spotMarketsProfile = newSpotMarketsProfile;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE, oldSpotMarketsProfile, newSpotMarketsProfile);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setSpotMarketsProfile(SpotMarketsProfile newSpotMarketsProfile) {
-		if (newSpotMarketsProfile != spotMarketsProfile) {
-			NotificationChain msgs = null;
-			if (spotMarketsProfile != null)
-				msgs = ((InternalEObject)spotMarketsProfile).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE, null, msgs);
-			if (newSpotMarketsProfile != null)
-				msgs = ((InternalEObject)newSpotMarketsProfile).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE, null, msgs);
-			msgs = basicSetSpotMarketsProfile(newSpotMarketsProfile, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE, newSpotMarketsProfile, newSpotMarketsProfile));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public FleetProfile getFleetProfile() {
 		if (fleetProfile != null && fleetProfile.eIsProxy()) {
 			InternalEObject oldFleetProfile = (InternalEObject)fleetProfile;
@@ -365,72 +275,6 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ADPModelResult getResult() {
-		if (result != null && result.eIsProxy()) {
-			InternalEObject oldResult = (InternalEObject)result;
-			result = (ADPModelResult)eResolveProxy(oldResult);
-			if (result != oldResult) {
-				InternalEObject newResult = (InternalEObject)result;
-				NotificationChain msgs = oldResult.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__RESULT, null, null);
-				if (newResult.eInternalContainer() == null) {
-					msgs = newResult.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__RESULT, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.ADP_MODEL__RESULT, oldResult, result));
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ADPModelResult basicGetResult() {
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetResult(ADPModelResult newResult, NotificationChain msgs) {
-		ADPModelResult oldResult = result;
-		result = newResult;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__RESULT, oldResult, newResult);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setResult(ADPModelResult newResult) {
-		if (newResult != result) {
-			NotificationChain msgs = null;
-			if (result != null)
-				msgs = ((InternalEObject)result).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__RESULT, null, msgs);
-			if (newResult != null)
-				msgs = ((InternalEObject)newResult).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__RESULT, null, msgs);
-			msgs = basicSetResult(newResult, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__RESULT, newResult, newResult));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -438,12 +282,8 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 				return ((InternalEList<?>)getPurchaseContractProfiles()).basicRemove(otherEnd, msgs);
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
 				return ((InternalEList<?>)getSalesContractProfiles()).basicRemove(otherEnd, msgs);
-			case ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE:
-				return basicSetSpotMarketsProfile(null, msgs);
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				return basicSetFleetProfile(null, msgs);
-			case ADPPackage.ADP_MODEL__RESULT:
-				return basicSetResult(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -464,15 +304,9 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 				return getPurchaseContractProfiles();
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
 				return getSalesContractProfiles();
-			case ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE:
-				if (resolve) return getSpotMarketsProfile();
-				return basicGetSpotMarketsProfile();
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				if (resolve) return getFleetProfile();
 				return basicGetFleetProfile();
-			case ADPPackage.ADP_MODEL__RESULT:
-				if (resolve) return getResult();
-				return basicGetResult();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -500,14 +334,8 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 				getSalesContractProfiles().clear();
 				getSalesContractProfiles().addAll((Collection<? extends SalesContractProfile>)newValue);
 				return;
-			case ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE:
-				setSpotMarketsProfile((SpotMarketsProfile)newValue);
-				return;
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				setFleetProfile((FleetProfile)newValue);
-				return;
-			case ADPPackage.ADP_MODEL__RESULT:
-				setResult((ADPModelResult)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -533,14 +361,8 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
 				getSalesContractProfiles().clear();
 				return;
-			case ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE:
-				setSpotMarketsProfile((SpotMarketsProfile)null);
-				return;
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				setFleetProfile((FleetProfile)null);
-				return;
-			case ADPPackage.ADP_MODEL__RESULT:
-				setResult((ADPModelResult)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -562,12 +384,8 @@ public class ADPModelImpl extends EObjectImpl implements ADPModel {
 				return purchaseContractProfiles != null && !purchaseContractProfiles.isEmpty();
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
 				return salesContractProfiles != null && !salesContractProfiles.isEmpty();
-			case ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE:
-				return spotMarketsProfile != null;
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 				return fleetProfile != null;
-			case ADPPackage.ADP_MODEL__RESULT:
-				return result != null;
 		}
 		return super.eIsSet(featureID);
 	}

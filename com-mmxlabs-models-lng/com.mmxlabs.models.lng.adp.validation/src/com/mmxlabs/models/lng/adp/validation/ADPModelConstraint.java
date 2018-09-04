@@ -76,22 +76,22 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-			int slotCount = 0;
-			for (PurchaseContractProfile p : adpModel.getPurchaseContractProfiles()) {
-				if (!p.isEnabled()) {
-					continue;
-				}
-				for (SubContractProfile<?> sp : p.getSubProfiles()) {
-					slotCount += sp.getSlots().size();
-				}
-			}
-			if (slotCount == 0) {
-				factory.copyName() //
-						.withObjectAndFeature(adpModel, ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES) //
-						.withObjectAndFeature(adpModel, ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES) //
-						.withMessage("No slots to generate") //
-						.make(ctx, statuses);
-			}
+//			int slotCount = 0;
+//			for (PurchaseContractProfile p : adpModel.getPurchaseContractProfiles()) {
+//				if (!p.isEnabled()) {
+//					continue;
+//				}
+//				for (SubContractProfile<?> sp : p.getSubProfiles()) {
+//					slotCount += sp.getSlots().size();
+//				}
+//			}
+//			if (slotCount == 0) {
+//				factory.copyName() //
+//						.withObjectAndFeature(adpModel, ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES) //
+//						.withObjectAndFeature(adpModel, ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES) //
+//						.withMessage("No slots to generate") //
+//						.make(ctx, statuses);
+//			}
 
 		}
 

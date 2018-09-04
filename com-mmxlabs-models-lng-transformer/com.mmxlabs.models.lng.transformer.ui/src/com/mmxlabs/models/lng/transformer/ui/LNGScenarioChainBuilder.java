@@ -152,23 +152,39 @@ public class LNGScenarioChainBuilder {
 				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
 
+			BiConsumer<LNGScenarioToOptimiserBridge, String> exportCallback = (bridge, name) -> {
+				SolutionSetExporterUnit.exportMultipleSolutions(builder, 1, bridge, () -> {
+					OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+					options.setName(name);
+					options.setUserSettings(EcoreUtil.copy(dataTransformer.getUserSettings()));
+					return options;
+				}, OptionalLong.empty());
+			};
+
 			if (!optimisationPlan.getStages().isEmpty()) {
 
 				UserSettings userSettings = optimisationPlan.getUserSettings();
 				for (final OptimisationStage stage : optimisationPlan.getStages()) {
+					BiConsumer<LNGScenarioToOptimiserBridge, String> callback;
+
 					if (stage instanceof ParallelOptimisationStage<?>) {
 						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
 						final OptimisationStage template = parallelOptimisationStage.getTemplate();
 						assert template != null;
-						LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
+						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
 					} else {
-						LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, stage, 1, userSettings);
+						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, stage, 1, userSettings);
+					}
+					if (callback != null) {
+						exportCallback = callback;
 					}
 				}
 			}
 
+			if (exportCallback != null) {
+				exportCallback.accept(scenarioToOptimiserBridge, resultName);
+			}
 		}
-
 		return builder.build(initialSequences);
 	}
 
