@@ -56,25 +56,27 @@ public class MigrateToV95 extends AbstractMigrationUnit {
 		final List<EObjectWrapper> ports = portModel.getRefAsList("ports");
 		for (final EObjectWrapper port : ports) {
 			final String mmxId = port.getRef("location").getAttrib("mmxId");
-			switch (mmxId) {
-			case "L_CP_PortS":
-				suezNorth = port;
-				break;
-			case "L_CP_Suez":
-				suezSouth = port;
-				break;
-			case "L_V_SuezC":
-				suezVirtual = port;
-				break;
-			case "L_CP_Colon":
-				panamaNorth = port;
-				break;
-			case "L_CP_Balbo":
-				panamaSouth = port;
-				break;
-			case "L_V_Panam":
-				panamaVirtual = port;
-				break;
+			if(mmxId != null) {
+				switch (mmxId) {
+				case "L_CP_PortS":
+					suezNorth = port;
+					break;
+				case "L_CP_Suez":
+					suezSouth = port;
+					break;
+				case "L_V_SuezC":
+					suezVirtual = port;
+					break;
+				case "L_CP_Colon":
+					panamaNorth = port;
+					break;
+				case "L_CP_Balbo":
+					panamaSouth = port;
+					break;
+				case "L_V_Panam":
+					panamaVirtual = port;
+					break;
+				}
 			}
 		}
 
