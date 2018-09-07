@@ -57,7 +57,7 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/contract"/>
       <genFeatures createChild="false" propertyDescription="The name of the counterparty for this deal"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/counterparty"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cn"/>
+      <genFeatures createChild="false" propertyDescription="Contract Note" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cn"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The load or discharge port for this trade"
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/port"/>
       <genFeatures createChild="false" propertyDescription="Arrival window start date"
