@@ -4,105 +4,214 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.cargo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import java.time.LocalDate;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 public class CargoReportModel {
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	@JsonSerialize(using = LocalDateSerializer.class)  
-	LocalDate loadingWindowDate;
-	int loadingWindowSizeInHours;
-	String sourcePortName;
-	String type;
-	String endBuyer;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	@JsonSerialize(using = LocalDateSerializer.class)  
-	LocalDate endBuyerWindowDate;
-	int endBuyerWindowSizeInHours;
-	String receivingPortName;
-	String vesselName;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	@JsonSerialize(using = LocalDateSerializer.class)  
-	LocalDate nextLoadPortDate;
-	Integer rtv;
-	int loadableVolume;
-	String comments;
 	
-	public LocalDate getLoadingWindowDate() {
-		return loadingWindowDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	LocalDateTime loadScheduledDate;
+	
+	String loadName;
+	double loadVolumeM3;
+	double loadVolumeMMBTU;
+	double loadPrice;
+	String loadPortName;
+	String purchaseContract;
+	String purchaseCounterparty; 
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	LocalDateTime dischargeScheduledDate;
+	
+	String dischargeName;
+	double dischargeVolumeM3; // M3
+	double dischargeVolumeMMBTU; // MMMBtu
+	double dischargePrice;
+	String dischargePortName;
+	String saleContract;
+	String saleCounterparty; 
+	
+	String vesselName;
+	
+	String loadComment;
+	String dischargeComment;
+	
+	String cargoType;
+	
+	long profitAndLoss;
+
+	public LocalDateTime getLoadScheduledDate() {
+		return loadScheduledDate;
 	}
-	public void setLoadingWindowDate(LocalDate loadingWindowDate) {
-		this.loadingWindowDate = loadingWindowDate;
+
+	public void setLoadScheduledDate(LocalDateTime loadScheduledDate) {
+		this.loadScheduledDate = loadScheduledDate;
 	}
-	public int getLoadingWindowSizeInHours() {
-		return loadingWindowSizeInHours;
+
+	public String getLoadName() {
+		return loadName;
 	}
-	public void setLoadingWindowSizeInHours(int loadingWindowSizeInHours) {
-		this.loadingWindowSizeInHours = loadingWindowSizeInHours;
+
+	public void setLoadName(String loadName) {
+		this.loadName = loadName;
 	}
-	public String getSourcePortName() {
-		return sourcePortName;
+
+	public double getLoadVolumeM3() {
+		return loadVolumeM3;
 	}
-	public void setSourcePortName(String sourcePortName) {
-		this.sourcePortName = sourcePortName;
+
+	public void setLoadVolumeM3(double loadVolumeM3) {
+		this.loadVolumeM3 = loadVolumeM3;
 	}
-	public String getType() {
-		return type;
+
+	public double getLoadVolumeMMBTU() {
+		return loadVolumeMMBTU;
 	}
-	public void setType(String type) {
-		this.type = type;
+
+	public void setLoadVolumeMMBTU(double loadVolumeMMBTU) {
+		this.loadVolumeMMBTU = loadVolumeMMBTU;
 	}
-	public String getEndBuyer() {
-		return endBuyer;
+
+	public double getLoadPrice() {
+		return loadPrice;
 	}
-	public void setEndBuyer(String endBuyer) {
-		this.endBuyer = endBuyer;
+
+	public void setLoadPrice(double loadPrice) {
+		this.loadPrice = loadPrice;
 	}
-	public void setEndBuyerWindowDate(LocalDate endBuyerWindowDate) {
-		this.endBuyerWindowDate = endBuyerWindowDate;
+
+	public String getLoadPortName() {
+		return loadPortName;
 	}
-	public int getEndBuyerWindowSizeInHours() {
-		return endBuyerWindowSizeInHours;
+
+	public void setLoadPortName(String loadPortName) {
+		this.loadPortName = loadPortName;
 	}
-	public void setEndBuyerWindowSizeInHours(int endBuyerWindowSizeInHours) {
-		this.endBuyerWindowSizeInHours = endBuyerWindowSizeInHours;
+
+	public String getPurchaseContract() {
+		return purchaseContract;
 	}
+
+	public void setPurchaseContract(String purchaseContract) {
+		this.purchaseContract = purchaseContract;
+	}
+
+	public String getPurchaseCounterparty() {
+		return purchaseCounterparty;
+	}
+
+	public void setPurchaseCounterparty(String purchaseCounterparty) {
+		this.purchaseCounterparty = purchaseCounterparty;
+	}
+
+	public LocalDateTime getDischargeScheduledDate() {
+		return dischargeScheduledDate;
+	}
+
+	public void setDischargeScheduledDate(LocalDateTime dischargeScheduledDate) {
+		this.dischargeScheduledDate = dischargeScheduledDate;
+	}
+
+	public String getDischargeName() {
+		return dischargeName;
+	}
+
+	public void setDischargeName(String dischargeName) {
+		this.dischargeName = dischargeName;
+	}
+
+	public double getDischargeVolumeM3() {
+		return dischargeVolumeM3;
+	}
+
+	public void setDischargeVolumeM3(double dischargeVolumeM3) {
+		this.dischargeVolumeM3 = dischargeVolumeM3;
+	}
+
+	public double getDischargeVolumeMMBTU() {
+		return dischargeVolumeMMBTU;
+	}
+
+	public void setDischargeVolumeMMBTU(double dischargeVolumeMMBTU) {
+		this.dischargeVolumeMMBTU = dischargeVolumeMMBTU;
+	}
+
+	public double getDischargePrice() {
+		return dischargePrice;
+	}
+
+	public void setDischargePrice(double dischargePrice) {
+		this.dischargePrice = dischargePrice;
+	}
+
+	public String getDischargePortName() {
+		return dischargePortName;
+	}
+
+	public void setDischargePortName(String dischargePortName) {
+		this.dischargePortName = dischargePortName;
+	}
+
+	public String getSaleContract() {
+		return saleContract;
+	}
+
+	public void setSaleContract(String saleContract) {
+		this.saleContract = saleContract;
+	}
+
+	public String getSaleCounterparty() {
+		return saleCounterparty;
+	}
+
+	public void setSaleCounterparty(String saleCounterparty) {
+		this.saleCounterparty = saleCounterparty;
+	}
+
 	public String getVesselName() {
 		return vesselName;
 	}
+
 	public void setVesselName(String vesselName) {
 		this.vesselName = vesselName;
 	}
-	public LocalDate getNextLoadPortDate() {
-		return nextLoadPortDate;
+
+	public String getLoadComment() {
+		return loadComment;
 	}
-	public void setNextLoadPortDate(LocalDate nextLoadPortDate) {
-		this.nextLoadPortDate = nextLoadPortDate;
+
+	public void setLoadComment(String loadComment) {
+		this.loadComment = loadComment;
 	}
-	public Integer getRtv() {
-		return rtv;
+
+	public String getDischargeComment() {
+		return dischargeComment;
 	}
-	public void setRtv(Integer rtv) {
-		this.rtv = rtv;
+
+	public void setDischargeComment(String dischargeComment) {
+		this.dischargeComment = dischargeComment;
 	}
-	public int getLoadableVolume() {
-		return loadableVolume;
+
+	public String getCargoType() {
+		return cargoType;
 	}
-	public void setLoadableVolume(int loadableVolume) {
-		this.loadableVolume = loadableVolume;
+
+	public void setCargoType(String cargoType) {
+		this.cargoType = cargoType;
 	}
-	public String getComments() {
-		return comments;
+
+	public long getProfitAndLoss() {
+		return profitAndLoss;
 	}
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-	public String getReceivingPortName() {
-		return receivingPortName;
-	}
-	public void setReceivingPortName(String receivingPortName) {
-		this.receivingPortName = receivingPortName;
+
+	public void setProfitAndLoss(long profitAndLoss) {
+		this.profitAndLoss = profitAndLoss;
 	}
 }

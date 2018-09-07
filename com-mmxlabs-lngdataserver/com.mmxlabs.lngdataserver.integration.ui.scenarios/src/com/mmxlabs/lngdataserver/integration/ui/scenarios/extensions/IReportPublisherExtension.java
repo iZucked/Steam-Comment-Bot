@@ -13,7 +13,8 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @NonNullByDefault
 public interface IReportPublisherExtension {
-	void publishReport(IScenarioDataProvider scenarioDataProvider, ScheduleModel scheduleModel, OutputStream outputStream);
-	
+
+	void publishReport(IScenarioDataProvider scenarioDataProvider, ScheduleModel scheduleModel, OutputStream outputStream) throws Exception;
+
 	String getReportType();
 }

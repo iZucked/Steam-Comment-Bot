@@ -4,14 +4,6 @@ package com.mmxlabs.lngdataserver.integration.reports.cargocontract;
  * All rights reserved.
  */
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import java.time.LocalDate;
-import java.util.List;
-
-
 /**
  * @author josephpallamidessi
  *

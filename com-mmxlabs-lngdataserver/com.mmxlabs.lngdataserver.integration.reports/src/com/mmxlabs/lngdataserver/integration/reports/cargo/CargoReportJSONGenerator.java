@@ -5,91 +5,109 @@
 package com.mmxlabs.lngdataserver.integration.reports.cargo;
 
 import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.NonNull;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.common.time.Days;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class CargoReportJSONGenerator {
 
-	public static List<CargoReportModel> createILPData(ScheduleModel scheduleModel) {
-		VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
-		List<CargoReportModel> ilpModels = new LinkedList<>();
-		for (CargoAllocation cargoAllocation: scheduleModel.getSchedule().getCargoAllocations()) {
-			CargoReportModel ilpModel = new CargoReportModel();
-			EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
-			List<SlotAllocation> collect = slotAllocations //
-											.stream() //
-											.filter(s->(s.getSlot() != null && (s.getSlot() instanceof LoadSlot))) //
-											.collect(Collectors.toList());
-			Optional<LoadSlot> loadOptional = slotAllocations //
-												.stream() //
-												.filter(s->(s.getSlot() != null && (s.getSlot() instanceof LoadSlot))) //
-												.map(s->(LoadSlot) s.getSlot()) //
-												.findFirst();
-			Optional<DischargeSlot> dischargeOptional = slotAllocations.stream().filter(s->(s.getSlot() != null && s.getSlot() instanceof DischargeSlot)).map(s->(DischargeSlot) s.getSlot()).findFirst();
+	public static List<CargoReportModel> createReportData(final @NonNull ScheduleModel scheduleModel) {
+
+		final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
+		final List<CargoReportModel> models = new LinkedList<>();
+
+		for (final CargoAllocation cargoAllocation : scheduleModel.getSchedule().getCargoAllocations()) {
+
+			final CargoReportModel model = new CargoReportModel();
+			final EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
+
+			final Optional<SlotAllocation> loadOptional = slotAllocations //
+					.stream() //
+					.filter(s -> (s.getSlot() != null && (s.getSlot() instanceof LoadSlot))) //
+					.findFirst();
+
+			final Optional<SlotAllocation> dischargeOptional = slotAllocations.stream()//
+					.filter(s -> (s.getSlot() != null && s.getSlot() instanceof DischargeSlot)) //
+					.findFirst();
+
 			if (!loadOptional.isPresent()) {
 				continue;
 			}
-			ilpModel.loadingWindowDate = loadOptional.get().getWindowStart();
-			ilpModel.loadingWindowSizeInHours = loadOptional.get().getWindowSizeInHours();
-			ilpModel.sourcePortName = loadOptional.get().getPort().getName();
-			ilpModel.type = "";
+
+			model.cargoType = cargoAllocation.getCargoType().toString();
+
+			final String vesselName = vesselAssignmentFormatter.render(cargoAllocation);
+			if (!vesselName.equals("")) {
+				model.vesselName = vesselName;
+			}
+
+			if (loadOptional.isPresent()) {
+				updateLoadAttributes(model, loadOptional.get());
+			}
 			if (dischargeOptional.isPresent()) {
-				ilpModel.endBuyer = CargoReportUtils.getEndBuyerText(dischargeOptional.get());
-				ilpModel.endBuyerWindowDate = dischargeOptional.get().getWindowStart();
-				ilpModel.endBuyerWindowSizeInHours = dischargeOptional.get().getWindowSizeInHours();
-				ilpModel.receivingPortName = dischargeOptional.get().getPort().getName();
+				updateDischargeAttributes(model, dischargeOptional.get());
 			}
-			String vesselName = vesselAssignmentFormatter.render(cargoAllocation);
-			if (vesselName.equals("")) {
-				ilpModel.vesselName = null;
-			} else {
-				ilpModel.vesselName = vesselName;
-			}
-			LocalDate nextLoadPortDate = CargoReportUtils.getNextLoadPortDate(cargoAllocation);
-			ilpModel.nextLoadPortDate = nextLoadPortDate;
-			if (nextLoadPortDate != null) {
-				ilpModel.rtv = Days.between(loadOptional.get().getWindowStart(), nextLoadPortDate);
-			} else {
-				ilpModel.rtv = null;
-			}
-			Optional<SlotAllocation> slotAllocation = slotAllocations.stream().filter(s->s.getSlot() == loadOptional.get()).findFirst();
-			ilpModel.loadableVolume = slotAllocation.get().getVolumeTransferred();
-			ilpModel.comments = loadOptional.get().getNotes();
-			ilpModels.add(ilpModel);
+
+			models.add(model);
 		}
-//		jsonOutput(ilpModels);
-		return ilpModels;
+
+		return models;
 	}
-	
-	private static void jsonOutput(List<CargoReportModel> ilpModels) {
-		ObjectMapper objectMapper = new ObjectMapper();
+
+	private static void updateLoadAttributes(final @NonNull CargoReportModel model, final @NonNull SlotAllocation slotAllocation) {
+		final Slot slot = slotAllocation.getSlot();
+		if (slot != null) {
+			model.loadName = slot.getName();
+			model.loadComment = slot.getNotes();
+			model.purchaseContract = slot.getContract() == null ? null : slot.getContract().getName();
+			model.purchaseCounterparty = slot.getSlotOrDelegateCounterparty();
+		}
+		final SlotVisit slotVisit = slotAllocation.getSlotVisit();
+		if (slotVisit != null) {
+			model.loadScheduledDate = slotVisit.getStart().toLocalDateTime();
+			model.loadPortName = slotVisit.getPort().getName();
+		}
+		model.loadPrice = slotAllocation.getPrice();
+		model.loadVolumeM3 = slotAllocation.getVolumeTransferred();
+		model.loadVolumeMMBTU = slotAllocation.getEnergyTransferred();
+	}
+
+	private static void updateDischargeAttributes(final @NonNull CargoReportModel model, final @NonNull SlotAllocation slotAllocation) {
+		final Slot slot = slotAllocation.getSlot();
+		if (slot != null) {
+			model.dischargeName = slot.getName();
+			model.dischargeComment = slot.getNotes();
+			model.saleContract = slot.getContract() == null ? null : slot.getContract().getName();
+			model.saleCounterparty = slot.getSlotOrDelegateCounterparty();
+		}
+		final SlotVisit slotVisit = slotAllocation.getSlotVisit();
+		if (slotVisit != null) {
+			model.dischargeScheduledDate = slotVisit.getStart().toLocalDateTime();
+			model.dischargePortName = slotVisit.getPort().getName();
+		}
+		model.dischargePrice = slotAllocation.getPrice();
+		model.dischargeVolumeM3 = slotAllocation.getVolumeTransferred();
+		model.dischargeVolumeMMBTU = slotAllocation.getEnergyTransferred();
+	}
+
+	private static void jsonOutput(final List<CargoReportModel> models) {
+		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			objectMapper.writeValue(new File("/tmp/user.json"), ilpModels);
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			objectMapper.writeValue(new File("/tmp/user.json"), models);
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 

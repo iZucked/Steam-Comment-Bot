@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -19,6 +17,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +58,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class ScenarioServicePublishAction {
+	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServicePublishAction.class);
 
 	public static void publishScenario(ScenarioInstance scenarioInstance) {
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
@@ -219,20 +220,23 @@ public class ScenarioServicePublishAction {
 
 				publishersMonitor.beginTask("Publish base case reports", publishersList.size());
 				for (IReportPublisherExtension reportPublisherExtension : publishersList) {
-					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+					try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-					reportPublisherExtension.publishReport(scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider), outputStream);
-					String reportType = reportPublisherExtension.getReportType();
+						reportPublisherExtension.publishReport(scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider), outputStream);
+						String reportType = reportPublisherExtension.getReportType();
 
-					// Call the correct upload report endpoint;
-					outputStream.toByteArray();
-					ReportsServiceClient reportsServiceClient = new ReportsServiceClient();
+						// Call the correct upload report endpoint;
+						outputStream.toByteArray();
+						ReportsServiceClient reportsServiceClient = new ReportsServiceClient();
 
-					try {
-						reportsServiceClient.uploadReport(outputStream.toString(), reportType, uuid);
-					} catch (IOException e) {
-						e.printStackTrace();
-						return;
+						try {
+							reportsServiceClient.uploadReport(outputStream.toString(), reportType, uuid);
+						} catch (IOException e) {
+							e.printStackTrace();
+							return;
+						}
+					} catch (Exception e) {
+						LOG.error(e.getMessage(), e);
 					}
 					publishersMonitor.worked(1);
 				}
