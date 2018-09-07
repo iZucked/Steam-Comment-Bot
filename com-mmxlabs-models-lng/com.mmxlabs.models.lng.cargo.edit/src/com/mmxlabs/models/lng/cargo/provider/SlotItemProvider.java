@@ -320,7 +320,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_cn_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_cn_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_cn_description"),
 				 CargoPackage.Literals.SLOT__CN,
 				 true,
 				 false,

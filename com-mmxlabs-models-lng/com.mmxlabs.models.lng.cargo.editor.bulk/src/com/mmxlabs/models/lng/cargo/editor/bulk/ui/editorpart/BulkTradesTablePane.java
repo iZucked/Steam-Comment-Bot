@@ -102,10 +102,14 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.rowmodel.extmodule.ITradeBasedBu
 import com.mmxlabs.models.lng.cargo.editor.bulk.rowmodel.extmodule.ITradeBasedBulkRowModelFactoryExtension;
 import com.mmxlabs.models.lng.cargo.editor.bulk.rowtransformer.extmodule.ITradeBasedBulkRowTransformerExtension;
 import com.mmxlabs.models.lng.cargo.editor.bulk.rowtransformer.extmodule.ITradeBasedBulkRowTransformerFactoryExtension;
+import com.mmxlabs.models.lng.cargo.editor.bulk.views.DischargePortTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesBasedRowModelTransformerFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.ITradesRowTransformerFactory;
+import com.mmxlabs.models.lng.cargo.editor.bulk.views.LoadPortTradesBasedFilterHandler;
+import com.mmxlabs.models.lng.cargo.editor.bulk.views.PurchaseContractTradesBasedFilterHandler;
+import com.mmxlabs.models.lng.cargo.editor.bulk.views.SalesContractTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
@@ -308,6 +312,14 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		// getToolBarManager().add(addLoadSlotToDischarge);
 		// getToolBarManager().add(addDischargeSlotToLoad);
 		final List<Action> filterActions = new LinkedList<>();
+		filterActions.add(new Action("Clear Filter") {
+			@Override
+			public void run() {
+				activeColumnFilterHandlers.clear();
+				scenarioViewer.refresh(false);
+			}
+		});
+		
 		for (final ITradesBasedFilterHandler filterHandler : getFiltersList(allColumnFilterHandlers)) {
 			if (filterHandler.activateAction(columnFilters, activeColumnFilterHandlers, this) != null) {
 				filterActions.add(filterHandler.activateAction(columnFilters, activeColumnFilterHandlers, this));
@@ -789,16 +801,38 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	}
 
 	protected void registerColumnFilterHandlers() {
+
+		{
+            SalesContractTradesBasedFilterHandler handler = new SalesContractTradesBasedFilterHandler();
+            registerHandler(handler, true);
+        }
+		{
+            DischargePortTradesBasedFilterHandler handler = new DischargePortTradesBasedFilterHandler();
+            registerHandler(handler, true);
+        }
+		{
+            LoadPortTradesBasedFilterHandler handler = new LoadPortTradesBasedFilterHandler();
+            registerHandler(handler, true);
+        }
+		{
+            PurchaseContractTradesBasedFilterHandler handler = new PurchaseContractTradesBasedFilterHandler();
+            registerHandler(handler, true);
+        }
+		
 		if (columnFilterExtensions != null) {
 			for (final ITradeBasedBulkColumnFilterExtension ext : columnFilterExtensions) {
 				final ITradesBasedFilterHandler handler = ext.getFactory();
-				allColumnFilterHandlers.add(handler);
-				if (handler.isDefaultFilter()) {
-					// default filters are always active
-					activeColumnFilterHandlers.add(handler);
-					handler.activate(columnFilters, activeColumnFilterHandlers);
-				}
+				registerHandler(handler, handler.isDefaultFilter());
 			}
+		}
+	}
+	
+	private void registerHandler(ITradesBasedFilterHandler handler, boolean activate) {
+		allColumnFilterHandlers.add(handler);
+		if (activate) {
+			// default filters are always active
+			activeColumnFilterHandlers.add(handler);
+			handler.activate(columnFilters, activeColumnFilterHandlers);
 		}
 	}
 
