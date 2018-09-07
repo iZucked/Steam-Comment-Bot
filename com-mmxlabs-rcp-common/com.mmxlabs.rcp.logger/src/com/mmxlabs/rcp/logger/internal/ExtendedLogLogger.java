@@ -26,6 +26,7 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 				&& ! "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping".equals(name)
 				&& ! "org.springframework.web.servlet.handler.SimpleUrlHandlerMapping".equals(name)
 				&& ! "org.springframework.core.annotation.AnnotationUtils".equals(name)
+				&& ! "org.springframework.boot.web.servlet.FilterRegistrationBean".equals(name)
 				&& ! "com.mmxlabs.lngdataservice.central.EmbeddedMongoMorphiaAutoConfiguration".equals(name);
 		debugEnabled = !(name.startsWith("org.springframework")//
 				|| name.startsWith("org.eclipse.jetty")//
