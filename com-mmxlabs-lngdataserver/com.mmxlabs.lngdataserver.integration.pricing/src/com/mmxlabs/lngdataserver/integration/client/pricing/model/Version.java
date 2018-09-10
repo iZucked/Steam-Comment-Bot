@@ -106,5 +106,4 @@ public class Version {
     public void setCurrent(boolean current) {
         this.current = current;
     }
-
 }

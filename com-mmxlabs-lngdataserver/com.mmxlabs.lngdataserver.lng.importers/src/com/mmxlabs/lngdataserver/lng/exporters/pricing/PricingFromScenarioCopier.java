@@ -82,22 +82,22 @@ public class PricingFromScenarioCopier {
 
 		pricingModel.getCurrencyIndices().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CURRENCY);
-			version.getCurves().put(curve.getName(), curve);
+			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
 		});
 
 		pricingModel.getBaseFuelPrices().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.BASE_FUEL);
-			version.getCurves().put(curve.getName(), curve);
+			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
 		});
 
 		pricingModel.getCharterIndices().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.CHARTER);
-			version.getCurves().put(curve.getName(), curve);
+			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
 		});
 
 		pricingModel.getCommodityIndices().forEach(idx -> {
 			Curve curve = curveTransformer.apply(idx, CurveType.COMMODITY);
-			version.getCurves().put(curve.getName(), curve);
+			version.getCurves().put(Curve.encodedName(curve.getName()), curve);
 		});
 
 		String marketCurveDataVersion = pricingModel.getMarketCurveDataVersion();
