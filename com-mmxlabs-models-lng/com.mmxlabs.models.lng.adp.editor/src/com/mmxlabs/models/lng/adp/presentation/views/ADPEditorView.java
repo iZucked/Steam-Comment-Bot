@@ -272,13 +272,16 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 	}
 
 	private void updateRootModel(@Nullable final LNGScenarioModel scenarioModel, @Nullable final ADPModel adpModel) {
+		final boolean changed = this.editorData.adpModel != adpModel;
+		if (!changed) {
+			return;
+		}
 
 		if (releaseAdaptersRunnable != null) {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
 		}
 
-		final boolean changed = this.editorData.adpModel != adpModel;
 
 		this.editorData.adpModel = adpModel;
 		this.editorData.scenarioModel = scenarioModel;
