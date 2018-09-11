@@ -5,15 +5,20 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import com.google.common.collect.Lists;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -33,6 +38,27 @@ import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
  */
 @RunWith(value = ShiroRunner.class)
 public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
+
+	private static List<String> requiredFeatures = Lists.newArrayList("contingency-idle-time");
+	private static List<String> addedFeatures = new LinkedList<>();
+
+	@BeforeClass
+	public static void hookIn() {
+		for (final String feature : requiredFeatures) {
+			if (!LicenseFeatures.isPermitted("features:" + feature)) {
+				LicenseFeatures.addFeatureEnablements(feature);
+				addedFeatures.add(feature);
+			}
+		}
+	}
+
+	@AfterClass
+	public static void hookOut() {
+		for (final String feature : addedFeatures) {
+			LicenseFeatures.removeFeatureEnablements(feature);
+		}
+		addedFeatures.clear();
+	}
 
 	@Test
 	@Category({ MicroTest.class })
@@ -109,6 +135,7 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
+		@SuppressWarnings("unused")
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.build() //
@@ -123,7 +150,6 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check no initial delay
 			{
 				final Schedule schedule = scenarioRunner.evaluateInitialState();
@@ -147,6 +173,7 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
+		@SuppressWarnings("unused")
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.build() //
@@ -161,7 +188,6 @@ public class ContingencyIdleTimeTest extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check no initial delay
 			{
 				final Schedule schedule = scenarioRunner.evaluateInitialState();
