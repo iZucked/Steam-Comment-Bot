@@ -85,6 +85,7 @@ public class PortAndDistancesToScenarioCopier {
 			} else {
 				oldPort = PortFactory.eINSTANCE.createPort();
 				oldPort.setLocation(PortFactory.eINSTANCE.createLocation());
+				oldPort.getLocation().setMmxId(mmxId);
 
 				oldPort.setDefaultWindowSize(1);
 				oldPort.setDefaultWindowSizeUnits(TimePeriod.DAYS);
