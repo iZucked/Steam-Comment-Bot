@@ -367,11 +367,10 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 					final ScenarioResult scenarioResult = new ScenarioResult(getScenarioInstance(), ScenarioModelUtil.getScheduleModel(getScenarioDataProvider()));
 					ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, //
-							provider -> {
+							provider -> RunnerHelper.asyncExec(() -> {
 								provider.deselectAll();
 								provider.select(scenarioResult);
-
-							});
+							}));
 
 				} finally {
 					monitor.done();
