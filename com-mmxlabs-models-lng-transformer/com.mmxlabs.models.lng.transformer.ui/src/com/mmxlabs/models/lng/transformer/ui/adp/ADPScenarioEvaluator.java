@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -73,8 +74,8 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 
 		// DEBUGGING
 		// DO NOT COMMIT
-		 ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000);
-		 ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
+		ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000);
+		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
 
 		final List<String> hints = new LinkedList<>();
 		// TODO: Add hints
@@ -104,58 +105,17 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			// Probably need to bring in the evaluation modules
 			final Collection<IOptimiserInjectorService> services = bridge.getDataTransformer().getModuleServices();
 
-			final ISequences initialSequences = bridge.getDataTransformer().getInitialSequences();// injector.getInstance(Key.get(IMultiStateResult.class,
-			// Names.named(OptimiserConstants.SEQUENCE_TYPE_SEQUENCE_BUILDER)));
+			final ISequences initialSequences = bridge.getDataTransformer().getInitialSequences();
 
 			// FIXME: Create ADP chain
 			final IChainRunner chainRunner = LNGScenarioChainBuilder.createADPOptimisationChain(optimisationPlan.getResultName(), bridge.getDataTransformer(), bridge, optimisationPlan,
 					executorService, new MultiStateResult(initialSequences, new HashMap<>()), initialHints);
 
-			final IMultiStateResult result = chainRunner.run(progressMonitor);
+			LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, bridge, chainRunner, null);
+
+			final IMultiStateResult result = scenarioRunner.runWithProgress(progressMonitor);
 			return result != null;
-			// final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
-			// final Schedule schedule = bridge.createSchedule(bestSolution.getFirst(), bestSolution.getSecond());
-			//
-			// final ScheduleModel scheduleModel = ScheduleFactory.eINSTANCE.createScheduleModel();
-			// scheduleModel.setSchedule(schedule);
-			// scheduleModel.setDirty(false);
-			//
-			// adpResult.setScheduleModel(scheduleModel);
-			//
-			// // Add new markets to extra bit
-			// for (final Sequence seq : schedule.getSequences()) {
-			// final CharterInMarket charterInMarket = seq.getCharterInMarket();
-			// if (charterInMarket != null) {
-			// if (charterInMarket.eContainer() == null) {
-			// adpResult.getExtraSpotCharterMarkets().add(charterInMarket);
-			// }
-			// }
-			// }
-			//
-			// // New spot slots etc will need to be contained here.
-			// for (final SlotAllocation a : schedule.getSlotAllocations()) {
-			// final Slot slot = a.getSlot();
-			// if (slot != null && slot.eContainer() == null) {
-			// adpResult.getExtraSlots().add(slot);
-			// }
-			// }
-			// for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-			//
-			// for (final SlotAllocation a : ca.getSlotAllocations()) {
-			// final Slot slot = a.getSlot();
-			// if (slot != null && slot.eContainer() == null) {
-			// adpResult.getExtraSlots().add(slot);
-			// }
-			// }
-			// }
-			// for (final OpenSlotAllocation ca : schedule.getOpenSlotAllocations()) {
-			// final Slot slot = ca.getSlot();
-			// if (slot != null && slot.eContainer() == null) {
-			// assert false;
-			// }
-			// }
-			//
-			// return adpResult;
+
 		} catch (final InfeasibleSolutionException e) {
 			throw e;
 		} catch (final Exception e) {
@@ -166,151 +126,6 @@ public class ADPScenarioEvaluator implements IADPScenarioEvaluator {
 			System.out.println("done in:" + (System.currentTimeMillis() - start));
 		}
 	}
-
-	// private Module createInitialSolutionModule(final @NonNull ADPModel adpModel, final CharterInMarket defaultMarket) {
-	// return new PrivateModule() {
-	//
-	// @Override
-	// protected void configure() {
-	// // Nothing to do here - see provides methods
-	// }
-	//
-	// @Provides
-	// @Singleton
-	// @Named("ADP_SOLUTION")
-	// private ISequences provideSequences(final Injector injector, final ModelEntityMap modelEntityMap, final IScenarioDataProvider scenarioDataProvider, final IOptimisationData data) {
-	// final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
-	// final List<IResource> resources = new LinkedList<>();
-	//
-	// final List<ISequenceElement> allSequenceElements = new LinkedList<>();
-	//
-	// final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-	// for (final PurchaseContractProfile p : adpModel.getPurchaseContractProfiles()) {
-	// if (p.isEnabled()) {
-	// for (final SubContractProfile<LoadSlot> sp : p.getSubProfiles()) {
-	// for (final Slot s : sp.getSlots()) {
-	// final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class);
-	// allSequenceElements.add(portSlotProvider.getElement(portSlot));
-	// }
-	// }
-	// }
-	// }
-	// for (final SalesContractProfile p : adpModel.getSalesContractProfiles()) {
-	// if (p.isEnabled()) {
-	// for (final SubContractProfile<DischargeSlot> sp : p.getSubProfiles()) {
-	// for (final Slot s : sp.getSlots()) {
-	// final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class);
-	// allSequenceElements.add(portSlotProvider.getElement(portSlot));
-	// }
-	// }
-	// }
-	// }
-	//
-	// final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioDataProvider);
-	//
-	// if (adpModel.getSpotMarketsProfile().isIncludeEnabledSpotMarkets()) {
-	// final List<SpotMarketGroup> groups = Lists.newArrayList( //
-	// spotMarketsModel.getFobPurchasesSpotMarket(), //
-	// spotMarketsModel.getDesPurchaseSpotMarket(), //
-	// spotMarketsModel.getDesSalesSpotMarket(), //
-	// spotMarketsModel.getFobSalesSpotMarket() //
-	// );
-	// for (final SpotMarketGroup group : groups) {
-	// for (final SpotMarket market : group.getMarkets()) {
-	// if (market.isEnabled()) {
-	// final ISpotMarket o_market = modelEntityMap.getOptimiserObjectNullChecked(market, ISpotMarket.class);
-	// final ISpotMarketSlotsProvider spotMarketSlotsProvider = injector.getInstance(ISpotMarketSlotsProvider.class);
-	// final List<@NonNull ISequenceElement> elements = spotMarketSlotsProvider.getElementsFor(o_market);
-	// allSequenceElements.addAll(elements);
-	// }
-	// }
-	// }
-	// }
-	//
-	// final FleetProfile fleetProfile = adpModel.getFleetProfile();
-	// {
-	// for (final VesselEvent vesselEvent : cargoMo.getVesselEvents()) {
-	// final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(vesselEvent, IPortSlot.class);
-	// if (portSlot instanceof IVesselEventPortSlot) {
-	// final IVesselEventPortSlot eventPortSlot = (IVesselEventPortSlot) portSlot;
-	// allSequenceElements.addAll(eventPortSlot.getEventSequenceElements());
-	// } else {
-	// final ISequenceElement element = portSlotProvider.getElement(portSlot);
-	// allSequenceElements.add(element);
-	// }
-	// }
-	// }
-	//
-	// if (fleetProfile.isIncludeEnabledCharterMarkets()) {
-	// final List<CharterInMarket> charterInMarkets = spotMarketsModel.getCharterInMarkets();
-	// final ISpotCharterInMarketProvider spotCharterInMarketProvider = injector.getInstance(ISpotCharterInMarketProvider.class);
-	//
-	// for (final CharterInMarket charterInMarket : charterInMarkets) {
-	// if (charterInMarket.isNominal()) {
-	// final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
-	// final IVesselAvailability o_availability = spotCharterInMarketProvider.getSpotMarketAvailability(market, -1);
-	// resources.add(vesselProvider.getResource(o_availability));
-	// }
-	// if (charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
-	// final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
-	// final int spotCharterInMarketCount = spotCharterInMarketProvider.getSpotCharterInMarketCount(market);
-	// for (int i = 0; i < spotCharterInMarketCount; ++i) {
-	// final IVesselAvailability o_availability = spotCharterInMarketProvider.getSpotMarketAvailability(market, i);
-	// resources.add(vesselProvider.getResource(o_availability));
-	// }
-	// }
-	// }
-	// }
-	// {
-	// final ISpotCharterInMarketProvider spotCharterInMarketProvider = injector.getInstance(ISpotCharterInMarketProvider.class);
-	//
-	// {
-	// final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(defaultMarket, ISpotCharterInMarket.class);
-	// final IVesselAvailability o_availability = spotCharterInMarketProvider.getSpotMarketAvailability(market, -1);
-	// resources.add(vesselProvider.getResource(o_availability));
-	// }
-	// }
-	//
-	// for (final VesselAvailability vesselAvailability : fleetProfile.getVesselAvailabilities()) {
-	// final IVesselAvailability o_availability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
-	// resources.add(vesselProvider.getResource(o_availability));
-	// }
-	//
-	// final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
-	//
-	// for (final ISequenceElement e : allSequenceElements) {
-	// final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
-	// if (vesselAvailability != null) {
-	// final IResource o_resource = vesselProvider.getResource(vesselAvailability);
-	// resources.add(o_resource);
-	// }
-	// }
-	//
-	// final IModifiableSequences initialSequences = SequenceHelper.createEmptySequences(injector, resources);
-	// initialSequences.getModifiableUnusedElements().addAll(allSequenceElements);
-	//
-	// return initialSequences;
-	// }
-	//
-	// @Provides
-	// @Singleton
-	// @Named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)
-	// @Exposed
-	// private ISequences provideInitialSequences(@Named("ADP_SOLUTION") final ISequences sequences) {
-	// return sequences;
-	// }
-	//
-	// @Provides
-	// @Singleton
-	// @Named(LNGInitialSequencesModule.KEY_GENERATED_SOLUTION_PAIR)
-	// @Exposed
-	// private IMultiStateResult provideSolutionPair(@Named("ADP_SOLUTION") final ISequences sequences) {
-	//
-	// return new MultiStateResult(sequences, new HashMap<>());
-	// }
-	//
-	// };
-	// }
 
 	private Module createExtraDataModule(final @NonNull ADPModel adpModel) {
 

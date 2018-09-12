@@ -105,7 +105,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		plan.setUserSettings(EcoreUtil.copy(userSettings));
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, false, //
+		scenarioRunner = LNGScenarioRunner.make(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, false, //
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
@@ -249,9 +249,8 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 					RunnerHelper.syncExec(() -> originalEditingDomain.getCommandStack().execute(cmd));
 
 					plan.setName(AnalyticsSolutionHelper.generateName(plan));
-					
+
 					actionableSetPlan = plan;
-					
 
 				} finally {
 					monitor.done();

@@ -78,7 +78,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			fork = ScenarioServiceModelUtils.fork(parent, name, new NullProgressMonitor());
 			forkRecord = SSDataManager.Instance.getModelRecord(fork);
 			this.forkScenarioDataProvider = forkRecord.aquireScenarioDataProvider("AbstractLNGRunMultipleForkedJobsControl:1");
-			this.runner = new LNGScenarioRunner(runnerService, forkScenarioDataProvider, fork, optimisationPlan, forkScenarioDataProvider.getEditingDomain(), null, false, hints);
+			this.runner = LNGScenarioRunner.make(runnerService, forkScenarioDataProvider, fork, optimisationPlan, forkScenarioDataProvider.getEditingDomain(), null, false, hints);
 			this.lock = forkScenarioDataProvider.getModelReference().getLock();
 			this.lock.lock();
 		}

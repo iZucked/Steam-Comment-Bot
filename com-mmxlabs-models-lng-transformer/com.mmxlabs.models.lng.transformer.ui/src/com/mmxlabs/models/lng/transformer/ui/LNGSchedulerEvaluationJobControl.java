@@ -66,7 +66,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 
 			// Hack: Add on shipping only hint to avoid generating spot markets during eval.
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true,
+			final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true,
 					LNGTransformerHelper.HINT_SHIPPING_ONLY);
 			try {
 				scenarioDataProvider.setLastEvaluationFailed(true);

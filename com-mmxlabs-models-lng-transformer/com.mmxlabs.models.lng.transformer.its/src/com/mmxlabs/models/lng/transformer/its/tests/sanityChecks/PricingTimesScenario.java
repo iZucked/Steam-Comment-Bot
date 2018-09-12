@@ -146,7 +146,7 @@ public class PricingTimesScenario {
 	public void testSalesPrice(final double... prices) {
 		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, LNGScenarioRunnerUtils.createDefaultOptimisationPlan(),
+			final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, LNGScenarioRunnerUtils.createDefaultOptimisationPlan(),
 					new TransformerExtensionTestBootstrapModule(), null, true);
 			runner.evaluateInitialState();
 

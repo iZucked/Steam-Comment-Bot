@@ -60,36 +60,30 @@ public class LNGScenarioRunner {
 
 	private final @NonNull CleanableExecutorService executorService;
 
-	public LNGScenarioRunner(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
-			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
-		this(exectorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), runnerHook, evaluationOnly, initialHints);
+	public static @NonNull LNGScenarioRunner make(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider,
+			@NonNull final OptimisationPlan optimisationPlan, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
+		return make(exectorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), runnerHook, evaluationOnly, initialHints);
 
 	}
 
-	public LNGScenarioRunner(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
-			@Nullable final Module extraModule, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
-		this(exectorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), extraModule, null, runnerHook, evaluationOnly, initialHints);
+	public static @NonNull LNGScenarioRunner make(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider,
+			@NonNull final OptimisationPlan optimisationPlan, @Nullable final Module extraModule, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
+		return make(exectorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), extraModule, null, runnerHook, evaluationOnly, initialHints);
 	}
 
-	public LNGScenarioRunner(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
-			@NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly,
-			final String... initialHints) {
-		this(exectorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, null, runnerHook, evaluationOnly, initialHints);
+	public static @NonNull LNGScenarioRunner make(@NonNull final CleanableExecutorService exectorService, @NonNull final IScenarioDataProvider scenarioDataProvider,
+			@Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final IRunnerHook runnerHook,
+			final boolean evaluationOnly, final String... initialHints) {
+		return make(exectorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, null, runnerHook, evaluationOnly, initialHints);
 	}
 
-	public LNGScenarioRunner(@NonNull final CleanableExecutorService executorService, @NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
-			@NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule, @Nullable final IOptimiserInjectorService localOverrides,
-			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
-
-		this.executorService = executorService;
-		this.scenarioDataProvider = scenarioDataProvider;
-		this.scenarioInstance = scenarioInstance;
+	public static @NonNull LNGScenarioRunner make(@NonNull final CleanableExecutorService executorService, @NonNull final IScenarioDataProvider scenarioDataProvider,
+			@Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule,
+			@Nullable final IOptimiserInjectorService localOverrides, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
 
 		// here we want to take user settings and generate initial state settings
-		scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, optimisationPlan.getUserSettings(), optimisationPlan.getSolutionBuilderSettings(),
-				editingDomain, extraModule, localOverrides, evaluationOnly, true, initialHints);
-
-		setRunnerHook(runnerHook);
+		LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, optimisationPlan.getUserSettings(),
+				optimisationPlan.getSolutionBuilderSettings(), editingDomain, extraModule, localOverrides, evaluationOnly, true, initialHints);
 
 		// // FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
 		// if (false) {
@@ -99,9 +93,28 @@ public class LNGScenarioRunner {
 		// chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
 		// executorService,
 		// LNGTransformerHelper.HINT_OPTIMISE_LSO);
-		chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge,
+		IChainRunner chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge,
 				optimisationPlan, executorService, initialHints);
 		// }
+
+		return new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, scenarioToOptimiserBridge, chainRunner, runnerHook);
+
+	}
+
+	public LNGScenarioRunner(@NonNull final CleanableExecutorService executorService, //
+			@NonNull final IScenarioDataProvider scenarioDataProvider, //
+			@Nullable final ScenarioInstance scenarioInstance, //
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, //
+			@NonNull final IChainRunner chainRunner, //
+			@Nullable final IRunnerHook runnerHook) {
+
+		this.executorService = executorService;
+		this.scenarioDataProvider = scenarioDataProvider;
+		this.scenarioInstance = scenarioInstance;
+		this.scenarioToOptimiserBridge = scenarioToOptimiserBridge;
+		this.chainRunner = chainRunner;
+
+		setRunnerHook(runnerHook);
 	}
 
 	public void dispose() {
@@ -114,11 +127,6 @@ public class LNGScenarioRunner {
 	@Nullable
 	public Schedule evaluateInitialState() {
 		startTimeMillis = System.currentTimeMillis();
-
-		// TODO: The API would be *much* cleaner if we did not need to return the annotated solution to get the fitness trace. This would avoid the need here to re-calculate after doing an initial
-		// export in the constructor
-		// TODO: It is also pretty keyed to the first run LSO state and not any other stage in the process.
-		// TODO: Fitness traces needed for ITS run. Additional data also needed for headless app runs - e.g. move analysis logger.
 
 		final IMultiStateResult result = chainRunner.getInitialState();
 

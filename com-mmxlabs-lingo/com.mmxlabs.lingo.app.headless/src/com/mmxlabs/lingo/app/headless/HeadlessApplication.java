@@ -293,7 +293,7 @@ public class HeadlessApplication implements IApplication {
 				hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 				try {
-					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, localOverrides,
+					final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, localOverrides,
 							runnerHook, false, hints.toArray(new String[hints.size()]));
 
 					// FIXME

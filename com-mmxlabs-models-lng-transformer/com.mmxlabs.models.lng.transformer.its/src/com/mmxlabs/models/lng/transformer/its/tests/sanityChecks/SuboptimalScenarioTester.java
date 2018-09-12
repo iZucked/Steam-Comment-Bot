@@ -140,7 +140,7 @@ public class SuboptimalScenarioTester {
 					lsoStage.getAnnealingSettings().setIterations(10_000);
 				}
 			}
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			runner.evaluateInitialState();
 			runner.runAndApplyBest();

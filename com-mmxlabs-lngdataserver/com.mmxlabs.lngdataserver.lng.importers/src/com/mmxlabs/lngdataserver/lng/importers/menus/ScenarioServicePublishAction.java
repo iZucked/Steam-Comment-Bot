@@ -118,7 +118,7 @@ public class ScenarioServicePublishAction {
 					assert optimisationPlan != null;
 
 					// Hack: Add on shipping only hint to avoid generating spot markets during eval.
-					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, true,
+					final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, scenarioInstance, optimisationPlan, editingDomain, null, true,
 							LNGTransformerHelper.HINT_SHIPPING_ONLY);
 					scenarioDataProvider.setLastEvaluationFailed(true);
 					runner.evaluateInitialState();
