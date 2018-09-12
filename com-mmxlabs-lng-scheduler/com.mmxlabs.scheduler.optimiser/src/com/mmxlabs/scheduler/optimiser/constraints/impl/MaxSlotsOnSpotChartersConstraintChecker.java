@@ -38,10 +38,10 @@ public class MaxSlotsOnSpotChartersConstraintChecker implements IPairwiseConstra
 
 	private static final int MAX_SPOT_COUNT = 2;
 
-	private String name;
+	private final @NonNull String name;
 
-	public MaxSlotsOnSpotChartersConstraintChecker(String name) {
-		this.name = (name);
+	public MaxSlotsOnSpotChartersConstraintChecker(final @NonNull String name) {
+		this.name = name;
 	}
 
 	/**
@@ -59,21 +59,19 @@ public class MaxSlotsOnSpotChartersConstraintChecker implements IPairwiseConstra
 
 	@Override
 	public @NonNull String getName() {
-		return getName();
+		return name;
 	}
 
 	@Override
 	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources) {
 		for (IResource resource : sequences.getResources()) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.SPOT_CHARTER
-					&& vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
+			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.SPOT_CHARTER && vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
 				continue;
 			}
 			int spots = 0;
 			for (ISequenceElement element : sequences.getSequence(resource)) {
-				if (portSlotProvider.getPortSlot(element).getPortType() == PortType.Load
-						|| portSlotProvider.getPortSlot(element).getPortType() == PortType.Discharge) {
+				if (portSlotProvider.getPortSlot(element).getPortType() == PortType.Load || portSlotProvider.getPortSlot(element).getPortType() == PortType.Discharge) {
 					spots++;
 				}
 			}
