@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -13,6 +14,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -27,8 +29,12 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
+import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 /**
  * Test cases for when we run out of heel on a non-cargo voyage.
@@ -96,6 +102,145 @@ public class RunDryTests extends AbstractMicroTestCase {
 		// 10 days * 100m3/day
 		Assert.assertEquals(10 * 100, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
 		Assert.assertEquals(10 * 1, ScheduleTools.getFuelQuantity(Fuel.PILOT_LIGHT, FuelUnit.MT, journey));
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testStartHeel() throws Exception {
+
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		
+		for (final BaseFuel baseFuel : fleetModelFinder.getFleetModel().getBaseFuels()) {
+			baseFuel.setEquivalenceFactor(47.423);
+		}
+
+		fleetModelBuilder.setVesselStateAttributes(vessel, true, 207, 207, 20, 12);
+		fleetModelBuilder.setVesselStateAttributes(vessel, false, 207, 207, 20, 12);
+
+		vessel.setPilotLightRate(1);
+		vessel.setSafetyHeel(500);
+		vessel.setWarmingTime(24);
+		vessel.setCoolingVolume(1000);
+		
+		//vessel.setMinSpeed(15.0);
+		//vessel.setMaxSpeed(15.0);
+
+		//vessel.getLadenAttributes().getFuelConsumption().clear();
+		//vessel.getBallastAttributes().getFuelConsumption().clear();
+		//fleetModelBuilder.setVesselStateAttributesCurve(vessel, true, 15.0, 124);
+		//fleetModelBuilder.setVesselStateAttributesCurve(vessel, false, 15.0, 124);
+
+		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port2 = portFinder.findPort("Sakai");
+
+		//distanceModelBuilder.setPortToPortDistance(port1, port2, null, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
+
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartPort(port1) //
+				.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0)) //
+				.withStartHeel(6000, 6000, 22.37, "0.01") //
+				.withEndPort(port2) //
+				.withEndWindow(LocalDateTime.of(2017, 8, 1, 0, 0)) //
+				.withEndHeel(0, 0, EVesselTankState.EITHER, "0") //
+				.build();
+		
+		Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 22.53)
+				.withWindowSize(1, TimePeriod.MONTHS)//
+				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
+				.build() //
+				//
+				.makeDESSale("D1", LocalDate.of(2017, 4, 2), portFinder.findPort("Sakai"), null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS)//
+				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
+				.build() //
+				//
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		evaluateTest(null, null, scenarioRunner -> {
+		});
+
+		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
+		Assert.assertNotNull(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+		final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
+		
+		Assert.assertEquals(6000, startEvent.getHeelAtStart());
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testNBOConversion() throws Exception {
+
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		
+		for (final BaseFuel baseFuel : fleetModelFinder.getFleetModel().getBaseFuels()) {
+			baseFuel.setEquivalenceFactor(50);
+		}
+
+		fleetModelBuilder.setVesselStateAttributes(vessel, true, 200, 200, 20, 12);
+		fleetModelBuilder.setVesselStateAttributes(vessel, false, 200, 200, 20, 12);
+
+		vessel.setPilotLightRate(1);
+		vessel.setSafetyHeel(500);
+		vessel.setWarmingTime(24);
+		vessel.setCoolingVolume(1000);
+		
+		vessel.setMinSpeed(15);
+		vessel.setMaxSpeed(15);
+
+		vessel.getLadenAttributes().getFuelConsumption().clear();
+		vessel.getBallastAttributes().getFuelConsumption().clear();
+		fleetModelBuilder.setVesselStateAttributesCurve(vessel, true, 15.0, 80);
+		fleetModelBuilder.setVesselStateAttributesCurve(vessel, false, 15.0, 80);
+
+		final Port port1 = portFinder.findPort("Point Fortin");
+		final Port port2 = portFinder.findPort("Sakai");
+
+		distanceModelBuilder.setPortToPortDistance(port1, port2, 10500, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
+
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartPort(port2) //
+				.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0)) //
+				.withStartHeel(4734, 4734, 25, "0.01") //
+				.withEndPort(port2) //
+				.withEndWindow(LocalDateTime.of(2017, 8, 1, 0, 0)) //
+				.withEndHeel(0, 0, EVesselTankState.EITHER, "0") //
+				.build();
+		
+		Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2017, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 25.0)
+				.withWindowSize(1, TimePeriod.MONTHS)//
+				.withVolumeLimits(140_000, 145_000, VolumeUnits.M3) //
+				.build() //
+				//
+				.makeDESSale("D1", LocalDate.of(2017, 4, 2), portFinder.findPort("Sakai"), null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS)//
+				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
+				.build() //
+				//
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		evaluateTest(null, null, scenarioRunner -> {
+		});
+
+		final Schedule schedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
+		Assert.assertNotNull(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+		final StartEvent startEvent = (StartEvent) sequence.getEvents().get(0);
+		final Journey journey = (Journey) sequence.getEvents().get(1);
+		
+		ScenarioTools.printFuel(journey.getFuels());
+		Assert.assertEquals(4734, startEvent.getHeelAtStart());
+		Assert.assertEquals(4733, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
 	}
 
 	@Test

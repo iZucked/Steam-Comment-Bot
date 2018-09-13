@@ -293,7 +293,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			output.setIdleNBOHours(nboHours);
 
-			final long nboInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerDay, nboHours) / 24L;
+			long nboInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerDay, nboHours) / 24L;
+			// Totally legit, as nboAvailableInM3 is set to Long.MAX_VALUE SOMEWHERE
+			if (nboInM3 < nboAvailableInM3 && nboAvailableInM3 != Long.MAX_VALUE) {
+				nboInM3 = nboAvailableInM3;
+			}
 			final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
 
 			output.setFuelConsumption(LNGFuelKeys.IdleNBO_In_m3, nboInM3);
