@@ -49,7 +49,7 @@ public class DefaultDistanceProviderTests {
 	@Test
 	public void getDistanceTest() throws Exception {
 		double dist = getDistanceProvider("1488467163%newest").getDistance("barrow island", "soyo", Via.Direct);
-		assertEquals(6952.0, dist);
+		assertEquals(6952.37, dist, 0.0);
 	}
 
 	// @Test(expected = PortNotFoundException.class)
@@ -62,6 +62,6 @@ public class DefaultDistanceProviderTests {
 	public void testIdentityRoute() throws Exception {
 
 		double dist = getDistanceProvider("1488467163%newest").getDistance("pecem", "pecem", Via.Direct);
-		assertEquals(0.0, dist);
+		assertEquals(0.0, dist, 0.0);
 	}
 }

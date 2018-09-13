@@ -38,9 +38,9 @@ public class CsvDistancesImporterTests {
 		CSVReader reader = new CSVReader(",".charAt(0), stream);
 
 		Map<String, Map<String, Double>> result = CsvDistancesImporter.importMatrix(reader, new DefaultImportContext(".".charAt(0)));
-		assertEquals(Double.valueOf(5), result.get("arzew").get("bethioua"));
-		assertEquals(Double.valueOf(12598), result.get("gladstone").get("arzew"));
-		assertEquals(Double.valueOf(12603), result.get("arzew").get("gladstone"));
+		assertEquals(Double.valueOf(5.623), result.get("arzew").get("bethioua"));
+		assertEquals(Double.valueOf(12598.923), result.get("gladstone").get("arzew"));
+		assertEquals(Double.valueOf(12603.058), result.get("arzew").get("gladstone"));
 		assertEquals(Double.valueOf(0), result.get("gladstone").get("gladstone"));
 	}
 }

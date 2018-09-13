@@ -13,7 +13,14 @@ Bundle-ClassPath: .,
  lib/spring-boot-starter-test-1.5.9.RELEASE.jar,
  lib/spring-boot-test-1.5.9.RELEASE.jar,
  lib/spring-boot-test-autoconfigure-1.5.9.RELEASE.jar,
- lib/spring-test-4.3.13.RELEASE.jar
+ lib/spring-test-4.3.13.RELEASE.jar,
+ lib/jetty-http-9.4.8.v20171121.jar,
+ lib/jetty-io-9.4.8.v20171121.jar,
+ lib/jetty-security-9.4.8.v20171121.jar,
+ lib/jetty-server-9.4.8.v20171121.jar,
+ lib/jetty-servlet-9.4.8.v20171121.jar,
+ lib/jetty-servlets-9.4.8.v20171121.jar,
+ lib/jetty-util-9.4.8.v20171121.jar
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0",
  org.junit;bundle-version="4.12.0",
  com.google.guava;bundle-version="21.0.0"

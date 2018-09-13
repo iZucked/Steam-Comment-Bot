@@ -56,15 +56,17 @@ public class NumberAttributeImporter {
 	@NonNull
 	public DecimalFormat getFloatFormatterForAttribute(@NonNull final EAttribute attribute) {
 
-		final EAnnotation annotation = attribute.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
 		String format = null;
+		if (attribute != null) {
+			final EAnnotation annotation = attribute.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
 
-		if (annotation != null) {
-			if (annotation.getDetails().containsKey("exportFormatString")) {
-				format = annotation.getDetails().get("exportFormatString");
-			}
-			if (format == null && annotation.getDetails().containsKey("formatString")) {
-				format = annotation.getDetails().get("formatString");
+			if (annotation != null) {
+				if (annotation.getDetails().containsKey("exportFormatString")) {
+					format = annotation.getDetails().get("exportFormatString");
+				}
+				if (format == null && annotation.getDetails().containsKey("formatString")) {
+					format = annotation.getDetails().get("formatString");
+				}
 			}
 		}
 

@@ -14,6 +14,7 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -44,8 +45,11 @@ public class UpstreamUrlProvider {
 	private static final OkHttpClient CLIENT = new okhttp3.OkHttpClient();
 
 	private UpstreamUrlProvider() {
-
-		preferenceStore = Activator.getDefault().getPreferenceStore();
+		if (Activator.getDefault() != null) {
+			preferenceStore = Activator.getDefault().getPreferenceStore();
+		} else {
+			preferenceStore = new PreferenceStore();
+		}
 		preferenceStore.addPropertyChangeListener(listener);
 
 		baseCaseServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(StandardDateRepositoryPreferenceConstants.P_ENABLE_BASE_CASE_SERVICE_KEY));
