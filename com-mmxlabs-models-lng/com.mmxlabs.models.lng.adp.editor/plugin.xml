@@ -264,14 +264,5 @@
          plugin.xml="adp.plugin.xml">
    </PluginXMLEnablement>
 </extension>
-<extension
-      point="org.eclipse.ui.views">
-   <view
-         class="com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView"
-         id="com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView"
-         name="ADP"
-         restorable="true">
-   </view>
-</extension>
 
 </plugin>

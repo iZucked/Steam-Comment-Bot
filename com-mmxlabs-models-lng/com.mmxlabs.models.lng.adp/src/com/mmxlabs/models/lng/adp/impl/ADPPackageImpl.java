@@ -1371,6 +1371,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
+		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
@@ -1389,6 +1390,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		subContractProfileEClass_T.getEBounds().add(g1);
 
 		// Add supertypes to classes
+		adpModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		g1 = createEGenericType(this.getContractProfile());
 		EGenericType g2 = createEGenericType(theCargoPackage.getLoadSlot());
 		g1.getETypeArguments().add(g2);

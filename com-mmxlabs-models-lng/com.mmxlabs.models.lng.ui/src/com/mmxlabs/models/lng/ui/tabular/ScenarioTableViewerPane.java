@@ -9,12 +9,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -25,19 +21,12 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.GroupMarker;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
-import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -49,21 +38,13 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.custom.ViewForm;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.menus.IMenuService;
-import org.eclipse.ui.views.properties.PropertySheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,213 +54,43 @@ import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.EMFViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
-import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
-public class ScenarioTableViewerPane extends EMFViewerPane {
+public class ScenarioTableViewerPane extends ScenarioViewerPane {
 
 	private static final Logger log = LoggerFactory.getLogger(ScenarioTableViewerPane.class);
 
-	protected static final String VIEW_GROUP = "view";
-	protected static final String ADD_REMOVE_GROUP = "addremove";
-	protected static final String EDIT_GROUP = "edit";
-	/**
-	 */
 	protected ScenarioTableViewer scenarioViewer;
-	/**
-	 */
-	protected final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
-	/**
-	 */
-	protected FilterField filterField;
-	/**
-	 */
-	protected ToolBarManager externalToolbarManager;
-	protected MenuManager externalMenuManager;
-
-	/**
-	 */
-	protected final IActionBars actionBars;
-	/**
-	 */
 	protected Action deleteAction;
-
-	/**
-	 */
 	protected Action addAction;
 
-	private final ISelectionListener selectionListener = new ISelectionListener() {
-
-		private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
-
-		@Override
-		public void selectionChanged(final MPart part, final Object selectedObject) {
-
-			{
-				final IWorkbenchPart view = SelectionHelper.getE3Part(part);
-
-				if (view == ScenarioTableViewerPane.this.part) {
-					return;
-				}
-				if (view instanceof PropertySheet) {
-					return;
-				}
-			}
-
-			// Convert selection
-			final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
-
-			// Avoid re-entrant selection changes.
-			if (inSelectionChanged.compareAndSet(false, true)) {
-				try {
-					// Avoid cyclic selection changes
-					if (ScenarioTableViewerPane.this.page.getActivePart() == ScenarioTableViewerPane.this.part) {
-						return;
-					}
-					if (scenarioViewer != null) {
-						try {
-							scenarioViewer.setSelection(selection, true);
-						} catch (final Exception e) {
-							log.error(e.getMessage(), e);
-						}
-					}
-				} finally {
-					inSelectionChanged.set(false);
-				}
-			}
-		}
-
-	};
-
 	public ScenarioTableViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
-		super(page, part);
-		this.scenarioEditingLocation = location;
-		this.actionBars = actionBars;
-		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
-		service.addPostSelectionListener(selectionListener);
-
+		super(page, part, location, actionBars);
 	}
 
 	public ScenarioTableViewer getScenarioViewer() {
 		return scenarioViewer;
 	}
 
-	protected String getToolbarID() {
-		return "toolbar:" + getClass().getCanonicalName();
-	}
-
-	protected String getMenuID() {
-		return "menu:" + getClass().getCanonicalName();
-	}
-
 	@Override
 	public void dispose() {
-		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
-		service.removePostSelectionListener(selectionListener);
-
-		if (externalToolbarManager != null) {
-			externalToolbarManager.removeAll();
-			externalToolbarManager.update(true);
-		}
-		externalToolbarManager = null;
-		if (externalMenuManager != null) {
-			externalMenuManager.removeAll();
-			externalMenuManager.update(true);
-		}
-		externalMenuManager = null;
-
-		scenarioViewer = null;
 
 		super.dispose();
-	}
 
-	public void setExternalToolBarManager(final ToolBarManager manager) {
-		this.externalToolbarManager = manager;
-	}
-
-	public void setExternalMenuManager(MenuManager menuManager) {
-		this.externalMenuManager = menuManager;
-
-	}
-
-	@Override
-	public ToolBarManager getToolBarManager() {
-		if (externalToolbarManager != null) {
-			return externalToolbarManager;
-		} else {
-			return super.getToolBarManager();
-		}
-	}
-
-	@Override
-	public MenuManager getMenuManager() {
-		if (externalMenuManager != null) {
-			return externalMenuManager;
-		} else {
-			return super.getMenuManager();
-		}
-	}
-
-	@Override
-	public void createControl(final Composite parent) {
-		// interpose and create filter field
-		if (getControl() == null) {
-			container = parent;
-
-			// Create view form.
-			// control = new ViewForm(parent, getStyle());
-			control = new ViewForm(parent, SWT.NONE);
-			control.addDisposeListener(new DisposeListener() {
-				@Override
-				public void widgetDisposed(final DisposeEvent event) {
-					dispose();
-				}
-			});
-
-			control.marginWidth = 0;
-			control.marginHeight = 0;
-
-			// Create a title bar.
-			if (externalToolbarManager == null)
-				createTitleBar();
-
-			final Composite inner = new Composite(control, SWT.NONE);
-			filterField = new FilterField(inner);
-
-			final GridLayout layout = new GridLayout(1, false);
-			layout.marginHeight = 0;
-			layout.marginWidth = 0;
-			inner.setLayout(layout);
-
-			viewer = createViewer(inner);
-
-			viewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-
-			control.setContent(inner);
-
-			control.setTabList(new Control[] { inner });
-
-			// When the pane or any child gains focus, notify the workbench.
-			control.addListener(SWT.Activate, this);
-			hookFocus(control);
-			hookFocus(viewer.getControl());
-		}
+		scenarioViewer = null;
 	}
 
 	@Override
@@ -289,7 +100,6 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 			enableOpenListener();
 
-			// scenarioViewer.getGrid().setCellSelectionEnabled(true);
 			filterField.setFilterSupport(scenarioViewer.getFilterSupport());
 
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
@@ -314,14 +124,11 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 	/**
 	 */
 	protected void enableOpenListener() {
-		scenarioViewer.addOpenListener(new IOpenListener() {
-
-			@Override
-			public void open(final OpenEvent event) {
-				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
-					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
-					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
-				}
+		scenarioViewer.addOpenListener(event -> {
+			final ISelection selection = scenarioViewer.getSelection();
+			if (selection instanceof IStructuredSelection) {
+				final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+				DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 			}
 		});
 	}
@@ -338,43 +145,14 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		return scenarioViewer.addColumn(columnName, renderer, manipulator, pathObjects);
 	}
 
-	public EditingDomain getEditingDomain() {
-		return scenarioEditingLocation.getEditingDomain();
-	}
-
-	public @NonNull AdapterFactory getAdapterFactory() {
-		return scenarioEditingLocation.getAdapterFactory();
-	}
-
-	public @NonNull IReferenceValueProviderProvider getReferenceValueProviderCache() {
-		return scenarioEditingLocation.getReferenceValueProviderCache();
-	}
-
-	public @NonNull IScenarioEditingLocation getJointModelEditorPart() {
-		return scenarioEditingLocation;
-	}
-
-	/**
-	 */
 	protected GridViewerColumn addNameManipulator(final String nameName) {
 		return addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
 	}
 
-	/**
-	 */
-	protected void defaultSetTitle(final String string) {
-		setTitle(string, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
-	}
-
-	/**
-	 */
 	protected Action createAddAction(final EReference containment) {
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), new Action[] { createDuplicateAction() });
-
 	}
 
-	/**
-	 */
 	protected IAddContext getAddContext(final EReference containment) {
 		return new IAddContext() {
 			@Override
@@ -421,16 +199,9 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
-		// set up toolbars
+		super.initToolbars();
 		final ToolBarManager toolbar = getToolBarManager();
-		toolbar.add(new GroupMarker(EDIT_GROUP));
-		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
-		toolbar.add(new GroupMarker(VIEW_GROUP));
 		toolbar.appendToGroup(VIEW_GROUP, new PackGridTreeColumnsAction(scenarioViewer));
-
-		final ActionContributionItem filter = filterField.getContribution();
-
-		toolbar.appendToGroup(VIEW_GROUP, filter);
 
 		final EReference containment = path.get(path.size() - 1);
 
@@ -453,25 +224,6 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
-		// add extension points to toolbar
-		{
-			final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
-			if (menuService != null) {
-				{
-					toolbar.getControl().addDisposeListener(new DisposeListener() {
-
-						@Override
-						public void widgetDisposed(DisposeEvent e) {
-							menuService.releaseContributions(toolbar);
-
-						}
-					});
-					menuService.populateContributionManager(toolbar, getToolbarID());
-				}
-
-			}
-		}
-
 		Action copyToClipboardAction = null;
 		if (viewer instanceof TableViewer) {
 			copyToClipboardAction = new CopyTableToClipboardAction(((TableViewer) viewer).getTable());
@@ -485,27 +237,6 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 		if (copyToClipboardAction != null) {
 			toolbar.add(copyToClipboardAction);
-		}
-
-		// Disable menu contributions for embedded panes. This stops empty menus appearing
-		if (externalMenuManager != null) {
-			// Menu Manager
-			{
-				final String menuID = getMenuID();
-				final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
-				if (menuService != null) {
-					final MenuManager mgr = getMenuManager();
-					menuService.populateContributionManager(mgr, menuID);
-
-					viewer.getControl().addDisposeListener(new DisposeListener() {
-						@Override
-						public void widgetDisposed(final DisposeEvent e) {
-							menuService.releaseContributions(mgr);
-						}
-					});
-				}
-			}
-
 		}
 
 		if (actionBars != null) {
@@ -526,7 +257,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		return result;
 	}
 
-	protected Action createDeleteAction(@Nullable Function<Collection<?>, Collection<Object>> callback) {
+	protected Action createDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
 		return new ScenarioModifyingAction("Delete") {
 			{
 				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
@@ -597,19 +328,13 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		}
 	}
 
+	@Override
 	public void setLocked(final boolean locked) {
 		final ScenarioTableViewer pScenarioViewer = scenarioViewer;
 		if (pScenarioViewer != null) {
 			pScenarioViewer.setLocked(locked);
 		}
 
-		for (final IContributionItem item : getToolBarManager().getItems()) {
-			if (item instanceof ActionContributionItem) {
-				final IAction action = ((ActionContributionItem) item).getAction();
-				if (action instanceof LockableAction) {
-					((LockableAction) action).setLocked(locked);
-				}
-			}
-		}
+		super.setLocked(locked);
 	}
 }

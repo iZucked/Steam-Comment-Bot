@@ -27,6 +27,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.SWT;
@@ -40,9 +42,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -50,20 +55,23 @@ import com.google.common.base.Objects;
 import com.mmxlabs.models.datetime.ui.formatters.YearMonthTextFormatter;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.services.IADPScenarioEvaluator;
+import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.scenario.LNGScenarioModelValidationTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.ScenarioInstanceStatusProvider;
-import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
+import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
-import com.mmxlabs.models.ui.validation.impl.Multi;
 import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -72,7 +80,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
+public class ADPEditorViewerPane extends ScenarioViewerPane {
 
 	private Label errorLabel;
 
@@ -82,11 +90,15 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 	FormattedText startEditor;
 	FormattedText endEditor;
 
+	public ADPEditorViewerPane(IWorkbenchPage page, JointModelEditorPart editorPart, IActionBars actionBars) {
+		super(page, editorPart, editorPart, actionBars);
+	}
+
 	@Override
-	public void createPartControl(final Composite parent) {
+	public Viewer createViewer(final Composite parent) {
 		imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
 
-		editorData = new ADPEditorData(this);
+		editorData = new ADPEditorData(this.scenarioEditingLocation);
 
 		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
 
@@ -98,6 +110,41 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 					.equalWidth(false) //
 					.create());
 			{
+
+				{
+					{
+						Button btn = new Button(toolbarComposite, SWT.PUSH);
+						// deleteScenarioButton.setText("X");
+						btn.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+
+						btn.setToolTipText("New ADP");
+						btn.addSelectionListener(new SelectionAdapter() {
+
+							@Override
+							public void widgetSelected(final SelectionEvent e) {
+								if (editorData.adpModel != null) {
+									if (MessageDialog.openConfirm(getJointModelEditorPart().getShell(), "Delete ADP", "Are you sure you want to delete the current ADP model?")) {
+
+										final CompoundCommand cmd = new CompoundCommand("Delete current ADP");
+										cmd.append(DeleteCommand.create(getEditingDomain(), editorData.adpModel));
+										getEditingDomain().getCommandStack().execute(cmd);
+										doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), null);
+									}
+								}
+								final LNGScenarioModel scenarioModel = (LNGScenarioModel) getJointModelEditorPart().getRootObject();
+								final ADPModel model = ADPModelUtil.createADPModel(scenarioModel);
+
+								final CompoundCommand cmd = new CompoundCommand("Create ADP");
+								cmd.append(SetCommand.create(getEditingDomain(), scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), model));
+								getEditingDomain().getCommandStack().execute(cmd);
+
+								doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), model);
+
+							}
+						});
+					}
+				}
+
 				final Label lbl = new Label(toolbarComposite, SWT.NONE);
 				lbl.setText("ADP");
 				{
@@ -111,12 +158,12 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 						@Override
 						public void widgetSelected(final SelectionEvent e) {
 							if (editorData.adpModel != null) {
-								if (MessageDialog.openConfirm(getShell(), "Delete ADP", "Are you sure you want to delete the current ADP model?")) {
+								if (MessageDialog.openConfirm(getJointModelEditorPart().getShell(), "Delete ADP", "Are you sure you want to delete the current ADP model?")) {
 
 									final CompoundCommand cmd = new CompoundCommand("Delete current ADP");
 									cmd.append(DeleteCommand.create(getEditingDomain(), editorData.adpModel));
 									getEditingDomain().getCommandStack().execute(cmd);
-									doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), null);
+									doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), null);
 								}
 							}
 						}
@@ -159,7 +206,6 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			pages.add(page);
 			tabItem.setControl(page);
 		}
-
 		{
 			final CTabItem tabItem = new CTabItem(folder, SWT.NONE);
 			tabItem.setText("Summary");
@@ -191,9 +237,50 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			});
 		}
 
-		makeUndoActions();
+		// makeUndoActions();
 
-		listenToScenarioSelection();
+		// listenToScenarioSelection();
+		doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), null);
+
+		// Create dummy viewer instance
+		return new Viewer() {
+
+			@Override
+			public void setSelection(ISelection selection, boolean reveal) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void setInput(Object input) {
+				// TODO Auto-generated method stub
+				doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), null);
+			}
+
+			@Override
+			public void refresh() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public ISelection getSelection() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Object getInput() {
+				// TODO Auto-generated method stub
+				return editorData.adpModel;
+			}
+
+			@Override
+			public Control getControl() {
+				// TODO Auto-generated method stub
+				return folder;
+			}
+		};
 	}
 
 	private final IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
@@ -230,17 +317,17 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 		}
 	}
 
-	@Override
-	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
-		final IStatusProvider statusProvider = getStatusProvider();
-		if (statusProvider != null) {
-			statusProvider.removeStatusChangedListener(statusChangedListener);
-			statusProvider.addStatusChangedListener(statusChangedListener);
-			refreshValidation(statusProvider.getStatus());
-		}
-		updateUndoActions(getEditingDomain());
-	}
+	// @Override
+	// protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
+	// doDisplayScenarioInstance(scenarioInstance, rootObject, null);
+	// final IStatusProvider statusProvider = getStatusProvider();
+	// if (statusProvider != null) {
+	// statusProvider.removeStatusChangedListener(statusChangedListener);
+	// statusProvider.addStatusChangedListener(statusChangedListener);
+	// refreshValidation(statusProvider.getStatus());
+	// }
+	//// updateUndoActions(getEditingDomain());
+	// }
 
 	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable ADPModel model) {
 
@@ -282,7 +369,6 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			releaseAdaptersRunnable = null;
 		}
 
-
 		this.editorData.adpModel = adpModel;
 		this.editorData.scenarioModel = scenarioModel;
 
@@ -309,10 +395,10 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 		btn_optimise.setEnabled(adpModel != null);
 
-		final IStatusProvider statusProvider = getStatusProvider();
-		if (statusProvider != null) {
-			statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
-		}
+		// final IStatusProvider statusProvider = getStatusProvider();
+		// if (statusProvider != null) {
+		// statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
+		// }
 	}
 
 	private Image imgError;
@@ -329,10 +415,10 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
 		}
-		final IStatusProvider statusProvider = getStatusProvider();
-		if (statusProvider != null) {
-			statusProvider.removeStatusChangedListener(statusChangedListener);
-		}
+		// final IStatusProvider statusProvider = getStatusProvider();
+		// if (statusProvider != null) {
+		// statusProvider.removeStatusChangedListener(statusChangedListener);
+		// }
 
 		if (editorData.adpModel != null) {
 			editorData.adpModel = null;
@@ -346,26 +432,27 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 
 	private void optimiseScenario() {
 
-		if (!validateScenario(getScenarioDataProvider(), editorData.adpModel)) {
+		if (!validateScenario(getJointModelEditorPart().getScenarioDataProvider(), editorData.adpModel)) {
 			return;
 		}
 
-		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(getJointModelEditorPart().getShell());
 		try {
 			dialog.run(true, true, (monitor) -> {
 
 				monitor.beginTask("Generate ADP", 1000);
 				try {
-					ServiceHelper.withService(IADPScenarioEvaluator.class, //
-							evaluator -> evaluator.runADPModel(getScenarioInstance(), //
-									getScenarioDataProvider(), //
+					final boolean result = ServiceHelper.withService(IADPScenarioEvaluator.class, //
+							evaluator -> evaluator.runADPModel(getJointModelEditorPart().getScenarioInstance(), //
+									getJointModelEditorPart().getScenarioDataProvider(), //
 									editorData.adpModel, //
 									new SubProgressMonitor(monitor, 1000)));
 
 					// final Command command = SetCommand.create(getEditingDomain(), editorData.adpModel, ADPPackage.Literals.ADP_MODEL__RESULT, result);
 					// RunnerHelper.syncExecDisplayOptional(() -> getDefaultCommandHandler().handleCommand(command, editorData.adpModel, ADPPackage.Literals.ADP_MODEL__RESULT));
 
-					final ScenarioResult scenarioResult = new ScenarioResult(getScenarioInstance(), ScenarioModelUtil.getScheduleModel(getScenarioDataProvider()));
+					final ScenarioResult scenarioResult = new ScenarioResult(getJointModelEditorPart().getScenarioInstance(),
+							ScenarioModelUtil.getScheduleModel(getJointModelEditorPart().getScenarioDataProvider()));
 					ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, //
 							provider -> RunnerHelper.asyncExec(() -> {
 								provider.deselectAll();
@@ -378,7 +465,7 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 			});
 		} catch (final InvocationTargetException e) {
 			if (e.getCause() instanceof InfeasibleSolutionException || e.getTargetException() instanceof InfeasibleSolutionException) {
-				MessageDialog.openError(getShell(), "Unable to generate solution", "Unable to generate a feasible schedule with the given constraints.");
+				MessageDialog.openError(getJointModelEditorPart().getShell(), "Unable to generate solution", "Unable to generate a feasible schedule with the given constraints.");
 			} else {
 				e.printStackTrace();
 			}
@@ -468,30 +555,13 @@ public class ADPEditorView extends ScenarioInstanceViewWithUndoSupport {
 		return true;
 	}
 
-	@Override
-	protected ScenarioInstanceStatusProvider createScenarioValidationProvider(final ScenarioInstance instance) {
-		return new ScenarioInstanceStatusProvider(instance) {
-			@Override
-			public void fireStatusChanged(IStatus status) {
-				if (!(status instanceof Multi)) {
-					if (editorData.adpModel != null) {
-						status = ADPEditorValidatorUtil.mergeWithADPValidation(status, editorData.getScenarioDataProvider(), editorData.adpModel);
-					}
-				}
-				super.fireStatusChanged(status);
-			}
-
-			@Override
-			public IStatus getStatus() {
-				IStatus status = super.getStatus();
-
-				if (!(status instanceof Multi)) {
-					if (editorData.adpModel != null) {
-						status = ADPEditorValidatorUtil.mergeWithADPValidation(status, editorData.getScenarioDataProvider(), editorData.adpModel);
-					}
-				}
-				return status;
-			}
-		};
+	public void setValidationTarget(EObject target) {
+		// Note: These indicies need to be kept in sync with page.
+		if (target instanceof FleetProfile) {
+			folder.setSelection(1);
+		} else if (target instanceof ContractProfile<?>) {
+			folder.setSelection(0);
+			((ContractPage) pages.get(0)).setSelectedProfile((ContractProfile<?>) target);
+		}
 	}
 }

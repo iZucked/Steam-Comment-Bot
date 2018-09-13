@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.adp;
 
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -72,13 +73,31 @@ public interface ADPPackage extends EPackage {
 	int ADP_MODEL = 0;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Year Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__YEAR_START = 0;
+	int ADP_MODEL__YEAR_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Year End</b></em>' attribute.
@@ -87,7 +106,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__YEAR_END = 1;
+	int ADP_MODEL__YEAR_END = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Purchase Contract Profiles</b></em>' containment reference list.
@@ -96,7 +115,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__PURCHASE_CONTRACT_PROFILES = 2;
+	int ADP_MODEL__PURCHASE_CONTRACT_PROFILES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Sales Contract Profiles</b></em>' containment reference list.
@@ -105,7 +124,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__SALES_CONTRACT_PROFILES = 3;
+	int ADP_MODEL__SALES_CONTRACT_PROFILES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fleet Profile</b></em>' containment reference.
@@ -114,7 +133,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__FLEET_PROFILE = 4;
+	int ADP_MODEL__FLEET_PROFILE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -123,7 +142,34 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL_FEATURE_COUNT = 5;
+	int ADP_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Model</em>' class.
@@ -132,7 +178,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL_OPERATION_COUNT = 0;
+	int ADP_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl <em>Fleet Profile</em>}' class.

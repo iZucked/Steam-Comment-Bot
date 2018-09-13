@@ -52,6 +52,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
@@ -226,7 +227,7 @@ public class ContractPage extends ADPComposite {
 					previewGroup.setLayout(new GridLayout(1, false));
 					previewGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 
-					previewGroup.setText("Preview");
+					previewGroup.setText("Contract positions");
 
 					final DetailToolbarManager removeButtonManager = new DetailToolbarManager(previewGroup, SWT.TOP);
 
@@ -541,5 +542,9 @@ public class ContractPage extends ADPComposite {
 			return false;
 		}
 
+	}
+
+	public void setSelectedProfile(ContractProfile<?> p) {
+		objectSelector.setSelection(new StructuredSelection(p.getContract()));
 	}
 }

@@ -9,6 +9,8 @@ package com.mmxlabs.models.lng.adp.util;
 import com.mmxlabs.models.lng.adp.*;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -189,6 +191,14 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseTargetCargoesOnVesselConstraint(TargetCargoesOnVesselConstraint object) {
 				return createTargetCargoesOnVesselConstraintAdapter();
+			}
+			@Override
+			public Adapter caseMMXObject(MMXObject object) {
+				return createMMXObjectAdapter();
+			}
+			@Override
+			public Adapter caseUUIDObject(UUIDObject object) {
+				return createUUIDObjectAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -613,6 +623,34 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTargetCargoesOnVesselConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject
+	 * @generated
+	 */
+	public Adapter createMMXObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.UUIDObject <em>UUID Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.mmxcore.UUIDObject
+	 * @generated
+	 */
+	public Adapter createUUIDObjectAdapter() {
 		return null;
 	}
 

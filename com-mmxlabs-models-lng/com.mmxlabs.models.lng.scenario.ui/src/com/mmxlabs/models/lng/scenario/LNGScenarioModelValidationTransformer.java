@@ -29,6 +29,7 @@ public class LNGScenarioModelValidationTransformer implements IValidationRootObj
 			l.add(lngScenarioModel.getScheduleModel());
 
 			l.add(lngScenarioModel.getAnalyticsModel());
+			l.add(lngScenarioModel.getAdpModel());
 
 			while (l.remove(null))
 				;

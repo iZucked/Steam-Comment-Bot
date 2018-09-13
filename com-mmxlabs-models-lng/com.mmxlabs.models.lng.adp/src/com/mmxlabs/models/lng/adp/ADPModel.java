@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.adp;
 
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import java.time.YearMonth;
 
 import org.eclipse.emf.common.util.EList;
@@ -31,7 +32,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface ADPModel extends EObject {
+public interface ADPModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Year Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->

@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.time.YearMonth;
 
 import java.util.Collection;
@@ -44,7 +45,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class ADPModelImpl extends EObjectImpl implements ADPModel {
+public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	/**
 	 * The default value of the '{@link #getYearStart() <em>Year Start</em>}' attribute.
 	 * <!-- begin-user-doc -->

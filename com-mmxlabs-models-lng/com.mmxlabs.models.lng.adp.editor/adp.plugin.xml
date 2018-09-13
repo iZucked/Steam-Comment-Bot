@@ -11,6 +11,14 @@
 -->
 
 <plugin>
-  
+  <extension
+      point="com.mmxlabs.models.ui.jointmodeleditors">
+   <jointModelEditor
+         id="com.mmxlabs.models.lng.adp.editor.ADPModelEditorContribution"
+         implementation="com.mmxlabs.models.lng.adp.editor.ADPModelEditorContribution"
+         priority="11"
+         subModelClass="com.mmxlabs.models.lng.adp.ADPModel">
+   </jointModelEditor>
+</extension>
 
 </plugin>

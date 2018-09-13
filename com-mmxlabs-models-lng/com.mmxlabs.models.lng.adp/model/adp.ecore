@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="adp" nsURI="http://www.mmxlabs.com/models/lng/adp/1/" nsPrefix="lng.adp">
-  <eClassifiers xsi:type="ecore:EClass" name="ADPModel">
+  <eClassifiers xsi:type="ecore:EClass" name="ADPModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="yearStart" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="yearEnd" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="purchaseContractProfiles"

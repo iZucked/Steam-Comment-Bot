@@ -193,10 +193,16 @@ public class MigrateToV96 extends AbstractMigrationUnit {
 		if (adpModelResult != null) {
 
 			final EClass cls_LoadSlot = MetamodelUtils.getEClass(pkg_CargoModel, "LoadSlot");
+			final EClass cls_SpotSlot = MetamodelUtils.getEClass(pkg_CargoModel, "SpotSlot");
 
 			final List<EObjectWrapper> extraSlots = adpModelResult.getRefAsList("extraSlots");
 			if (extraSlots != null) {
 				for (final EObjectWrapper slot : extraSlots) {
+
+					// Skip unused spot slots
+					if (cls_SpotSlot.isInstance(slot)) {
+						continue;
+					}
 					if (cls_LoadSlot.isInstance(slot)) {
 						loadSlots.add(slot);
 					} else {
@@ -218,11 +224,12 @@ public class MigrateToV96 extends AbstractMigrationUnit {
 				charterInMarkets.addAll(extraMarkets);
 			}
 
+			// We *could* retain the schedule *but* we have to generate the cargoes from the CargoAllocations
 			final EObjectWrapper resultScheduleModel = adpModelResult.getRef("scheduleModel");
 			if (resultScheduleModel != null) {
 				final EObjectWrapper schedule = resultScheduleModel.getRef("schedule");
 				if (schedule != null) {
-					scheduleModel.setRef("schedule", schedule);
+					// scheduleModel.setRef("schedule", schedule);
 				}
 			}
 			adpModel.unsetFeature("result");
