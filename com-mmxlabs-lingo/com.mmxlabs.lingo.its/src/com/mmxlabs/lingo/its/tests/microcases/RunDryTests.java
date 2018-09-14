@@ -240,7 +240,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 		
 		ScenarioTools.printFuel(journey.getFuels());
 		Assert.assertEquals(4734, startEvent.getHeelAtStart());
-		Assert.assertEquals(4733, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
+		Assert.assertEquals(4734, ScheduleTools.getFuelQuantity(Fuel.NBO, FuelUnit.M3, journey));
 	}
 
 	@Test

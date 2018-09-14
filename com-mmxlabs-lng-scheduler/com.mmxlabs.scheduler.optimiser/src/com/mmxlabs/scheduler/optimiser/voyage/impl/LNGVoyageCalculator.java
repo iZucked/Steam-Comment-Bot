@@ -94,7 +94,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		final int additionalRouteTimeInHours = routeCostProvider.getRouteTransitTime(options.getRoute(), vessel);
 		int extraIdleTime = options.getExtraIdleTime();
-		
+
 		/**
 		 * How much time is available to cover the distance, excluding time which must be spent traversing any canals
 		 */
@@ -108,15 +108,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// May be longer than available time
 		final int travelTimeInHours = speed == 0 ? 0 : Calculator.getTimeFromSpeedDistance(speed, distance);
 		// If idle time is negative, then there is not enough time for this voyage! This should be caught by the caller
-		final int idleTimeInHours = extraIdleTime + Math.max(0, availableTimeInHours  - travelTimeInHours);
+		final int idleTimeInHours = extraIdleTime + Math.max(0, availableTimeInHours - travelTimeInHours);
 
 		// We output travel time + canal time, but the calculations
 		// below only need to care about travel time
 		output.setTravelTime(travelTimeInHours + additionalRouteTimeInHours);
 		output.setIdleTime(idleTimeInHours);
 
-		
-//		assert travelTimeInHours + additionalRouteTimeInHours + idleTimeInHours == options.getAvailableTime();
+		// assert travelTimeInHours + additionalRouteTimeInHours + idleTimeInHours == options.getAvailableTime();
 		// Route Additional Consumption
 		/**
 		 * Base fuel requirement for canal traversal
@@ -286,16 +285,19 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			final long nboRequiredInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerDay, idleTimeInHours) / 24L;
 			nboHours = idleTimeInHours;
+			boolean ranDry = false;
 			if (nboRequiredInM3 > nboAvailableInM3) {
 				// Ran dry
 				nboHours = Calculator.getTimeFromRateQuantity(idleNBORateInM3PerDay, nboAvailableInM3 * 24L);
+				ranDry = true;
+
 			}
 
 			output.setIdleNBOHours(nboHours);
 
 			long nboInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerDay, nboHours) / 24L;
 			// Totally legit, as nboAvailableInM3 is set to Long.MAX_VALUE SOMEWHERE
-			if (nboInM3 < nboAvailableInM3 && nboAvailableInM3 != Long.MAX_VALUE) {
+			if (ranDry && (nboInM3 < nboAvailableInM3 && nboAvailableInM3 != Long.MAX_VALUE)) {
 				nboInM3 = nboAvailableInM3;
 			}
 			final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
@@ -341,18 +343,24 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		int nboHours = 0;
 		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 			nboHours = travelTimeInHours;
-			if (requiredConsumptionInMT > nboAvailableInMT) {
+			boolean ranDry = false;
+			long totalTravelTimeNBOInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
+			if (totalTravelTimeNBOInM3 > nboAvailableInM3 // NBO Exceeds available quantity
+					|| requiredConsumptionInMT > nboAvailableInMT) { // Not enough gas onboard to cover the fuel requirements
 				// Ran dry
 				if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
-					nboHours = Calculator.getTimeFromRateQuantity(consumptionRateInMTPerDay, nboAvailableInMT * 24L);
+					final long nboRateInMTPerDay = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
+					nboHours = Calculator.getTimeFromRateQuantity(Math.max(nboRateInMTPerDay, consumptionRateInMTPerDay), nboAvailableInMT * 24L);
 				} else {
 					nboHours = Calculator.getTimeFromRateQuantity(nboRateInM3PerDay, nboAvailableInM3 * 24L);
 				}
+				ranDry = true;
 			}
 
 			output.setTravelNBOHours(nboHours);
 
-			final long nboInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
+			long nboInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
+
 			final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
 
 			output.setFuelConsumption(LNGFuelKeys.NBO_In_m3, nboInM3);
@@ -363,10 +371,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			boolean usePilotLight = false;
 			final long diffInMT = baseConsumptionInMTForNBOHours - nboInMT;
+			long fboInM3 = 0L;
 			if (diffInMT > 0) {
 				if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
 					final long fboInMT = diffInMT;
-					final long fboInM3 = Calculator.convertMTToM3(fboInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
+					fboInM3 = Calculator.convertMTToM3(fboInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
 
 					output.setFuelConsumption(LNGFuelKeys.FBO_In_m3, fboInM3);
 					output.setFuelConsumption(LNGFuelKeys.FBO_In_MT, fboInMT);
@@ -383,6 +392,15 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			} else {
 				usePilotLight = true;
 			}
+
+			if (ranDry && ((nboInM3 + fboInM3) < nboAvailableInM3 && nboAvailableInM3 != Long.MAX_VALUE)) {
+				// Handle volume -> hours -> vol rounding.
+				// Make sure we use up all the available LNG if we run dry.
+				// Direct m3 -> mt conversion may be out a little.
+				nboInM3 = nboAvailableInM3 - fboInM3;
+				output.setFuelConsumption(LNGFuelKeys.NBO_In_m3, nboInM3);
+			}
+
 			if (usePilotLight) {
 				final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
 				if (pilotLightRateINMTPerDay > 0) {
@@ -1314,9 +1332,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 *         Populate a PortDetails object with correct fuel costs based on a PortOptions object.
 	 * 
 	 * @param options
-	 *            The PortOptions to use, specifying vessel class, vessel state and port visit duration.
+	 *                    The PortOptions to use, specifying vessel class, vessel state and port visit duration.
 	 * @param details
-	 *            The PortDetails to set the correct fuel consumption for.
+	 *                    The PortDetails to set the correct fuel consumption for.
 	 */
 	public final void calculatePortFuelRequirements(final PortOptions options, final PortDetails details) {
 		details.setOptions(options);
