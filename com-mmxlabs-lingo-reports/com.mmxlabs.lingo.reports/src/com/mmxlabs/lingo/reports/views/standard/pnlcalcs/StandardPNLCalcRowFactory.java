@@ -125,24 +125,22 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 
 		// Theoretical shipping cost
 		// Real Shipping cost
-		
-//		getShippingCost((fu) -> getFuelcost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT));
-//		rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createShippingCosts((fu) -> getShippingCost(StandardPNLCalcRowFactory::getShippingCost(fuelCostFunc) )));
-		
-		Function<FuelUsage, Integer> fuelCostFunc = (fu) -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);		
-		Function<SlotVisit, Integer> portCostFunc = (sv) -> sv.getPortCost();		
+
+		// getShippingCost((fu) -> getFuelcost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT));
+		// rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createShippingCosts((fu) -> getShippingCost(StandardPNLCalcRowFactory::getShippingCost(fuelCostFunc) )));
+
+		Function<FuelUsage, Integer> fuelCostFunc = (fu) -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+		Function<SlotVisit, Integer> portCostFunc = (sv) -> sv.getPortCost();
 		Function<Object, Integer> func2 = (object) -> getShippingCost(object, portCostFunc, fuelCostFunc);
-		
+
 		rows.add(createRow(200, "Real shipping cost", false, "$", "", true, createShippingCosts(Integer.class, DollarsFormat::format, func2)));
-		
 
 		// Spacer
 		rows.add(createRow(210, "", false, "", "", false, createEmptyFormatter()));
 		rows.add(createRow(220, "", false, "", "", false, createEmptyFormatter()));
 
 		rows.add(createRow(300, "Real shipping", false, "", "", false, createEmptyFormatter()));
-		
-		
+
 		for (int legIdx = 0; legIdx < 2; ++legIdx) {
 			final int base = 1000 + 1000 * legIdx;
 
@@ -157,13 +155,12 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 			rows.add(createRow(base + 20, "    Speed", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, SpeedFormat::format, (visit, travel, idle) -> travel.getSpeed())));
 			rows.add(createRow(base + 30, "    Days", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, DaysFormat::format,
 					(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration)) / 24.0))));
-			
-//			rows.add(createRow(base + 90, "    Route", false, "", "", false, createFullLegFormatter(legIdx, (travel, idle) -> getRoute(travel.getRouteOption()))));		
-// 			rows.add(createRow(base + 91, "    Port duration", false, "", "", false, createFullLegFormatter(legIdx, (travel, idle) -> getPortDuration(travel))));
-//			rows.add(createRow(base + 31, "    Port days", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, DaysFormat::format,
-//					(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration)) / 24.0))));
 
-			
+			// rows.add(createRow(base + 90, " Route", false, "", "", false, createFullLegFormatter(legIdx, (travel, idle) -> getRoute(travel.getRouteOption()))));
+			// rows.add(createRow(base + 91, " Port duration", false, "", "", false, createFullLegFormatter(legIdx, (travel, idle) -> getPortDuration(travel))));
+			// rows.add(createRow(base + 31, " Port days", false, "", "", false, createFullLegFormatter2(legIdx, Double.class, DaysFormat::format,
+			// (visit, travel, idle) -> ((getOrZero(visit, Event::getDuration)) / 24.0))));
+
 			rows.add(createRow(base + 40, "    Total BO (mmBtu)", false, "", "", false,
 					createFullLegFormatter2(legIdx, Integer.class, VolumeMMBtuFormat::format, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO)))));
 			rows.add(createRow(base + 50, "    Charter Cost", true, "$", "", true, createFullLegFormatter2(legIdx, Integer.class, DollarsFormat::format,
@@ -196,7 +193,7 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 
 			rows.add(createRow(base + 160, "    Idle bunkers cost", false, "", "", false,
 					createFullLegFormatter2(legIdx, Integer.class, DollarsFormat::format, (visit, travel, idle) -> (getFuelCost(idle, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT))), greyColourProvider));
-			
+
 			rows.add(createRow(base + 170, "    Total idle cost ($)", false, "", "", true,
 					createFullLegFormatter2(legIdx, Long.class, DollarsFormat::format, (visit, travel, idle) -> (getEventShippingCost(idle))), greyColourProvider));
 		}
@@ -433,52 +430,52 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		};
 	}
 
-//	private @NonNull ICellRenderer createFullLegFormatter(final int index, final TriFunction<SlotVisit, Journey, Idle, String> func) {
-//		return new BaseFormatter() {
-//			@Override
-//			public @Nullable String render(final Object object) {
-//				try {
-//					if (object instanceof CargoAllocation) {
-//						final CargoAllocation cargoAllocation = (CargoAllocation) object;
-//						SlotVisit slotVisit = null;
-//						Journey journey = null;
-//						Idle idle = null;
-//						int legNumber = -1;
-//						for (final Event event : cargoAllocation.getEvents()) {
-//							if (event instanceof PortVisit) {
-//								if (legNumber == index) {
-//									return func.apply(slotVisit, journey, idle);
-//								}
-//								journey = null;
-//								idle = null;
-//								slotVisit = null;
-//								++legNumber;
-//								if (legNumber > index) {
-//									return null;
-//								}
-//							}
-//							if (event instanceof SlotVisit) {
-//								slotVisit = (SlotVisit) event;
-//							}
-//							if (event instanceof Journey) {
-//								journey = (Journey) event;
-//							}
-//							if (event instanceof Idle) {
-//								idle = (Idle) event;
-//							}
-//						}
-//						if (legNumber == index) {
-//							return func.apply(slotVisit, journey, idle);
-//						}
-//
-//					}
-//				} catch (final NullPointerException e) {
-//					// ignore npe's
-//				}
-//				return null;
-//			}
-//		};
-//	}
+	// private @NonNull ICellRenderer createFullLegFormatter(final int index, final TriFunction<SlotVisit, Journey, Idle, String> func) {
+	// return new BaseFormatter() {
+	// @Override
+	// public @Nullable String render(final Object object) {
+	// try {
+	// if (object instanceof CargoAllocation) {
+	// final CargoAllocation cargoAllocation = (CargoAllocation) object;
+	// SlotVisit slotVisit = null;
+	// Journey journey = null;
+	// Idle idle = null;
+	// int legNumber = -1;
+	// for (final Event event : cargoAllocation.getEvents()) {
+	// if (event instanceof PortVisit) {
+	// if (legNumber == index) {
+	// return func.apply(slotVisit, journey, idle);
+	// }
+	// journey = null;
+	// idle = null;
+	// slotVisit = null;
+	// ++legNumber;
+	// if (legNumber > index) {
+	// return null;
+	// }
+	// }
+	// if (event instanceof SlotVisit) {
+	// slotVisit = (SlotVisit) event;
+	// }
+	// if (event instanceof Journey) {
+	// journey = (Journey) event;
+	// }
+	// if (event instanceof Idle) {
+	// idle = (Idle) event;
+	// }
+	// }
+	// if (legNumber == index) {
+	// return func.apply(slotVisit, journey, idle);
+	// }
+	//
+	// }
+	// } catch (final NullPointerException e) {
+	// // ignore npe's
+	// }
+	// return null;
+	// }
+	// };
+	// }
 
 	public <T> @NonNull ICellRenderer createFullLegFormatter2(final int index, final Class<T> type, final Function<T, String> formatter, final TriFunction<SlotVisit, Journey, Idle, T> func) {
 		return new BaseFormatter() {
@@ -503,14 +500,16 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 							}
 						}
 					}
-					return formatter.apply(t);
+					if (t != null) {
+						return formatter.apply(t);
+					}
 				} else {
 					final T t = get(object);
 					if (t != null) {
 						return formatter.apply(t);
 					}
-					return "";
 				}
+				return "";
 			}
 
 			public @Nullable T get(final Object object) {
@@ -610,13 +609,13 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 
 					final T cost = func.apply(object);
 					if (cost != null) {
-//						return DollarsFormat.format(cost);
-					
-//						final T t = get(object);
-//						if (t != null) {
-							return formatter.apply(cost);
-//						}
-//						return "";
+						// return DollarsFormat.format(cost);
+
+						// final T t = get(object);
+						// if (t != null) {
+						return formatter.apply(cost);
+						// }
+						// return "";
 
 					}
 				}
@@ -625,9 +624,9 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 
 					final T cost = func.apply(object);
 					return formatter.apply(cost);
-//					if (cost != null) {
-//						return DollarsFormat.format(cost);
-//					}
+					// if (cost != null) {
+					// return DollarsFormat.format(cost);
+					// }
 				} else if (object instanceof VesselEventVisitPair) {
 					T cost = getFromCargoAllocationPair(type, func, object);
 					return DollarsFormat.format(cost);
@@ -873,7 +872,7 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 	private static int getPortDuration(final Journey travel) {
 		return travel.getPreviousEvent().getDuration();
 	}
-	
+
 	private static String getRoute(final RouteOption routeOption) {
 		switch (routeOption) {
 
