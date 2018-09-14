@@ -50,17 +50,16 @@ public class FetchUpstreamTests {
 	// repo.initRepository(new File("D:/workspace/lingo-ws/lingo-master/runtime-g.product/distance-repository"));
 	// }
 
-
 	@Test
-	public void fetchDistancesTest() throws AuthenticationException, ClientProtocolException, IOException, ParseException {
+	public void fetchDistancesTest() throws AuthenticationException, IOException, ParseException {
 		Map<Via, Map<String, Map<String, Double>>> distances = UpstreamDistancesFetcher.getDistances(SERVICE_URL, "user", "pw");
-		assertEquals(Double.valueOf(15847.0), distances.get(Via.Direct).get("L_US_Sabin").get("L_JP_Himej"));
-		assertEquals(Double.valueOf(9631.0), distances.get(Via.PanamaCanal).get("L_US_Sabin").get("L_JP_Himej"));
-		assertEquals(Double.valueOf(14957.0), distances.get(Via.SuezCanal).get("L_US_Sabin").get("L_JP_Himej"));
+		assertEquals(Double.valueOf(15847.225), distances.get(Via.Direct).get("L_US_Sabin").get("L_JP_Himej"));
+		assertEquals(Double.valueOf(9631.482), distances.get(Via.PanamaCanal).get("L_US_Sabin").get("L_JP_Himej"));
+		assertEquals(Double.valueOf(14957.204), distances.get(Via.SuezCanal).get("L_US_Sabin").get("L_JP_Himej"));
 	}
 
 	@Test
-	public void fetchPortsTest() throws AuthenticationException, ClientProtocolException, IOException, ParseException {
+	public void fetchPortsTest() throws AuthenticationException, IOException, ParseException {
 		List<Port> ports = UpstreamPortFetcher.getPorts(SERVICE_URL, "user", "pw");
 		Optional<Port> potential = ports.stream().filter(e -> "Soyo".equals(e.getName())).findAny();
 		assertTrue(potential.isPresent());

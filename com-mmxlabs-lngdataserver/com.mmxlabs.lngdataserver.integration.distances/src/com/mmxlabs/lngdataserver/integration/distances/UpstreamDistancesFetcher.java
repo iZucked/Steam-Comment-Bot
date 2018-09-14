@@ -82,7 +82,9 @@ public class UpstreamDistancesFetcher {
 			if (!ro.getValue().isEmpty()) {
 				requestArgs.add(ro.getValue());
 			}
-			requestArgs.add("v=" + version);
+			if (version != null) {
+				requestArgs.add("v=" + version);
+			}
 			String url = baseUrl + DISTANCES_URL + "?" + Joiner.on("&").join(requestArgs);
 
 			String rawJSON = UrlFetcher.fetchURLContent(url, username, password);
