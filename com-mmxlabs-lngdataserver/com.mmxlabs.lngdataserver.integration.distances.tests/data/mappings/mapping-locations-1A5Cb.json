@@ -1,12 +1,12 @@
 {
   "id" : "37e71ad0-fe7b-35d9-8ad8-511105c0bc94",
   "request" : {
-    "url" : "/ports",
+    "url" : "/locations",
     "method" : "GET"
   },
   "response" : {
     "status" : 200,
-    "bodyFileName" : "body-ports-1A5Cb.json",
+    "bodyFileName" : "body-locations-1A5Cb.json",
     "headers" : {
       "Date" : "Wed, 02 Aug 2017 11:59:33 GMT",
       "Content-Type" : "application/json;charset=UTF-8",
