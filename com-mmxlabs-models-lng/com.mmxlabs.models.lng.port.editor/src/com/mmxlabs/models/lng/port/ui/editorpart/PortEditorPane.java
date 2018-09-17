@@ -6,13 +6,16 @@ package com.mmxlabs.models.lng.port.ui.editorpart;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -193,5 +196,14 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			}
 		}
 	}
+	
+	@Override
+	protected Action createDeleteAction(@Nullable Function<Collection<?>, Collection<Object>> callback) {
+		return null;
+	}
 
+	@Override
+	protected Action createDuplicateAction() {
+		return null;
+	}
 }
