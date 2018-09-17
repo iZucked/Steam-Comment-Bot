@@ -42,6 +42,10 @@ public class MigrateToV96 extends AbstractMigrationUnit {
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
 		final EPackage pkg_CargoModel = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
 		final EPackage pkg_MarketsModel = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		final EPackage pkg_ScheduleModel = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+
+		EClass cls_ScheduleModel = MetamodelUtils.getEClass(pkg_ScheduleModel, "ScheduleModel");
+		EClass cls_Schedule = MetamodelUtils.getEClass(pkg_ScheduleModel, "Schedule");
 
 		final EObjectWrapper scenarioModel = modelRecord.getModelRoot();
 
@@ -196,11 +200,14 @@ public class MigrateToV96 extends AbstractMigrationUnit {
 			final EClass cls_SpotSlot = MetamodelUtils.getEClass(pkg_CargoModel, "SpotSlot");
 
 			final List<EObjectWrapper> extraSlots = adpModelResult.getRefAsList("extraSlots");
+
+			List<EObjectWrapper> extraSpotSlots = new LinkedList<>();
 			if (extraSlots != null) {
 				for (final EObjectWrapper slot : extraSlots) {
 
-					// Skip unused spot slots
+					// Store spot slot
 					if (cls_SpotSlot.isInstance(slot)) {
+						extraSpotSlots.add(slot);
 						continue;
 					}
 					if (cls_LoadSlot.isInstance(slot)) {
@@ -224,13 +231,46 @@ public class MigrateToV96 extends AbstractMigrationUnit {
 				charterInMarkets.addAll(extraMarkets);
 			}
 
+			EPackage pkg_AnalyticsModel = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
+			EClass cls_OptimisationResult = MetamodelUtils.getEClass(pkg_AnalyticsModel, "OptimisationResult");
+			EClass cls_SolutionOption = MetamodelUtils.getEClass(pkg_AnalyticsModel, "SolutionOption");
+
 			// We *could* retain the schedule *but* we have to generate the cargoes from the CargoAllocations
 			final EObjectWrapper resultScheduleModel = adpModelResult.getRef("scheduleModel");
 			if (resultScheduleModel != null) {
-				final EObjectWrapper schedule = resultScheduleModel.getRef("schedule");
-				if (schedule != null) {
-					// scheduleModel.setRef("schedule", schedule);
+
+				EObjectWrapper solutionOption = (EObjectWrapper) pkg_AnalyticsModel.getEFactoryInstance().create(cls_SolutionOption);
+				solutionOption.setRef("scheduleModel", resultScheduleModel);
+				List<EObjectWrapper> options = new LinkedList<>();
+				options.add(solutionOption);
+
+				EObjectWrapper optimisationResult = (EObjectWrapper) pkg_AnalyticsModel.getEFactoryInstance().create(cls_OptimisationResult);
+				optimisationResult.setRef("extraSlots", extraSpotSlots);
+				optimisationResult.setRef("options", options);
+				optimisationResult.setAttrib("name", "ADP Optimisation");
+
+				// Blank base option
+				{
+					EObjectWrapper baseSolutionOption = (EObjectWrapper) pkg_AnalyticsModel.getEFactoryInstance().create(cls_SolutionOption);
+					EObjectWrapper baseScheduleModel = (EObjectWrapper) pkg_ScheduleModel.getEFactoryInstance().create(cls_ScheduleModel);
+					EObjectWrapper schedule = (EObjectWrapper) pkg_ScheduleModel.getEFactoryInstance().create(cls_Schedule);
+
+					baseScheduleModel.setRef("schedule", schedule);
+
+					baseSolutionOption.setRef("scheduleModel", baseScheduleModel);
+					optimisationResult.setRef("baseOption", baseSolutionOption);
+
 				}
+
+				List<EObjectWrapper> optimisations = scenarioModel.getRef("analyticsModel").getRefAsList("optimisations");
+				if (optimisations != null) {
+					optimisations.add(optimisationResult);
+				} else {
+					optimisations = new LinkedList<>();
+					optimisations.add(optimisationResult);
+					scenarioModel.getRef("analyticsModel").setRef("optimisations", optimisations);
+				}
+
 			}
 			adpModel.unsetFeature("result");
 		}
@@ -285,6 +325,12 @@ public class MigrateToV96 extends AbstractMigrationUnit {
 		fleetProfile.unsetFeature("defaultVesselCharterInRate");
 		fleetProfile.unsetFeature("includeEnabledCharterMarkets");
 		adpModel.unsetFeature("spotMarketsProfile");
+
+		// Set blank scenario
+		{
+			EObjectWrapper schedule = (EObjectWrapper) pkg_ScheduleModel.getEFactoryInstance().create(cls_Schedule);
+			scheduleModel.setRef("schedule", schedule);
+		}
 
 	}
 }
