@@ -392,12 +392,12 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord sourceRecord, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
+	public ScenarioInstance copyInto(final Container parent, final ScenarioModelRecord sourceRecord, final String name, @Nullable final IProgressMonitor progressMonitor) throws Exception {
 		try {
 			progressMonitor.beginTask("Copy", 1);
 			// Create a new UUID
 			final String uuid = EcoreUtil.generateUUID();
-			URI archiveURI = resolveURI(String.format("./%s.lingo", uuid));
+			final URI archiveURI = resolveURI(String.format("./%s.lingo", uuid));
 
 			sourceRecord.saveCopyTo(uuid, archiveURI);
 
@@ -420,7 +420,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 			newInstance.setMetadata(metadata);
 
-			ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
+			final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
 
 			modelRecord.setScenarioInstance(newInstance);
 			modelRecord.setName(newInstance.getName());
@@ -439,12 +439,12 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name, @Nullable IProgressMonitor progressMonitor) throws Exception {
+	public ScenarioInstance copyInto(final Container parent, final IScenarioDataProvider scenarioDataProvider, final String name, @Nullable final IProgressMonitor progressMonitor) throws Exception {
 		try {
 			progressMonitor.beginTask("Copy", 1);
 			// Create a new UUID
 			final String uuid = EcoreUtil.generateUUID();
-			URI archiveURI = resolveURI(String.format("./%s.lingo", uuid));
+			final URI archiveURI = resolveURI(String.format("./%s.lingo", uuid));
 			{
 				// try (ModelReference ref = aquireReference("ModelRecord:saveAsCopy")) {
 				final EObject rootObject = EcoreUtil.copy(scenarioDataProvider.getScenario());
@@ -473,7 +473,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 			newInstance.setMetadata(metadata);
 
-			ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
+			final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
 
 			modelRecord.setScenarioInstance(newInstance);
 			modelRecord.setName(newInstance.getName());
@@ -583,7 +583,12 @@ public class FileScenarioService extends AbstractScenarioService {
 		}
 
 		if (resource.getContents().isEmpty()) {
-			resource.getContents().add(ScenarioServiceFactory.eINSTANCE.createScenarioService());
+			// Create a new model
+			final ScenarioService model = ScenarioServiceFactory.eINSTANCE.createScenarioService();
+			final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
+			f.setName("Base cases");
+			model.getElements().add(f);
+			resource.getContents().add(model);
 			if (resourceExisted) {
 				// consider loading backup?
 			}
@@ -621,14 +626,14 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		result.eAllContents().forEachRemaining(e -> {
 			if (e instanceof ScenarioInstance) {
-				ScenarioInstance scenarioInstance = (ScenarioInstance) e;
-				URI archiveURI = resolveURI(scenarioInstance.getUuid() + ".lingo");
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) e;
+				final URI archiveURI = resolveURI(scenarioInstance.getUuid() + ".lingo");
 				if (!new File(archiveURI.toFileString()).exists()) {
 					// Maybe old style?
-					URI oldURI = resolveURI(scenarioInstance.getUuid() + ".xmi");
-					File oldScenarioFile = new File(oldURI.toFileString());
+					final URI oldURI = resolveURI(scenarioInstance.getUuid() + ".xmi");
+					final File oldScenarioFile = new File(oldURI.toFileString());
 					if (oldScenarioFile.exists()) {
-						Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+						final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
 						manifest.setScenarioType(scenarioInstance.getMetadata().getContentType());
 						manifest.setVersionContext(scenarioInstance.getVersionContext());
 						manifest.setScenarioVersion(scenarioInstance.getScenarioVersion());
@@ -642,20 +647,20 @@ public class FileScenarioService extends AbstractScenarioService {
 
 							// Remove instances backup
 							{
-								URI backupScenarioURI = resolveURI("instances/" + scenarioInstance.getUuid() + ".xmi");
-								File backupScenarioFile = new File(backupScenarioURI.toFileString());
+								final URI backupScenarioURI = resolveURI("instances/" + scenarioInstance.getUuid() + ".xmi");
+								final File backupScenarioFile = new File(backupScenarioURI.toFileString());
 								if (backupScenarioFile.exists()) {
 									FileDeleter.delete(backupScenarioFile, true);
 								}
 							}
 
-						} catch (Exception ex) {
+						} catch (final Exception ex) {
 							ex.printStackTrace();
 						}
 					}
 				}
 				try {
-					ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
+					final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
 					if (modelRecord != null) {
 						modelRecord.setName(scenarioInstance.getName());
 						modelRecord.setScenarioInstance(scenarioInstance);
@@ -663,7 +668,7 @@ public class FileScenarioService extends AbstractScenarioService {
 						scenarioInstance.setRootObjectURI(archiveURI.toString());
 						scenarioInstance.setManifest(modelRecord.getManifest());
 					}
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 					// ex.printStackTrace();
 				}
 			}
