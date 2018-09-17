@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -59,6 +60,32 @@ public class CargoReportJSONGenerator {
 			}
 			if (dischargeOptional.isPresent()) {
 				updateDischargeAttributes(model, dischargeOptional.get());
+			}
+
+			models.add(model);
+		}
+
+		for (final OpenSlotAllocation openSlotAllocation : scheduleModel.getSchedule().getOpenSlotAllocations()) {
+
+			final CargoReportModel model = new CargoReportModel();
+
+			Slot slot = openSlotAllocation.getSlot();
+			if (slot == null) {
+				continue;
+			}
+			boolean isLong = slot instanceof LoadSlot;
+			model.cargoType = isLong ? "Long" : "Short";
+
+			if (isLong) {
+				model.loadName = slot.getName();
+				model.loadComment = slot.getNotes();
+				model.purchaseContract = slot.getContract() == null ? null : slot.getContract().getName();
+				model.purchaseCounterparty = slot.getSlotOrDelegateCounterparty();
+			} else {
+				model.dischargeName = slot.getName();
+				model.dischargeComment = slot.getNotes();
+				model.saleContract = slot.getContract() == null ? null : slot.getContract().getName();
+				model.saleCounterparty = slot.getSlotOrDelegateCounterparty();
 			}
 
 			models.add(model);
