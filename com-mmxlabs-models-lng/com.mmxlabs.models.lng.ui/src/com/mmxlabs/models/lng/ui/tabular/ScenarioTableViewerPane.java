@@ -369,7 +369,9 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 	/**
 	 */
 	protected Action createAddAction(final EReference containment) {
-		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), new Action[] { createDuplicateAction() });
+		final Action duplicateAction = createDuplicateAction();
+		final Action[] extraActions = duplicateAction == null ? new Action[0] : new Action[] { duplicateAction };
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
 
 	}
 
@@ -520,7 +522,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 	 * 
 	 * @return
 	 */
-	protected Action createDuplicateAction() {
+	protected @Nullable Action createDuplicateAction() {
 		final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
 		scenarioViewer.addSelectionChangedListener(result);
 		return result;
