@@ -83,7 +83,7 @@ public class Exposures {
 
 	}
 
-	public static void calculateExposures(final LNGScenarioModel scenarioModel, final Schedule schedule) {
+	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule) {
 
 		if (schedule == null) {
 			return;
@@ -103,58 +103,51 @@ public class Exposures {
 				if (slot == null) {
 					continue;
 				}
-				
+
 				final boolean isPurchase = slot instanceof LoadSlot;
 				{
 					final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
-					if (physical != null) {
-						physical.setDealType(DealType.PHYSICAL);
-	
-						physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
-						physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
-						physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slotAllocation.getVolumeValue());
-						physical.setVolumeUnit("mmBtu");
-						physical.setIndexName("Physical");
-						physical.setDate(YearMonth.from(slotAllocation.getSlotVisit().getStart().toLocalDate()));
-	
-						slotAllocation.getExposures().add(physical);
-					}
+
+					physical.setDealType(DealType.PHYSICAL);
+
+					physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
+					physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
+					physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slotAllocation.getVolumeValue());
+					physical.setVolumeUnit("mmBtu");
+					physical.setIndexName("Physical");
+					physical.setDate(YearMonth.from(slotAllocation.getSlotVisit().getStart().toLocalDate()));
+
+					slotAllocation.getExposures().add(physical);
 				}
 
 				final LocalDate pricingFullDate = PricingMonthUtils.getFullPricingDate(slotAllocation);
-				if (pricingFullDate == null) {
-					continue;
-				}
-				final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
-
-				final MarkedUpNode node = getExposureCoefficient(slot, slotAllocation, lookupData);
-				if (node == null) {
-					continue;
-				}
-
-				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
-				if (exposureDetail != null && !exposureDetail.isEmpty()) {
-
-					for (final ExposureDetail d : exposureDetail) {
-						// This is only for unit test reload validation as -0.0 != 0.0 and we cannot
-						// persist/reload -0.0
-						if (d.getNativeValue() == -0.0) {
-							d.setNativeValue(0.0);
-						}
-						if (d.getUnitPrice() == -0.0) {
-							d.setUnitPrice(0.0);
-						}
-						if (d.getVolumeInMMBTU() == -0.0) {
-							d.setVolumeInMMBTU(0.0);
-						}
-						if (d.getVolumeInNativeUnits() == -0.0) {
-							d.setVolumeInNativeUnits(0.0);
+				if (pricingFullDate != null) {
+					final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
+					final MarkedUpNode node = getExposureCoefficient(slot, slotAllocation, lookupData);
+					if (node != null) {
+						final Collection<ExposureDetail> exposureDetails = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
+						if (exposureDetails != null && !exposureDetails.isEmpty()) {
+							slotAllocation.getExposures().addAll(exposureDetails);
 						}
 					}
-					slotAllocation.getExposures().addAll(exposureDetail);
 				}
-				
-				
+
+				for (final ExposureDetail d : slotAllocation.getExposures()) {
+					// This is only for unit test reload validation as -0.0 != 0.0 and we cannot
+					// persist/reload -0.0
+					if (d.getNativeValue() == -0.0) {
+						d.setNativeValue(0.0);
+					}
+					if (d.getUnitPrice() == -0.0) {
+						d.setUnitPrice(0.0);
+					}
+					if (d.getVolumeInMMBTU() == -0.0) {
+						d.setVolumeInMMBTU(0.0);
+					}
+					if (d.getVolumeInNativeUnits() == -0.0) {
+						d.setVolumeInNativeUnits(0.0);
+					}
+				}
 			}
 		}
 	}
