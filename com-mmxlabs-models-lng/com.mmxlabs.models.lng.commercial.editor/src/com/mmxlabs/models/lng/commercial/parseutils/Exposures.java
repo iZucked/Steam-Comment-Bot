@@ -103,19 +103,35 @@ public class Exposures {
 				if (slot == null) {
 					continue;
 				}
+				
+				final boolean isPurchase = slot instanceof LoadSlot;
+				{
+					final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
+					if (physical != null) {
+						physical.setDealType(DealType.PHYSICAL);
+	
+						physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
+						physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
+						physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slotAllocation.getVolumeValue());
+						physical.setVolumeUnit("mmBtu");
+						physical.setIndexName("Physical");
+						physical.setDate(YearMonth.from(slotAllocation.getSlotVisit().getStart().toLocalDate()));
+	
+						slotAllocation.getExposures().add(physical);
+					}
+				}
 
 				final LocalDate pricingFullDate = PricingMonthUtils.getFullPricingDate(slotAllocation);
-				final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
-				if (pricingDate == null) {
+				if (pricingFullDate == null) {
 					continue;
 				}
+				final YearMonth pricingDate = YearMonth.of(pricingFullDate.getYear(), pricingFullDate.getMonth());
 
 				final MarkedUpNode node = getExposureCoefficient(slot, slotAllocation, lookupData);
 				if (node == null) {
 					continue;
 				}
 
-				final boolean isPurchase = slot instanceof LoadSlot;
 				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, isPurchase, lookupData, pricingFullDate.getDayOfMonth());
 				if (exposureDetail != null && !exposureDetail.isEmpty()) {
 
@@ -136,20 +152,9 @@ public class Exposures {
 						}
 					}
 					slotAllocation.getExposures().addAll(exposureDetail);
-					{
-						final ExposureDetail physical = ScheduleFactory.eINSTANCE.createExposureDetail();
-						physical.setDealType(DealType.PHYSICAL);
-
-						physical.setVolumeInMMBTU((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
-						physical.setVolumeInNativeUnits((isPurchase ? 1.0 : -1.0) * slotAllocation.getEnergyTransferred());
-						physical.setNativeValue((isPurchase ? -1.0 : 1.0) * slotAllocation.getVolumeValue());
-						physical.setVolumeUnit("mmBtu");
-						physical.setIndexName("Physical");
-						physical.setDate(YearMonth.from(slotAllocation.getSlotVisit().getStart().toLocalDate()));
-
-						slotAllocation.getExposures().add(physical);
-					}
 				}
+				
+				
 			}
 		}
 	}
