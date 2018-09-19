@@ -5,10 +5,14 @@
 package com.mmxlabs.lngdataserver.server;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.net.ssl.SSLException;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
@@ -18,6 +22,8 @@ import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.server.dialogs.AuthDetailsPromptDialog;
 import com.mmxlabs.lngdataserver.server.internal.Activator;
@@ -30,6 +36,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class UpstreamUrlProvider {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamUrlProvider.class);
+
+	// Avoids repeated error reporting
+	private static final ConcurrentHashMap<String, Object> reportedError = new ConcurrentHashMap<>();
+
 	public static final UpstreamUrlProvider INSTANCE = new UpstreamUrlProvider();
 
 	private final IPreferenceStore preferenceStore;
@@ -187,7 +199,7 @@ public class UpstreamUrlProvider {
 
 		try (Response loginResponse = CLIENT.newCall(loginRequest).execute()) {
 			if (!loginResponse.isSuccessful()) {
-				System.out.println("Bad credentials");
+				LOGGER.error("Invalid data hub credentials");
 				return false;
 			}
 		} catch (final IOException e) {
@@ -198,11 +210,19 @@ public class UpstreamUrlProvider {
 	}
 
 	public static boolean testUpstreamAvailability(final String url) {
+
+		if (url == null || url.isEmpty()) {
+			return false;
+		}
+
 		Request pingRequest = null;
 		try {
 			pingRequest = new Request.Builder().url(url + "/ping").get().build();
 		} catch (final IllegalArgumentException e) {
-			System.out.println("No valid url anymore");
+			if (!reportedError.containsKey(url)) {
+				reportedError.put(url, new Object());
+				LOGGER.error("Invalid data hub URL {}", url);
+			}
 			return false;
 		}
 
@@ -214,10 +234,28 @@ public class UpstreamUrlProvider {
 			if (!pingResponse.isSuccessful()) {
 				return false;
 			}
+		} catch (final UnknownHostException e) {
+			if (!reportedError.containsKey(url)) {
+				reportedError.put(url, new Object());
+				LOGGER.error("Error finding Data Hub host", e);
+			}
+			return false;
+		} catch (final SSLException e) {
+			if (!reportedError.containsKey(url)) {
+				reportedError.put(url, new Object());
+				LOGGER.error("Error validating server SSL certificates", e);
+			}
+			return false;
 		} catch (final IOException e) {
-			System.out.println("No reachable upstream server");
+			if (!reportedError.containsKey(url)) {
+				reportedError.put(url, new Object());
+				LOGGER.error("Error reaching upstream server", e);
+			}
 			return false;
 		}
+
+		// Clear any logged errors
+		reportedError.remove(url);
 
 		return true;
 	}
