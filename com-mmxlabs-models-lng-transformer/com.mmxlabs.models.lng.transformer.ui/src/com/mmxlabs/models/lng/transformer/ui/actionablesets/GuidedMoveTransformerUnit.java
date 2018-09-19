@@ -238,7 +238,7 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 
 				bind(FitnessCalculator.class).in(PerChainUnitScope.class);
 				bind(GuidedMoveMultipleSolutionOptimiser.class).in(PerChainUnitScope.class);
-				bind(ExecutorService.class).toInstance(executorService);
+				bind(CleanableExecutorService.class).toInstance(executorService);
 				bind(ILookupManager.class).to(LookupManager.class);
 			}
 

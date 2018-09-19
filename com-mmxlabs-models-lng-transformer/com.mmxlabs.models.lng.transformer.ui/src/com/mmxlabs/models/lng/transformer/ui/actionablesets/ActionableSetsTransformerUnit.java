@@ -188,7 +188,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 
 				bind(FitnessCalculator.class).in(PerChainUnitScope.class);
 				bind(ActionableSetOptimiser.class).in(PerChainUnitScope.class);
-				bind(ExecutorService.class).toInstance(executorService);
+				bind(CleanableExecutorService.class).toInstance(executorService);
 				bind(ILookupManager.class).to(LookupManager.class);
 			}
 

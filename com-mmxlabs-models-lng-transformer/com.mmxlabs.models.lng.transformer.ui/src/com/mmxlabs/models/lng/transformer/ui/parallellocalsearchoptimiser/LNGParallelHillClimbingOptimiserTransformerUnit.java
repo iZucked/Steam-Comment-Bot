@@ -174,7 +174,7 @@ public class LNGParallelHillClimbingOptimiserTransformerUnit extends AbstractLNG
 
 			@Override
 			protected void configure() {
-				bind(ExecutorService.class).toInstance(executorService);
+				bind(CleanableExecutorService.class).toInstance(executorService);
 			}
 
 			@Provides
