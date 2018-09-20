@@ -66,6 +66,10 @@ public class SharedWorkspaceServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
+				if (response.code() == 409) {
+					throw new IOException("Scenario already exists " + path);
+				}
+
 				throw new IOException("Unexpected code " + response);
 			}
 
@@ -231,6 +235,11 @@ public class SharedWorkspaceServiceClient {
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
+
+				if (response.code() == 409) {
+					throw new IOException("Scenario already exists " + newPath);
+				}
+
 				throw new IOException("Unexpected code: " + response);
 			}
 		}

@@ -21,6 +21,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,8 +197,6 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			baseCaseFolder.mkdirs();
 		}
 
-		// storeURI = URI.createFileURI(baseCaseFolder.getCanonicalPath());
-
 		client = new SharedWorkspaceServiceClient();
 
 		// Initial model load
@@ -221,21 +221,22 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			return;
 		}
 		final String basePath = SharedWorkspacePathUtils.getPathFor(destination);
-
-		for (final Container c : elements) {
-			if (isThisScenarioService(c)) {
-				recursiveMoveInto(c, basePath);
+		try {
+			for (final Container c : elements) {
+				if (isThisScenarioService(c)) {
+					recursiveMoveInto(c, basePath);
+				}
 			}
+		} catch (final Exception e) {
+			RunnerHelper.asyncExec(display -> MessageDialog.openError(display.getActiveShell(), "Error moving scenarios",
+					"Unable to rename one or more scenarios due to name conflict. See error log for more details"));
+			log.error("Error moving scenarios " + e.getMessage(), e);
 		}
-
 		try {
 			updater.refresh();
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return;
 	}
 
 	private boolean isThisScenarioService(final Container c) {
@@ -249,16 +250,10 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		return false;
 	}
 
-	private void recursiveMoveInto(final Container c, final String basePath) {
+	private void recursiveMoveInto(final Container c, final String basePath) throws IOException {
 		if (c instanceof ScenarioInstance) {
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
-			try {
-				client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(basePath, scenarioInstance.getName()));
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// client.uploadScenario(file, path);
+			client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(basePath, scenarioInstance.getName()));
 		}
 
 		for (final Container child : c.getElements()) {
@@ -286,7 +281,6 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			scenarioInstance.setReadonly(true);
 			scenarioInstance.setUuid(manifest.getUUID());
 
-			final URI fileURI = URI.createFileURI(f.getAbsolutePath());
 			scenarioInstance.setRootObjectURI(archiveURI.toString());
 
 			final String scenarioname = f.getName().replaceFirst("\\.lingo$", "");
@@ -327,21 +321,25 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
 				if (notification.getNewStringValue().contains("/")) {
 					// Do not allow forward slashed in names - used as separator in service backend
-					// Note: This will trigger another notification to hit the else statemenet
+					// Note: This will trigger another notification to hit the else statement
 					RunnerHelper.asyncExec(() -> ((Container) notification.getNotifier()).setName(notification.getNewStringValue().replaceAll("/", "_")));
 				} else {
-					renameWalk((Container) notification.getNotifier(), notification.getOldStringValue(), notification.getNewStringValue());
+					if (renameWalk((Container) notification.getNotifier(), notification.getOldStringValue(), notification.getNewStringValue())) {
+						RunnerHelper.asyncExec(display -> MessageDialog.openError(display.getActiveShell(), "Error renaming scenarios",
+								"Unable to rename one or more scenarios due to name conflict. See error log for more details"));
+					}
 				}
 			}
 		}
 
 	};
 
-	protected void renameWalk(final @NonNull Container container, final @NonNull String oldName, final @NonNull String newName) {
+	protected boolean renameWalk(final @NonNull Container container, final @NonNull String oldName, final @NonNull String newName) {
 		if (container instanceof ScenarioService) {
-			return;
+			return false;
 		}
 
+		boolean error = false;
 		final Container parent = container.getParent();
 		final String basePath = SharedWorkspacePathUtils.getPathFor(parent);
 
@@ -350,29 +348,32 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			try {
 				client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(basePath, newName));
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Error renaming scenario " + e.getMessage(), e);
+				error = true;
 			}
 		}
 
-		// updater.updatePath(SharedWorkspacePathUtils.addChildSegment(basePath, oldName), SharedWorkspacePathUtils.addChildSegment(basePath, newName));
-		renameChildren(container, SharedWorkspacePathUtils.addChildSegment(basePath, oldName), SharedWorkspacePathUtils.addChildSegment(basePath, newName));
+		error |= renameChildren(container, SharedWorkspacePathUtils.addChildSegment(basePath, oldName), SharedWorkspacePathUtils.addChildSegment(basePath, newName));
+		return error;
 	}
 
-	private void renameChildren(final @NonNull Container container, final @NonNull String oldBasePath, final @NonNull String newBasePath) {
+	private boolean renameChildren(final @NonNull Container container, final @NonNull String oldBasePath, final @NonNull String newBasePath) {
 
+		boolean error = false;
 		for (final Container c : container.getElements()) {
 			if (c instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
 				try {
 					client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(newBasePath, c.getName()));
 				} catch (final IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Error renaming scenario " + e.getMessage(), e);
+					error = true;
 				}
 			}
-			renameChildren(c, SharedWorkspacePathUtils.addChildSegment(oldBasePath, c.getName()), SharedWorkspacePathUtils.addChildSegment(newBasePath, c.getName()));
+			error |= renameChildren(c, SharedWorkspacePathUtils.addChildSegment(oldBasePath, c.getName()), SharedWorkspacePathUtils.addChildSegment(newBasePath, c.getName()));
+
 		}
+		return error;
 	}
 
 	private IProgressListener wrapMonitor(final IProgressMonitor monitor) {
