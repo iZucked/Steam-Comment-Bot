@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedScenarioRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePathUtils;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
 import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
@@ -62,15 +64,7 @@ public class SharedScenarioUpdater {
 	private final ScenarioService modelRoot;
 	private final File basePath;
 	private Instant lastModified = Instant.EPOCH;
-	private final IUpstreamDetailChangedListener detailChangedListener = new IUpstreamDetailChangedListener() {
-
-		@Override
-		public void changed() {
-			// Reset to trigger refresh
-			lastModified = Instant.EPOCH;
-
-		}
-	};
+	private final IUpstreamDetailChangedListener detailChangedListener =  () -> lastModified = Instant.EPOCH; //Reset to trigger refresh
 
 	private Thread updateThread;
 	private final ReentrantLock updateLock = new ReentrantLock();
@@ -88,20 +82,20 @@ public class SharedScenarioUpdater {
 		taskExecutor.shutdownNow();
 	}
 
-	public void update(final List<Pair<String, String>> scenarios) {
+	public void update(final List<SharedScenarioRecord> scenarios) {
 
 		final Set<String> existingUUIDS = new HashSet<>();
 		recursiveUUIDCollector(modelRoot, existingUUIDS);
 
 		if (scenarios != null) {
-			for (final Pair<String, String> scenario : scenarios) {
-				final String uuid = scenario.getFirst();
-				final String path = scenario.getSecond();
+			for (final SharedScenarioRecord scenario : scenarios) {
+				final String uuid = scenario.uuid;
+				final String path = scenario.pathString;
 
 				final Container parent = getContainer(path);
 				final String name = SharedWorkspacePathUtils.getLastName(path);
 
-				taskExecutor.execute(new AddScenarioTask(parent, name, uuid));
+				taskExecutor.execute(new AddScenarioTask(parent, name, scenario));
 				existingUUIDS.remove(uuid);
 			}
 		}
@@ -181,21 +175,21 @@ public class SharedScenarioUpdater {
 
 	private class AddScenarioTask implements Runnable {
 		private final Container parent;
-		private final String uuid;
+		private final SharedScenarioRecord record;
 		private final String name;
 
-		public AddScenarioTask(final Container parent, final String name, final String uuid) {
+		public AddScenarioTask(final Container parent, final String name, final SharedScenarioRecord record) {
 			this.parent = parent;
 			this.name = name;
-			this.uuid = uuid;
+			this.record = record;
 		}
 
 		@Override
 		public void run() {
-			final File f = new File(String.format("%s%s%s.lingo", basePath, File.separator, uuid));
+			final File f = new File(String.format("%s%s%s.lingo", basePath, File.separator, record.uuid));
 			if (!f.exists()) {
 				try {
-					if (!downloadScenario(uuid, f, null)) {
+					if (!downloadScenario(record.uuid, f, null)) {
 						// Something went wrong - reset lastModified to trigger another refresh
 						lastModified = Instant.EPOCH;
 						// Failed!
@@ -209,7 +203,7 @@ public class SharedScenarioUpdater {
 				}
 			}
 
-			final ScenarioInstance instance = mapping.computeIfAbsent(uuid, u -> loadScenarioFrom(f, u, name));
+			final ScenarioInstance instance = mapping.computeIfAbsent(record.uuid, u -> loadScenarioFrom(f, record, name));
 			if (instance != null) {
 				RunnerHelper.syncExecDisplayOptional(() -> {
 					instance.setName(name);
@@ -268,9 +262,10 @@ public class SharedScenarioUpdater {
 				} catch (final Exception e) {
 					// return Status.
 				} finally {
-					monitor.done();
+					if (monitor != null) {
+						monitor.done();
+					}
 				}
-
 				return Status.OK_STATUS;
 			}
 		};
@@ -288,14 +283,14 @@ public class SharedScenarioUpdater {
 		return ret[0];
 	}
 
-	protected ScenarioInstance loadScenarioFrom(final File f, final String uuid, final String scenarioname) {
+	protected ScenarioInstance loadScenarioFrom(final File f, final SharedScenarioRecord record, final String scenarioname) {
 		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
 		final Manifest manifest = ScenarioStorageUtil.loadManifest(f);
 		if (manifest != null) {
 			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 			scenarioInstance.setReadonly(true);
 			scenarioInstance.setUuid(manifest.getUUID());
-			scenarioInstance.setExternalID(uuid);
+			scenarioInstance.setExternalID(record.uuid);
 
 			scenarioInstance.setRootObjectURI(archiveURI.toString());
 
@@ -307,6 +302,9 @@ public class SharedScenarioUpdater {
 			scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
 
 			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
+			meta.setCreator(record.creator);
+			meta.setCreated(Date.from(record.creationDate));
+			
 			scenarioInstance.setMetadata(meta);
 			meta.setContentType(manifest.getScenarioType());
 			// Probably better pass in from service
@@ -338,7 +336,7 @@ public class SharedScenarioUpdater {
 			try {
 				json = Files.toString(f, Charsets.UTF_8);
 
-				final List<Pair<String, String>> scenariosList = client.parseScenariosJSONData(json);
+				final List<SharedScenarioRecord> scenariosList = client.parseScenariosJSONData(json);
 				if (scenariosList != null) {
 					update(scenariosList);
 				}
@@ -431,7 +429,7 @@ public class SharedScenarioUpdater {
 				if (m.isAfter(lastModified)) {
 					final Pair<String, Instant> scenariosPair = client.getScenarios();
 					if (scenariosPair != null) {
-						final List<Pair<String, String>> scenariosList = client.parseScenariosJSONData(scenariosPair.getFirst());
+						final List<SharedScenarioRecord> scenariosList = client.parseScenariosJSONData(scenariosPair.getFirst());
 						update(scenariosList);
 						Files.write(scenariosPair.getFirst(), new File(basePath.getAbsolutePath() + "/scenarios.json"), Charsets.UTF_8);
 						lastModified = scenariosPair.getSecond();

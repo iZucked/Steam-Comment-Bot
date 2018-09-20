@@ -40,26 +40,26 @@ public class SharedWorkspaceServiceClient {
 	private static final String SCENARIO_MOVE_URL = "/scenarios/v1/shared/move/";
 	private static final String SCENARIO_LAST_MODIFIED_URL = "/scenarios/v1/shared/lastModified";
 
-	public String uploadScenario(File file, String path, IProgressListener progressListener) throws IOException {
+	public String uploadScenario(final File file, final String path, final IProgressListener progressListener) throws IOException {
 
-		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+		final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("scenario", "scenario.lingo", RequestBody.create(mediaType, file))//
 				.addFormDataPart("path", path) //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + SCENARIO_UPLOAD_URL) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
 		// Check the response
@@ -69,30 +69,30 @@ public class SharedWorkspaceServiceClient {
 				throw new IOException("Unexpected code " + response);
 			}
 
-			String jsonData = response.body().string();
+			final String jsonData = response.body().string();
 			final JSONObject Jobject = new JSONObject(jsonData);
 			final String uuidString = Jobject.getString("uuid");
 			return uuidString;
 		}
 	}
 
-	public boolean downloadTo(String uuid, File file, IProgressListener progressListener) throws IOException {
+	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws IOException {
 		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
 				@Override
-				public Response intercept(Chain chain) throws IOException {
-					Response originalResponse = chain.proceed(chain.request());
+				public Response intercept(final Chain chain) throws IOException {
+					final Response originalResponse = chain.proceed(chain.request());
 					return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
 				}
 			});
 		}
-		OkHttpClient httpClient = clientBuilder //
+		final OkHttpClient httpClient = clientBuilder //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(String.format("%s%s%s", upstreamURL, SCENARIO_DOWNLOAD_URL, uuid)) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
@@ -103,7 +103,7 @@ public class SharedWorkspaceServiceClient {
 				throw new IOException("Unexpected code: " + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
-				BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
+				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
 				bufferedSink.writeAll(bufferedSource);
 				bufferedSink.close();
 				return true;
@@ -111,15 +111,15 @@ public class SharedWorkspaceServiceClient {
 		}
 	}
 
-	public static String getBaseCaseDetails(String uuid) throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+	public static String getBaseCaseDetails(final String uuid) throws IOException {
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + SCENARIO_DOWNLOAD_URL + uuid + "/details") //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
@@ -129,21 +129,21 @@ public class SharedWorkspaceServiceClient {
 				response.body().close();
 				throw new IOException("Unexpected code: " + response);
 			}
-			String value = response.body().string();
+			final String value = response.body().string();
 
 			return value;
 		}
 	}
 
 	public static Pair<String, Instant> getScenarios() throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + SCENARIO_LIST_URL) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
@@ -152,26 +152,26 @@ public class SharedWorkspaceServiceClient {
 			if (!response.isSuccessful()) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			String date = response.headers().get("MMX-LastModified");
+			final String date = response.headers().get("MMX-LastModified");
 			if (date == null) {
 				return null;
 			}
-			Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
-			String jsonData = response.body().string();
+			final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
+			final String jsonData = response.body().string();
 			return new Pair<>(jsonData, lastModified);
 
 		}
 	}
 
-	public static void deleteScenario(String uuid) throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+	public static void deleteScenario(final String uuid) throws IOException {
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return;
 		}
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + SCENARIO_DELETE_URL + uuid) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.delete() //
@@ -185,45 +185,45 @@ public class SharedWorkspaceServiceClient {
 	}
 
 	public Instant getLastModified() {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + SCENARIO_LAST_MODIFIED_URL) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
 
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (response.isSuccessful()) {
-				String date = response.body().string();
-				Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
+				final String date = response.body().string();
+				final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
 				return lastModified;
 				// throw new IOException("Unexpected code: " + response);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 
 		}
 		return null;
 	}
 
-	public void rename(String uuid, String newPath) throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+	public void rename(final String uuid, final String newPath) throws IOException {
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return;
 		}
 
-		RequestBody requestBody = new MultipartBody.Builder() //
+		final RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("path", newPath) //
 				.build();
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + SCENARIO_MOVE_URL + uuid) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody) //
@@ -236,14 +236,20 @@ public class SharedWorkspaceServiceClient {
 		}
 	}
 
-	public List<Pair<String, String>> parseScenariosJSONData(String jsonData) {
-		final JSONArray Jobject = new JSONArray(jsonData);
-		List<Pair<String, String>> l = new LinkedList<>();
-		for (int i = 0; i < Jobject.length(); ++i) {
-			final JSONObject versionObject = Jobject.getJSONObject(i);
-			final String uuidString = versionObject.getString("uuid");
-			final String pathString = versionObject.getString("path");
-			l.add(new Pair<>(uuidString, pathString));
+	public List<SharedScenarioRecord> parseScenariosJSONData(final String jsonData) {
+		final JSONArray jObject = new JSONArray(jsonData);
+		final List<SharedScenarioRecord> l = new LinkedList<>();
+		for (int i = 0; i < jObject.length(); ++i) {
+			final JSONObject versionObject = jObject.getJSONObject(i);
+
+			SharedScenarioRecord record = new SharedScenarioRecord();
+			record.uuid = versionObject.getString("uuid");
+			record.creator = versionObject.getString("creator");
+			record.pathString = versionObject.getString("path");
+
+			final String creationDate = versionObject.getString("creationDate");
+			record.creationDate = Instant.parse(creationDate);
+			l.add(record);
 		}
 		return l;
 	}

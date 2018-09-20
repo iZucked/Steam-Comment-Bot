@@ -6,10 +6,10 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.internal;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -25,8 +25,8 @@ import org.eclipse.emf.common.util.URI;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.server.IUpstreamDetailChangedListener;
 import com.mmxlabs.lngdataserver.server.UpstreamUrlProvider;
@@ -56,14 +56,7 @@ public class BaseCaseScenarioUpdater {
 	private final ScenarioService modelRoot;
 	private final File basePath;
 	private String lastUUID = "";
-	private IUpstreamDetailChangedListener detailChangedListener = new IUpstreamDetailChangedListener() {
-
-		@Override
-		public void changed() {
-			// Reset to trigger refresh
-			lastUUID = "";
-		}
-	};
+	private final IUpstreamDetailChangedListener detailChangedListener = () -> lastUUID = ""; // Reset to trigger refresh
 
 	private Thread updateThread;
 
@@ -80,19 +73,18 @@ public class BaseCaseScenarioUpdater {
 		taskExecutor.shutdownNow();
 	}
 
-	public void update(final Pair<String, Instant> scenario) {
+	public void update(final BaseCaseRecord record) {
 
 		final Set<String> existingUUIDS = new HashSet<>();
 		recursiveUUIDCollector(modelRoot, existingUUIDS);
 
-		if (scenario != null) {
-			final String uuid = scenario.getFirst();
-			ZonedDateTime date = scenario.getSecond().atZone(ZoneId.of("UTC"));
-			String name = String.format("Basecase %04d-%02d-%02d %02d:%02d", date.getYear(), date.getMonthValue(), date.getDayOfMonth(), date.getHour(), date.getMinute());
+		if (record != null) {
+			final String uuid = record.uuid;
+			final String name = record.originalName;
 
 			final Container parent = modelRoot;
 
-			taskExecutor.execute(new AddScenarioTask(parent, name, uuid));
+			taskExecutor.execute(new AddScenarioTask(parent, name, record));
 			existingUUIDS.remove(uuid);
 		}
 
@@ -126,21 +118,21 @@ public class BaseCaseScenarioUpdater {
 
 	private class AddScenarioTask implements Runnable {
 		private final Container parent;
-		private final String uuid;
+		private final BaseCaseRecord record;
 		private final String name;
 
-		public AddScenarioTask(final Container parent, final String name, final String uuid) {
+		public AddScenarioTask(final Container parent, final String name, final BaseCaseRecord record) {
 			this.parent = parent;
 			this.name = name;
-			this.uuid = uuid;
+			this.record = record;
 		}
 
 		@Override
 		public void run() {
-			final File f = new File(String.format("%s%s%s.lingo", basePath, File.separator, uuid));
+			final File f = new File(String.format("%s%s%s.lingo", basePath, File.separator, record.uuid));
 			if (!f.exists()) {
 				try {
-					if (!downloadScenario(uuid, f, null)) {
+					if (!downloadScenario(record.uuid, f, null)) {
 						// Something went wrong - reset lastModified to trigger another refresh
 						lastUUID = "";
 						// Failed!
@@ -154,7 +146,7 @@ public class BaseCaseScenarioUpdater {
 				}
 			}
 
-			final ScenarioInstance instance = mapping.computeIfAbsent(uuid, u -> loadScenarioFrom(f, u, name));
+			final ScenarioInstance instance = mapping.computeIfAbsent(record.uuid, u -> loadScenarioFrom(f, record, name));
 			if (instance != null) {
 				RunnerHelper.syncExecDisplayOptional(() -> {
 					instance.setName(name);
@@ -164,8 +156,8 @@ public class BaseCaseScenarioUpdater {
 		}
 	}
 
-	private boolean downloadScenario(final String uuid, final File f, IProgressListener progressListener) throws IOException {
-		boolean[] ret = new boolean[1];
+	private boolean downloadScenario(final String uuid, final File f, final IProgressListener progressListener) throws IOException {
+		final boolean[] ret = new boolean[1];
 		final Job background = new Job("Download base case scenario") {
 
 			@Override
@@ -177,10 +169,12 @@ public class BaseCaseScenarioUpdater {
 			public IStatus main(final IProgressMonitor monitor) {
 				try {
 					ret[0] = client.downloadTo(uuid, f, wrapMonitor(monitor));
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					// return Status.
 				} finally {
-					monitor.done();
+					if (monitor != null) {
+						monitor.done();
+					}
 				}
 
 				return Status.OK_STATUS;
@@ -193,21 +187,21 @@ public class BaseCaseScenarioUpdater {
 		background.schedule();
 		try {
 			background.join();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		return ret[0];
 	}
 
-	protected ScenarioInstance loadScenarioFrom(final File f, final String uuid, final String scenarioname) {
+	protected ScenarioInstance loadScenarioFrom(final File f, final BaseCaseRecord record, final String scenarioname) {
 		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
 		final Manifest manifest = ScenarioStorageUtil.loadManifest(f);
 		if (manifest != null) {
 			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 			scenarioInstance.setReadonly(true);
 			scenarioInstance.setUuid(manifest.getUUID());
-			scenarioInstance.setExternalID(uuid);
+			scenarioInstance.setExternalID(record.uuid);
 
 			scenarioInstance.setRootObjectURI(archiveURI.toString());
 
@@ -219,6 +213,9 @@ public class BaseCaseScenarioUpdater {
 			scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
 
 			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
+			meta.setCreator(record.creator);
+			meta.setCreated(Date.from(record.creationDate));
+
 			scenarioInstance.setMetadata(meta);
 			meta.setContentType(manifest.getScenarioType());
 			// Probably better pass in from service
@@ -244,17 +241,17 @@ public class BaseCaseScenarioUpdater {
 	}
 
 	public void start() {
-		File f = new File(basePath.getAbsolutePath() + "/basecase.json");
+		final File f = new File(basePath.getAbsolutePath() + "/basecase.json");
 		if (f.exists()) {
 			String json;
 			try {
 				json = Files.toString(f, Charsets.UTF_8);
 
-				final Pair<String, Instant> scenariosList = client.parseScenariosJSONData(json);
-				if (scenariosList != null) {
-					update(scenariosList);
+				final BaseCaseRecord record = client.parseScenariosJSONData(json);
+				if (record != null) {
+					update(record);
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -306,16 +303,16 @@ public class BaseCaseScenarioUpdater {
 		pathMap.put(sb.toString(), f);
 	}
 
-	public void updatePath(String oldPath, String newPath) {
+	public void updatePath(final String oldPath, final String newPath) {
 
-		Container value = pathMap.get(oldPath);
+		final Container value = pathMap.get(oldPath);
 		if (value != null) {
 			pathMap.put(newPath, value);
 		}
 	}
 
 	public void refresh() throws IOException {
-		boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
+		final boolean available = UpstreamUrlProvider.INSTANCE.isAvailable();
 		if (!modelRoot.isOffline() != available) {
 			RunnerHelper.syncExecDisplayOptional(() -> modelRoot.setOffline(!available));
 		}
@@ -329,7 +326,7 @@ public class BaseCaseScenarioUpdater {
 				}
 				if (!currentUUID.equals(lastUUID)) {
 					final String scenariosData = client.getBaseCaseDetails(currentUUID);
-					final Pair<String, Instant> scenariosInfo = client.parseScenariosJSONData(scenariosData);
+					final BaseCaseRecord scenariosInfo = client.parseScenariosJSONData(scenariosData);
 					if (scenariosInfo != null) {
 						update(scenariosInfo);
 						Files.write(scenariosData, new File(basePath.getAbsolutePath() + "/basecase.json"), Charsets.UTF_8);
@@ -343,7 +340,7 @@ public class BaseCaseScenarioUpdater {
 		}
 	};
 
-	private IProgressListener wrapMonitor(IProgressMonitor monitor) {
+	private IProgressListener wrapMonitor(final IProgressMonitor monitor) {
 		if (monitor == null) {
 			return null;
 		}
@@ -352,7 +349,7 @@ public class BaseCaseScenarioUpdater {
 			boolean firstCall = true;
 
 			@Override
-			public void update(long bytesRead, long contentLength, boolean done) {
+			public void update(final long bytesRead, final long contentLength, final boolean done) {
 				if (firstCall) {
 					int total = (int) (contentLength / 1000L);
 					if (total == 0) {
@@ -361,7 +358,7 @@ public class BaseCaseScenarioUpdater {
 					monitor.beginTask("Transfer", total);
 					firstCall = false;
 				}
-				int worked = (int) (bytesRead / 1000L);
+				final int worked = (int) (bytesRead / 1000L);
 				monitor.worked(worked);
 			}
 		};

@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -592,6 +593,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
 				scenarioInstance.setMetadata(meta);
 				meta.setContentType(manifest.getScenarioType());
+				meta.setCreated(new Date(f.lastModified()));
 
 				final String string = file.getParent().normalize().toString();
 				final WeakReference<Container> weakReference = folderMap.get(string);

@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.scenario.service.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IColorProvider;
@@ -18,6 +22,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -40,7 +46,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 	private final Image pinImage;
 
-	private Font boldFont;
+	private final Font boldFont;
 
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
@@ -78,7 +84,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 			if (object instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
-				ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 				if (modelRecord != null) {
 					// We can be blocked on migration if we are loading when checking for a reference
 					if (modelRecord.isLoaded()) {
@@ -86,6 +92,19 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 							if (ref != null && ref.isDirty()) {
 								text = "* " + text;
 							}
+						}
+					}
+				}
+
+				final IScenarioService ss = SSDataManager.Instance.findScenarioService(scenarioInstance);
+				if (ss != null && !ss.getServiceModel().isLocal()) {
+					final Metadata metadata = scenarioInstance.getMetadata();
+					if (metadata != null) {
+						final Date created = metadata.getCreated();
+						if (created != null) {
+							final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+							format.setTimeZone(TimeZone.getTimeZone("UTC"));
+							text += " [" + format.format(created) + "]" ;// [" + metadata.getCreator() + "]";
 						}
 					}
 				}
@@ -113,19 +132,18 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 						return showDisabledImage;
 					}
 				}
-			}
-			else if (object instanceof ScenarioFragment) {
-//				ScenarioFragment scenarioFragment = (ScenarioFragment) object;
-//				final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
-//				if (service != null) {
-//					if (service.isPinned((ScenarioFragment) object)) {
-//						return pinImage;
-//					} else if (service.isSelected((ScenarioFragment) object)) {
-//						return showEnabledImage;
-//					} else {
-//						return showDisabledImage;
-//					}
-//				}
+			} else if (object instanceof ScenarioFragment) {
+				// ScenarioFragment scenarioFragment = (ScenarioFragment) object;
+				// final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
+				// if (service != null) {
+				// if (service.isPinned((ScenarioFragment) object)) {
+				// return pinImage;
+				// } else if (service.isSelected((ScenarioFragment) object)) {
+				// return showEnabledImage;
+				// } else {
+				// return showDisabledImage;
+				// }
+				// }
 			}
 			return null;
 		case ScenarioServiceNavigator.COLUMN_NAME_IDX:
@@ -135,7 +153,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	}
 
 	@Override
-	public Color getForeground(Object object) {
+	public Color getForeground(final Object object) {
 
 		if (object instanceof ScenarioService) {
 			return Grey;
@@ -144,7 +162,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	}
 
 	@Override
-	public Font getFont(Object object) {
+	public Font getFont(final Object object) {
 
 		if (object instanceof ScenarioService) {
 			return boldFont;

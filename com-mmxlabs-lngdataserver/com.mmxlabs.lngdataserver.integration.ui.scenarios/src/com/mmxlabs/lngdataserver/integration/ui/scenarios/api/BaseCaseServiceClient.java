@@ -30,19 +30,20 @@ import okio.Okio;
 
 public class BaseCaseServiceClient {
 
+	private static final String UNEXPECTED_CODE = "Unexpected code: ";
 	private static final String BASECASE_UPLOAD_URL = "/scenarios/v1/basecase/upload";
 	private static final String BASECASE_DOWNLOAD_URL = "/scenarios/v1/basecase/";
 	private static final String BASECASE_CURRENT_URL = "/scenarios/v1/basecase/current";
 
 	// public String uploadBaseCase(File file, String portsVersionUUID, String vesselsVersionUUID, String pricingVersionUUID, String distancesVersionUUID) throws IOException {
-	public String uploadBaseCase(File file, //
-			String scenarioName, ///
-			String pricingVersionUUID, //
-			IProgressListener progressListener) throws IOException {
+	public String uploadBaseCase(final File file, //
+			final String scenarioName, ///
+			final String pricingVersionUUID, //
+			final IProgressListener progressListener) throws IOException {
 		if (pricingVersionUUID == null) {
 			throw new IllegalArgumentException("Pricing version cannot be null");
 		}
-		okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+		final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 		RequestBody requestBody = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("pricingVersionUUID", pricingVersionUUID) //
@@ -56,14 +57,14 @@ public class BaseCaseServiceClient {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + BASECASE_UPLOAD_URL) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.post(requestBody).build();
 
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
 		// Check the response
@@ -73,28 +74,28 @@ public class BaseCaseServiceClient {
 				throw new IOException("Unexpected code " + response);
 			}
 
-			String responseStr = response.body().string();
+			final String responseStr = response.body().string();
 			return responseStr;
 		}
 	}
 
-	public boolean downloadTo(String uuid, File file, IProgressListener progressListener) throws IOException {
+	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws IOException {
 		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
 				@Override
-				public Response intercept(Chain chain) throws IOException {
-					Response originalResponse = chain.proceed(chain.request());
+				public Response intercept(final Chain chain) throws IOException {
+					final Response originalResponse = chain.proceed(chain.request());
 					return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
 				}
 			});
 		}
-		OkHttpClient httpClient = clientBuilder //
+		final OkHttpClient httpClient = clientBuilder //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(String.format("%s%s%s", upstreamURL, BASECASE_DOWNLOAD_URL, uuid)) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
@@ -102,10 +103,10 @@ public class BaseCaseServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
-				throw new IOException("Unexpected code: " + response);
+				throw new IOException(UNEXPECTED_CODE + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
-				BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
+				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
 				bufferedSink.writeAll(bufferedSource);
 				bufferedSink.close();
 			}
@@ -114,7 +115,7 @@ public class BaseCaseServiceClient {
 	}
 
 	public static String getCurrentBaseCase() throws IOException {
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
@@ -124,10 +125,10 @@ public class BaseCaseServiceClient {
 			return null;
 		}
 
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + BASECASE_CURRENT_URL) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
@@ -137,25 +138,23 @@ public class BaseCaseServiceClient {
 				response.body().close();
 				// 404 Not found is a valid response if there is no current basecase
 				if (response.code() != 404) {
-					throw new IOException("Unexpected code: " + response);
+					throw new IOException(UNEXPECTED_CODE + response);
 				}
 				return "";
 			}
-			String value = response.body().string();
-
-			return value;
+			return response.body().string();
 		}
 	}
 
-	public static String setCurrentBaseCase(String uuid) throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+	public static String setCurrentBaseCase(final String uuid) throws IOException {
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + BASECASE_CURRENT_URL + "/" + uuid) //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
@@ -163,23 +162,21 @@ public class BaseCaseServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
-				throw new IOException("Unexpected code: " + response);
+				throw new IOException(UNEXPECTED_CODE + response);
 			}
-			String value = response.body().string();
-
-			return value;
+			return response.body().string();
 		}
 	}
 
-	public static String getBaseCaseDetails(String uuid) throws IOException {
-		OkHttpClient httpClient = new OkHttpClient.Builder() //
+	public static String getBaseCaseDetails(final String uuid) throws IOException {
+		final OkHttpClient httpClient = new OkHttpClient.Builder() //
 				.build();
 
-		String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
+		final String upstreamURL = UpstreamUrlProvider.INSTANCE.getBaseURL();
 		if (upstreamURL == null || upstreamURL.isEmpty()) {
 			return null;
 		}
-		Request request = new Request.Builder() //
+		final Request request = new Request.Builder() //
 				.url(upstreamURL + BASECASE_DOWNLOAD_URL + uuid + "/details") //
 				.header("Authorization", Credentials.basic(UpstreamUrlProvider.INSTANCE.getUsername(), UpstreamUrlProvider.INSTANCE.getPassword()))//
 				.build();
@@ -187,20 +184,22 @@ public class BaseCaseServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
-				throw new IOException("Unexpected code: " + response);
+				throw new IOException(UNEXPECTED_CODE + response);
 			}
-			String value = response.body().string();
-
-			return value;
+			return response.body().string();
 		}
 	}
 
-	public Pair<String, Instant> parseScenariosJSONData(String jsonData) {
+	public BaseCaseRecord parseScenariosJSONData(final String jsonData) {
 		final JSONObject versionObject = new JSONObject(jsonData);
+		BaseCaseRecord record = new BaseCaseRecord();
+		record.uuid = versionObject.getString("uuid");
+		record.creator = versionObject.getString("creator");
+		record.originalName = versionObject.getString("originalName");
 
-		final String uuidString = versionObject.getString("uuid");
 		final String creationDate = versionObject.getString("creationDate");
-		Instant instant = Instant.parse(creationDate);
-		return new Pair<>(uuidString, instant);
+		record.creationDate = Instant.parse(creationDate);
+		return record;
 	}
+
 }
