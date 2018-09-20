@@ -140,28 +140,28 @@ public class Activator extends AbstractUIPlugin {
 				LOGGER.error("Error retrieving distance versions");
 			}
 			// register consumer to update on new version
-			repository.registerLocalVersionListener(versionString -> {
+			repository.registerLocalVersionListener(v -> {
 				RunnerHelper.asyncExec(c -> {
 					// Check for existing versions
 					for (final Node n : dataRoot.getChildren()) {
-						if (Objects.equals(versionString, n.getDisplayName())) {
+						if (Objects.equals(v.getFullIdentifier(), n.getDisplayName())) {
 							return;
 						}
 					}
 
 					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
-					newVersion.setDisplayName(versionString);
-					newVersion.setVersionIdentifier(versionString);
+					newVersion.setDisplayName(v.getFullIdentifier());
+					newVersion.setVersionIdentifier(v.getIdentifier());
 					newVersion.setParent(dataRoot);
 					dataRoot.getChildren().add(0, newVersion);
 				});
 			});
 			repository.startListenForNewLocalVersions();
 
-			repository.registerUpstreamVersionListener(versionString -> {
+			repository.registerUpstreamVersionListener(v -> {
 				RunnerHelper.asyncExec(c -> {
 					try {
-						repository.syncUpstreamVersion(versionString);
+						repository.syncUpstreamVersion(v.getIdentifier());
 					} catch (final Exception e) {
 						e.printStackTrace();
 					}

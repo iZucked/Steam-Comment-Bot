@@ -147,28 +147,28 @@ public class Activator extends AbstractUIPlugin {
 			}
 
 			// register consumer to update on new version
-			vesselsRepository.registerLocalVersionListener(versionString -> {
+			vesselsRepository.registerLocalVersionListener(v -> {
 				RunnerHelper.asyncExec(c -> {
 					// Check for existing versions
 					for (final Node n : vesselsDataRoot.getChildren()) {
-						if (Objects.equals(versionString, n.getDisplayName())) {
+						if (Objects.equals(v.getFullIdentifier(), n.getDisplayName())) {
 							return;
 						}
 					}
 
 					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
-					newVersion.setDisplayName(versionString);
-					newVersion.setVersionIdentifier(versionString);
+					newVersion.setDisplayName(v.getFullIdentifier());
+					newVersion.setVersionIdentifier(v.getIdentifier());
 					newVersion.setParent(vesselsDataRoot);
 					vesselsDataRoot.getChildren().add(0, newVersion);
 				});
 			});
 			vesselsRepository.startListenForNewLocalVersions();
 
-			vesselsRepository.registerUpstreamVersionListener(versionString -> {
+			vesselsRepository.registerUpstreamVersionListener(v -> {
 				RunnerHelper.asyncExec(c -> {
 					try {
-						vesselsRepository.syncUpstreamVersion(versionString);
+						vesselsRepository.syncUpstreamVersion(v.getIdentifier());
 					} catch (final Exception e) {
 						e.printStackTrace();
 					}

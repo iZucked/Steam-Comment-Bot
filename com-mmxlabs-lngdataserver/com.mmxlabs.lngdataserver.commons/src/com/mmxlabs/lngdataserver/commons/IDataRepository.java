@@ -31,8 +31,8 @@ public interface IDataRepository {
 
 	void stopListeningForNewUpstreamVersions();
 
-	void registerLocalVersionListener(final Consumer<String> versionConsumer);
+	void registerLocalVersionListener(final Consumer<DataVersion> versionConsumer);
 
-	void registerUpstreamVersionListener(final Consumer<String> versionConsumer);
+	void registerUpstreamVersionListener(final Consumer<DataVersion> versionConsumer);
 
 }

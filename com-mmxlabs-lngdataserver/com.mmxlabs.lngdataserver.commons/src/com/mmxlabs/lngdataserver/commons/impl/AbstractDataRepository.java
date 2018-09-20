@@ -46,8 +46,8 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	// protected String upstreamUrl;
 	protected boolean listenForNewLocalVersions;
 	protected boolean listenForNewUpstreamVersions;
-	protected final List<Consumer<String>> newLocalVersionCallbacks = new LinkedList<>();
-	protected final List<Consumer<String>> newUpstreamVersionCallbacks = new LinkedList<>();
+	protected final List<Consumer<DataVersion>> newLocalVersionCallbacks = new LinkedList<>();
+	protected final List<Consumer<DataVersion>> newUpstreamVersionCallbacks = new LinkedList<>();
 
 	protected Thread localVersionThread;
 	protected Thread upstreamVersionThread;
@@ -92,7 +92,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 						if (Boolean.TRUE == newVersionAvailable) {
 							final List<DataVersion> versions = getVersions();
 							for (final DataVersion v : versions) {
-								newLocalVersionCallbacks.forEach(c -> c.accept(v.getIdentifier()));
+								newLocalVersionCallbacks.forEach(c -> c.accept(v));
 							}
 						}
 					}
@@ -136,7 +136,7 @@ public abstract class AbstractDataRepository implements IDataRepository {
 					if (versionAvailable == Boolean.TRUE) {
 						final List<DataVersion> versions = getUpstreamVersions();
 						for (final DataVersion v : versions) {
-							newUpstreamVersionCallbacks.forEach(c -> c.accept(v.getIdentifier()));
+							newUpstreamVersionCallbacks.forEach(c -> c.accept(v));
 						}
 					}
 				} catch (final InterruptedException e) {
@@ -178,12 +178,12 @@ public abstract class AbstractDataRepository implements IDataRepository {
 	}
 
 	@Override
-	public void registerLocalVersionListener(final Consumer<String> versionConsumer) {
+	public void registerLocalVersionListener(final Consumer<DataVersion> versionConsumer) {
 		newLocalVersionCallbacks.add(versionConsumer);
 	}
 
 	@Override
-	public void registerUpstreamVersionListener(final Consumer<String> versionConsumer) {
+	public void registerUpstreamVersionListener(final Consumer<DataVersion> versionConsumer) {
 		newUpstreamVersionCallbacks.add(versionConsumer);
 	}
 

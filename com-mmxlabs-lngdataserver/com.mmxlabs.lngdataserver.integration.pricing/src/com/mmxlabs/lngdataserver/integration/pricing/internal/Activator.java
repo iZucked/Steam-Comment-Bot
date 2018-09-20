@@ -127,7 +127,7 @@ public class Activator extends AbstractUIPlugin {
 						version.setDisplayName(v.getFullIdentifier());
 						version.setVersionIdentifier(v.getIdentifier());
 						version.setPublished(v.isPublished());
-						
+
 						if (v.isCurrent()) {
 							RunnerHelper.asyncExec(c -> pricingDataRoot.setCurrent(version));
 						}
@@ -141,27 +141,27 @@ public class Activator extends AbstractUIPlugin {
 			}
 
 			// register consumer to update on new version
-			pricingRepository.registerLocalVersionListener(versionString -> {
+			pricingRepository.registerLocalVersionListener(v -> {
 
 				RunnerHelper.asyncExec(c -> {
 					// Check for existing versions
 					for (final Node n : pricingDataRoot.getChildren()) {
-						if (Objects.equals(versionString, n.getDisplayName())) {
+						if (Objects.equals(v.getFullIdentifier(), n.getDisplayName())) {
 							return;
 						}
 					}
 					final Node newVersion = BrowserFactory.eINSTANCE.createLeaf();
-					newVersion.setDisplayName(versionString);
-					newVersion.setVersionIdentifier(versionString);
+					newVersion.setDisplayName(v.getFullIdentifier());
+					newVersion.setVersionIdentifier(v.getIdentifier());
 					pricingDataRoot.getChildren().add(newVersion);
 				});
 			});
 			pricingRepository.startListenForNewLocalVersions();
 
-			pricingRepository.registerUpstreamVersionListener(versionString -> {
+			pricingRepository.registerUpstreamVersionListener(v -> {
 				RunnerHelper.asyncExec(c -> {
 					try {
-						pricingRepository.syncUpstreamVersion(versionString);
+						pricingRepository.syncUpstreamVersion(v.getIdentifier());
 					} catch (final Exception e) {
 						e.printStackTrace();
 					}
