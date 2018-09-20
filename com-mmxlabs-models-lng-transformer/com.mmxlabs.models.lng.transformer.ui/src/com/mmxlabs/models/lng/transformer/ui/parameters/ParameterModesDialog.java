@@ -44,6 +44,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -89,6 +90,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		private final List<Pair<String, Object>> choices = new LinkedList<>();
 		public boolean enabled = true;
 		public Function<UserSettings, Boolean> enabledHook;
+		public String disabledMessage;
 
 		public void addChoice(final String name, final Object value) {
 			choices.add(new Pair<>(name, value));
@@ -341,7 +343,12 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		}
 	}
 
-	private void createOption(final Composite parent, final Option option) {
+	private void createOption(Composite parent, final Option option) {
+
+		if (option.choiceData != null && !option.choiceData.enabled && option.choiceData.disabledMessage != null) {
+			parent = toolkit.createComposite(parent);
+			parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		}
 
 		switch (option.dataType) {
 		case Boolean:
@@ -361,6 +368,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		default:
 			break;
 		}
+
+		if (option.choiceData != null && !option.choiceData.enabled && option.choiceData.disabledMessage != null) {
+			toolkit.createText(parent, option.choiceData.disabledMessage);
+		}
 	}
 
 	/**
@@ -375,12 +386,16 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Button btn = toolkit.createButton(form, option.label, SWT.CHECK);
 		if (!option.enabled) {
 			btn.setEnabled(false);
-			btn.setToolTipText("Module not licensed");
+			if (option.choiceData.disabledMessage == null) {
+				btn.setToolTipText("Module not licensed");
+			}
 		}
 
 		if (!option.enabled) {
 			btn.setEnabled(false);
-			btn.setToolTipText("Module not licensed");
+			if (option.choiceData.disabledMessage == null) {
+				btn.setToolTipText("Module not licensed");
+			}
 		}
 
 		final EMFUpdateValueStrategy stringToValueStrategy = new EMFUpdateValueStrategy();
@@ -689,9 +704,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		// ValidationStatusProvider
 		ControlDecorationSupport.create(validator, SWT.TOP | SWT.LEFT, area);
-		
+
 		if (choiceData.enabledHook != null) {
-			setEnabled(area, choiceData.enabledHook.apply((UserSettings)target));
+			setEnabled(area, choiceData.enabledHook.apply((UserSettings) target));
 		}
 
 		return area;

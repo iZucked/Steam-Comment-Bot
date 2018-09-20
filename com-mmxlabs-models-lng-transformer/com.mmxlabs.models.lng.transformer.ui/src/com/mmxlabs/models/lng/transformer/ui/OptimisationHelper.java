@@ -54,8 +54,11 @@ import com.mmxlabs.common.time.Months;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -73,6 +76,7 @@ import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterF
 import com.mmxlabs.models.lng.scenario.LNGScenarioModelValidationTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
@@ -315,6 +319,17 @@ public final class OptimisationHelper {
 			{
 
 				if (forADP) {
+					boolean scenarioContainsForbiddedADPEvents = false;
+					if (scenario != null) {
+						CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
+						for (VesselEvent event : cargoModel.getVesselEvents()) {
+							if (!(event instanceof DryDockEvent)) {
+								scenarioContainsForbiddedADPEvents = true;
+								copy.setCleanStateOptimisation(false);
+								break;
+							}
+						}
+					}
 					final OptionGroup group = dialog.createGroup(DataSection.General, "ADP");
 					{
 						final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
@@ -329,7 +344,12 @@ public final class OptimisationHelper {
 						final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 						choiceData.addChoice("No", Boolean.FALSE);
 						choiceData.addChoice("Yes", Boolean.TRUE);
-						choiceData.enabledHook = (userSettings -> userSettings.isAdpOptimisation());
+						if (scenarioContainsForbiddedADPEvents) {
+							choiceData.enabled = false;
+							choiceData.disabledMessage = "Clean slate only supports dry-dock vessel events.";
+						} else {
+							choiceData.enabledHook = (userSettings -> userSettings.isAdpOptimisation());
+						}
 						final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Clean slate: ", copy, defaultSettings, DataType.Choice, choiceData,
 								SWTBOT_CLEAN_STATE_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
 						optionAdded = true;
@@ -574,7 +594,7 @@ public final class OptimisationHelper {
 		}
 
 		if (optionAdded && (enabledOptionAdded || !displayOnlyIfOptionsEnabled)) {
-			final int[] ret = new int[1];
+			final int[] ret = new int[] { Window.CANCEL };
 			display.syncExec(new Runnable() {
 
 				@Override
