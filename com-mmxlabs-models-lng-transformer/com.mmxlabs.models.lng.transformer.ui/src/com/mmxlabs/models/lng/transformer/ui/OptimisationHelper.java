@@ -343,6 +343,9 @@ public final class OptimisationHelper {
 									final UserSettings userSettings = (UserSettings) value;
 
 									if (userSettings.isAdpOptimisation()) {
+										if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
+											return ValidationStatus.error("Period optimisation must be disabled with ADP optimisation");
+										}
 										if (userSettings.isCleanStateOptimisation()) {
 											if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
 												return ValidationStatus.error("Similarity must be disabled with clean slate ADP optimisation");
@@ -353,9 +356,6 @@ public final class OptimisationHelper {
 											}
 											if (userSettings.isGenerateCharterOuts()) {
 												return ValidationStatus.error("Charter out generation must be disabled with clean slate ADP optimisation");
-											}
-											if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
-												return ValidationStatus.error("Period optimisation must be disabled with clean slate ADP optimisation");
 											}
 										}
 									}
