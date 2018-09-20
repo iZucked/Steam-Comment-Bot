@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -376,5 +377,15 @@ public final class ScenarioModelUtil {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
 		return extraDataProvider;
+	}
+
+	public static @Nullable ADPModel getADPModel(@NonNull IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
+			return lngScenarioModel.getAdpModel();
+		}
+		throw new IllegalArgumentException("Invalid scenario model");
 	}
 }

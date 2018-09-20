@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
@@ -21,16 +23,22 @@ import com.google.inject.Module;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
+import com.mmxlabs.models.lng.transformer.ui.adp.ADPScenarioModuleHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 
 public class LNGScenarioRunner {
 
@@ -81,21 +89,41 @@ public class LNGScenarioRunner {
 			@Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule,
 			@Nullable final IOptimiserInjectorService localOverrides, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
 
-		// here we want to take user settings and generate initial state settings
-		LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, optimisationPlan.getUserSettings(),
-				optimisationPlan.getSolutionBuilderSettings(), editingDomain, extraModule, localOverrides, evaluationOnly, true, initialHints);
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
+		UserSettings userSettings = optimisationPlan.getUserSettings();
+		if (userSettings.isAdpOptimisation()) {
+			ADPModel adpModel = ScenarioModelUtil.getADPModel(scenarioDataProvider);
+			if (adpModel == null) {
+				throw new IllegalStateException("No ADP Model for ADP optimisation");
+			}
+			OptimiserInjectorServiceMaker serviceMaker = OptimiserInjectorServiceMaker.begin()//
+					.withModuleBindInstance(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPModel.class, adpModel)//
+					.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPScenarioModuleHelper.createExtraDataModule(adpModel))//
+			;
+			if (userSettings.isCleanStateOptimisation()) {
+				serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, ADPScenarioModuleHelper.createEmptySolutionModule());
+			}
+			scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
+					scenarioInstance, //
+					userSettings, //
+					optimisationPlan.getSolutionBuilderSettings(), //
+					editingDomain, //
+					extraModule, // Bootstrap module
+					serviceMaker.make(), //
+					evaluationOnly, true, //
+					initialHints // Hints? No Caching?
+			);
+		} else {
+			scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, userSettings, optimisationPlan.getSolutionBuilderSettings(), editingDomain,
+					extraModule, localOverrides, evaluationOnly, true, initialHints);
+		}
 
-		// // FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
-		// if (false) {
-		// chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimisationPlan, executorService,
-		// initialHints);
-		// } else {
-		// chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
-		// executorService,
-		// LNGTransformerHelper.HINT_OPTIMISE_LSO);
-		IChainRunner chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge,
-				optimisationPlan, executorService, initialHints);
-		// }
+		// Probably need to bring in the evaluation modules
+		final Collection<IOptimiserInjectorService> services = scenarioToOptimiserBridge.getDataTransformer().getModuleServices();
+
+		// here we want to take user settings and generate initial state settings
+		final IChainRunner chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(),
+				scenarioToOptimiserBridge, optimisationPlan, executorService, initialHints);
 
 		return new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, scenarioToOptimiserBridge, chainRunner, runnerHook);
 

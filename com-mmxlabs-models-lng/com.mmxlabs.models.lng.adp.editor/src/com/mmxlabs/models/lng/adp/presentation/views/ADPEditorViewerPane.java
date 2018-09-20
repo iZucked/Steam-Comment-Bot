@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -24,7 +22,6 @@ import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -57,28 +54,20 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetProfile;
-import com.mmxlabs.models.lng.adp.services.IADPScenarioEvaluator;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.scenario.LNGScenarioModelValidationTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.IStatusProvider;
-import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
-import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ADPEditorViewerPane extends ScenarioViewerPane {
 
@@ -87,8 +76,8 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 	private ADPEditorData editorData;
 
 	private final List<ADPComposite> pages = new LinkedList<>();
-	FormattedText startEditor;
-	FormattedText endEditor;
+	private FormattedText startEditor;
+	private FormattedText endEditor;
 
 	public ADPEditorViewerPane(IWorkbenchPage page, JointModelEditorPart editorPart, IActionBars actionBars) {
 		super(page, editorPart, editorPart, actionBars);
@@ -220,23 +209,6 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		final Composite bottomBar = new Composite(parent, SWT.NONE);
 		bottomBar.setLayout(GridLayoutFactory.fillDefaults().numColumns(10).create());
 
-		{
-			btn_optimise = new Button(bottomBar, SWT.PUSH);
-			btn_optimise.setLayoutData(GridDataFactory.fillDefaults() //
-					.span(2, 1) //
-					.hint(100, SWT.DEFAULT) //
-					.create());
-			btn_optimise.setText("Optimise");
-			btn_optimise.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					optimiseScenario();
-				}
-
-			});
-		}
-
 		// makeUndoActions();
 
 		// listenToScenarioSelection();
@@ -283,51 +255,11 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		};
 	}
 
-	private final IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
-
-		@Override
-		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-			RunnerHelper.syncExec(() -> {
-				btn_optimise.setImage(status.getSeverity() < IStatus.ERROR ? null : imgError);
-				btn_optimise.setEnabled(status.getSeverity() < IStatus.ERROR);
-				// Large tooltip covers the button and stop user being able to press it.
-				if (status.isOK()) {
-					// btn_optimise.setToolTipText(null);
-				} else {
-					// btn_optimise.setToolTipText(DialogValidationSupport.processMessages(status));
-				}
-			});
-			RunnerHelper.runNowOrAsync(() -> refreshValidation(status));
-		}
-	};
-
 	private CTabFolder folder;
 
 	private Button deleteScenarioButton;
 
-	private Button btn_optimise;
-
 	private Runnable releaseAdaptersRunnable;
-
-	private void refreshValidation(final IStatus status) {
-		editorData.validationErrors.clear();
-		DialogValidationSupport.processStatus(status, editorData.validationErrors);
-		for (final ADPComposite page : pages) {
-			page.refresh();
-		}
-	}
-
-	// @Override
-	// protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-	// doDisplayScenarioInstance(scenarioInstance, rootObject, null);
-	// final IStatusProvider statusProvider = getStatusProvider();
-	// if (statusProvider != null) {
-	// statusProvider.removeStatusChangedListener(statusChangedListener);
-	// statusProvider.addStatusChangedListener(statusChangedListener);
-	// refreshValidation(statusProvider.getStatus());
-	// }
-	//// updateUndoActions(getEditingDomain());
-	// }
 
 	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable ADPModel model) {
 
@@ -392,13 +324,6 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		deleteScenarioButton.setEnabled(adpModel != null);
 		startEditor.getControl().setEnabled(adpModel != null);
 		endEditor.getControl().setEnabled(adpModel != null);
-
-		btn_optimise.setEnabled(adpModel != null);
-
-		// final IStatusProvider statusProvider = getStatusProvider();
-		// if (statusProvider != null) {
-		// statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
-		// }
 	}
 
 	private Image imgError;
@@ -415,10 +340,6 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
 		}
-		// final IStatusProvider statusProvider = getStatusProvider();
-		// if (statusProvider != null) {
-		// statusProvider.removeStatusChangedListener(statusChangedListener);
-		// }
 
 		if (editorData.adpModel != null) {
 			editorData.adpModel = null;
@@ -428,50 +349,6 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		}
 
 		super.dispose();
-	}
-
-	private void optimiseScenario() {
-
-		if (!validateScenario(getJointModelEditorPart().getScenarioDataProvider(), editorData.adpModel)) {
-			return;
-		}
-
-		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(getJointModelEditorPart().getShell());
-		try {
-			dialog.run(true, true, (monitor) -> {
-
-				monitor.beginTask("Generate ADP", 1000);
-				try {
-					final boolean result = ServiceHelper.withService(IADPScenarioEvaluator.class, //
-							evaluator -> evaluator.runADPModel(getJointModelEditorPart().getScenarioInstance(), //
-									getJointModelEditorPart().getScenarioDataProvider(), //
-									editorData.adpModel, //
-									new SubProgressMonitor(monitor, 1000)));
-
-					// final Command command = SetCommand.create(getEditingDomain(), editorData.adpModel, ADPPackage.Literals.ADP_MODEL__RESULT, result);
-					// RunnerHelper.syncExecDisplayOptional(() -> getDefaultCommandHandler().handleCommand(command, editorData.adpModel, ADPPackage.Literals.ADP_MODEL__RESULT));
-
-					final ScenarioResult scenarioResult = new ScenarioResult(getJointModelEditorPart().getScenarioInstance(),
-							ScenarioModelUtil.getScheduleModel(getJointModelEditorPart().getScenarioDataProvider()));
-					ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, //
-							provider -> RunnerHelper.asyncExec(() -> {
-								provider.deselectAll();
-								provider.select(scenarioResult);
-							}));
-
-				} finally {
-					monitor.done();
-				}
-			});
-		} catch (final InvocationTargetException e) {
-			if (e.getCause() instanceof InfeasibleSolutionException || e.getTargetException() instanceof InfeasibleSolutionException) {
-				MessageDialog.openError(getJointModelEditorPart().getShell(), "Unable to generate solution", "Unable to generate a feasible schedule with the given constraints.");
-			} else {
-				e.printStackTrace();
-			}
-		} catch (final InterruptedException e) {
-
-		}
 	}
 
 	private FormattedText createYearMonthEditor(final Composite parent, final EAttribute attribute) {

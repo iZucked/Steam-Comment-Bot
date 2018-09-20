@@ -152,13 +152,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 8;
 
 	/**
+	 * The feature id for the '<em><b>Adp Optimisation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__ADP_OPTIMISATION = 9;
+
+	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 9;
+	int USER_SETTINGS_FEATURE_COUNT = 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1496,6 +1505,17 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_FloatingDaysLimit();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation <em>Adp Optimisation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Adp Optimisation</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_AdpOptimisation();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2287,6 +2307,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__FLOATING_DAYS_LIMIT = eINSTANCE.getUserSettings_FloatingDaysLimit();
+
+		/**
+		 * The meta object literal for the '<em><b>Adp Optimisation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__ADP_OPTIMISATION = eINSTANCE.getUserSettings_AdpOptimisation();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.

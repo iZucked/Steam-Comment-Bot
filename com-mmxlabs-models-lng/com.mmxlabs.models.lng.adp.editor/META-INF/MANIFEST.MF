@@ -12,8 +12,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.mmxlabs.models.lng.adp.presentation,
  com.mmxlabs.models.lng.adp.ext,
  com.mmxlabs.models.lng.adp.ext.impl,
- com.mmxlabs.models.lng.adp.presentation,
- com.mmxlabs.models.lng.adp.services
+ com.mmxlabs.models.lng.adp.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
  com.mmxlabs.models.lng.adp.edit;visibility:=reexport,

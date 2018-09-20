@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation <em>Adp Optimisation</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings()
@@ -334,5 +335,31 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setFloatingDaysLimit(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Adp Optimisation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Adp Optimisation</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Adp Optimisation</em>' attribute.
+	 * @see #setAdpOptimisation(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_AdpOptimisation()
+	 * @model
+	 * @generated
+	 */
+	boolean isAdpOptimisation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isAdpOptimisation <em>Adp Optimisation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Adp Optimisation</em>' attribute.
+	 * @see #isAdpOptimisation()
+	 * @generated
+	 */
+	void setAdpOptimisation(boolean value);
 
 } // UserSettings

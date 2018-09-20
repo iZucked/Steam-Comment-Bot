@@ -211,7 +211,7 @@ public class SimilarityIntervalImpl extends EObjectImpl implements SimilarityInt
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (weight: ");
 		result.append(weight);
 		result.append(", threshold: ");

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -22,7 +23,6 @@ import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.conversion.Converter;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.databinding.property.value.IValueProperty;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.MultiValidator;
@@ -52,6 +52,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -62,6 +63,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 
 /**
@@ -86,6 +88,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		private final List<Pair<String, Object>> choices = new LinkedList<>();
 		public boolean enabled = true;
+		public Function<UserSettings, Boolean> enabledHook;
 
 		public void addChoice(final String name, final Object value) {
 			choices.add(new Pair<>(name, value));
@@ -108,6 +111,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final String label;
 		final String swtBotId;
 		final EditingDomain editingDomain;
+		Control control;
 		public boolean enabled = true;
 
 		@NonNull
@@ -341,19 +345,19 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		switch (option.dataType) {
 		case Boolean:
-			createCheckBox(parent, option);
+			option.control = createCheckBox(parent, option);
 			break;
 		case PositiveInt:
-			createNumberTextBox(parent, option);
+			option.control = createNumberTextBox(parent, option);
 			break;
 		case Date:
-			createDateEditor(parent, option);
+			option.control = createDateEditor(parent, option);
 			break;
 		case MonthYear:
-			createMonthYearEditor(parent, option);
+			option.control = createMonthYearEditor(parent, option);
 			break;
 		case Choice:
-			createChoiceEditor(parent, option);
+			option.control = createChoiceEditor(parent, option);
 		default:
 			break;
 		}
@@ -679,13 +683,16 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				btn.setEnabled(false);
 				btn.setToolTipText("Module not licensed");
 			}
-
 		}
 
 		dbc.addValidationStatusProvider(validator);
 
 		// ValidationStatusProvider
 		ControlDecorationSupport.create(validator, SWT.TOP | SWT.LEFT, area);
+		
+		if (choiceData.enabledHook != null) {
+			setEnabled(area, choiceData.enabledHook.apply((UserSettings)target));
+		}
 
 		return area;
 
@@ -810,6 +817,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
+				if (option.choiceData.enabledHook != null) {
+					setEnabled(option.control, option.choiceData.enabledHook.apply((UserSettings) notification.getNotifier()));
+				}
 				revalidate();
 			}
 		};
@@ -848,5 +858,15 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	public String getNameSuggestion() {
 		return nameSuggestion;
+	}
+
+	private static void setEnabled(Control c, boolean enabled) {
+		c.setEnabled(enabled);
+		if (c instanceof Composite) {
+			Composite composite = (Composite) c;
+			for (Control c2 : composite.getChildren()) {
+				setEnabled(c2, enabled);
+			}
+		}
 	}
 }
