@@ -222,8 +222,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		}
 
-		final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
-		final CargoModel cargoModel = scenarioModel.getCargoModel();
+		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 
 		// Process initial vessel assignments list
 		ModelDistanceProvider modelDistanceProvider = ScenarioModelUtil.getModelDistanceProvider(scenarioDataProvider);

@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
@@ -14,6 +16,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * 
  * @author Simon Goodall
  */
+@NonNullByDefault
 public interface IRestrictedElementsProvider extends IDataComponentProvider {
 
 	Collection<ISequenceElement> getRestrictedFollowerElements(ISequenceElement element);

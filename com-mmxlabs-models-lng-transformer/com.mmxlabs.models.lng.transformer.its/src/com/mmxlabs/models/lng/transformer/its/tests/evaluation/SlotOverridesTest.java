@@ -128,7 +128,7 @@ public class SlotOverridesTest {
 			return result;
 		}
 
-		public List<Slot> getRestrictedPrecedingSlots(final Slot slot) {
+		public List<Slot> getRestrictedPrecedingSlots(final @NonNull Slot slot) {
 			final IPortSlotProvider psProvider = getProvider(IPortSlotProvider.class);
 
 			// pull the load slot out of the transformed data
@@ -137,7 +137,7 @@ public class SlotOverridesTest {
 			final ISequenceElement element = psProvider.getElement(oSlot);
 			final IRestrictedElementsProvider reProvider = getProvider(IRestrictedElementsProvider.class);
 
-			final ArrayList<Slot> result = new ArrayList<Slot>();
+			final ArrayList<Slot> result = new ArrayList<>();
 			for (final ISequenceElement restricted : reProvider.getRestrictedPrecedingElements(element)) {
 				final IPortSlot restrictedSlot = psProvider.getPortSlot(restricted);
 				result.add(getModelObject(restrictedSlot, Slot.class));

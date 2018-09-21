@@ -129,7 +129,7 @@ public class ScenarioTools {
 	 * @param pilotLightRate
 	 * @return
 	 */
-	public static IScenarioDataProvider createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+	public static @NonNull IScenarioDataProvider createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
@@ -290,7 +290,7 @@ public class ScenarioTools {
 	 * Creates a scenario with a charter out.
 	 * 
 	 */
-	public static IScenarioDataProvider createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+	public static @NonNull IScenarioDataProvider createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate,
@@ -587,7 +587,7 @@ public class ScenarioTools {
 	 *            The name to give port.
 	 * @return The created port.
 	 */
-	public static Port createPort(final String name) {
+	public static @NonNull Port createPort(final String name) {
 
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setName(name);

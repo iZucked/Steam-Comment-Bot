@@ -42,7 +42,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.insertion.SequencesHitchHikerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -68,7 +67,7 @@ public class ScheduleSpecificationTransformer {
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
 	@NonNull
-	public ISequences createSequences(@NonNull final ScheduleSpecification scheduleSpecification, LNGDataTransformer dataTransformer) {
+	public ISequences createSequences(@NonNull final ScheduleSpecification scheduleSpecification, final LNGDataTransformer dataTransformer) {
 
 		final Set<ISequenceElement> usedElements = new HashSet<>();
 
@@ -78,7 +77,7 @@ public class ScheduleSpecificationTransformer {
 		final List<IResource> orderedResources = new LinkedList<>();
 		final Map<IResource, ISequence> sequences = new HashMap<>();
 		final List<ISequenceElement> unusedElements = new LinkedList<>();
-		IOptimisationData optimisationData = dataTransformer.getOptimisationData();
+		final IOptimisationData optimisationData = dataTransformer.getOptimisationData();
 		for (final VesselScheduleSpecification vesselSpecificiation : scheduleSpecification.getVesselScheduleSpecifications()) {
 			final VesselAssignmentType vesselAllocation = vesselSpecificiation.getVesselAllocation();
 			IResource resource = null;
@@ -92,12 +91,12 @@ public class ScheduleSpecificationTransformer {
 				resource = vesselProvider.getResource(o_vesselAvailability);
 			} else if (vesselAllocation instanceof CharterInMarket) {
 				final CharterInMarket e_charterInMarket = (CharterInMarket) vesselAllocation;
-				int spotIndex = vesselSpecificiation.getSpotIndex();
+				final int spotIndex = vesselSpecificiation.getSpotIndex();
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
 
 				for (final IResource o_resource : optimisationData.getResources()) {
 					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-					ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();
+					final ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();
 					if (spotCharterInMarket != o_market) {
 						continue;
 					}
@@ -144,9 +143,9 @@ public class ScheduleSpecificationTransformer {
 			orderedResources.add(resource);
 			sequences.put(resource, new ListModifiableSequence(elements));
 
-			for (ISequenceElement e : elements) {
+			for (final ISequenceElement e : elements) {
 				if (!usedElements.add(e)) {
-					int ii = 0;
+					final int ii = 0;
 				}
 
 			}
@@ -163,15 +162,15 @@ public class ScheduleSpecificationTransformer {
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);
 				elements.add(e);
 
-				IVesselAvailability o_vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
+				final IVesselAvailability o_vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
 				if (o_vesselAvailability != null) {
 					resource = vesselProvider.getResource(o_vesselAvailability);
 				}
 			}
 
-			for (ISequenceElement e : elements) {
+			for (final ISequenceElement e : elements) {
 				if (!usedElements.add(e)) {
-					int ii = 0;
+					final int ii = 0;
 				}
 
 			}
@@ -208,7 +207,7 @@ public class ScheduleSpecificationTransformer {
 		// Optionally - add in spot market slots?
 		{
 		}
-		ISequences seq = new Sequences(orderedResources, sequences, unusedElements);
+		final ISequences seq = new Sequences(orderedResources, sequences, unusedElements);
 
 		// assert SequencesHitchHikerHelper.checkValidSequences(seq);
 		return seq;
