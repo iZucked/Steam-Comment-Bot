@@ -33,4 +33,13 @@ public interface IElementDurationProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getDefaultValue();
+
+	/**
+	 * Return the duration set for the given element without a {@link IResource}. If no non-resource duration has been set, then the default value {@link #getDefaultValue()} will be returned.
+	 * 
+	 * @param element
+	 * @param resource
+	 * @return
+	 */
+	int getElementDuration(ISequenceElement element);
 }

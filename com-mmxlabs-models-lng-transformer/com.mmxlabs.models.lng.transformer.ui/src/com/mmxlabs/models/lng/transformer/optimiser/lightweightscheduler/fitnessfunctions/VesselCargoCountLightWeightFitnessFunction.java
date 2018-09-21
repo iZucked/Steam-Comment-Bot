@@ -7,10 +7,11 @@ package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnes
 import java.util.List;
 
 import com.google.inject.Inject;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightFitnessFunction;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightOptimisationData;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.LightWeightCargoDetails;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.metaheuristic.TabuLightWeightSequenceOptimiser.Interval;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightCargoDetails;
+import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.tabu.CargoWindowData;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 public class VesselCargoCountLightWeightFitnessFunction implements ILightWeightFitnessFunction {
 	@Inject
@@ -20,12 +21,13 @@ public class VesselCargoCountLightWeightFitnessFunction implements ILightWeightF
 	
 	@Override
 	public Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, Interval[] loads, Interval[] discharges,
-			double[] volumes, LightWeightCargoDetails[] cargoDetails, double[][] cargoDailyCharterCostPerAvailabilityProcessed) {
+			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, CargoWindowData[] cargoWindows, double[] volumes,
+			LightWeightCargoDetails[] cargoDetails, double[][] cargoDailyCharterCostPerAvailabilityProcessed, ITimeWindow[] vesselStartTimeWindows, ITimeWindow[] vesselEndTimeWindows,
+			int[] cargoEndDurations) {
 		double fitness = 0.0;
 		int idx = 0;
 		for (List<Integer> sequence : sequences) {
-			int sum = sequence.stream().mapToInt(s->1).sum();
+			int sum = (int) sequence.stream().count();
 			fitness += (Math.min(sum, lightWeightOptimisationData.getDesiredVesselCargoCount()[idx])*perVesselWeight[idx]);
 			idx++;
 		}
@@ -40,5 +42,14 @@ public class VesselCargoCountLightWeightFitnessFunction implements ILightWeightF
 				perVesselWeight[i] = lightWeightOptimisationData.getDesiredVesselCargoWeight()[i];
 			}
 		}
+	}
+
+	@Override
+	public Double annotate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
+			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, CargoWindowData[] cargoWindows, double[] volumes,
+			LightWeightCargoDetails[] cargoDetails, double[][] cargoDailyCharterCostPerAvailabilityProcessed, ITimeWindow[] vesselStartTimeWindows, ITimeWindow[] vesselEndTimeWindows,
+			int[] cargoEndDurations) {
+		return evaluate(sequences, cargoCount, cargoPNL, vesselCapacities, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
+				cargoToCargoMinTravelTimes, cargoMinTravelTimes, cargoWindows, volumes, cargoDetails, cargoDailyCharterCostPerAvailabilityProcessed, vesselStartTimeWindows, vesselEndTimeWindows, cargoEndDurations);
 	}
 }

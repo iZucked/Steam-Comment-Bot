@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.inject.Inject;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightConstraintChecker;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightOptimisationData;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintChecker;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
 
 public class LightWeightShippingRestrictionsConstraintChecker implements ILightWeightConstraintChecker {
 

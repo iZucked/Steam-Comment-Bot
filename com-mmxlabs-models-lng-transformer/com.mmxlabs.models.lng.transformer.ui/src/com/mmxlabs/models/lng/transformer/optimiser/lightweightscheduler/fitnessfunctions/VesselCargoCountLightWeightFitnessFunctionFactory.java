@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions;
 
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightFitnessFunction;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightFitnessFunctionFactory;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunctionFactory;
 
 public class VesselCargoCountLightWeightFitnessFunctionFactory implements ILightWeightFitnessFunctionFactory {
 	public final String NAME = "VesselCargoCountLightWeightFitnessFunction";

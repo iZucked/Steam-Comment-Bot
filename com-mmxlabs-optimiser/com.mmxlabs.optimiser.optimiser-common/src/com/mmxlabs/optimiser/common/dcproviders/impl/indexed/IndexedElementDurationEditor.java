@@ -65,4 +65,13 @@ public final class IndexedElementDurationEditor implements IElementDurationProvi
 	public void setElementDuration(final ISequenceElement element, final int durationHours) {
 		durationByElement.set(element, durationHours);
 	}
+
+	@Override
+	public int getElementDuration(ISequenceElement element) {
+		final Integer i = durationByElement.maybeGet(element);
+		if (i != null) {
+			return i.intValue();
+		}
+		return defaultDuration;
+	}
 }

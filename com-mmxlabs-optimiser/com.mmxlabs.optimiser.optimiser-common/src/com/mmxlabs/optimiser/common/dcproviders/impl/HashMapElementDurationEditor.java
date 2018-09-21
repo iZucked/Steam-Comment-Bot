@@ -54,6 +54,12 @@ public final class HashMapElementDurationEditor implements IElementDurationProvi
 		final Integer x = nonResourceDurations.get(element);
 		return x == null ? defaultValue : x;
 	}
+	
+	@Override
+	public int getElementDuration(final ISequenceElement element) {
+		final Integer x = nonResourceDurations.get(element);
+		return x == null ? defaultValue : x;
+	}
 
 	@Override
 	public int getDefaultValue() {

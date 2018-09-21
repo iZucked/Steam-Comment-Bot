@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.OptionalLong;
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 
 import org.apache.shiro.SecurityUtils;
@@ -42,8 +41,8 @@ import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.ResetInitialSequencesUnit;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.multisimilarity.LNGMultiObjectiveOptimiserTransformerUnit;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.LightWeightSchedulerOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser.LNGParallelHillClimbingOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser.LNGParallelMultiObjectiveOptimiserTransformerUnit;

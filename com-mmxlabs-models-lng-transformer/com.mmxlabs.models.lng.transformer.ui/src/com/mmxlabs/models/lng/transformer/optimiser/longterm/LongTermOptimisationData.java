@@ -38,8 +38,6 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	private IPortSlotProvider portSlotProvider;
 	@Inject
 	private IMaxSlotCountConstraintDataProvider maxSlotCountConstraint;
-	@Inject(optional = true)
-	private IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider;
 
 	Long[][] profit;
 	private boolean[][] valid;
@@ -54,8 +52,6 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	private List<Map<String, List<Integer>>> minDischargeGroupCount;
 	private List<Map<String, List<Integer>>> maxLoadGroupCount;
 	private List<Map<String, List<Integer>>> minLoadGroupCount;
-
-	private int[] vesselDesiredNumberSlots;
 
 	public LongTermOptimisationData() {
 
@@ -250,10 +246,6 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 			dischargeCountConstraintJSON.add(map);
 		}
 		return dischargeCountConstraintJSON;
-	}
-
-	public int[] getVesselDesiredNumberSlots() {
-		return vesselDesiredNumberSlots;
 	}
 
 	public List<ILoadOption> getSortedLoads() {
