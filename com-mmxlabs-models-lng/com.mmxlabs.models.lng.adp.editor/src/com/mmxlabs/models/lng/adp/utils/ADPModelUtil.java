@@ -23,6 +23,7 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -62,44 +63,6 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class ADPModelUtil {
 
-	public static LNGScenarioModel prepareModel(final LNGScenarioModel scenarioModel) {
-		final LNGScenarioModel copy = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-
-		final EcoreUtil.Copier copier = new EcoreUtil.Copier();
-		final LNGReferenceModel referenceModel = (LNGReferenceModel) copier.copy(ScenarioModelUtil.findReferenceModel(scenarioModel));
-		copy.setReferenceModel(referenceModel);
-
-		copy.setCargoModel(CargoFactory.eINSTANCE.createCargoModel());
-
-		copy.getCargoModel().getVesselAvailabilities().addAll(copier.copyAll(scenarioModel.getCargoModel().getVesselAvailabilities()));
-
-		copy.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
-
-		if (scenarioModel.getPromptPeriodStart() != null) {
-			copy.setPromptPeriodStart(scenarioModel.getPromptPeriodStart());
-		}
-		if (scenarioModel.getPromptPeriodEnd() != null) {
-			copy.setPromptPeriodEnd(scenarioModel.getPromptPeriodEnd());
-		}
-		if (scenarioModel.isSetSchedulingEndDate()) {
-			copy.setSchedulingEndDate(scenarioModel.getSchedulingEndDate());
-		}
-		// Copy existing model?
-		// for (EObject eObject : scenarioModel.getExtensions()) {
-		// if (eObject instanceof ADPModel) {
-		// ADPModel adpModel = (ADPModel) eObject;
-		// copy.getExtensions().add(copier.copy(adpModel));
-		// break;
-		// }
-		// }
-
-		// TODO: Run post process hooks e.g. create custom model
-
-		copier.copyReferences();
-
-		return copy;
-	}
-
 	public static ADPModel createADPModel(final LNGScenarioModel scenarioModel) {
 		final ADPModel adpModel = ADPFactory.eINSTANCE.createADPModel();
 
@@ -124,101 +87,31 @@ public class ADPModelUtil {
 		try {
 			final IADPProfileProvider profileProvider = bundleContext.getService(serviceReference);
 			profileProvider.createProfiles(scenarioModel, commercialModel, adpModel);
-
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}
 		return adpModel;
 	}
 
-	// public static void populateModel(final LNGScenarioModel scenarioModel, final ADPModel adpModel) {
-	// final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
-	//
-	// final Bundle bundle = FrameworkUtil.getBundle(ADPModelUtil.class);
-	// final BundleContext bundleContext = bundle.getBundleContext();
-	// Collection<ServiceReference<IProfileGenerator>> serviceReferences;
-	// try {
-	// serviceReferences = bundleContext.getServiceReferences(IProfileGenerator.class, null);
-	//
-	// final List<IProfileGenerator> generators = new LinkedList<>();
-	//
-	// for (final ServiceReference<IProfileGenerator> ref : serviceReferences) {
-	// generators.add(bundleContext.getService(ref));
-	// }
-	// try {
-	// for (final PurchaseContractProfile profile : adpModel.getPurchaseContractProfiles()) {
-	// if (profile.isEnabled()) {
-	// for (final SubContractProfile<LoadSlot> subProfile : profile.getSubProfiles()) {
-	// for (final IProfileGenerator g : generators) {
-	// if (g.canGenerate(profile, subProfile)) {
-	// final List<LoadSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
-	// subProfile.getSlots().addAll(slots);
-	//
-	// break;
-	// }
-	// }
-	// }
-	// }
-	// }
-	// for (final SalesContractProfile profile : adpModel.getSalesContractProfiles()) {
-	// if (profile.isEnabled()) {
-	//
-	// for (final SubContractProfile<DischargeSlot> subProfile : profile.getSubProfiles()) {
-	// for (final IProfileGenerator g : generators) {
-	// if (g.canGenerate(profile, subProfile)) {
-	// final List<DischargeSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
-	// subProfile.getSlots().addAll(slots);
-	// // cargoModel.getDischargeSlots().addAll(slots);
-	//
-	// break;
-	// }
-	// }
-	// }
-	// }
-	// }
-	// } finally {
-	// for (final ServiceReference<IProfileGenerator> ref : serviceReferences) {
-	// bundleContext.ungetService(ref);
-	// }
-	// }
-	// } catch (final InvalidSyntaxException e) {
-	// e.printStackTrace();
-	// }
-	// final FleetProfile fleetProfile = adpModel.getFleetProfile();
-	// for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-	// final VesselAvailability newAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-	// newAvailability.setVessel(vesselAvailability.getVessel());
-	// newAvailability.setCharterNumber(vesselAvailability.getCharterNumber());
-	// newAvailability.setEntity(vesselAvailability.getEntity());
-	// if (vesselAvailability.isSetTimeCharterRate()) {
-	// newAvailability.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
-	// }
-	// newAvailability.setFleet(vesselAvailability.isFleet());
-	// newAvailability.setOptional(vesselAvailability.isOptional());
-	//
-	// final StartHeelOptions startOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
-	// startOptions.setMinVolumeAvailable(0);
-	// startOptions.setMaxVolumeAvailable(newAvailability.getVessel().getSafetyHeel());
-	// startOptions.setCvValue(22.8);
-	// startOptions.setPriceExpression("0.0");
-	// newAvailability.setStartHeel(startOptions);
-	//
-	// final EndHeelOptions endOptions = CargoFactory.eINSTANCE.createEndHeelOptions();
-	// endOptions.setMinimumEndHeel(newAvailability.getVessel().getSafetyHeel());
-	// endOptions.setMaximumEndHeel(newAvailability.getVessel().getSafetyHeel());
-	// endOptions.setTankState(EVesselTankState.EITHER);
-	// endOptions.setPriceExpression("0.0");
-	// newAvailability.setEndHeel(endOptions);
-	//
-	// newAvailability.setStartAfter(adpModel.getYearStart().atDay(1).atStartOfDay());
-	// newAvailability.setStartBy(adpModel.getYearStart().atDay(1).atStartOfDay());
-	//
-	// newAvailability.setEndAfter(adpModel.getYearEnd().atDay(1).atStartOfDay());
-	// newAvailability.setEndBy(adpModel.getYearEnd().atDay(1).atStartOfDay());
-	//
-	// fleetProfile.getVesselAvailabilities().add(newAvailability);
-	// }
-	// }
+	/**
+	 * Generate default profiles, without EMF command
+	 * 
+	 * @param scenarioModel
+	 * @param adpModel
+	 */
+	public static void createDefaultProfiles(LNGScenarioModel scenarioModel, ADPModel adpModel) {
+		final Bundle bundle = FrameworkUtil.getBundle(ADPModelUtil.class);
+		final BundleContext bundleContext = bundle.getBundleContext();
+		final ServiceReference<IADPProfileProvider> serviceReference = bundleContext.getServiceReference(IADPProfileProvider.class);
+
+		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
+		try {
+			final IADPProfileProvider profileProvider = bundleContext.getService(serviceReference);
+			profileProvider.createProfiles(scenarioModel, commercialModel, adpModel);
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
+	}
 
 	public static @Nullable Command populateModel(final EditingDomain editingDomain, final LNGScenarioModel scenarioModel, final ADPModel adpModel, final PurchaseContractProfile profile) {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
@@ -470,4 +363,102 @@ public class ADPModelUtil {
 
 		}
 	}
+
+	public static void generateModelSlots(@NonNull LNGScenarioModel scenarioModel, @NonNull ADPModel adpModel) {
+		for (PurchaseContractProfile profile : adpModel.getPurchaseContractProfiles()) {
+			populateModel(scenarioModel, adpModel, profile);
+		}
+		for (SalesContractProfile profile : adpModel.getSalesContractProfiles()) {
+			populateModel(scenarioModel, adpModel, profile);
+		}
+
+	}
+
+	public static void populateModel(final LNGScenarioModel scenarioModel, final ADPModel adpModel, final PurchaseContractProfile profile) {
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+
+		final Bundle bundle = FrameworkUtil.getBundle(ADPModelUtil.class);
+		final BundleContext bundleContext = bundle.getBundleContext();
+		Collection<ServiceReference<IProfileGenerator>> serviceReferences;
+		try {
+			serviceReferences = bundleContext.getServiceReferences(IProfileGenerator.class, null);
+
+			final List<IProfileGenerator> generators = new LinkedList<>();
+
+			for (final ServiceReference<IProfileGenerator> ref : serviceReferences) {
+				generators.add(bundleContext.getService(ref));
+			}
+			try {
+				if (profile.isEnabled()) {
+					for (final SubContractProfile<LoadSlot> subProfile : profile.getSubProfiles()) {
+						for (final IProfileGenerator g : generators) {
+							if (g.canGenerate(profile, subProfile)) {
+								final List<LoadSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
+								for (SubProfileConstraint subProfileConstraint : subProfile.getConstraints()) {
+									if (subProfileConstraint instanceof ProfileVesselRestriction) {
+										slots.stream().forEach(s -> {
+											s.getAllowedVessels().clear();
+											s.getAllowedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+										});
+									}
+								}
+								cargoModel.getLoadSlots().addAll(slots);
+								break;
+							}
+						}
+					}
+				}
+			} finally {
+				for (final ServiceReference<IProfileGenerator> ref : serviceReferences) {
+					bundleContext.ungetService(ref);
+				}
+			}
+		} catch (final InvalidSyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void populateModel(final LNGScenarioModel scenarioModel, final ADPModel adpModel, final SalesContractProfile profile) {
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+		final Bundle bundle = FrameworkUtil.getBundle(ADPModelUtil.class);
+		final BundleContext bundleContext = bundle.getBundleContext();
+		Collection<ServiceReference<IProfileGenerator>> serviceReferences;
+		try {
+			serviceReferences = bundleContext.getServiceReferences(IProfileGenerator.class, null);
+
+			final List<IProfileGenerator> generators = new LinkedList<>();
+			for (final ServiceReference<IProfileGenerator> ref : serviceReferences) {
+				generators.add(bundleContext.getService(ref));
+			}
+			try {
+				if (profile.isEnabled()) {
+					for (final SubContractProfile<DischargeSlot> subProfile : profile.getSubProfiles()) {
+						for (final IProfileGenerator g : generators) {
+							if (g.canGenerate(profile, subProfile)) {
+								final List<DischargeSlot> slots = DistributionModelGeneratorUtil.generateProfile(factory -> g.generateSlots(adpModel, profile, subProfile, factory));
+								for (SubProfileConstraint subProfileConstraint : subProfile.getConstraints()) {
+									if (subProfileConstraint instanceof ProfileVesselRestriction) {
+										slots.stream().forEach(s -> {
+											s.getAllowedVessels().clear();
+											s.getAllowedVessels().addAll(((ProfileVesselRestriction) subProfileConstraint).getVessels());
+										});
+									}
+								}
+								cargoModel.getDischargeSlots().addAll(slots);
+								break;
+							}
+						}
+					}
+				}
+			} finally {
+				for (final ServiceReference<IProfileGenerator> ref : serviceReferences) {
+					bundleContext.ungetService(ref);
+				}
+			}
+
+		} catch (final InvalidSyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

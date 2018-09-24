@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.cargo.util;
+package com.mmxlabs.models.lng.adp.util;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -15,10 +15,10 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
-public class CargoModelFinder {
+public class ADPModelFinder {
 	private final @NonNull CargoModel cargoModel;
 
-	public CargoModelFinder(final @NonNull CargoModel cargoModel) {
+	public ADPModelFinder(final @NonNull CargoModel cargoModel) {
 		this.cargoModel = cargoModel;
 	}
 
@@ -44,7 +44,7 @@ public class CargoModelFinder {
 				return cargo;
 			}
 		}
-		throw new IllegalArgumentException("Unknown load slot: " + name);
+		throw new IllegalArgumentException("Unknown load slot");
 	}
 
 	@NonNull
@@ -54,7 +54,7 @@ public class CargoModelFinder {
 				return cargo;
 			}
 		}
-		throw new IllegalArgumentException("Unknown discharge slot: " + name);
+		throw new IllegalArgumentException("Unknown discharge slot");
 	}
 
 	@NonNull

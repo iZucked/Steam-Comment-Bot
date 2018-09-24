@@ -77,6 +77,60 @@ public class OptimiserResultVerifier {
 		return new VesselVerifier(this, p);
 	}
 
+	/**
+	 * Ensure load slot has been allocated in some way
+	 * 
+	 * @param loadName
+	 * @return
+	 */
+	public VesselVerifier withUsedLoad(final String loadName) {
+
+		final CargoModelFinder finder = scenarioModelFinder.getCargoModelFinder();
+		final LoadSlot loadSlot = finder.findLoadSlot(loadName);
+
+		final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
+
+			final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(loadSlot);
+
+			final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
+
+			if (a != null) {
+				if (a.getFirst() != null) {
+					return new Pair<>(s, a.getFirst());
+				}
+			}
+			return null;
+		};
+		return new VesselVerifier(this, p);
+	}
+
+	/**
+	 * Ensure load slot has been allocated in some way
+	 * 
+	 * @param dischargeName
+	 * @return
+	 */
+	public VesselVerifier withUsedDischarge(final String dischargeName) {
+
+		final CargoModelFinder finder = scenarioModelFinder.getCargoModelFinder();
+		final DischargeSlot dischargeSlot = finder.findDischargeSlot(dischargeName);
+
+		final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
+
+			final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(dischargeSlot);
+
+			final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
+
+			if (a != null) {
+				if (a.getFirst() != null) {
+					return new Pair<>(s, a.getFirst());
+				}
+			}
+			return null;
+		};
+		return new VesselVerifier(this, p);
+	}
+
 	public OptimiserResultVerifier withUnusedSlot(final String name) {
 
 		final CargoModelFinder finder = scenarioModelFinder.getCargoModelFinder();
@@ -179,6 +233,32 @@ public class OptimiserResultVerifier {
 		}
 
 		final List<SolutionData> data = new ArrayList<SolutionData>(solutions.size() - 1);
+		for (int i = 1; i < solutions.size(); ++i) {
+			data.add(new SolutionData(mapper, solutions.get(i).getFirst()));
+		}
+
+		for (final Function<SolutionData, Boolean> checker : checks) {
+			boolean foundMatch = false;
+			for (final SolutionData d : data) {
+				if (checker.apply(d)) {
+					foundMatch = true;
+					break;
+				}
+			}
+			if (!foundMatch) {
+				errorHandler.accept("Solution requirement not found");
+			}
+		}
+	}
+
+	public void verifySingleOptimisationResult(final IMultiStateResult result, final Consumer<String> errorHandler) {
+
+		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = result.getSolutions();
+		if (solutions.size() < 2) {
+			errorHandler.accept("No solution found");
+		}
+
+		final List<SolutionData> data = new ArrayList<>(1);
 		for (int i = 1; i < solutions.size(); ++i) {
 			data.add(new SolutionData(mapper, solutions.get(i).getFirst()));
 		}

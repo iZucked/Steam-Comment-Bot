@@ -5,10 +5,13 @@
 package com.mmxlabs.models.lng.scenario.model.util;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.util.ADPModelBuilder;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
@@ -26,6 +29,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -137,11 +141,19 @@ public final class ScenarioModelBuilder {
 		lngScenarioModel.setPromptPeriodEnd(promptEnd);
 	}
 
-	public void setScheduleHorizon(@Nullable final LocalDate horizon) {
+	public void setScheduleHorizon(final @Nullable LocalDate horizon) {
 		if (horizon != null) {
 			lngScenarioModel.setSchedulingEndDate(horizon);
 		} else {
 			lngScenarioModel.unsetSchedulingEndDate();
 		}
+	}
+
+	public @NonNull ADPModelBuilder initialiseADP(final @NonNull YearMonth startInclusive, final @NonNull YearMonth endExclusive, final @NonNull CharterInMarket defaultNominalVessel) {
+		final ADPModel adpModel = ADPModelBuilder.initialise(startInclusive, endExclusive);
+		adpModel.getFleetProfile().setDefaultNominalMarket(defaultNominalVessel);
+		lngScenarioModel.setAdpModel(adpModel);
+
+		return new ADPModelBuilder(adpModel);
 	}
 }
