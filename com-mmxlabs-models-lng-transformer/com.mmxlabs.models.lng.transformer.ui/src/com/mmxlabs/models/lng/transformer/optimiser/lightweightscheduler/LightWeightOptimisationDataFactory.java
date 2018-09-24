@@ -102,6 +102,11 @@ public class LightWeightOptimisationDataFactory {
 		// add cargoes
 		Set<Integer> cargoIndexes = new HashSet<>();
 		List<List<IPortSlot>> shippedCargoes = LongTermOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
+		if (shippedCargoes.isEmpty()) {
+			// No cargoes found!
+			return null;
+		}
+		
 		for (int i = 0; i < shippedCargoes.size(); i++) {
 			cargoIndexes.add(i);
 		}
