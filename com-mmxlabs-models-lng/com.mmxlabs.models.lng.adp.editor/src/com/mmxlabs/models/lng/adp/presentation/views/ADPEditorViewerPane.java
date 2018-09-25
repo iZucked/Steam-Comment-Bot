@@ -95,51 +95,33 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		{
 			final Composite toolbarComposite = new Composite(parent, SWT.NONE);
 			toolbarComposite.setLayout(GridLayoutFactory.fillDefaults() //
-					.numColumns(10) //
+					.numColumns(6) //
 					.equalWidth(false) //
 					.create());
+			toolbarComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+
 			{
-
-				{
-					{
-						Button btn = new Button(toolbarComposite, SWT.PUSH);
-						// deleteScenarioButton.setText("X");
-						btn.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-
-						btn.setToolTipText("New ADP");
-						btn.addSelectionListener(new SelectionAdapter() {
-
-							@Override
-							public void widgetSelected(final SelectionEvent e) {
-								if (editorData.adpModel != null) {
-									if (MessageDialog.openConfirm(getJointModelEditorPart().getShell(), "Delete ADP", "Are you sure you want to delete the current ADP model?")) {
-
-										final CompoundCommand cmd = new CompoundCommand("Delete current ADP");
-										cmd.append(DeleteCommand.create(getEditingDomain(), editorData.adpModel));
-										getEditingDomain().getCommandStack().execute(cmd);
-										doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), null);
-									}
-								}
-								final LNGScenarioModel scenarioModel = (LNGScenarioModel) getJointModelEditorPart().getRootObject();
-								final ADPModel model = ADPModelUtil.createADPModel(scenarioModel);
-
-								final CompoundCommand cmd = new CompoundCommand("Create ADP");
-								cmd.append(SetCommand.create(getEditingDomain(), scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), model));
-								getEditingDomain().getCommandStack().execute(cmd);
-
-								doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), model);
-
-							}
-						});
-					}
-				}
-
 				final Label lbl = new Label(toolbarComposite, SWT.NONE);
 				lbl.setText("ADP");
+
+				{
+					final Label l = new Label(toolbarComposite, SWT.NONE);
+					l.setText("Start: ");
+					startEditor = createYearMonthEditor(toolbarComposite, ADPPackage.Literals.ADP_MODEL__YEAR_START);
+					startEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(80, SWT.DEFAULT).create());
+				}
+				{
+					final Label l = new Label(toolbarComposite, SWT.NONE);
+					l.setText("End before: ");
+					endEditor = createYearMonthEditor(toolbarComposite, ADPPackage.Literals.ADP_MODEL__YEAR_END);
+					endEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(80, SWT.DEFAULT).create());
+				}
+
 				{
 					deleteScenarioButton = new Button(toolbarComposite, SWT.PUSH);
 					// deleteScenarioButton.setText("X");
 					deleteScenarioButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE));
+					deleteScenarioButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
 
 					deleteScenarioButton.setToolTipText("Delete current ADP");
 					deleteScenarioButton.addSelectionListener(new SelectionAdapter() {
@@ -157,19 +139,6 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 							}
 						}
 					});
-				}
-
-				{
-					final Label l = new Label(toolbarComposite, SWT.NONE);
-					l.setText("Start: ");
-					startEditor = createYearMonthEditor(toolbarComposite, ADPPackage.Literals.ADP_MODEL__YEAR_START);
-					startEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(80, SWT.DEFAULT).create());
-				}
-				{
-					final Label l = new Label(toolbarComposite, SWT.NONE);
-					l.setText("End before: ");
-					endEditor = createYearMonthEditor(toolbarComposite, ADPPackage.Literals.ADP_MODEL__YEAR_END);
-					endEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(80, SWT.DEFAULT).create());
 				}
 			}
 		}

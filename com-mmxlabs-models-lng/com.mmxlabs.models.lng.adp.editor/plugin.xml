@@ -264,5 +264,47 @@
          plugin.xml="adp.plugin.xml">
    </PluginXMLEnablement>
 </extension>
+<extension
+      point="org.eclipse.ui.commands">
+   <command
+         defaultHandler="com.mmxlabs.models.lng.adp.actions.CreateADPCommandHandler"
+         id="com.mmxlabs.models.lng.adp.create"
+         name="Create ADP">
+   </command>
+</extension>
+<extension
+      point="org.eclipse.ui.menus">
+   <menuContribution
+         allPopups="false"
+         locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?before=optimisation">
+      <command
+            commandId="com.mmxlabs.models.lng.adp.create"
+            style="push"
+            tooltip="Create an ADP model if none exists">
+            <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with
+                              variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                                                   <not><test
+                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
+                          forcePluginActivation="true">
+                     </test></not>
+
+                           </iterate>
+                        </with>
+                        <count
+                              value="1">
+                        </count>
+                     </and>
+                  </visibleWhen>
+      </command>
+   </menuContribution>
+</extension>
 
 </plugin>
