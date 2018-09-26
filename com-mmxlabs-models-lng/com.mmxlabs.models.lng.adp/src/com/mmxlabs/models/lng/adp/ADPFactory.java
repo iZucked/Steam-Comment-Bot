@@ -54,15 +54,6 @@ public interface ADPFactory extends EFactory {
 	<T extends Slot> ContractProfile<T> createContractProfile();
 
 	/**
-	 * Returns a new object of class '<em>Spot Markets Profile</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Spot Markets Profile</em>'.
-	 * @generated
-	 */
-	SpotMarketsProfile createSpotMarketsProfile();
-
-	/**
 	 * Returns a new object of class '<em>Cargo Size Distribution Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -241,15 +232,6 @@ public interface ADPFactory extends EFactory {
 	 * @generated
 	 */
 	MaxCargoConstraint createMaxCargoConstraint();
-
-	/**
-	 * Returns a new object of class '<em>Model Result</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Model Result</em>'.
-	 * @generated
-	 */
-	ADPModelResult createADPModelResult();
 
 	/**
 	 * Returns a new object of class '<em>Target Cargoes On Vessel Constraint</em>'.

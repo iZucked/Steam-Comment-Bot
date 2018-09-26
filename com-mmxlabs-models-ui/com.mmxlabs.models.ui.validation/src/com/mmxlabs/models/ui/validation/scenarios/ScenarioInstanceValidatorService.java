@@ -73,11 +73,11 @@ public class ScenarioInstanceValidatorService implements IPostChangeHook {
 			if (pValidationService != null) {
 
 				final IValidationRootObjectTransformerService transformer;
-				if (pObjectTransformerService != null) {
-					transformer = pObjectTransformerService;
-				} else {
+//				if (pObjectTransformerService != null) {
+//					transformer = pObjectTransformerService;
+//				} else {
 					transformer = root -> Collections.singleton(root);
-				}
+//				}
 
 				final IStatus status = pValidationService.runValidation(createValidator(), extraContext, transformer, scenarioDataProvider.getScenario(), null);
 				if (status != null) {

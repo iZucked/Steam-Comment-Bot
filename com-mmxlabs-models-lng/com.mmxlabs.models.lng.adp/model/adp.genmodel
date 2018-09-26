@@ -27,17 +27,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//ADPModel/yearEnd"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/purchaseContractProfiles"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/salesContractProfiles"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/spotMarketsProfile"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/fleetProfile"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/result"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//FleetProfile">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//FleetProfile/vesselAvailabilities"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//FleetProfile/includeEnabledCharterMarkets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//FleetProfile/constraints"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//FleetProfile/vesselEvents"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//FleetProfile/defaultVessel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//FleetProfile/defaultVesselCharterInRate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//FleetProfile/defaultNominalMarket"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//ContractProfile">
       <genTypeParameters ecoreTypeParameter="adp.ecore#//ContractProfile/T"/>
@@ -50,10 +44,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ContractProfile/subProfiles"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ContractProfile/constraints"/>
     </genClasses>
-    <genClasses ecoreClass="adp.ecore#//SpotMarketsProfile">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SpotMarketsProfile/includeEnabledSpotMarkets"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SpotMarketsProfile/spotMarkets"/>
-    </genClasses>
     <genClasses ecoreClass="adp.ecore#//PurchaseContractProfile"/>
     <genClasses ecoreClass="adp.ecore#//SalesContractProfile"/>
     <genClasses ecoreClass="adp.ecore#//SubContractProfile">
@@ -65,7 +55,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/nominatedVessel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//SubContractProfile/shippingDays"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/customAttribs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/slots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SubContractProfile/constraints"/>
     </genClasses>
     <genClasses image="false" ecoreClass="adp.ecore#//CustomSubProfileAttributes"/>
@@ -132,11 +121,6 @@
     <genClasses ecoreClass="adp.ecore#//MaxCargoConstraint">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//MaxCargoConstraint/maxCargoes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//MaxCargoConstraint/intervalType"/>
-    </genClasses>
-    <genClasses ecoreClass="adp.ecore#//ADPModelResult">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModelResult/extraSlots"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModelResult/scheduleModel"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModelResult/extraSpotCharterMarkets"/>
     </genClasses>
     <genClasses image="false" ecoreClass="adp.ecore#//FleetConstraint"/>
     <genClasses ecoreClass="adp.ecore#//TargetCargoesOnVesselConstraint">

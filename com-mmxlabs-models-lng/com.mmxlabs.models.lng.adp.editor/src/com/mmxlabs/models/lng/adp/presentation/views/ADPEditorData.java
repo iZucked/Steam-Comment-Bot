@@ -10,9 +10,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -20,15 +18,12 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselAssignmentTypeValueProviderFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
-import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -100,24 +95,7 @@ public final class ADPEditorData implements IScenarioEditingLocation {
 
 	@Override
 	public IReferenceValueProviderProvider getReferenceValueProviderCache() {
-		// Return a wrapper using the value provider from the ADP package rather than standard one.
-		// Use ADP vessel availabilities.
-		return new IReferenceValueProviderProvider() {
-			@Override
-			public void dispose() {
-
-			}
-
-			@Override
-			public IReferenceValueProvider getReferenceValueProvider(EClass owner, EReference reference) {
-
-				if (reference.getEType() == TypesPackage.Literals.VESSEL_ASSIGNMENT_TYPE) {
-					return new VesselAssignmentTypeValueProviderFactory(adpModel).createReferenceValueProvider(owner, reference, delegate.getRootObject());
-				}
-
-				return delegate.getReferenceValueProviderCache().getReferenceValueProvider(owner, reference);
-			}
-		};
+		return delegate.getReferenceValueProviderCache();
 	}
 
 	@Override

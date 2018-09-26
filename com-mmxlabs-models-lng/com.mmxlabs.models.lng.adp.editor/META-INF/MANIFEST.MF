@@ -9,11 +9,10 @@ Bundle-Activator: com.mmxlabs.models.lng.adp.presentation.ADPEditorPlugin$Implem
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: com.mmxlabs.models.lng.adp.presentation,
- com.mmxlabs.models.lng.adp.ext,
+Export-Package: com.mmxlabs.models.lng.adp.ext,
  com.mmxlabs.models.lng.adp.ext.impl,
  com.mmxlabs.models.lng.adp.presentation,
- com.mmxlabs.models.lng.adp.services
+ com.mmxlabs.models.lng.adp.utils
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
  com.mmxlabs.models.lng.adp.edit;visibility:=reexport,
@@ -55,6 +54,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.util,
  com.mmxlabs.models.lng.scenario.ui,
  com.mmxlabs.models.ui.validation,
- com.mmxlabs.optimiser.optimiser-core
+ com.mmxlabs.optimiser.optimiser-core,
+ org.eclipse.core.expressions
 Bundle-ActivationPolicy: lazy
 Bundle-Module: com.mmxlabs.models.lng.adp.editor.internal.ADPActivatorModule

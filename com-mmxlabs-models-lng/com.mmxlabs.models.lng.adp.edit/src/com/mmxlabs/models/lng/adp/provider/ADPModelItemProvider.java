@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.time.YearMonth;
 
 import java.util.Collection;
@@ -41,13 +42,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class ADPModelItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -133,9 +128,7 @@ public class ADPModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SPOT_MARKETS_PROFILE);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__RESULT);
 		}
 		return childrenFeatures;
 	}
@@ -172,8 +165,7 @@ public class ADPModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		YearMonth labelValue = ((ADPModel)object).getYearStart();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((ADPModel)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ADPModel_type") :
 			getString("_UI_ADPModel_type") + " " + label;
@@ -198,9 +190,7 @@ public class ADPModelItemProvider
 				return;
 			case ADPPackage.ADP_MODEL__PURCHASE_CONTRACT_PROFILES:
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
-			case ADPPackage.ADP_MODEL__SPOT_MARKETS_PROFILE:
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
-			case ADPPackage.ADP_MODEL__RESULT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -230,29 +220,8 @@ public class ADPModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__SPOT_MARKETS_PROFILE,
-				 ADPFactory.eINSTANCE.createSpotMarketsProfile()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE,
 				 ADPFactory.eINSTANCE.createFleetProfile()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__RESULT,
-				 ADPFactory.eINSTANCE.createADPModelResult()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

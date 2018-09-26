@@ -261,7 +261,7 @@ public class PeriodOptimiserTest {
 			vesselAvailabilities = new VesselAvailability[2];
 			vesselAvailabilities[0] = csc.addVesselSimple("classOne", 1, fuelPrice, 25, 1000000, 10, 10, 0, 500, false)[0];
 			vesselAvailabilities[1] = csc.addVesselSimple("classTwo", 1, fuelPrice, 25, 1000000, 10, 10, 0, 500, false)[0];
- 
+
 			// create two different cargoes
 			cargoA1 = csc.addCargo("Cargo-A1", loadPort, dischargePort, 5, 5.0f, 20.f, dateA, 50);
 			cargoA2 = csc.addCargo("Cargo-A2", loadPort, dischargePort, 5, 5.0f, 20.f, dateB, 50);
@@ -339,15 +339,15 @@ public class PeriodOptimiserTest {
 
 				final OptimisationPlan plan = getPlan();
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+				final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
 						LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenarioDataProvider(), "c:/temp/scenario1.lingo");
 				}
-				
+
 				runner.runAndApplyBest();
-				
+
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenarioDataProvider(), "c:/temp/scenario2.lingo");
 				}
@@ -381,7 +381,7 @@ public class PeriodOptimiserTest {
 				plan.getUserSettings().setPeriodStartDate(start);
 				plan.getUserSettings().setPeriodEnd(end);
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+				final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
 						LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 

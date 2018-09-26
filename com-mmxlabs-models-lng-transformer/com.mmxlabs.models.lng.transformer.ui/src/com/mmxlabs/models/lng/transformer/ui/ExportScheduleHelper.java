@@ -20,7 +20,6 @@ import org.eclipse.ui.PartInitException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.lng.adp.ADPModelResult;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -96,7 +95,7 @@ public class ExportScheduleHelper {
 		for (final Sequence seq : schedule.getSequences()) {
 			final CharterInMarket charterInMarket = seq.getCharterInMarket();
 			if (charterInMarket != null) {
-				if (charterInMarket.eContainer() == null || charterInMarket.eContainer() instanceof ADPModelResult) {
+				if (charterInMarket.eContainer() == null) {
 					spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 				}
 			}

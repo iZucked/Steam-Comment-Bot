@@ -16,14 +16,16 @@
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//SimilarityMode/HIGH"/>
     </genEnums>
     <genClasses ecoreClass="parameters.ecore#//UserSettings">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/periodStart"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/periodStartDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/periodEnd"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/shippingOnly"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/generateCharterOuts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/withSpotCargoMarkets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/buildActionSets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/similarityMode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/cleanStateOptimisation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/floatingDaysLimit"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/adpOptimisation"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//Objective">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Objective/weight"/>
@@ -58,6 +60,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimisationPlan/userSettings"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimisationPlan/stages"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimisationPlan/solutionBuilderSettings"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//OptimisationPlan/resultName"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//ConstraintAndFitnessSettings">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ConstraintAndFitnessSettings/objectives"/>
@@ -95,11 +98,20 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ActionPlanOptimisationStage/searchDepth"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//ResetInitialSequencesStage"/>
-    <genClasses ecoreClass="parameters.ecore#//BreakEvenOptmisationStage">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//BreakEvenOptmisationStage/targetProfitAndLoss"/>
+    <genClasses ecoreClass="parameters.ecore#//InsertionOptimisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//InsertionOptimisationStage/iterations"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//BreakEvenOptimisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//BreakEvenOptimisationStage/targetProfitAndLoss"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//SolutionBuilderSettings">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//SolutionBuilderSettings/constraintAndFitnessSettings"/>
     </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//MultipleSolutionSimilarityOptimisationStage"/>
+    <genClasses ecoreClass="parameters.ecore#//ParallelMultipleSolutionSimilarityOptimisationStage"/>
+    <genClasses ecoreClass="parameters.ecore#//ParallelHillClimbOptimisationStage"/>
+    <genClasses ecoreClass="parameters.ecore#//ParallelLocalSearchOptimisationStage"/>
+    <genClasses ecoreClass="parameters.ecore#//MultiobjectiveSimilarityOptimisationStage"/>
+    <genClasses ecoreClass="parameters.ecore#//ParallelMultiobjectiveSimilarityOptimisationStage"/>
   </genPackages>
 </genmodel:GenModel>

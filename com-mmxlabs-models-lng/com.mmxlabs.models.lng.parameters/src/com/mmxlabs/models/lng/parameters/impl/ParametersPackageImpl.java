@@ -271,7 +271,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ParametersPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -285,7 +285,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		if (isInited) return (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ParametersPackageImpl theParametersPackage = (ParametersPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ParametersPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ParametersPackageImpl());
+		Object registeredParametersPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ParametersPackageImpl theParametersPackage = registeredParametersPackage instanceof ParametersPackageImpl ? (ParametersPackageImpl)registeredParametersPackage : new ParametersPackageImpl();
 
 		isInited = true;
 
@@ -302,7 +303,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		// Mark meta-data to indicate it can't be changed
 		theParametersPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ParametersPackage.eNS_URI, theParametersPackage);
 		return theParametersPackage;
@@ -406,6 +406,15 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	@Override
 	public EAttribute getUserSettings_FloatingDaysLimit() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_AdpOptimisation() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -1089,6 +1098,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEAttribute(userSettingsEClass, USER_SETTINGS__SIMILARITY_MODE);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__CLEAN_STATE_OPTIMISATION);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__FLOATING_DAYS_LIMIT);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__ADP_OPTIMISATION);
 
 		objectiveEClass = createEClass(OBJECTIVE);
 		createEAttribute(objectiveEClass, OBJECTIVE__WEIGHT);
@@ -1251,6 +1261,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getUserSettings_SimilarityMode(), this.getSimilarityMode(), "similarityMode", "OFF", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_CleanStateOptimisation(), ecorePackage.getEBoolean(), "cleanStateOptimisation", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_FloatingDaysLimit(), ecorePackage.getEInt(), "floatingDaysLimit", "15", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_AdpOptimisation(), ecorePackage.getEBoolean(), "adpOptimisation", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(objectiveEClass, Objective.class, "Objective", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getObjective_Weight(), ecorePackage.getEDouble(), "weight", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1365,12 +1376,12 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	protected void createRequiredAnnotations() {
-		String source = "http://www.minimaxlabs.com/license/features/required";	
+		String source = "http://www.minimaxlabs.com/license/features/required";
 		addAnnotation
-		  (getUserSettings_BuildActionSets(), 
-		   source, 
+		  (getUserSettings_BuildActionSets(),
+		   source,
 		   new String[] {
-			 "module", "actionplan"
+			   "module", "actionplan"
 		   });
 	}
 

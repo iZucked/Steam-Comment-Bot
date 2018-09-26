@@ -9,6 +9,8 @@ package com.mmxlabs.models.lng.adp.util;
 import com.mmxlabs.models.lng.adp.*;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -76,6 +78,8 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 			case ADPPackage.ADP_MODEL: {
 				ADPModel adpModel = (ADPModel)theEObject;
 				T1 result = caseADPModel(adpModel);
+				if (result == null) result = caseUUIDObject(adpModel);
+				if (result == null) result = caseMMXObject(adpModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -88,12 +92,6 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 			case ADPPackage.CONTRACT_PROFILE: {
 				ContractProfile<?> contractProfile = (ContractProfile<?>)theEObject;
 				T1 result = caseContractProfile(contractProfile);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ADPPackage.SPOT_MARKETS_PROFILE: {
-				SpotMarketsProfile spotMarketsProfile = (SpotMarketsProfile)theEObject;
-				T1 result = caseSpotMarketsProfile(spotMarketsProfile);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -269,12 +267,6 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ADPPackage.ADP_MODEL_RESULT: {
-				ADPModelResult adpModelResult = (ADPModelResult)theEObject;
-				T1 result = caseADPModelResult(adpModelResult);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ADPPackage.FLEET_CONSTRAINT: {
 				FleetConstraint fleetConstraint = (FleetConstraint)theEObject;
 				T1 result = caseFleetConstraint(fleetConstraint);
@@ -334,21 +326,6 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <T extends Slot> T1 caseContractProfile(ContractProfile<T> object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Spot Markets Profile</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Spot Markets Profile</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseSpotMarketsProfile(SpotMarketsProfile object) {
 		return null;
 	}
 
@@ -713,21 +690,6 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Model Result</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Model Result</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseADPModelResult(ADPModelResult object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Fleet Constraint</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -754,6 +716,36 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseTargetCargoesOnVesselConstraint(TargetCargoesOnVesselConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>MMX Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>MMX Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseMMXObject(MMXObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>UUID Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>UUID Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseUUIDObject(UUIDObject object) {
 		return null;
 	}
 

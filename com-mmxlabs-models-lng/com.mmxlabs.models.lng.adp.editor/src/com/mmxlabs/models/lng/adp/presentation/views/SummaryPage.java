@@ -94,7 +94,8 @@ public class SummaryPage extends ADPComposite {
 				}
 			});
 			createColumn(purchasesViewer, "Contract", (profile) -> profile.getContract().getName());
-			createColumn(purchasesViewer, "Num cargoes", (profile) -> profile.isEnabled() ? Integer.toString(profile.getSubProfiles().stream().mapToInt(sp -> sp.getSlots().size()).sum()) : "0");
+			createColumn(purchasesViewer, "Num cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+					.filter(s -> profile.getContract() == s.getContract()).count()));
 		}
 		{
 			salesViewer = new GridTableViewer(mainComposite);
@@ -124,7 +125,8 @@ public class SummaryPage extends ADPComposite {
 			});
 
 			createColumn(salesViewer, "Contract", (profile) -> profile.getContract().getName());
-			createColumn(salesViewer, "Num cargoes", (profile) -> profile.isEnabled() ? Integer.toString(profile.getSubProfiles().stream().mapToInt(sp -> sp.getSlots().size()).sum()) : "0");
+			createColumn(salesViewer, "Num cargoes", (profile) -> Long.toString(editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
+					.filter(s -> profile.getContract() == s.getContract()).count()));
 		}
 		{
 

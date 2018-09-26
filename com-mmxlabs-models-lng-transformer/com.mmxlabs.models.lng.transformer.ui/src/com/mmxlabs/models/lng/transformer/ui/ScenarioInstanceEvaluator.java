@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -21,9 +18,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 
 public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 	@Override
@@ -52,7 +47,7 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 					});
 					scenarioDataProvider.setLastEvaluationFailed(true);
 
-					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, p, editingDomain, (IRunnerHook) null, true);
+					final LNGScenarioRunner runner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, p, editingDomain, (IRunnerHook) null, true);
 					runner.evaluateInitialState();
 					scenarioDataProvider.setLastEvaluationFailed(false);
 				} finally {

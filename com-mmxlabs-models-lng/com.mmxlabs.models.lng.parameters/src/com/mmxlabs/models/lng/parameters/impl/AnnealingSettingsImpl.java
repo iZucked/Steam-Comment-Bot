@@ -424,7 +424,7 @@ public class AnnealingSettingsImpl extends EObjectImpl implements AnnealingSetti
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (iterations: ");
 		result.append(iterations);
 		result.append(", epochLength: ");

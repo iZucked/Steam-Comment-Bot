@@ -23,6 +23,10 @@ public class WorkbenchChangeProcessor {
 	@Execute
 	void process(@NonNull final MApplication application, @NonNull final EModelService modelService) {
 
+		// Remove ADP view part
+		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView", application, modelService);
+
+		
 		// Added for 3.8.x to 3.9.0 changes
 		// Rename Diff Tools Perspective to Compare
 		for (final MWindow window : application.getChildren()) {

@@ -66,7 +66,8 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			final Vessel vessel = availability.getVessel();
 			final String vesselName = ScenarioElementNameHelper.getName(vessel, "<Unknown>");
 
-			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withTypedName(ScenarioElementNameHelper.getTypeName(availability), vesselName);
+			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus() //
+					.withTypedName(ScenarioElementNameHelper.getTypeName(availability), vesselName);
 
 			if (vessel == null) {
 				statuses.add(baseFactory.copyName() //

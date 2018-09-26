@@ -67,31 +67,9 @@ public class FleetProfileComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_vesselAvailabilitiesEditor(detailComposite, topClass);
-		add_includeEnabledCharterMarketsEditor(detailComposite, topClass);
 		add_constraintsEditor(detailComposite, topClass);
-		add_vesselEventsEditor(detailComposite, topClass);
-		add_defaultVesselEditor(detailComposite, topClass);
-		add_defaultVesselCharterInRateEditor(detailComposite, topClass);
+		add_defaultNominalMarketEditor(detailComposite, topClass);
 	}
-	/**
-	 * Create the editor for the vesselAvailabilities feature on FleetProfile
-	 *
-	 * @generated
-	 */
-	protected void add_vesselAvailabilitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__VESSEL_AVAILABILITIES));
-	}
-
-	/**
-	 * Create the editor for the includeEnabledCharterMarkets feature on FleetProfile
-	 *
-	 * @generated
-	 */
-	protected void add_includeEnabledCharterMarketsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS));
-	}
-
 	/**
 	 * Create the editor for the constraints feature on FleetProfile
 	 *
@@ -102,29 +80,11 @@ public class FleetProfileComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the vesselEvents feature on FleetProfile
+	 * Create the editor for the defaultNominalMarket feature on FleetProfile
 	 *
 	 * @generated
 	 */
-	protected void add_vesselEventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__VESSEL_EVENTS));
-	}
-
-	/**
-	 * Create the editor for the defaultVessel feature on FleetProfile
-	 *
-	 * @generated
-	 */
-	protected void add_defaultVesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL));
-	}
-
-	/**
-	 * Create the editor for the defaultVesselCharterInRate feature on FleetProfile
-	 *
-	 * @generated
-	 */
-	protected void add_defaultVesselCharterInRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE));
+	protected void add_defaultNominalMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.FLEET_PROFILE__DEFAULT_NOMINAL_MARKET));
 	}
 }

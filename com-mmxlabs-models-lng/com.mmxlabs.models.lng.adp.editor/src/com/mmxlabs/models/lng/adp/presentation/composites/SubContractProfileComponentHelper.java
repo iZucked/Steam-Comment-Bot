@@ -74,7 +74,6 @@ public class SubContractProfileComponentHelper extends BaseComponentHelper {
 		add_nominatedVesselEditor(detailComposite, topClass);
 		add_shippingDaysEditor(detailComposite, topClass);
 		add_customAttribsEditor(detailComposite, topClass);
-		add_slotsEditor(detailComposite, topClass);
 		add_constraintsEditor(detailComposite, topClass);
 	}
 	/**

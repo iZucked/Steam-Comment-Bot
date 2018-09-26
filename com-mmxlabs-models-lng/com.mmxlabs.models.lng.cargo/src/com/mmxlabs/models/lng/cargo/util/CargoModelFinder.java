@@ -44,7 +44,7 @@ public class CargoModelFinder {
 				return cargo;
 			}
 		}
-		throw new IllegalArgumentException("Unknown load slot");
+		throw new IllegalArgumentException("Unknown load slot: " + name);
 	}
 
 	@NonNull
@@ -54,7 +54,7 @@ public class CargoModelFinder {
 				return cargo;
 			}
 		}
-		throw new IllegalArgumentException("Unknown discharge slot");
+		throw new IllegalArgumentException("Unknown discharge slot: " + name);
 	}
 
 	@NonNull

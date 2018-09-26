@@ -30,9 +30,9 @@ public class MaxSpotSlotsConstraintChecker implements IPairwiseConstraintChecker
 	@NonNull
 	private ISpotMarketSlotsProvider spotMarketSlots;
 
-	private String name;
+	private final @NonNull String name;
 
-	public MaxSpotSlotsConstraintChecker(String name) {
+	public MaxSpotSlotsConstraintChecker(final @NonNull String name) {
 		this.name = name;
 	}
 
@@ -51,7 +51,7 @@ public class MaxSpotSlotsConstraintChecker implements IPairwiseConstraintChecker
 
 	@Override
 	public @NonNull String getName() {
-		return getName();
+		return name;
 	}
 
 	@Override

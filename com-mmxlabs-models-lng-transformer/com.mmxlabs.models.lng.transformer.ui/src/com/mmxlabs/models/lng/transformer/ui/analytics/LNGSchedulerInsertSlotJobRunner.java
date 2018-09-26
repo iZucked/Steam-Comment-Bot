@@ -135,7 +135,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
 
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, hints);
+		scenarioRunner = LNGScenarioRunner.make(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, hints);
 
 		if (userSettings.isSetPeriodStartDate() || userSettings.isSetPeriodEnd()) {
 			// Map between original and possible period scenario

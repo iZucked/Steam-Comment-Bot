@@ -80,7 +80,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link LNGScenarioPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -94,7 +94,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		if (isInited) return (LNGScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(LNGScenarioPackage.eNS_URI);
 
 		// Obtain or create and register package
-		LNGScenarioPackageImpl theLNGScenarioPackage = (LNGScenarioPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof LNGScenarioPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new LNGScenarioPackageImpl());
+		Object registeredLNGScenarioPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		LNGScenarioPackageImpl theLNGScenarioPackage = registeredLNGScenarioPackage instanceof LNGScenarioPackageImpl ? (LNGScenarioPackageImpl)registeredLNGScenarioPackage : new LNGScenarioPackageImpl();
 
 		isInited = true;
 
@@ -123,7 +124,6 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		// Mark meta-data to indicate it can't be changed
 		theLNGScenarioPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(LNGScenarioPackage.eNS_URI, theLNGScenarioPackage);
 		return theLNGScenarioPackage;
@@ -224,8 +224,17 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_AdpModels() {
+	public EReference getLNGScenarioModel_AdpModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getLNGScenarioModel_AdpModels() {
+		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -329,6 +338,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__REFERENCE_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__USER_SETTINGS);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ANALYTICS_MODEL);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ADP_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ADP_MODELS);
 
 		lngReferenceModelEClass = createEClass(LNG_REFERENCE_MODEL);
@@ -397,6 +407,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGScenarioModel_ReferenceModel(), this.getLNGReferenceModel(), null, "referenceModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_UserSettings(), theParametersPackage.getUserSettings(), null, "userSettings", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_AnalyticsModel(), theAnalyticsPackage.getAnalyticsModel(), null, "analyticsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_AdpModel(), theADPPackage.getADPModel(), null, "adpModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_AdpModels(), theADPPackage.getADPModel(), null, "adpModels", null, 0, -1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lngReferenceModelEClass, LNGReferenceModel.class, "LNGReferenceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

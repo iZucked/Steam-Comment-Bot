@@ -200,7 +200,7 @@ public abstract class AbstractMicroTestCase {
 		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(),
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(),
 					new TransformerExtensionTestBootstrapModule(), overrides, null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			if (runnerHookFactory != null) {
 				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
@@ -249,7 +249,7 @@ public abstract class AbstractMicroTestCase {
 		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
 
 			if (runnerHookFactory != null) {
 				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
@@ -283,10 +283,10 @@ public abstract class AbstractMicroTestCase {
 		// Generate internal data
 		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimiserPlan, scenarioDataProvider.getEditingDomain(), null, localOverrides,
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimiserPlan, scenarioDataProvider.getEditingDomain(), null, localOverrides,
 					null, true);
 
-			// final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, null, localOverrides, true);
+			// final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, lngScenarioModel, optimiserSettings, null, localOverrides, true);
 			//
 			// if (runnerHookFactory != null) {
 			// final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);

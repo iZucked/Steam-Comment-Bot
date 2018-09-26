@@ -164,29 +164,6 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.SpotMarketsProfile} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SpotMarketsProfileItemProvider spotMarketsProfileItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.SpotMarketsProfile}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSpotMarketsProfileAdapter() {
-		if (spotMarketsProfileItemProvider == null) {
-			spotMarketsProfileItemProvider = new SpotMarketsProfileItemProvider(this);
-		}
-
-		return spotMarketsProfileItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.CargoSizeDistributionModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -647,29 +624,6 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.ADPModelResult} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ADPModelResultItemProvider adpModelResultItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.ADPModelResult}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createADPModelResultAdapter() {
-		if (adpModelResultItemProvider == null) {
-			adpModelResultItemProvider = new ADPModelResultItemProvider(this);
-		}
-
-		return adpModelResultItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -821,7 +775,6 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (adpModelItemProvider != null) adpModelItemProvider.dispose();
 		if (fleetProfileItemProvider != null) fleetProfileItemProvider.dispose();
 		if (contractProfileItemProvider != null) contractProfileItemProvider.dispose();
-		if (spotMarketsProfileItemProvider != null) spotMarketsProfileItemProvider.dispose();
 		if (purchaseContractProfileItemProvider != null) purchaseContractProfileItemProvider.dispose();
 		if (salesContractProfileItemProvider != null) salesContractProfileItemProvider.dispose();
 		if (subContractProfileItemProvider != null) subContractProfileItemProvider.dispose();
@@ -842,7 +795,6 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (shippingOptionItemProvider != null) shippingOptionItemProvider.dispose();
 		if (minCargoConstraintItemProvider != null) minCargoConstraintItemProvider.dispose();
 		if (maxCargoConstraintItemProvider != null) maxCargoConstraintItemProvider.dispose();
-		if (adpModelResultItemProvider != null) adpModelResultItemProvider.dispose();
 		if (targetCargoesOnVesselConstraintItemProvider != null) targetCargoesOnVesselConstraintItemProvider.dispose();
 	}
 

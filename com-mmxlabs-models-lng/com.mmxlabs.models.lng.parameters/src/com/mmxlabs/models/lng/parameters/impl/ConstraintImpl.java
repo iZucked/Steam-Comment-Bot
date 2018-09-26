@@ -154,7 +154,7 @@ public class ConstraintImpl extends NamedObjectImpl implements Constraint {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (enabled: ");
 		result.append(enabled);
 		result.append(')');

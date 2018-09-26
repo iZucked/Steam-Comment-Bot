@@ -950,7 +950,7 @@ public class CompareViewTests {
 		// Generate internal data
 		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 		try {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
 			scenarioRunner.evaluateInitialState();
 		} finally {
 			executorService.shutdownNow();

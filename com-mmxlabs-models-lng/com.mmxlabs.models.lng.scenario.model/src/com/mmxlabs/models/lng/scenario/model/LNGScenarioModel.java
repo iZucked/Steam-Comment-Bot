@@ -35,6 +35,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getReferenceModel <em>Reference Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModel <em>Adp Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModels <em>Adp Models</em>}</li>
  * </ul>
  *
@@ -303,6 +304,32 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setAnalyticsModel(AnalyticsModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Adp Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Adp Model</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Adp Model</em>' containment reference.
+	 * @see #setAdpModel(ADPModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_AdpModel()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	ADPModel getAdpModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAdpModel <em>Adp Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Adp Model</em>' containment reference.
+	 * @see #getAdpModel()
+	 * @generated
+	 */
+	void setAdpModel(ADPModel value);
 
 	/**
 	 * Returns the value of the '<em><b>Adp Models</b></em>' containment reference list.

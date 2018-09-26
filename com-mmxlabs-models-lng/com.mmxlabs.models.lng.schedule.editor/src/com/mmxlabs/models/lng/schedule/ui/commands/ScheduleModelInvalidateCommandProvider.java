@@ -17,7 +17,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
-import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -94,12 +93,6 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 			}
 			if (analyticsModel != null && !analyticsModel.getOptimisations().isEmpty()) {
 				delete.addAll(analyticsModel.getOptimisations());
-			}
-
-			for (ADPModel adpModel : scenarioModel.getAdpModels()) {
-				if (adpModel.getResult() != null) {
-					delete.add(adpModel.getResult());
-				}
 			}
 
 			if (delete.isEmpty()) {

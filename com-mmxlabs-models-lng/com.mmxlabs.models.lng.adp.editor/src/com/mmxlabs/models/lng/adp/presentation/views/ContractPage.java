@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -18,12 +17,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.validation.model.Category;
-import org.eclipse.emf.validation.model.EvaluationMode;
-import org.eclipse.emf.validation.service.IBatchValidator;
-import org.eclipse.emf.validation.service.IConstraintDescriptor;
-import org.eclipse.emf.validation.service.IConstraintFilter;
-import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -59,11 +52,13 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
-import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -76,22 +71,16 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.editors.EmbeddedDetailComposite;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
-import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
-import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.IValidationService;
-import com.mmxlabs.models.ui.validation.impl.Multi;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
 public class ContractPage extends ADPComposite {
@@ -169,11 +158,7 @@ public class ContractPage extends ADPComposite {
 						if (input instanceof PurchaseContractProfile) {
 							final PurchaseContractProfile profile = (PurchaseContractProfile) input;
 							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
-							for (final SubContractProfile<?> sub : profile.getSubProfiles()) {
-								if (!sub.getSlots().isEmpty()) {
-									cmd.append(DeleteCommand.create(editorData.getEditingDomain(), sub.getSlots()));
-								}
-							}
+
 							final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), editorData.scenarioModel, editorData.adpModel, profile);
 							if (populateModelCommand != null) {
 								cmd.append(populateModelCommand);
@@ -184,11 +169,6 @@ public class ContractPage extends ADPComposite {
 							final SalesContractProfile profile = (SalesContractProfile) input;
 							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
 
-							for (final SubContractProfile<?> sub : profile.getSubProfiles()) {
-								if (!sub.getSlots().isEmpty()) {
-									cmd.append(DeleteCommand.create(editorData.getEditingDomain(), sub.getSlots()));
-								}
-							}
 							final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), editorData.scenarioModel, editorData.adpModel, profile);
 							if (populateModelCommand != null) {
 								cmd.append(populateModelCommand);
@@ -247,7 +227,7 @@ public class ContractPage extends ADPComposite {
 					previewGroup.setLayout(new GridLayout(1, false));
 					previewGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 
-					previewGroup.setText("Preview");
+					previewGroup.setText("Contract positions");
 
 					final DetailToolbarManager removeButtonManager = new DetailToolbarManager(previewGroup, SWT.TOP);
 
@@ -466,15 +446,19 @@ public class ContractPage extends ADPComposite {
 			if (target instanceof PurchaseContractProfile) {
 				final PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile) target;
 				final List<Object> o = new LinkedList<>();
-				for (final SubContractProfile<?> p : purchaseContractProfile.getSubProfiles()) {
-					o.addAll(p.getSlots());
+				for (LoadSlot s : editorData.getScenarioModel().getCargoModel().getLoadSlots()) {
+					if (s.getContract() == purchaseContractProfile.getContract()) {
+						o.add(s);
+					}
 				}
 				previewViewer.setInput(o);
 			} else if (target instanceof SalesContractProfile) {
 				final SalesContractProfile salesContractProfile = (SalesContractProfile) target;
 				final List<Object> o = new LinkedList<>();
-				for (final SubContractProfile<?> p : salesContractProfile.getSubProfiles()) {
-					o.addAll(p.getSlots());
+				for (DischargeSlot s : editorData.getScenarioModel().getCargoModel().getDischargeSlots()) {
+					if (s.getContract() == salesContractProfile.getContract()) {
+						o.add(s);
+					}
 				}
 				previewViewer.setInput(o);
 			}
@@ -558,5 +542,9 @@ public class ContractPage extends ADPComposite {
 			return false;
 		}
 
+	}
+
+	public void setSelectedProfile(ContractProfile<?> p) {
+		objectSelector.setSelection(new StructuredSelection(p.getContract()));
 	}
 }

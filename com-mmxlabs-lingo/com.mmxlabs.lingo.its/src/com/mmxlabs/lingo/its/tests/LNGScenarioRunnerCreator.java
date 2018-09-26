@@ -101,7 +101,7 @@ public class LNGScenarioRunnerCreator {
 	public static void withEvaluationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer) throws Exception {
 		withExecutorService(executorService -> {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
 					createITSService(), null, false);
 
 			scenarioRunner.evaluateInitialState();
@@ -128,7 +128,7 @@ public class LNGScenarioRunnerCreator {
 	public static <E extends Exception> void withOptimisationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
 			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, E> consumer) throws E {
 		withExecutorService(executorService -> {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
 					createITSService(), null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 			scenarioRunner.evaluateInitialState();
@@ -149,7 +149,7 @@ public class LNGScenarioRunnerCreator {
 		}
 
 		withExecutorService(executorService -> {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunner.make(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null,
 					optimiserInjectorService, null, false, hints);
 
 			scenarioRunner.evaluateInitialState();

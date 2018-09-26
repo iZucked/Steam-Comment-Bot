@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getSimilarityMode <em>Similarity Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isAdpOptimisation <em>Adp Optimisation</em>}</li>
  * </ul>
  *
  * @generated
@@ -239,6 +240,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected int floatingDaysLimit = FLOATING_DAYS_LIMIT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isAdpOptimisation() <em>Adp Optimisation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAdpOptimisation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ADP_OPTIMISATION_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAdpOptimisation() <em>Adp Optimisation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAdpOptimisation()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean adpOptimisation = ADP_OPTIMISATION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -515,6 +536,27 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isAdpOptimisation() {
+		return adpOptimisation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAdpOptimisation(boolean newAdpOptimisation) {
+		boolean oldAdpOptimisation = adpOptimisation;
+		adpOptimisation = newAdpOptimisation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION, oldAdpOptimisation, adpOptimisation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -536,6 +578,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return isCleanStateOptimisation();
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				return getFloatingDaysLimit();
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
+				return isAdpOptimisation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -574,6 +618,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				setFloatingDaysLimit((Integer)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
+				setAdpOptimisation((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -614,6 +661,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				setFloatingDaysLimit(FLOATING_DAYS_LIMIT_EDEFAULT);
 				return;
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
+				setAdpOptimisation(ADP_OPTIMISATION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -644,6 +694,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return cleanStateOptimisation != CLEAN_STATE_OPTIMISATION_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				return floatingDaysLimit != FLOATING_DAYS_LIMIT_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION:
+				return adpOptimisation != ADP_OPTIMISATION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -657,7 +709,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (periodStartDate: ");
 		if (periodStartDateESet) result.append(periodStartDate); else result.append("<unset>");
 		result.append(", periodEnd: ");
@@ -676,6 +728,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(cleanStateOptimisation);
 		result.append(", floatingDaysLimit: ");
 		result.append(floatingDaysLimit);
+		result.append(", adpOptimisation: ");
+		result.append(adpOptimisation);
 		result.append(')');
 		return result.toString();
 	}

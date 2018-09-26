@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.adp;
 
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -72,13 +73,31 @@ public interface ADPPackage extends EPackage {
 	int ADP_MODEL = 0;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Year Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__YEAR_START = 0;
+	int ADP_MODEL__YEAR_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Year End</b></em>' attribute.
@@ -87,7 +106,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__YEAR_END = 1;
+	int ADP_MODEL__YEAR_END = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Purchase Contract Profiles</b></em>' containment reference list.
@@ -96,7 +115,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__PURCHASE_CONTRACT_PROFILES = 2;
+	int ADP_MODEL__PURCHASE_CONTRACT_PROFILES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Sales Contract Profiles</b></em>' containment reference list.
@@ -105,16 +124,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__SALES_CONTRACT_PROFILES = 3;
-
-	/**
-	 * The feature id for the '<em><b>Spot Markets Profile</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADP_MODEL__SPOT_MARKETS_PROFILE = 4;
+	int ADP_MODEL__SALES_CONTRACT_PROFILES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fleet Profile</b></em>' containment reference.
@@ -123,16 +133,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL__FLEET_PROFILE = 5;
-
-	/**
-	 * The feature id for the '<em><b>Result</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADP_MODEL__RESULT = 6;
+	int ADP_MODEL__FLEET_PROFILE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -141,7 +142,34 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL_FEATURE_COUNT = 7;
+	int ADP_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Model</em>' class.
@@ -150,7 +178,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL_OPERATION_COUNT = 0;
+	int ADP_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl <em>Fleet Profile</em>}' class.
@@ -163,58 +191,22 @@ public interface ADPPackage extends EPackage {
 	int FLEET_PROFILE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Availabilities</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_PROFILE__VESSEL_AVAILABILITIES = 0;
-
-	/**
-	 * The feature id for the '<em><b>Include Enabled Charter Markets</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS = 1;
-
-	/**
 	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_PROFILE__CONSTRAINTS = 2;
+	int FLEET_PROFILE__CONSTRAINTS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Default Nominal Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_PROFILE__VESSEL_EVENTS = 3;
-
-	/**
-	 * The feature id for the '<em><b>Default Vessel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_PROFILE__DEFAULT_VESSEL = 4;
-
-	/**
-	 * The feature id for the '<em><b>Default Vessel Charter In Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE = 5;
+	int FLEET_PROFILE__DEFAULT_NOMINAL_MARKET = 1;
 
 	/**
 	 * The number of structural features of the '<em>Fleet Profile</em>' class.
@@ -223,7 +215,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_PROFILE_FEATURE_COUNT = 6;
+	int FLEET_PROFILE_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Fleet Profile</em>' class.
@@ -335,52 +327,6 @@ public interface ADPPackage extends EPackage {
 	int CONTRACT_PROFILE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SpotMarketsProfileImpl <em>Spot Markets Profile</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.SpotMarketsProfileImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSpotMarketsProfile()
-	 * @generated
-	 */
-	int SPOT_MARKETS_PROFILE = 3;
-
-	/**
-	 * The feature id for the '<em><b>Include Enabled Spot Markets</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKETS_PROFILE__INCLUDE_ENABLED_SPOT_MARKETS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Spot Markets</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKETS_PROFILE__SPOT_MARKETS = 1;
-
-	/**
-	 * The number of structural features of the '<em>Spot Markets Profile</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKETS_PROFILE_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Spot Markets Profile</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKETS_PROFILE_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.DistributionModel <em>Distribution Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -388,7 +334,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDistributionModel()
 	 * @generated
 	 */
-	int DISTRIBUTION_MODEL = 8;
+	int DISTRIBUTION_MODEL = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.CargoSizeDistributionModelImpl <em>Cargo Size Distribution Model</em>}' class.
@@ -398,7 +344,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCargoSizeDistributionModel()
 	 * @generated
 	 */
-	int CARGO_SIZE_DISTRIBUTION_MODEL = 9;
+	int CARGO_SIZE_DISTRIBUTION_MODEL = 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.CargoNumberDistributionModelImpl <em>Cargo Number Distribution Model</em>}' class.
@@ -408,7 +354,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCargoNumberDistributionModel()
 	 * @generated
 	 */
-	int CARGO_NUMBER_DISTRIBUTION_MODEL = 10;
+	int CARGO_NUMBER_DISTRIBUTION_MODEL = 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.PurchaseContractProfileImpl <em>Purchase Contract Profile</em>}' class.
@@ -418,7 +364,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPurchaseContractProfile()
 	 * @generated
 	 */
-	int PURCHASE_CONTRACT_PROFILE = 4;
+	int PURCHASE_CONTRACT_PROFILE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -518,7 +464,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSalesContractProfile()
 	 * @generated
 	 */
-	int SALES_CONTRACT_PROFILE = 5;
+	int SALES_CONTRACT_PROFILE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -619,7 +565,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSubContractProfile()
 	 * @generated
 	 */
-	int SUB_CONTRACT_PROFILE = 6;
+	int SUB_CONTRACT_PROFILE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -685,22 +631,13 @@ public interface ADPPackage extends EPackage {
 	int SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS = 6;
 
 	/**
-	 * The feature id for the '<em><b>Slots</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUB_CONTRACT_PROFILE__SLOTS = 7;
-
-	/**
 	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE__CONSTRAINTS = 8;
+	int SUB_CONTRACT_PROFILE__CONSTRAINTS = 7;
 
 	/**
 	 * The number of structural features of the '<em>Sub Contract Profile</em>' class.
@@ -709,7 +646,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE_FEATURE_COUNT = 9;
+	int SUB_CONTRACT_PROFILE_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Sub Contract Profile</em>' class.
@@ -729,7 +666,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCustomSubProfileAttributes()
 	 * @generated
 	 */
-	int CUSTOM_SUB_PROFILE_ATTRIBUTES = 7;
+	int CUSTOM_SUB_PROFILE_ATTRIBUTES = 6;
 
 	/**
 	 * The number of structural features of the '<em>Custom Sub Profile Attributes</em>' class.
@@ -884,7 +821,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCargoByQuarterDistributionModel()
 	 * @generated
 	 */
-	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL = 11;
+	int CARGO_BY_QUARTER_DISTRIBUTION_MODEL = 10;
 
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -967,7 +904,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getCargoIntervalDistributionModel()
 	 * @generated
 	 */
-	int CARGO_INTERVAL_DISTRIBUTION_MODEL = 12;
+	int CARGO_INTERVAL_DISTRIBUTION_MODEL = 11;
 
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -1040,7 +977,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPreDefinedDistributionModel()
 	 * @generated
 	 */
-	int PRE_DEFINED_DISTRIBUTION_MODEL = 13;
+	int PRE_DEFINED_DISTRIBUTION_MODEL = 12;
 
 	/**
 	 * The feature id for the '<em><b>Volume Per Cargo</b></em>' attribute.
@@ -1113,7 +1050,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getPreDefinedDate()
 	 * @generated
 	 */
-	int PRE_DEFINED_DATE = 14;
+	int PRE_DEFINED_DATE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1150,7 +1087,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSubProfileConstraint()
 	 * @generated
 	 */
-	int SUB_PROFILE_CONSTRAINT = 25;
+	int SUB_PROFILE_CONSTRAINT = 24;
 
 	/**
 	 * The number of structural features of the '<em>Sub Profile Constraint</em>' class.
@@ -1178,7 +1115,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getFlowType()
 	 * @generated
 	 */
-	int FLOW_TYPE = 15;
+	int FLOW_TYPE = 14;
 
 	/**
 	 * The number of structural features of the '<em>Flow Type</em>' class.
@@ -1206,7 +1143,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromFlow()
 	 * @generated
 	 */
-	int SUPPLY_FROM_FLOW = 16;
+	int SUPPLY_FROM_FLOW = 15;
 
 	/**
 	 * The number of structural features of the '<em>Supply From Flow</em>' class.
@@ -1234,7 +1171,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToFlow()
 	 * @generated
 	 */
-	int DELIVER_TO_FLOW = 17;
+	int DELIVER_TO_FLOW = 16;
 
 	/**
 	 * The number of structural features of the '<em>Deliver To Flow</em>' class.
@@ -1262,7 +1199,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromProfileFlow()
 	 * @generated
 	 */
-	int SUPPLY_FROM_PROFILE_FLOW = 18;
+	int SUPPLY_FROM_PROFILE_FLOW = 17;
 
 	/**
 	 * The feature id for the '<em><b>Profile</b></em>' reference.
@@ -1308,7 +1245,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToProfileFlow()
 	 * @generated
 	 */
-	int DELIVER_TO_PROFILE_FLOW = 19;
+	int DELIVER_TO_PROFILE_FLOW = 18;
 
 	/**
 	 * The feature id for the '<em><b>Profile</b></em>' reference.
@@ -1354,7 +1291,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSupplyFromSpotFlow()
 	 * @generated
 	 */
-	int SUPPLY_FROM_SPOT_FLOW = 20;
+	int SUPPLY_FROM_SPOT_FLOW = 19;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -1391,7 +1328,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDeliverToSpotFlow()
 	 * @generated
 	 */
-	int DELIVER_TO_SPOT_FLOW = 21;
+	int DELIVER_TO_SPOT_FLOW = 20;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -1428,7 +1365,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getProfileVesselRestriction()
 	 * @generated
 	 */
-	int PROFILE_VESSEL_RESTRICTION = 22;
+	int PROFILE_VESSEL_RESTRICTION = 21;
 
 	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
@@ -1465,7 +1402,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getShippingOption()
 	 * @generated
 	 */
-	int SHIPPING_OPTION = 23;
+	int SHIPPING_OPTION = 22;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Assignment Type</b></em>' reference.
@@ -1520,7 +1457,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getProfileConstraint()
 	 * @generated
 	 */
-	int PROFILE_CONSTRAINT = 24;
+	int PROFILE_CONSTRAINT = 23;
 
 	/**
 	 * The number of structural features of the '<em>Profile Constraint</em>' class.
@@ -1548,7 +1485,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getMinCargoConstraint()
 	 * @generated
 	 */
-	int MIN_CARGO_CONSTRAINT = 26;
+	int MIN_CARGO_CONSTRAINT = 25;
 
 	/**
 	 * The feature id for the '<em><b>Min Cargoes</b></em>' attribute.
@@ -1594,7 +1531,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getMaxCargoConstraint()
 	 * @generated
 	 */
-	int MAX_CARGO_CONSTRAINT = 27;
+	int MAX_CARGO_CONSTRAINT = 26;
 
 	/**
 	 * The feature id for the '<em><b>Max Cargoes</b></em>' attribute.
@@ -1633,61 +1570,6 @@ public interface ADPPackage extends EPackage {
 	int MAX_CARGO_CONSTRAINT_OPERATION_COUNT = PROFILE_CONSTRAINT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.ADPModelResultImpl <em>Model Result</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPModelResultImpl
-	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getADPModelResult()
-	 * @generated
-	 */
-	int ADP_MODEL_RESULT = 28;
-
-	/**
-	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADP_MODEL_RESULT__EXTRA_SLOTS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADP_MODEL_RESULT__SCHEDULE_MODEL = 1;
-
-	/**
-	 * The feature id for the '<em><b>Extra Spot Charter Markets</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS = 2;
-
-	/**
-	 * The number of structural features of the '<em>Model Result</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADP_MODEL_RESULT_FEATURE_COUNT = 3;
-
-	/**
-	 * The number of operations of the '<em>Model Result</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADP_MODEL_RESULT_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.FleetConstraint <em>Fleet Constraint</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1695,7 +1577,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getFleetConstraint()
 	 * @generated
 	 */
-	int FLEET_CONSTRAINT = 29;
+	int FLEET_CONSTRAINT = 27;
 
 	/**
 	 * The number of structural features of the '<em>Fleet Constraint</em>' class.
@@ -1723,7 +1605,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getTargetCargoesOnVesselConstraint()
 	 * @generated
 	 */
-	int TARGET_CARGOES_ON_VESSEL_CONSTRAINT = 30;
+	int TARGET_CARGOES_ON_VESSEL_CONSTRAINT = 28;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -1787,7 +1669,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getIntervalType()
 	 * @generated
 	 */
-	int INTERVAL_TYPE = 31;
+	int INTERVAL_TYPE = 29;
 
 
 	/**
@@ -1798,7 +1680,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getLNGVolumeUnit()
 	 * @generated
 	 */
-	int LNG_VOLUME_UNIT = 32;
+	int LNG_VOLUME_UNIT = 30;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ADPModel <em>Model</em>}'.
@@ -1855,17 +1737,6 @@ public interface ADPPackage extends EPackage {
 	EReference getADPModel_SalesContractProfiles();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.adp.ADPModel#getSpotMarketsProfile <em>Spot Markets Profile</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Spot Markets Profile</em>'.
-	 * @see com.mmxlabs.models.lng.adp.ADPModel#getSpotMarketsProfile()
-	 * @see #getADPModel()
-	 * @generated
-	 */
-	EReference getADPModel_SpotMarketsProfile();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.adp.ADPModel#getFleetProfile <em>Fleet Profile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1877,17 +1748,6 @@ public interface ADPPackage extends EPackage {
 	EReference getADPModel_FleetProfile();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.adp.ADPModel#getResult <em>Result</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Result</em>'.
-	 * @see com.mmxlabs.models.lng.adp.ADPModel#getResult()
-	 * @see #getADPModel()
-	 * @generated
-	 */
-	EReference getADPModel_Result();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.FleetProfile <em>Fleet Profile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1896,28 +1756,6 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getFleetProfile();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.FleetProfile#getVesselAvailabilities <em>Vessel Availabilities</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Vessel Availabilities</em>'.
-	 * @see com.mmxlabs.models.lng.adp.FleetProfile#getVesselAvailabilities()
-	 * @see #getFleetProfile()
-	 * @generated
-	 */
-	EReference getFleetProfile_VesselAvailabilities();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.FleetProfile#isIncludeEnabledCharterMarkets <em>Include Enabled Charter Markets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Include Enabled Charter Markets</em>'.
-	 * @see com.mmxlabs.models.lng.adp.FleetProfile#isIncludeEnabledCharterMarkets()
-	 * @see #getFleetProfile()
-	 * @generated
-	 */
-	EAttribute getFleetProfile_IncludeEnabledCharterMarkets();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.FleetProfile#getConstraints <em>Constraints</em>}'.
@@ -1931,37 +1769,15 @@ public interface ADPPackage extends EPackage {
 	EReference getFleetProfile_Constraints();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.FleetProfile#getVesselEvents <em>Vessel Events</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.FleetProfile#getDefaultNominalMarket <em>Default Nominal Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
-	 * @see com.mmxlabs.models.lng.adp.FleetProfile#getVesselEvents()
+	 * @return the meta object for the reference '<em>Default Nominal Market</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FleetProfile#getDefaultNominalMarket()
 	 * @see #getFleetProfile()
 	 * @generated
 	 */
-	EReference getFleetProfile_VesselEvents();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.FleetProfile#getDefaultVessel <em>Default Vessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Default Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.adp.FleetProfile#getDefaultVessel()
-	 * @see #getFleetProfile()
-	 * @generated
-	 */
-	EReference getFleetProfile_DefaultVessel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.FleetProfile#getDefaultVesselCharterInRate <em>Default Vessel Charter In Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Default Vessel Charter In Rate</em>'.
-	 * @see com.mmxlabs.models.lng.adp.FleetProfile#getDefaultVesselCharterInRate()
-	 * @see #getFleetProfile()
-	 * @generated
-	 */
-	EAttribute getFleetProfile_DefaultVesselCharterInRate();
+	EReference getFleetProfile_DefaultNominalMarket();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ContractProfile <em>Contract Profile</em>}'.
@@ -2060,38 +1876,6 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getContractProfile_Constraints();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.SpotMarketsProfile <em>Spot Markets Profile</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Spot Markets Profile</em>'.
-	 * @see com.mmxlabs.models.lng.adp.SpotMarketsProfile
-	 * @generated
-	 */
-	EClass getSpotMarketsProfile();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.SpotMarketsProfile#isIncludeEnabledSpotMarkets <em>Include Enabled Spot Markets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Include Enabled Spot Markets</em>'.
-	 * @see com.mmxlabs.models.lng.adp.SpotMarketsProfile#isIncludeEnabledSpotMarkets()
-	 * @see #getSpotMarketsProfile()
-	 * @generated
-	 */
-	EAttribute getSpotMarketsProfile_IncludeEnabledSpotMarkets();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.SpotMarketsProfile#getSpotMarkets <em>Spot Markets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Spot Markets</em>'.
-	 * @see com.mmxlabs.models.lng.adp.SpotMarketsProfile#getSpotMarkets()
-	 * @see #getSpotMarketsProfile()
-	 * @generated
-	 */
-	EReference getSpotMarketsProfile_SpotMarkets();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.DistributionModel <em>Distribution Model</em>}'.
@@ -2273,17 +2057,6 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSubContractProfile_ShippingDays();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getSlots <em>Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Slots</em>'.
-	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getSlots()
-	 * @see #getSubContractProfile()
-	 * @generated
-	 */
-	EReference getSubContractProfile_Slots();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getConstraints <em>Constraints</em>}'.
@@ -2752,49 +2525,6 @@ public interface ADPPackage extends EPackage {
 	EAttribute getMaxCargoConstraint_IntervalType();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ADPModelResult <em>Model Result</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Model Result</em>'.
-	 * @see com.mmxlabs.models.lng.adp.ADPModelResult
-	 * @generated
-	 */
-	EClass getADPModelResult();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.ADPModelResult#getExtraSlots <em>Extra Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Slots</em>'.
-	 * @see com.mmxlabs.models.lng.adp.ADPModelResult#getExtraSlots()
-	 * @see #getADPModelResult()
-	 * @generated
-	 */
-	EReference getADPModelResult_ExtraSlots();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.adp.ADPModelResult#getScheduleModel <em>Schedule Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Schedule Model</em>'.
-	 * @see com.mmxlabs.models.lng.adp.ADPModelResult#getScheduleModel()
-	 * @see #getADPModelResult()
-	 * @generated
-	 */
-	EReference getADPModelResult_ScheduleModel();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.ADPModelResult#getExtraSpotCharterMarkets <em>Extra Spot Charter Markets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Spot Charter Markets</em>'.
-	 * @see com.mmxlabs.models.lng.adp.ADPModelResult#getExtraSpotCharterMarkets()
-	 * @see #getADPModelResult()
-	 * @generated
-	 */
-	EReference getADPModelResult_ExtraSpotCharterMarkets();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.FleetConstraint <em>Fleet Constraint</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2944,28 +2674,12 @@ public interface ADPPackage extends EPackage {
 		EReference ADP_MODEL__SALES_CONTRACT_PROFILES = eINSTANCE.getADPModel_SalesContractProfiles();
 
 		/**
-		 * The meta object literal for the '<em><b>Spot Markets Profile</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ADP_MODEL__SPOT_MARKETS_PROFILE = eINSTANCE.getADPModel_SpotMarketsProfile();
-
-		/**
 		 * The meta object literal for the '<em><b>Fleet Profile</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ADP_MODEL__FLEET_PROFILE = eINSTANCE.getADPModel_FleetProfile();
-
-		/**
-		 * The meta object literal for the '<em><b>Result</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ADP_MODEL__RESULT = eINSTANCE.getADPModel_Result();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl <em>Fleet Profile</em>}' class.
@@ -2978,22 +2692,6 @@ public interface ADPPackage extends EPackage {
 		EClass FLEET_PROFILE = eINSTANCE.getFleetProfile();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Availabilities</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLEET_PROFILE__VESSEL_AVAILABILITIES = eINSTANCE.getFleetProfile_VesselAvailabilities();
-
-		/**
-		 * The meta object literal for the '<em><b>Include Enabled Charter Markets</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FLEET_PROFILE__INCLUDE_ENABLED_CHARTER_MARKETS = eINSTANCE.getFleetProfile_IncludeEnabledCharterMarkets();
-
-		/**
 		 * The meta object literal for the '<em><b>Constraints</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3002,28 +2700,12 @@ public interface ADPPackage extends EPackage {
 		EReference FLEET_PROFILE__CONSTRAINTS = eINSTANCE.getFleetProfile_Constraints();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Default Nominal Market</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference FLEET_PROFILE__VESSEL_EVENTS = eINSTANCE.getFleetProfile_VesselEvents();
-
-		/**
-		 * The meta object literal for the '<em><b>Default Vessel</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLEET_PROFILE__DEFAULT_VESSEL = eINSTANCE.getFleetProfile_DefaultVessel();
-
-		/**
-		 * The meta object literal for the '<em><b>Default Vessel Charter In Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FLEET_PROFILE__DEFAULT_VESSEL_CHARTER_IN_RATE = eINSTANCE.getFleetProfile_DefaultVesselCharterInRate();
+		EReference FLEET_PROFILE__DEFAULT_NOMINAL_MARKET = eINSTANCE.getFleetProfile_DefaultNominalMarket();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.ContractProfileImpl <em>Contract Profile</em>}' class.
@@ -3098,32 +2780,6 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTRACT_PROFILE__CONSTRAINTS = eINSTANCE.getContractProfile_Constraints();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.SpotMarketsProfileImpl <em>Spot Markets Profile</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.adp.impl.SpotMarketsProfileImpl
-		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSpotMarketsProfile()
-		 * @generated
-		 */
-		EClass SPOT_MARKETS_PROFILE = eINSTANCE.getSpotMarketsProfile();
-
-		/**
-		 * The meta object literal for the '<em><b>Include Enabled Spot Markets</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SPOT_MARKETS_PROFILE__INCLUDE_ENABLED_SPOT_MARKETS = eINSTANCE.getSpotMarketsProfile_IncludeEnabledSpotMarkets();
-
-		/**
-		 * The meta object literal for the '<em><b>Spot Markets</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SPOT_MARKETS_PROFILE__SPOT_MARKETS = eINSTANCE.getSpotMarketsProfile_SpotMarkets();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.DistributionModel <em>Distribution Model</em>}' class.
@@ -3272,14 +2928,6 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SUB_CONTRACT_PROFILE__SHIPPING_DAYS = eINSTANCE.getSubContractProfile_ShippingDays();
-
-		/**
-		 * The meta object literal for the '<em><b>Slots</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SUB_CONTRACT_PROFILE__SLOTS = eINSTANCE.getSubContractProfile_Slots();
 
 		/**
 		 * The meta object literal for the '<em><b>Constraints</b></em>' containment reference list feature.
@@ -3668,40 +3316,6 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MAX_CARGO_CONSTRAINT__INTERVAL_TYPE = eINSTANCE.getMaxCargoConstraint_IntervalType();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.ADPModelResultImpl <em>Model Result</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.adp.impl.ADPModelResultImpl
-		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getADPModelResult()
-		 * @generated
-		 */
-		EClass ADP_MODEL_RESULT = eINSTANCE.getADPModelResult();
-
-		/**
-		 * The meta object literal for the '<em><b>Extra Slots</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ADP_MODEL_RESULT__EXTRA_SLOTS = eINSTANCE.getADPModelResult_ExtraSlots();
-
-		/**
-		 * The meta object literal for the '<em><b>Schedule Model</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ADP_MODEL_RESULT__SCHEDULE_MODEL = eINSTANCE.getADPModelResult_ScheduleModel();
-
-		/**
-		 * The meta object literal for the '<em><b>Extra Spot Charter Markets</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ADP_MODEL_RESULT__EXTRA_SPOT_CHARTER_MARKETS = eINSTANCE.getADPModelResult_ExtraSpotCharterMarkets();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.FleetConstraint <em>Fleet Constraint</em>}' class.

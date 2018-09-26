@@ -31,13 +31,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChecker {
 	@Inject
 	private IMaxSlotCountConstraintDataProvider maxSlotCountConstraintProvider;
-	
+
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-	
-	private String name;
 
-	public MinMaxSlotGroupConstraintChecker(String name) {
+	private @NonNull final String name;
+
+	public MinMaxSlotGroupConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
@@ -56,40 +56,34 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 
 	@Override
 	public @NonNull String getName() {
-		return getName();
+		return name;
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources) {
-		Set<ISequenceElement> unusedSet = getUnusedSet(sequences);
-		List<Pair<Set<IDischargeOption>,Integer>> allMinDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts();
-		List<Pair<Set<IDischargeOption>,Integer>> allMaxDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts();
-		List<Pair<Set<ILoadOption>,Integer>> allMinLoadGroupCounts = maxSlotCountConstraintProvider.getAllMinLoadGroupCounts();
-		List<Pair<Set<ILoadOption>,Integer>> allMaxLoadGroupCounts = maxSlotCountConstraintProvider.getAllMaxLoadGroupCounts();
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		final Set<ISequenceElement> unusedSet = getUnusedSet(sequences);
+		final List<Pair<Set<IDischargeOption>, Integer>> allMinDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts();
+		final List<Pair<Set<IDischargeOption>, Integer>> allMaxDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts();
+		final List<Pair<Set<ILoadOption>, Integer>> allMinLoadGroupCounts = maxSlotCountConstraintProvider.getAllMinLoadGroupCounts();
+		final List<Pair<Set<ILoadOption>, Integer>> allMaxLoadGroupCounts = maxSlotCountConstraintProvider.getAllMaxLoadGroupCounts();
 
-		for (Pair<Set<IDischargeOption>, Integer> pair : allMinDischargeGroupCounts) {
+		for (final Pair<Set<IDischargeOption>, Integer> pair : allMinDischargeGroupCounts) {
 			if (pair.getFirst().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() < pair.getSecond()) {
 				return false;
 			}
 		}
-		for (Pair<Set<IDischargeOption>, Integer> pair : allMaxDischargeGroupCounts) {
-			if (pair.getFirst().stream()
-					.filter(s -> !unusedSet.contains(portSlotProvider.getElement(s)))
-					.count() > pair.getSecond()) {
+		for (final Pair<Set<IDischargeOption>, Integer> pair : allMaxDischargeGroupCounts) {
+			if (pair.getFirst().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() > pair.getSecond()) {
 				return false;
 			}
 		}
-		for (Pair<Set<ILoadOption>, Integer> pair : allMinLoadGroupCounts) {
-			if (pair.getFirst().stream()
-					.filter(s -> !unusedSet.contains(portSlotProvider.getElement(s)))
-					.count() < pair.getSecond()) {
+		for (final Pair<Set<ILoadOption>, Integer> pair : allMinLoadGroupCounts) {
+			if (pair.getFirst().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() < pair.getSecond()) {
 				return false;
 			}
 		}
-		for (Pair<Set<ILoadOption>, Integer> pair : allMaxLoadGroupCounts) {
-			if (pair.getFirst().stream()
-					.filter(s -> !unusedSet.contains(portSlotProvider.getElement(s)))
-					.count() > pair.getSecond()) {
+		for (final Pair<Set<ILoadOption>, Integer> pair : allMaxLoadGroupCounts) {
+			if (pair.getFirst().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() > pair.getSecond()) {
 				return false;
 			}
 		}
@@ -98,11 +92,11 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 		return checkConstraints(sequences, changedResources);
 	}
-	
-	private Set<ISequenceElement> getUnusedSet(@NonNull ISequences sequences) {
+
+	private Set<ISequenceElement> getUnusedSet(@NonNull final ISequences sequences) {
 		return new HashSet<>(sequences.getUnusedElements());
 	}
 

@@ -14,6 +14,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -23,6 +24,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
@@ -41,6 +43,27 @@ public class OpenScenarioUtils {
 		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
 
 		openEditor(editorInput);
+	}
+
+	/**
+	 * Close any open editors. Return true if an editor was found. Does not try to save contents.
+	 * 
+	 * @param editorInput
+	 * @return
+	 */
+	public static boolean closeEditors(final IScenarioServiceEditorInput editorInput) {
+		boolean closedEditor = false;
+		final IWorkbench workbench = PlatformUI.getWorkbench();
+		for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
+			for (final IWorkbenchPage page : window.getPages()) {
+				final IEditorReference[] editorReferences = page.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+				if (editorReferences != null && editorReferences.length > 0) {
+					closedEditor = true;
+					RunnerHelper.syncExec(() -> page.closeEditors(editorReferences, false));
+				}
+			}
+		}
+		return closedEditor;
 	}
 
 	public static void openEditor(final IScenarioServiceEditorInput editorInput) throws PartInitException {

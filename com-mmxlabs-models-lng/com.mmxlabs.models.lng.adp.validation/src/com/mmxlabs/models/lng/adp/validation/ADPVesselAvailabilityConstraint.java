@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.adp.validation;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -15,39 +13,35 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetProfile;
-import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class FleetProfileVesselAvailabilityConstraint extends AbstractModelMultiConstraint {
+public class ADPVesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailability) {
-			VesselAvailability va = (VesselAvailability) target;
+			final VesselAvailability va = (VesselAvailability) target;
 
-			DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withName("ADP Fleet profile");
+			final Vessel vessel = va.getVessel();
+			final String vesselName = ScenarioElementNameHelper.getName(vessel, "<Unknown>");
 
-			EObject eContainer = va.eContainer();
-			if (eContainer == null) {
-				eContainer = extraContext.getContainer(target);
-			}
-			if (eContainer instanceof FleetProfile) {
-				eContainer = eContainer.eContainer();
-			}
-			if (eContainer instanceof ADPModel) {
-				ADPModel adpModel = (ADPModel) eContainer;
-				LocalDateTime start = adpModel.getYearStart().atDay(1).atStartOfDay();
-				LocalDateTime end = adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay();
+			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
+					.withTypedName(ScenarioElementNameHelper.getTypeName(va), vesselName);
+
+			final ADPModel adpModel = ScenarioModelUtil.getADPModel(extraContext.getScenarioDataProvider());
+			if (adpModel != null) {
+				final LocalDateTime start = adpModel.getYearStart().atDay(1).atStartOfDay();
+				final LocalDateTime end = adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay();
 				if (va.getStartAfter() == null || !va.getStartAfter().equals(start)) {
 					factory.copyName() //
 							.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) //
