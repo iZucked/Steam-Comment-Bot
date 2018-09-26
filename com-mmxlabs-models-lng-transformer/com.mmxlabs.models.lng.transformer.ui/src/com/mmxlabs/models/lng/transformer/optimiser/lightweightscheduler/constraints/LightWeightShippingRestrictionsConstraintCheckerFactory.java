@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints;
 
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightConstraintChecker;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.ILightWeightConstraintCheckerFactory;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintChecker;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintCheckerFactory;
 
 public class LightWeightShippingRestrictionsConstraintCheckerFactory implements ILightWeightConstraintCheckerFactory {
 	final String NAME = "LightWeightShippingRestrictionsConstraintChecker";
