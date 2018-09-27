@@ -28,33 +28,33 @@ public class ADPVesselAvailabilityConstraint extends AbstractModelMultiConstrain
 	@Override
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
-		final EObject target = ctx.getTarget();
-		if (target instanceof VesselAvailability) {
-			final VesselAvailability va = (VesselAvailability) target;
-
-			final Vessel vessel = va.getVessel();
-			final String vesselName = ScenarioElementNameHelper.getName(vessel, "<Unknown>");
-
-			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withTypedName(ScenarioElementNameHelper.getTypeName(va), vesselName);
-
-			final ADPModel adpModel = ScenarioModelUtil.getADPModel(extraContext.getScenarioDataProvider());
-			if (adpModel != null) {
-				final LocalDateTime start = adpModel.getYearStart().atDay(1).atStartOfDay();
-				final LocalDateTime end = adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay();
-				if (va.getStartAfter() == null || !va.getStartAfter().equals(start)) {
-					factory.copyName() //
-							.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) //
-							.withMessage("Vessel start date does not match ADP start.") //
-							.make(ctx, statuses);
-				}
-				if (va.getEndBy() == null || !va.getEndBy().equals(end)) {
-					factory.copyName() //
-							.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY) //
-							.withMessage("Vessel end date does not match ADP end.") //
-							.make(ctx, statuses);
-				}
-			}
-		}
+//		final EObject target = ctx.getTarget();
+//		if (target instanceof VesselAvailability) {
+//			final VesselAvailability va = (VesselAvailability) target;
+//
+//			final Vessel vessel = va.getVessel();
+//			final String vesselName = ScenarioElementNameHelper.getName(vessel, "<Unknown>");
+//
+//			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
+//					.withTypedName(ScenarioElementNameHelper.getTypeName(va), vesselName);
+//
+//			final ADPModel adpModel = ScenarioModelUtil.getADPModel(extraContext.getScenarioDataProvider());
+//			if (adpModel != null) {
+//				final LocalDateTime start = adpModel.getYearStart().atDay(1).atStartOfDay();
+//				final LocalDateTime end = adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay();
+//				if (va.getStartAfter() == null || !va.getStartAfter().equals(start)) {
+//					factory.copyName() //
+//							.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) //
+//							.withMessage("Vessel start date does not match ADP start.") //
+//							.make(ctx, statuses);
+//				}
+//				if (va.getEndBy() == null || !va.getEndBy().equals(end)) {
+//					factory.copyName() //
+//							.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY) //
+//							.withMessage("Vessel end date does not match ADP end.") //
+//							.make(ctx, statuses);
+//				}
+//			}
+//		}
 	}
 }

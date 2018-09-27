@@ -254,8 +254,15 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		int[] durations = new int[cargoes.size()];
 		for (int i = 0; i < cargoes.size(); i++) {
 			List<IPortSlot> cargo = cargoes.get(i);
-			durations[i] = elementDurationProvider.getElementDuration(
-					portSlotProvider.getElement(cargo.get(cargo.size()-1)));
+			IPortSlot lastSlot = cargo.get(cargo.size()-1);
+			if (lastSlot.getPortType() == PortType.Load
+					|| lastSlot.getPortType() == PortType.Discharge) {
+				durations[i] = elementDurationProvider.getElementDuration(
+						portSlotProvider.getElement(cargo.get(cargo.size()-1)));
+			} else {
+				// durations will be encoded on the start slot for vessel events
+				durations[i] = 0;
+			}
 		}
 		return durations;
 	}

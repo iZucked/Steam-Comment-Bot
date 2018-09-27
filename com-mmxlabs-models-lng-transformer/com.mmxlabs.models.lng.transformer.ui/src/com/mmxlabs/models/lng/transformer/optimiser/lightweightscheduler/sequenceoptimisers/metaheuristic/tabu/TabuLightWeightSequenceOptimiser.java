@@ -109,6 +109,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 						constraintCheckers, fitnessFunctions, false);
 
 				// Create new candidate schedules
+				// TODO: not threadsafe. Cannot use a parallel stream due to the random object being reused.
 				List<TabuSolution> tabuSolutions = getNewCandidateSolutions(schedule, unusedCargoes, usedCargoes, random, mapping);
 
 				// Evaluate solutions
@@ -256,7 +257,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	private Double annotateSolution(List<List<Integer>> sequences, int cargoCount, int vesselCount, ILightWeightOptimisationData lightWeightOptimisationData,
 			TabuLightWeightSequenceOptimiserData dataTransformer, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions, Set<Integer> allCargoes) {
 		printSolution(sequences);
-		System.out.println(String.format("Left over cargoes:",
+		System.out.println(String.format("Left over cargoes: %s",
 				updateUnusedList(sequences, allCargoes).size()));
 		return evaluate(sequences, cargoCount, lightWeightOptimisationData, dataTransformer, constraintCheckers, fitnessFunctions, true);
 	}

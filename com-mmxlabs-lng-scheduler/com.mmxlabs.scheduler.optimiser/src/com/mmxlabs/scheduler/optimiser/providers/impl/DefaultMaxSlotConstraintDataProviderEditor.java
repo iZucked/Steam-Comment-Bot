@@ -45,12 +45,12 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 
 	@Override
 	public void addMinLoadSlotsPerYear(final List<ILoadOption> slots, final int startMonth, final int limit) {
-		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 12, limit, 12));
+		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 11, limit, 12));
 	}
 
 	@Override
 	public void addMaxLoadSlotsPerYear(final List<ILoadOption> slots, final int startMonth, final int limit) {
-		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 12, limit, 12));
+		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 11, limit, 12));
 	}
 
 	@Override
@@ -83,12 +83,12 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 
 	@Override
 	public void addMinDischargeSlotsPerYear(final List<IDischargeOption> slots, final int startMonth, final int limit) {
-		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 12, limit, 12));
+		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 11, limit, 12));
 	}
 
 	@Override
 	public void addMaxDischargeSlotsPerYear(final List<IDischargeOption> slots, final int startMonth, final int limit) {
-		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 12, limit, 12));
+		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 11, limit, 12));
 	}
 
 	@Override
@@ -136,7 +136,6 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 	}
 
 	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerPeriod(final List<T> slots, final int startMonth, final int limit, final int interval) {
-		final List<Pair<Set<T>, Integer>> slotsSets = new LinkedList<>();
 		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), a.getTimeWindow().getInclusiveStart()));
 		final int lastMonth = getUTCMonth(slots.get(slots.size() - 1));
 		return addSlotsPerPeriod(slots, startMonth, lastMonth, limit, interval);

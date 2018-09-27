@@ -30,7 +30,7 @@ public class TabuLightWeightSequenceOptimiserMoves {
 				} else if (choice == 3) {
 					return removeUsedCargo(sequences, usedCargoes, mapping, random);
 				} else if (choice == 4) {
-					return replaceWithUnusedCargo(sequences, usedCargoes, unusedCargoes, mapping, random);
+					return replaceUsedWithUnusedCargo(sequences, usedCargoes, unusedCargoes, mapping, random);
 				}
 			} else {
 				return insertUnusedCargo(sequences, unusedCargoes, random);
@@ -132,14 +132,13 @@ public class TabuLightWeightSequenceOptimiserMoves {
 		return new TabuSolution(sequences, tabu);
 	}
 
-	static private TabuSolution replaceWithUnusedCargo(List<List<Integer>> sequences, List<Integer> usedCargoes, List<Integer> unusedCargoes, CargoMap mapping, Random random) {
+	static private TabuSolution replaceUsedWithUnusedCargo(List<List<Integer>> sequences, List<Integer> usedCargoes, List<Integer> unusedCargoes, CargoMap mapping, Random random) {
 		final List<Integer> tabu = new ArrayList<>();
 
 		final int choiceUsedIndex = random.nextInt(usedCargoes.size());
 		final Integer usedCargo = usedCargoes.get(choiceUsedIndex);
 
 		CargoCoordinates coords = mapping.getCoordinates(usedCargo);
-
 		int choiceUnusedIndex = random.nextInt(unusedCargoes.size());
 
 		final Integer unusedCargo = unusedCargoes.get(choiceUnusedIndex);

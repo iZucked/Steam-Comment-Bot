@@ -90,12 +90,12 @@ public class LoadDischargePairValueCalculator {
 				((TravelTimeConstraintChecker) checker).setMaxLateness(0);
 			}
 			if (checker instanceof LadenIdleTimeConstraintChecker) {
-				((LadenIdleTimeConstraintChecker) checker).setMaxIdleTimeInHours(8);
+				((LadenIdleTimeConstraintChecker) checker).setMaxIdleTimeInHours(8*24);
 			}
 			if (checker instanceof LadenLegLimitConstraintChecker) {
 				((LadenLegLimitConstraintChecker) checker).setMaxLadenDuration(32 * 24);
 			}
-
+//
 		}
 	}
 

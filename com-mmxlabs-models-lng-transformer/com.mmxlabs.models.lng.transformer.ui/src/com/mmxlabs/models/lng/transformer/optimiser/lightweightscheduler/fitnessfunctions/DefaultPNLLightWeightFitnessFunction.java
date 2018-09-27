@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitnessFunction {
 	private static final double LATENESS_FINE = 10_000_000;
 	private static final double UNFULFILLED_FINE = 10_000_000;
-	private static final long VESSEL_EVENT_PNL = 400_000_000_00L;
+	private static final double VESSEL_EVENT_PNL = 200_000_000.0;
 
 	private static final class CargoTimeDetails {
 		int start;
@@ -108,10 +108,13 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 			}
 			details.add(new CargoTimeDetails(earliestCargoStart, earliestCargoEnd, lateness));
 		}
-		// add vessel end date lateness to last cargo
-		CargoTimeDetails lastCargoTimeDetails = details.get(details.size() - 1);
-		int endTime = lastCargoTimeDetails.end + cargoEndDurations[sequence.get(sequence.size()-1)];
-		lastCargoTimeDetails.latenessInHours += Math.max(0, endTime - vesselEndTime);
+		if (details.size() > 0) {
+			// add vessel end date lateness to last cargo
+			CargoTimeDetails lastCargoTimeDetails = details.get(details.size() - 1);
+			// Note: end duration is used here as it needs to be added to as lastCargoTimeDetails.end is the start of discharge 
+			int endofLastDischargeTime = lastCargoTimeDetails.end + cargoEndDurations[sequence.get(sequence.size()-1)];
+			lastCargoTimeDetails.latenessInHours += Math.max(0, endofLastDischargeTime - vesselEndTime);
+		}
 		return details;
 	}
 	
@@ -152,13 +155,13 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 	}
 
 
-	private double calculateProfitOnSequence(List<Integer> sequence, double capacity, double[] cargoPNL, double[] volumes, LightWeightCargoDetails[] cargoDetails) {
+	private double calculateProfitOnSequence(List<Integer> sequence, double capacity, double[] cargoPNLPerM3, double[] volumes, LightWeightCargoDetails[] cargoDetails) {
 		double sum = 0.0f;
 		for (int i = 0; i < sequence.size(); i++) {
 			Integer cargoIndex = sequence.get(i);
-			if (cargoDetails[cargoIndex].getType() != PortType.DryDock ||
+			if (cargoDetails[cargoIndex].getType() != PortType.DryDock &&
 					cargoDetails[cargoIndex].getType() != PortType.CharterOut) {
-				sum += cargoPNL[sequence.get(i)] * Math.min(capacity, volumes[sequence.get(i)]);
+				sum += cargoPNLPerM3[sequence.get(i)] * Math.min(capacity, volumes[sequence.get(i)]);
 			} else {
 				sum += VESSEL_EVENT_PNL;
 			}
