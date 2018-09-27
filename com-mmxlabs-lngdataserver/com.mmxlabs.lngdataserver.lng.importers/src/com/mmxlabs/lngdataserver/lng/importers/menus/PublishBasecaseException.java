@@ -8,9 +8,12 @@ public class PublishBasecaseException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
-		FAILED_TO_EVALUATE,
-
-		OTHER
+		FAILED_TO_EVALUATE, //
+		FAILED_TO_SAVE, //
+		FAILED_TO_UPLOAD_BASECASE, //
+		FAILED_TO_UPLOAD_REPORT, //
+		FAILED_TO_GENERATE_REPORT, //
+		FAILED_TO_MAKE_CURRENT,//
 	};
 
 	private final Type type;

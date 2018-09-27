@@ -70,19 +70,36 @@ public class ScenarioServicePublishAction {
 		try {
 			dialog.run(true, false, m -> publishScenario(scenarioInstance, m));
 		} catch (final InvocationTargetException e) {
+			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
 			if (cause instanceof PublishBasecaseException) {
 				final PublishBasecaseException publishBasecaseException = (PublishBasecaseException) cause;
-				if (publishBasecaseException.getType() == Type.FAILED_TO_EVALUATE) {
+				switch (publishBasecaseException.getType()) {
+				case FAILED_TO_EVALUATE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", "Failed to evaluate the scenario. Unable to publish as base case.");
-					return;
+					break;
+				case FAILED_TO_SAVE:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", "Failed to save the base case scenario to a temporary file. Unable to publish as base case.");
+					break;
+				case FAILED_TO_UPLOAD_BASECASE:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", "Failed to upload the base case scenario. Unable to publish as base case.");
+					break;
+				case FAILED_TO_GENERATE_REPORT:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", e.getMessage() + " Unable to publish as base case.");
+					break;
+				case FAILED_TO_UPLOAD_REPORT:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", e.getMessage() + " Unable to publish as base case.");
+					break;
+				case FAILED_TO_MAKE_CURRENT:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", "Base case uploaded but was unable to mark as current.");
+					break;
+				default:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error publishing", "Unknown error occurred. Unable to publish as base case.");
+					break;
 				}
 			}
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (final InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 
 	}
@@ -150,14 +167,14 @@ public class ScenarioServicePublishAction {
 				tmpScenarioFile = ScenarioStorageUtil.getTempDirectory().createTempFile("publishScenarioUtil_", "");
 			} catch (final IOException e) {
 				e.printStackTrace();
-				return;
+				throw new PublishBasecaseException("Error saving temporary scenario.", Type.FAILED_TO_SAVE, e);
 			}
 
 			try {
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
 			} catch (final IOException e) {
 				e.printStackTrace();
-				return;
+				throw new PublishBasecaseException("Error saving temporary scenario.", Type.FAILED_TO_SAVE, e);
 			}
 
 			progressMonitor.worked(200);
@@ -209,6 +226,8 @@ public class ScenarioServicePublishAction {
 			} catch (final IOException e) {
 				System.out.println("Error uploading the basecase scenario");
 				e.printStackTrace();
+				throw new PublishBasecaseException("Error uploading scenario.", Type.FAILED_TO_UPLOAD_BASECASE, e);
+
 			} finally {
 				uploadMonitor.done();
 			}
@@ -247,10 +266,12 @@ public class ScenarioServicePublishAction {
 							reportsServiceClient.uploadReport(outputStream.toString(), reportType, uuid);
 						} catch (final IOException e) {
 							e.printStackTrace();
-							return;
+							throw new PublishBasecaseException("Error uploading report " + reportType, Type.FAILED_TO_UPLOAD_REPORT, e);
+
 						}
 					} catch (final Exception e) {
 						LOG.error(e.getMessage(), e);
+						throw new PublishBasecaseException("Error generating report " + reportPublisherExtension.getReportType(), Type.FAILED_TO_GENERATE_REPORT, e);
 					}
 					publishersMonitor.worked(1);
 				}
@@ -264,6 +285,8 @@ public class ScenarioServicePublishAction {
 				// TODO Auto-generated catch block
 				System.out.println("Error while setting the new baseCase as current");
 				e.printStackTrace();
+				throw new PublishBasecaseException("Error marking base case current", Type.FAILED_TO_MAKE_CURRENT, e);
+
 			}
 		} finally {
 			progressMonitor.done();
