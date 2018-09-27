@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public interface IVoyagePlanner {
 
-	public static final int ROUNDING_EPSILON = 0;
+	public static final int ROUNDING_EPSILON = 10;
 
 	/**
 	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages.
