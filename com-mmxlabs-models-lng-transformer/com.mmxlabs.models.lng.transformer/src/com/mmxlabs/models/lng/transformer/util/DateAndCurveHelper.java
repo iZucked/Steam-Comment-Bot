@@ -169,7 +169,7 @@ public class DateAndCurveHelper {
 		return splitExpressionMap;
 	}
 
-	public StepwiseIntegerCurve generateExpressionCurve(final String priceExpression, final SeriesParser indices) {
+	public @Nullable StepwiseIntegerCurve generateExpressionCurve(final String priceExpression, final SeriesParser indices) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;

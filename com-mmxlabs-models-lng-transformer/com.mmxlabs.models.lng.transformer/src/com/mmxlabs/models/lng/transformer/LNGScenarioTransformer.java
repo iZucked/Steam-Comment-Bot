@@ -776,6 +776,7 @@ public class LNGScenarioTransformer {
 				modelEntityMap.addModelObject(eBF, bf);
 
 				final ICurve curve = dateHelper.generateExpressionCurve(baseFuelCost.getExpression(), baseFuelIndices);
+				assert curve != null;
 				baseFuelCurveProvider.setBaseFuelCurve(bf, curve);
 			}
 		}
