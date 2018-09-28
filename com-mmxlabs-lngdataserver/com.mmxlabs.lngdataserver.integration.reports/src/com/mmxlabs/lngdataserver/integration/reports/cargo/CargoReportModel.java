@@ -14,36 +14,36 @@ public class CargoReportModel {
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	LocalDateTime loadScheduledDate;
+	public LocalDateTime loadScheduledDate;
 	
-	String loadName;
-	double loadVolumeM3;
-	double loadVolumeMMBTU;
-	double loadPrice;
-	String loadPortName;
-	String purchaseContract;
-	String purchaseCounterparty; 
+	public String loadName;
+	public double loadVolumeM3;
+	public double loadVolumeMMBTU;
+	public double loadPrice;
+	public String loadPortName;
+	public String purchaseContract;
+	public String purchaseCounterparty; 
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	LocalDateTime dischargeScheduledDate;
+	public LocalDateTime dischargeScheduledDate;
 	
-	String dischargeName;
-	double dischargeVolumeM3; // M3
-	double dischargeVolumeMMBTU; // MMMBtu
-	double dischargePrice;
-	String dischargePortName;
-	String saleContract;
-	String saleCounterparty; 
+	public String dischargeName;
+	public double dischargeVolumeM3; // M3
+	public double dischargeVolumeMMBTU; // MMMBtu
+	public double dischargePrice;
+	public String dischargePortName;
+	public String saleContract;
+	public String saleCounterparty; 
 	
-	String vesselName;
+	public String vesselName;
 	
-	String loadComment;
-	String dischargeComment;
+	public String loadComment;
+	public String dischargeComment;
 	
-	String cargoType;
+	public String cargoType;
 	
-	long profitAndLoss;
+	public long profitAndLoss;
 
 	public LocalDateTime getLoadScheduledDate() {
 		return loadScheduledDate;
