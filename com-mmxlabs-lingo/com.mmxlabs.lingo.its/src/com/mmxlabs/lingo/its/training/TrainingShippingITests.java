@@ -5,8 +5,8 @@
 package com.mmxlabs.lingo.its.training;
 
 import java.net.MalformedURLException;
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,29 +23,31 @@ import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParallelOptimisationPlanExtender;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -75,6 +77,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
+	// Which scenario data to import
 	@Override
 	public @NonNull IScenarioDataProvider importReferenceData() throws MalformedURLException {
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/trainingcases/Shipping_I/");
@@ -82,6 +85,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		return scenarioDataProvider;
 	}
 
+	// Override default behaviour to also import portfolio data e.g. cargoes, vessel availabilities, events
 	@NonNull
 	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
 
@@ -122,7 +126,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	protected OptimisationPlan createOptimisationPlan(final UserSettings userSettings) {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000_000);
 		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 50_000);
@@ -132,20 +136,6 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		new ParallelOptimisationPlanExtender().extend(optimisationPlan);
 
 		return optimisationPlan;
-	}
-
-	protected @NonNull VesselAvailability createDefaultAvailability(@NonNull String vesselName) {
-		return createDefaultAvailability(fleetModelFinder.findVessel(vesselName));
-	}
-
-	protected @NonNull VesselAvailability createDefaultAvailability(@NonNull Vessel vessel) {
-		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withCharterRate("70000") //
-				.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0)) //
-				.withEndWindow(LocalDateTime.of(2017, 8, 1, 0, 0)) //
-				.withStartHeel(6_000, 6_000, 22.67, "0.01") //
-				.withEndHeel(0, 500, EVesselTankState.EITHER, "0") //
-				.build();
 	}
 
 	@Test
@@ -171,28 +161,30 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 				// Run, get result and store to schedule model for inspection at EMF level if needed
 				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
-
+				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
 				// Solution 1
 				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
 							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
 							.pnlDelta(initialPNL, 944_899, 1_000) //
 					;
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
 				}
 				// Solution 2
 				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
 							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
 							.pnlDelta(initialPNL, 610_378, 1_000) //
 					;
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
 				}
 			});
@@ -231,10 +223,12 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 			runnerBuilder.run(false, runner -> {
 				// Run, get result and store to schedule model for inspection at EMF level if needed
 				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
-
+				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
 				// Solution 1
 				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
 							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("BO_1").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
@@ -244,20 +238,12 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -992_994, 1_000) //
 					;
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
-
-					final Schedule schedule = runner.getScenarioToOptimiserBridge().createSchedule(solution, new HashMap<>());
-					final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule);
-					final long lateness = ScheduleModelKPIUtils.getScheduleLateness(schedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
-					final long violations = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
-					Assert.assertEquals(-992_994, pnl - initialPNL, 1_000);
-					Assert.assertEquals(-(24 * 4 + 5), lateness - initialLateness);
-					Assert.assertEquals(-1, violations - initialViolations);
 				}
 				// Solution 2
 				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
 							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("BO_1").onFleetVessel("Small Ship") //
 							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
@@ -266,16 +252,8 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -1_327_515, 1_000) //
 					;
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
-					final Schedule schedule = runner.getScenarioToOptimiserBridge().createSchedule(solution, new HashMap<>());
-
-					final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule);
-					final long lateness = ScheduleModelKPIUtils.getScheduleLateness(schedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
-					final long violations = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
-					Assert.assertEquals(-1_327_515, pnl - initialPNL, 1_000);
-					Assert.assertEquals(-(24 * 4 + 5), lateness - initialLateness);
-					Assert.assertEquals(-1, violations - initialViolations);
 				}
 				// Solution 3
 				{
@@ -286,7 +264,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -2_144_366, 1_000) //
 					;
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
 
 				}
@@ -296,7 +274,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ OptimisationTest.class })
-	public void testShipping_I_Stage2_2_Lateness_with_charter_in() throws Exception {
+	public void testShipping_I_Stage_2_2_Lateness_with_charter_in() throws Exception {
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -307,7 +285,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		cargoModelFinder.findVesselAvailability("Small ship").setStartAt(portFinder.findPort("Sabine Pass"));
 
 		spotMarketsModelBuilder.getSpotMarketsModel().getCharterInMarkets().clear();
-		CharterInMarket charterMarket = spotMarketsModelBuilder.createCharterInMarket("CI_10", fleetModelFinder.findVessel("Steam_2"), "21750", 1);
+		final CharterInMarket charterMarket = spotMarketsModelBuilder.createCharterInMarket("CI_10", fleetModelFinder.findVessel("Steam_2"), "21750", 1);
 		charterMarket.setEnabled(true);
 		charterMarket.setNominal(true);
 
@@ -332,10 +310,12 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 				// Run, get result and store to schedule model for inspection at EMF level if needed
 				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
-
+				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
 				// Solution 1
 				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
 							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
 							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
@@ -345,12 +325,12 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -147_982, 1_000) //
 					;
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
 				}
 				// Solution 2
 				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
 							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
 							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
 							.withUsedLoad("S_4").onFleetVessel("Medium Ship") //
@@ -359,13 +339,13 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 							.pnlDelta(initialPNL, -482_503, 1_000) //
 					;
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
 					Assert.assertNotNull(solution);
 
 				}
 				// Solution 3
 				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
 							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
 							.violationDelta(initialViolations, 0) //
 							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
@@ -376,6 +356,99 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 					Assert.assertNotNull(solution);
 				}
 
+			});
+		}
+	}
+
+	@Test
+	@Category({ OptimisationTest.class })
+	public void testShipping_I_Stage_3_1_allocation_and_keep_open() throws Exception {
+
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+
+		// Make changes to initial data
+		final Port p = portFinder.findPort("Corpus Christi");
+		p.getCapabilities().add(PortCapability.LOAD);
+		p.setLoadDuration(24);
+		p.setCvValue(22.7);
+		costModelBuilder.createPortCost(Collections.singleton(p), Collections.singleton(PortCapability.LOAD), 140000);
+
+		cargoModelFinder.findVesselAvailability("Large ship").setStartAt(portFinder.findPort("Gladstone"));
+		cargoModelFinder.findVesselAvailability("Medium ship").setStartAt(portFinder.findPort("Barcelona"));
+		cargoModelFinder.findVesselAvailability("Small ship").setStartAt(portFinder.findPort("Sabine Pass"));
+
+		cargoModelFinder.findLoadSlot("S_3").setArriveCold(false);
+
+		cargoModelBuilder.makeFOBPurchase("New_Load", LocalDate.of(2017, 1, 1), p, null, entity, "10.5%BRENT_ICE", 22.7) //
+				.withWindowStartTime(0) //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+				.withVisitDuration(36) //
+				.withVolumeLimits(2_950_000, 4_000_000, VolumeUnits.MMBTU) //
+				.withCancellationFee("10500000") //
+				.build();
+
+		cargoModelBuilder.makeDESSale("New_Discharge", LocalDate.of(2017, 2, 1), portFinder.findPort("Dunkirk"), null, entity, "16%BRENT_ICE") //
+				.withWindowStartTime(0) //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+				.withVisitDuration(36) //
+				.withVolumeLimits(2_910_000, 3_811_000, VolumeUnits.MMBTU) //
+				.withCancellationFee("350000*FX_EUR_USD") //
+				.build();
+
+		final UserSettings userSettings = createUserSettings();
+		userSettings.setShippingOnly(false);
+
+		try (final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withOptimisationPlan(createOptimisationPlan(userSettings)) //
+				.withOptimiseHint() //
+				.withThreadCount(1) //
+				.buildDefaultRunner()) {
+
+			runnerBuilder.evaluateInitialState();
+
+			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
+			Assert.assertNotNull(initialSchedule);
+
+			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
+			final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+			final long initialViolations = ScheduleModelKPIUtils.getScheduleViolationCount(initialSchedule);
+
+			runnerBuilder.run(false, runner -> {
+				// Run, get result and store to schedule model for inspection at EMF level if needed
+				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
+
+				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
+				// Solution 1
+				{
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+							.withCargo("New_Load", "New_Discharge").onFleetVessel("Small Ship") //
+							.withUsedLoad("A_3").onFleetVessel("Small Ship") //
+							.withUsedLoad("S_1").onFleetVessel("Medium Ship") //
+							.withUsedLoad("S_4").onFleetVessel("Large Ship") //
+							.violationDelta(initialViolations, -1) //
+							.latenessDelta(initialLateness, 0) //
+							.pnlDelta(initialPNL, 19_124_719, 1_000) //
+					;
+
+					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assert.fail(msg));
+					Assert.assertNotNull(solution);
+
+				}
+				// Solution 2
+				{
+					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+							.withCargo("New_Load", "New_Discharge").onFleetVessel("Small Ship") //
+							.violationDelta(initialViolations, -1) //
+							.latenessDelta(initialLateness, 0) //
+							.pnlDelta(initialPNL, 18_179_820, 1_000) //
+					;
+
+					final ISequences solution = verifier.verifySolutionExistsInResults(result, msg -> Assert.fail(msg));
+					Assert.assertNotNull(solution);
+
+				}
 			});
 		}
 	}

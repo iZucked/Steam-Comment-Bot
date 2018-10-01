@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.verifier;
 
 import java.util.function.Supplier;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
@@ -16,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 public class SolutionData {
 	private final OptimiserDataMapper optimiserDataMapper;
 	private final LookupManager lookupManager;
-	private Supplier<Schedule> scheduleSupplier;
+	private Schedule schedule;
 
 	public SolutionData(final OptimiserDataMapper optimiserDataMapper, final LookupManager lookupManager) {
 		this.optimiserDataMapper = optimiserDataMapper;
@@ -41,18 +42,12 @@ public class SolutionData {
 	}
 
 	public @Nullable Schedule getSchedule() {
-		if (scheduleSupplier != null) {
-			return scheduleSupplier.get();
-		}
-		return null;
+
+		return schedule;
 	}
 
-	public Supplier<Schedule> getScheduleSupplier() {
-		return scheduleSupplier;
-	}
-
-	public void setScheduleSupplier(Supplier<Schedule> scheduleSupplier) {
-		this.scheduleSupplier = scheduleSupplier;
+	public void setSchedule(@NonNull Schedule schedule) {
+		this.schedule = schedule;
 	}
 
 }

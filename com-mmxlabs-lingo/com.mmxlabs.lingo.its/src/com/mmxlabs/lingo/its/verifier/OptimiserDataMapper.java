@@ -63,7 +63,7 @@ public class OptimiserDataMapper {
 		return dataTransformer;
 	}
 
-	public LNGScenarioToOptimiserBridge getScenarioToOptimtiserBridge() {
+	public LNGScenarioToOptimiserBridge getScenarioToOptimiserBridge() {
 		return scenarioToOptimiserBridge;
 	}
 

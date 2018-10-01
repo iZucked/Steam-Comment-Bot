@@ -23,8 +23,8 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -46,19 +46,36 @@ public class OptimiserResultVerifier {
 
 	private final ScenarioModelFinder scenarioModelFinder;
 
-	private final List<Function<SolutionData, Boolean>> checks = new LinkedList<>();
-	private final OptimiserDataMapper mapper;
+	private final @NonNull List<Function<SolutionData, Boolean>> checks = new LinkedList<>();
+	private boolean needsSchedule = false;
+	private final @NonNull OptimiserDataMapper mapper;
 
-	private final LNGScenarioRunner scenarioRunner;
+	public static List<SolutionData> createSolutionData(final boolean needsSchedule, final IMultiStateResult results, final @NonNull OptimiserDataMapper mapper) {
 
-	public static OptimiserResultVerifier begin(final LNGScenarioRunner scenarioRunner) {
-		return new OptimiserResultVerifier(scenarioRunner);
+		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
+		final List<SolutionData> solutionDataList = new LinkedList<>();
+		for (int i = 1; i < solutions.size(); ++i) {
+			final NonNullPair<ISequences, Map<String, Object>> solutionDataPair = solutions.get(i);
+			final SolutionData data = new SolutionData(mapper, solutionDataPair.getFirst());
+			if (needsSchedule) {
+				data.setSchedule(mapper.getScenarioToOptimiserBridge().createSchedule(solutionDataPair.getFirst(), solutionDataPair.getSecond()));
+			}
+			solutionDataList.add(data);
+		}
+		return solutionDataList;
 	}
 
-	private OptimiserResultVerifier(final LNGScenarioRunner scenarioRunner) {
-		this.scenarioRunner = scenarioRunner;
-		this.scenarioModelFinder = new ScenarioModelFinder(scenarioRunner.getScenarioToOptimiserBridge().getOptimiserScenario());
-		this.mapper = new OptimiserDataMapper(scenarioRunner.getScenarioToOptimiserBridge());
+	public static OptimiserResultVerifier begin(final @NonNull LNGScenarioRunner scenarioRunner) {
+		return new OptimiserResultVerifier(new OptimiserDataMapper(scenarioRunner.getScenarioToOptimiserBridge()));
+	}
+
+	public static OptimiserResultVerifier begin(final @NonNull OptimiserDataMapper mapper) {
+		return new OptimiserResultVerifier(mapper);
+	}
+
+	private OptimiserResultVerifier(final OptimiserDataMapper mapper) {
+		this.scenarioModelFinder = new ScenarioModelFinder(mapper.getScenarioToOptimiserBridge().getOptimiserScenario());
+		this.mapper = mapper;
 	}
 
 	public VesselVerifier withCargo(final String loadName, final String dischargeName) {
@@ -252,7 +269,7 @@ public class OptimiserResultVerifier {
 			return verifier;
 		}
 
-		public OptimiserResultVerifier onSpotCharter(String marketName) {
+		public OptimiserResultVerifier onSpotCharter(final String marketName) {
 			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
 				if (p == null || p.getSecond() == null) {
 					return false;
@@ -261,8 +278,8 @@ public class OptimiserResultVerifier {
 				final IVesselProvider vesselProvider = p.getFirst().getInjector().getInstance(IVesselProvider.class);
 				final ICharterMarketProvider charterMarketProvider = p.getFirst().getInjector().getInstance(ICharterMarketProvider.class);
 				final IVesselAvailability va = vesselProvider.getVesselAvailability(r);
-				ISpotCharterInMarket spotCharterInMarket = va.getSpotCharterInMarket();
-				return( va.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER ) //
+				final ISpotCharterInMarket spotCharterInMarket = va.getSpotCharterInMarket();
+				return (va.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) //
 						&& (marketName.equalsIgnoreCase(spotCharterInMarket.getName()));
 			};
 
@@ -273,6 +290,7 @@ public class OptimiserResultVerifier {
 	}
 
 	public OptimiserResultVerifier pnlDelta(final long initialValue, final long expectedChange, final long delta) {
+		needsSchedule = true;
 
 		final Function<SolutionData, Boolean> aa = (data) -> {
 			final Schedule schedule = data.getSchedule();
@@ -287,6 +305,7 @@ public class OptimiserResultVerifier {
 	}
 
 	public OptimiserResultVerifier latenessDelta(final long initialValue, final long expectedChange) {
+		needsSchedule = true;
 
 		final Function<SolutionData, Boolean> aa = (data) -> {
 			final Schedule schedule = data.getSchedule();
@@ -301,6 +320,7 @@ public class OptimiserResultVerifier {
 	}
 
 	public OptimiserResultVerifier violationDelta(final long initialValue, final long expectedChange) {
+		needsSchedule = true;
 
 		final Function<SolutionData, Boolean> aa = (data) -> {
 			final Schedule schedule = data.getSchedule();
@@ -315,22 +335,22 @@ public class OptimiserResultVerifier {
 	}
 
 	public @Nullable ISequences verifySolutionExistsInResults(final IMultiStateResult results, final Consumer<String> errorHandler) {
-
 		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
 		if (solutions.size() < 2) {
 			errorHandler.accept("No solutions found");
+			return null;
 		}
 
-		LOOP_SOLUTIONS: for (int i = 1; i < solutions.size(); ++i) {
-			final NonNullPair<ISequences, Map<String, Object>> solutionDataPair = solutions.get(i);
-			final SolutionData data = new SolutionData(mapper, solutionDataPair.getFirst());
-			// Lazy eval
-			// TODO: Move higher in code stack to avoid repeating this
-			data.setScheduleSupplier(() -> scenarioRunner.getScenarioToOptimiserBridge().createSchedule(solutionDataPair.getFirst(), solutionDataPair.getSecond()));
+		final List<SolutionData> solutionDataList = createSolutionData(needsSchedule, results, mapper);
+		return verifySolutionExistsInResults(solutionDataList, errorHandler);
+	}
 
+	public @Nullable ISequences verifySolutionExistsInResults(final List<SolutionData> solutionDataList, final Consumer<String> errorHandler) {
+
+		for (final SolutionData data : solutionDataList) {
 			for (final Function<SolutionData, Boolean> checker : checks) {
 				if (!checker.apply(data)) {
-					continue LOOP_SOLUTIONS;
+					continue;
 				}
 			}
 			return data.getLookupManager().getRawSequences();
@@ -364,8 +384,8 @@ public class OptimiserResultVerifier {
 			}
 		}
 	}
-	
-	public void verifyCargoCountInOptimisationResultWithoutNominals(int solution, int cargoCount, final IMultiStateResult result, final Consumer<String> errorHandler) {
+
+	public void verifyCargoCountInOptimisationResultWithoutNominals(final int solution, final int cargoCount, final IMultiStateResult result, final Consumer<String> errorHandler) {
 
 		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = result.getSolutions();
 		if (solutions.size() < 2 + solution) {
@@ -377,9 +397,9 @@ public class OptimiserResultVerifier {
 			data.add(new SolutionData(mapper, solutions.get(i).getFirst()));
 		}
 
-		SolutionData solutionData = data.get(solution);
-		ISequences sequences = solutionData.getLookupManager().getRawSequences();
-		int totalLoadsOnSequences = OptimiserResultVerifierUtils.getTotalLoadsOnSequences(sequences, mapper, true);
+		final SolutionData solutionData = data.get(solution);
+		final ISequences sequences = solutionData.getLookupManager().getRawSequences();
+		final int totalLoadsOnSequences = OptimiserResultVerifierUtils.getTotalLoadsOnSequences(sequences, mapper, true);
 		if (totalLoadsOnSequences != cargoCount) {
 			errorHandler.accept(String.format("Cargo count: expected %s but was %s", cargoCount, totalLoadsOnSequences));
 		}
