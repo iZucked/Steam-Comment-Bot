@@ -223,7 +223,7 @@ public class LNGOptimisationBuilder {
 				executorService, initialHints);
 	}
 
-	public static class LNGOptimisationRunnerBuilder {
+	public static class LNGOptimisationRunnerBuilder implements AutoCloseable {
 		private final LNGOptimisationBuilder builder;
 		private final LNGScenarioRunner scenarioRunner;
 
@@ -264,6 +264,11 @@ public class LNGOptimisationBuilder {
 			} finally {
 				executorService.shutdownNow();
 			}
+		}
+
+		@Override
+		public void close() throws Exception {
+			dispose();
 		}
 
 		public void dispose() {

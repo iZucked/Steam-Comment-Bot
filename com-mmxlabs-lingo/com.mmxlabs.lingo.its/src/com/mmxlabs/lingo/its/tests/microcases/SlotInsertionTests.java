@@ -617,7 +617,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 					.withUnusedSlot("DES_Sale2") // Main sure we have a solution with this slot unused.
 			;
 
-			verifier.verifyInsertionResults(results, msg -> Assert.fail(msg));
+			verifier.verifySolutionExistsInResults(results, msg -> Assert.fail(msg));
 		}, null);
 
 	}

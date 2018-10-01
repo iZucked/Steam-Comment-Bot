@@ -110,7 +110,6 @@ public abstract class AbstractMicroTestCase {
 		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
 		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		cargoModelFinder = scenarioModelFinder.getCargoModelFinder();
 		fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 

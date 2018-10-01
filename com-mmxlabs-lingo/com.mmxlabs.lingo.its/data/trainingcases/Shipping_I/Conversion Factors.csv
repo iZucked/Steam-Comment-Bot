@@ -1,0 +1,4 @@
+from,to,factor,kind
+MWh,mmBtu,0.293287,UnitConversion
+bbl,mmBtu,0.180136,UnitConversion
+therm,mmBtu,10,UnitConversion
