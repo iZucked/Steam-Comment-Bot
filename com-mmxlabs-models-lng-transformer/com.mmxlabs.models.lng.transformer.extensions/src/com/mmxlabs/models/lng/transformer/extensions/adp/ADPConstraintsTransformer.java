@@ -55,9 +55,6 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 	private IVesselSlotCountFitnessProviderEditor longTermVesselSlotCountFitnessProviderEditor;
 
 	@Inject
-	private IVesselProvider vesselProvider;
-
-	@Inject
 	private SchedulerCalculationUtils scheduleCalculationUtils;
 
 	@Inject

@@ -35,12 +35,12 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 
 	@Override
 	public void addMinLoadSlotsPerMonth(final List<ILoadOption> slots, final int startMonth, final int limit) {
-		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1));
+		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1, 1));
 	}
 
 	@Override
 	public void addMaxLoadSlotsPerMonth(final List<ILoadOption> slots, final int startMonth, final int limit) {
-		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1));
+		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1, 1));
 	}
 
 	@Override
@@ -55,60 +55,60 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 
 	@Override
 	public void addMinLoadSlotsPerQuarter(final List<ILoadOption> slots, final int startMonth, final int limit) {
-		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3));
+		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3, 3));
 	}
 
 	@Override
 	public void addMaxLoadSlotsPerQuarter(final List<ILoadOption> slots, final int startMonth, final int limit) {
-		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3));
+		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3, 3));
 	}
 
 	@Override
 	public void addMinLoadSlotsPerMonthlyPeriod(List<ILoadOption> slots, int startMonth, int period, int limit) {
-		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period));	}
+		loadMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period, 1));	}
 
 	@Override
 	public void addMaxLoadSlotsPerMonthlyPeriod(List<ILoadOption> slots, int startMonth, int period, int limit) {
-		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period));	}
+		loadMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period, 1));	}
 
 	@Override
 	public void addMinDischargeSlotsPerMonth(final List<IDischargeOption> slots, final int startMonth, final int limit) {
-		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1));
+		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1, 1));
 	}
 
 	@Override
 	public void addMaxDischargeSlotsPerMonth(final List<IDischargeOption> slots, final int startMonth, final int limit) {
-		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1));
+		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 1, 1));
 	}
 
 	@Override
 	public void addMinDischargeSlotsPerYear(final List<IDischargeOption> slots, final int startMonth, final int limit) {
-		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 11, limit, 12));
+		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 11, limit, 12, 1));
 	}
 
 	@Override
 	public void addMaxDischargeSlotsPerYear(final List<IDischargeOption> slots, final int startMonth, final int limit) {
-		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 11, limit, 12));
+		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, startMonth + 11, limit, 12, 1));
 	}
 
 	@Override
 	public void addMinDischargeSlotsPerQuarter(final List<IDischargeOption> slots, final int startMonth, final int limit) {
-		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3));
+		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3, 3));
 	}
 
 	@Override
 	public void addMaxDischargeSlotsPerQuarter(final List<IDischargeOption> slots, final int startMonth, final int limit) {
-		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3));
+		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, 3, 3));
 	}
 
 	@Override
 	public void addMinDischargeSlotsPerMonthlyPeriod(List<IDischargeOption> slots, int startMonth, int period, int limit) {
-		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period));
+		dischargeMinRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period, 1));
 	}
 
 	@Override
 	public void addMaxDischargeSlotsPerMonthlyPeriod(List<IDischargeOption> slots, int startMonth, int period, int limit) {
-		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period));
+		dischargeMaxRestrictions.addAll(addSlotsPerPeriod(slots, startMonth, limit, period, 1));
 	}
 
 	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerMonth(final List<T> slots, final int startMonth, final int limit) {
@@ -135,16 +135,16 @@ public class DefaultMaxSlotConstraintDataProviderEditor implements IMaxSlotConst
 		return lastMonth;
 	}
 
-	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerPeriod(final List<T> slots, final int startMonth, final int limit, final int interval) {
+	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerPeriod(final List<T> slots, final int startMonth, final int limit, final int interval, final int step) {
 		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), a.getTimeWindow().getInclusiveStart()));
 		final int lastMonth = getUTCMonth(slots.get(slots.size() - 1));
-		return addSlotsPerPeriod(slots, startMonth, lastMonth, limit, interval);
+		return addSlotsPerPeriod(slots, startMonth, lastMonth, limit, interval, step);
 	}
 
-	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerPeriod(final List<T> slots, final int startMonth, final int endMonthInclusive, final int limit, final int interval) {
+	private <T extends IPortSlot> List<Pair<Set<T>, Integer>> addSlotsPerPeriod(final List<T> slots, final int startMonth, final int endMonthInclusive, final int limit, final int interval, final int step) {
 		final List<Pair<Set<T>, Integer>> slotsSets = new LinkedList<>();
 		Collections.sort(slots, (a, b) -> Integer.compare(a.getTimeWindow().getInclusiveStart(), a.getTimeWindow().getInclusiveStart()));
-		for (int month = startMonth; month < (endMonthInclusive + 2) - interval; month = month + 1) {
+		for (int month = startMonth; month < (endMonthInclusive + 2) - interval; month = month + step) {
 			final Set<T> slotsSet = new LinkedHashSet<>();
 			for (final T slot : slots) {
 				if (getUTCMonth(slot) >= month && getUTCMonth(slot) < month + interval) {
