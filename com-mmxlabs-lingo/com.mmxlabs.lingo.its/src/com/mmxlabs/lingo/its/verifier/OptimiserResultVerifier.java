@@ -276,4 +276,25 @@ public class OptimiserResultVerifier {
 			}
 		}
 	}
+	
+	public void verifyCargoCountInOptimisationResultWithoutNominals(int solution, int cargoCount, final IMultiStateResult result, final Consumer<String> errorHandler) {
+
+		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = result.getSolutions();
+		if (solutions.size() < 2 + solution) {
+			errorHandler.accept("No solution found");
+		}
+
+		final List<SolutionData> data = new ArrayList<>(1);
+		for (int i = 1; i < solutions.size(); ++i) {
+			data.add(new SolutionData(mapper, solutions.get(i).getFirst()));
+		}
+
+		SolutionData solutionData = data.get(solution);
+		ISequences sequences = solutionData.getLookupManager().getRawSequences();
+		int totalLoadsOnSequences = OptimiserResultVerifierUtils.getTotalLoadsOnSequences(sequences, mapper, true);
+		if (totalLoadsOnSequences != cargoCount) {
+			errorHandler.accept(String.format("Cargo count: expected %s but was %s", cargoCount, totalLoadsOnSequences));
+		}
+	}
+
 }

@@ -18,6 +18,7 @@ import org.junit.Before;
 import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
+import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
@@ -59,6 +60,7 @@ public abstract class AbstractMicroTestCase {
 	protected PortModelBuilder portModelBuilder;
 	protected PortModelFinder portFinder;
 	protected CargoModelBuilder cargoModelBuilder;
+	protected CargoModelFinder cargoModelFinder;
 	protected CostModelBuilder costModelBuilder;
 	protected CommercialModelBuilder commercialModelBuilder;
 	protected FleetModelBuilder fleetModelBuilder;
@@ -112,6 +114,7 @@ public abstract class AbstractMicroTestCase {
 		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
 		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
+		cargoModelFinder = scenarioModelFinder.getCargoModelFinder();
 		fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
@@ -147,6 +150,7 @@ public abstract class AbstractMicroTestCase {
 		spotMarketsModelBuilder = null;
 		pricingModelBuilder = null;
 		entity = null;
+		cargoModelFinder = null;
 
 		if (scenarioDataProvider != null) {
 			scenarioDataProvider.close();

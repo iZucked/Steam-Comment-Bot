@@ -116,6 +116,14 @@ public class OptimiserDataMapper {
 		throw new IllegalArgumentException();
 	}
 
+	public Slot getSlotForElement(final ISequenceElement element) {
+
+		final IPortSlotProvider portSlotProvider = dataTransformer.getInjector().getInstance(IPortSlotProvider.class);
+		IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+		final Slot slot = modelEntityMap.getModelObject(portSlot, Slot.class);
+		return slot;
+	}
+
 	public ISequenceElement getElementFor(final Slot slot) {
 
 		final IPortSlotProvider portSlotProvider = dataTransformer.getInjector().getInstance(IPortSlotProvider.class);
