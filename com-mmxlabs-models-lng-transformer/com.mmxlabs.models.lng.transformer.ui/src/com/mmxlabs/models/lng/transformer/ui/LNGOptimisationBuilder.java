@@ -168,7 +168,7 @@ public class LNGOptimisationBuilder {
 						.withModuleBindInstance(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPModel.class, adpModel)//
 						.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPScenarioModuleHelper.createExtraDataModule(adpModel))//
 				;
-				if (localOptimisationPlan.getUserSettings().isCleanStateOptimisation()) {
+				if (!evaluationOnly && localOptimisationPlan.getUserSettings().isCleanStateOptimisation()) {
 					serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, ADPScenarioModuleHelper.createEmptySolutionModule());
 				}
 				// FIXME: This replaces any local overrides!
