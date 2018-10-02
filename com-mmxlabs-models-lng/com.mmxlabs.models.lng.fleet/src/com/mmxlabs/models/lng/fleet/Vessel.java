@@ -23,27 +23,27 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getIMO <em>IMO</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getType <em>Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getReference <em>Reference</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessiblePortsOverride <em>Inaccessible Ports Override</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInPortBaseFuel <em>In Port Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightBaseFuel <em>Pilot Light Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getIdleBaseFuel <em>Idle Base Fuel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightRate <em>Pilot Light Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel <em>Safety Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume <em>Cooling Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime <em>Warming Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMaxSpeed <em>Max Speed</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel <em>Safety Heel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime <em>Warming Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume <em>Cooling Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessiblePortsOverride <em>Inaccessible Ports Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isRouteParametersOverride <em>Route Parameters Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getRouteParameters <em>Route Parameters</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapabilityOverride <em>Has Reliq Capability Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapability <em>Has Reliq Capability</em>}</li>

@@ -160,6 +160,7 @@ public class FleetActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
+		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("fleet-settings"));
 		toolBarManager.add(new Separator("fleet-additions"));
 	}

@@ -201,7 +201,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_InaccessiblePorts() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(5);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(20);
 	}
 
 	/**
@@ -210,7 +210,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_InaccessibleRoutesOverride() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(21);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_Capacity() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(12);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_FillCapacity() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(13);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -237,15 +237,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_LadenAttributes() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(14);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVessel_BallastAttributes() {
 		return (EReference)vesselEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -254,8 +245,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVessel_MinSpeed() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(16);
+	public EReference getVessel_BallastAttributes() {
+		return (EReference)vesselEClass.getEStructuralFeatures().get(16);
 	}
 
 	/**
@@ -263,7 +254,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVessel_MaxSpeed() {
+	public EAttribute getVessel_MinSpeed() {
 		return (EAttribute)vesselEClass.getEStructuralFeatures().get(17);
 	}
 
@@ -272,7 +263,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVessel_SafetyHeel() {
+	public EAttribute getVessel_MaxSpeed() {
 		return (EAttribute)vesselEClass.getEStructuralFeatures().get(18);
 	}
 
@@ -281,8 +272,17 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getVessel_SafetyHeel() {
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getVessel_WarmingTime() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(19);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_CoolingVolume() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(20);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -300,7 +300,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_RouteParametersOverride() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(22);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(23);
 	}
 
 	/**
@@ -309,7 +309,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_RouteParameters() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(23);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(24);
 	}
 
 	/**
@@ -318,7 +318,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_PilotLightRate() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(24);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -372,7 +372,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_Scnt() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(21);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_InaccessiblePortsOverride() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(19);
 	}
 
 	/**
@@ -390,7 +390,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_InaccessibleRoutes() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(22);
 	}
 
 	/**
@@ -399,7 +399,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_BaseFuel() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(8);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -408,7 +408,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_InPortBaseFuel() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(9);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -417,7 +417,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_PilotLightBaseFuel() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(10);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -426,7 +426,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_IdleBaseFuel() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(11);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -723,27 +723,27 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselEClass, VESSEL__IMO);
 		createEAttribute(vesselEClass, VESSEL__TYPE);
 		createEReference(vesselEClass, VESSEL__REFERENCE);
-		createEAttribute(vesselEClass, VESSEL__INACCESSIBLE_PORTS_OVERRIDE);
-		createEReference(vesselEClass, VESSEL__INACCESSIBLE_PORTS);
-		createEAttribute(vesselEClass, VESSEL__INACCESSIBLE_ROUTES_OVERRIDE);
-		createEAttribute(vesselEClass, VESSEL__INACCESSIBLE_ROUTES);
+		createEAttribute(vesselEClass, VESSEL__CAPACITY);
+		createEAttribute(vesselEClass, VESSEL__FILL_CAPACITY);
+		createEAttribute(vesselEClass, VESSEL__SCNT);
 		createEReference(vesselEClass, VESSEL__BASE_FUEL);
 		createEReference(vesselEClass, VESSEL__IN_PORT_BASE_FUEL);
 		createEReference(vesselEClass, VESSEL__PILOT_LIGHT_BASE_FUEL);
 		createEReference(vesselEClass, VESSEL__IDLE_BASE_FUEL);
-		createEAttribute(vesselEClass, VESSEL__CAPACITY);
-		createEAttribute(vesselEClass, VESSEL__FILL_CAPACITY);
+		createEAttribute(vesselEClass, VESSEL__PILOT_LIGHT_RATE);
+		createEAttribute(vesselEClass, VESSEL__SAFETY_HEEL);
+		createEAttribute(vesselEClass, VESSEL__COOLING_VOLUME);
+		createEAttribute(vesselEClass, VESSEL__WARMING_TIME);
 		createEReference(vesselEClass, VESSEL__LADEN_ATTRIBUTES);
 		createEReference(vesselEClass, VESSEL__BALLAST_ATTRIBUTES);
 		createEAttribute(vesselEClass, VESSEL__MIN_SPEED);
 		createEAttribute(vesselEClass, VESSEL__MAX_SPEED);
-		createEAttribute(vesselEClass, VESSEL__SAFETY_HEEL);
-		createEAttribute(vesselEClass, VESSEL__WARMING_TIME);
-		createEAttribute(vesselEClass, VESSEL__COOLING_VOLUME);
-		createEAttribute(vesselEClass, VESSEL__SCNT);
+		createEAttribute(vesselEClass, VESSEL__INACCESSIBLE_PORTS_OVERRIDE);
+		createEReference(vesselEClass, VESSEL__INACCESSIBLE_PORTS);
+		createEAttribute(vesselEClass, VESSEL__INACCESSIBLE_ROUTES_OVERRIDE);
+		createEAttribute(vesselEClass, VESSEL__INACCESSIBLE_ROUTES);
 		createEAttribute(vesselEClass, VESSEL__ROUTE_PARAMETERS_OVERRIDE);
 		createEReference(vesselEClass, VESSEL__ROUTE_PARAMETERS);
-		createEAttribute(vesselEClass, VESSEL__PILOT_LIGHT_RATE);
 		createEAttribute(vesselEClass, VESSEL__MIN_BASE_FUEL_CONSUMPTION);
 		createEAttribute(vesselEClass, VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE);
 		createEAttribute(vesselEClass, VESSEL__HAS_RELIQ_CAPABILITY);
@@ -838,6 +838,21 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVessel_IMO(), ecorePackage.getEString(), "IMO", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_Type(), ecorePackage.getEString(), "type", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_Reference(), this.getVessel(), null, "reference", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_Capacity(), ecorePackage.getEInt(), "capacity", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_FillCapacity(), ecorePackage.getEDouble(), "fillCapacity", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_Scnt(), ecorePackage.getEInt(), "scnt", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_BaseFuel(), this.getBaseFuel(), null, "baseFuel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_InPortBaseFuel(), this.getBaseFuel(), null, "inPortBaseFuel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_PilotLightBaseFuel(), this.getBaseFuel(), null, "pilotLightBaseFuel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_IdleBaseFuel(), this.getBaseFuel(), null, "idleBaseFuel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_PilotLightRate(), ecorePackage.getEDouble(), "pilotLightRate", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_SafetyHeel(), ecorePackage.getEInt(), "safetyHeel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_CoolingVolume(), ecorePackage.getEInt(), "coolingVolume", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_WarmingTime(), ecorePackage.getEInt(), "warmingTime", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_LadenAttributes(), this.getVesselStateAttributes(), null, "ladenAttributes", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_BallastAttributes(), this.getVesselStateAttributes(), null, "ballastAttributes", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_MinSpeed(), ecorePackage.getEDouble(), "minSpeed", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_MaxSpeed(), ecorePackage.getEDouble(), "maxSpeed", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_InaccessiblePortsOverride(), ecorePackage.getEBoolean(), "inaccessiblePortsOverride", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
@@ -845,23 +860,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVessel_InaccessiblePorts(), g1, null, "inaccessiblePorts", null, 0, -1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_InaccessibleRoutesOverride(), ecorePackage.getEBoolean(), "inaccessibleRoutesOverride", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_InaccessibleRoutes(), thePortPackage.getRouteOption(), "inaccessibleRoutes", null, 0, -1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_BaseFuel(), this.getBaseFuel(), null, "baseFuel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_InPortBaseFuel(), this.getBaseFuel(), null, "inPortBaseFuel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_PilotLightBaseFuel(), this.getBaseFuel(), null, "pilotLightBaseFuel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_IdleBaseFuel(), this.getBaseFuel(), null, "idleBaseFuel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_Capacity(), ecorePackage.getEInt(), "capacity", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_FillCapacity(), ecorePackage.getEDouble(), "fillCapacity", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_LadenAttributes(), this.getVesselStateAttributes(), null, "ladenAttributes", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_BallastAttributes(), this.getVesselStateAttributes(), null, "ballastAttributes", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_MinSpeed(), ecorePackage.getEDouble(), "minSpeed", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_MaxSpeed(), ecorePackage.getEDouble(), "maxSpeed", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_SafetyHeel(), ecorePackage.getEInt(), "safetyHeel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_WarmingTime(), ecorePackage.getEInt(), "warmingTime", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_CoolingVolume(), ecorePackage.getEInt(), "coolingVolume", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_Scnt(), ecorePackage.getEInt(), "scnt", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_RouteParametersOverride(), ecorePackage.getEBoolean(), "routeParametersOverride", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_RouteParameters(), this.getVesselClassRouteParameters(), null, "routeParameters", null, 0, -1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVessel_PilotLightRate(), ecorePackage.getEDouble(), "pilotLightRate", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_MinBaseFuelConsumption(), ecorePackage.getEDouble(), "minBaseFuelConsumption", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_HasReliqCapabilityOverride(), ecorePackage.getEBoolean(), "hasReliqCapabilityOverride", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_HasReliqCapability(), ecorePackage.getEBoolean(), "hasReliqCapability", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -997,6 +997,34 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 			   "exportFormatString", "#.###"
 		   });
 		addAnnotation
+		  (getVessel_PilotLightRate(),
+		   source,
+		   new String[] {
+			   "unit", "MT/day",
+			   "formatString", "##0.##"
+		   });
+		addAnnotation
+		  (getVessel_SafetyHeel(),
+		   source,
+		   new String[] {
+			   "formatString", "###,##0",
+			   "unit", "m\u00b3"
+		   });
+		addAnnotation
+		  (getVessel_CoolingVolume(),
+		   source,
+		   new String[] {
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0"
+		   });
+		addAnnotation
+		  (getVessel_WarmingTime(),
+		   source,
+		   new String[] {
+			   "unit", "hrs",
+			   "formatString", "##0"
+		   });
+		addAnnotation
 		  (getVessel_MinSpeed(),
 		   source,
 		   new String[] {
@@ -1009,34 +1037,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			   "unit", "kts",
 			   "formatString", "#0.###"
-		   });
-		addAnnotation
-		  (getVessel_SafetyHeel(),
-		   source,
-		   new String[] {
-			   "formatString", "###,##0",
-			   "unit", "m\u00b3"
-		   });
-		addAnnotation
-		  (getVessel_WarmingTime(),
-		   source,
-		   new String[] {
-			   "unit", "hrs",
-			   "formatString", "##0"
-		   });
-		addAnnotation
-		  (getVessel_CoolingVolume(),
-		   source,
-		   new String[] {
-			   "unit", "m\u00b3",
-			   "formatString", "###,##0"
-		   });
-		addAnnotation
-		  (getVessel_PilotLightRate(),
-		   source,
-		   new String[] {
-			   "unit", "MT/day",
-			   "formatString", "##0.##"
 		   });
 		addAnnotation
 		  (getVessel_MinBaseFuelConsumption(),

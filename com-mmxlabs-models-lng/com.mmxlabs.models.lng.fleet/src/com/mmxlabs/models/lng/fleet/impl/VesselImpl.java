@@ -42,27 +42,27 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getIMO <em>IMO</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getType <em>Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getReference <em>Reference</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isInaccessiblePortsOverride <em>Inaccessible Ports Override</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getScnt <em>Scnt</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInPortBaseFuel <em>In Port Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightBaseFuel <em>Pilot Light Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getIdleBaseFuel <em>Idle Base Fuel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getSafetyHeel <em>Safety Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getWarmingTime <em>Warming Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMaxSpeed <em>Max Speed</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getSafetyHeel <em>Safety Heel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getWarmingTime <em>Warming Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getScnt <em>Scnt</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isInaccessiblePortsOverride <em>Inaccessible Ports Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isRouteParametersOverride <em>Route Parameters Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getRouteParameters <em>Route Parameters</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isHasReliqCapabilityOverride <em>Has Reliq Capability Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
@@ -144,63 +144,91 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected Vessel reference;
 
 	/**
-	 * The default value of the '{@link #isInaccessiblePortsOverride() <em>Inaccessible Ports Override</em>}' attribute.
+	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isInaccessiblePortsOverride()
+	 * @see #getCapacity()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean INACCESSIBLE_PORTS_OVERRIDE_EDEFAULT = false;
+	protected static final int CAPACITY_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #isInaccessiblePortsOverride() <em>Inaccessible Ports Override</em>}' attribute.
+	 * The cached value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isInaccessiblePortsOverride()
+	 * @see #getCapacity()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean inaccessiblePortsOverride = INACCESSIBLE_PORTS_OVERRIDE_EDEFAULT;
+	protected int capacity = CAPACITY_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getInaccessiblePorts() <em>Inaccessible Ports</em>}' reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getInaccessiblePorts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<APortSet<Port>> inaccessiblePorts;
-
-	/**
-	 * The default value of the '{@link #isInaccessibleRoutesOverride() <em>Inaccessible Routes Override</em>}' attribute.
+	 * This is true if the Capacity attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isInaccessibleRoutesOverride()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean INACCESSIBLE_ROUTES_OVERRIDE_EDEFAULT = false;
+	protected boolean capacityESet;
 
 	/**
-	 * The cached value of the '{@link #isInaccessibleRoutesOverride() <em>Inaccessible Routes Override</em>}' attribute.
+	 * The default value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isInaccessibleRoutesOverride()
+	 * @see #getFillCapacity()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean inaccessibleRoutesOverride = INACCESSIBLE_ROUTES_OVERRIDE_EDEFAULT;
+	protected static final double FILL_CAPACITY_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
+	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getInaccessibleRoutes()
+	 * @see #getFillCapacity()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<RouteOption> inaccessibleRoutes;
+	protected double fillCapacity = FILL_CAPACITY_EDEFAULT;
+
+	/**
+	 * This is true if the Fill Capacity attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fillCapacityESet;
+
+	/**
+	 * The default value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScnt()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SCNT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScnt()
+	 * @generated
+	 * @ordered
+	 */
+	protected int scnt = SCNT_EDEFAULT;
+
+	/**
+	 * This is true if the Scnt attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean scntESet;
 
 	/**
 	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference.
@@ -279,62 +307,120 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected boolean idleBaseFuelESet;
 
 	/**
-	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
+	 * The default value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCapacity()
+	 * @see #getPilotLightRate()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int CAPACITY_EDEFAULT = 0;
+	protected static final double PILOT_LIGHT_RATE_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
+	 * The cached value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCapacity()
+	 * @see #getPilotLightRate()
 	 * @generated
 	 * @ordered
 	 */
-	protected int capacity = CAPACITY_EDEFAULT;
+	protected double pilotLightRate = PILOT_LIGHT_RATE_EDEFAULT;
 
 	/**
-	 * This is true if the Capacity attribute has been set.
+	 * This is true if the Pilot Light Rate attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean capacityESet;
+	protected boolean pilotLightRateESet;
 
 	/**
-	 * The default value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
+	 * The default value of the '{@link #getSafetyHeel() <em>Safety Heel</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFillCapacity()
+	 * @see #getSafetyHeel()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double FILL_CAPACITY_EDEFAULT = 0.0;
+	protected static final int SAFETY_HEEL_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
+	 * The cached value of the '{@link #getSafetyHeel() <em>Safety Heel</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFillCapacity()
+	 * @see #getSafetyHeel()
 	 * @generated
 	 * @ordered
 	 */
-	protected double fillCapacity = FILL_CAPACITY_EDEFAULT;
+	protected int safetyHeel = SAFETY_HEEL_EDEFAULT;
 
 	/**
-	 * This is true if the Fill Capacity attribute has been set.
+	 * This is true if the Safety Heel attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean fillCapacityESet;
+	protected boolean safetyHeelESet;
+
+	/**
+	 * The default value of the '{@link #getCoolingVolume() <em>Cooling Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCoolingVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int COOLING_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCoolingVolume() <em>Cooling Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCoolingVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int coolingVolume = COOLING_VOLUME_EDEFAULT;
+
+	/**
+	 * This is true if the Cooling Volume attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean coolingVolumeESet;
+
+	/**
+	 * The default value of the '{@link #getWarmingTime() <em>Warming Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWarmingTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WARMING_TIME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getWarmingTime() <em>Warming Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWarmingTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected int warmingTime = WARMING_TIME_EDEFAULT;
+
+	/**
+	 * This is true if the Warming Time attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean warmingTimeESet;
 
 	/**
 	 * The cached value of the '{@link #getLadenAttributes() <em>Laden Attributes</em>}' containment reference.
@@ -415,120 +501,63 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected boolean maxSpeedESet;
 
 	/**
-	 * The default value of the '{@link #getSafetyHeel() <em>Safety Heel</em>}' attribute.
+	 * The default value of the '{@link #isInaccessiblePortsOverride() <em>Inaccessible Ports Override</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSafetyHeel()
+	 * @see #isInaccessiblePortsOverride()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int SAFETY_HEEL_EDEFAULT = 0;
+	protected static final boolean INACCESSIBLE_PORTS_OVERRIDE_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #getSafetyHeel() <em>Safety Heel</em>}' attribute.
+	 * The cached value of the '{@link #isInaccessiblePortsOverride() <em>Inaccessible Ports Override</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSafetyHeel()
+	 * @see #isInaccessiblePortsOverride()
 	 * @generated
 	 * @ordered
 	 */
-	protected int safetyHeel = SAFETY_HEEL_EDEFAULT;
+	protected boolean inaccessiblePortsOverride = INACCESSIBLE_PORTS_OVERRIDE_EDEFAULT;
 
 	/**
-	 * This is true if the Safety Heel attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getInaccessiblePorts() <em>Inaccessible Ports</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getInaccessiblePorts()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean safetyHeelESet;
+	protected EList<APortSet<Port>> inaccessiblePorts;
 
 	/**
-	 * The default value of the '{@link #getWarmingTime() <em>Warming Time</em>}' attribute.
+	 * The default value of the '{@link #isInaccessibleRoutesOverride() <em>Inaccessible Routes Override</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getWarmingTime()
+	 * @see #isInaccessibleRoutesOverride()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int WARMING_TIME_EDEFAULT = 0;
+	protected static final boolean INACCESSIBLE_ROUTES_OVERRIDE_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #getWarmingTime() <em>Warming Time</em>}' attribute.
+	 * The cached value of the '{@link #isInaccessibleRoutesOverride() <em>Inaccessible Routes Override</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getWarmingTime()
+	 * @see #isInaccessibleRoutesOverride()
 	 * @generated
 	 * @ordered
 	 */
-	protected int warmingTime = WARMING_TIME_EDEFAULT;
+	protected boolean inaccessibleRoutesOverride = INACCESSIBLE_ROUTES_OVERRIDE_EDEFAULT;
 
 	/**
-	 * This is true if the Warming Time attribute has been set.
+	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @see #getInaccessibleRoutes()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean warmingTimeESet;
-
-	/**
-	 * The default value of the '{@link #getCoolingVolume() <em>Cooling Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCoolingVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int COOLING_VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getCoolingVolume() <em>Cooling Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCoolingVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int coolingVolume = COOLING_VOLUME_EDEFAULT;
-
-	/**
-	 * This is true if the Cooling Volume attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean coolingVolumeESet;
-
-	/**
-	 * The default value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getScnt()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SCNT_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getScnt()
-	 * @generated
-	 * @ordered
-	 */
-	protected int scnt = SCNT_EDEFAULT;
-
-	/**
-	 * This is true if the Scnt attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean scntESet;
+	protected EList<RouteOption> inaccessibleRoutes;
 
 	/**
 	 * The default value of the '{@link #isRouteParametersOverride() <em>Route Parameters Override</em>}' attribute.
@@ -559,35 +588,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected EList<VesselClassRouteParameters> routeParameters;
-
-	/**
-	 * The default value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPilotLightRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double PILOT_LIGHT_RATE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPilotLightRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected double pilotLightRate = PILOT_LIGHT_RATE_EDEFAULT;
-
-	/**
-	 * This is true if the Pilot Light Rate attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean pilotLightRateESet;
 
 	/**
 	 * The default value of the '{@link #getMinBaseFuelConsumption() <em>Min Base Fuel Consumption</em>}' attribute.
@@ -2095,14 +2095,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__REFERENCE:
 				if (resolve) return getReference();
 				return basicGetReference();
-			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
-				return isInaccessiblePortsOverride();
-			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
-				return getInaccessiblePorts();
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE:
-				return isInaccessibleRoutesOverride();
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
-				return getInaccessibleRoutes();
+			case FleetPackage.VESSEL__CAPACITY:
+				return getCapacity();
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+				return getFillCapacity();
+			case FleetPackage.VESSEL__SCNT:
+				return getScnt();
 			case FleetPackage.VESSEL__BASE_FUEL:
 				if (resolve) return getBaseFuel();
 				return basicGetBaseFuel();
@@ -2115,10 +2113,14 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
 				if (resolve) return getIdleBaseFuel();
 				return basicGetIdleBaseFuel();
-			case FleetPackage.VESSEL__CAPACITY:
-				return getCapacity();
-			case FleetPackage.VESSEL__FILL_CAPACITY:
-				return getFillCapacity();
+			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
+				return getPilotLightRate();
+			case FleetPackage.VESSEL__SAFETY_HEEL:
+				return getSafetyHeel();
+			case FleetPackage.VESSEL__COOLING_VOLUME:
+				return getCoolingVolume();
+			case FleetPackage.VESSEL__WARMING_TIME:
+				return getWarmingTime();
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
 				return getLadenAttributes();
 			case FleetPackage.VESSEL__BALLAST_ATTRIBUTES:
@@ -2127,20 +2129,18 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getMinSpeed();
 			case FleetPackage.VESSEL__MAX_SPEED:
 				return getMaxSpeed();
-			case FleetPackage.VESSEL__SAFETY_HEEL:
-				return getSafetyHeel();
-			case FleetPackage.VESSEL__WARMING_TIME:
-				return getWarmingTime();
-			case FleetPackage.VESSEL__COOLING_VOLUME:
-				return getCoolingVolume();
-			case FleetPackage.VESSEL__SCNT:
-				return getScnt();
+			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
+				return isInaccessiblePortsOverride();
+			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
+				return getInaccessiblePorts();
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE:
+				return isInaccessibleRoutesOverride();
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				return getInaccessibleRoutes();
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS_OVERRIDE:
 				return isRouteParametersOverride();
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS:
 				return getRouteParameters();
-			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
-				return getPilotLightRate();
 			case FleetPackage.VESSEL__MIN_BASE_FUEL_CONSUMPTION:
 				return getMinBaseFuelConsumption();
 			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE:
@@ -2175,6 +2175,51 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__REFERENCE:
 				setReference((Vessel)newValue);
 				return;
+			case FleetPackage.VESSEL__CAPACITY:
+				setCapacity((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+				setFillCapacity((Double)newValue);
+				return;
+			case FleetPackage.VESSEL__SCNT:
+				setScnt((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__BASE_FUEL:
+				setBaseFuel((BaseFuel)newValue);
+				return;
+			case FleetPackage.VESSEL__IN_PORT_BASE_FUEL:
+				setInPortBaseFuel((BaseFuel)newValue);
+				return;
+			case FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL:
+				setPilotLightBaseFuel((BaseFuel)newValue);
+				return;
+			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
+				setIdleBaseFuel((BaseFuel)newValue);
+				return;
+			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
+				setPilotLightRate((Double)newValue);
+				return;
+			case FleetPackage.VESSEL__SAFETY_HEEL:
+				setSafetyHeel((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__COOLING_VOLUME:
+				setCoolingVolume((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__WARMING_TIME:
+				setWarmingTime((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
+				setLadenAttributes((VesselStateAttributes)newValue);
+				return;
+			case FleetPackage.VESSEL__BALLAST_ATTRIBUTES:
+				setBallastAttributes((VesselStateAttributes)newValue);
+				return;
+			case FleetPackage.VESSEL__MIN_SPEED:
+				setMinSpeed((Double)newValue);
+				return;
+			case FleetPackage.VESSEL__MAX_SPEED:
+				setMaxSpeed((Double)newValue);
+				return;
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
 				setInaccessiblePortsOverride((Boolean)newValue);
 				return;
@@ -2189,57 +2234,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				getInaccessibleRoutes().clear();
 				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
 				return;
-			case FleetPackage.VESSEL__BASE_FUEL:
-				setBaseFuel((BaseFuel)newValue);
-				return;
-			case FleetPackage.VESSEL__IN_PORT_BASE_FUEL:
-				setInPortBaseFuel((BaseFuel)newValue);
-				return;
-			case FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL:
-				setPilotLightBaseFuel((BaseFuel)newValue);
-				return;
-			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
-				setIdleBaseFuel((BaseFuel)newValue);
-				return;
-			case FleetPackage.VESSEL__CAPACITY:
-				setCapacity((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL__FILL_CAPACITY:
-				setFillCapacity((Double)newValue);
-				return;
-			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
-				setLadenAttributes((VesselStateAttributes)newValue);
-				return;
-			case FleetPackage.VESSEL__BALLAST_ATTRIBUTES:
-				setBallastAttributes((VesselStateAttributes)newValue);
-				return;
-			case FleetPackage.VESSEL__MIN_SPEED:
-				setMinSpeed((Double)newValue);
-				return;
-			case FleetPackage.VESSEL__MAX_SPEED:
-				setMaxSpeed((Double)newValue);
-				return;
-			case FleetPackage.VESSEL__SAFETY_HEEL:
-				setSafetyHeel((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL__WARMING_TIME:
-				setWarmingTime((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL__COOLING_VOLUME:
-				setCoolingVolume((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL__SCNT:
-				setScnt((Integer)newValue);
-				return;
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS_OVERRIDE:
 				setRouteParametersOverride((Boolean)newValue);
 				return;
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS:
 				getRouteParameters().clear();
 				getRouteParameters().addAll((Collection<? extends VesselClassRouteParameters>)newValue);
-				return;
-			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
-				setPilotLightRate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL__MIN_BASE_FUEL_CONSUMPTION:
 				setMinBaseFuelConsumption((Double)newValue);
@@ -2279,17 +2279,14 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__REFERENCE:
 				setReference((Vessel)null);
 				return;
-			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
-				setInaccessiblePortsOverride(INACCESSIBLE_PORTS_OVERRIDE_EDEFAULT);
+			case FleetPackage.VESSEL__CAPACITY:
+				unsetCapacity();
 				return;
-			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
-				getInaccessiblePorts().clear();
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+				unsetFillCapacity();
 				return;
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE:
-				setInaccessibleRoutesOverride(INACCESSIBLE_ROUTES_OVERRIDE_EDEFAULT);
-				return;
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
-				getInaccessibleRoutes().clear();
+			case FleetPackage.VESSEL__SCNT:
+				unsetScnt();
 				return;
 			case FleetPackage.VESSEL__BASE_FUEL:
 				unsetBaseFuel();
@@ -2303,11 +2300,17 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
 				unsetIdleBaseFuel();
 				return;
-			case FleetPackage.VESSEL__CAPACITY:
-				unsetCapacity();
+			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
+				unsetPilotLightRate();
 				return;
-			case FleetPackage.VESSEL__FILL_CAPACITY:
-				unsetFillCapacity();
+			case FleetPackage.VESSEL__SAFETY_HEEL:
+				unsetSafetyHeel();
+				return;
+			case FleetPackage.VESSEL__COOLING_VOLUME:
+				unsetCoolingVolume();
+				return;
+			case FleetPackage.VESSEL__WARMING_TIME:
+				unsetWarmingTime();
 				return;
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
 				setLadenAttributes((VesselStateAttributes)null);
@@ -2321,26 +2324,23 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MAX_SPEED:
 				unsetMaxSpeed();
 				return;
-			case FleetPackage.VESSEL__SAFETY_HEEL:
-				unsetSafetyHeel();
+			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
+				setInaccessiblePortsOverride(INACCESSIBLE_PORTS_OVERRIDE_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL__WARMING_TIME:
-				unsetWarmingTime();
+			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
+				getInaccessiblePorts().clear();
 				return;
-			case FleetPackage.VESSEL__COOLING_VOLUME:
-				unsetCoolingVolume();
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE:
+				setInaccessibleRoutesOverride(INACCESSIBLE_ROUTES_OVERRIDE_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL__SCNT:
-				unsetScnt();
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
 				return;
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS_OVERRIDE:
 				setRouteParametersOverride(ROUTE_PARAMETERS_OVERRIDE_EDEFAULT);
 				return;
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS:
 				getRouteParameters().clear();
-				return;
-			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
-				unsetPilotLightRate();
 				return;
 			case FleetPackage.VESSEL__MIN_BASE_FUEL_CONSUMPTION:
 				unsetMinBaseFuelConsumption();
@@ -2376,14 +2376,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 			case FleetPackage.VESSEL__REFERENCE:
 				return reference != null;
-			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
-				return inaccessiblePortsOverride != INACCESSIBLE_PORTS_OVERRIDE_EDEFAULT;
-			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
-				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE:
-				return inaccessibleRoutesOverride != INACCESSIBLE_ROUTES_OVERRIDE_EDEFAULT;
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
-				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
+			case FleetPackage.VESSEL__CAPACITY:
+				return isSetCapacity();
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+				return isSetFillCapacity();
+			case FleetPackage.VESSEL__SCNT:
+				return isSetScnt();
 			case FleetPackage.VESSEL__BASE_FUEL:
 				return isSetBaseFuel();
 			case FleetPackage.VESSEL__IN_PORT_BASE_FUEL:
@@ -2392,10 +2390,14 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetPilotLightBaseFuel();
 			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
 				return isSetIdleBaseFuel();
-			case FleetPackage.VESSEL__CAPACITY:
-				return isSetCapacity();
-			case FleetPackage.VESSEL__FILL_CAPACITY:
-				return isSetFillCapacity();
+			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
+				return isSetPilotLightRate();
+			case FleetPackage.VESSEL__SAFETY_HEEL:
+				return isSetSafetyHeel();
+			case FleetPackage.VESSEL__COOLING_VOLUME:
+				return isSetCoolingVolume();
+			case FleetPackage.VESSEL__WARMING_TIME:
+				return isSetWarmingTime();
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
 				return ladenAttributes != null;
 			case FleetPackage.VESSEL__BALLAST_ATTRIBUTES:
@@ -2404,20 +2406,18 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetMinSpeed();
 			case FleetPackage.VESSEL__MAX_SPEED:
 				return isSetMaxSpeed();
-			case FleetPackage.VESSEL__SAFETY_HEEL:
-				return isSetSafetyHeel();
-			case FleetPackage.VESSEL__WARMING_TIME:
-				return isSetWarmingTime();
-			case FleetPackage.VESSEL__COOLING_VOLUME:
-				return isSetCoolingVolume();
-			case FleetPackage.VESSEL__SCNT:
-				return isSetScnt();
+			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
+				return inaccessiblePortsOverride != INACCESSIBLE_PORTS_OVERRIDE_EDEFAULT;
+			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
+				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE:
+				return inaccessibleRoutesOverride != INACCESSIBLE_ROUTES_OVERRIDE_EDEFAULT;
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS_OVERRIDE:
 				return routeParametersOverride != ROUTE_PARAMETERS_OVERRIDE_EDEFAULT;
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS:
 				return routeParameters != null && !routeParameters.isEmpty();
-			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
-				return isSetPilotLightRate();
 			case FleetPackage.VESSEL__MIN_BASE_FUEL_CONSUMPTION:
 				return isSetMinBaseFuelConsumption();
 			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE:
@@ -2447,32 +2447,32 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(imo);
 		result.append(", type: ");
 		result.append(type);
+		result.append(", capacity: ");
+		if (capacityESet) result.append(capacity); else result.append("<unset>");
+		result.append(", fillCapacity: ");
+		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");
+		result.append(", scnt: ");
+		if (scntESet) result.append(scnt); else result.append("<unset>");
+		result.append(", pilotLightRate: ");
+		if (pilotLightRateESet) result.append(pilotLightRate); else result.append("<unset>");
+		result.append(", safetyHeel: ");
+		if (safetyHeelESet) result.append(safetyHeel); else result.append("<unset>");
+		result.append(", coolingVolume: ");
+		if (coolingVolumeESet) result.append(coolingVolume); else result.append("<unset>");
+		result.append(", warmingTime: ");
+		if (warmingTimeESet) result.append(warmingTime); else result.append("<unset>");
+		result.append(", minSpeed: ");
+		if (minSpeedESet) result.append(minSpeed); else result.append("<unset>");
+		result.append(", maxSpeed: ");
+		if (maxSpeedESet) result.append(maxSpeed); else result.append("<unset>");
 		result.append(", inaccessiblePortsOverride: ");
 		result.append(inaccessiblePortsOverride);
 		result.append(", inaccessibleRoutesOverride: ");
 		result.append(inaccessibleRoutesOverride);
 		result.append(", inaccessibleRoutes: ");
 		result.append(inaccessibleRoutes);
-		result.append(", capacity: ");
-		if (capacityESet) result.append(capacity); else result.append("<unset>");
-		result.append(", fillCapacity: ");
-		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");
-		result.append(", minSpeed: ");
-		if (minSpeedESet) result.append(minSpeed); else result.append("<unset>");
-		result.append(", maxSpeed: ");
-		if (maxSpeedESet) result.append(maxSpeed); else result.append("<unset>");
-		result.append(", safetyHeel: ");
-		if (safetyHeelESet) result.append(safetyHeel); else result.append("<unset>");
-		result.append(", warmingTime: ");
-		if (warmingTimeESet) result.append(warmingTime); else result.append("<unset>");
-		result.append(", coolingVolume: ");
-		if (coolingVolumeESet) result.append(coolingVolume); else result.append("<unset>");
-		result.append(", scnt: ");
-		if (scntESet) result.append(scnt); else result.append("<unset>");
 		result.append(", routeParametersOverride: ");
 		result.append(routeParametersOverride);
-		result.append(", pilotLightRate: ");
-		if (pilotLightRateESet) result.append(pilotLightRate); else result.append("<unset>");
 		result.append(", minBaseFuelConsumption: ");
 		if (minBaseFuelConsumptionESet) result.append(minBaseFuelConsumption); else result.append("<unset>");
 		result.append(", hasReliqCapabilityOverride: ");

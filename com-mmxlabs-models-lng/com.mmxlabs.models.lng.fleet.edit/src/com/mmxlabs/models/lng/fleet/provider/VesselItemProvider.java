@@ -54,25 +54,25 @@ public class VesselItemProvider
 			addIMOPropertyDescriptor(object);
 			addTypePropertyDescriptor(object);
 			addReferencePropertyDescriptor(object);
-			addInaccessiblePortsOverridePropertyDescriptor(object);
-			addInaccessiblePortsPropertyDescriptor(object);
-			addInaccessibleRoutesOverridePropertyDescriptor(object);
-			addInaccessibleRoutesPropertyDescriptor(object);
+			addCapacityPropertyDescriptor(object);
+			addFillCapacityPropertyDescriptor(object);
+			addScntPropertyDescriptor(object);
 			addBaseFuelPropertyDescriptor(object);
 			addInPortBaseFuelPropertyDescriptor(object);
 			addPilotLightBaseFuelPropertyDescriptor(object);
 			addIdleBaseFuelPropertyDescriptor(object);
-			addCapacityPropertyDescriptor(object);
-			addFillCapacityPropertyDescriptor(object);
+			addPilotLightRatePropertyDescriptor(object);
+			addSafetyHeelPropertyDescriptor(object);
+			addCoolingVolumePropertyDescriptor(object);
+			addWarmingTimePropertyDescriptor(object);
 			addMinSpeedPropertyDescriptor(object);
 			addMaxSpeedPropertyDescriptor(object);
-			addSafetyHeelPropertyDescriptor(object);
-			addWarmingTimePropertyDescriptor(object);
-			addCoolingVolumePropertyDescriptor(object);
-			addScntPropertyDescriptor(object);
+			addInaccessiblePortsOverridePropertyDescriptor(object);
+			addInaccessiblePortsPropertyDescriptor(object);
+			addInaccessibleRoutesOverridePropertyDescriptor(object);
+			addInaccessibleRoutesPropertyDescriptor(object);
 			addRouteParametersOverridePropertyDescriptor(object);
 			addRouteParametersPropertyDescriptor(object);
-			addPilotLightRatePropertyDescriptor(object);
 			addMinBaseFuelConsumptionPropertyDescriptor(object);
 			addHasReliqCapabilityOverridePropertyDescriptor(object);
 			addHasReliqCapabilityPropertyDescriptor(object);
@@ -770,19 +770,19 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__SHORT_NAME:
 			case FleetPackage.VESSEL__IMO:
 			case FleetPackage.VESSEL__TYPE:
+			case FleetPackage.VESSEL__CAPACITY:
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+			case FleetPackage.VESSEL__SCNT:
+			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
+			case FleetPackage.VESSEL__SAFETY_HEEL:
+			case FleetPackage.VESSEL__COOLING_VOLUME:
+			case FleetPackage.VESSEL__WARMING_TIME:
+			case FleetPackage.VESSEL__MIN_SPEED:
+			case FleetPackage.VESSEL__MAX_SPEED:
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
 			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE:
 			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
-			case FleetPackage.VESSEL__CAPACITY:
-			case FleetPackage.VESSEL__FILL_CAPACITY:
-			case FleetPackage.VESSEL__MIN_SPEED:
-			case FleetPackage.VESSEL__MAX_SPEED:
-			case FleetPackage.VESSEL__SAFETY_HEEL:
-			case FleetPackage.VESSEL__WARMING_TIME:
-			case FleetPackage.VESSEL__COOLING_VOLUME:
-			case FleetPackage.VESSEL__SCNT:
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS_OVERRIDE:
-			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
 			case FleetPackage.VESSEL__MIN_BASE_FUEL_CONSUMPTION:
 			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE:
 			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY:

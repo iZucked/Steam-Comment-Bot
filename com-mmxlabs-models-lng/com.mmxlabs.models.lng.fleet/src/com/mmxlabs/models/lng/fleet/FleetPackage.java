@@ -262,85 +262,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__REFERENCE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Inaccessible Ports Override</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__INACCESSIBLE_PORTS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Inaccessible Routes Override</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__INACCESSIBLE_ROUTES_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>In Port Base Fuel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__IN_PORT_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Pilot Light Base Fuel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__PILOT_LIGHT_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
-
-	/**
-	 * The feature id for the '<em><b>Idle Base Fuel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__IDLE_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
-
-	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -349,70 +277,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
-
-	/**
-	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
-
-	/**
-	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
-
-	/**
-	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
-
-	/**
-	 * The feature id for the '<em><b>Safety Heel</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__SAFETY_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 18;
-
-	/**
-	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 19;
-
-	/**
-	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 20;
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Scnt</b></em>' attribute.
@@ -421,25 +286,43 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 21;
+	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Route Parameters Override</b></em>' attribute.
+	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__ROUTE_PARAMETERS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 22;
+	int VESSEL__BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
+	 * The feature id for the '<em><b>In Port Base Fuel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 23;
+	int VESSEL__IN_PORT_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Pilot Light Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__PILOT_LIGHT_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Idle Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__IDLE_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
@@ -448,7 +331,124 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 24;
+	int VESSEL__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Safety Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__SAFETY_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
+
+	/**
+	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
+
+	/**
+	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
+
+	/**
+	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 18;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__INACCESSIBLE_PORTS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 19;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 20;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Routes Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__INACCESSIBLE_ROUTES_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 21;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 22;
+
+	/**
+	 * The feature id for the '<em><b>Route Parameters Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__ROUTE_PARAMETERS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 23;
+
+	/**
+	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Min Base Fuel Consumption</b></em>' attribute.

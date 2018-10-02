@@ -48,25 +48,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="IMO" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Vessel"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessiblePortsOverride"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1">
-      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
-      </eGenericType>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessibleRoutesOverride"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessibleRoutes" upperBound="-1"
-        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuel" lowerBound="1"
-        eType="#//BaseFuel" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="inPortBaseFuel" lowerBound="1"
-        eType="#//BaseFuel" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pilotLightBaseFuel" lowerBound="1"
-        eType="#//BaseFuel" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="idleBaseFuel" lowerBound="1"
-        eType="#//BaseFuel" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -81,6 +62,44 @@
         <details key="formatString" value="##0.#"/>
         <details key="unit" value="%"/>
         <details key="exportFormatString" value="#.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scnt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuel" lowerBound="1"
+        eType="#//BaseFuel" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inPortBaseFuel" lowerBound="1"
+        eType="#//BaseFuel" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pilotLightBaseFuel" lowerBound="1"
+        eType="#//BaseFuel" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="idleBaseFuel" lowerBound="1"
+        eType="#//BaseFuel" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pilotLightRate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="MT/day"/>
+        <details key="formatString" value="##0.##"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="safetyHeel" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="###,##0"/>
+        <details key="unit" value="m³"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coolingVolume" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="warmingTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="hrs"/>
+        <details key="formatString" value="##0"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ladenAttributes" lowerBound="1"
@@ -101,40 +120,21 @@
         <details key="formatString" value="#0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="safetyHeel" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="formatString" value="###,##0"/>
-        <details key="unit" value="m³"/>
-      </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessiblePortsOverride"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="warmingTime" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="hrs"/>
-        <details key="formatString" value="##0"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coolingVolume" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="m³"/>
-        <details key="formatString" value="###,##0"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scnt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessibleRoutesOverride"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessibleRoutes" upperBound="-1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeParametersOverride"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="routeParameters" upperBound="-1"
         eType="#//VesselClassRouteParameters" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pilotLightRate" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="MT/day"/>
-        <details key="formatString" value="##0.##"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minBaseFuelConsumption"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
