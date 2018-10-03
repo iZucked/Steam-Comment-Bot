@@ -223,7 +223,7 @@ public class MigrateToV96 extends AbstractMigrationUnit {
 				for (EObjectWrapper market : extraMarkets) {
 					if (Objects.equals(market.getAttrib("name"), "ADP Default Vessel") //
 							&& Objects.equals(market.getRef("vessel"), fleetProfile.getRef("defaultVessel")) //
-							&& Objects.equals(market.getAttrib("charterInRate"), fleetProfile.getRef("defaultVesselCharterInRate"))) {
+							&& Objects.equals(market.getAttrib("charterInRate"), fleetProfile.getAttrib("defaultVesselCharterInRate"))) {
 
 						defaultNominalMarket = market;
 					}
