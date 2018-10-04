@@ -1170,7 +1170,7 @@ public class LNGScenarioTransformer {
 	 * Extract the cargoes from the scenario and add them to the given builder.
 	 * 
 	 * @param builder
-	 *            current builder. should already have ports/distances/vessels built
+	 *                                 current builder. should already have ports/distances/vessels built
 	 * @param indexAssociation
 	 * @param contractTransformers
 	 * @param modelEntityMap
@@ -2798,13 +2798,13 @@ public class LNGScenarioTransformer {
 	 * Create the distance matrix for the given builder.
 	 * 
 	 * @param builder
-	 *            the builder we are working with
+	 *                              the builder we are working with
 	 * @param portAssociation
-	 *            an association between ports in the EMF model and IPorts in the builder
+	 *                              an association between ports in the EMF model and IPorts in the builder
 	 * @param allPorts
-	 *            the list of all IPorts constructed so far
+	 *                              the list of all IPorts constructed so far
 	 * @param portIndices
-	 *            a reverse-lookup for the ports in allPorts
+	 *                              a reverse-lookup for the ports in allPorts
 	 * @param vesselAssociation
 	 * @throws IncompleteScenarioException
 	 */
@@ -3053,9 +3053,9 @@ public class LNGScenarioTransformer {
 	 * Construct the fleet model for the scenario
 	 * 
 	 * @param builder
-	 *            a builder which has had its ports and distances instantiated
+	 *                            a builder which has had its ports and distances instantiated
 	 * @param portAssociation
-	 *            the Port <-> IPort association to connect EMF Ports with builder IPorts
+	 *                            the Port <-> IPort association to connect EMF Ports with builder IPorts
 	 * @param modelEntityMap
 	 * @return
 	 */
@@ -3546,11 +3546,13 @@ public class LNGScenarioTransformer {
 			final IHeelOptionConsumer heelConsumer) {
 
 		final Set<IPort> portSet = new LinkedHashSet<>();
-		for (final Port p : ports) {
-			portSet.add(portAssociation.lookup(p));
+		if (ports != null) {
+			for (final Port p : ports) {
+				portSet.add(portAssociation.lookup(p));
+			}
 		}
 		// Is the availability open ended or do we force the end rule?
-		if (ports.isEmpty()) {
+		if (ports == null || ports.isEmpty()) {
 			return builder.createEndRequirement(null, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer, false);
 		} else {
 			return builder.createEndRequirement(portSet, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer, false);
