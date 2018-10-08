@@ -14,7 +14,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		DefaultScope.INSTANCE.getNode("com.mmxlabs.models.lng.cargo.editor").put(PreferenceConstants.P_CONTACTS_TO_CONSIDER_OPEN, "");
+		DefaultScope.INSTANCE.getNode("com.mmxlabs.models.lng.cargo.editor").put(PreferenceConstants.P_CONTRACTS_TO_CONSIDER_OPEN, "");
 
 	}
 
