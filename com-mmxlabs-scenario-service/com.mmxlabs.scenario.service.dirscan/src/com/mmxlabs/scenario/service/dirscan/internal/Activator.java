@@ -26,7 +26,6 @@ import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvide
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-
 	private static final Logger log = LoggerFactory.getLogger(Activator.class);
 
 	// The plug-in ID

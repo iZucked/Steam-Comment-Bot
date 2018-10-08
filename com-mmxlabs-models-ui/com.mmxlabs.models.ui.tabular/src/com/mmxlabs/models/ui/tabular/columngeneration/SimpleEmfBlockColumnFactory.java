@@ -25,13 +25,19 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 	protected final String blockType;
 	protected final String blockGroup;
 	protected final String orderKey;
+	protected String blockConfigurationName;
 
 	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
-		this(blockID, title, tooltip, columnType, null, null, null, formatter, null, path);
+		this(blockID, title, tooltip, columnType, null, null, null, formatter, null, null, path);
+	}
+	
+	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final String blockType, String blockGroup, final String orderKey,
+			final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement... path) {
+		this(blockID, title, tooltip, columnType, blockType, blockGroup, orderKey, formatter, manipulator, null, path);
 	}
 
 	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final String blockType, String blockGroup, final String orderKey,
-			final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement... path) {
+			final ICellRenderer formatter, final ICellManipulator manipulator, final String configurationName, final ETypedElement... path) {
 		this.blockID = blockID;
 		this.columnName = title;
 		this.blockDisplayName = title;
@@ -43,10 +49,11 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 		this.blockType = blockType;
 		this.blockGroup = blockGroup;
 		this.orderKey = orderKey;
+		this.blockConfigurationName = configurationName;
 	}
 
 	protected SimpleEmfBlockColumnFactory(final String blockID, final String title, final String blockName, final String tooltip, final ColumnType columnType, final String blockType,
-			String blockGroup, final String orderKey, final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement... path) {
+			String blockGroup, final String orderKey, final ICellRenderer formatter, final ICellManipulator manipulator, final String configurationName, final ETypedElement... path) {
 		this.blockID = blockID;
 		this.columnName = title;
 		this.blockDisplayName = blockName;
@@ -58,13 +65,13 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 		this.blockType = blockType;
 		this.blockGroup = blockGroup;
 		this.orderKey = orderKey;
+		this.blockConfigurationName = configurationName;
 	}
 
 	@Override
 	public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
-		final ColumnBlock block = blockManager.createBlock(blockID, blockDisplayName, blockType, blockGroup, orderKey, columnType);
+		final ColumnBlock block = blockManager.createBlock(blockID, blockDisplayName, blockType, blockGroup, orderKey, columnType, blockConfigurationName);
 		block.tooltip = tooltip;
 		return blockManager.createColumn(block, columnName, formatter, manipulator, path);
 	}
-
 }
