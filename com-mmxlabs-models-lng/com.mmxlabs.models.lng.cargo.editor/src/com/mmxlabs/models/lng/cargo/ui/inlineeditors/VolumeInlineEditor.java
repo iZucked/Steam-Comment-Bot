@@ -230,7 +230,8 @@ public class VolumeInlineEditor extends UnsettableInlineEditor implements Modify
 	@Override
 	protected void updateValueDisplay(final Object value) {
 		if (text != null) {
-			updateBackgroundColour(text.isEmpty());
+			boolean a = !valueIsSet();
+			updateBackgroundColour(a || text.isEmpty());
 			text.setValue(scale(value));
 		}
 	}
@@ -293,7 +294,8 @@ public class VolumeInlineEditor extends UnsettableInlineEditor implements Modify
 		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
 		if (text != null) {
-			updateBackgroundColour(!controlsEnabled);
+			boolean a = !valueIsSet();
+			updateBackgroundColour(a || text.isEmpty());
 			text.getControl().setEnabled(controlsEnabled);
 		}
 		if (unitPrefixLabel != null) {

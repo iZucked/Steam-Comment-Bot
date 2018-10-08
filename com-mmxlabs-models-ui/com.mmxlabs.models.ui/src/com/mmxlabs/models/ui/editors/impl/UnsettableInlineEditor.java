@@ -307,7 +307,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (setButton != null) {
 			setButton.setEnabled(controlsEnabled);
 			if (inner != null) {
-				inner.setEnabled(setButton.getSelection());
+				inner.setEnabled(!canOverride() || setButton.getSelection());
 			}
 		} else if (inner != null) {
 			inner.setEnabled(controlsEnabled);
@@ -350,7 +350,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (input instanceof MMXObject) {
 			final MMXObject mmxinput = (MMXObject) input;
 			final DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
-			if (di != null) { // && di.getDelegateFeature() == feature) {
+			if (di != null && di.getDelegateFeature() != null) { // && di.getDelegateFeature() == feature) {
 				return true;
 			}
 

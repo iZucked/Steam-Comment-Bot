@@ -288,7 +288,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
 		if (text != null) {
-			updateBackgroundColour(!controlsEnabled);
+			boolean a = !valueIsSet();
+			updateBackgroundColour(a || text.isEmpty());
 			text.getControl().setEnabled(controlsEnabled);
 		}
 		if (unitPrefixLabel != null) {
