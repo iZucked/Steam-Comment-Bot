@@ -22,7 +22,7 @@ import com.mmxlabs.scenario.service.dirscan.internal.Activator;
  */
 
 public class DirScanServicePreferencesPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-
+	
 	public DirScanServicePreferencesPage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());

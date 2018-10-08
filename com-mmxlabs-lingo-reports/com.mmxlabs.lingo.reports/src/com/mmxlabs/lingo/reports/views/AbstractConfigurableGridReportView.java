@@ -65,7 +65,6 @@ import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
-import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -80,6 +79,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
+import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -431,7 +431,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			final Action configureColumnsAction = new Action("Configure Contents") {
 				@Override
 				public void run() {
-					final IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
+					final com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
 
 						@Override
 						public int getColumnIndex(final Object columnObj) {

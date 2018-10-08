@@ -32,6 +32,7 @@ public class ColumnBlock {
 	private boolean modeVisible = false;
 	public String blockID;
 	public String blockName;
+	public String configurationName;
 	public final String blockOrderKey;
 	private ColumnType columnType;
 	private final String blockType;
@@ -64,13 +65,14 @@ public class ColumnBlock {
 	private GridColumnGroup gridColumnGroup;
 	private boolean forceGroup;
 
-	public ColumnBlock(final String blockID, final String blockName, final String blockType, final String blockGroup, final String blockOrderKey, final ColumnType columnType) {
+	public ColumnBlock(final String blockID, final String blockName, final String blockType, final String blockGroup, final String blockOrderKey, final ColumnType columnType, final String configurationName) {
 		this.blockID = blockID;
 		this.blockName = blockName;
 		this.blockType = blockType;
 		this.blockGroup = blockGroup;
 		this.columnType = columnType;
 		this.blockOrderKey = blockOrderKey;
+		this.configurationName = configurationName;
 	}
 
 	public void addColumn(final ColumnHandler handler) {

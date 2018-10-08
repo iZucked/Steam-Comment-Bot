@@ -58,7 +58,7 @@ public class MultiObjectEmfBlockColumnFactory extends EmfBlockColumnFactory {
 
 	@Override
 	public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
-		final ColumnBlock block = blockManager.createBlock(blockID, blockDisplayName, blockType, blockGroup, orderKey, columnType);
+		final ColumnBlock block = blockManager.createBlock(blockID, blockDisplayName, blockType, blockGroup, orderKey, columnType,null);
 		block.tooltip = tooltip;
 		return blockManager.createColumn(block, columnName, formatter, manipulator, path);
 	}

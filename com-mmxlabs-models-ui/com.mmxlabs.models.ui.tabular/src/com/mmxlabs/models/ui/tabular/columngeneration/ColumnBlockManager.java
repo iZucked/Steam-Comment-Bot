@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.tabular.columngeneration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -69,10 +71,10 @@ public class ColumnBlockManager {
 	}
 
 	public ColumnBlock createBlock(final String blockID, final String blockName, final ColumnType columnType) {
-		return createBlock(blockID, blockName, null, null, null, columnType);
+		return createBlock(blockID, blockName, null, null, null, columnType, null);
 	}
 
-	public ColumnBlock createBlock(final String blockID, final String blockName, final String blockType, final String blockGroup, final String blockOrderKey, final ColumnType columnType) {
+	public ColumnBlock createBlock(final String blockID, final String blockName, final String blockType, final String blockGroup, final String blockOrderKey, final ColumnType columnType, final String blockConfigurationName) {
 
 		for (final ColumnBlock block : blocks) {
 			if (block.blockID.equals(blockID)) {
@@ -80,7 +82,7 @@ public class ColumnBlockManager {
 			}
 		}
 
-		final ColumnBlock namedBlock = new ColumnBlock(blockID, blockName, blockType, blockGroup, blockOrderKey, columnType);
+		final ColumnBlock namedBlock = new ColumnBlock(blockID, blockName, blockType, blockGroup, blockOrderKey, columnType, blockConfigurationName);//FM
 		blocks.add(namedBlock);
 
 		return namedBlock;
@@ -305,6 +307,41 @@ public class ColumnBlockManager {
 
 			setBlockIDOrder(new ArrayList<>(order));
 		}
+	}
+	
+	public void saveToPreferences(final String key, final IPreferenceStore prefStore) {
+		final List<String> prefs = new ArrayList<String>();
+		for (final String blockID : getBlockIDOrder()) {
+			final ColumnBlock block = getBlockByID(blockID);
+			if (block == null) {
+				continue;
+			}
+			if (block.getVisible()) {
+				prefs.add(blockID);
+			}
+		}
+		if (!prefs.isEmpty()) {
+			prefStore.setValue(key, String.join(",", prefs));
+		}
+	}
+	
+	public int initFromPreferences(final String key, final IPreferenceStore prefStore) {
+		int counter = 0;
+		final String ps = prefStore.getString(key);
+		if (ps != null) {
+			final String[] prefs = ps.split(",");
+			if (prefs.length > 0) {
+				for (final String blockID : prefs) {
+					final ColumnBlock block = getBlockByID(blockID);
+					if (block == null) {
+						continue;
+					}
+					block.setUserVisible(true);
+					counter++;
+				}
+			}
+		}
+		return counter;
 	}
 
 	public void setGrid(final Grid grid) {

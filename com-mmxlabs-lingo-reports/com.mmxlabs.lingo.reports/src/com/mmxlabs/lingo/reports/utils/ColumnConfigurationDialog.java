@@ -61,6 +61,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 
 /**
  * Adapted from MarkersViewColumnsDialog in Eclipse code:
@@ -854,48 +855,6 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		} catch (final NumberFormatException ex) {
 			// ignore
 		}
-	}
-
-	/**
-	 * Update various aspects of a columns from a viewer such {@link TableViewer}
-	 */
-	public interface IColumnInfoProvider {
-
-		/**
-		 * Get corresponding index for the column
-		 * 
-		 * @param columnObj
-		 */
-		public int getColumnIndex(Object columnObj);
-
-		/**
-		 * Get the width of the column
-		 * 
-		 * @param columnObj
-		 */
-		public int getColumnWidth(Object columnObj);
-
-		/**
-		 * Returns true if the column represented by parameters is showing in the viewer
-		 * 
-		 * @param columnObj
-		 */
-		public boolean isColumnVisible(Object columnObj);
-
-		/**
-		 * Returns true if the column represented by parameters is configured as movable
-		 * 
-		 * @param columnObj
-		 */
-		public boolean isColumnMovable(Object columnObj);
-
-		/**
-		 * Returns true if the column represented by parameters is configured as resizable
-		 * 
-		 * @param columnObj
-		 */
-		public boolean isColumnResizable(Object columnObj);
-
 	}
 
 	public static abstract class ColumnInfoAdapter implements IColumnInfoProvider {

@@ -44,6 +44,9 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.bindings.keys.IKeyLookup;
 import org.eclipse.jface.bindings.keys.KeyLookupFactory;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -134,6 +137,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
@@ -146,6 +150,8 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAdaptable {
 
+	private static final String COLUMN_VISIBILITY_KEY = "BulkTradesTablePane.COLUMN_VISIBILITY_KEY";
+	
 	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
 
 	@Inject(optional = true)
@@ -224,7 +230,24 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			TradesBasedColumnFactory.DISCHARGE_END_GROUP, //
 			TradesBasedColumnFactory.CARGO_END_GROUP //
 	};
+	// FM - properties +
+	private IPreferenceStore preferenceStore;// = Activator.getDefault().getPreferenceStore();
+	private IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			setInitialState();
+		}
+	};
+
+	@Override
+	public void dispose() {
+		if (preferenceStore != null) {
+			preferenceStore.removePropertyChangeListener(propertyChangeListener);
+		}
+		super.dispose();
+	}
+	// FM - properties -
 	private final EPackage customRowPackage = createCustomisedRowEcore();
 	private final ColumnFilters columnFilters;
 	private final Set<ITradesBasedFilterHandler> allColumnFilterHandlers = new HashSet<>();
@@ -252,6 +275,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		this.cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, ScenarioModelUtil.getCargoModel(scenarioModel),
 				ScenarioModelUtil.getCommercialModel(scenarioModel), Activator.getDefault().getModelFactoryRegistry());
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
+		preferenceStore = Activator.getDefault().getPreferenceStore();
+		preferenceStore.addPropertyChangeListener(propertyChangeListener);
 	}
 
 	@Override
@@ -263,7 +288,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		buildRowTransformerHandlers(rowTransformerHandlers);
 
 		buildToolbar();
-
+		setInitialState();
 	}
 
 	public Object getAdapter(final Class c) {
@@ -280,9 +305,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	}
 
 	private void buildToolbar() {
-		final Action newCargo = getNewCargoAction();
-		final Action newLoadSlot = getNewLoadSlotAction();
-		final Action newDischargeSlot = getNewDischargeSlotAction();
 		final Action addLoadSlotToDischarge = getAddLoadToDischargeAction();
 		final Action addDischargeSlotToLoad = getAddDischargeToLoadAction();
 
@@ -299,18 +321,10 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		toolbar.appendToGroup(VIEW_GROUP, new PackGridTreeColumnsAction(scenarioViewer));
 
 		final Action addAction = new AddAction("Add", addLoadSlotToDischarge, addDischargeSlotToLoad);
-		//
-		// final Action addAction = AddModelAction.create(CargoPackage.Literals.SLOT, getAddContext(CargoPackage.Literals.CARGO_MODEL__CARGOES),
-		// new Action[] { addLoadSlotToDischarge, addDischargeSlotToLoad });
 
 		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
-		// getToolBarManager().add(newCargo);
-		// getToolBarManager().add(newLoadSlot);
-		// getToolBarManager().add(newDischargeSlot);
-		// getToolBarManager().add(addLoadSlotToDischarge);
-		// getToolBarManager().add(addDischargeSlotToLoad);
 		final List<Action> filterActions = new LinkedList<>();
 		filterActions.add(new Action("Clear Filter") {
 			@Override
@@ -319,7 +333,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				scenarioViewer.refresh(false);
 			}
 		});
-		
+
 		for (final ITradesBasedFilterHandler filterHandler : getFiltersList(allColumnFilterHandlers)) {
 			if (filterHandler.activateAction(columnFilters, activeColumnFilterHandlers, this) != null) {
 				filterActions.add(filterHandler.activateAction(columnFilters, activeColumnFilterHandlers, this));
@@ -339,16 +353,61 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
-		// final Action lockAction = new Action("Lock") {
-		// };
-		// lockAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/lock.gif"));
-		// toolbar.appendToGroup(VIEW_GROUP, lockAction);
+		final Action configureColumnsAction = new Action("Configure Contents") {
+			@Override
+			public void run() {
+
+				final List<ColumnBlock> items = getBlockManager().getBlockOrderFromGrid();
+				ColumnSelectionDialog myDialog = new ColumnSelectionDialog(part.getSite().getShell(), items);
+				final List<ColumnBlock> results = myDialog.pick(part.getSite().getShell(), items, null);
+				setState(results);
+				scenarioViewer.refresh();
+			}
+		};
+		getMenuManager().add(configureColumnsAction);
+		getMenuManager().update(true);
+		//
 		toolbar.update(true);
+	}
+	private ColumnBlockManager getBlockManager() {
+		return columnBlockManager;
+	}
+
+	private void setInitialState() {
+		//hide all
+		for (final String blockId : getBlockManager().getBlockIDOrder()) {
+			getBlockManager().getBlockByID(blockId).setUserVisible(false);
+		}
+		//init from file the settings
+		int numberOfVisibleColumns = columnBlockManager.initFromPreferences(COLUMN_VISIBILITY_KEY, preferenceStore);
+		if (numberOfVisibleColumns == 0) {
+			for (final String blockId : getBlockManager().getBlockIDOrder()) {
+				getBlockManager().getBlockByID(blockId).setUserVisible(true);
+			}
+		}
+		scenarioViewer.refresh();
+	}
+	
+	private void setState(List<ColumnBlock> list) {
+		if (list != null) {
+			if(!list.isEmpty()) {
+				//hide all
+				for (final String blockId : getBlockManager().getBlockIDOrder()) {
+					getBlockManager().getBlockByID(blockId).setUserVisible(false);
+				}
+				//init from file the settings
+				for (final ColumnBlock cb: list) {
+					cb.setUserVisible(true);
+				}
+				scenarioViewer.refresh();
+				columnBlockManager.saveToPreferences(COLUMN_VISIBILITY_KEY, preferenceStore);
+			}
+		}
 	}
 
 	private List<ITradesBasedFilterHandler> getFiltersList(final Set<ITradesBasedFilterHandler> allColumnFilterHandlers) {
 		if (allColumnFilterHandlers.isEmpty()) {
-			return Collections.<ITradesBasedFilterHandler> emptyList();
+			return Collections.<ITradesBasedFilterHandler>emptyList();
 		}
 		final List<ITradesBasedFilterHandler> filters = new LinkedList<>(allColumnFilterHandlers);
 		Collections.sort(filters, new Comparator<ITradesBasedFilterHandler>() {
@@ -774,9 +833,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				}
 				if (columnFilters.isColumnVisible(handler.block)) {
 					column.setVisible(true);
+					handler.block.setUserVisible(true);
 				} else {
 					column.setVisible(false);
+					handler.block.setUserVisible(false);
 				}
+				handler.block.setViewState(false, false);
 				columnOrderList.add(scenarioViewer.getGrid().indexOf(column));
 			}
 		}
@@ -784,6 +846,17 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		scenarioViewer.getGrid().setColumnOrder(CollectionsUtil.integersToIntArray(columnOrderList));
 
 		scenarioViewer.getGrid().recalculateHeader();
+		setColumnsImmovable();
+		
+		columnBlockManager.initFromPreferences(COLUMN_VISIBILITY_KEY, preferenceStore);
+	}
+
+	private void setColumnsImmovable() {
+		if (scenarioViewer != null) {
+			for (final GridColumn column : scenarioViewer.getGrid().getColumns()) {
+				column.setMoveable(false);
+			}
+		}
 	}
 
 	public void setColumnsVisibility() {
@@ -803,22 +876,22 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	protected void registerColumnFilterHandlers() {
 
 		{
-            SalesContractTradesBasedFilterHandler handler = new SalesContractTradesBasedFilterHandler();
-            registerHandler(handler, true);
-        }
+			SalesContractTradesBasedFilterHandler handler = new SalesContractTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
 		{
-            DischargePortTradesBasedFilterHandler handler = new DischargePortTradesBasedFilterHandler();
-            registerHandler(handler, true);
-        }
+			DischargePortTradesBasedFilterHandler handler = new DischargePortTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
 		{
-            LoadPortTradesBasedFilterHandler handler = new LoadPortTradesBasedFilterHandler();
-            registerHandler(handler, true);
-        }
+			LoadPortTradesBasedFilterHandler handler = new LoadPortTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
 		{
-            PurchaseContractTradesBasedFilterHandler handler = new PurchaseContractTradesBasedFilterHandler();
-            registerHandler(handler, true);
-        }
-		
+			PurchaseContractTradesBasedFilterHandler handler = new PurchaseContractTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
+
 		if (columnFilterExtensions != null) {
 			for (final ITradeBasedBulkColumnFilterExtension ext : columnFilterExtensions) {
 				final ITradesBasedFilterHandler handler = ext.getFactory();
@@ -826,7 +899,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 		}
 	}
-	
+
 	private void registerHandler(ITradesBasedFilterHandler handler, boolean activate) {
 		allColumnFilterHandlers.add(handler);
 		if (activate) {
@@ -990,7 +1063,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 
 			/**
-			 * Overridden method to convert internal RowData objects into a collection of EMF Objects
+			 * Overridden method to convert internal RowData objects into a collection of
+			 * EMF Objects
 			 */
 			protected void updateSelection(final ISelection selection) {
 
@@ -1386,8 +1460,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		/**
 		 * Subclasses should fill their menu with actions here.
 		 * 
-		 * @param menu
-		 *            the menu which is about to be displayed
+		 * @param menu the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 			{
@@ -1549,7 +1622,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			newSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 			newSlot.setOptional(false);
 			newSlot.setName("");
-			// Set window so that via default sorting inserts new slot at current table position
+			// Set window so that via default sorting inserts new slot at current table
+			// position
 			if (referenceRowData != null) {
 				final Slot primarySortSlot = isLoad ? referenceRowData.getLoadSlot() : referenceRowData.getDischargeSlot();
 				final Slot secondarySortSlot = isLoad ? referenceRowData.getDischargeSlot() : referenceRowData.getLoadSlot();

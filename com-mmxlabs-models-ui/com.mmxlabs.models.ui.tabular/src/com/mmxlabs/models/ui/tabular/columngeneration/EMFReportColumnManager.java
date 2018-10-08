@@ -56,8 +56,8 @@ public class EMFReportColumnManager {
 		}
 	}
 
-	public void registerColumn(final String reportType, final String columnID, final String title, String tooltip, final ColumnType columnType, final String blockGroup, final String blockType, final String orderKey, final ICellRenderer formatter, final ICellManipulator manipulator, final ETypedElement... path) {
-		registerColumn(reportType, new SimpleEmfBlockColumnFactory(columnID, title, tooltip, columnType, blockGroup, blockType, orderKey, formatter, manipulator, path));
+	public void registerColumn(final String reportType, final String columnID, final String title, String tooltip, final ColumnType columnType, final String blockGroup, final String blockType, final String orderKey, final ICellRenderer formatter, final ICellManipulator manipulator, final String configurationName, final ETypedElement... path) {
+		registerColumn(reportType, new SimpleEmfBlockColumnFactory(columnID, title, tooltip, columnType, blockGroup, blockType, orderKey, formatter, manipulator, configurationName, path));
 	}
 	
 
