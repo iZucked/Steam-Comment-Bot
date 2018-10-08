@@ -748,7 +748,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@Override
 			public void propertyChange(final PropertyChangeEvent event) {
 				final String property = event.getProperty();
-				if (PreferenceConstants.P_CONTACTS_TO_CONSIDER_OPEN.equals(property)) {
+				if (PreferenceConstants.P_CONTRACTS_TO_CONSIDER_OPEN.equals(property)) {
 					final String value = preferenceStore.getString(property);
 					filters_openContracts.clear();
 					if (value != null) {
@@ -767,7 +767,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		};
 		preferenceStore.addPropertyChangeListener(propertyChangeListener);
-		final String value = preferenceStore.getString(PreferenceConstants.P_CONTACTS_TO_CONSIDER_OPEN);
+		final String value = preferenceStore.getString(PreferenceConstants.P_CONTRACTS_TO_CONSIDER_OPEN);
 		if (value != null) {
 			if (value.contains(",")) {
 				final String[] split = value.split(",");
@@ -1757,7 +1757,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private enum CargoFilterOption {
-		NONE, CARGO, LONG, SHORT
+		NONE, CARGO, LONG, SHORT, OPEN
 	}
 
 	private class TradesCargoFilter extends ViewerFilter {
@@ -1781,31 +1781,41 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return false;
 				}
 			case LONG:
-				if (c != null && cargo == null && c.getLoadSlot() != null) {
-					return true;
-				} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() instanceof SpotSlot) {
-					return true;
-				} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() != null) {
-					final DischargeSlot s = c.getDischargeSlot();
-					final Contract contract = s.getContract();
-					if (contract != null && contract.getName() != null) {
-						return filters_openContracts.contains(contract.getName().toLowerCase());
-					}
-				}
-				return false;
+				return isLong(c, cargo);
 			case SHORT:
-				if (c != null && cargo == null && c.getDischargeSlot() != null) {
-					return true;
-				} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() instanceof SpotSlot) {
-					return true;
-				} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() != null) {
-					final LoadSlot s = c.getLoadSlot();
-					final Contract contract = s.getContract();
-					if (contract != null && contract.getName() != null) {
-						return filters_openContracts.contains(contract.getName().toLowerCase());
-					}
+				return isShort(c, cargo);
+			case OPEN:
+				return isLong(c, cargo) || isShort(c, cargo);
+			}
+			return false;
+		}
+
+		private boolean isShort(RowData c, Cargo cargo) {
+			if (c != null && cargo == null && c.getDischargeSlot() != null) {
+				return true;
+			} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() instanceof SpotSlot) {
+				return true;
+			} else if (c != null && cargo != null && c.getDischargeSlot() != null && c.getLoadSlot() != null) {
+				final LoadSlot s = c.getLoadSlot();
+				final Contract contract = s.getContract();
+				if (contract != null && contract.getName() != null) {
+					return filters_openContracts.contains(contract.getName().toLowerCase());
 				}
-				return false;
+			}
+			return false;
+		}
+
+		private boolean isLong(RowData c, Cargo cargo) {
+			if (c != null && cargo == null && c.getLoadSlot() != null) {
+				return true;
+			} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() instanceof SpotSlot) {
+				return true;
+			} else if (c != null && cargo != null && c.getLoadSlot() != null && c.getDischargeSlot() != null) {
+				final DischargeSlot s = c.getDischargeSlot();
+				final Contract contract = s.getContract();
+				if (contract != null && contract.getName() != null) {
+					return filters_openContracts.contains(contract.getName().toLowerCase());
+				}
 			}
 			return false;
 		}
@@ -1877,9 +1887,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							scenarioViewer.refresh(false);
 						}
 					};
+					final Action openAction = new Action("Open Only") {
+						@Override
+						public void run() {
+							tradesCargoFilter.option = CargoFilterOption.OPEN;
+							scenarioViewer.refresh(false);
+						}
+					};
 					addActionToMenu(cargoesAction, menu);
 					addActionToMenu(longsAction, menu);
 					addActionToMenu(shortsAction, menu);
+					addActionToMenu(openAction, menu);
 				}
 			};
 			addActionToMenu(dmca, menu);

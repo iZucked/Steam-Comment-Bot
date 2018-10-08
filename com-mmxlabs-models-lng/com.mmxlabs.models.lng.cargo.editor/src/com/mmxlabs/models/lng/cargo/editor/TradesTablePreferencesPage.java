@@ -37,7 +37,7 @@ public class TradesTablePreferencesPage extends FieldEditorPreferencePage implem
 			final Label label = new Label(getFieldEditorParent(), SWT.WRAP);
 			label.setText("Contract to consider as open when computing Long/Shorts.For multiple names, separate with a comma");
 			label.setLayoutData(labelLayoutData.create());
-			final StringFieldEditor leeway = new StringFieldEditor(PreferenceConstants.P_CONTACTS_TO_CONSIDER_OPEN, "&Open contract names:", getFieldEditorParent());
+			final StringFieldEditor leeway = new StringFieldEditor(PreferenceConstants.P_CONTRACTS_TO_CONSIDER_OPEN, "&Open contract names:", getFieldEditorParent());
 			addField(leeway);
 		}
 
