@@ -525,7 +525,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 				final IAnnotatedSolution bestSolution = optimiser.getBestSolution();
 				final ISequences bestRawSequences = optimiser.getBestRawSequences();
 
-				List<NonDominatedSolution> sortedArchive = optimiser.getSortedArchive();
+				List<NonDominatedSolution> sortedArchive = optimiser.getSortedArchive(true);
 
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = sortedArchive.stream() //
 						.distinct() //
