@@ -20,6 +20,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -349,8 +350,28 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			switch (mode) {
 			case REPLACE:
 				final Object newValue = (!feature.isUnsettable() || proxy.eIsSet(feature)) ? proxy.eGet(feature) : SetCommand.UNSET_VALUE;
+				boolean isContainment = false;
+				if (feature instanceof EReference) {
+					EReference eReference = (EReference) feature;
+					if (eReference.isContainment()) {
+						isContainment = true;
+
+					}
+				}
 				for (final EObject original : proxyCounterparts.get(proxy)) {
-					command.append(SetCommand.create(commandHandler.getEditingDomain(), original, feature, newValue));
+					Object value = newValue;
+					if (isContainment) {
+						if (feature.isMany()) {
+							List<EObject> l = new LinkedList<>();
+							for (Object o : (List<?>) newValue) {
+								l.add(EcoreUtil.copy((EObject) o));
+							}
+							value = l;
+						} else {
+							value = EcoreUtil.copy((EObject) newValue);
+						}
+					}
+					command.append(SetCommand.create(commandHandler.getEditingDomain(), original, feature, value));
 				}
 				break;
 			case UNION:
@@ -472,6 +493,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 
 			return new IInlineEditor() {
 				private Pair<EObject, EStructuralFeature> key;
+				private Pair<EObject, EStructuralFeature> key2;
 
 				@Override
 				public void processValidation(final IStatus status) {
@@ -505,7 +527,19 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 
 					final ToolBarManager manager = new ToolBarManager(SWT.NONE);
 					final Pair<EObject, EStructuralFeature> pair = new Pair<EObject, EStructuralFeature>(null, getFeature());
+					// Check for secondary override feature.
+					Pair<EObject, EStructuralFeature> l_pair2 = null;
+					if (pair.getSecond() != null) {
+						for (EStructuralFeature f : pair.getSecond().getEContainingClass().getEAllAttributes()) {
+							if (f.getName().equals(pair.getSecond().getName() + "Override")) {
+								l_pair2 = new Pair<>(null, f);
+							}
+						}
+					}
+					final Pair<EObject, EStructuralFeature> pair2 = l_pair2;
+
 					this.key = pair;
+					this.key2 = pair2;
 					manager.add(new Action("Set", IAction.AS_CHECK_BOX) {
 						@Override
 						public void run() {
@@ -513,8 +547,14 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 							proxy.setEditorEnabled(isChecked());
 							if (isChecked()) {
 								featuresToSet.put(pair, SetMode.REPLACE);
+								if (pair2 != null) {
+									featuresToSet.put(pair2, SetMode.REPLACE);
+								}
 							} else {
 								featuresToSet.remove(pair);
+								if (pair2 != null) {
+									featuresToSet.remove(pair2);
+								}
 							}
 						}
 					});
@@ -550,6 +590,9 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					// FIXME: Fixed the NPE by key == null, but need to investigate why key is sometimes null (new vessel override UI)
 					if (key != null) {
 						key.setFirst(proxy.getEditorTarget());
+					}
+					if (key2 != null) {
+						key2.setFirst(proxy.getEditorTarget());
 					}
 				}
 
