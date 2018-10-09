@@ -20,7 +20,6 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -61,7 +60,6 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
-import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
@@ -90,25 +88,23 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	private final IInlineEditorWrapper wrapper = new EditorWrapper();
 	private final ICommandHandler commandHandler;
 
-	private DefaultExtraValidationContext validationContext;
-
 	/**
 	 * Track all the controls that have been created, so we can disable them after setInput(), which will re-enable them otherwise.
 	 */
-	private final List<IInlineEditor> controlsToDisable = new LinkedList<IInlineEditor>();
+	private final List<IInlineEditor> controlsToDisable = new LinkedList<>();
 
 	/**
 	 * This list of EObjects contains the proxy structure being edited in place of the real input
 	 */
-	private final List<EObject> proxies = new ArrayList<EObject>();
+	private final List<EObject> proxies = new ArrayList<>();
 
 	/**
 	 * This maps from proxy objects and features to set modes
 	 */
-	private final Map<Pair<EObject, EStructuralFeature>, SetMode> featuresToSet = new HashMap<Pair<EObject, EStructuralFeature>, SetMode>();
+	private final Map<Pair<EObject, EStructuralFeature>, SetMode> featuresToSet = new HashMap<>();
 	private EClass editingClass;
 	private List<EObject> editedObjects;
-	private final Map<EObject, List<EObject>> proxyCounterparts = new HashMap<EObject, List<EObject>>();
+	private final Map<EObject, List<EObject>> proxyCounterparts = new HashMap<>();
 	private IDisplayCompositeFactory displayCompositeFactory;
 	// private IScenarioEditingLocation scenarioEditingLocation;
 	private IDialogEditingContext dialogContext;
@@ -145,13 +141,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		this.observablesManager = new ObservablesManager();
 
 		// This call means we do not need to manually manage our databinding objects lifecycle manually.
-		observablesManager.runAndCollect(new Runnable() {
-
-			@Override
-			public void run() {
-				doCreateFormContent();
-			}
-		});
+		observablesManager.runAndCollect(() -> doCreateFormContent());
 
 	}
 
@@ -223,7 +213,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	}
 
 	private void createProxies() {
-		final List<List<EObject>> ranges = new ArrayList<List<EObject>>(editedObjects.size());
+		final List<List<EObject>> ranges = new ArrayList<>(editedObjects.size());
 
 		List<Class<?>> classes = null;
 
@@ -305,7 +295,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		// now set equal attributes.
 		for (int i = 0; i < proxies.size(); i++) {
 			final EObject proxy = proxies.get(i);
-			final ArrayList<EObject> originals = new ArrayList<EObject>(editedObjects.size());
+			final List<EObject> originals = new ArrayList<>(editedObjects.size());
 			for (final List<EObject> range : ranges) {
 
 				// Ensure originals array is in the same order as all other arrays.
@@ -376,18 +366,18 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				break;
 			case UNION:
 			case INTERSECTION:
-				final List<Object> newValues = (List) proxy.eGet(feature);
+				final List<?> newValues = (List<?>) proxy.eGet(feature);
 				for (final EObject original : proxyCounterparts.get(proxy)) {
-					final List<Object> oldValues = (List) original.eGet(feature);
+					final List<?> oldValues = (List<?>) original.eGet(feature);
 
-					final LinkedHashSet<Object> lhs = new LinkedHashSet<Object>();
+					final Set<Object> lhs = new LinkedHashSet<>();
 					lhs.addAll(oldValues);
 					if (mode == SetMode.UNION) {
 						lhs.addAll(newValues);
 					} else {
 						lhs.retainAll(newValues);
 					}
-					final ArrayList<Object> combination = new ArrayList<Object>(lhs);
+					final List<Object> combination = new ArrayList<>(lhs);
 					command.append(SetCommand.create(commandHandler.getEditingDomain(), original, feature, combination));
 				}
 				break;
@@ -459,7 +449,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		}
 
 		// now do contained objects
-		final List<EObject> containedObjects = new ArrayList<EObject>(multiples.size());
+		final List<EObject> containedObjects = new ArrayList<>(multiples.size());
 		for (final EReference c : target.eClass().getEAllContainments()) {
 			if (c.isMany()) {
 				continue;
@@ -492,13 +482,12 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			}
 
 			return new IInlineEditor() {
-				private Pair<EObject, EStructuralFeature> key;
-				private Pair<EObject, EStructuralFeature> key2;
+				private Pair<EObject, EStructuralFeature> key; // Main feature pair
+				private Pair<EObject, EStructuralFeature> key2; // optional override feature pair
 
 				@Override
 				public void processValidation(final IStatus status) {
 					proxy.processValidation(status);
-
 				};
 
 				@Override
@@ -526,7 +515,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					controlsToDisable.add(proxy);
 
 					final ToolBarManager manager = new ToolBarManager(SWT.NONE);
-					final Pair<EObject, EStructuralFeature> pair = new Pair<EObject, EStructuralFeature>(null, getFeature());
+					final Pair<EObject, EStructuralFeature> pair = new Pair<>(null, getFeature());
 					// Check for secondary override feature.
 					Pair<EObject, EStructuralFeature> l_pair2 = null;
 					if (pair.getSecond() != null) {
