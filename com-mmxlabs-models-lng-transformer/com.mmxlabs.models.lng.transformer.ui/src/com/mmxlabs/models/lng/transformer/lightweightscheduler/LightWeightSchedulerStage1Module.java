@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.transformer.optimiser.longterm.GoogleORToolsLongTe
 import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimisationData;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
@@ -85,7 +86,8 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 		long[] vesselReward = new long[vessels.size()];
 		if (vesselSlotCountFitnessProvider != null) {
 			for (int i = 0; i < vessels.size(); i++) {
-				vesselReward[i] = vesselSlotCountFitnessProvider.getWeightForVessel(vessels.get(i));
+				vesselReward[i] = vesselSlotCountFitnessProvider.getWeightForVessel(vessels.get(i))
+						* Calculator.ScaleFactor; // note: scaling is done here for LWO, different scaling in LSO
 			}
 		}
 		return vesselReward;

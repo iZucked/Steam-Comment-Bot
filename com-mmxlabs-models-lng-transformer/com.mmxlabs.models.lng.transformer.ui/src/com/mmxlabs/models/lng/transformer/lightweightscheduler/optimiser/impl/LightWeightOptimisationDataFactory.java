@@ -108,7 +108,7 @@ public class LightWeightOptimisationDataFactory {
 		List<@NonNull IVesselAvailability> vessels = getVessels();
 
 		// calculate shipping costs between two cargoes
-		Long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
+		long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
 
 		// set vessel restrictions
 		ArrayList<Set<Integer>> cargoVesselRestrictions = cargoVesselRestrictionsMatrixProducer.getIntegerCargoVesselRestrictions(shippedCargoes, vessels,
@@ -130,7 +130,7 @@ public class LightWeightOptimisationDataFactory {
 		long[][] cargoCharterCostPerAvailability = cargoToCargoCostCalculator.getCargoCharterCostPerAvailability(shippedCargoes, vessels);
 
 		// Vessel Capacity
-		double[] capacity = getVesselCapacities(vessels);
+		long[] capacity = getVesselCapacities(vessels);
 
 		// Cargo Volume
 		long[] cargoesVolumes = getCargoVolumes(shippedCargoes);
@@ -139,19 +139,20 @@ public class LightWeightOptimisationDataFactory {
 		ITimeWindow[] vesselStartWindows = vessels.stream().map(v->v.getStartRequirement().getTimeWindow()).toArray(size -> new ITimeWindow[size]);
 		ITimeWindow[] vesselEndWindows = vessels.stream().map(v->v.getEndRequirement().getTimeWindow()).toArray(size -> new ITimeWindow[size]);
 
+		// Cargo windows
 		int[] cargoStartSlotDurations = cargoToCargoCostCalculator.getCargoStartSlotDurations(shippedCargoes);
 		int[] cargoEndSlotDurations = cargoToCargoCostCalculator.getCargoEndSlotDurations(shippedCargoes);
-		
+		CargoWindowData[] cargoWindows = calculateCargoWindows(shippedCargoes, minCargoStartToEndSlotTravelTimesPerVessel, cargoIndexes);
+
 		LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
 				minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes, cargoDetails,
-				cargoCharterCostPerAvailability, cargoIndexes, eventIndexes, vesselStartWindows, vesselEndWindows, cargoStartSlotDurations, cargoEndSlotDurations);
+				cargoCharterCostPerAvailability, cargoIndexes, eventIndexes, vesselStartWindows, vesselEndWindows, cargoStartSlotDurations, cargoEndSlotDurations, cargoWindows);
 
 		return lightWeightOptimisationData;
 	}
 
-	// ALEX_TODO: unit conversion issue
-	private double[] getVesselCapacities(List<@NonNull IVesselAvailability> vessels) {
-		double[] capacity = vessels.stream().mapToDouble(v -> v.getVessel().getCargoCapacity() / 1000).toArray();
+	private long[] getVesselCapacities(List<@NonNull IVesselAvailability> vessels) {
+		long[] capacity = vessels.stream().mapToLong(v -> v.getVessel().getCargoCapacity()).toArray();
 		return capacity;
 	}
 
@@ -226,6 +227,30 @@ public class LightWeightOptimisationDataFactory {
 		List<ILoadOption> longtermLoads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
 		return longtermLoads;
 	}
+	
+	private CargoWindowData[] calculateCargoWindows(List<List<IPortSlot>> cargoes, int[][] cargoMinTravelTimes, Set<Integer> cargoIndexes) {
+		CargoWindowData[] cargoWindows = new CargoWindowData[cargoes.size()];
+
+		for (int i = 0; i < cargoes.size(); i++) {
+			if (cargoIndexes.contains(i)) {
+				ITimeWindow loadTW = cargoes.get(i).get(0).getTimeWindow();
+				ITimeWindow dischargeTW = cargoes.get(i).get(1).getTimeWindow();
+				
+				cargoWindows[i] = new CargoWindowData(loadTW.getInclusiveStart(), loadTW.getExclusiveEnd(),
+						dischargeTW.getInclusiveStart(), dischargeTW.getExclusiveEnd());
+			} else {
+				ITimeWindow tw  = cargoes.get(i).get(0).getTimeWindow();
+				
+				// vessel events are vessel independent for duration so get time from first vessel
+				cargoWindows[i] = new CargoWindowData(tw.getInclusiveStart(), tw.getExclusiveEnd(),
+						tw.getInclusiveStart() + cargoMinTravelTimes[i][0],
+						tw.getExclusiveEnd() + cargoMinTravelTimes[i][0]);
+			}
+		}
+		
+		return cargoWindows;
+	}
+
 
 	private void printPairings(Map<ILoadOption, IDischargeOption> pairingsMap) {
 		System.out.println("####Pairings####");

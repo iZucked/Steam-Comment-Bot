@@ -7,16 +7,22 @@ package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnes
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.inject.Inject;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.CargoWindowData;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightCargoDetails;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.tabu.CargoWindowData;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitnessFunction {
-	private static final double LATENESS_FINE = 10_000_000;
-	private static final double UNFULFILLED_FINE = 10_000_000;
-	private static final double VESSEL_EVENT_PNL = 200_000_000.0;
+	@Inject
+	private ILightWeightOptimisationData lightWeightOptimisationData;
+	
+	private static final long LATENESS_FINE = 10_000_000L * Calculator.ScaleFactor;
+	private static final long UNFULFILLED_FINE = 10_000_000L * Calculator.ScaleFactor;
+	private static final long VESSEL_EVENT_PNL = 200_000_000L * Calculator.ScaleFactor;
 
 	private static final class CargoTimeDetails {
 		int start;
@@ -36,11 +42,9 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 	}
 
 	@Override
-	public Double evaluate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, CargoWindowData[] cargoWindows, double[] volumes,
-			LightWeightCargoDetails[] cargoDetails, double[][] cargoDailyCharterCostPerAvailabilityProcessed, ITimeWindow[] vesselStartTimeWindows, ITimeWindow[] vesselEndTimeWindows, int[] cargoEndDurations) {
-		double totalCost = 0;
-		double totalPNL = 0;
+	public long evaluate(List<List<Integer>> sequences) {
+		long totalCost = 0;
+		long totalPNL = 0;
 		long totalLateness = 0;
 		int used = 0;
 
@@ -48,46 +52,57 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 			List<Integer> sequence = sequences.get(availability);
 			used += sequence.size();
 			// calculate costs
-			double cost = calculateVariableCostOnSequence(sequence, availability, cargoToCargoCostsOnAvailability);
+			long cost = calculateVariableCostOnSequence(sequence, availability, lightWeightOptimisationData.getCargoToCargoCostsOnAvailability());
 			// calculate lateness
-			List<CargoTimeDetails> fastestStartTimes = getMostCompressedTimes(sequence, availability, cargoWindows, cargoToCargoMinTravelTimes, cargoMinTravelTimes, vesselStartTimeWindows, vesselEndTimeWindows, cargoEndDurations);
+			List<CargoTimeDetails> fastestStartTimes = getMostCompressedTimes(sequence, availability, lightWeightOptimisationData.getCargoWindows(), lightWeightOptimisationData.getCargoToCargoMinTravelTimes(),
+					lightWeightOptimisationData.getCargoMinTravelTimes(), lightWeightOptimisationData.getVesselStartWindows(), lightWeightOptimisationData.getVesselEndWindows(),
+					lightWeightOptimisationData.getCargoEndSlotDurations());
 			int lateness = fastestStartTimes.stream().mapToInt(c->c.latenessInHours).sum();
 			totalLateness += lateness;
-			cost += calculateCharterCostOnSequence(sequence, fastestStartTimes, availability, cargoDailyCharterCostPerAvailabilityProcessed);
+			cost += calculateCharterCostOnSequence(sequence, fastestStartTimes, availability, lightWeightOptimisationData.getCargoCharterCostPerAvailability());
 			// calculate pnl
-			double profit = calculateProfitOnSequence(sequence, vesselCapacities[availability], cargoPNL, volumes, cargoDetails);
+			long profit = calculateProfitOnSequence(sequence, lightWeightOptimisationData.getVesselCapacities()[availability], lightWeightOptimisationData.getCargoPNL(),
+					lightWeightOptimisationData.getCargoesVolumesInM3(), lightWeightOptimisationData.getCargoDetails());
 			totalPNL += profit;
 			totalCost += cost;
 		}
 
-		return totalPNL - totalCost - LATENESS_FINE * totalLateness - UNFULFILLED_FINE * (cargoCount - used);
+		return totalPNL - totalCost - LATENESS_FINE * totalLateness - UNFULFILLED_FINE * (lightWeightOptimisationData.getCargoCount() - used);
 	}
 
-	private double calculateVariableCostOnSequence(List<Integer> sequence, int availability, double[][][] cargoToCargoCostsOnAvailability) {
-		double total = 0;
+	private long calculateVariableCostOnSequence(List<Integer> sequence, int availability, long[][][] cargoToCargoCostsOnAvailability) {
+		long total = 0;
 		for (int i = 0; i < sequence.size() - 1; i++) {
 			int currIdx = sequence.get(i);
 			int nextIdx = sequence.get(i + 1);
 
-			total += cargoToCargoCostsOnAvailability[currIdx][nextIdx][availability];
+			total += calculateVariableCost(cargoToCargoCostsOnAvailability[currIdx][nextIdx][availability]);
 		}
 		return total;
 	}
 	
-	private double calculateCharterCostOnSequence(List<Integer> sequence, List<CargoTimeDetails> times, int availability, double[][] cargoCharterCostPerAvailability) {
-		double total = 0;
+	private long calculateVariableCost(long cost) {
+		return Calculator.convertFromHighToLow(cost);
+	}
+	
+	private long calculateCharterCostOnSequence(List<Integer> sequence, List<CargoTimeDetails> times, int availability, long[][] cargoCharterCostPerAvailability) {
+		long total = 0;
 		for (int i = 0; i < sequence.size() - 1; i++) {
 			int currIdx = sequence.get(i);
 			int cargoTime = times.get(i+1).start - times.get(i).start;
-			total += (cargoTime * cargoCharterCostPerAvailability[currIdx][availability]) / 24.0;
+			total += calculateCharterCost(cargoTime, cargoCharterCostPerAvailability[currIdx][availability]);
 		}
 		// last is start -> end multiplied by two (round trip)
 		if (sequence.size() > 0) {
 			int currIdx = sequence.get(sequence.size() - 1);
 			int cargoTime = times.get(sequence.size() - 1).end - times.get(sequence.size() - 1).start;
-			total += ((cargoTime * cargoCharterCostPerAvailability[currIdx][availability]) / 24.0)*2;
+			total += calculateCharterCost(cargoTime, cargoCharterCostPerAvailability[currIdx][availability]);
 		}
 		return total;
+	}
+
+	private long calculateCharterCost(int cargoTimeInHours, long costPerDay) {
+		return (cargoTimeInHours*costPerDay)/24L;
 	}
 
 	private List<CargoTimeDetails> setFastestTimesAndLateness(List<Integer> sequence, int availability, CargoWindowData[] cargoWindows, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, int vesselStartTime, int vesselEndTime, int[] cargoEndDurations) {
@@ -155,26 +170,28 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 	}
 
 
-	private double calculateProfitOnSequence(List<Integer> sequence, double capacity, double[] cargoPNLPerM3, double[] volumes, LightWeightCargoDetails[] cargoDetails) {
-		double sum = 0.0f;
+	private long calculateProfitOnSequence(List<Integer> sequence, long capacity, long[] cargoPNLPerM3, long[] volumes, LightWeightCargoDetails[] cargoDetails) {
+		long sum = 0L;
 		for (int i = 0; i < sequence.size(); i++) {
 			Integer cargoIndex = sequence.get(i);
 			if (cargoDetails[cargoIndex].getType() != PortType.DryDock &&
 					cargoDetails[cargoIndex].getType() != PortType.CharterOut) {
-				sum += cargoPNLPerM3[sequence.get(i)] * Math.min(capacity, volumes[sequence.get(i)]);
+				sum += calculateCargoProfit(Math.min(capacity, volumes[sequence.get(i)]), cargoPNLPerM3[sequence.get(i)]);
 			} else {
 				sum += VESSEL_EVENT_PNL;
 			}
 		}
 		return sum;
 	}
+	
+	private long calculateCargoProfit(long capacity, long cargoPNLPerM3) {
+		return capacity*cargoPNLPerM3;
+	}
 
 	@Override
-	public Double annotate(List<List<Integer>> sequences, int cargoCount, double[] cargoPNL, double[] vesselCapacities, double[][][] cargoToCargoCostsOnAvailability,
-			List<List<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, CargoWindowData[] cargoWindows, double[] volumes,
-			LightWeightCargoDetails[] cargoDetails, double[][] cargoDailyCharterCostPerAvailabilityProcessed, ITimeWindow[] vesselStartTimeWindows, ITimeWindow[] vesselEndTimeWindows, int[] cargoEndDurations) {
-		double totalCost = 0;
-		double totalPNL = 0;
+	public long annotate(List<List<Integer>> sequences) {
+		long totalCost = 0;
+		long totalPNL = 0;
 		long totalLateness = 0;
 		int used = 0;
 
@@ -182,19 +199,22 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 			List<Integer> sequence = sequences.get(availability);
 			used += sequence.size();
 			// calculate costs
-			double cost = calculateVariableCostOnSequence(sequence, availability, cargoToCargoCostsOnAvailability);
+			long cost = calculateVariableCostOnSequence(sequence, availability, lightWeightOptimisationData.getCargoToCargoCostsOnAvailability());
 			// calculate lateness
-			List<CargoTimeDetails> fastestStartTimes = getMostCompressedTimes(sequence, availability, cargoWindows, cargoToCargoMinTravelTimes, cargoMinTravelTimes, vesselStartTimeWindows, vesselEndTimeWindows, cargoEndDurations);
+			List<CargoTimeDetails> fastestStartTimes = getMostCompressedTimes(sequence, availability, lightWeightOptimisationData.getCargoWindows(), lightWeightOptimisationData.getCargoToCargoMinTravelTimes(),
+					lightWeightOptimisationData.getCargoMinTravelTimes(), lightWeightOptimisationData.getVesselStartWindows(), lightWeightOptimisationData.getVesselEndWindows(),
+					lightWeightOptimisationData.getCargoEndSlotDurations());
 			int lateness = fastestStartTimes.stream().mapToInt(c->c.latenessInHours).sum();
 			totalLateness += lateness;
-			cost += calculateCharterCostOnSequence(sequence, fastestStartTimes, availability, cargoDailyCharterCostPerAvailabilityProcessed);
+			cost += calculateCharterCostOnSequence(sequence, fastestStartTimes, availability, lightWeightOptimisationData.getCargoCharterCostPerAvailability());
 			// calculate pnl
-			double profit = calculateProfitOnSequence(sequence, vesselCapacities[availability], cargoPNL, volumes, cargoDetails);
+			long profit = calculateProfitOnSequence(sequence, lightWeightOptimisationData.getVesselCapacities()[availability], lightWeightOptimisationData.getCargoPNL(),
+					lightWeightOptimisationData.getCargoesVolumesInM3(), lightWeightOptimisationData.getCargoDetails());
 			totalPNL += profit;
 			totalCost += cost;
 		}
 		System.out.println("Total lateness: "+totalLateness);
-		return totalPNL - totalCost - LATENESS_FINE * totalLateness - UNFULFILLED_FINE * (cargoCount - used);
+		return totalPNL - totalCost - LATENESS_FINE * totalLateness - UNFULFILLED_FINE * (lightWeightOptimisationData.getCargoCount() - used);
 	}
 
 }

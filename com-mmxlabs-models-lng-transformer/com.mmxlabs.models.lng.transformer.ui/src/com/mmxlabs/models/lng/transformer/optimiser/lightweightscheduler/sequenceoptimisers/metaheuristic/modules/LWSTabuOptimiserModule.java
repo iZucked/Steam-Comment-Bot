@@ -6,10 +6,7 @@ package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequen
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
-import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.tabu.TabuLightWeightSequenceOptimiserData;
 
 public class LWSTabuOptimiserModule extends AbstractModule {
 	public static final String GLOBAL_ITERATIONS = "TABU_GLOBAL_ITERATIONS";
@@ -43,11 +40,5 @@ public class LWSTabuOptimiserModule extends AbstractModule {
 	@Named(SEED)
 	private int getSeed(/*@Named(LocalSearchOptimiserModule.RANDOM_SEED) long seed*/) {
 		return (int) 0;
-	}
-	
-	@Provides
-	@Singleton
-	private TabuLightWeightSequenceOptimiserData getTabuLightWeightSequenceOptimiserData(ILightWeightOptimisationData lwd) {
-		return new TabuLightWeightSequenceOptimiserData(lwd);
-	}
+	}	
 }

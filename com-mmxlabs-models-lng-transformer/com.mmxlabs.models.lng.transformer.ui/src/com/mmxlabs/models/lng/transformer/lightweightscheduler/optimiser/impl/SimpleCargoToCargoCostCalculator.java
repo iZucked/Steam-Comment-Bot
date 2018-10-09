@@ -143,10 +143,10 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	}
 
 	@Override
-	public Long[][][] createCargoToCargoCostMatrix(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+	public long[][][] createCargoToCargoCostMatrix(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
 		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
 		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
-		final Long[][][] costs = new Long[cargoes.size()][cargoes.size()][vessels.size()];
+		final long[][][] costs = new long[cargoes.size()][cargoes.size()][vessels.size()];
 		for (final List<IPortSlot> cargoA : cargoes) {
 			final ILoadSlot loadA = getLoadSlot(cargoA);
 			final IDischargeSlot dischargeA = getDischargeSlot(cargoA);

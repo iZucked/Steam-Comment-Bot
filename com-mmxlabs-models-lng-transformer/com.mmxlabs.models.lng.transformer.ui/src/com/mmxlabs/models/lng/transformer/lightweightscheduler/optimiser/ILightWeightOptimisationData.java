@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.CargoWindowData;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightCargoDetails;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -19,7 +20,12 @@ public interface ILightWeightOptimisationData {
 
 	long[] getCargoPNL();
 
-	Long[][][] getCargoToCargoCostsOnAvailability();
+	/**
+	 * Calculates the cargo charter costs.
+	 * Only calculates cost for non-optional charters
+	 * @return
+	 */
+	long[][][] getCargoToCargoCostsOnAvailability();
 
 	List<Set<Integer>> getCargoVesselRestrictions();
 
@@ -35,7 +41,7 @@ public interface ILightWeightOptimisationData {
 
 	int[] getDesiredVesselCargoCount();
 
-	double[] getVesselCapacities();
+	long[] getVesselCapacities();
 
 	long[] getDesiredVesselCargoWeight();
 	
@@ -56,4 +62,8 @@ public interface ILightWeightOptimisationData {
 	int[] getCargoStartSlotDurations();
 
 	int[] getCargoEndSlotDurations();
+
+	CargoWindowData[] getCargoWindows();
+	
+	int getCargoCount();
 }
