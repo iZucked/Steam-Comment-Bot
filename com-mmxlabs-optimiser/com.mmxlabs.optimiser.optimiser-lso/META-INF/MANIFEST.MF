@@ -8,6 +8,7 @@ Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 4.5.17.qualifier
 Export-Package: com.mmxlabs.optimiser.lso,
  com.mmxlabs.optimiser.lso.impl,
+ com.mmxlabs.optimiser.lso.multiobjective.impl,
  com.mmxlabs.optimiser.lso.impl.thresholders,
  com.mmxlabs.optimiser.lso.logging,
  com.mmxlabs.optimiser.lso.modules,
