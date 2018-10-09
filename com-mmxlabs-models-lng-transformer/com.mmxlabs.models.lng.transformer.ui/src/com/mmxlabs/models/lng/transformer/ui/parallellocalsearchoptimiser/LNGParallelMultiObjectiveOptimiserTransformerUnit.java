@@ -234,7 +234,7 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 						throw new RuntimeException("Unable to optimise");
 					}
 				} else {
-					List<NonDominatedSolution> sortedArchive = ((SequentialParallelSimpleMultiObjectiveOptimiser) optimiser).getSortedArchive(); //TODO: make generic
+					List<NonDominatedSolution> sortedArchive = ((SequentialParallelSimpleMultiObjectiveOptimiser) optimiser).getSortedArchive(true); //TODO: make generic
 
 					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = sortedArchive.stream() //
 							.distinct() //

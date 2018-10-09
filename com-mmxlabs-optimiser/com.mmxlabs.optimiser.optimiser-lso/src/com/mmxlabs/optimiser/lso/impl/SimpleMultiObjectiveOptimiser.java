@@ -6,6 +6,7 @@ package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -311,8 +312,13 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return getBestRawSequences(archive, 4, 0);
 	}
 
-	public List<NonDominatedSolution> getSortedArchive() {
-		return getSortedArchiveWithEpsilonDominance(archive, 0);
+	public List<NonDominatedSolution> getSortedArchive(boolean isAscending) {
+		List<NonDominatedSolution> sortedArchiveWithEpsilonDominance = getSortedArchiveWithEpsilonDominance(archive, 0);
+		if (isAscending) {
+			Collections.sort(sortedArchiveWithEpsilonDominance,
+					(a,b) -> -Long.compare(a.getFitnesses()[0], b.getFitnesses()[0]));
+		}
+		return sortedArchiveWithEpsilonDominance;
 	}
 
 	public ISequences getBestRawSequences(final List<NonDominatedSolution> unsortedArchive, final int noGroups, final int objectiveIndex) {
