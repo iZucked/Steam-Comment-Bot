@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightW
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightSequenceOptimiser;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.CargoWindowData;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightCargoDetails;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.modules.LWSTabuOptimiserModule;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -43,22 +44,8 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	@Override
 	public List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers,
 			List<ILightWeightFitnessFunction> fitnessFunctions, IProgressMonitor monitor) {
-
-		TabuLightWeightSequenceOptimiserData dataTransformer = new TabuLightWeightSequenceOptimiserData(lightWeightOptimisationData);
-
-		return optimise(//
-				lightWeightOptimisationData.getCargoes().size(), //
-				lightWeightOptimisationData.getVessels().size(), //
-				lightWeightOptimisationData, dataTransformer, //
-				constraintCheckers, fitnessFunctions, monitor);
-	}
-
-	private List<List<Integer>> optimise(int cargoCount, int vesselCount, //
-			ILightWeightOptimisationData lightWeightOptimisationData, //
-			TabuLightWeightSequenceOptimiserData dataTransformer, //
-			List<ILightWeightConstraintChecker> constraintCheckers, //
-			List<ILightWeightFitnessFunction> fitnessFunctions,
-			IProgressMonitor monitor) {
+		int cargoCount = lightWeightOptimisationData.getCargoes().size();
+		int vesselCount = lightWeightOptimisationData.getVessels().size();
 
 		TabuList tabuList = new TabuList();
 		
@@ -105,7 +92,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				// Forced first move, meaning we'll always make a change
 				TabuSolution currentSolution = TabuLightWeightSequenceOptimiserMoves.move(schedule, unusedCargoes, usedCargoes, mapping, random);
 
-				double currentFitness = evaluate(currentSolution.schedule, cargoCount, lightWeightOptimisationData, dataTransformer,
+				double currentFitness = evaluate(currentSolution.schedule, cargoCount, lightWeightOptimisationData,
 						constraintCheckers, fitnessFunctions, false);
 
 				// Create new candidate schedules
@@ -113,7 +100,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				List<TabuSolution> tabuSolutions = getNewCandidateSolutions(schedule, unusedCargoes, usedCargoes, random, mapping);
 
 				// Evaluate solutions
-				neighbourhoodFitnesses = tabuSolutions.parallelStream().mapToDouble(s -> evaluate(s.schedule, cargoCount, lightWeightOptimisationData, dataTransformer,
+				neighbourhoodFitnesses = tabuSolutions.parallelStream().mapToDouble(s -> evaluate(s.schedule, cargoCount, lightWeightOptimisationData,
 						constraintCheckers, fitnessFunctions, false))
 						.toArray();
 
@@ -148,7 +135,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 			System.out.printf("\n\nFitness best : %f\n", bestFitness);
 			System.out.printf("Iteration best: %d it\n", bestIteration);
 
-			annotateSolution(bestSchedule, cargoCount, vesselCount, lightWeightOptimisationData, dataTransformer, constraintCheckers, fitnessFunctions, allCargoes);
+			annotateSolution(bestSchedule, cargoCount, vesselCount, lightWeightOptimisationData, constraintCheckers, fitnessFunctions, allCargoes);
 
 			return bestSchedule;
 		} finally {
@@ -186,67 +173,31 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		return tabuSolutions;
 	}
 
-	private Double evaluate(List<List<Integer>> sequences, int cargoCount, //
+	private long evaluate(List<List<Integer>> sequences, int cargoCount, //
 			ILightWeightOptimisationData lightWeightOptimisationData, //
-			TabuLightWeightSequenceOptimiserData dataTransformer, //
 			List<ILightWeightConstraintChecker> constraintCheckers, //
 			List<ILightWeightFitnessFunction> fitnessFunctions,
 			boolean annotate) {
-	
-		int[][] cargoMinTravelTimes = lightWeightOptimisationData.getCargoMinTravelTimes();
-		int[][][] cargoToCargoMinTravelTimes = lightWeightOptimisationData.getCargoToCargoMinTravelTimes();
-		double[] volumes = dataTransformer.getCargoesVolumesProcessed();
-		LightWeightCargoDetails[] cargoDetails = lightWeightOptimisationData.getCargoDetails();
-	
-		List<List<Integer>> cargoVesselRestrictions = dataTransformer.getCargoVesselRestrictionAsList();
-		double[] cargoPNL = dataTransformer.getCargoPNLasDouble();
-		double[] vesselCapacities = dataTransformer.getCapacity();
-		double[][][] cargoToCargoCostsOnAvailability = dataTransformer.getCargoToCargoCostsProcessed();
-		double[][] cargoDailyCharterCostPerAvailabilityProcessed = dataTransformer.getCargoDailyCharterCostPerAvailabilityProcessed();
-		CargoWindowData[] cargoWindows = dataTransformer.getCargoWindows();
-		ITimeWindow[] vesselStartWindows = lightWeightOptimisationData.getVesselStartWindows();
-		ITimeWindow[] vesselEndWindows = lightWeightOptimisationData.getVesselEndWindows();
-		int[] cargoEndSlotDurations = lightWeightOptimisationData.getCargoEndSlotDurations();
-		
+				
 		for (ILightWeightConstraintChecker constraintChecker : constraintCheckers) {
 			for (int availability = 0; availability < sequences.size(); availability++) {
 				List<Integer> sequence = sequences.get(availability);
 				// calculate restrictions
 				boolean checkRestrictions = constraintChecker.checkSequence(sequence, availability);
 				if (!checkRestrictions) {
-					return -Double.MAX_VALUE;
+					return -Long.MAX_VALUE;
 				}
 			}
 		}
 	
-		Double fitness = 0.;
+		long fitness = 0L;
 		for (ILightWeightFitnessFunction fitnessFunction : fitnessFunctions) {
-			final Double evaluate;
+			final long evaluate;
 			
 			if (!annotate) {
-				evaluate = fitnessFunction.evaluate(sequences, cargoCount, //
-						cargoPNL, vesselCapacities, //
-						cargoToCargoCostsOnAvailability, cargoVesselRestrictions, //
-						cargoToCargoMinTravelTimes, cargoMinTravelTimes, //
-						cargoWindows, //
-						volumes,
-						cargoDetails,
-						cargoDailyCharterCostPerAvailabilityProcessed,
-						vesselStartWindows,
-						vesselEndWindows,
-						cargoEndSlotDurations);
+				evaluate = fitnessFunction.evaluate(sequences);
 			} else {
-				evaluate = fitnessFunction.annotate(sequences, cargoCount, //
-						cargoPNL, vesselCapacities, //
-						cargoToCargoCostsOnAvailability, cargoVesselRestrictions, //
-						cargoToCargoMinTravelTimes, cargoMinTravelTimes, //
-						cargoWindows, //
-						volumes,
-						cargoDetails,
-						cargoDailyCharterCostPerAvailabilityProcessed,
-						vesselStartWindows,
-						vesselEndWindows,
-						cargoEndSlotDurations);
+				evaluate = fitnessFunction.annotate(sequences);
 			}
 			fitness = fitness + evaluate;
 		}
@@ -254,12 +205,12 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		return fitness;
 	}
 
-	private Double annotateSolution(List<List<Integer>> sequences, int cargoCount, int vesselCount, ILightWeightOptimisationData lightWeightOptimisationData,
-			TabuLightWeightSequenceOptimiserData dataTransformer, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions, Set<Integer> allCargoes) {
+	private long annotateSolution(List<List<Integer>> sequences, int cargoCount, int vesselCount, ILightWeightOptimisationData lightWeightOptimisationData,
+			List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions, Set<Integer> allCargoes) {
 		printSolution(sequences);
 		System.out.println(String.format("Left over cargoes: %s",
 				updateUnusedList(sequences, allCargoes).size()));
-		return evaluate(sequences, cargoCount, lightWeightOptimisationData, dataTransformer, constraintCheckers, fitnessFunctions, true);
+		return evaluate(sequences, cargoCount, lightWeightOptimisationData, constraintCheckers, fitnessFunctions, true);
 	}
 
 	private List<Integer> updateUsedList(List<List<Integer>> solution) {
@@ -275,7 +226,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	private List<Integer> updateUnusedList(List<List<Integer>> solution, Set<Integer> cargoes) {
-		List<Integer> cargoesSet = new ArrayList(cargoes);
+		List<Integer> cargoesSet = new ArrayList<Integer>(cargoes);
 		cargoesSet.removeAll(updateUsedList(solution));
 
 		return cargoesSet;

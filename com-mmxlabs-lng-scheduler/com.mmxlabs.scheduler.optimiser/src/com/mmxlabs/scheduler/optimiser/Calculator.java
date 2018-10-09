@@ -216,5 +216,17 @@ public final class Calculator {
 	public static long percentageLow(final long percentage, final long input) {
 		return (input * percentage) / HighScaleFactor;
 	}
+	
+	/**
+	 * Converts from high scaling factor to low scaling factor
+	 * unfortunately with loss of accuracy
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static long convertFromHighToLow(final long input) {
+		return input / (HighScaleFactor / ScaleFactor);
+	}
+
 
 }

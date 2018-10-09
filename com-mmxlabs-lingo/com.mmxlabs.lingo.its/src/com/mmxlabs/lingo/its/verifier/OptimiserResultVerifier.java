@@ -180,6 +180,21 @@ public class OptimiserResultVerifier {
 		this.checks.add(p);
 		return this;
 	}
+	
+	public OptimiserResultVerifier withCargoCount(final int count, boolean ignoreRoundTrips) {
+
+		final Function<SolutionData, Boolean> p = (s) -> {
+			final ISequences sequences = s.getLookupManager().getRawSequences();
+			final int totalLoadsOnSequences = OptimiserResultVerifierUtils.getTotalLoadsOnSequences(sequences, mapper, ignoreRoundTrips);
+			if (totalLoadsOnSequences != count) {
+				return false;
+			}
+
+			return true;
+		};
+		this.checks.add(p);
+		return this;
+	}
 
 	public static class VesselVerifier {
 		private final Function<SolutionData, Pair<SolutionData, IResource>> result;
