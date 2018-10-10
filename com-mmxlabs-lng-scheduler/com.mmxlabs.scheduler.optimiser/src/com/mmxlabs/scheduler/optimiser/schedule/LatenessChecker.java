@@ -9,7 +9,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -58,10 +57,8 @@ public class LatenessChecker {
 	public static final @NonNull String GA_TOTAL_BEYOND_LATENESS_HIGH_IN_HOURS = "total-beyond-high-lateness-hours";
 
 	/**
-	 * TODO: Break out into separate class Calculate the various capacity violation
-	 * check - min/max load & discharge volumes, max heel, vessel capacity and
-	 * cooldown. Note the {@link IVolumeAllocator} and {@link LNGVoyageCalculator}
-	 * generally feed into these checks.
+	 * TODO: Break out into separate class Calculate the various capacity violation check - min/max load & discharge volumes, max heel, vessel capacity and cooldown. Note the {@link IVolumeAllocator}
+	 * and {@link LNGVoyageCalculator} generally feed into these checks.
 	 * 
 	 * @param sequences
 	 * @param profitAndLossSequences
@@ -72,7 +69,7 @@ public class LatenessChecker {
 		final IResource resource = volumeAllocatedSequence.getResource();
 		assert resource != null;
 		for (final IPortSlot portSlot : volumeAllocatedSequence.getSequenceSlots()) {
-			final ITimeWindow tw = getTW(portSlot, resource);
+			ITimeWindow tw = getTW(portSlot, resource);
 			if (tw == null) {
 				continue;
 			}
@@ -143,8 +140,8 @@ public class LatenessChecker {
 				tw = req.getTimeWindow();
 			}
 		} else if (portSlot instanceof IEndPortSlot) {
-			final IStartEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
-			if (req.hasTimeRequirement()) {
+			final IEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
+			if (req.hasTimeRequirement() || req.isMinDurationSet() || req.isMaxDurationSet()) {
 				tw = req.getTimeWindow();
 			}
 		} else {

@@ -36,6 +36,9 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
@@ -52,9 +55,12 @@ import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -1100,6 +1106,122 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 			}
 			Assert.assertTrue(foundVessel1);
 		});
+	}
+
+	/**
+	 * This test ensures we do not add a cargo to a charter in which would exceed max duration even though it is profitable.
+	 * 
+	 * @throws Exception
+	 */
+
+	@Test
+	@Category({ MicroTest.class })
+	public void maxDurationOnCharterInTest() throws Exception {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		@NonNull
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModel.getCanalBookings().getCanalBookingSlots().clear();
+
+		cargoModel.getCanalBookings().setStrictBoundaryOffsetDays(0);
+		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(1);
+
+		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
+		cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
+		cargoModel.getCanalBookings().setArrivalMarginHours(12);
+
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+
+		int minDuration = 10;
+		int maxDuration = 28;
+
+		CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("TestCharterMarket", vessel1, "1", 1);
+		charterInMarket.setEnabled(true);
+		charterInMarket.setMinDuration(minDuration);
+		charterInMarket.setMaxDuration(maxDuration);
+
+		// Construct the cargo
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Himeji");
+
+		// final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+		cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2018, Month.JANUARY, 1), port1, null, entity, "5", 22.6) //
+				.withWindowSize(1, TimePeriod.DAYS) //
+				.withVisitDuration(24) //
+
+				.build();
+		//
+		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2018, Month.FEBRUARY, 1), port2, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.DAYS) //
+				.withVisitDuration(24) //
+
+				.build();//
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2018, 1, 1), LocalDate.of(2018, 4, 1));
+
+		IOptimiserInjectorService localOverrides = makeTimeScheduleRulesModuleService(false);
+
+		// Create UserSettings
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withUserSettings(userSettings) //
+				.withOptimiserInjectorService(localOverrides) //
+				.withOptimiseHint() //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		try {
+			runnerBuilder.evaluateInitialState();
+			runnerBuilder.run(true);
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+
+			boolean foundVessel1 = false;
+			for (Sequence sequence : schedule.getSequences()) {
+				if (sequence.getCharterInMarket() == charterInMarket) {
+					foundVessel1 = true;
+				} else {
+					continue;
+				}
+
+				// Found a vessel, make sure we are within the min/max bounds.
+				// Note: Given the input cargo this should not happen.
+				final Event start = sequence.getEvents().get(0);
+				final Event end = sequence.getEvents().get(sequence.getEvents().size() - 1);
+
+				int duration = Days.between(start.getStart(), end.getEnd());
+				Assert.assertTrue(duration >= minDuration);
+				Assert.assertTrue(duration <= maxDuration);
+			}
+			Assert.assertFalse(foundVessel1);
+		} finally {
+			runnerBuilder.dispose();
+		}
+
+	}
+
+	private IOptimiserInjectorService makeTimeScheduleRulesModuleService(boolean canalTrimming) {
+		IOptimiserInjectorService localOverrides = OptimiserInjectorServiceMaker.begin() //
+				.makeModule() //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(canalTrimming)) //
+				.with(binder -> binder.bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)).toInstance(Boolean.FALSE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE))//
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)).toInstance(Boolean.FALSE)) //
+				.buildOverride(ModuleType.Module_LNGTransformerModule)//
+				.make();
+		return localOverrides;
 	}
 
 }
