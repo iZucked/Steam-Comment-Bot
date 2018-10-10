@@ -45,7 +45,7 @@ public class PurchaseContractTradesBasedFilterHandler implements ITradesBasedFil
 				Collections.sort(contracts, (a, b) -> a.getName().compareTo(b.getName()));
 
 				for (Contract c : contracts) {
-					addActionToMenu(new RunnableAction(c.getName(), () -> {
+					RunnableAction rA = new RunnableAction(c.getName(), () -> {
 						Iterator<ITradesBasedFilterHandler> itr = activeFilters.iterator();
 						while(itr.hasNext()) {
 							ITradesBasedFilterHandler filter = itr.next();
@@ -55,9 +55,16 @@ public class PurchaseContractTradesBasedFilterHandler implements ITradesBasedFil
 						}
 						activeFilters.add(new ContractTradesBasedFilterHandler(c));
 						viewer.getScenarioViewer().refresh();
+					});
+					for (final ITradesBasedFilterHandler f : activeFilters) {
+						if (f instanceof ContractTradesBasedFilterHandler) {
+							final ContractTradesBasedFilterHandler filter = (ContractTradesBasedFilterHandler) f;
+							if (filter.referenceContract.equals(c)) {
+								rA.setChecked(true);
+							}
+						}
 					}
-
-					), menu);
+					addActionToMenu(rA, menu);
 				}
 			}
 			

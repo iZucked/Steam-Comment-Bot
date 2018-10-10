@@ -18,14 +18,14 @@ public class CargoTradesBasedFilterHandler implements ITradesBasedFilterHandler 
 
 	@Override
 	public Action activateAction(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters, final BulkTradesTablePane viewer) {
-		final DefaultMenuCreatorAction action = new DefaultMenuCreatorAction("Cargo types") {
+		final DefaultMenuCreatorAction action = new DefaultMenuCreatorAction("Open/Cargo") {
 			@Override
 			protected void populate(final Menu menu) {
 
-				final Action cargoesAction = new RunnableAction("Cargoes Only", () -> addCargoFilter(activeFilters, viewer, CargoFilterOption.CARGO));
-				final Action longsAction = new RunnableAction("Longs Only", () -> addCargoFilter(activeFilters, viewer, CargoFilterOption.LONG));
-				final Action shortsAction = new RunnableAction("Shorts Only", () -> addCargoFilter(activeFilters, viewer, CargoFilterOption.SHORT));
-				final Action openAction = new RunnableAction("Open Only", () -> addCargoFilter(activeFilters, viewer, CargoFilterOption.OPEN));
+				final Action cargoesAction = new RunnableAction("Cargoes only", () -> addCargoFilter(activeFilters, viewer, CargoFilterOption.CARGO));
+				final Action openAction = new RunnableAction("Open only", () -> addCargoFilter(activeFilters, viewer, CargoFilterOption.OPEN));
+				final Action longsAction = new RunnableAction("Longs", () -> addCargoFilter(activeFilters, viewer, CargoFilterOption.LONG));
+				final Action shortsAction = new RunnableAction("Shorts", () -> addCargoFilter(activeFilters, viewer, CargoFilterOption.SHORT));
 
 				// Detect currently selected option (if any)
 				for (final ITradesBasedFilterHandler f : activeFilters) {
