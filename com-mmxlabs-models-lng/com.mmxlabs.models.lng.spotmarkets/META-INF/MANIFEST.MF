@@ -21,3 +21,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.lng.spotmarkets,
  com.mmxlabs.models.lng.spotmarkets.impl,
  com.mmxlabs.models.lng.spotmarkets.util
+Automatic-Module-Name: com.mmxlabs.models.lng.spotmarkets

@@ -32,3 +32,4 @@ Bundle-ClassPath: .
 Export-Package: com.mmxlabs.lngdataserver.integration.ports,
  com.mmxlabs.lngdataserver.integration.ports.internal
 Bundle-Vendor: Minimax Labs Ltd.
+Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.ports

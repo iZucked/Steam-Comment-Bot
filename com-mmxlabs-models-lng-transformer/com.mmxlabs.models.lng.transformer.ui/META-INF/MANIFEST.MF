@@ -81,3 +81,4 @@ Export-Package: com.mmxlabs.models.lng.transformer.actionplan,
  com.mmxlabs.models.lng.transformer.ui.inventory,
  com.mmxlabs.models.lng.transformer.ui.parametermodes,
  com.mmxlabs.models.lng.transformer.ui.parametermodes.impl
+Automatic-Module-Name: com.mmxlabs.models.lng.transformer.ui

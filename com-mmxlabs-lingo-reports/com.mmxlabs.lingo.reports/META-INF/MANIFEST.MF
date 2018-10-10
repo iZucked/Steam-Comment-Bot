@@ -110,3 +110,4 @@ Import-Package: javax.inject;version="1.0.0",
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/*.xml
+Automatic-Module-Name: com.mmxlabs.lingo.reports

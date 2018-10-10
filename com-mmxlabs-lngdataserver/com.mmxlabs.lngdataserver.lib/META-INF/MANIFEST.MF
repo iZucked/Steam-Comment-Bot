@@ -138,3 +138,4 @@ Export-Package: com.google.gson;version=2.8.1,
  org.threeten.bp.temporal;version=1.3.5,
  org.threeten.bp.zone;version=1.3.5,
  relocated.morphia.org.apache.commons.collections
+Automatic-Module-Name: com.mmxlabs.lngdataserver.lib

@@ -33,3 +33,4 @@ Export-Package: com.mmxlabs.models.util,
  com.mmxlabs.models.util.importer.registry.impl
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
+Automatic-Module-Name: com.mmxlabs.models.util

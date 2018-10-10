@@ -34,3 +34,4 @@ Export-Package: com.mmxlabs.lngdataserver.integration.ui
 Bundle-ClassPath: .,
  web_files/
 Bundle-Vendor: Minimax Labs Ltd.
+Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.ui

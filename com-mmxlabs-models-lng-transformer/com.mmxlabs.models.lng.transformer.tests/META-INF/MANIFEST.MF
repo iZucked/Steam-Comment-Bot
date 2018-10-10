@@ -12,3 +12,4 @@ Require-Bundle: org.junit;bundle-version="4.8.2",
  com.mmxlabs.models.lng.transformer.ui,
  net.bytebuddy.byte-buddy;bundle-version="1.7.8",
  org.objenesis;bundle-version="2.6.0"
+Automatic-Module-Name: com.mmxlabs.models.lng.transformer.tests

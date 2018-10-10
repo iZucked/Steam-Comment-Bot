@@ -21,4 +21,5 @@ Export-Package: com.mmxlabs.models.ui.validation,
  com.mmxlabs.models.ui.validation.gui,
  com.mmxlabs.models.ui.validation.impl
 Service-Component: OSGI-INF/*.xml
+Automatic-Module-Name: com.mmxlabs.models.ui.validation
 

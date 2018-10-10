@@ -17,3 +17,4 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.license.features;bundle-version="[4.5.17,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.mmxlabs.lingo.platform.ui
+Automatic-Module-Name: com.mmxlabs.lingo.ui

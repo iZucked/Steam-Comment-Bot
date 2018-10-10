@@ -34,3 +34,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.reports.scheduleview.views,
  com.mmxlabs.lingo.reports.scheduleview.views.colourschemes
 Import-Package: javax.inject;version="1.0.0"
+Automatic-Module-Name: com.mmxlabs.lingo.reports.scheduleview

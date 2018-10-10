@@ -33,3 +33,4 @@ Export-Package: com.mmxlabs.models.ui.tabular,
  com.mmxlabs.models.ui.tabular.generic,
  com.mmxlabs.models.ui.tabular.manipulators,
  com.mmxlabs.models.ui.tabular.renderers
+Automatic-Module-Name: com.mmxlabs.models.ui.tabular

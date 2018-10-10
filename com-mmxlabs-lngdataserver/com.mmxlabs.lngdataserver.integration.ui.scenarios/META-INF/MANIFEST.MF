@@ -62,3 +62,4 @@ Export-Package: com.mmxlabs.lngdataserver.integration.ui.scenarios,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.internal
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
+Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.ui.scenarios

@@ -10,3 +10,4 @@ Export-Package: com.mmxlabs.jobmanager.jobs,
  com.mmxlabs.jobmanager.manager,
  com.mmxlabs.jobmanager.manager.impl
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
+Automatic-Module-Name: com.mmxlabs.jobmanager

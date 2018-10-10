@@ -49,3 +49,4 @@ Export-Package: com.mmxlabs.models.lng.transformer.its,
  com.mmxlabs.models.lng.transformer.its.tests.calculation
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.transformer.its.internal.Activator
+Automatic-Module-Name: com.mmxlabs.models.lng.transformer.its

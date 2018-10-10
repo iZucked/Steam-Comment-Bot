@@ -21,3 +21,4 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0"
+Automatic-Module-Name: com.mmxlabs.models.lng.adp.validation

@@ -16,3 +16,4 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.models.lng.pricing.validation
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
+Automatic-Module-Name: com.mmxlabs.lingo.reports.tests

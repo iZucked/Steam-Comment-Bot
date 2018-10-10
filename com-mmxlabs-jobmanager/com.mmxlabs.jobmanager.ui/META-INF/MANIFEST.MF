@@ -16,3 +16,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.jobmanager.ui,
  com.mmxlabs.jobmanager.views
+Automatic-Module-Name: com.mmxlabs.jobmanager.ui

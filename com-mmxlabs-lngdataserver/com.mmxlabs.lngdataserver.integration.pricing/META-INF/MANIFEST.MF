@@ -34,3 +34,4 @@ Export-Package: com.mmxlabs.lngdataserver.integration.client.pricing.model,
  com.mmxlabs.lngdataserver.integration.pricing.exceptions
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-ClassPath: .
+Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.pricing

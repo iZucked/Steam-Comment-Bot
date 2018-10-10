@@ -15,3 +15,4 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.scenario.service.ui;bundle-version="[4.5.17,5.0.0)",
  com.mmxlabs.models.migration;bundle-version="[4.5.17,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: com.mmxlabs.lingo.product

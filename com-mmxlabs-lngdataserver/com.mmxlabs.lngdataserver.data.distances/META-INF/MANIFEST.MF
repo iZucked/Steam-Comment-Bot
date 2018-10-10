@@ -14,3 +14,4 @@ Require-Bundle: org.eclipse.osgi,
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.data.distances.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: com.mmxlabs.lngdataserver.data.distances

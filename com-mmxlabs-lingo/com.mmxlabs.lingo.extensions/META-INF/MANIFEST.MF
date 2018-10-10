@@ -24,3 +24,4 @@ Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-Module: com.mmxlabs.lingo.extensions.LingoExtensionsActivatorModule
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: com.mmxlabs.lingo.extensions

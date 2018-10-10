@@ -39,3 +39,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.app,
  com.mmxlabs.lingo.app.intro
+Automatic-Module-Name: com.mmxlabs.lingo.app

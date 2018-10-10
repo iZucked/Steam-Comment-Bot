@@ -36,3 +36,4 @@ Export-Package: com.mmxlabs.lngdataserver.integration.distances,
 Bundle-Activator: com.mmxlabs.lngdataserver.integration.distances.internal.Activator
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
+Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.distances

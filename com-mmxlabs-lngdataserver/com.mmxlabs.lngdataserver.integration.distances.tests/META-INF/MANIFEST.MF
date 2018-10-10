@@ -28,3 +28,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: data/,
  .
 Bundle-Vendor: Minimax Labs Ltd.
+Automatic-Module-Name: com.mmxlabs.lngdataserver.integration.distances.tests

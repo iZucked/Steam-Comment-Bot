@@ -115,4 +115,5 @@ Export-Package: com.github.tomakehurst.wiremock,
  org.xmlunit.xpath
 Eclipse-RegisterBuddy: com.mmxlabs.lngdataserver.lib
 Bundle-Vendor: Minimax Labs Ltd.
+Automatic-Module-Name: com.mmxlabs.lngdataserver.lib.test
  
