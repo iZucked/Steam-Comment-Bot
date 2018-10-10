@@ -62,7 +62,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "null" })
 public class PeriodTransformerTests {
 
 	@Test

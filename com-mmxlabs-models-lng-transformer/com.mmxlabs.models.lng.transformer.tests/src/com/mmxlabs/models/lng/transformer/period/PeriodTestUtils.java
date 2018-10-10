@@ -70,6 +70,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 
+@SuppressWarnings("null")
 public class PeriodTestUtils {
 
 	public static YearMonth createYearMonth(final int year, final int month) {

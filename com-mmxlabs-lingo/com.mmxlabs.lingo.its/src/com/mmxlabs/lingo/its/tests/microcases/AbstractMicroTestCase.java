@@ -45,6 +45,7 @@ import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
+@SuppressWarnings("null")
 public abstract class AbstractMicroTestCase {
 
 	protected LNGScenarioModel lngScenarioModel;

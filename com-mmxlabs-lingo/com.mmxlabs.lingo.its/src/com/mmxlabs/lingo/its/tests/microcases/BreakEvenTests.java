@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
+@SuppressWarnings({ "unused", "null" })
 @RunWith(value = ShiroRunner.class)
 public class BreakEvenTests extends AbstractMicroTestCase {
 

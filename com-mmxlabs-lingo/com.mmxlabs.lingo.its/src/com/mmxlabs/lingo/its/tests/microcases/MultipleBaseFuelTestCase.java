@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
+@SuppressWarnings({ "unused", "null" })
 public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");

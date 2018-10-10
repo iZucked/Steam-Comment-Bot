@@ -39,7 +39,7 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "null" })
 @RunWith(value = ShiroRunner.class)
 public class CharterOutTests extends AbstractMicroTestCase {
 

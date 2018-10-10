@@ -55,6 +55,7 @@ import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
+@SuppressWarnings({ "unused", "null" })
 @RunWith(value = ShiroRunner.class)
 public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 

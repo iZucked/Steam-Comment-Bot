@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "null" })
 @RunWith(value = ShiroRunner.class)
 public class CancellationFeesTests extends AbstractMicroTestCase {
 

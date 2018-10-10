@@ -88,7 +88,7 @@ import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "null" })
 @RunWith(value = ShiroRunner.class)
 public class CapacityViolationTests extends AbstractMicroTestCase {
 

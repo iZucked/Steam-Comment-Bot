@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
+@SuppressWarnings("null")
 public class ObjectCopierTests {
 
 	@Test

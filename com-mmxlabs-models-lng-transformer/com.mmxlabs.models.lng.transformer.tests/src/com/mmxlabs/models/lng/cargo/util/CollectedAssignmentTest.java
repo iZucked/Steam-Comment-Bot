@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
  * @author Simon Goodall
  *
  */
+@SuppressWarnings("null")
 public class CollectedAssignmentTest {
 
 	@Test

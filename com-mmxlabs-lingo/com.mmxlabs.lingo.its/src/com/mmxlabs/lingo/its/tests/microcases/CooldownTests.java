@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "null" })
 @RunWith(value = ShiroRunner.class)
 public class CooldownTests extends AbstractMicroTestCase {
 
