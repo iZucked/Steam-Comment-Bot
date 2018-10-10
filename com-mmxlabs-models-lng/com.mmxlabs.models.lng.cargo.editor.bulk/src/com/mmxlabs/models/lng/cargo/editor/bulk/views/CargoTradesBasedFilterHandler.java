@@ -55,9 +55,9 @@ public class CargoTradesBasedFilterHandler implements ITradesBasedFilterHandler 
 				}
 
 				addActionToMenu(cargoesAction, menu);
+				addActionToMenu(openAction, menu);
 				addActionToMenu(longsAction, menu);
 				addActionToMenu(shortsAction, menu);
-				addActionToMenu(openAction, menu);
 
 			}
 
