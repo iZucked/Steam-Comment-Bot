@@ -27,7 +27,7 @@ public class SalesContractTradesBasedFilterHandler implements ITradesBasedFilter
 
 	@Override
 	public Action activateAction(ColumnFilters columnFilters, Set<ITradesBasedFilterHandler> activeFilters, BulkTradesTablePane viewer) {
-		DefaultMenuCreatorAction action = new DefaultMenuCreatorAction("Sales contracts") {
+		DefaultMenuCreatorAction action = new DefaultMenuCreatorAction("Sale contracts") {
 			@Override
 			protected void populate(Menu menu) {
 					CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getJointModelEditorPart().getScenarioDataProvider());
@@ -45,7 +45,7 @@ public class SalesContractTradesBasedFilterHandler implements ITradesBasedFilter
 				Collections.sort(contracts, (a, b) -> a.getName().compareTo(b.getName()));
 
 				for (Contract c : contracts) {
-					addActionToMenu(new RunnableAction(c.getName(), () -> {
+					RunnableAction rA = new RunnableAction(c.getName(), () -> {
 						Iterator<ITradesBasedFilterHandler> itr = activeFilters.iterator();
 						while(itr.hasNext()) {
 							ITradesBasedFilterHandler filter = itr.next();
@@ -55,9 +55,16 @@ public class SalesContractTradesBasedFilterHandler implements ITradesBasedFilter
 						}
 						activeFilters.add(new ContractTradesBasedFilterHandler(c));
 						viewer.getScenarioViewer().refresh();
+					});
+					for (final ITradesBasedFilterHandler f : activeFilters) {
+						if (f instanceof ContractTradesBasedFilterHandler) {
+							final ContractTradesBasedFilterHandler filter = (ContractTradesBasedFilterHandler) f;
+							if (filter.referenceContract.equals(c)) {
+								rA.setChecked(true);
+							}
+						}
 					}
-
-					), menu);
+					addActionToMenu(rA, menu);
 				}
 			}
 			

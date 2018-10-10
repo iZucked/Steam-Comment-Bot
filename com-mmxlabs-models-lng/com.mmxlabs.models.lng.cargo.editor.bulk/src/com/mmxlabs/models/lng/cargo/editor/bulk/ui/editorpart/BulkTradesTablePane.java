@@ -6,10 +6,10 @@ package com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -115,6 +115,7 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.LoadPortTradesBasedFilterH
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.PurchaseContractTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.SalesContractTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
+import com.mmxlabs.models.lng.cargo.editor.bulk.views.VesselsTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
@@ -251,8 +252,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	// FM - properties -
 	private final EPackage customRowPackage = createCustomisedRowEcore();
 	private final ColumnFilters columnFilters;
-	private final Set<ITradesBasedFilterHandler> allColumnFilterHandlers = new HashSet<>();
-	private final Set<ITradesBasedFilterHandler> activeColumnFilterHandlers = new HashSet<>();
+	private final Set<ITradesBasedFilterHandler> allColumnFilterHandlers = new LinkedHashSet<>();
+	private final Set<ITradesBasedFilterHandler> activeColumnFilterHandlers = new LinkedHashSet<>();
 	final Map<String, ITradesRowTransformerFactory> rowTransformerHandlers = new HashMap<>();
 
 	private final ColumnBlockManager columnBlockManager = new ColumnBlockManager();
@@ -411,19 +412,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			return Collections.<ITradesBasedFilterHandler>emptyList();
 		}
 		final List<ITradesBasedFilterHandler> filters = new LinkedList<>(allColumnFilterHandlers);
-		Collections.sort(filters, new Comparator<ITradesBasedFilterHandler>() {
-
-			@Override
-			public int compare(final ITradesBasedFilterHandler o1, final ITradesBasedFilterHandler o2) {
-				if (o1.isDefaultFilter() && !o2.isDefaultFilter()) {
-					return -1;
-				} else if (!o1.isDefaultFilter() && o2.isDefaultFilter()) {
-					return 1;
-				} else {
-					return o1.getClass().getName().compareTo(o2.getClass().getName());
-				}
-			}
-		});
 		return filters;
 	}
 
@@ -824,9 +812,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					gvcolumn = handler.createColumn();
 				}
 				final GridColumn column = gvcolumn.getColumn();
-				// DefaultColumnHeaderRenderer colRenderer = new DefaultColumnHeaderRenderer();
-				// colRenderer.setWordWrap(true);
-				// column.setHeaderRenderer(colRenderer);
 				column.setMinimumWidth(70);
 				handlerToColumnMap.put(handler, column);
 				if (column.getData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER) != null) {
@@ -875,9 +860,20 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	}
 
 	protected void registerColumnFilterHandlers() {
-
+		{
+			PurchaseContractTradesBasedFilterHandler handler = new PurchaseContractTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
 		{
 			SalesContractTradesBasedFilterHandler handler = new SalesContractTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
+		{
+			VesselsTradesBasedFilterHandler handler = new VesselsTradesBasedFilterHandler();
+			registerHandler(handler, true);
+		}
+		{
+			CargoTradesBasedFilterHandler handler = new CargoTradesBasedFilterHandler();
 			registerHandler(handler, true);
 		}
 		{
@@ -886,14 +882,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 		{
 			LoadPortTradesBasedFilterHandler handler = new LoadPortTradesBasedFilterHandler();
-			registerHandler(handler, true);
-		}
-		{
-			PurchaseContractTradesBasedFilterHandler handler = new PurchaseContractTradesBasedFilterHandler();
-			registerHandler(handler, true);
-		}
-		{
-			CargoTradesBasedFilterHandler handler = new CargoTradesBasedFilterHandler();
 			registerHandler(handler, true);
 		}
 

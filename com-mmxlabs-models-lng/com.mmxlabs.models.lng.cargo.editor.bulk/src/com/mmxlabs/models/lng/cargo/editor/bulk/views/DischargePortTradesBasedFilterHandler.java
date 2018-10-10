@@ -39,11 +39,10 @@ public class DischargePortTradesBasedFilterHandler implements ITradesBasedFilter
 						discharges.add(s.getPort());
 					}
 				}
-				
 				Collections.sort(discharges, (a, b) -> a.getName().compareTo(b.getName()));
 
 				for (Port p : discharges) {
-					addActionToMenu(new RunnableAction(p.getName(), () -> {
+					RunnableAction rA = new RunnableAction(p.getName(), () -> {
 						Iterator<ITradesBasedFilterHandler> itr = activeFilters.iterator();
 						while(itr.hasNext()) {
 							ITradesBasedFilterHandler filter = itr.next();
@@ -53,11 +52,17 @@ public class DischargePortTradesBasedFilterHandler implements ITradesBasedFilter
 						}
 						activeFilters.add(new PortTradesBasedFilterHandler(p));
 						viewer.getScenarioViewer().refresh();
+					});
+					for (final ITradesBasedFilterHandler f : activeFilters) {
+						if (f instanceof PortTradesBasedFilterHandler) {
+							final PortTradesBasedFilterHandler filter = (PortTradesBasedFilterHandler) f;
+							if (p.equals(filter.referencePort)) {
+								rA.setChecked(true);
+							}
+						}
 					}
-
-					), menu);
+					addActionToMenu(rA, menu);
 				}
-
 			}
 
 			@Override
@@ -122,9 +127,7 @@ public class DischargePortTradesBasedFilterHandler implements ITradesBasedFilter
 
 		@Override
 		public void deactivate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters) {
-			activeFilters.remove(this); // TODO - how about isActive?
-			// columnFilters.removeGroupFilter(TradesBasedColumnFactory.LOAD_START_GROUP, TradesBasedColumnFactory.LOAD_START_GROUP);
-			// columnFilters.removeGroupFilter(TradesBasedColumnFactory.DISCHARGE_START_GROUP, TradesBasedColumnFactory.DISCHARGE_START_GROUP);
+			activeFilters.remove(this);
 		}
 
 		@Override

@@ -134,6 +134,9 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -1847,7 +1850,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final EMFPath vesselPath1 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
 					CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
 			final EMFPath vesselPath2 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
-
+			
 			final Action clearAction = new Action("Clear Filter") {
 				@Override
 				public void run() {
@@ -1859,48 +1862,49 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			addActionToMenu(clearAction, menu);
 			addActionToMenu(new FilterAction("Purchase Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, purchaseContractPath), menu);
-			addActionToMenu(new FilterAction("Sales Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, salesContractPath), menu);
+			addActionToMenu(new FilterAction("Sale Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, salesContractPath), menu);
 			addActionToMenu(new FilterAction("Vessels", fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, new EMFMultiPath(true, vesselPath1, vesselPath2)), menu);
 
-			final DefaultMenuCreatorAction dmca = new DefaultMenuCreatorAction("General") {
+			final DefaultMenuCreatorAction dmca = new DefaultMenuCreatorAction("Open/Cargo") {
 
 				@Override
 				protected void populate(final Menu menu) {
-					final Action cargoesAction = new Action("Cargoes Only") {
+					final Action cargoesAction = new Action("Cargoes only") {
 						@Override
 						public void run() {
 							tradesCargoFilter.option = CargoFilterOption.CARGO;
 							scenarioViewer.refresh(false);
 						}
 					};
-					final Action longsAction = new Action("Longs Only") {
-						@Override
-						public void run() {
-							tradesCargoFilter.option = CargoFilterOption.LONG;
-							scenarioViewer.refresh(false);
-						}
-					};
-					final Action shortsAction = new Action("Shorts Only") {
-						@Override
-						public void run() {
-							tradesCargoFilter.option = CargoFilterOption.SHORT;
-							scenarioViewer.refresh(false);
-						}
-					};
-					final Action openAction = new Action("Open Only") {
+					final Action openAction = new Action("Open only") {
 						@Override
 						public void run() {
 							tradesCargoFilter.option = CargoFilterOption.OPEN;
 							scenarioViewer.refresh(false);
 						}
 					};
+					final Action longsAction = new Action("Longs") {
+						@Override
+						public void run() {
+							tradesCargoFilter.option = CargoFilterOption.LONG;
+							scenarioViewer.refresh(false);
+						}
+					};
+					final Action shortsAction = new Action("Shorts") {
+						@Override
+						public void run() {
+							tradesCargoFilter.option = CargoFilterOption.SHORT;
+							scenarioViewer.refresh(false);
+						}
+					};
 					addActionToMenu(cargoesAction, menu);
+					addActionToMenu(openAction, menu);
 					addActionToMenu(longsAction, menu);
 					addActionToMenu(shortsAction, menu);
-					addActionToMenu(openAction, menu);
 				}
 			};
 			addActionToMenu(dmca, menu);
+			//TODO : Consider using TradesBasedFilterHandler!
 		}
 	}
 

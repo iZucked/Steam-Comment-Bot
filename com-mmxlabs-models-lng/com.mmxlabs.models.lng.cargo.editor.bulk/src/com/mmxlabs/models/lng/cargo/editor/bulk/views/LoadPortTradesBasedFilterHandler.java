@@ -41,9 +41,9 @@ public class LoadPortTradesBasedFilterHandler implements ITradesBasedFilterHandl
 				}
 				
 				Collections.sort(actualLoads, (a, b) -> a.getName().compareTo(b.getName()));
-
+				
 				for (Port p : actualLoads) {
-					addActionToMenu(new RunnableAction(p.getName(), () -> {
+					RunnableAction rA = new RunnableAction(p.getName(), () -> {
 						Iterator<ITradesBasedFilterHandler> itr = activeFilters.iterator();
 						while(itr.hasNext()) {
 							ITradesBasedFilterHandler filter = itr.next();
@@ -53,14 +53,17 @@ public class LoadPortTradesBasedFilterHandler implements ITradesBasedFilterHandl
 						}
 						activeFilters.add(new PortTradesBasedFilterHandler(p));
 						viewer.getScenarioViewer().refresh();
+					});
+					for (final ITradesBasedFilterHandler f : activeFilters) {
+						if (f instanceof PortTradesBasedFilterHandler) {
+							final PortTradesBasedFilterHandler filter = (PortTradesBasedFilterHandler) f;
+							if (filter.referencePort.equals(p)) {
+								rA.setChecked(true);
+							}
+						}
 					}
-
-					), menu);
+					addActionToMenu(rA, menu);
 				}
-				// final EMFPath loadPortPath = new EMFPath(false, CargoBulkEditorPackage.Literals.ROW__LOAD_SLOT, CargoPackage.Literals.SLOT__PORT);
-				//
-				// addActionToMenu(new FilterAction("Load ports", portModel, PortPackage.Literals.PORT_MODEL__PORTS, loadPortPath), menu);
-
 			}
 
 			@Override
@@ -87,8 +90,6 @@ public class LoadPortTradesBasedFilterHandler implements ITradesBasedFilterHandl
 
 	@Override
 	public void activate(ColumnFilters columnFilters, Set<ITradesBasedFilterHandler> activeFilters) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -115,14 +116,11 @@ public class LoadPortTradesBasedFilterHandler implements ITradesBasedFilterHandl
 
 		@Override
 		public void activate(ColumnFilters columnFilters, Set<ITradesBasedFilterHandler> activeFilters) {
-
 		}
 
 		@Override
 		public void deactivate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters) {
-			activeFilters.remove(this); // TODO - how about isActive?
-			// columnFilters.removeGroupFilter(TradesBasedColumnFactory.LOAD_START_GROUP, TradesBasedColumnFactory.LOAD_START_GROUP);
-			// columnFilters.removeGroupFilter(TradesBasedColumnFactory.DISCHARGE_START_GROUP, TradesBasedColumnFactory.DISCHARGE_START_GROUP);
+			activeFilters.remove(this);
 		}
 
 		@Override
