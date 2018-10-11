@@ -6,7 +6,6 @@ package com.mmxlabs.lngdataserver.integration.distances;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +17,8 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
@@ -26,6 +27,9 @@ import com.mmxlabs.lngdataservice.client.distances.ApiClient;
 import com.mmxlabs.lngdataservice.client.distances.ApiException;
 import com.mmxlabs.lngdataservice.client.distances.api.DistancesApi;
 import com.mmxlabs.lngdataservice.client.distances.model.Version;
+
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * This implementation is not thread-safe.
@@ -191,5 +195,20 @@ public class DistanceRepository extends AbstractDataRepository {
 	protected String getVersionNotificationEndpoint() {
 		return "/distances/version_notification";
 	}
+	
+
+	public com.mmxlabs.lngdataserver.integration.distances.model.Version getLocalVersion(String versionTag) throws IOException {
+		ensureReady();
+		Request request = new Request.Builder().url(BackEndUrlProvider.INSTANCE.getUrl() + SYNC_VERSION_ENDPOINT + versionTag).build();
+		try (Response response = CLIENT.newCall(request).execute()) {
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.findAndRegisterModules();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+			return mapper.readValue(response.body().byteStream(), com.mmxlabs.lngdataserver.integration.distances.model.Version.class);
+		}
+
+	}
+
 
 }

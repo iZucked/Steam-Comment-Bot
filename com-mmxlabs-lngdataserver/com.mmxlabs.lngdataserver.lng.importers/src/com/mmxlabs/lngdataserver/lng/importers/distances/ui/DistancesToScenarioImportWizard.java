@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.lng.importers.distances.ui;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -19,11 +20,8 @@ import org.eclipse.ui.IWorkbench;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.distances.DefaultPortProvider;
 import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
-import com.mmxlabs.lngdataserver.integration.distances.IDistanceProvider;
-import com.mmxlabs.lngdataserver.integration.distances.ILocationProvider;
-import com.mmxlabs.lngdataserver.integration.distances.LocationRepository;
+import com.mmxlabs.lngdataserver.integration.distances.model.Version;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
@@ -34,6 +32,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 
 public class DistancesToScenarioImportWizard extends Wizard implements IImportWizard {
 
@@ -44,11 +43,11 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 	private final ScenarioInstance currentInstance;
 
-	private @Nullable String versionIdentifier;
+	private @Nullable final String versionIdentifier;
 
-	private boolean autoSave;
+	private final boolean autoSave;
 
-	public DistancesToScenarioImportWizard(@Nullable String versionIdentifier, final ScenarioInstance currentInstance, boolean autoSave) {
+	public DistancesToScenarioImportWizard(@Nullable final String versionIdentifier, final ScenarioInstance currentInstance, final boolean autoSave) {
 		this.versionIdentifier = versionIdentifier;
 		this.currentInstance = currentInstance;
 		this.autoSave = autoSave;
@@ -79,24 +78,18 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 						try {
 							final DistanceRepository distanceRepository = DistanceRepository.INSTANCE;
-							
-							final IDistanceProvider distanceProvider = distanceRepository.getDistances(versionTag);
 
-							final LocationRepository portRepository = new LocationRepository();
-							ILocationProvider portProvider;
-							portProvider = new DefaultPortProvider(versionTag, portRepository.getPorts(versionTag));
-							final PortAndDistancesToScenarioCopier copier = new PortAndDistancesToScenarioCopier();
-
+							final Version version = distanceRepository.getLocalVersion(versionTag);
 							for (final ScenarioInstance scenarioInstance : scenarioSelectionPage.getSelectedScenarios()) {
 
 								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 								try (ModelReference modelReference = modelRecord.aquireReference(DistancesToScenarioImportWizard.class.getSimpleName())) {
 									modelReference.executeWithLock(true, () -> {
-										monitor.subTask(String.format("Importing %s into %s", distanceProvider.getVersion(), modelRecord.getName()));
+										monitor.subTask(String.format("Importing %s into %s", versionTag, modelRecord.getName()));
 
 										final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
 										final EditingDomain editingDomain = modelReference.getEditingDomain();
-										final Command command = copier.getUpdateCommand(editingDomain, portProvider, distanceProvider, portModel);
+										final Command command = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
 
 										if (!command.canExecute()) {
 											throw new RuntimeException("Unable to execute command");
@@ -106,7 +99,7 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 										if (autoSave) {
 											try {
 												modelReference.save();
-											} catch (IOException e) {
+											} catch (final IOException e) {
 												// TODO Auto-generated catch block
 												e.printStackTrace();
 											}

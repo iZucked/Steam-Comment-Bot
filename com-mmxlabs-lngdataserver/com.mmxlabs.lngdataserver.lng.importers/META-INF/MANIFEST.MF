@@ -57,3 +57,4 @@ Export-Package: com.mmxlabs.lngdataserver.lng.exporters.port,
  com.mmxlabs.lngdataserver.lng.importers.pricing
 Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.lngdataserver.lng.importers
+Service-Component: OSGI-INF/ImportLiNGODataHandler.xml

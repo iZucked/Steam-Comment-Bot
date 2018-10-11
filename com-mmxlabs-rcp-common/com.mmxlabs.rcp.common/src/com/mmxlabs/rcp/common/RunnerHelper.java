@@ -5,6 +5,7 @@
 package com.mmxlabs.rcp.common;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -44,6 +45,28 @@ public final class RunnerHelper {
 			return null;
 		}
 		return display;
+	}
+
+	/**
+	 * Run the task in a blocking manner.
+	 * 
+	 * @param runnable
+	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
+	 */
+	public static <R> R syncExecFunc(@NonNull final Function<Display, R> runnable) {
+
+		final Display display = getWorkbenchDisplay();
+		if (display == null) {
+			return null;
+		}
+
+		if (display.getThread() == Thread.currentThread()) {
+			return runnable.apply(display);
+		} else {
+			Object[] r = new Object[1];
+			display.syncExec(() -> r[0] = runnable.apply(display));
+			return (R) r[0];
+		}
 	}
 
 	/**

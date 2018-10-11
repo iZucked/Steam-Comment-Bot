@@ -34,6 +34,7 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
+import org.omg.CORBA.ShortSeqHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,7 +109,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 			return Status.OK_STATUS;
 		}
 		// Handle e.g. desktop to application DND
-		else if (FileTransfer.getInstance().isSupportedType(transferType) && (target instanceof Container || target == null)) {
+		else if (FileTransfer.getInstance().isSupportedType(transferType) && ((target instanceof ScenarioService || target instanceof Folder) || target == null)) {
 			final Object obj = FileTransfer.getInstance().nativeToJava(transferType);
 
 			if (!(target instanceof Folder || target instanceof ScenarioService)) {
@@ -122,6 +123,27 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 					// Expect this type of extension
 					final String lowerFilePath = filePath.toLowerCase();
 					if (!lowerFilePath.endsWith(".lingo")) {
+						return Status.CANCEL_STATUS;
+
+					}
+				}
+
+			}
+
+			return Status.OK_STATUS;
+		} else if (FileTransfer.getInstance().isSupportedType(transferType) && (target instanceof ScenarioInstance || target == null)) {
+			final Object obj = FileTransfer.getInstance().nativeToJava(transferType);
+
+			if (obj instanceof String[]) {
+				final String[] files = (String[]) obj;
+				if (files.length != 1) {
+					return Status.CANCEL_STATUS;
+
+				}
+				for (final String filePath : files) {
+					// Expect this type of extension
+					final String lowerFilePath = filePath.toLowerCase();
+					if (!lowerFilePath.endsWith(".lingodata")) {
 						return Status.CANCEL_STATUS;
 
 					}
@@ -206,7 +228,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 												} catch (final Exception e) {
 													log.error(e.getMessage(), e);
 													RunnerHelper.asyncExec((display) -> {
-														MessageDialog.openError(display.getActiveShell(), "Error copying scenarios", "There was an error copying scenarios. Please ensure they can all be opened.");
+														MessageDialog.openError(display.getActiveShell(), "Error copying scenarios",
+																"There was an error copying scenarios. Please ensure they can all be opened.");
 													});
 												}
 											} else {
@@ -302,7 +325,45 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 							return !handled;
 						});
 					}
+				}
+			} else if (FileTransfer.getInstance().isSupportedType(currentTransfer)) {
+				final Object obj = FileTransfer.getInstance().nativeToJava(currentTransfer);
+				if (obj instanceof String[]) {
+					final String[] files = (String[]) obj;
+					return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+						try {
+							dialog.run(true, true, new IRunnableWithProgress() {
+								@Override
+								public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
+									monitor.beginTask("Import data", 10 * files.length);
+									try {
+
+										for (final String filePath : files) {
+											if (monitor.isCanceled()) {
+												return;
+											}
+											monitor.setTaskName("Copying " + filePath);
+											ServiceHelper.withAllServices(ILiNGODataImportHandler.class, null, handler -> {
+												final boolean handled = handler.importLiNGOData(filePath, scenarioInstance);
+												return !handled;
+											});
+											monitor.worked(10);
+										}
+									} catch (final Exception e) {
+										log.error(e.getMessage(), e);
+									} finally {
+										monitor.done();
+									}
+								}
+							});
+						} catch (final Exception e) {
+							log.error(e.getMessage(), e);
+							return Status.CANCEL_STATUS;
+						}
+						return Status.OK_STATUS;
+					});
 				}
 			}
 

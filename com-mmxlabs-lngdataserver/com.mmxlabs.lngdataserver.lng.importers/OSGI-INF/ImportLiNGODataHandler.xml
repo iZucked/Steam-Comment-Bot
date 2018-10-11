@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.lngdataserver.lng.importers.lingodata.ImportLiNGODataHandler">
+   <implementation class="com.mmxlabs.lngdataserver.lng.importers.lingodata.ImportLiNGODataHandler"/>
+   <service>
+      <provide interface="com.mmxlabs.scenario.service.ui.dnd.ILiNGODataImportHandler"/>
+   </service>
+</scr:component>
