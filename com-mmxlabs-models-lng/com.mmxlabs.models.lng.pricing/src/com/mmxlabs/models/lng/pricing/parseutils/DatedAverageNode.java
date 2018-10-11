@@ -2,18 +2,30 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.commercial.parseutils;
+package com.mmxlabs.models.lng.pricing.parseutils;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
-public class ShiftNode extends AbstractMarkedUpNode {
+public class DatedAverageNode extends AbstractMarkedUpNode {
 	private MarkedUpNode shiftedNode;
 	private int months;
+	private int lag;
+	private int reset;
 
-	public ShiftNode(MarkedUpNode shiftedNode, int months) {
+	public DatedAverageNode(MarkedUpNode shiftedNode, int months, int lag, int reset) {
 		this.shiftedNode = shiftedNode;
 		this.months = months;
+		this.lag = lag;
+		this.reset = reset;
+	}
+
+	public int getLag() {
+		return lag;
+	}
+
+	public int getReset() {
+		return reset;
 	}
 
 	public MarkedUpNode getChild() {

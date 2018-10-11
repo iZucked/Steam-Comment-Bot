@@ -16,12 +16,6 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesOperatorExpression;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
-import com.mmxlabs.models.lng.commercial.parseutils.IndexConversion;
-import com.mmxlabs.models.lng.commercial.parseutils.IndexConversion.BreakEvenType;
-import com.mmxlabs.models.lng.commercial.parseutils.IndexConversion.Form;
-import com.mmxlabs.models.lng.commercial.parseutils.LookupData;
-import com.mmxlabs.models.lng.commercial.parseutils.MarkedUpNode;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -32,6 +26,12 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
+import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion;
+import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion.BreakEvenType;
+import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion.Form;
+import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
+import com.mmxlabs.models.lng.pricing.parseutils.MarkedUpNode;
+import com.mmxlabs.models.lng.pricing.parseutils.Nodes;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
@@ -216,12 +216,12 @@ public class IndexConversionsTest {
 		makeFXCurve("EURO", "USD", 1.111, pricingModel);
 
 		@NonNull
-		final LookupData lookupData = Exposures.createLookupData(pricingModel);
+		final LookupData lookupData = LookupData.createLookupData(pricingModel);
 		// Parse the expression
 		final IExpression<Node> parse = new RawTreeParser().parse(expression);
 		final Node p = parse.evaluate();
-		final Node node = Exposures.expandNode(p, lookupData);
-		final MarkedUpNode markedUpNode = Exposures.markupNodes(node, lookupData);
+		final Node node = Nodes.expandNode(p, lookupData);
+		final MarkedUpNode markedUpNode = Nodes.markupNodes(node, lookupData);
 		return markedUpNode;
 	}
 	
@@ -240,7 +240,7 @@ public class IndexConversionsTest {
 		makeFXCurve("EURO", "USD", 1.111, pricingModel);
 		
 		@NonNull
-		final LookupData lookupData = Exposures.createLookupData(pricingModel);
+		final LookupData lookupData = LookupData.createLookupData(pricingModel);
 		
 		final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
 		final IExpression<ISeries> series = p.parse(expression);

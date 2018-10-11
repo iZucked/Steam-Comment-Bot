@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.commercial.parseutils;
+package com.mmxlabs.models.lng.pricing.parseutils;
 
 import java.time.YearMonth;
 import java.util.Collection;
@@ -209,7 +209,7 @@ public class IndexConversion {
 	}
 
 	public static Pair<MarkedUpNode, MarkedUpNode> getOperatorChildren(OperatorNode node) {
-		List<@NonNull MarkedUpNode> children = node.getChildren();
+		List<com.mmxlabs.models.lng.pricing.parseutils.MarkedUpNode> children = node.getChildren();
 		if (children.size() == 2) {
 			Optional<MarkedUpNode> optionalConstant = children.stream().filter(c -> (c instanceof ConstantNode || c instanceof BreakevenNode)).findFirst();
 			MarkedUpNode constant = optionalConstant.isPresent() ? optionalConstant.get() : null;
@@ -315,7 +315,7 @@ public class IndexConversion {
 
 	private static double parseExpression(@NonNull PricingModel pricingModel, @NonNull String expression, YearMonth date) {
 		@NonNull
-		final LookupData lookupData = Exposures.createLookupData(pricingModel);
+		final LookupData lookupData = LookupData.createLookupData(pricingModel);
 
 		final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
 		final IExpression<ISeries> series = p.parse(expression);
@@ -331,12 +331,12 @@ public class IndexConversion {
 
 	public static MarkedUpNode getMarkedUpNode(@NonNull PricingModel pricingModel, @NonNull String expression) {
 		@NonNull
-		final LookupData lookupData = Exposures.createLookupData(pricingModel);
+		final LookupData lookupData = LookupData.createLookupData(pricingModel);
 		// Parse the expression
 		final IExpression<Node> parse = new RawTreeParser().parse(expression);
 		final Node p = parse.evaluate();
-		final Node node = Exposures.expandNode(p, lookupData);
-		final MarkedUpNode markedUpNode = Exposures.markupNodes(node, lookupData);
+		final Node node = Nodes.expandNode(p, lookupData);
+		final MarkedUpNode markedUpNode = Nodes.markupNodes(node, lookupData);
 		return markedUpNode;
 	}
 

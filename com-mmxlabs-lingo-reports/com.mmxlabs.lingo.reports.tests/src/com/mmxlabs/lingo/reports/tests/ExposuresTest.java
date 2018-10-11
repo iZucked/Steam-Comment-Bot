@@ -28,7 +28,6 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
-import com.mmxlabs.models.lng.commercial.parseutils.LookupData;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
@@ -40,6 +39,7 @@ import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
@@ -319,7 +319,7 @@ public class ExposuresTest {
 		// Sale
 		final boolean isPurchase = false;
 
-		final @NonNull LookupData lookupData = Exposures.createLookupData(pricingModel);
+		final @NonNull LookupData lookupData = LookupData.createLookupData(pricingModel);
 
 		final Collection<ExposureDetail> details = Exposures.calculateExposure(expression, pricingDate, volume, isPurchase, lookupData, pricingDay);
 		checker.validate(details, expression, lookupData);

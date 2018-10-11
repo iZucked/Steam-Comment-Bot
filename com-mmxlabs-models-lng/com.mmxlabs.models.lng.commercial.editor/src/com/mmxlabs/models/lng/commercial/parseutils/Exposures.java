@@ -35,11 +35,24 @@ import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
+import com.mmxlabs.models.lng.pricing.parseutils.CommodityNode;
+import com.mmxlabs.models.lng.pricing.parseutils.ConstantNode;
+import com.mmxlabs.models.lng.pricing.parseutils.ConversionNode;
+import com.mmxlabs.models.lng.pricing.parseutils.CurrencyNode;
+import com.mmxlabs.models.lng.pricing.parseutils.DatedAverageNode;
+import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
+import com.mmxlabs.models.lng.pricing.parseutils.MarkedUpNode;
+import com.mmxlabs.models.lng.pricing.parseutils.MaxFunctionNode;
+import com.mmxlabs.models.lng.pricing.parseutils.MinFunctionNode;
+import com.mmxlabs.models.lng.pricing.parseutils.Nodes;
+import com.mmxlabs.models.lng.pricing.parseutils.OperatorNode;
+import com.mmxlabs.models.lng.pricing.parseutils.SCurveNode;
+import com.mmxlabs.models.lng.pricing.parseutils.ShiftNode;
+import com.mmxlabs.models.lng.pricing.parseutils.SplitNode;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -70,19 +83,6 @@ public class Exposures {
 		VOLUME_MMBTU, VOLUME_NATIVE, NATIVE_VALUE
 	}
 
-	public static @NonNull LookupData createLookupData(final PricingModel pricingModel) {
-		final LookupData lookupData = new LookupData();
-		lookupData.pricingModel = pricingModel;
-
-		pricingModel.getCommodityIndices().forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getCurrencyIndices().forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getConversionFactors().forEach(f -> lookupData.conversionMap.put(PriceIndexUtils.createConversionFactorName(f).toLowerCase(), f));
-		pricingModel.getConversionFactors().forEach(f -> lookupData.reverseConversionMap.put(PriceIndexUtils.createReverseConversionFactorName(f).toLowerCase(), f));
-
-		return lookupData;
-
-	}
-
 	public static void calculateExposures(final @NonNull LNGScenarioModel scenarioModel, final @Nullable Schedule schedule) {
 
 		if (schedule == null) {
@@ -91,7 +91,7 @@ public class Exposures {
 
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-		final LookupData lookupData = createLookupData(pricingModel);
+		final LookupData lookupData = LookupData.createLookupData(pricingModel);
 
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -163,62 +163,9 @@ public class Exposures {
 		// Parse the expression
 		final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
 		final Node p = parse.evaluate();
-		final Node node = expandNode(p, lookupData);
-		final MarkedUpNode markedUpNode = markupNodes(node, lookupData);
+		final Node node = Nodes.expandNode(p, lookupData);
+		final MarkedUpNode markedUpNode = Nodes.markupNodes(node, lookupData);
 		return createExposureDetail(markedUpNode, date, volumeInMMBTu, isPurchase, lookupData, dayOfMonth);
-	}
-
-	/**
-	 * Expands the node tree. Returns a new node if the parentNode has change and needs to be replaced in the upper chain. Returns null if the node does not need replacing (note: the children may
-	 * still have changed).
-	 * 
-	 * @param exposedIndexToken
-	 * @param parentNode
-	 * @param pricingModel
-	 * @param date
-	 * @return
-	 */
-	public static @NonNull Node expandNode(@NonNull final Node parentNode, final LookupData lookupData) {
-
-		if (lookupData.expressionCache.containsKey(parentNode.token)) {
-			return lookupData.expressionCache.get(parentNode.token);
-		}
-
-		if (parentNode.children.length == 0) {
-			// Leaf node, this should be an index or a value
-			if (lookupData.commodityMap.containsKey(parentNode.token.toLowerCase())) {
-				final CommodityIndex idx = lookupData.commodityMap.get(parentNode.token.toLowerCase());
-
-				// Matched derived index...
-				if (idx.getData() instanceof DerivedIndex<?>) {
-					final DerivedIndex<?> derivedIndex = (DerivedIndex<?>) idx.getData();
-					// Parse the expression
-					final IExpression<Node> parse = new RawTreeParser().parse(derivedIndex.getExpression());
-					final Node p = parse.evaluate();
-					// Expand the parsed tree again if needed,
-					@Nullable
-					final Node expandNode = expandNode(p, lookupData);
-					// return the new sub-parse tree for the expression
-					if (expandNode != null) {
-						lookupData.expressionCache.put(derivedIndex.getExpression(), expandNode);
-						return expandNode;
-					}
-					return p;
-				} else {
-					return parentNode;
-				}
-			}
-			return parentNode;
-		} else {
-			// We have children, token *should* be an operator, expand out the child nodes
-			for (int i = 0; i < parentNode.children.length; ++i) {
-				final Node replacement = expandNode(parentNode.children[i], lookupData);
-				if (replacement != null) {
-					parentNode.children[i] = replacement;
-				}
-			}
-			return parentNode;
-		}
 	}
 
 	/**
@@ -273,124 +220,20 @@ public class Exposures {
 		if (priceExpression != null && !priceExpression.isEmpty()) {
 			if (!priceExpression.equals("?")) {
 
-				if (lookupData.expressionCache2.containsKey(priceExpression)) {
-					return lookupData.expressionCache2.get(priceExpression);
+				if (lookupData.expressionToNode.containsKey(priceExpression)) {
+					return lookupData.expressionToNode.get(priceExpression);
 				}
 				// Parse the expression
 				final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
 				final Node p = parse.evaluate();
-				final Node node = expandNode(p, lookupData);
-				final MarkedUpNode markedUpNode = markupNodes(node, lookupData);
-				lookupData.expressionCache2.put(priceExpression, markedUpNode);
+				final Node node = Nodes.expandNode(p, lookupData);
+				final MarkedUpNode markedUpNode = Nodes.markupNodes(node, lookupData);
+				lookupData.expressionToNode.put(priceExpression, markedUpNode);
 				return markedUpNode;
 			}
 		}
 
 		return null;
-	}
-
-	public static @NonNull MarkedUpNode markupNodes(@NonNull final Node parentNode, final LookupData lookupData) {
-		final @NonNull MarkedUpNode n;
-
-		if (parentNode.token.equalsIgnoreCase("MAX")) {
-			n = new MaxFunctionNode();
-		} else if (parentNode.token.equalsIgnoreCase("MIN")) {
-			n = new MinFunctionNode();
-		} else if (parentNode.token.equalsIgnoreCase("SPLITMONTH")) {
-			final MarkedUpNode splitPoint = markupNodes(parentNode.children[2], lookupData);
-			double splitPointValue = -1;
-			splitPointValue = extractDoubleNode(splitPoint);
-			n = new SplitNode((int) splitPointValue);
-		} else if (parentNode.token.equalsIgnoreCase("SHIFT")) {
-			final MarkedUpNode child = markupNodes(parentNode.children[0], lookupData);
-			final MarkedUpNode shiftValue = markupNodes(parentNode.children[1], lookupData);
-			final double shift;
-			if (shiftValue instanceof ConstantNode) {
-				final ConstantNode constantNode = (ConstantNode) shiftValue;
-				shift = constantNode.getConstant();
-			} else if (shiftValue instanceof OperatorNode) {
-				// FIXME: Only allow a specific operation here -- effectively the expression -x,
-				// generated as 0-x.
-				final OperatorNode operatorNode = (OperatorNode) shiftValue;
-				if (operatorNode.getOperator().equals("-") && operatorNode.getChildren().size() == 2 && operatorNode.getChildren().get(0) instanceof ConstantNode
-						&& operatorNode.getChildren().get(1) instanceof ConstantNode) {
-					shift = ((ConstantNode) operatorNode.getChildren().get(0)).getConstant() - ((ConstantNode) operatorNode.getChildren().get(1)).getConstant();
-				} else {
-					throw new IllegalStateException();
-				}
-			} else {
-				throw new IllegalStateException();
-			}
-			n = new ShiftNode(child, (int) Math.round(shift));
-			return n;
-		} else if (parentNode.token.equalsIgnoreCase("DATEDAVG")) {
-			final MarkedUpNode child = markupNodes(parentNode.children[0], lookupData);
-			final MarkedUpNode monthsValue = markupNodes(parentNode.children[1], lookupData);
-			final MarkedUpNode lagValue = markupNodes(parentNode.children[2], lookupData);
-			final MarkedUpNode resetValue = markupNodes(parentNode.children[3], lookupData);
-			final double months;
-			final double lag;
-			final double reset;
-			months = extractDoubleNode(monthsValue);
-			lag = extractDoubleNode(lagValue);
-			reset = extractDoubleNode(resetValue);
-			n = new DatedAverageNode(child, (int) Math.round(months), (int) Math.round(lag), (int) Math.round(reset));
-			return n;
-		} else if (parentNode.token.equalsIgnoreCase("S")) {
-			final MarkedUpNode base = markupNodes(parentNode.children[0], lookupData);
-
-			final double lowerThan = extractDoubleNode(markupNodes(parentNode.children[1], lookupData));
-			final double higherThan = extractDoubleNode(markupNodes(parentNode.children[2], lookupData));
-			final double a1 = extractDoubleNode(markupNodes(parentNode.children[3], lookupData));
-			final double b1 = extractDoubleNode(markupNodes(parentNode.children[4], lookupData));
-			final double a2 = extractDoubleNode(markupNodes(parentNode.children[5], lookupData));
-			final double b2 = extractDoubleNode(markupNodes(parentNode.children[6], lookupData));
-			final double a3 = extractDoubleNode(markupNodes(parentNode.children[7], lookupData));
-			final double b3 = extractDoubleNode(markupNodes(parentNode.children[8], lookupData));
-
-			n = new SCurveNode(base, lowerThan, higherThan, a1, b1, a2, b2, a3, b3);
-			return n;
-		} else if (parentNode.token.equals("-") && parentNode.children.length == 1) {
-			// Prefix operator! - Convert to 0-expr
-			n = new OperatorNode(parentNode.token);
-			n.addChildNode(new ConstantNode(0.0));
-			n.addChildNode(markupNodes(parentNode.children[0], lookupData));
-			return n;
-		} else if (parentNode.token.equals("*") || parentNode.token.equals("/") || parentNode.token.equals("+") || parentNode.token.equals("-") || parentNode.token.equals("%")) {
-			n = new OperatorNode(parentNode.token);
-		} else if (lookupData.commodityMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
-
-		} else if (lookupData.currencyMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new CurrencyNode(lookupData.currencyMap.get(parentNode.token.toLowerCase()));
-
-		} else if (lookupData.conversionMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new ConversionNode(parentNode.token, lookupData.conversionMap.get(parentNode.token.toLowerCase()), false);
-		} else if (lookupData.reverseConversionMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new ConversionNode(parentNode.token, lookupData.reverseConversionMap.get(parentNode.token.toLowerCase()), true);
-		} else if (parentNode.token.equals("?")) {
-			n = new BreakevenNode();
-		} else {
-			// This should be a constant
-			try {
-				n = new ConstantNode(Double.parseDouble(parentNode.token));
-			} catch (final Exception e) {
-				throw new RuntimeException("Unexpected token: " + parentNode.token);
-			}
-		}
-
-		for (final Node child : parentNode.children) {
-			n.addChildNode(markupNodes(child, lookupData));
-		}
-		return n;
-	}
-
-	private static double extractDoubleNode(final MarkedUpNode lowerThanValue) {
-		if (lowerThanValue instanceof ConstantNode) {
-			final ConstantNode constantNode = (ConstantNode) lowerThanValue;
-			return constantNode.getConstant();
-		}
-		throw new IllegalStateException();
 	}
 
 	/**

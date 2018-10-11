@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.commercial.parseutils;
+package com.mmxlabs.models.lng.pricing.parseutils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
-public class MinFunctionNode extends AbstractMarkedUpNode {
+public class MaxFunctionNode extends AbstractMarkedUpNode {
 	List<MarkedUpNode> children = new ArrayList<>(2);
 
 	public List<MarkedUpNode> getChildren() {

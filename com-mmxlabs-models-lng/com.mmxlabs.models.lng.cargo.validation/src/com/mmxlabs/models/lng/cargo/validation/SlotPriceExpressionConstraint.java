@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -16,11 +19,15 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -70,25 +77,12 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 						start = slot.getWindowStartWithSlotOrPortTime();
 					}
 					if (start != null) {
+
 						final YearMonth key = YearMonth.from(start);
 						PriceExpressionUtils.constrainPriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression, minExpressionValue, maxExpressionValue, key, failures);
 
 						if (priceExpression != null && !priceExpression.trim().isEmpty()) {
-							for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(priceExpression)) {
-								final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
-								if (date == null) {
-									final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-											(IConstraintStatus) ctx.createFailureStatus(String.format("[Slot|%s] There is no commodity pricing data for curve %s", slot.getName(), index.getName())));
-									dcsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
-									failures.add(dcsd);
-								} else if (date.isAfter(key)) {
-									final String monthDisplayname = date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-									final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String
-											.format("[Slot|%s] There is no commodity pricing data before %s %04d for curve %s", slot.getName(), monthDisplayname, date.getYear(), index.getName())));
-									dcsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
-									failures.add(dcsd);
-								}
-							}
+							PriceExpressionUtils.checkExpressionAgainstPricingDate(ctx, priceExpression, slot, start.toLocalDate(), CargoPackage.Literals.SLOT__PRICE_EXPRESSION, failures);
 						}
 					}
 				}

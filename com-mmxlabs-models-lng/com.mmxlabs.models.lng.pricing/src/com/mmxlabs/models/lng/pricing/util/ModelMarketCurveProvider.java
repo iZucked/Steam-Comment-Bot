@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,12 +24,12 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DatePoint;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
@@ -39,6 +40,10 @@ import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
+import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
+import com.mmxlabs.models.lng.pricing.util.IndexToDate.IIndexToDateNode;
+import com.mmxlabs.models.lng.pricing.util.IndexToDate.IndexDateRecord;
+import com.mmxlabs.models.lng.pricing.util.IndexToDate.IndexToDateRecords;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 public class ModelMarketCurveProvider extends EContentAdapter {
@@ -208,28 +213,6 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		return map.getOrDefault(indexName.toLowerCase(), null);
 	}
 
-	private static class LookupData {
-		public Map<String, CommodityIndex> commodityMap = new HashMap<>();
-		public Map<String, CurrencyIndex> currencyMap = new HashMap<>();
-		public Map<String, CharterIndex> charterMap = new HashMap<>();
-		public Map<String, BaseFuelIndex> baseFuelMap = new HashMap<>();
-
-		public Map<String, Node> expressionCache = new HashMap<>();
-		public Map<String, Collection<NamedIndexContainer<?>>> expressionCache2 = new HashMap<>();
-	}
-
-	private static @NonNull LookupData createLookupData(final PricingModel pricingModel) {
-		final LookupData lookupData = new LookupData();
-
-		pricingModel.getCommodityIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getCharterIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.charterMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getBaseFuelPrices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.baseFuelMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getCurrencyIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
-
-		return lookupData;
-
-	}
-
 	public @NonNull Collection<@NonNull NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
 		if (priceExpression == null || priceExpression.trim().isEmpty()) {
 			return Collections.emptySet();
@@ -237,7 +220,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 		LookupData lookupData = expressionToIndexUseCache.get();
 		if (lookupData == null) {
-			lookupData = createLookupData(pricingModel);
+			lookupData = LookupData.createLookupData(pricingModel);
 			expressionToIndexUseCache = new SoftReference<>(lookupData);
 		}
 
@@ -263,6 +246,35 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		}
 		return Collections.emptySet();
 
+	}
+
+	public @NonNull List<Pair<NamedIndexContainer<?>, LocalDate>> getLinkedCurvesAndDate(final String priceExpression, LocalDate date) {
+		if (priceExpression == null || priceExpression.trim().isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		LookupData lookupData = expressionToIndexUseCache.get();
+		if (lookupData == null) {
+			lookupData = LookupData.createLookupData(pricingModel);
+			expressionToIndexUseCache = new SoftReference<>(lookupData);
+		}
+
+		final LookupData pLookupData = lookupData;
+		try {
+			IIndexToDateNode n = IndexToDate.calculateIndicesToDate(priceExpression, date, pLookupData);
+			if (n instanceof IndexToDateRecords) {
+				IndexToDateRecords indexToDateRecords = (IndexToDateRecords) n;
+				List<Pair<NamedIndexContainer<?>, LocalDate>> result = new LinkedList<>();
+				for (IndexDateRecord rec : indexToDateRecords.records) {
+					result.add(new Pair<>(rec.index, rec.date));
+				}
+				return result;
+
+			}
+		} catch (Exception e) {
+			// ignore
+		}
+		return Collections.emptyList();
 	}
 
 	private static @NonNull Node expandNode(@NonNull final Node parentNode, final LookupData lookupData) {
@@ -378,7 +390,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 	public NamedIndexContainer<?> getCurve(PriceIndexType priceIndexType, String name) {
 		LookupData lookupData = expressionToIndexUseCache.get();
 		if (lookupData == null) {
-			lookupData = createLookupData(pricingModel);
+			lookupData = LookupData.createLookupData(pricingModel);
 			expressionToIndexUseCache = new SoftReference<>(lookupData);
 		}
 

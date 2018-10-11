@@ -4,11 +4,16 @@
  */
 package com.mmxlabs.models.lng.pricing.validation.utils;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.TextStyle;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -26,6 +31,8 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.UnknownSeriesException;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
@@ -382,5 +389,38 @@ public class PriceExpressionUtils {
 		}
 		return null;
 
+	}
+
+	public static void checkExpressionAgainstPricingDate(IValidationContext ctx, String priceExpression, Slot slot, LocalDate pricingDate,  EStructuralFeature feature, final List<IStatus> failures) {
+		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
+		final List<Pair<NamedIndexContainer<?>, LocalDate>> linkedCurvesAndDate = marketCurveProvider.getLinkedCurvesAndDate(priceExpression, pricingDate);
+
+		final Map<NamedIndexContainer<?>, LocalDate> result1 = linkedCurvesAndDate.stream()
+				.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond, (oldValue, newValue) -> (oldValue.isBefore(newValue) ? oldValue : newValue)));
+
+		for (final Map.Entry<NamedIndexContainer<?>, LocalDate> e : result1.entrySet()) {
+			final NamedIndexContainer<?> index = e.getKey();
+			String type = "index";
+			if (index instanceof CommodityIndex) {
+				type = "commodity pricing";
+			} else if (index instanceof CurrencyIndex) {
+				type = "currency";
+			}
+			final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
+			if (date == null) {
+
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("[Slot|%s] There is no %s data for curve %s", slot.getName(), type, index.getName())));
+				dcsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+				failures.add(dcsd);
+
+			} else if (date.isAfter(YearMonth.from(e.getValue()))) {
+				final String monthDisplayname = date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
+						.createFailureStatus(String.format("[Slot|%s] There is no %s data before %s %04d for curve %s", slot.getName(), type, monthDisplayname, date.getYear(), index.getName())));
+				dcsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+				failures.add(dcsd);
+			}
+		}
 	}
 }
