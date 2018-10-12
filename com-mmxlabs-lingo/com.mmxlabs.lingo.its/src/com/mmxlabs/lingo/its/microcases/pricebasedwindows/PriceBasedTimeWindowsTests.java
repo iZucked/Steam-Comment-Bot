@@ -4,20 +4,16 @@
  */
 package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -35,15 +31,22 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -91,43 +94,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		addedFeatures.clear();
 	}
 
-	@Before
-	public void constructor() throws MalformedURLException {
-
-		scenarioDataProvider = importReferenceData();
-		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
-		scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
-		scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
-
-		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		portFinder = scenarioModelFinder.getPortModelFinder();
-
-		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
-		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		entity = commercialModelFinder.findEntity("Shipping");
-
-		// Set a default prompt in the past
+	@Override
+	protected void setPromptDates() {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
-	}
-
-	@After
-	public void destructor() {
-		lngScenarioModel = null;
-		scenarioModelFinder = null;
-		scenarioModelBuilder = null;
-		commercialModelFinder = null;
-		fleetModelFinder = null;
-		portFinder = null;
-		cargoModelBuilder = null;
-		fleetModelBuilder = null;
-		spotMarketsModelBuilder = null;
-		pricingModelBuilder = null;
-		entity = null;
 	}
 
 	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
@@ -782,6 +751,77 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
 			});
 		});
+	}
+
+	/**
+	 * Test for issue;
+	 * 
+	 * Single cargo with price change at month boundary and an India timezone (n+30mins tz offset).
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testNonHourAlignedTimezoneOffset() throws Exception {
+
+		// Do not set this! Timezone critical for test
+		// portModelBuilder.setAllExistingPortsToUTC();
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
+		CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("CharterInMarket", vessel, "1", 1);
+		charterInMarket.setEnabled(true);
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase(loadName, LocalDate.of(2018, 9, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withPricingEvent(PricingEvent.START_LOAD, null) //
+				.build() //
+				//
+				.makeDESSale(dischargeName, LocalDate.of(2018, 11, 30), portFinder.findPort("Dahej"), null, entity, "Test") //
+				.withVisitDuration(24) //
+				.withWindowStartTime(0) //
+				.withWindowSize(2, TimePeriod.DAYS) //
+				.withPricingEvent(PricingEvent.START_DISCHARGE, null) //
+				.build() //
+				//
+				.withVesselAssignment(charterInMarket, 1, 1) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2018, 8, 1), LocalDate.of(2019, 1, 1));
+
+		CommodityIndex testCurve = pricingModelBuilder.makeCommodityDataCurve("Test", "$", "mmbtu") //
+				.addIndexPoint(YearMonth.of(2018, 1), 6.0) //
+				.addIndexPoint(YearMonth.of(2018, 12), 12.0) //
+				.build();
+
+		// Create UserSettings
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setWithSpotCargoMarkets(true);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withUserSettings(userSettings) //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		try {
+			runnerBuilder.evaluateInitialState();
+		} finally {
+			runnerBuilder.dispose();
+		}
+
+		CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
+		SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
+
+		// 2018-10-12: This currently fails as the timezone rounding means we end up with the wrong price.
+		Assert.assertEquals(12.0, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.1);
 	}
 
 	public IDischargeSlot getDefaultOptimiserDischargeSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
