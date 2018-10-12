@@ -7,7 +7,10 @@ package com.mmxlabs.models.ui.editors.impl;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.BasicExtendedMetaData.EStructuralFeatureExtendedMetaData;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -37,6 +40,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	protected boolean isOverridable;
 	protected boolean isOverridableWithButton;
 	protected EStructuralFeature overrideToggleFeature;
+	private EStructuralFeature classOverrideFeature;
 
 	public UnsettableInlineEditor(final EStructuralFeature feature) {
 		super(feature);
@@ -78,6 +82,15 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		final Control c;
 
 		final boolean isUnsettable = feature.isUnsettable();
+		EAnnotation annotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		if (annotation != null) {
+			for (EObject o : annotation.getReferences()) {
+				if (o instanceof EStructuralFeature) {
+					classOverrideFeature = (EStructuralFeature) o;
+					break;
+				}
+			}
+		}
 
 		if (isOverridableWithButton || !isOverridable && isUnsettable) {
 			// FIXME: too early! Needs to be after/part of display(), once input has been set
@@ -350,7 +363,13 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (input instanceof MMXObject) {
 			final MMXObject mmxinput = (MMXObject) input;
 			final DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
-			if (di != null && di.getDelegateFeature() != null) { // && di.getDelegateFeature() == feature) {
+			if (di != null) {
+				if (classOverrideFeature != null) {
+					if (input.eGet(classOverrideFeature) == null) {
+						return false;
+					}
+				}
+
 				return true;
 			}
 

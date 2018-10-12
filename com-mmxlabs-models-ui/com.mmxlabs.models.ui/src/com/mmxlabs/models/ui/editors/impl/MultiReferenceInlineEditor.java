@@ -240,6 +240,6 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 		theLabel.setVisible(visible);
 		button.setVisible(visible);
 
-		super.setControlsEnabled(visible);
+		super.setControlsVisible(visible);
 	}
 }

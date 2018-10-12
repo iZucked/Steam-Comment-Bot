@@ -12,14 +12,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -36,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
@@ -106,6 +102,31 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
+	protected void updateControl() {
+		if (combo == null || combo.isDisposed()) {
+			return;
+		}
+
+		final List<Pair<String, EObject>> values = getValues();
+		// update combo contents
+		combo.removeAll();
+		nameList.clear();
+		valueList.clear();
+
+		for (final Pair<String, EObject> object : values) {
+			valueList.add(object.getSecond());
+			nameList.add(object.getFirst());
+			combo.add(object.getFirst());
+		}
+		super.updateControl();
+	}
+
+	@Override
+	protected Object getInitialUnsetValue() {
+		return null;
+	}
+
+	@Override
 	public Control createValueControl(final Composite parent) {
 		this.combo = new Combo(parent, SWT.READ_ONLY);
 		// this.combo = toolkit.createCombo(parent, SWT.READ_ONLY);
@@ -142,26 +163,6 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	}
 
-	@Override
-	protected void updateControl() {
-		if (combo == null || combo.isDisposed()) {
-			return;
-		}
-
-		final List<Pair<String, EObject>> values = getValues();
-		// update combo contents
-		combo.removeAll();
-		nameList.clear();
-		valueList.clear();
-
-		for (final Pair<String, EObject> object : values) {
-			valueList.add(object.getSecond());
-			nameList.add(object.getFirst());
-			combo.add(object.getFirst());
-		}
-		super.updateControl();
-	}
-
 	protected List<Pair<String, EObject>> getValues() {
 		return valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>> emptyList();
 	}
@@ -171,7 +172,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected void updateDisplay(final Object target) {
 
-		super.updateDisplay(getValue());
+		super.updateDisplay(target);//getValue());
 	}
 
 	@Override
@@ -188,11 +189,6 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	protected Object getInitialUnsetValue() {
-		return null;
-	}
-
-	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 
 		if (valueProvider != null) {
@@ -206,11 +202,13 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public void setControlsEnabled(final boolean enabled) {
+		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
+
 		if (combo != null && !combo.isDisposed()) {
-			combo.setEnabled(!isFeatureReadonly() && enabled);
+			combo.setEnabled(controlsEnabled);
 		}
 
-		super.setControlsEnabled(enabled);
+		super.setControlsEnabled(controlsEnabled);
 	}
 
 	@Override
