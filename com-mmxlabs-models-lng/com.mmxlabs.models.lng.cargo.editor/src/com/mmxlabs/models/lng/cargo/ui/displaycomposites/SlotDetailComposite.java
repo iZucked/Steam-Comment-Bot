@@ -18,9 +18,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.impl.EFSURIHandlerImpl;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -312,7 +314,28 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			final EStructuralFeature f = editor.getFeature();
 			feature2Editor.put(f, editor);
 			if (!allFeatures.contains(f)) {
-				missedFeaturesList.add(f);
+				Section section = getSectionFor(f);
+				switch (section) {
+				case MAIN:
+					mainFeatures.add(new EStructuralFeature[]{f});
+					break;
+				case PRICING:
+					pricingFeatures.add(new EStructuralFeature[]{f});
+					break;
+				case TERMS:
+					loadTermsFeatures.add(new EStructuralFeature[]{f});
+					dischargeTermsFeatures.add(new EStructuralFeature[]{f});
+					break;
+				case WINDOW:
+					windowFeatures.add(new EStructuralFeature[]{f});
+					break;
+				case OTHER:
+				default:
+					missedFeaturesList.add(f);
+					break;
+				
+				}
+				
 				allFeatures.add(f);
 			}
 		}
@@ -465,5 +488,28 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private String formatDate(final LocalDate localDate, final int hourOfDay) {
 
 		return String.format("%02d %s %04d %02d:00", localDate.getDayOfMonth(), localDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), localDate.getYear(), hourOfDay);
+	}
+	
+	
+	private enum Section {
+		OTHER, MAIN,
+		PRICING, WINDOW, TERMS,
+	}
+	
+	private Section getSectionFor(EStructuralFeature feature) {
+		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/layout/slot");
+
+		if (annotation != null) {
+			if (annotation.getDetails().containsKey("section")) {
+				String value = annotation.getDetails().get("section");
+				switch (value) {
+				case "main": return Section.MAIN;
+				case "pricing": return Section.PRICING;
+				case "window": return Section.WINDOW;
+				case "terms": return Section.TERMS;
+				}
+			}
+		}
+		return Section.OTHER;
 	}
 }
