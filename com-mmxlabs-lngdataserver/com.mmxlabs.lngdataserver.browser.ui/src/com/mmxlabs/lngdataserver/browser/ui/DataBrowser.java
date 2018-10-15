@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
@@ -82,6 +83,7 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceAdapterFactory;
+import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 
 public class DataBrowser extends ViewPart {
 
@@ -441,6 +443,7 @@ public class DataBrowser extends ViewPart {
 		dataViewer.addSelectionChangedListener(nodeSelectionListener);
 
 		root.eAdapters().add(new EContentAdapter() {
+			@Override
 			public void notifyChanged(org.eclipse.emf.common.notify.Notification notification) {
 				super.notifyChanged(notification);
 				if (notification.isTouch()) {
@@ -448,11 +451,8 @@ public class DataBrowser extends ViewPart {
 				}
 				if (notification.getFeature() == BrowserPackage.Literals.COMPOSITE_NODE__CURRENT) {
 					ViewerHelper.refresh(scenarioViewer, false);
-					ViewerHelper.refresh(dataViewer, false);
 				}
-				if (notification.getFeature() == BrowserPackage.Literals.COMPOSITE_NODE__CHILDREN) {
-					ViewerHelper.runIfViewerValid(dataViewer, false, (v) -> v.expandAll());
-				}
+				ViewerHelper.runIfViewerValid(dataViewer, false, (v) -> v.expandAll());
 			};
 		});
 		dataViewer.expandAll();
@@ -574,19 +574,20 @@ public class DataBrowser extends ViewPart {
 		}
 	}
 
-	class ScenarioContentProvider implements ITreeContentProvider {
+	class ScenarioContentProvider extends AdapterFactoryContentProvider implements ITreeContentProvider {
 
 		public ScenarioContentProvider() {
+			super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		}
 
-		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-
-		}
+//		@Override
+//		public void dispose() {
+//		}
+//
+//		@Override
+//		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+//
+//		}
 
 		@Override
 		public Object[] getElements(Object inputElement) {
