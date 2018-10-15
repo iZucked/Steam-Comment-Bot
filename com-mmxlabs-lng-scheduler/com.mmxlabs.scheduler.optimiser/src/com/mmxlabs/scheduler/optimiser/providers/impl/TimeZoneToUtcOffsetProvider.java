@@ -86,7 +86,6 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	@Override
 	public int UTC(final int localTime, final String timezoneId) {
 		final ZoneId tz = timezoneId == null ? ZoneId.of("UTC") : ZoneId.of(timezoneId);
-
 		// for now, re-throw any exceptions
 		try {
 			// check for illegal/wrong timezoneId
@@ -95,8 +94,9 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 				Instant i = Instant.ofEpochMilli( convertInternalToMillis(localTime));
 				ZonedDateTime atZone = i.atZone(tz);
 				Instant i2 = Instant.from(atZone.withZoneSameLocal(ZoneId.of("UTC")));
-				
-				final long utcInMillis = i2.toEpochMilli();//utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
+				long oo = tz.getRules().getOffset(i).getTotalSeconds() % (60 *60);
+
+				final long utcInMillis = i2.toEpochMilli() - (oo * 1000L);//utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
 				
 //				final long localTimeInMillis = convertInternalToMillis(localTime);
 //				// final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
@@ -143,8 +143,11 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 				Instant i = Instant.ofEpochMilli(utcTimeInMillis);
 				ZonedDateTime atZone = i.atZone(ZoneId.of("UTC"));
 				Instant i2 = Instant.from(atZone.withZoneSameLocal(tz));
+				long oo = tz.getRules().getOffset(i).getTotalSeconds() % (60 *60);
+
+				final long localInMillis = i2.toEpochMilli() + (oo * 1000L);//utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
 				
-				final long localInMillis = i2.toEpochMilli();//utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
+//				final long localInMillis = i2.toEpochMilli();//utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
 
 				return convertMillisToInternal(localInMillis);
 			} else {

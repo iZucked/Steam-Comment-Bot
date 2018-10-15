@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -15,6 +17,7 @@ import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 
 /**
  * Sanity check on Timezone conversion. Particularly important for Asia/Calcutta
@@ -27,8 +30,8 @@ public class TimeZoneTests {
 	private ModelEntityMap modelEntityMap;
 	private DateAndCurveHelper dateHelper;
 
-	public void testTimeZone(int year, int month, int day, String timeZone, boolean isJanEarliestTime, boolean dahejEarliestTime) {
-		String earliestTimeString = isJanEarliestTime ? "Jan 2014" : "Jul 2013";
+	public void testTimeZone(final int year, final int month, final int day, final String timeZone, final boolean isJanEarliestTime, final boolean dahejEarliestTime) {
+		final String earliestTimeString = isJanEarliestTime ? "Jan 2014" : "Jul 2013";
 		System.out.println(String.format("Testing: %s/%s/%s (%s) with earliest time %s", year, month + 1, day, timeZone, earliestTimeString));
 		if (isJanEarliestTime) {
 			if (dahejEarliestTime)
@@ -42,28 +45,28 @@ public class TimeZoneTests {
 				setJulyEarliestTime();
 		}
 		for (int i = 0; i < 24; i++) {
-			ZonedDateTime dateToTest = createDate(year, month, day, i, timeZone);
+			final ZonedDateTime dateToTest = createDate(year, month, day, i, timeZone);
 			testDate(dateToTest, timeZone);
 		}
 	}
 
-	public void testTimeZone(int year, int month, int day, String timeZone, boolean isJanEarliestTime) {
+	public void testTimeZone(final int year, final int month, final int day, final String timeZone, final boolean isJanEarliestTime) {
 		testTimeZone(year, month, day, timeZone, isJanEarliestTime, false);
 	}
 
-	public static ZonedDateTime createDate(int year, int month, int day, int hour, String timeZone) {
+	public static ZonedDateTime createDate(final int year, final int month, final int day, final int hour, final String timeZone) {
 		return ZonedDateTime.of(year, 1 + month, day, hour, 0, 0, 0, ZoneId.of(timeZone));
 	}
 
-	public void testDate(ZonedDateTime dateToTest, String timeZone) {
-		int dhToInt = dateHelper.convertTime(dateToTest);
-		ZonedDateTime intToDate = modelEntityMap.getDateFromHours(dhToInt, timeZone);
+	public void testDate(final ZonedDateTime dateToTest, final String timeZone) {
+		final int dhToInt = dateHelper.convertTime(dateToTest);
+		final ZonedDateTime intToDate = modelEntityMap.getDateFromHours(dhToInt, timeZone);
 		System.out.println(String.format("In: %s Out: %s", dateToTest, intToDate));
 		Assert.assertEquals(dateToTest, intToDate);
 	}
 
-	private void setJanuaryEarliestTime(String timeZone) {
-		ZonedDateTime jan = createDate(2014, 0, 10, 0, timeZone);
+	private void setJanuaryEarliestTime(final String timeZone) {
+		final ZonedDateTime jan = createDate(2014, 0, 10, 0, timeZone);
 		setEarliestTime(jan);
 	}
 
@@ -71,8 +74,8 @@ public class TimeZoneTests {
 		setJanuaryEarliestTime("UTC");
 	}
 
-	private void setJulyEarliestTime(String timeZone) {
-		ZonedDateTime jul = createDate(2013, 6, 10, 0, timeZone);
+	private void setJulyEarliestTime(final String timeZone) {
+		final ZonedDateTime jul = createDate(2013, 6, 10, 0, timeZone);
 		setEarliestTime(jul);
 	}
 
@@ -203,6 +206,70 @@ public class TimeZoneTests {
 		testTimeZone(2015, 6, 1, "Canada/Newfoundland", true, true);
 		testTimeZone(2015, 6, 1, "Canada/Newfoundland", false);
 		testTimeZone(2015, 6, 1, "Canada/Newfoundland", false, true);
+	}
+
+	@Test
+	public void testCalculattaWithIntervalTimeZoneProvider() {
+		// Initialise date strucutres
+		setEarliestTime(ZonedDateTime.of(2018, 9, 1, 0, 0, 0, 0, ZoneId.of("Etc/UTC")));
+
+		final LocalDateTime localDateTime = LocalDateTime.of(2018, 9, 30, 0, 0, 0);
+		final ZonedDateTime calcuttaDateTime = localDateTime.atZone(ZoneId.of("Asia/Calcutta"));
+		final ZonedDateTime calcuttaDateTimeAsUTC = calcuttaDateTime.withZoneSameLocal(ZoneId.of("Etc/UTC"));
+
+		final int dhInternalDate = dateHelper.convertTime(calcuttaDateTime);
+		final ZonedDateTime modelEntityMapCalcuttaTime = modelEntityMap.getDateFromHours(dhInternalDate, "Asia/Calcutta");
+
+		// Check we get the original time back.
+		Assert.assertEquals(calcuttaDateTime, modelEntityMapCalcuttaTime);
+
+		// Initialise internal helepr
+		final TimeZoneToUtcOffsetProvider helper = new TimeZoneToUtcOffsetProvider();
+		helper.setTimeZeroInMillis(Instant.from(dateHelper.getEarliestTime()).toEpochMilli());
+
+		// Convert to UTC, then back again.
+		final int utcEquiv = helper.UTC(dhInternalDate, "Asia/Calcutta");
+		final int newLocalTime = helper.localTime(utcEquiv, "Asia/Calcutta");
+
+		// We should match
+		Assert.assertEquals(dhInternalDate, newLocalTime);
+
+		final ZonedDateTime modelEntityMapCalcuttaUTCTime = modelEntityMap.getDateFromHours(utcEquiv, "Etc/UTC");
+		// Ahead of UTC - Expect to loose an hour
+		Assert.assertEquals(calcuttaDateTimeAsUTC.minusHours(1), modelEntityMapCalcuttaUTCTime);
+
+	}
+
+	@Test
+	public void testMinusHourHourWithIntervalTimeZoneProvider() {
+		// Initialise date structures
+		setEarliestTime(ZonedDateTime.of(2018, 9, 1, 0, 0, 0, 0, ZoneId.of("Etc/UTC")));
+
+		final LocalDateTime localDateTime = LocalDateTime.of(2018, 9, 30, 0, 0, 0);
+		final ZonedDateTime newfoundLandDateTime = localDateTime.atZone(ZoneId.of("America/St_Johns"));
+		final ZonedDateTime newfoundLandDateTimeAsUTC = newfoundLandDateTime.withZoneSameLocal(ZoneId.of("Etc/UTC"));
+
+		final int dhInternalDate = dateHelper.convertTime(newfoundLandDateTime);
+		final ZonedDateTime modelEntityMapnewfoundLandTime = modelEntityMap.getDateFromHours(dhInternalDate, "America/St_Johns");
+
+		// Check we get the original time back.
+		Assert.assertEquals(newfoundLandDateTime, modelEntityMapnewfoundLandTime);
+
+		// Initialise internal helper
+		final TimeZoneToUtcOffsetProvider helper = new TimeZoneToUtcOffsetProvider();
+		helper.setTimeZeroInMillis(Instant.from(dateHelper.getEarliestTime()).toEpochMilli());
+
+		// Convert to UTC, then back again.
+		final int utcEquiv = helper.UTC(dhInternalDate, "America/St_Johns");
+		final int newLocalTime = helper.localTime(utcEquiv, "America/St_Johns");
+
+		// We should match
+		Assert.assertEquals(dhInternalDate, newLocalTime);
+
+		final ZonedDateTime modelEntityMapNewfoundLandUTCTime = modelEntityMap.getDateFromHours(utcEquiv, "Etc/UTC");
+		// Behind UTC, should match
+		Assert.assertEquals(newfoundLandDateTimeAsUTC, modelEntityMapNewfoundLandUTCTime);
+
 	}
 
 }

@@ -221,7 +221,7 @@ public class PriceIntervalProviderHelper {
 		return minSalesStart;
 	}
 
-	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStartInclusive, final int purchaseEndInclusive, int salesStartInclusive, int salesEndInclusive, final int loadDuration,
+	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStartInclusive, final int purchaseEndInclusive, int salesStartInclusive, final int salesEndInclusive, final int loadDuration,
 			final int canalMaxSpeed, final int canalNBOSpeed) {
 
 		// set min start dates
@@ -245,7 +245,7 @@ public class PriceIntervalProviderHelper {
 				} else {
 					purchase = purchaseStartInclusive;
 					// Recalculate diff as salesStartInclusive may not be based on max canal speed
-					int diff = (purchase + canalNBOSpeed + loadDuration) - salesStartInclusive;
+					final int diff = (purchase + canalNBOSpeed + loadDuration) - salesStartInclusive;
 					if (diff > 0) {
 						discharge = Math.min(salesStartInclusive + diff, salesEndInclusive); // note: remainder is -ve
 					}
@@ -332,7 +332,7 @@ public class PriceIntervalProviderHelper {
 	 * @param canalTransitTime
 	 * @param durationAtPort
 	 * @param isLaden
-	 *            TODO
+	 *                                TODO
 	 * @return
 	 */
 	public static long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVessel vessel, final int cv, final int[] times, final long distance, final int equivalenceFactor,
@@ -346,7 +346,7 @@ public class PriceIntervalProviderHelper {
 		final int totalLegLengthInHours = (times[1] - times[0] - durationAtPort - canalTransitTime);
 
 		if (distance == 0 || totalLegLengthInHours == 0) {
-			return new long[] {0, 0};
+			return new long[] { 0, 0 };
 		}
 
 		// estimate speed and rate
@@ -701,31 +701,34 @@ public class PriceIntervalProviderHelper {
 
 		final PricingEventType pricingEventType = getPriceEventTypeFromPortSlot(slot, portTimeWindowsRecord);
 
-		final int[] hourIntervals = intervals.getIntervalRange(start, end);
+		final int startUTCEquiv = shiftTimeByTimezoneToUTC(start, slot, portTimeWindowsRecord, pricingEventType);
+		final int endUTCEquiv = shiftTimeByTimezoneToUTC(end, slot, portTimeWindowsRecord, pricingEventType);
+
+		final int[] hourIntervals = intervals.getIntervalRange(startUTCEquiv, endUTCEquiv);
 		int transferDate = start;
 		if (isStartOfWindow(pricingEventType)) {
-			priceIntervals
-					.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, shiftTimeByTimezoneToUTC(start, slot, portTimeWindowsRecord, pricingEventType)) });
+			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, startUTCEquiv) });
 			priceIntervals.add(getEndInterval(end));
 		} else if (isEndOfWindow(pricingEventType)) {
-			priceIntervals
-					.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, shiftTimeByTimezoneToUTC(end, slot, portTimeWindowsRecord, pricingEventType)) });
+			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, endUTCEquiv) });
 			priceIntervals.add(getEndInterval(end));
 		} else if (isPricingDateSpecified(slot, pricingEventType)) {
 			final int slotPricingDate = getDateFromSlotOrContract(slot, portTimeWindowsRecord);
 			assert slotPricingDate != IPortSlot.NO_PRICING_DATE;
-			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, timeZoneToUtcOffsetProvider.UTC(slotPricingDate, slot.getPort())) });
+			final int slotPricingDateUTCEquiv = timeZoneToUtcOffsetProvider.UTC(slotPricingDate, slot.getPort());
+			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, slotPricingDateUTCEquiv) });
 			priceIntervals.add(getEndInterval(end));
 		} else {
 			// first add start
+			int slotDuration = getDuration(slot, portTimeWindowsRecord);
 			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption,
-					shiftTimeByTimezoneToUTC(start + (isEndOfEvent(pricingEventType) ? getDuration(slot, portTimeWindowsRecord) : 0), slot, portTimeWindowsRecord, pricingEventType)) });
+					shiftTimeByTimezoneToUTC(start + (isEndOfEvent(pricingEventType) ? slotDuration : 0), slot, portTimeWindowsRecord, pricingEventType)) });
 			for (int h = 1; h < hourIntervals.length - 1; h++) {
 				final int date = hourIntervals[h];
 				if (isStartOfEvent(pricingEventType)) {
 					transferDate = date;
 				} else if (isEndOfEvent(pricingEventType)) {
-					transferDate = date - getDuration(slot, portTimeWindowsRecord);
+					transferDate = date - slotDuration;
 				}
 				final int windowDate = shiftTimeByTimezoneToLocalTime(transferDate, slot, portTimeWindowsRecord, pricingEventType);
 				if (windowDate < end && windowDate > start) {
@@ -1052,8 +1055,8 @@ public class PriceIntervalProviderHelper {
 	}
 
 	public long getCharterRateForTimePickingDecision(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart,
-			@NonNull IResource resource) {
-		IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			@NonNull final IResource resource) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			if (portTimeWindowRecord == portTimeWindowRecordStart) {
 				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),

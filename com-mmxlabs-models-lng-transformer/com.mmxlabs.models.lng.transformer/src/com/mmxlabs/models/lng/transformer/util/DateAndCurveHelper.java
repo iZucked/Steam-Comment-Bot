@@ -331,7 +331,6 @@ public class DateAndCurveHelper {
 		LocalDate start = earliestTimeUTC.toLocalDate().withDayOfMonth(1);
 		final LocalDate end = latestTimeUTC.toLocalDate();
 
-		final List<Pair<LocalDate, Integer>> vals = new LinkedList<>();
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 		curve.setDefaultValue(0);
 		while (start.isBefore(end)) {
