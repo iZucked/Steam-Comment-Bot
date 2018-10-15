@@ -13,7 +13,8 @@ Export-Package: com.mmxlabs.optimiser.lso,
  com.mmxlabs.optimiser.lso.logging,
  com.mmxlabs.optimiser.lso.modules,
  com.mmxlabs.optimiser.lso.movegenerators.impl,
- com.mmxlabs.optimiser.optimiser.lso.parallellso
+ com.mmxlabs.optimiser.optimiser.lso.parallellso,
+ com.mmxlabs.optimiser.lso.multiobjective.modules
 Import-Package: javax.inject;version="[1.0,2)",
  org.slf4j;version="[1.5,2)"
 Require-Bundle: com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.5.17,5.0.0)",

@@ -613,8 +613,10 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			Assert.assertTrue(results.getSolutions().size() > 1);
 			// Next validate solution types exist
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
+					.withAnySolutionResultChecker()
 					.withCargo("FOB_Purchase2", "DES_Sale4").any() //
 					.withUnusedSlot("DES_Sale2") // Main sure we have a solution with this slot unused.
+					.build()
 			;
 
 			verifier.verifySolutionExistsInResults(results, msg -> Assert.fail(msg));

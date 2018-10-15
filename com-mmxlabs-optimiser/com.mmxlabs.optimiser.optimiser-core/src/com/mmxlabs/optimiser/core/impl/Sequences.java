@@ -142,7 +142,7 @@ public final class Sequences implements ISequences {
 				return false;
 			}
 
-			if (!seq.getSequences().equals(seq.getSequences())) {
+			if (!seq.getSequences().equals(this.getSequences())) {
 				return false;
 			}
 			return true;

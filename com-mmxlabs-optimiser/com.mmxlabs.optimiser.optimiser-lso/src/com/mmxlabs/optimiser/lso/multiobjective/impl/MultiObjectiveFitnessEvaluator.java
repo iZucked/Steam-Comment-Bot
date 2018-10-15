@@ -56,6 +56,11 @@ public class MultiObjectiveFitnessEvaluator extends LinearSimulatedAnnealingFitn
 		return fitnesses;
 	}
 	
+	/**
+	 * Get the seperate objective values
+	 * Note: first objective is the combined fitnesses and is hardcoded
+	 * TODO: Get rid of double counting
+	 */
 	@Override
 	public long[] getCombinedFitnessAndObjectiveValuesForComponentClasses(@NonNull ISequences rawSequences,
 			@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState,
