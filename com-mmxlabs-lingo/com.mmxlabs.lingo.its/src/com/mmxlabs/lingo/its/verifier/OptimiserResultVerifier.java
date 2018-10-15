@@ -5,11 +5,13 @@
 package com.mmxlabs.lingo.its.verifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -24,7 +26,6 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -46,7 +47,10 @@ public class OptimiserResultVerifier {
 
 	private final ScenarioModelFinder scenarioModelFinder;
 
-	private final @NonNull List<Function<SolutionData, Boolean>> checks = new LinkedList<>();
+	private final @NonNull List<Function<SolutionData, Boolean>> anySolutionChecks = new LinkedList<>();
+	private final @NonNull Map<Integer, List<Function<SolutionData, Boolean>>> specificSolutionChecks = new HashMap<>();
+	private final @NonNull List<Function<List<SolutionData>, Boolean>> multipleSolutionChecks = new LinkedList<>();
+
 	private boolean needsSchedule = false;
 	private final @NonNull OptimiserDataMapper mapper;
 
@@ -78,135 +82,232 @@ public class OptimiserResultVerifier {
 		this.mapper = mapper;
 	}
 
-	public VesselVerifier withCargo(final String loadName, final String dischargeName) {
+	public static final class OptimiserResultChecker {
+		private final OptimiserResultVerifier verifier;
+		private final List<Function<SolutionData, Boolean>> checkers =
+				new LinkedList<Function<SolutionData,Boolean>>();
+		private int solutionIndex = -1;
 
-		final CargoModelFinder finder = scenarioModelFinder.getCargoModelFinder();
-		final LoadSlot loadSlot = finder.findLoadSlot(loadName);
-		final DischargeSlot dischargeSlot = finder.findDischargeSlot(dischargeName);
+		public OptimiserResultChecker(OptimiserResultVerifier verifier) {
+			this.verifier = verifier;
+		}
+		
+		public OptimiserResultChecker(OptimiserResultVerifier verifier, int solutionIndex) {
+			this.verifier = verifier;
+			this.solutionIndex = solutionIndex;
+		}
 
-		final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
+		
+		public OptimiserResultVerifier build() {
+			checkers.forEach(c->addCheckerToFinalResult(c));
+			return this.verifier;
+		}
+		
+		private void addCheckerToFinalResult(Function<SolutionData, Boolean> checker) {
+			if (solutionIndex == -1) {
+				verifier.addAnySolutionChecker(checker);
+			} else {
+				verifier.addSpecificSolutionChecker(solutionIndex, checker);
+			}
+		}
+		
+		public void addChecker(Function<SolutionData, Boolean> checker) {
+			checkers.add(checker);
+		}
+		
+		public VesselVerifier withCargo(final String loadName, final String dischargeName) {
+			
+			final CargoModelFinder finder = verifier.scenarioModelFinder.getCargoModelFinder();
+			final LoadSlot loadSlot = finder.findLoadSlot(loadName);
+			final DischargeSlot dischargeSlot = finder.findDischargeSlot(dischargeName);
+			
+			final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
+				
+				final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(loadSlot);
+				final ISequenceElement d = s.getOptimiserDataMapper().getElementFor(dischargeSlot);
+				
+				final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
+				final Pair<IResource, Integer> b = s.getLookupManager().lookup(d);
+				
+				if (a != null && b != null) {
+					if (a.getFirst() != null && a.getFirst() == b.getFirst()) {
+						if (a.getSecond() + 1 == b.getSecond()) {
+							return new Pair<>(s, a.getFirst());
+						}
+					}
+					
+				}
+				return null;
+			};
+			return new VesselVerifier(this, p);
+		}
+		
+		/**
+		 * Ensure load slot has been allocated in some way
+		 * 
+		 * @param loadName
+		 * @return
+		 */
+		public VesselVerifier withUsedLoad(final String loadName) {
 
-			final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(loadSlot);
-			final ISequenceElement d = s.getOptimiserDataMapper().getElementFor(dischargeSlot);
+			final CargoModelFinder finder = verifier.scenarioModelFinder.getCargoModelFinder();
+			final LoadSlot loadSlot = finder.findLoadSlot(loadName);
 
-			final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
-			final Pair<IResource, Integer> b = s.getLookupManager().lookup(d);
+			final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
 
-			if (a != null && b != null) {
-				if (a.getFirst() != null && a.getFirst() == b.getFirst()) {
-					if (a.getSecond() + 1 == b.getSecond()) {
+				final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(loadSlot);
+
+				final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
+
+				if (a != null) {
+					if (a.getFirst() != null) {
 						return new Pair<>(s, a.getFirst());
 					}
 				}
+				return null;
+			};
+			return new VesselVerifier(this, p);
+		}
 
-			}
-			return null;
-		};
-		return new VesselVerifier(this, p);
-	}
+		/**
+		 * Ensure load slot has been allocated in some way
+		 * 
+		 * @param dischargeName
+		 * @return
+		 */
+		public VesselVerifier withUsedDischarge(final String dischargeName) {
 
-	/**
-	 * Ensure load slot has been allocated in some way
-	 * 
-	 * @param loadName
-	 * @return
-	 */
-	public VesselVerifier withUsedLoad(final String loadName) {
+			final CargoModelFinder finder = verifier.scenarioModelFinder.getCargoModelFinder();
+			final DischargeSlot dischargeSlot = finder.findDischargeSlot(dischargeName);
 
-		final CargoModelFinder finder = scenarioModelFinder.getCargoModelFinder();
-		final LoadSlot loadSlot = finder.findLoadSlot(loadName);
+			final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
 
-		final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
+				final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(dischargeSlot);
 
-			final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(loadSlot);
+				final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
 
-			final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
-
-			if (a != null) {
-				if (a.getFirst() != null) {
-					return new Pair<>(s, a.getFirst());
+				if (a != null) {
+					if (a.getFirst() != null) {
+						return new Pair<>(s, a.getFirst());
+					}
 				}
-			}
-			return null;
-		};
-		return new VesselVerifier(this, p);
-	}
+				return null;
+			};
+			return new VesselVerifier(this, p);
+		}
 
-	/**
-	 * Ensure load slot has been allocated in some way
-	 * 
-	 * @param dischargeName
-	 * @return
-	 */
-	public VesselVerifier withUsedDischarge(final String dischargeName) {
+		public OptimiserResultChecker withUnusedSlot(final String name) {
 
-		final CargoModelFinder finder = scenarioModelFinder.getCargoModelFinder();
-		final DischargeSlot dischargeSlot = finder.findDischargeSlot(dischargeName);
+			final CargoModelFinder finder = verifier.scenarioModelFinder.getCargoModelFinder();
+			final Slot slot = finder.findSlot(name);
 
-		final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
+			final Function<SolutionData, Boolean> p = (s) -> {
 
-			final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(dischargeSlot);
+				final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(slot);
+				final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
 
-			final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
+				if (a != null) {
+					if (a.getFirst() == null) {
+						return true;
+					}
 
-			if (a != null) {
-				if (a.getFirst() != null) {
-					return new Pair<>(s, a.getFirst());
 				}
-			}
-			return null;
-		};
-		return new VesselVerifier(this, p);
-	}
+				return false;
+			};
+			this.addChecker(p);
+			return this;
+		}
+		
+		public OptimiserResultChecker withCargoCount(final int count, boolean ignoreRoundTrips) {
 
-	public OptimiserResultVerifier withUnusedSlot(final String name) {
-
-		final CargoModelFinder finder = scenarioModelFinder.getCargoModelFinder();
-		final Slot slot = finder.findSlot(name);
-
-		final Function<SolutionData, Boolean> p = (s) -> {
-
-			final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(slot);
-			final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
-
-			if (a != null) {
-				if (a.getFirst() == null) {
-					return true;
+			final Function<SolutionData, Boolean> p = (s) -> {
+				final ISequences sequences = s.getLookupManager().getRawSequences();
+				final int totalLoadsOnSequences = OptimiserResultVerifierUtils.getTotalLoadsOnSequences(sequences, verifier.mapper, ignoreRoundTrips);
+				if (totalLoadsOnSequences != count) {
+					return false;
 				}
 
-			}
-			return false;
-		};
-		this.checks.add(p);
-		return this;
+				return true;
+			};
+			this.addChecker(p);
+			return this;
+		}
+		
+		public OptimiserResultChecker pnlDelta(final long initialValue, final long expectedChange, final long delta) {
+			verifier.needsSchedule = true;
+
+			final Function<SolutionData, Boolean> aa = (data) -> {
+				final Schedule schedule = data.getSchedule();
+				if (schedule == null) {
+					return false;
+				}
+				final long value = ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule);
+				return Math.abs(expectedChange - (value - initialValue)) <= delta;
+			};
+			this.addChecker(aa);
+			return this;
+		}
+
+		public OptimiserResultChecker latenessDelta(final long initialValue, final long expectedChange) {
+			verifier.needsSchedule = true;
+
+			final Function<SolutionData, Boolean> aa = (data) -> {
+				final Schedule schedule = data.getSchedule();
+				if (schedule == null) {
+					return false;
+				}
+				final long value = ScheduleModelKPIUtils.getScheduleLateness(schedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+				return expectedChange == (value - initialValue);
+			};
+			this.addChecker(aa);
+			return this;
+		}
+
+		public OptimiserResultChecker violationDelta(final long initialValue, final long expectedChange) {
+			verifier.needsSchedule = true;
+
+			final Function<SolutionData, Boolean> aa = (data) -> {
+				final Schedule schedule = data.getSchedule();
+				if (schedule == null) {
+					return false;
+				}
+				final long value = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
+				return expectedChange == (value - initialValue);
+			};
+			this.addChecker(aa);
+			return this;
+		}
 	}
 	
-	public OptimiserResultVerifier withCargoCount(final int count, boolean ignoreRoundTrips) {
+	public OptimiserResultChecker withAnySolutionResultChecker() {
+		return new OptimiserResultChecker(this);
+	}
+	
+	public OptimiserResultChecker withSolutionResultChecker(int solution) {
+		return new OptimiserResultChecker(this, solution);
+	}
 
-		final Function<SolutionData, Boolean> p = (s) -> {
-			final ISequences sequences = s.getLookupManager().getRawSequences();
-			final int totalLoadsOnSequences = OptimiserResultVerifierUtils.getTotalLoadsOnSequences(sequences, mapper, ignoreRoundTrips);
-			if (totalLoadsOnSequences != count) {
-				return false;
-			}
+	
+	public OptimiserResultVerifier withMultipleSolutionCount(final int count) {
 
-			return true;
+		final Function<List<SolutionData>, Boolean> p = (s) -> {
+			return s.size() == count;
 		};
-		this.checks.add(p);
+		this.multipleSolutionChecks.add(p);
 		return this;
 	}
+
 
 	public static class VesselVerifier {
 		private final Function<SolutionData, Pair<SolutionData, IResource>> result;
-		private final OptimiserResultVerifier verifier;
+		private final OptimiserResultChecker resultChecker;
 
-		VesselVerifier(final OptimiserResultVerifier verifier, final Function<SolutionData, Pair<SolutionData, IResource>> result) {
-			this.verifier = verifier;
+		VesselVerifier(final OptimiserResultChecker verifier, final Function<SolutionData, Pair<SolutionData, IResource>> result) {
+			this.resultChecker = verifier;
 			this.result = result;
-
 		}
-
-		public OptimiserResultVerifier any() {
+		
+		public OptimiserResultChecker any() {
 			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
 				if (p == null || p.getSecond() == null) {
 					return false;
@@ -215,11 +316,11 @@ public class OptimiserResultVerifier {
 			};
 
 			final Function<SolutionData, Boolean> aa = v.compose(result);
-			verifier.checks.add(aa);
-			return verifier;
+			resultChecker.addChecker(aa);
+			return this.resultChecker;
 		}
 
-		public OptimiserResultVerifier anyNominalVessel() {
+		public OptimiserResultChecker anyNominalVessel() {
 			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
 				if (p == null || p.getSecond() == null) {
 					return false;
@@ -231,11 +332,11 @@ public class OptimiserResultVerifier {
 			};
 
 			final Function<SolutionData, Boolean> aa = v.compose(result);
-			verifier.checks.add(aa);
-			return verifier;
+			resultChecker.addChecker(aa);
+			return this.resultChecker;
 		}
 
-		public OptimiserResultVerifier anySpotCharterVessel() {
+		public OptimiserResultChecker anySpotCharterVessel() {
 			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
 				if (p == null || p.getSecond() == null) {
 					return false;
@@ -247,11 +348,11 @@ public class OptimiserResultVerifier {
 			};
 
 			final Function<SolutionData, Boolean> aa = v.compose(result);
-			verifier.checks.add(aa);
-			return verifier;
+			resultChecker.addChecker(aa);
+			return this.resultChecker;
 		}
 
-		public OptimiserResultVerifier anyFleetVessel() {
+		public OptimiserResultChecker anyFleetVessel() {
 			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
 				if (p == null || p.getSecond() == null) {
 					return false;
@@ -263,11 +364,11 @@ public class OptimiserResultVerifier {
 			};
 
 			final Function<SolutionData, Boolean> combinedChecker = v.compose(result);
-			verifier.checks.add(combinedChecker);
-			return verifier;
+			resultChecker.addChecker(combinedChecker);
+			return this.resultChecker;
 		}
 
-		public OptimiserResultVerifier onFleetVessel(final @NonNull String name) {
+		public OptimiserResultChecker onFleetVessel(final @NonNull String name) {
 			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
 				if (p == null || p.getSecond() == null) {
 					return false;
@@ -280,11 +381,11 @@ public class OptimiserResultVerifier {
 			};
 
 			final Function<SolutionData, Boolean> combinedChecker = v.compose(result);
-			verifier.checks.add(combinedChecker);
-			return verifier;
+			resultChecker.addChecker(combinedChecker);
+			return this.resultChecker;
 		}
 
-		public OptimiserResultVerifier onSpotCharter(final String marketName) {
+		public OptimiserResultChecker onSpotCharter(final String marketName) {
 			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
 				if (p == null || p.getSecond() == null) {
 					return false;
@@ -298,55 +399,10 @@ public class OptimiserResultVerifier {
 						&& (marketName.equalsIgnoreCase(spotCharterInMarket.getName()));
 			};
 
-			final Function<SolutionData, Boolean> aa = v.compose(result);
-			verifier.checks.add(aa);
-			return verifier;
+			final Function<SolutionData, Boolean> checker = v.compose(result);
+			resultChecker.addChecker(checker);
+			return this.resultChecker;
 		}
-	}
-
-	public OptimiserResultVerifier pnlDelta(final long initialValue, final long expectedChange, final long delta) {
-		needsSchedule = true;
-
-		final Function<SolutionData, Boolean> aa = (data) -> {
-			final Schedule schedule = data.getSchedule();
-			if (schedule == null) {
-				return false;
-			}
-			final long value = ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule);
-			return Math.abs(expectedChange - (value - initialValue)) <= delta;
-		};
-		checks.add(aa);
-		return this;
-	}
-
-	public OptimiserResultVerifier latenessDelta(final long initialValue, final long expectedChange) {
-		needsSchedule = true;
-
-		final Function<SolutionData, Boolean> aa = (data) -> {
-			final Schedule schedule = data.getSchedule();
-			if (schedule == null) {
-				return false;
-			}
-			final long value = ScheduleModelKPIUtils.getScheduleLateness(schedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
-			return expectedChange == (value - initialValue);
-		};
-		checks.add(aa);
-		return this;
-	}
-
-	public OptimiserResultVerifier violationDelta(final long initialValue, final long expectedChange) {
-		needsSchedule = true;
-
-		final Function<SolutionData, Boolean> aa = (data) -> {
-			final Schedule schedule = data.getSchedule();
-			if (schedule == null) {
-				return false;
-			}
-			final long value = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
-			return expectedChange == (value - initialValue);
-		};
-		checks.add(aa);
-		return this;
 	}
 
 	public @Nullable ISequences verifySolutionExistsInResults(final IMultiStateResult results, final Consumer<String> errorHandler) {
@@ -363,7 +419,7 @@ public class OptimiserResultVerifier {
 	public @Nullable ISequences verifySolutionExistsInResults(final List<SolutionData> solutionDataList, final Consumer<String> errorHandler) {
 
 		for (final SolutionData data : solutionDataList) {
-			for (final Function<SolutionData, Boolean> checker : checks) {
+			for (final Function<SolutionData, Boolean> checker : anySolutionChecks) {
 				if (!checker.apply(data)) {
 					continue;
 				}
@@ -386,7 +442,66 @@ public class OptimiserResultVerifier {
 			data.add(new SolutionData(mapper, solutions.get(i).getFirst()));
 		}
 
-		for (final Function<SolutionData, Boolean> checker : checks) {
+		checkAnySolutionsCheckers(errorHandler, data);
+		
+		checkMultipleSolutionCheckers(errorHandler, data);
+	}
+	
+	public void verifyOptimisationResults(final IMultiStateResult result, final Consumer<String> errorHandler) {
+
+		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = result.getSolutions();
+		if (solutions.size() < 2) {
+			errorHandler.accept("No solution found");
+		}
+
+		final List<SolutionData> data = new ArrayList<>(1);
+		for (int i = 1; i < solutions.size(); ++i) {
+			data.add(new SolutionData(mapper, solutions.get(i).getFirst()));
+		}
+
+		checkAnySolutionsCheckers(errorHandler, data);
+		
+		checkMultipleSolutionCheckers(errorHandler, data);
+		
+		checkSpecificSolutionCheckers(errorHandler, data);
+	}
+
+	private void checkSpecificSolutionCheckers(final Consumer<String> errorHandler, final List<SolutionData> data) {
+		boolean failed = false;
+		List<Integer> keySet = new LinkedList<>(specificSolutionChecks.keySet())
+				.stream().sorted().collect(Collectors.toList());
+		for (Integer solutionIndex : keySet) {
+			if (solutionIndex >= data.size() ) {
+				failed = true;
+				break;
+			}
+			for (final Function<SolutionData, Boolean> checker : specificSolutionChecks.get(solutionIndex)) {
+				if (!checker.apply(data.get(solutionIndex))) {
+					failed = true;
+					break;
+				}
+			}
+		}
+		if (failed) {
+			errorHandler.accept("Solution requirement not found");
+		}
+	}
+
+	private void checkMultipleSolutionCheckers(final Consumer<String> errorHandler, final List<SolutionData> data) {
+		boolean failed = false;
+		for (final Function<List<SolutionData>, Boolean> checker : multipleSolutionChecks) {
+			if (!checker.apply(data)) {
+				failed = true;
+				break;
+			}
+		}
+		if (failed) {
+			errorHandler.accept("Solution requirement not found");
+		}
+	}
+
+	private void checkAnySolutionsCheckers(final Consumer<String> errorHandler, final List<SolutionData> data) {
+		for (final Function<SolutionData, Boolean> checker : anySolutionChecks) {
 			boolean foundMatch = false;
 			for (final SolutionData d : data) {
 				if (checker.apply(d)) {
@@ -399,6 +514,7 @@ public class OptimiserResultVerifier {
 			}
 		}
 	}
+
 
 	public void verifyCargoCountInOptimisationResultWithoutNominals(final int solution, final int cargoCount, final IMultiStateResult result, final Consumer<String> errorHandler) {
 
@@ -419,5 +535,21 @@ public class OptimiserResultVerifier {
 			errorHandler.accept(String.format("Cargo count: expected %s but was %s", cargoCount, totalLoadsOnSequences));
 		}
 	}
+	
+	private void addAnySolutionChecker(Function<SolutionData, Boolean> check) {
+		anySolutionChecks.add(check);
+	}
+	
+	private void addSpecificSolutionChecker(int solutionIndex, Function<SolutionData, Boolean> check) {
+		specificSolutionChecks.compute(solutionIndex, (k, v) -> {
+			List<Function<SolutionData, Boolean>> solutionCheckers = v;
+			if (v == null) {
+				solutionCheckers = new LinkedList<>();
+			}
+			solutionCheckers.add(check);
+			return solutionCheckers;
+		});
+	}
+
 
 }

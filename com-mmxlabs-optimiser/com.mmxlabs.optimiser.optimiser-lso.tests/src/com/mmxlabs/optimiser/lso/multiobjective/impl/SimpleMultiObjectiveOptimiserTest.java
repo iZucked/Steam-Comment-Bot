@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.optimiser.lso.impl;
+package com.mmxlabs.optimiser.lso.multiobjective.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +27,10 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
-import com.mmxlabs.optimiser.lso.impl.SimpleMultiObjectiveOptimiser.eQuartile;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.NonDominatedSolution;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.SimpleMultiObjectiveOptimiser;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.SimpleMultiObjectiveOptimiser.eQuartile;
 
 public class SimpleMultiObjectiveOptimiserTest {
 

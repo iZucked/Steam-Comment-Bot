@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.impl.NonDominatedSolution;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.NonDominatedSolution;
 
 public class MultiObjectiveUtils {
 	

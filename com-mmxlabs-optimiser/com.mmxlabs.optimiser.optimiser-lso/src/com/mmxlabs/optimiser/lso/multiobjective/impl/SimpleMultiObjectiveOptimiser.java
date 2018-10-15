@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.optimiser.lso.impl;
+package com.mmxlabs.optimiser.lso.multiobjective.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +42,9 @@ import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
+import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.optimiser.lso.multiobjective.modules.MultiObjectiveOptimiserModule;
 import com.mmxlabs.optimiser.optimiser.lso.parallellso.MultiObjectiveUtils;
 
 /**
@@ -53,7 +55,9 @@ import com.mmxlabs.optimiser.optimiser.lso.parallellso.MultiObjectiveUtils;
  */
 public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 
-	private static final int EPSILON_DOMINANCE_DOLLAR_PER_CHANGE_VALUE = 200_000;
+	@Inject
+	@Named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES)
+	private long[] epsilonDominanceValues;
 
 	@Inject
 	private Injector injector;
@@ -185,7 +189,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	protected List<NonDominatedSolution> getSortedArchiveWithEpsilonDominance(final List<NonDominatedSolution> archive, final int objectiveIndex) {
 		final List<NonDominatedSolution> sortedValues = archive.stream().sorted((a, b) -> Long.compare(a.getFitnesses()[objectiveIndex], b.getFitnesses()[objectiveIndex]))
 				.collect(Collectors.toList());
-		return MultiObjectiveUtils.filterArchive(archive, objectiveIndex, new long[] { EPSILON_DOMINANCE_DOLLAR_PER_CHANGE_VALUE, 0 });
+		return MultiObjectiveUtils.filterArchive(archive, objectiveIndex, epsilonDominanceValues);
 	}
 
 	
@@ -200,15 +204,15 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	}
 
 	protected boolean addSolutionToNonDominatedArchive(final ISequences pinnedPotentialRawSequences, final long[] fitnesses) {
-		final boolean nonDominated = isDominated(archive, fitnesses);
+		final boolean nonDominated = checkIsDominatedAndRemoveDominatedSolutionsFromArchive(archive, fitnesses);
 		if (nonDominated) {
 			archive.add(new NonDominatedSolution(new Sequences(pinnedPotentialRawSequences), fitnesses, null));
 		}
 		return nonDominated;
 	}
 
-	protected boolean isDominated(final List<NonDominatedSolution> archive, final long[] thisFitness) {
-		final List<ISequences> dominated = new LinkedList<>();
+	protected boolean checkIsDominatedAndRemoveDominatedSolutionsFromArchive(final List<NonDominatedSolution> archive, final long[] thisFitness) {
+		final List<NonDominatedSolution> dominated = new LinkedList<>();
 		boolean add = true;
 		for (final NonDominatedSolution other : archive) {
 			final long[] otherFitness = other.getFitnesses();
@@ -219,13 +223,13 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			}
 			if (allObjectivesLower(thisFitness, otherFitness)) {
 				// new solution dominates
-				dominated.add(other.getSequences());
+				dominated.add(other);
 			} else if (allObjectivesLowerOrEqual(thisFitness, otherFitness)) {
-				dominated.add(other.getSequences());
+				dominated.add(other);
 			}
 		}
-		for (final ISequences a : dominated) {
-			archive.removeIf(b -> b.getSequences().equals(a));
+		for (final NonDominatedSolution solution : dominated) {
+			archive.remove(solution);
 		}
 		return add;
 	}
@@ -318,7 +322,18 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			Collections.sort(sortedArchiveWithEpsilonDominance,
 					(a,b) -> -Long.compare(a.getFitnesses()[0], b.getFitnesses()[0]));
 		}
-		return sortedArchiveWithEpsilonDominance;
+		List<NonDominatedSolution> filteredSolutions = filterOutInitialSequences(initialRawSequences, sortedArchiveWithEpsilonDominance);
+		return filteredSolutions;
+	}
+
+	private List<NonDominatedSolution> filterOutInitialSequences(ModifiableSequences initialRawSequences, List<NonDominatedSolution> sortedArchiveWithEpsilonDominance) {
+		List<NonDominatedSolution> filterList = new ArrayList<>();
+		for (NonDominatedSolution nonDominatedSolution : sortedArchiveWithEpsilonDominance) {
+			if (!nonDominatedSolution.getSequences().equals(initialRawSequences)) {
+				filterList.add(nonDominatedSolution);
+			}
+		}
+		return filterList;
 	}
 
 	public ISequences getBestRawSequences(final List<NonDominatedSolution> unsortedArchive, final int noGroups, final int objectiveIndex) {

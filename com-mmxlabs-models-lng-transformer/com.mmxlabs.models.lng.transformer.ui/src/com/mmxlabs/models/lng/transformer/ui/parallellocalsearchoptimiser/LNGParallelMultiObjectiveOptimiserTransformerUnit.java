@@ -60,9 +60,10 @@ import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.impl.NonDominatedSolution;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.NonDominatedSolution;
+import com.mmxlabs.optimiser.lso.multiobjective.modules.MultiObjectiveOptimiserModule;
 import com.mmxlabs.optimiser.optimiser.lso.parallellso.SequentialParallelSimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.optimiser.lso.parallellso.SimpleMultiObjectiveLSOMover;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -134,55 +135,9 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(CollectionsUtil.makeLinkedList(new LNGOptimisationModule()), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
+		modules.add(new MultiObjectiveOptimiserModule(executorService));
+		
 		modules.add(new AbstractModule() {
-
-			@Override
-			protected void configure() {
-				bind(CleanableExecutorService.class).toInstance(executorService);
-			}
-
-			@Provides
-			@Singleton
-			SequentialParallelSimpleMultiObjectiveOptimiser buildMultiObjectiveOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-					@NonNull final IMoveGenerator moveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator,
-					@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
-					@Named(LocalSearchOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_NAMES) final List<String> objectiveNames, @NonNull final List<IConstraintChecker> constraintCheckers,
-					@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses,
-					@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed) {
-				final List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
-				assert (objectives.size() == objectiveNames.size());
-				final SequentialParallelSimpleMultiObjectiveOptimiser lso = new SequentialParallelSimpleMultiObjectiveOptimiser(objectives, new Random(randomSeed));
-
-				setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, randomSeed);
-				lso.setMultiObjectiveFitnessEvaluator(fitnessEvaluator);
-				return lso;
-			}
-
-			private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-					@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations,
-					@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
-					@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses, @NonNull final LocalSearchOptimiser lso, final long seed) {
-				injector.injectMembers(lso);
-				lso.setNumberOfIterations(numberOfIterations);
-
-				lso.setSequenceManipulator(manipulator);
-
-				lso.setMoveGenerator(moveGenerator);
-				lso.setFitnessEvaluator(fitnessEvaluator);
-				lso.setConstraintCheckers(constraintCheckers);
-				lso.setEvaluatedStateConstraintCheckers(evaluatedStateConstraintCheckers);
-				lso.setEvaluationProcesses(evaluationProcesses);
-
-				lso.setReportInterval(Math.max(10, numberOfIterations / 100));
-
-				lso.setRandom(new Random(seed));
-			}
-
-			private List<IFitnessComponent> getMultiObjectiveFitnessComponents(final IMultiObjectiveFitnessEvaluator fitnessEvaluator, final List<String> objectiveNames) {
-				final List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
-				assert (objectives.size() == objectiveNames.size());
-				return objectives;
-			}
 
 			@Provides
 			private SimpleMultiObjectiveLSOMover providePerThreadLSOMover(@NonNull final Injector injector, @Named(LocalSearchOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_NAMES) final List<String> objectiveNames){
@@ -192,12 +147,20 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 					scope.enter();
 					simpleMultiObjectiveLSOMover = new SimpleMultiObjectiveLSOMover();
 					injector.injectMembers(simpleMultiObjectiveLSOMover);
-					List<IFitnessComponent> multiObjectiveFitnessComponents = getMultiObjectiveFitnessComponents(simpleMultiObjectiveLSOMover.getMultiObjectiveFitnessEvaluator(), objectiveNames);
+					
+					// Note: this is critical because we need to use the components that are created per thread!
+					List<IFitnessComponent> multiObjectiveFitnessComponents = MultiObjectiveOptimiserModule
+							.getMultiObjectiveFitnessComponents(simpleMultiObjectiveLSOMover.getMultiObjectiveFitnessEvaluator(), objectiveNames);
 
 					simpleMultiObjectiveLSOMover.setFitnessComponents(multiObjectiveFitnessComponents);
+
 					threadCache.put(Thread.currentThread(), simpleMultiObjectiveLSOMover);
 				}
 				return simpleMultiObjectiveLSOMover;
+			}
+
+			@Override
+			protected void configure() {
 			}
 		});
 		

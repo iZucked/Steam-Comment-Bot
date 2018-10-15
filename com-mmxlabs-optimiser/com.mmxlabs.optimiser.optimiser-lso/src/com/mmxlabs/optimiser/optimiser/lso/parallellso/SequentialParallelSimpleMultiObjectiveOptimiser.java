@@ -24,9 +24,9 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.lso.impl.NonDominatedSolution;
-import com.mmxlabs.optimiser.lso.impl.SimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.NonDominatedSolution;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.SimpleMultiObjectiveOptimiser;
 
 public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMultiObjectiveOptimiser {
 
@@ -114,7 +114,7 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 
 	@Override
 	protected boolean addSolutionToNonDominatedArchive(final ISequences pinnedPotentialRawSequences, final long[] fitnesses) {
-		final boolean nonDominated = isDominated(archive, fitnesses);
+		final boolean nonDominated = checkIsDominatedAndRemoveDominatedSolutionsFromArchive(archive, fitnesses);
 		if (nonDominated) {
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(pinnedPotentialRawSequences);

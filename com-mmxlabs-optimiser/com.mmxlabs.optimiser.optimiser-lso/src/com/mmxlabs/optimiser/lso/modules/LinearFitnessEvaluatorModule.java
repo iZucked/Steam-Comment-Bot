@@ -24,7 +24,7 @@ import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
-import com.mmxlabs.optimiser.lso.impl.MultiObjectiveFitnessEvaluator;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.MultiObjectiveFitnessEvaluator;
 
 /**
  * A {@link Guice} module to provide a Local Search optimiser

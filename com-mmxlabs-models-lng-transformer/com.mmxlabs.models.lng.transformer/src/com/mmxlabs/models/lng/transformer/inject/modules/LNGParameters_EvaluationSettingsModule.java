@@ -34,6 +34,7 @@ import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.optimiser.lso.multiobjective.modules.MultiObjectiveOptimiserModule;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -163,13 +164,28 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		return weightsMap;
 	}
 
+	/**
+	 * The objectives to add for multi-objective
+	 * Note: this is additional to the first objective which is always the combined fitness
+	 * @param enabledFitnessNames
+	 * @return
+	 */
 	@Provides
-	@Named(LocalSearchOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_NAMES)
+	@Named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_ADDITIONAL_OBJECTIVE_NAMES)
 	List<String> provideMultiObjectiveFitnessComponentNames(@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
 		LinkedList<String> objectiveNames = new LinkedList<>(Arrays.asList("SimilarityFitnessCore"));
 		assert (enabledFitnessNames.containsAll(objectiveNames));
 		return objectiveNames;
 	}
+	
+	@Provides
+	@Named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES)
+	long[] provideMultiObjectiveEpsilonDominanceValues() {
+		long FITNESS_EPSILON_IN_DOLLARS = 200_000;
+		long SIMILARITY_EPSILON_IN_CHANGES = 0;
+		return new long[] {FITNESS_EPSILON_IN_DOLLARS, SIMILARITY_EPSILON_IN_CHANGES};
+	}
+
 
 	@Provides
 	@Singleton

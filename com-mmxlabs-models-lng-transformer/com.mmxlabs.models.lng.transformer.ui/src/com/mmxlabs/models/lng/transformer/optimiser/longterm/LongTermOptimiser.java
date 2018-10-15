@@ -85,10 +85,6 @@ public class LongTermOptimiser {
 			throw new UnsupportedOperationException("Long term optimiser not supported");
 		}
 		// (2) Generate S2S bindings matrix for LT slots
-//		ExecutorService es = Executors.newSingleThreadExecutor();
-		// LongTermOptimiserHelper.getS2SBindings(loads, discharges, charterInMarket, es, dataTransformer, optimiserRecorder);
-		// now using our profits recorder we have a full matrix of constraints
-		// and pnl
 		Long[][] profit = optimiserRecorder.getProfit();
 
 		// (3) Optimise matrix
