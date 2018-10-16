@@ -63,21 +63,20 @@ public class PricingRepository extends AbstractDataRepository {
 			throw new RuntimeException("Error fetching pricing versions", e);
 		}
 	}
+//
+//	@Override
+//	public DataVersion getUpstreamVersion(String identifier) {
+//		ensureReady();
+//		try {
+//			PricingVersion v = PricingClient.pullUpstreamVersion(getUpstreamUrl(), identifier);
+//			final LocalDateTime createdAt = v.getCreatedAt();
+//			return new DataVersion(v.getIdentifier(), createdAt, true);
+//		} catch (final Exception e) {
+//			LOG.error("Error fetching specific ports version" + e.getMessage());
+//			throw new RuntimeException("Error fetching specific ports version", e);
+//		}
+//	}
 
-	
-	@Override 
-	public DataVersion getUpstreamVersion(String identifier) {
-		ensureReady();
-		try {
-				PricingVersion v =PricingClient.pullUpstreamVersion(getUpstreamUrl(), identifier);
-				final LocalDateTime createdAt = v.getCreatedAt();
-				return new DataVersion(v.getIdentifier(), createdAt, true);
-		} catch (final Exception e) {
-			LOG.error("Error fetching specific ports version" + e.getMessage());
-			throw new RuntimeException("Error fetching specific ports version", e);
-		}
-	}
-	
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();
 		try {

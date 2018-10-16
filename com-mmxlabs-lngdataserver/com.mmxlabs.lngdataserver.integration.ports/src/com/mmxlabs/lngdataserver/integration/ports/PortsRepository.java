@@ -100,18 +100,18 @@ public class PortsRepository extends AbstractDataRepository {
 		}
 	}
 
-	@Override
-	public DataVersion getUpstreamVersion(String identifier) {
-		ensureReady();
-		try {
-			Version v = upstreamApi.fetchVersionUsingGET(identifier);
-			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
-			return new DataVersion(v.getIdentifier(), createdAt, true);
-		} catch (final Exception e) {
-			LOG.error("Error fetching specific ports version" + e.getMessage());
-			throw new RuntimeException("Error fetching specific ports version", e);
-		}
-	}
+//	@Override
+//	public DataVersion getUpstreamVersion(String identifier) {
+//		ensureReady();
+//		try {
+//			Version v = upstreamApi.fetchVersionUsingGET(identifier);
+//			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
+//			return new DataVersion(v.getIdentifier(), createdAt, true);
+//		} catch (final Exception e) {
+//			LOG.error("Error fetching specific ports version" + e.getMessage());
+//			throw new RuntimeException("Error fetching specific ports version", e);
+//		}
+//	}
 
 	public IPortsProvider getPortsProvider(final String versionTag) {
 		ensureReady();

@@ -91,19 +91,19 @@ public class VesselsRepository extends AbstractDataRepository {
 			throw new RuntimeException("Error fetching vessels versions", e);
 		}
 	}
-
-	@Override
-	public DataVersion getUpstreamVersion(String identifier) {
-		ensureReady();
-		try {
-			Version v = upstreamApi.getVersionUsingGET(identifier);
-			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
-			return new DataVersion(v.getIdentifier(), createdAt, true);
-		} catch (final Exception e) {
-			LOG.error("Error fetching specific vessels version" + e.getMessage());
-			throw new RuntimeException("Error fetching specific vessels version", e);
-		}
-	}
+//
+//	@Override
+//	public DataVersion getUpstreamVersion(String identifier) {
+//		ensureReady();
+//		try {
+//			Version v = upstreamApi.getVersionUsingGET(identifier);
+//			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
+//			return new DataVersion(v.getIdentifier(), createdAt, true);
+//		} catch (final Exception e) {
+//			LOG.error("Error fetching specific vessels version" + e.getMessage());
+//			throw new RuntimeException("Error fetching specific vessels version", e);
+//		}
+//	}
 
 	public List<DataVersion> getUpstreamVersions() {
 		ensureReady();

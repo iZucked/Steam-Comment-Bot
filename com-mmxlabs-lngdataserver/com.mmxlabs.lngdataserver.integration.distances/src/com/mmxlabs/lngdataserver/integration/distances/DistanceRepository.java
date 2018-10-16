@@ -109,18 +109,18 @@ public class DistanceRepository extends AbstractDataRepository {
 		}
 	}
 
-	@Override
-	public DataVersion getUpstreamVersion(String identifier) {
-		ensureReady();
-		try {
-			Version v = upstreamApi.getFullVersionUsingGET(identifier);
-			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
-			return new DataVersion(v.getIdentifier(), createdAt, true);
-		} catch (final Exception e) {
-			LOG.error("Error fetching specific distances version" + e.getMessage());
-			throw new RuntimeException("Error fetching specific distances version", e);
-		}
-	}
+//	@Override
+//	public DataVersion getUpstreamVersion(String identifier) {
+//		ensureReady();
+//		try {
+//			Version v = upstreamApi.getFullVersionUsingGET(identifier);
+//			final LocalDateTime createdAt = fromDateTimeAtUTC(v.getCreatedAt());
+//			return new DataVersion(v.getIdentifier(), createdAt, true);
+//		} catch (final Exception e) {
+//			LOG.error("Error fetching specific distances version" + e.getMessage());
+//			throw new RuntimeException("Error fetching specific distances version", e);
+//		}
+//	}
 
 	public IDistanceProvider getDistances(final String version) {
 
