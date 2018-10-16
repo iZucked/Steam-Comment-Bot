@@ -25,7 +25,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 public class InventoryFeedPane extends ScenarioTableViewerPane {
 
 	private final IScenarioEditingLocation jointModelEditor;
-
+	
 	public InventoryFeedPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		this.jointModelEditor = location;
@@ -35,13 +35,13 @@ public class InventoryFeedPane extends ScenarioTableViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
-
-		addTypicalColumn("Start Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_StartDate(), editingDomain));
-		addTypicalColumn("End Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_EndDate(), editingDomain));
+		
+		addTypicalColumn("Start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_StartDate(), editingDomain));
+		addTypicalColumn("End", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_EndDate(), editingDomain));
+		addTypicalColumn("Volume (m³)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Volume(), editingDomain));
 		addTypicalColumn("Frequency", new InventoryPeriodEnumAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Period(), editingDomain));
 		addTypicalColumn("Counterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_CounterParty(), editingDomain));
 		addTypicalColumn("Reliability (%)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Reliability(), editingDomain));
-		addTypicalColumn("Volume (m³)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Volume(), editingDomain));
 
 		setTitle("In");
 	}
