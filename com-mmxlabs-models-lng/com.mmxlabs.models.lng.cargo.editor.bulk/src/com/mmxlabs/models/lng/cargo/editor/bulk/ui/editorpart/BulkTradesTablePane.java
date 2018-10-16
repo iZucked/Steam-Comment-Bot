@@ -233,7 +233,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			TradesBasedColumnFactory.CARGO_END_GROUP //
 	};
 	// FM - properties +
-	private IPreferenceStore preferenceStore;// = Activator.getDefault().getPreferenceStore();
+	private IPreferenceStore preferenceStore;
 	private IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 
 		@Override
