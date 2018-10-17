@@ -684,7 +684,12 @@ public class ScenarioStorageUtil {
 	}
 
 	public static File getTempDirectory() {
-		return INSTANCE.storageDirectory.toFile();
+		final File file = INSTANCE.storageDirectory.toFile();
+		// Sometimes the temp folder is not present.
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		return file;
 	}
 
 	public static @Nullable Manifest loadManifest(final File scenarioFile) {
