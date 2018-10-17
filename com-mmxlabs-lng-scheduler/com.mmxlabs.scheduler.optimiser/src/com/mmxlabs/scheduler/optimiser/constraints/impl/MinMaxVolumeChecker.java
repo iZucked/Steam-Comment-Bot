@@ -52,8 +52,6 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
-	private final int maxLadenDuration = 60 * 24;
-
 	public MinMaxVolumeChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -130,11 +128,6 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 		if (slot1 instanceof ILoadOption && slot2 instanceof IDischargeOption) {
 			ILoadOption load = (ILoadOption) slot1;
 			IDischargeOption discharge = (IDischargeOption) slot2;
-			if (load.getId().contains("SC_31") || discharge.getId().contains("ENARSA-T-Esc-1-1")) {
-				int z = 0;
-			}
-			long minLoadVolumeMMBTU = load.getMinLoadVolumeMMBTU();
-			long maxDischargeVolumeMMBTU = discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue());
 			if (Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselAvailability.getVessel().getCargoCapacity(), load.getCargoCVValue())) > discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue())) {
 				// min > max
 				return false;

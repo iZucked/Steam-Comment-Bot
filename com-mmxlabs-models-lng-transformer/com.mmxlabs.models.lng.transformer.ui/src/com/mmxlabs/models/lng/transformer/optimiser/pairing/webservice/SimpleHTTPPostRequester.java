@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm.webservice;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing.webservice;
 
 import java.io.IOException;
 import java.util.Map;

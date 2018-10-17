@@ -2,10 +2,10 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper;
 
-public class LongTermOptimiserHelper extends AbstractOptimiserHelper {
+public class PairingOptimiserHelper extends AbstractOptimiserHelper {
 
 }

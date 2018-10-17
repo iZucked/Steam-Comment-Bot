@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimisationData;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimisationData;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -106,7 +106,7 @@ abstract public class AbstractOptimiserHelper {
 	 * @param longTermOptimisationData
 	 * @param path
 	 */
-	public static void produceDataForGurobi(LongTermOptimisationData longTermOptimisationData, String path) {
+	public static void produceDataForGurobi(PairingOptimisationData longTermOptimisationData, String path) {
 		long[][] profitAsPrimitive = longTermOptimisationData.getProfitAsPrimitive();
 		boolean[][] valid = longTermOptimisationData.getValid();
 		boolean[] optionalLoads = longTermOptimisationData.getOptionalLoads();
@@ -131,7 +131,7 @@ abstract public class AbstractOptimiserHelper {
 		}
 	}
 
-	public static void printPairings(List<ILoadOption> loads, boolean[][] pairingsMatrix, LongTermOptimisationData optimiserRecorder) {
+	public static void printPairings(List<ILoadOption> loads, boolean[][] pairingsMatrix, PairingOptimisationData optimiserRecorder) {
 		for (ILoadOption load : loads) {
 			System.out.println(String.format("%s to %s", load.getId(),
 					optimiserRecorder.getPairedDischarge(load, pairingsMatrix) == null ? "null" : optimiserRecorder.getPairedDischarge(load, pairingsMatrix).getId()));

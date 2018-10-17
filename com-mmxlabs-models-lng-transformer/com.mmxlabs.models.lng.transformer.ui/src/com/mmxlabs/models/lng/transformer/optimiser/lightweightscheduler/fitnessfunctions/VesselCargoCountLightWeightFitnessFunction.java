@@ -17,15 +17,16 @@ public class VesselCargoCountLightWeightFitnessFunction implements ILightWeightF
 	@Inject
 	ILightWeightOptimisationData lightWeightOptimisationData;
 	
-	public long[] perVesselWeight;
-	
 	@Override
 	public long evaluate(List<List<Integer>> sequences) {
 		long fitness = 0L;
 		int idx = 0;
 		for (List<Integer> sequence : sequences) {
 			int sum = (int) sequence.stream().count();
-			fitness += (Math.min(sum, lightWeightOptimisationData.getDesiredVesselCargoCount()[idx])*perVesselWeight[idx]);
+			fitness += (Math.min(sum,
+					lightWeightOptimisationData.getDesiredVesselCargoCount()[idx])
+					* lightWeightOptimisationData.getDesiredVesselCargoWeight()[idx]
+					);
 			idx++;
 		}
 		return fitness;
@@ -33,12 +34,7 @@ public class VesselCargoCountLightWeightFitnessFunction implements ILightWeightF
 
 	@Override
 	public void init() {
-		perVesselWeight = new long[lightWeightOptimisationData.getVessels().size()];
-		for (int i = 0; i < lightWeightOptimisationData.getVessels().size(); i++) {
-			if (lightWeightOptimisationData.getDesiredVesselCargoCount()[i] > 0) {
-				perVesselWeight[i] = lightWeightOptimisationData.getDesiredVesselCargoWeight()[i];
-			}
-		}
+		
 	}
 
 	@Override

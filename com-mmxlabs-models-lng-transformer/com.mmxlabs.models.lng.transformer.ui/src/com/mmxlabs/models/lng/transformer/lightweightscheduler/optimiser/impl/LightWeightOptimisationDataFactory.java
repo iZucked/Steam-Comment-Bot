@@ -27,9 +27,9 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoT
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
 import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper.ShippingType;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.ILongTermMatrixOptimiser;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimisationData;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimiserHelper;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.IPairingMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimisationData;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairValueCalculatorStep;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossExtractor;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -45,11 +45,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 public class LightWeightOptimisationDataFactory {
 
 	@Inject
-	private LongTermOptimisationData optimiserRecorder;
+	private PairingOptimisationData optimiserRecorder;
 	@Inject
 	private ILongTermSlotsProvider longTermSlotsProvider;
 	@Inject
-	private ILongTermMatrixOptimiser matrixOptimiser;
+	private IPairingMatrixOptimiser matrixOptimiser;
 	@Inject
 	private IVesselProvider vesselProvider;
 	@Inject
@@ -87,7 +87,7 @@ public class LightWeightOptimisationDataFactory {
 		
 		// add cargoes
 		Set<Integer> cargoIndexes = new HashSet<>();
-		List<List<IPortSlot>> shippedCargoes = LongTermOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
+		List<List<IPortSlot>> shippedCargoes = PairingOptimiserHelper.getCargoes(optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), pairingsMatrix, ShippingType.SHIPPED);
 		if (shippedCargoes.isEmpty()) {
 			// No cargoes found!
 			return null;
@@ -179,7 +179,7 @@ public class LightWeightOptimisationDataFactory {
 		List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
 				.sorted((a, b) -> a.getName().compareTo(b.getName())) //
 				.map(v -> vesselProvider.getVesselAvailability(v)) //
-				.filter(v -> LongTermOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
+				.filter(v -> PairingOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
 		return vessels;
 	}
 

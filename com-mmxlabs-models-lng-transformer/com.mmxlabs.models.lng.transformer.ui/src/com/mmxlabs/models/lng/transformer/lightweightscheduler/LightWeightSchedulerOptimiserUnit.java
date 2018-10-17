@@ -53,7 +53,7 @@ import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWe
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ISequenceElementFilter;
 import com.mmxlabs.models.lng.transformer.optimiser.common.SlotValueHelper;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.modules.LWSTabuOptimiserModule;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.SequencesToPortSlotsUtils;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.SequencesToPortSlotsUtils;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairValueCalculatorStep;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.transformerunits.TransformerUnitsHelper;

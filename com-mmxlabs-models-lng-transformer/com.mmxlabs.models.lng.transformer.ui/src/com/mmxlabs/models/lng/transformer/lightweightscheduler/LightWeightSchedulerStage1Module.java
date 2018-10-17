@@ -31,9 +31,9 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.Si
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightShippingRestrictionsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.DefaultPNLLightWeightFitnessFunctionFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.VesselCargoCountLightWeightFitnessFunctionFactory;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.ILongTermMatrixOptimiser;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.GoogleORToolsLongTermMatrixOptimiser;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.LongTermOptimisationData;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.GoogleORToolsPairingMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.IPairingMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimisationData;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -51,9 +51,9 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 		bind(ICargoToCargoCostCalculator.class).to(SimpleCargoToCargoCostCalculator.class);
 		bind(ICargoVesselRestrictionsMatrixProducer.class).to(CargoVesselRestrictionsMatrixProducer.class);
 
-		bind(ILongTermMatrixOptimiser.class).to(GoogleORToolsLongTermMatrixOptimiser.class);
+		bind(IPairingMatrixOptimiser.class).to(GoogleORToolsPairingMatrixOptimiser.class);
 
-		bind(LongTermOptimisationData.class);
+		bind(PairingOptimisationData.class);
 
 		bind(HashSetLongTermSlotsEditor.class).in(Singleton.class);
 		bind(ILongTermSlotsProvider.class).to(HashSetLongTermSlotsEditor.class);

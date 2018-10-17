@@ -2,14 +2,14 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 
-public interface ILongTermMaxSlotCountConstraintProvider {
+public interface IPairingMaxSlotCountConstraintProvider {
 	Map<Set<IDischargeOption>, Integer> getAllMaxDischargeGroupCounts();
 	Map<Set<IDischargeOption>, Integer> getAllMinDischargeGroupCounts();
 }

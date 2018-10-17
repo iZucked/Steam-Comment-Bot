@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,14 +24,14 @@ import com.google.ortools.linearsolver.MPVariable;
  * Optimise cargo allocations with Google OR.
  * <p>
  */
-public class GoogleORToolsLongTermMatrixOptimiser implements ILongTermMatrixOptimiser {
+public class GoogleORToolsPairingMatrixOptimiser implements IPairingMatrixOptimiser {
 
-	private static final long NON_OPTIONAL_PENALTY = 36_000000000L;
+	private static final long NON_OPTIONAL_PENALTY = 36_000_000_000L;
 	private static final double SYMMETRY_CONSTANT = 0.1;
 	
-	public boolean[][] optimise(PairingData pairingData) {
+	public boolean[][] optimise(SerializablePairingData pairingData) {
 		long[][] pnl = pairingData.getPnl();
-		boolean[][] restricted = pairingData.getRestricted();
+		boolean[][] validCargoes = pairingData.getValidCargoes();
 		boolean[] optionalLoads = pairingData.getOptionalLoads();
 		boolean[] optionalDischarges = pairingData.getOptionalDischarges();
 
@@ -68,16 +68,14 @@ public class GoogleORToolsLongTermMatrixOptimiser implements ILongTermMatrixOpti
 			}
 		}
 
-		// Set up non optional penalties - default 0
+		// Set up symmettry reward - default 0
 		double[][] symmetryPenalty = new double[no_loads][no_discharges];
 
-		// Modify loads with a non-optional penalty
+		// Add symmettry reward
 		for (int load_id = 0; load_id < no_loads; load_id++) {
-			if (!optionalLoads[load_id]) {
 				for (int discharge_id = 0; discharge_id < no_discharges; discharge_id++) {
-					symmetryPenalty[load_id][discharge_id] = ((double) load_id) * ((double) discharge_id) * SYMMETRY_CONSTANT;
+					symmetryPenalty[load_id][discharge_id] = (((double) load_id) + .1) * (((double) discharge_id) + .1) * SYMMETRY_CONSTANT;
 				}
-			}
 		}
 
 		/** google initialization */
@@ -98,7 +96,7 @@ public class GoogleORToolsLongTermMatrixOptimiser implements ILongTermMatrixOpti
 			for (int j = 0; j < no_discharges; j++) {
 				loadConstraints[i].setCoefficient(vars[i][j], 1);
 
-				if (!restricted[i][j]) {
+				if (!validCargoes[i][j]) {
 					vars[i][j].setUb(0);
 				}
 			}
@@ -321,11 +319,11 @@ public class GoogleORToolsLongTermMatrixOptimiser implements ILongTermMatrixOpti
 	public boolean[][] findOptimalPairings(long[][] values, boolean[] optionalLoads, boolean[] optionalDischarges, boolean[][] valid, List<Map<String, List<Integer>>> maxDischargeSlotsConstraints,
 			List<Map<String, List<Integer>>> minDischargeSlotsConstraints, List<Map<String, List<Integer>>> maxLoadSlotsConstraints, List<Map<String, List<Integer>>> minLoadSlotsConstraints) {
 
-		PairingData data = new PairingData();
+		SerializablePairingData data = new SerializablePairingData();
 		data.pnl = values;
 		data.optionalLoads = optionalLoads;
 		data.optionalDischarges = optionalDischarges;
-		data.restricted = valid;
+		data.validCargoes = valid;
 
 		data.minLoadSlots = minLoadSlotsConstraints;
 		data.maxLoadSlots = maxLoadSlotsConstraints;

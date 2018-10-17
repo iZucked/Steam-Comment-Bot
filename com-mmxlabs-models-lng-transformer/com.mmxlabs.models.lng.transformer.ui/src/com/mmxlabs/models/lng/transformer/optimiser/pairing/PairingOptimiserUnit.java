@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -54,7 +54,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetLongTermSlotsEditor;
 
-public class LongTermOptimiserUnit {
+public class PairingOptimiserUnit {
 
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
@@ -68,7 +68,7 @@ public class LongTermOptimiserUnit {
 	@NonNull
 	private final String phase;
 
-	private final Map<Thread, LongTermOptimiser> threadCache = new ConcurrentHashMap<>(100);
+	private final Map<Thread, PairingOptimiser> threadCache = new ConcurrentHashMap<>(100);
 
 	private @NonNull CleanableExecutorService executorService;
 
@@ -77,7 +77,7 @@ public class LongTermOptimiserUnit {
 	private LNGScenarioModel initialScenario;
 
 	@SuppressWarnings("null")
-	public LongTermOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
+	public PairingOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
 			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final CleanableExecutorService executorService, @NonNull final ISequences initialSequences,
 			LNGScenarioModel initialScenario, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
@@ -101,16 +101,16 @@ public class LongTermOptimiserUnit {
 				HashSetLongTermSlotsEditor longTermSlotEditor = new HashSetLongTermSlotsEditor();
 				bind(ILongTermSlotsProvider.class).toInstance(longTermSlotEditor);
 				bind(ILongTermSlotsProviderEditor.class).toInstance(longTermSlotEditor);
-				GoogleORToolsLongTermMatrixOptimiser matrixOptimiser = new GoogleORToolsLongTermMatrixOptimiser();
-				bind(ILongTermMatrixOptimiser.class).toInstance(matrixOptimiser);
+				GoogleORToolsPairingMatrixOptimiser matrixOptimiser = new GoogleORToolsPairingMatrixOptimiser();
+				bind(IPairingMatrixOptimiser.class).toInstance(matrixOptimiser);
 			}
 
 			@Provides
-			private LongTermOptimiser providePerThreadBagMover(@NonNull final Injector injector) {
+			private PairingOptimiser providePerThreadBagMover(@NonNull final Injector injector) {
 
-				LongTermOptimiser longTermOptimiser = threadCache.get(Thread.currentThread());
+				PairingOptimiser longTermOptimiser = threadCache.get(Thread.currentThread());
 				if (longTermOptimiser == null) {
-					longTermOptimiser = new LongTermOptimiser();
+					longTermOptimiser = new PairingOptimiser();
 					injector.injectMembers(longTermOptimiser);
 					threadCache.put(Thread.currentThread(), longTermOptimiser);
 				}
@@ -144,7 +144,7 @@ public class LongTermOptimiserUnit {
 						try {
 							// Bit nasty, but we are still in PoC stages
 
-							final LongTermOptimiser calculator = injector.getInstance(LongTermOptimiser.class);
+							final PairingOptimiser calculator = injector.getInstance(PairingOptimiser.class);
 							return calculator.optimise(executorService, dataTransformer, charterInMarket);
 						} finally {
 							monitor.worked(1);

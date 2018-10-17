@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  * @author achurchill
  *
  */
-public class LongTermOptimisationData implements ProfitAndLossRecorder {
+public class PairingOptimisationData implements ProfitAndLossRecorder {
 	@Inject
 	private IPhaseOptimisationData phaseOptimisationData;
 	@Inject
@@ -53,7 +53,7 @@ public class LongTermOptimisationData implements ProfitAndLossRecorder {
 	private List<Map<String, List<Integer>>> maxLoadGroupCount;
 	private List<Map<String, List<Integer>>> minLoadGroupCount;
 
-	public LongTermOptimisationData() {
+	public PairingOptimisationData() {
 
 	}
 

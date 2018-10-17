@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm.webservice;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing.webservice;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.models.lng.transformer.optimiser.longterm.ILongTermMatrixOptimiser;
+import com.mmxlabs.models.lng.transformer.optimiser.pairing.IPairingMatrixOptimiser;
 
-public class WebserviceLongTermMatrixOptimiser implements ILongTermMatrixOptimiser {
+public class WebServicePairingMatrixOptimiser implements IPairingMatrixOptimiser {
 	public static final String OPTIMISER_URL = "http://localhost:8080/api/optimise";
 	ObjectMapper mapper = new ObjectMapper();
 

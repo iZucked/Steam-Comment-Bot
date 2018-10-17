@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,9 +14,9 @@ import java.util.Map;
 /**
  * Created by alex on 01/12/2017.
  */
-public class PairingData {
+public class SerializablePairingData {
     long[][] pnl = null;
-    boolean[][] restricted = null;
+    boolean[][] validCargoes = null;
     boolean[] optionalLoads = null;
     boolean[] optionalDischarges = null;
     List<Map<String, List<Integer>>> maxDischargeSlots = null;
@@ -24,25 +24,25 @@ public class PairingData {
     List<Map<String, List<Integer>>> maxLoadSlots = null;
     List<Map<String, List<Integer>>> minLoadSlots = null;
 
-    public PairingData() {
+    public SerializablePairingData() {
 
     }
 
-    public PairingData(long[][] pnl,
-                       boolean[][] restricted,
+    public SerializablePairingData(long[][] pnl,
+                       boolean[][] validCargoes,
                         boolean[] optionalLoads,
                         boolean[] optionalDischarges) {
         this.pnl = pnl;
-        this.restricted = restricted;
+        this.validCargoes = validCargoes;
         this.optionalLoads = optionalLoads;
         this.optionalDischarges = optionalDischarges;
     }
 
-    public PairingData(String path) throws IOException {
+    public SerializablePairingData(String path) throws IOException {
         this.pnl = getPrestoredData(Paths.get(path, "profit.lt").toString());
 
         // booleans
-        this.restricted = getPrestoredData(Paths.get(path, "constraints.lt").toString());
+        this.validCargoes = getPrestoredData(Paths.get(path, "constraints.lt").toString());
         this.optionalLoads = getPrestoredData(Paths.get(path, "loads.lt").toString());
         this.optionalDischarges = getPrestoredData(Paths.get(path, "discharges.lt").toString());
     }
@@ -55,12 +55,12 @@ public class PairingData {
         this.pnl = pnl;
     }
 
-    public boolean[][] getRestricted() {
-        return restricted;
+    public boolean[][] getValidCargoes() {
+        return validCargoes;
     }
 
-    public void setRestricted(boolean[][] restricted) {
-        this.restricted = restricted;
+    public void setValidCargoes(boolean[][] restricted) {
+        this.validCargoes = restricted;
     }
 
     public boolean[] getOptionalLoads() {
@@ -134,7 +134,7 @@ public class PairingData {
         if (getPnl() != null
                 && getOptionalDischarges() != null
                 && getOptionalLoads() != null
-                && getRestricted() != null) {
+                && getValidCargoes() != null) {
             return true;
         } else {
             return false;

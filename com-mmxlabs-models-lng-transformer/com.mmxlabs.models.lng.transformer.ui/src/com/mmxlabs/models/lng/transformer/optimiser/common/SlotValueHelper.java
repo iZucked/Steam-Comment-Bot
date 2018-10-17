@@ -7,8 +7,10 @@ package com.mmxlabs.models.lng.transformer.optimiser.common;
 import java.util.Collections;
 import java.util.Iterator;
 
+import com.google.common.util.concurrent.CycleDetectingLockFactory.PotentialDeadlockException;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairValueCalculatorStep;
@@ -16,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxVolumeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 
@@ -33,6 +36,9 @@ public class SlotValueHelper {
 				iterator.remove();
 			}
 			if (constraint.getName().equals(MinMaxSlotGroupConstraintCheckerFactory.NAME)) {
+				iterator.remove();
+			}
+			if (constraint.getName().equals(PortExclusionConstraintCheckerFactory.NAME)) {
 				iterator.remove();
 			}
 		}

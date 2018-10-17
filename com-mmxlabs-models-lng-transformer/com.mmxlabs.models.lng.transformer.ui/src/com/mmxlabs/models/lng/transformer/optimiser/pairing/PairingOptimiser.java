@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,12 +38,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * Long term optimisation. Drives a long term optimisation using an {@link ILongTermMatrixOptimiser}.
+ * Long term optimisation. Drives a long term optimisation using an {@link IPairingMatrixOptimiser}.
  * 
  * @author achurchill
  *
  */
-public class LongTermOptimiser {
+public class PairingOptimiser {
 
 	private static final boolean DEBUG = false;
 
@@ -51,10 +51,10 @@ public class LongTermOptimiser {
 	private ILongTermSlotsProvider longTermSlotsProvider;
 
 	@Inject
-	private ILongTermMatrixOptimiser matrixOptimiser;
+	private IPairingMatrixOptimiser matrixOptimiser;
 
 	@Inject
-	private LongTermOptimisationData optimiserRecorder;
+	private PairingOptimisationData optimiserRecorder;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -103,12 +103,12 @@ public class LongTermOptimiser {
 
 		if (DEBUG) {
 			// print pairings for debug
-			LongTermOptimiserHelper.printPairings(loads, pairingsMatrix, optimiserRecorder);
+			PairingOptimiserHelper.printPairings(loads, pairingsMatrix, optimiserRecorder);
 		}
 
 		// (5) Export the pairings matrix to the raw sequences
 		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
-		IResource nominal = LongTermOptimiserHelper.getNominal(rawSequences, charterInMarket, vesselProvider);
+		IResource nominal = PairingOptimiserHelper.getNominal(rawSequences, charterInMarket, vesselProvider);
 		if (nominal == null) {
 			throw new IllegalStateException();
 		}
@@ -124,7 +124,7 @@ public class LongTermOptimiser {
 	 * @param nominal
 	 */
 	private void updateSequences(@NonNull IModifiableSequences rawSequences, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal) {
-		LongTermOptimiserHelper.moveElementsToUnusedList(rawSequences, portSlotProvider);
+		PairingOptimiserHelper.moveElementsToUnusedList(rawSequences, portSlotProvider);
 		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
 		int insertIndex = 0;
 		for (int i = 0; i < modifiableSequence.size(); i++) {
@@ -147,17 +147,17 @@ public class LongTermOptimiser {
 				unusedElements.remove(portSlotProvider.getElement(dischargeOption));
 			} else if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeOption) {
 				// Fob Sale
-				IResource resource = LongTermOptimiserHelper.getVirtualResource(dischargeOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
+				IResource resource = PairingOptimiserHelper.getVirtualResource(dischargeOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
 				if (resource != null) {
 					IModifiableSequence fobSale = rawSequences.getModifiableSequence(resource);
-					LongTermOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, fobSale, portSlotProvider);
+					PairingOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, fobSale, portSlotProvider);
 				}
 			} else if (loadOption instanceof ILoadOption && dischargeOption instanceof IDischargeSlot) {
 				// DES purchase
-				IResource resource = LongTermOptimiserHelper.getVirtualResource(loadOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
+				IResource resource = PairingOptimiserHelper.getVirtualResource(loadOption, portSlotProvider, virtualVesselSlotProvider, vesselProvider);
 				if (resource != null) {
 					IModifiableSequence desPurchase = rawSequences.getModifiableSequence(resource);
-					LongTermOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, desPurchase, portSlotProvider);
+					PairingOptimiserHelper.insertCargo(unusedElements, loadOption, dischargeOption, desPurchase, portSlotProvider);
 				}
 			}
 		}

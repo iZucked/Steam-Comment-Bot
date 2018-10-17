@@ -2,12 +2,12 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.optimiser.longterm;
+package com.mmxlabs.models.lng.transformer.optimiser.pairing;
 
 import java.util.List;
 import java.util.Map;
 
-public interface ILongTermMatrixOptimiser {
+public interface IPairingMatrixOptimiser {
 
 	/**
 	 * Finds optimal pairings of slots given a value array
