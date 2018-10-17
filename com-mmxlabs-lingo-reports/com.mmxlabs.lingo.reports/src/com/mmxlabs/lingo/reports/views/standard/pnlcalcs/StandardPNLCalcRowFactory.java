@@ -280,14 +280,16 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 							}
 						}
 					}
-					return formatter.apply(t);
+					if (t != null) {
+						return formatter.apply(t);
+					}
 				} else {
 					final T t = get(object);
 					if (t != null) {
 						return formatter.apply(t);
 					}
-					return "";
 				}
+				return "";
 			}
 
 			public @Nullable T get(final Object object) {
@@ -367,14 +369,16 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 							}
 						}
 					}
-					return formatter.apply(t);
+					if (t != null) {
+						return formatter.apply(t);
+					}
 				} else {
 					final T t = get(object);
 					if (t != null) {
 						return formatter.apply(t);
 					}
-					return "";
 				}
+				return "";
 			}
 
 			public @Nullable T get(final Object object) {
@@ -609,24 +613,16 @@ public class StandardPNLCalcRowFactory implements IPNLCalcsRowFactory {
 
 					final T cost = func.apply(object);
 					if (cost != null) {
-						// return DollarsFormat.format(cost);
-
-						// final T t = get(object);
-						// if (t != null) {
 						return formatter.apply(cost);
-						// }
-						// return "";
-
 					}
 				}
 				if (object instanceof VesselEventVisit) {
 					final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
 
 					final T cost = func.apply(object);
-					return formatter.apply(cost);
-					// if (cost != null) {
-					// return DollarsFormat.format(cost);
-					// }
+					if (cost != null) {
+						return formatter.apply(cost);
+					}
 				} else if (object instanceof VesselEventVisitPair) {
 					T cost = getFromCargoAllocationPair(type, func, object);
 					return DollarsFormat.format(cost);
