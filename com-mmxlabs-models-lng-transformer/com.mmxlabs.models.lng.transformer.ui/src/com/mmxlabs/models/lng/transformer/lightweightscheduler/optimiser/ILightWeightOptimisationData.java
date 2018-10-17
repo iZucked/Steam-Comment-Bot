@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 public interface ILightWeightOptimisationData {
 
-	long[] getCargoPNL();
+	long[] getCargoPNLPerM3();
 
 	/**
 	 * Calculates the cargo charter costs.

@@ -82,10 +82,10 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	}
 
 	@Override
-	public long[] getCargoPNL() {
+	public long[] getCargoPNLPerM3() {
 		return cargoPNL;
 	}
-	public void setCargoPNL(long[] cargoPNL) {
+	public void setCargoPNLPerM3(long[] cargoPNL) {
 		this.cargoPNL = cargoPNL;
 	}
 

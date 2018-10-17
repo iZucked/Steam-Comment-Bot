@@ -61,7 +61,7 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 			totalLateness += lateness;
 			cost += calculateCharterCostOnSequence(sequence, fastestStartTimes, availability, lightWeightOptimisationData.getCargoCharterCostPerAvailability());
 			// calculate pnl
-			long profit = calculateProfitOnSequence(sequence, lightWeightOptimisationData.getVesselCapacities()[availability], lightWeightOptimisationData.getCargoPNL(),
+			long profit = calculateProfitOnSequence(sequence, lightWeightOptimisationData.getVesselCapacities()[availability], lightWeightOptimisationData.getCargoPNLPerM3(),
 					lightWeightOptimisationData.getCargoesVolumesInM3(), lightWeightOptimisationData.getCargoDetails());
 			totalPNL += profit;
 			totalCost += cost;
@@ -208,7 +208,7 @@ public class DefaultPNLLightWeightFitnessFunction implements ILightWeightFitness
 			totalLateness += lateness;
 			cost += calculateCharterCostOnSequence(sequence, fastestStartTimes, availability, lightWeightOptimisationData.getCargoCharterCostPerAvailability());
 			// calculate pnl
-			long profit = calculateProfitOnSequence(sequence, lightWeightOptimisationData.getVesselCapacities()[availability], lightWeightOptimisationData.getCargoPNL(),
+			long profit = calculateProfitOnSequence(sequence, lightWeightOptimisationData.getVesselCapacities()[availability], lightWeightOptimisationData.getCargoPNLPerM3(),
 					lightWeightOptimisationData.getCargoesVolumesInM3(), lightWeightOptimisationData.getCargoDetails());
 			totalPNL += profit;
 			totalCost += cost;
