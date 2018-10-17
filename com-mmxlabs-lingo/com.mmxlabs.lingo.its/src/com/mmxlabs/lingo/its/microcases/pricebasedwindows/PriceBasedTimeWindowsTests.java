@@ -433,8 +433,6 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testTimeWindows_24hours_higher_price() throws Exception {
 
-		Assert.fail("FIXME: This test fails as the price trimmer does not take timezone into account");
-
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
