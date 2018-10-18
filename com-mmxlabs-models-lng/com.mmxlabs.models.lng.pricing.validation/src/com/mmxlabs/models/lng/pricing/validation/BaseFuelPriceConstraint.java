@@ -37,10 +37,27 @@ public class BaseFuelPriceConstraint extends AbstractModelMultiConstraint {
 
 			final String expression = baseFuelCost.getExpression();
 
-			if (expression != null && !expression.isEmpty()) {
+			if (expression == null || expression.isEmpty()) {
+				factory.copyName() //
+						.withObjectAndFeature(baseFuelCost, PricingPackage.Literals.BASE_FUEL_COST__EXPRESSION) //
+						.withMessage("Price is missing") //
+						.make(ctx, statuses);
+				return Activator.PLUGIN_ID;
+			} else {
+				try {
+					if (Double.parseDouble(expression) == 0.0) {
+						factory.copyName() //
+								.withObjectAndFeature(baseFuelCost, PricingPackage.Literals.BASE_FUEL_COST__EXPRESSION) //
+								.withMessage("Price is zero") //
+								.make(ctx, statuses);
+						return Activator.PLUGIN_ID;
+					}
+				} catch (NumberFormatException e) {
+					// Ignore, as could be an arbitrary expression
+				}
+
 				PriceExpressionUtils.validatePriceExpression(ctx, statuses, factory, baseFuelCost, PricingPackage.Literals.BASE_FUEL_COST__EXPRESSION, true);
 			}
-
 		}
 
 		return Activator.PLUGIN_ID;
