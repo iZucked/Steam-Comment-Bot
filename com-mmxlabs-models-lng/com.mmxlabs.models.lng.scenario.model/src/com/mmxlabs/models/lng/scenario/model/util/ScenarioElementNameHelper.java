@@ -78,7 +78,7 @@ public class ScenarioElementNameHelper {
 			final VesselEvent vesselEvent = (VesselEvent) target;
 			return String.format("%s \"%s\"", TYPE_VESSEL_EVENT.toLowerCase(), getNonNullString(vesselEvent.getName()));
 		} else if (target instanceof APortSet) {
-			final APortSet port = (APortSet) target;
+			final APortSet<?> port = (APortSet<?>) target;
 			return String.format("%s \"%s\"", TYPE_PORT.toLowerCase(), getNonNullString(port.getName()));
 		} else if (target instanceof NamedObject) {
 			final NamedObject namedObject = (NamedObject) target;
