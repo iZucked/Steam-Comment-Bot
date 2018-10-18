@@ -21,44 +21,41 @@ public class DistancesSelectionPage extends WizardPage {
 
 	private String versionTag;
 	private boolean isSelected = false;
-	private boolean checked = false;
 
-	protected DistancesSelectionPage(String pageName) {
+	protected DistancesSelectionPage(final String pageName) {
 		super(pageName);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		final Composite container = new Composite(parent, SWT.NONE);
 
 		// set the layout for the whole functional region
-		GridLayout layout = GridLayoutFactory.createFrom(new GridLayout(2, false)).extendedMargins(0, 0, 0, 0).spacing(5, 0).create();
+		final GridLayout layout = GridLayoutFactory.createFrom(new GridLayout(2, false)).extendedMargins(0, 0, 0, 0).spacing(5, 0).create();
 		container.setLayout(layout);
 
 		(new Label(container, SWT.NULL)).setText("Select the version of the distances to be imported: ");
 
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
-		DistanceRepository dr =   DistanceRepository.INSTANCE;
+		final DistanceRepository dr = DistanceRepository.INSTANCE;
 		dr.isReady();
 		dr.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
 
 		combo.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				versionTag = combo.getText();
 				isSelected = true;
-				cleanChecked();
 				getWizard().getContainer().updateButtons();
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 				versionTag = combo.getText();
 				getWizard().getContainer().updateButtons();
 				isSelected = false;
-				cleanChecked();
 			}
 		});
 		setControl(container);
@@ -72,29 +69,4 @@ public class DistancesSelectionPage extends WizardPage {
 	public String getVersionTag() {
 		return versionTag;
 	}
-
-	@Override
-	public IWizardPage getPreviousPage() {
-		checked = false;
-		return super.getPreviousPage();
-	}
-
-	/**
-	 * Indicates whether the selected distance was evaluated for lost distances
-	 * 
-	 * @return
-	 */
-	public boolean isChecked() {
-		return checked;
-	}
-
-	public void setChecked(boolean checked) {
-		this.checked = checked;
-	}
-
-	private void cleanChecked() {
-		checked = false;
-		// lostDistances.clear();
-	}
-
 }

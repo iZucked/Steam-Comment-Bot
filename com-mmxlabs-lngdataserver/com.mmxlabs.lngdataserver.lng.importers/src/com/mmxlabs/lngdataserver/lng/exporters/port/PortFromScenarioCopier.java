@@ -5,7 +5,8 @@
 package com.mmxlabs.lngdataserver.lng.exporters.port;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalTime;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,29 +15,32 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.commons.impl.AbstractDataRepository;
-import com.mmxlabs.lngdataservice.client.ports.model.Port;
-import com.mmxlabs.lngdataservice.client.ports.model.Version;
+import com.mmxlabs.lngdataserver.integration.ports.model.Port;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortCapability;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
+import com.mmxlabs.lngdataserver.integration.ports.model.TimePeriod;
 import com.mmxlabs.models.lng.port.PortModel;
 
 public class PortFromScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PortFromScenarioCopier.class);
 
-	public static @NonNull Version generateVersion(@NonNull PortModel portModel) {
+	public static @NonNull PortsVersion generateVersion(@NonNull PortModel portModel) {
 
-		Version version = new Version();
+		PortsVersion version = new PortsVersion();
 
 		List<Port> ports = new LinkedList<>();
 		for (com.mmxlabs.models.lng.port.Port lingo_port : portModel.getPorts()) {
 			Port port = new Port();
 			port.setLocationMmxId(lingo_port.getLocation().getMmxId());
 			port.setAllowCooldown(lingo_port.isAllowCooldown());
-			port.setDefaultStartTime(String.format("%02d:00:00", lingo_port.getDefaultStartTime()));
+			port.setDefaultStartTime(LocalTime.of(lingo_port.getDefaultStartTime(), 0));
 			port.setBerths(lingo_port.getBerths());
 			port.setCvValue(lingo_port.getCvValue());
 			port.setLoadDuration(lingo_port.getLoadDuration());
 			port.setDischargeDuration(lingo_port.getDischargeDuration());
+			port.setDefaultWindowSize(lingo_port.getDefaultWindowSize());
+			port.setDefaultWindowSizeUnits(map(lingo_port.getDefaultWindowSizeUnits()));
 			if (lingo_port.isSetMinCvValue()) {
 				port.setMinCvValue(lingo_port.getMinCvValue());
 			}
@@ -44,20 +48,20 @@ public class PortFromScenarioCopier {
 				port.setMaxCvValue(lingo_port.getMaxCvValue());
 			}
 
-			port.setCapabilities(new ArrayList<Port.CapabilitiesEnum>());
+			port.setCapabilities(new LinkedHashSet<>());
 			for (com.mmxlabs.models.lng.types.PortCapability lingo_pc : lingo_port.getCapabilities()) {
 				switch (lingo_pc) {
 				case DISCHARGE:
-					port.getCapabilities().add(Port.CapabilitiesEnum.DISCHARGE);
+					port.getCapabilities().add(PortCapability.DISCHARGE);
 					break;
 				case DRYDOCK:
-					port.getCapabilities().add(Port.CapabilitiesEnum.DRYDOCK);
+					port.getCapabilities().add(PortCapability.DRYDOCK);
 					break;
 				case LOAD:
-					port.getCapabilities().add(Port.CapabilitiesEnum.LOAD);
+					port.getCapabilities().add(PortCapability.LOAD);
 					break;
 				case MAINTENANCE:
-					port.getCapabilities().add(Port.CapabilitiesEnum.MAINTENANCE);
+					port.getCapabilities().add(PortCapability.MAINTENANCE);
 					break;
 				case TRANSFER:
 					break;
@@ -76,10 +80,21 @@ public class PortFromScenarioCopier {
 			portModel.setPortDataVersion(portDataVersion);
 		}
 		version.setIdentifier(portDataVersion);
-		version.setCreatedAt(AbstractDataRepository.DATE_FORMATTER.format(LocalDateTime.now()));
-		version.setLocationVersion(portModel.getDistanceDataVersion());
+		version.setCreatedAt(LocalDateTime.now());
 		version.setPorts(ports);
 
 		return version;
+	}
+
+	private static TimePeriod map(com.mmxlabs.models.lng.types.TimePeriod period) {
+		switch (period) {
+		case DAYS:
+			return TimePeriod.DAYS;
+		case HOURS:
+			return TimePeriod.HOURS;
+		case MONTHS:
+			return TimePeriod.MONTHS;
+		}
+		throw new IllegalArgumentException();
 	}
 }

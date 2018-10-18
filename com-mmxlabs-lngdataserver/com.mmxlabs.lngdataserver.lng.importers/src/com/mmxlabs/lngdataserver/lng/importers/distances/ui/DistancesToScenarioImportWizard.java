@@ -139,13 +139,4 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 	public boolean canFinish() {
 		return distancesSelectionPage == null || distancesSelectionPage.isPageComplete();
 	}
-
-	@Override
-	public IWizardPage getNextPage(final IWizardPage page) {
-		if (page == distancesSelectionPage) {
-			distancesSelectionPage.setChecked(true);
-		}
-		return super.getNextPage(page);
-	}
-
 }

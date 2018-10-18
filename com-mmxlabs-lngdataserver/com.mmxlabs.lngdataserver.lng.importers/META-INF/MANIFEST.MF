@@ -56,6 +56,7 @@ Export-Package: com.mmxlabs.lngdataserver.lng.exporters.distances,
  com.mmxlabs.lngdataserver.lng.exporters.pricing.ui,
  com.mmxlabs.lngdataserver.lng.exporters.vessels,
  com.mmxlabs.lngdataserver.lng.importers.distances,
+ com.mmxlabs.lngdataserver.lng.importers.port,
  com.mmxlabs.lngdataserver.lng.importers.pricing
 Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.lngdataserver.lng.importers

@@ -14,10 +14,10 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
+import com.mmxlabs.lngdataserver.integration.ports.PortsUploaderClient;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.server.BackEndUrlProvider;
-import com.mmxlabs.lngdataservice.client.ports.model.Version;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -39,8 +39,6 @@ public class PortsFromScenarioImportWizard extends Wizard implements IImportWiza
 	@Override
 	public boolean performFinish() {
 
-		String url = BackEndUrlProvider.INSTANCE.getUrl();
-
 		try {
 			List<ScenarioInstance> selectedScenarios = scenarioSelectionPage.getSelectedScenarios();
 
@@ -57,12 +55,9 @@ public class PortsFromScenarioImportWizard extends Wizard implements IImportWiza
 								LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 
 								PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-								Version version = PortFromScenarioCopier.generateVersion(portModel);
+								PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
 								try {
-									PortsRepository repo =  PortsRepository.INSTANCE;
-									repo.isReady();
-									repo.saveVersion(version);
-
+									PortsUploaderClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
 								} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();

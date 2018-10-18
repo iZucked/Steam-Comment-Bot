@@ -13,14 +13,15 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.PlatformUI;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distances.PortAndDistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.model.DataManifest;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.model.Entry;
+import com.mmxlabs.lngdataserver.lng.importers.port.PortsToScenarioCopier;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -44,13 +45,16 @@ public class LingoDataImporter {
 		}
 
 		Entry distanceEntry = null;
-		final Entry portEntry = null;
+		Entry portEntry = null;
 		final Entry pricingEntry = null;
 		final Entry vesselEntry = null;
 		for (final Entry entry : manifest.getEntries()) {
 			switch (entry.getType()) {
 			case "distances":
 				distanceEntry = entry;
+				break;
+			case "ports":
+				portEntry = entry;
 				break;
 			default:
 				break;
@@ -66,11 +70,13 @@ public class LingoDataImporter {
 		}
 
 		final Entry pDistanceEntry = distanceEntry;
+		final Entry pPortEntry = portEntry;
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (ModelReference modelReference = modelRecord.aquireReference(LingoDataImporter.class.getSimpleName())) {
 			modelReference.executeWithLock(true, () -> {
 				try {
 					importDistances(pDistanceEntry, baseURI, uc, modelReference);
+					importPorts(pPortEntry, baseURI, uc, modelReference);
 				} catch (final IOException e) {
 					e.printStackTrace();
 				}
@@ -90,6 +96,26 @@ public class LingoDataImporter {
 			final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
 			final EditingDomain editingDomain = modelReference.getEditingDomain();
 			final Command command = PortAndDistancesToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
+
+			if (!command.canExecute()) {
+				throw new RuntimeException("Unable to execute command");
+			}
+			RunnerHelper.syncExecDisplayOptional(() -> modelReference.getCommandStack().execute(command));
+		}
+	}
+
+	private void importPorts(final Entry entry, final String baseURI, final URIConverter uc, final ModelReference modelReference) throws IOException {
+		if (entry == null) {
+			return;
+		}
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		try (InputStream inputStream = uc.createInputStream(URI.createURI(baseURI + "/" + entry.getPath()))) {
+			final PortsVersion version = mapper.readValue(inputStream, PortsVersion.class);
+
+			final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
+			final EditingDomain editingDomain = modelReference.getEditingDomain();
+			final Command command = PortsToScenarioCopier.getUpdateCommand(editingDomain, portModel, version);
 
 			if (!command.canExecute()) {
 				throw new RuntimeException("Unable to execute command");

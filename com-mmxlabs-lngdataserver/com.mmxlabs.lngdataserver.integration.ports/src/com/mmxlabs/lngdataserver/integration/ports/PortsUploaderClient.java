@@ -4,31 +4,41 @@
  */
 package com.mmxlabs.lngdataserver.integration.ports;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lngdataservice.client.ports.model.Version;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.ByteString;
 
-public class PortsClient {
+public class PortsUploaderClient {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PortsClient.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PortsUploaderClient.class);
 	private static final OkHttpClient CLIENT = new OkHttpClient();
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-	public static boolean saveVersion(String baseUrl, Version version) throws IOException {
-		String json = new ObjectMapper().writeValueAsString(version.getPorts());
+	private PortsUploaderClient() {
 
+	}
+
+	public static boolean saveVersion(String baseUrl, PortsVersion version) throws IOException {
+		String json = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(version);
+
+		Files.write(json, new File("C:\\temp\\ports.json"), Charsets.UTF_8);
+		
 		RequestBody body = RequestBody.create(JSON, json);
-		Request request = new Request.Builder().url(baseUrl + "/ports/bulk").post(body).build();
+		Request request = new Request.Builder().url(baseUrl + "/ports/sync/versions").post(body).build();
 		try (Response response = CLIENT.newCall(request).execute()) {
 
 			if (!response.isSuccessful()) {

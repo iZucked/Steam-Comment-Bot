@@ -24,7 +24,8 @@ import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
-import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
+import com.mmxlabs.lngdataserver.integration.ports.PortsUploaderClient;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
 //import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.ScenarioServicePublishAction;
 import com.mmxlabs.lngdataserver.lng.exporters.port.PortFromScenarioCopier;
@@ -53,15 +54,15 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 public class DataBrowserContentMenuContribution implements IDataBrowserContextMenuExtension {
 
 	@Override
-	public boolean contributeToDataMenu(@NonNull TreeSelection selection, @NonNull MenuManager menuManager) {
+	public boolean contributeToDataMenu(@NonNull final TreeSelection selection, @NonNull final MenuManager menuManager) {
 		boolean itemsAdded = false;
 		if (selection.size() == 1) {
-			Object firstElement = selection.getFirstElement();
+			final Object firstElement = selection.getFirstElement();
 			if (firstElement instanceof Node) {
-				Node node = (Node) firstElement;
-				CompositeNode parentNode = (CompositeNode) node.eContainer();
+				final Node node = (Node) firstElement;
+				final CompositeNode parentNode = (CompositeNode) node.eContainer();
 				if (parentNode != null) {
-					String versionIdentifier = node.getVersionIdentifier();
+					final String versionIdentifier = node.getVersionIdentifier();
 					if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), parentNode.getType())) {
 						menuManager.add(new RunnableAction("Update scenario(s)", () -> {
 							openWizard((currentInstance) -> new DistancesToScenarioImportWizard(versionIdentifier, currentInstance, true));
@@ -92,68 +93,78 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 	}
 
 	@Override
-	public boolean contributeToScenarioMenu(@NonNull TreeSelection selection, @NonNull MenuManager menuManager) {
+	public boolean contributeToScenarioMenu(@NonNull final TreeSelection selection, @NonNull final MenuManager menuManager) {
 		boolean itemsAdded = false;
 		if (selection.size() == 1) {
-			Object firstElement = selection.getFirstElement();
+			final Object firstElement = selection.getFirstElement();
 			if (firstElement instanceof ScenarioInstance) {
-				ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
-				Manifest manifest = scenarioInstance.getManifest();
-				if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
-					menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
-						ScenarioServicePublishAction.publishScenario(scenarioInstance);
-					}));
-					itemsAdded = true;
-				}
-				if (manifest != null) {
-					for (ModelArtifact modelArtifact : manifest.getModelDependencies()) {
-						// if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), modelArtifact.getKey())) {
-						// String versionIdentifier = modelArtifact.getDataVersion();
-						// menuManager.add(new RunnableAction("Export distance data", () -> {
-						// openWizard((currentInstance) -> new DistancesFromScenarioImportWizard(versionIdentifier, currentInstance));
-						// }));
-						// itemsAdded = true;
-						// }
-						if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), modelArtifact.getKey())) {
-							menuManager.add(new RunnableAction("Export pricing data", () -> {
-								exportPricing(scenarioInstance);
-							}));
-							itemsAdded = true;
-						}
-						// if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
-						// menuManager.add(new RunnableAction("Export ports data", () -> {
-						// exportPorts(scenarioInstance);
-						// }));
-						// itemsAdded = true;
-						// }
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) firstElement;
+				final Manifest manifest = scenarioInstance.getManifest();
+				if (BackEndUrlProvider.INSTANCE.isAvailable()) {
+					if (UpstreamUrlProvider.INSTANCE.isAvailable()) {
+						menuManager.add(new RunnableAction("Publish scenario as current base case", () -> {
+							ScenarioServicePublishAction.publishScenario(scenarioInstance);
+						}));
+						itemsAdded = true;
+					}
+					if (manifest != null) {
+						for (final ModelArtifact modelArtifact : manifest.getModelDependencies()) {
+							// if (Objects.equals(LNGScenarioSharedModelTypes.DISTANCES.getID(), modelArtifact.getKey())) {
+							// String versionIdentifier = modelArtifact.getDataVersion();
+							// menuManager.add(new RunnableAction("Export distance data", () -> {
+							// openWizard((currentInstance) -> new DistancesFromScenarioImportWizard(versionIdentifier, currentInstance));
+							// }));
+							// itemsAdded = true;
+							// }
+							if (Objects.equals(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), modelArtifact.getKey())) {
+								menuManager.add(new RunnableAction("Export pricing data", () -> {
+									exportPricing(scenarioInstance);
+								}));
+								itemsAdded = true;
+							}
+							// if (Objects.equals(LNGScenarioSharedModelTypes.LOCATIONS.getID(), modelArtifact.getKey())) {
+							// menuManager.add(new RunnableAction("Export ports data", () -> {
+							// exportPorts(scenarioInstance);
+							// }));
+							// itemsAdded = true;
+							// }
 
-						// if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), modelArtifact.getKey())) {
-						// menuManager.add(new RunnableAction("Export pricing data", () -> {
-						// exportVessels(scenarioInstance);
-						// }));
-						// itemsAdded = true;
-						// }
+							// if (Objects.equals(LNGScenarioSharedModelTypes.FLEET.getID(), modelArtifact.getKey())) {
+							// menuManager.add(new RunnableAction("Export pricing data", () -> {
+							// exportVessels(scenarioInstance);
+							// }));
+							// itemsAdded = true;
+							// }
+						}
 					}
 				}
 
 			}
 
 		}
+		if (!itemsAdded) {
+			final RunnableAction action = new RunnableAction("Please wait...", () -> {
+			});
+			action.setEnabled(false);
+			menuManager.add(action);
+			itemsAdded = true;
+		}
 		return itemsAdded;
+
 	}
 
-	private void exportPricing(ScenarioInstance scenario) {
-		String url = BackEndUrlProvider.INSTANCE.getUrl();
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
+	private void exportPricing(final ScenarioInstance scenario) {
+		final String url = BackEndUrlProvider.INSTANCE.getUrl();
+		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 		try (ModelReference modelReference = modelRecord.aquireReference(PricingFromScenarioImportWizard.class.getSimpleName())) {
 			modelReference.executeWithLock(false, () -> {
-				LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 
-				PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-				Version version = PricingFromScenarioCopier.generateVersion(pricingModel);
+				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
+				final Version version = PricingFromScenarioCopier.generateVersion(pricingModel);
 				try {
 					PricingClient.saveVersion(url, version);
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -161,38 +172,35 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 		}
 	}
 
-	private void exportPorts(ScenarioInstance scenario) {
-		String url = BackEndUrlProvider.INSTANCE.getUrl();
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
+	private void exportPorts(final ScenarioInstance scenario) {
+		final String url = BackEndUrlProvider.INSTANCE.getUrl();
+		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 		try (ModelReference modelReference = modelRecord.aquireReference(PricingFromScenarioImportWizard.class.getSimpleName())) {
 			modelReference.executeWithLock(false, () -> {
-				LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 
-				PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-				com.mmxlabs.lngdataservice.client.ports.model.Version version = PortFromScenarioCopier.generateVersion(portModel);
+				final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+				final PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
 				try {
-					PortsRepository repo = PortsRepository.INSTANCE;
-					repo.isReady();
-					repo.saveVersion(version);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					PortsUploaderClient.saveVersion(BackEndUrlProvider.INSTANCE.getUrl(), version);
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			});
 		}
 	}
 
-	private void openWizard(Function<ScenarioInstance, IImportWizard> wizardFactory) {
-		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+	private void openWizard(final Function<ScenarioInstance, IImportWizard> wizardFactory) {
+		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		if (activeWorkbenchWindow == null) {
 			// action has been disposed
 			return;
 		}
 
 		ScenarioInstance currentInstance = null;
-		IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
 		if (activePage != null) {
-			IEditorPart activeEditor = activePage.getActiveEditor();
+			final IEditorPart activeEditor = activePage.getActiveEditor();
 			if (activeEditor != null) {
 				final IEditorInput activeEditorInput = activeEditor.getEditorInput();
 				if (activeEditorInput instanceof IScenarioServiceEditorInput) {
@@ -201,11 +209,11 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				}
 			}
 		}
-		IImportWizard wizard = wizardFactory.apply(currentInstance);
+		final IImportWizard wizard = wizardFactory.apply(currentInstance);
 
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
-		Shell parent = activeWorkbenchWindow.getShell();
+		final Shell parent = activeWorkbenchWindow.getShell();
 
 		final WizardDialog dialog = new WizardDialog(parent, wizard);
 		dialog.create();

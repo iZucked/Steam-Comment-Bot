@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.mmxlabs.lngdataserver.commons.http.IProgressListener;
 import com.mmxlabs.lngdataserver.integration.client.pricing.model.Version;
-import com.mmxlabs.lngdataserver.integration.ports.PortsClient;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingClient;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
@@ -351,17 +351,17 @@ public class ScenarioServicePublishAction {
 		final String url = BackEndUrlProvider.INSTANCE.getUrl();
 		String versionId = null;
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-		final com.mmxlabs.lngdataservice.client.ports.model.Version version = PortFromScenarioCopier.generateVersion(portModel);
+		final PortsVersion version = PortFromScenarioCopier.generateVersion(portModel);
 
-		try {
-			final boolean res = PortsClient.saveVersion(url, version);
+//		try {
+			final boolean res = false;//PortsClient.saveVersion(url, version);
 			if (res) {
 				versionId = version.getIdentifier();
 			}
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		} catch (final IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		return versionId;
 	}
