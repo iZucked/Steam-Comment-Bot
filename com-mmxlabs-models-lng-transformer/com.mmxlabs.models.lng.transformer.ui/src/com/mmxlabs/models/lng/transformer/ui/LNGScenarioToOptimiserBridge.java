@@ -115,7 +115,7 @@ public class LNGScenarioToOptimiserBridge {
 
 	public LNGScenarioToOptimiserBridge(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
 			@NonNull final SolutionBuilderSettings solutionBuilderSettings, @NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule,
-			@Nullable final IOptimiserInjectorService localOverrides, final boolean evaluationOnly, boolean initialEvaluation, final @NonNull String @Nullable... initialHints) {
+			@Nullable final IOptimiserInjectorService localOverrides, final boolean evaluationOnly, final @NonNull String @Nullable... initialHints) {
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.scenarioInstance = scenarioInstance;
 		this.userSettings = userSettings;
@@ -132,10 +132,6 @@ public class LNGScenarioToOptimiserBridge {
 		this.optimiserDataTransformer = originalDataTransformer;
 		this.optimiserScenarioDataProvider = originalScenarioDataProvider;
 
-		// Trigger initial evaluation - note no fitness state is saved
-		if (initialEvaluation) {
-			RunnerHelper.syncExecDisplayOptional(() -> overwrite(0, originalDataTransformer.getInitialSequences(), null));
-		}
 		if (!evaluationOnly) {
 			final Triple<com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance,
 					originalScenarioDataProvider, originalEditingDomain, userSettings);
@@ -166,7 +162,7 @@ public class LNGScenarioToOptimiserBridge {
 	}
 
 	@NonNull
-	private static Triple<com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> initPeriodOptimisationData(
+	private Triple<com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> initPeriodOptimisationData(
 			@Nullable final ScenarioInstance scenarioInstance, @NonNull final IScenarioDataProvider originalScenarioDataProvider, @NonNull final EditingDomain originalEditingDomain,
 			@NonNull final UserSettings userSettings) {
 
@@ -182,7 +178,9 @@ public class LNGScenarioToOptimiserBridge {
 			final PeriodTransformer t = new PeriodTransformer();
 			t.setInclusionChecker(new InclusionChecker());
 
-			final NonNullPair<IScenarioDataProvider, EditingDomain> p = t.transform(originalScenarioDataProvider, userSettings, periodMapping);
+			final Schedule schedule = createSchedule(originalDataTransformer.getInitialSequences(), null);
+
+			final NonNullPair<IScenarioDataProvider, EditingDomain> p = t.transform(originalScenarioDataProvider, schedule, userSettings, periodMapping);
 			IScenarioDataProvider periodScenarioDataProvider = p.getFirst();
 
 			// DEBUGGING - store sub scenario as a "fork"

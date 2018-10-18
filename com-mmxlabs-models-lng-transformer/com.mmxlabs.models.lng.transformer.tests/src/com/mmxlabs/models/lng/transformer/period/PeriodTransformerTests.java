@@ -2086,7 +2086,7 @@ public class PeriodTransformerTests {
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
 
-		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+		transformer.generateStartAndEndConditionsMap(scenarioModel.getScheduleModel().getSchedule(), startConditionMap, endConditionMap);
 
 		Assert.assertSame(endVisit, startConditionMap.get(cargo));
 		Assert.assertSame(loadVisit, endConditionMap.get(cargo));
@@ -2131,7 +2131,7 @@ public class PeriodTransformerTests {
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
 
-		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+		transformer.generateStartAndEndConditionsMap(scenarioModel.getScheduleModel().getSchedule(), startConditionMap, endConditionMap);
 
 		Assert.assertSame(endVisit, startConditionMap.get(cargo));
 		Assert.assertSame(loadVisit, endConditionMap.get(cargo));
@@ -2164,7 +2164,7 @@ public class PeriodTransformerTests {
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
 
-		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+		transformer.generateStartAndEndConditionsMap(scenarioModel.getScheduleModel().getSchedule(), startConditionMap, endConditionMap);
 
 		Assert.assertSame(endVisit, startConditionMap.get(vesselEvent));
 		Assert.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
@@ -2200,7 +2200,7 @@ public class PeriodTransformerTests {
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
 
-		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+		transformer.generateStartAndEndConditionsMap(scenarioModel.getScheduleModel().getSchedule(), startConditionMap, endConditionMap);
 
 		Assert.assertSame(endVisit, startConditionMap.get(vesselEvent));
 		Assert.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));

@@ -212,9 +212,8 @@ public class LNGOptimisationBuilder {
 	}
 
 	public LNGScenarioToOptimiserBridge buildStandardBridge(final OptimisationPlan optimisationPlan, final boolean evaluationOnly, final String... initialHints) {
-		final boolean performInitialEvaluation = true;
 		return new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, optimisationPlan.getUserSettings(), optimisationPlan.getSolutionBuilderSettings(),
-				scenarioDataProvider.getEditingDomain(), extraModule, optimiserInjectorService, evaluationOnly, performInitialEvaluation, initialHints);
+				scenarioDataProvider.getEditingDomain(), extraModule, optimiserInjectorService, evaluationOnly, initialHints);
 	}
 
 	public IChainRunner buildStandardChain(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final OptimisationPlan optimisationPlan, final CleanableExecutorService executorService,

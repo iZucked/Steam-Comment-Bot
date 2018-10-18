@@ -147,10 +147,10 @@ public class PeriodTransformer {
 	private InclusionChecker inclusionChecker;
 
 	@NonNull
-	public NonNullPair<IScenarioDataProvider, EditingDomain> transform(@NonNull final IScenarioDataProvider wholeScenario, @NonNull final UserSettings userSettings,
+	public NonNullPair<IScenarioDataProvider, EditingDomain> transform(@NonNull final IScenarioDataProvider wholeScenario, @NonNull Schedule schedule, @NonNull final UserSettings userSettings,
 			@NonNull final IScenarioEntityMapping mapping) {
 		final PeriodRecord periodRecord = createPeriodRecord(userSettings, wholeScenario.getTypedScenario(LNGScenarioModel.class));
-		return transform(wholeScenario, periodRecord, mapping);
+		return transform(wholeScenario, schedule, periodRecord, mapping);
 	}
 
 	@NonNull
@@ -189,14 +189,16 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public NonNullPair<IScenarioDataProvider, EditingDomain> transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull final PeriodRecord periodRecord,
-			@NonNull final IScenarioEntityMapping mapping) {
+	public NonNullPair<IScenarioDataProvider, EditingDomain> transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull Schedule wholeScenarioSchedule,
+			@NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
 
 		// assert - passed validation
 
 		// Take a copy to manipulate.
-		final IScenarioDataProvider outputDataProvider = copyScenario(wholeScenarioDataProvider, mapping);
+		final Pair<IScenarioDataProvider, Schedule> p = copyScenario(wholeScenarioDataProvider, wholeScenarioSchedule, mapping);
+		final IScenarioDataProvider outputDataProvider = p.getFirst();
 		LNGScenarioModel output = outputDataProvider.getTypedScenario(LNGScenarioModel.class);
+		Schedule schedule = p.getSecond();
 
 		// Do not allow the prompt period to extend past the optimisation period
 		if (periodRecord.upperBoundary != null && periodRecord.promptEnd != null) {
@@ -216,30 +218,30 @@ public class PeriodTransformer {
 		// Init extensions
 		if (extensions != null) {
 			for (final IPeriodTransformerExtension extension : extensions) {
-				extension.init(cargoModel, ScenarioModelUtil.getScheduleModel(output).getSchedule());
+				extension.init(cargoModel, schedule);
 			}
 		}
 
 		// Generate the schedule map - maps cargoes and events to schedule information for date, port and heel data extraction
 		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		generateObjectToPortVisitMap(output, objectToPortVisitMap);
+		generateObjectToPortVisitMap(schedule, objectToPortVisitMap);
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		generateStartAndEndConditionsMap(output, startConditionMap, endConditionMap);
+		generateStartAndEndConditionsMap(schedule, startConditionMap, endConditionMap);
 
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
-		generateSlotAllocationMap(output, slotAllocationMap);
+		generateSlotAllocationMap(schedule, slotAllocationMap);
 
 		// final Map<Cargo, CargoAllocation> fullMap = originalScenario.getScheduleModel().getSchedule().getCargoAllocations().stream() //
 		// .collect(Collectors.toMap(CargoAllocation::getInputCargo, Function.identity()));
 
-		final Map<VesselAvailability, Event> map = output.getScheduleModel().getSchedule().getSequences().stream() //
+		final Map<VesselAvailability, Event> map = schedule.getSequences().stream() //
 				.filter(s -> s.getVesselAvailability() != null) //
 				.collect(Collectors.toMap(Sequence::getVesselAvailability, s -> s.getEvents().get(s.getEvents().size() - 1)));
 
 		// Extend the vessel end date to cover late ending if present in input scenario
-		for (Sequence seq : output.getScheduleModel().getSchedule().getSequences()) {
+		for (Sequence seq : schedule.getSequences()) {
 			VesselAvailability va = seq.getVesselAvailability();
 			if (va != null) {
 				// Do we have an end date set?
@@ -309,8 +311,7 @@ public class PeriodTransformer {
 
 		// Filter out slots and cargoes, create new availabilities for special cases.
 		findSlotsAndCargoesToRemove(internalDomain, periodRecord, cargoModel, seenSlots, slotsToRemove, cargoesToRemove, slotAllocationMap, objectToPortVisitMap, lockedCargoes, lockedSlots);
-		final Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = findVesselEventsToRemoveAndDependencies(output.getScheduleModel().getSchedule(), periodRecord, cargoModel,
-				objectToPortVisitMap);
+		final Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = findVesselEventsToRemoveAndDependencies(schedule, periodRecord, cargoModel, objectToPortVisitMap);
 		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, eventDependencies.getFirst(), lockedCargoes);
 
 		// Update vessel availabilities
@@ -320,7 +321,7 @@ public class PeriodTransformer {
 
 		if (extensions != null) {
 			for (final IPeriodTransformerExtension ext : extensions) {
-				ext.processSlotInclusionsAndExclusions(cargoModel, output.getScheduleModel().getSchedule(), slotsToRemove, cargoesToRemove);
+				ext.processSlotInclusionsAndExclusions(cargoModel, schedule, slotsToRemove, cargoesToRemove);
 			}
 		}
 
@@ -758,7 +759,7 @@ public class PeriodTransformer {
 	 * @param endConditionMap
 	 * @param slotAllocationMap
 	 * @param lockedCargoes
-	 *            TODO
+	 *                                    TODO
 	 */
 	public void checkIfRemovedSlotsAreStillNeeded(final @NonNull Set<Slot> seenSlots, final @NonNull Collection<Slot> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
 			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
@@ -810,9 +811,9 @@ public class PeriodTransformer {
 							// Do not set optional, as this is no longer optional!
 
 							newVesselAvailabilities.add(newVesselAvailability);
-							
+
 							depCargo.setVesselAssignmentType(newVesselAvailability);
-							
+
 							updateVesselAvailabilityConditions(newVesselAvailability, depCargo, startConditionMap, endConditionMap);
 						}
 
@@ -940,9 +941,9 @@ public class PeriodTransformer {
 				slot.setWindowStart(localStart.toLocalDate());
 				slot.setWindowStartTime(localStart.getHour());
 			}
-			
+
 			slot.getAllowedVessels().clear();
-			
+
 			final VesselAssignmentType vat = slot.getCargo().getVesselAssignmentType();
 			if (vat instanceof VesselAvailability) {
 				slot.getAllowedVessels().add(((VesselAvailability) vat).getVessel());
@@ -1104,10 +1105,8 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void generateObjectToPortVisitMap(@NonNull final LNGScenarioModel output, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
+	public void generateObjectToPortVisitMap(@NonNull Schedule schedule, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 
-		final ScheduleModel scheduleModel = output.getScheduleModel();
-		final Schedule schedule = scheduleModel.getSchedule();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
@@ -1123,10 +1122,8 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void generateStartAndEndConditionsMap(@NonNull final LNGScenarioModel output, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
+	public void generateStartAndEndConditionsMap(@NonNull Schedule schedule, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
 			@NonNull final Map<AssignableElement, PortVisit> endConditionMap) {
-		final ScheduleModel scheduleModel = output.getScheduleModel();
-		final Schedule schedule = scheduleModel.getSchedule();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
 				final Event segmentStart = ScheduleModelUtils.getSegmentStart(event);
@@ -1208,35 +1205,44 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public IScenarioDataProvider copyScenario(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull final IScenarioEntityMapping mapping) {
+	public Pair<IScenarioDataProvider, Schedule> copyScenario(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, Schedule baseSchedule, @NonNull final IScenarioEntityMapping mapping) {
 		final Copier copier = new Copier();
 
 		LNGScenarioModel wholeScenario = wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		final LNGScenarioModel output = (LNGScenarioModel) copier.copy(wholeScenarioDataProvider.getScenario());
 		assert output != null;
-
+		Schedule copyBaseSchedule = (Schedule) copier.copy(baseSchedule);
 		copier.copyReferences();
 
 		// Remove schedule model references from copier before passing into the mapping object.
-		final Schedule schedule = wholeScenario.getScheduleModel().getSchedule();
-		if (schedule != null) {
-			final Iterator<EObject> itr = schedule.eAllContents();
-			while (itr.hasNext()) {
-				copier.remove(itr.next());
+		{
+			final Schedule schedule = wholeScenario.getScheduleModel().getSchedule();
+			if (schedule != null) {
+				final Iterator<EObject> itr = schedule.eAllContents();
+				while (itr.hasNext()) {
+					copier.remove(itr.next());
+				}
+				// schedule.eAllContents().forEachRemaining(t -> copier.remove(t));
+				copier.remove(schedule);
 			}
-			// schedule.eAllContents().forEachRemaining(t -> copier.remove(t));
-			copier.remove(schedule);
 		}
-
+		{
+			if (baseSchedule != null) {
+				final Iterator<EObject> itr = baseSchedule.eAllContents();
+				while (itr.hasNext()) {
+					copier.remove(itr.next());
+				}
+				// schedule.eAllContents().forEachRemaining(t -> copier.remove(t));
+				copier.remove(baseSchedule);
+			}
+		}
 		mapping.createMappings(copier);
 
-		return ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider);
+		return new Pair<>(ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider), copyBaseSchedule);
 	}
 
-	public void generateSlotAllocationMap(@NonNull final LNGScenarioModel output, @NonNull final Map<Slot, SlotAllocation> slotAllocationMap) {
-		final ScheduleModel scheduleModel = output.getScheduleModel();
-		final Schedule schedule = scheduleModel.getSchedule();
+	public void generateSlotAllocationMap(@NonNull final Schedule schedule, @NonNull final Map<Slot, SlotAllocation> slotAllocationMap) {
 		for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 			slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
 		}

@@ -129,7 +129,7 @@ public class ScheduleSpecificationHelper {
 							}
 						})//
 						.make(), //
-				true, false, //
+				true, // Evaluation only?
 				hints.toArray(new String[hints.size()]) // Hints? No Caching?
 		);
 		// Probably need to bring in the evaluation modules
