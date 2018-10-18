@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2018
+ * All rights reserved.
+ */
 package com.mmxlabs.lngdataserver.lng.importers.lingodata.model;
 
 import java.util.LinkedList;
