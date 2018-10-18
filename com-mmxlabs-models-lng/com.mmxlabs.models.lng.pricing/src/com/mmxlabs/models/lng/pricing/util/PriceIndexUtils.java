@@ -70,8 +70,6 @@ public class PriceIndexUtils {
 				@NonNull
 				final LocalDateTime plusMonths = startOfYear.plusMonths(months);
 
-				
-				
 				return Hours.between(dateTimeZero, plusMonths);
 			}
 
@@ -82,11 +80,11 @@ public class PriceIndexUtils {
 				@NonNull
 				final LocalDateTime plusMonths = dateTimeZero.plusHours(date).withDayOfMonth(1);
 
-				int m = Months.between(startOfYear,plusMonths);
+				int m = Months.between(startOfYear, plusMonths);
 
 				int a = startOfYear.getMonthValue();
 				int b = plusMonths.getMonthValue();
-				
+
 				return m;
 			}
 		});
@@ -180,6 +178,13 @@ public class PriceIndexUtils {
 			final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<Pair<YearMonth, Number>>(new Comparator<Pair<YearMonth, ?>>() {
 				@Override
 				public int compare(final Pair<YearMonth, ?> o1, final Pair<YearMonth, ?> o2) {
+					// Add some null checks
+					if (o1 == null || o1.getFirst() == null) {
+						return -1;
+					}
+					if (o2 == null || o2.getFirst() == null) {
+						return 1;
+					}
 					return o1.getFirst().compareTo(o2.getFirst());
 				}
 			});
@@ -190,6 +195,10 @@ public class PriceIndexUtils {
 			values = new Number[vals.size()];
 			int k = 0;
 			for (final Pair<YearMonth, Number> e : vals) {
+				if (e.getFirst() == null) {
+					// Handle nulls
+					continue;
+				}
 				times[k] = convertTime(dateZero, e.getFirst());
 				values[k++] = e.getSecond();
 			}
@@ -208,7 +217,7 @@ public class PriceIndexUtils {
 	public static int convertTime(final YearMonth earliest, final YearMonth windowStart) {
 		return Hours.between(earliest, windowStart);
 	}
-	
+
 	public static int convertTime(final YearMonth earliest, final LocalDate windowStart) {
 		return Hours.between(earliest.atDay(1), windowStart);
 	}
