@@ -193,7 +193,7 @@ public class LNGOptimisationBuilder {
 		if (threadCount != null) {
 			executorService = LNGScenarioChainBuilder.createExecutorService(threadCount);
 		} else {
-			executorService = LNGScenarioChainBuilder.createExecutorService(1);
+			executorService = LNGScenarioChainBuilder.createExecutorService();
 		}
 		return executorService;
 	}
