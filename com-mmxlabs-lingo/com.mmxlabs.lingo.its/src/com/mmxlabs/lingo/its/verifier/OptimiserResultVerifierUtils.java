@@ -26,7 +26,7 @@ public class OptimiserResultVerifierUtils {
 		return getTotalOnSequences(sequences, mapper, filterRoundTrips, e -> (e instanceof DischargeSlot));
 	}
 
-	public static int getTotalOnSequences(ISequences sequences, OptimiserDataMapper mapper, boolean filterRoundTrips, Function<Slot, Boolean> checker) {
+	public static int getTotalOnSequences(ISequences sequences, OptimiserDataMapper mapper, boolean filterRoundTrips, Function<Object, Boolean> checker) {
 		int count = 0;
 		IVesselProvider vesselProvider = mapper.getDataTransformer().getInjector().getInstance(IVesselProvider.class);
 		for (IResource resource : sequences.getResources()) {

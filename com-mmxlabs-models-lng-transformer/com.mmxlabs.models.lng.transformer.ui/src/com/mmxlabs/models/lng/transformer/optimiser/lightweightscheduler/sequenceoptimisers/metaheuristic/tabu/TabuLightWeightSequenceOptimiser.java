@@ -208,7 +208,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 	private long annotateSolution(List<List<Integer>> sequences, int cargoCount, int vesselCount, ILightWeightOptimisationData lightWeightOptimisationData,
 			List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions, Set<Integer> allCargoes) {
-		printSolution(sequences);
+		printSolution(sequences, lightWeightOptimisationData.getVessels().stream().map(v->v.getVessel().getName()).collect(Collectors.toList()));
 		System.out.println(String.format("Left over cargoes: %s",
 				updateUnusedList(sequences, allCargoes).size()));
 		return evaluate(sequences, cargoCount, lightWeightOptimisationData, constraintCheckers, fitnessFunctions, true);
@@ -243,15 +243,16 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		return clone;
 	}
 
-	private void printSolution(List<List<Integer>> solution) {
+	private void printSolution(List<List<Integer>> solution, List<String> vesselNames) {
 		System.out.println("\nOrdering");
-		for (List<Integer> vessel : solution) {
-			System.out.print("Ship " + solution.indexOf(vessel) + ": ");
+		for (int i = 0; i < solution.size(); i++) {
+			List<Integer> vessel = solution.get(i);
+			System.out.print(String.format("Ship %s (%s): ", i, vesselNames.get(i)));
 			if (vessel.isEmpty()) {
 				System.out.print("empty");
 			} else {
-				for (Object i : vessel) {
-					System.out.print(i + " ");
+				for (Object o : vessel) {
+					System.out.print(o + " ");
 				}
 			}
 			System.out.println();

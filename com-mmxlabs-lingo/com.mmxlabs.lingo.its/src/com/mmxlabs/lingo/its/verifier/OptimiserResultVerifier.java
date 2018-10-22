@@ -21,6 +21,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -170,7 +171,7 @@ public class OptimiserResultVerifier {
 		}
 
 		/**
-		 * Ensure load slot has been allocated in some way
+		 * Ensure discharge slot has been allocated in some way
 		 * 
 		 * @param dischargeName
 		 * @return
@@ -195,6 +196,34 @@ public class OptimiserResultVerifier {
 			};
 			return new VesselVerifier(this, p);
 		}
+		
+		/**
+		 * Ensure vessel event has been allocated in some way
+		 * 
+		 * @param dischargeName
+		 * @return
+		 */
+		public VesselVerifier withUsedVesselEvent(final String vesselEventName) {
+
+			final CargoModelFinder finder = verifier.scenarioModelFinder.getCargoModelFinder();
+			final VesselEvent vesselEvent = finder.findVesselEvent(vesselEventName);
+
+			final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
+
+				final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(vesselEvent);
+
+				final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
+
+				if (a != null) {
+					if (a.getFirst() != null) {
+						return new Pair<>(s, a.getFirst());
+					}
+				}
+				return null;
+			};
+			return new VesselVerifier(this, p);
+		}
+
 
 		public OptimiserResultChecker withUnusedSlot(final String name) {
 

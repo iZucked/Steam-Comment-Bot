@@ -79,6 +79,10 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		@NonNull
 		final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel.getVessel(), endAPort, //
 				startSlotB.getPort(), vessel.getVessel().getMaxSpeed(),AvailableRouteChoices.OPTIMAL);
+		// If the travel time is 0 no cost so shortcut
+		if (quickestTravelTimeAToB.getSecond() == 0) {
+			return 0L;
+		}
 		final int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel.getVessel(), startA);		
 		
 		ApproximateFuelCosts legFuelCosts = null;

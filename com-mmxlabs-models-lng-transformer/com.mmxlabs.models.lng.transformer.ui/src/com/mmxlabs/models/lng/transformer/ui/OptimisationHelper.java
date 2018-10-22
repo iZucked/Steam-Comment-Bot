@@ -55,6 +55,7 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -320,13 +321,25 @@ public final class OptimisationHelper {
 
 				if (forADP) {
 					boolean scenarioContainsForbiddedADPEvents = false;
+					String adpVesselEventIssueMsg = "";
 					if (scenario != null) {
 						CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
 						for (VesselEvent event : cargoModel.getVesselEvents()) {
-							if (!(event instanceof DryDockEvent)) {
+							if (!(event instanceof DryDockEvent ||
+									event instanceof CharterOutEvent)) {
 								scenarioContainsForbiddedADPEvents = true;
 								copy.setCleanStateOptimisation(false);
+								adpVesselEventIssueMsg = "Clean slate only supports dry-dock and charter out vessel events.";
 								break;
+							}
+							if ((event instanceof CharterOutEvent)) {
+								CharterOutEvent charterOutEvent = (CharterOutEvent) event;
+								if (charterOutEvent.isOptional() || charterOutEvent.getRelocateTo() != null) {
+									scenarioContainsForbiddedADPEvents = true;
+									copy.setCleanStateOptimisation(false);
+									adpVesselEventIssueMsg = "Clean slate only supports non-optional and non-relocated charter out events.";
+									break;
+								}
 							}
 						}
 					}
@@ -346,7 +359,7 @@ public final class OptimisationHelper {
 						choiceData.addChoice("Yes", Boolean.TRUE);
 						if (scenarioContainsForbiddedADPEvents) {
 							choiceData.enabled = false;
-							choiceData.disabledMessage = "Clean slate only supports dry-dock vessel events.";
+							choiceData.disabledMessage = adpVesselEventIssueMsg;
 						} else {
 							choiceData.enabledHook = (userSettings -> userSettings.isAdpOptimisation());
 						}

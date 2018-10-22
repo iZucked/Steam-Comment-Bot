@@ -32,7 +32,9 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.ISpotMarket;
@@ -120,7 +122,12 @@ public class OptimiserDataMapper {
 
 		final IPortSlotProvider portSlotProvider = dataTransformer.getInjector().getInstance(IPortSlotProvider.class);
 		IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-		final Slot slot = modelEntityMap.getModelObject(portSlot, Slot.class);
+		final Slot slot;
+		if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
+			slot = modelEntityMap.getModelObject(portSlot, Slot.class);
+		} else {
+			slot = null;
+		}
 		return slot;
 	}
 
@@ -131,6 +138,16 @@ public class OptimiserDataMapper {
 		final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 		return portSlotProvider.getElement(portSlot);
 	}
+	
+	public ISequenceElement getElementFor(final VesselEvent event) {
+
+		final IPortSlotProvider portSlotProvider = dataTransformer.getInjector().getInstance(IPortSlotProvider.class);
+
+		final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(event, IPortSlot.class);
+		return portSlotProvider.getElement(portSlot);
+	}
+
+
 
 	public List<ISequenceElement> getElementsFor(final SpotMarket spotMarket) {
 
