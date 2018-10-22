@@ -9,8 +9,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -112,7 +110,7 @@ public class PairingOptimiser {
 		if (nominal == null) {
 			throw new IllegalStateException();
 		}
-		updateSequences(rawSequences, pairingsMap, nominal);
+		updateSequences(rawSequences, loads, pairingsMap, nominal);
 		return new Pair<>(rawSequences, 0L);
 	}
 
@@ -123,7 +121,7 @@ public class PairingOptimiser {
 	 * @param pairingsMap
 	 * @param nominal
 	 */
-	private void updateSequences(@NonNull IModifiableSequences rawSequences, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal) {
+	private void updateSequences(@NonNull IModifiableSequences rawSequences, @NonNull List<ILoadOption> loads, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal) {
 		PairingOptimiserHelper.moveElementsToUnusedList(rawSequences, portSlotProvider);
 		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
 		int insertIndex = 0;
@@ -134,7 +132,7 @@ public class PairingOptimiser {
 			insertIndex++;
 		}
 		List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
-		for (ILoadOption loadOption : pairingsMap.keySet()) {
+		for (ILoadOption loadOption : loads) {
 			IDischargeOption dischargeOption = pairingsMap.get(loadOption);
 			// skip if unallocated
 			if (dischargeOption == null)

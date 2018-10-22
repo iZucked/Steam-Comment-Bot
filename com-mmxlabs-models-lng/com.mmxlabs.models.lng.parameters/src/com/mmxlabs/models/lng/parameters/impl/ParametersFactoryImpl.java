@@ -101,6 +101,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE: return createParallelLocalSearchOptimisationStage();
 			case ParametersPackage.MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: return createMultiobjectiveSimilarityOptimisationStage();
 			case ParametersPackage.PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: return createParallelMultiobjectiveSimilarityOptimisationStage();
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_SETTINGS: return createCleanStateOptimisationSettings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -390,6 +391,16 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public ParallelMultiobjectiveSimilarityOptimisationStage createParallelMultiobjectiveSimilarityOptimisationStage() {
 		ParallelMultiobjectiveSimilarityOptimisationStageImpl parallelMultiobjectiveSimilarityOptimisationStage = new ParallelMultiobjectiveSimilarityOptimisationStageImpl();
 		return parallelMultiobjectiveSimilarityOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CleanStateOptimisationSettings createCleanStateOptimisationSettings() {
+		CleanStateOptimisationSettingsImpl cleanStateOptimisationSettings = new CleanStateOptimisationSettingsImpl();
+		return cleanStateOptimisationSettings;
 	}
 
 	/**

@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -220,8 +221,8 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		}
 
 		ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
-
-		final LightWeightSchedulerOptimiserUnit slotInserter = new LightWeightSchedulerOptimiserUnit(dataTransformer, dataTransformer.getUserSettings(), constraintAndFitnessSettings,
+		CleanStateOptimisationStage cleanStateParameters = ScenarioUtils.createDefaultCleanStateParameters(constraintAndFitnessSettings);
+		final LightWeightSchedulerOptimiserUnit slotInserter = new LightWeightSchedulerOptimiserUnit(dataTransformer, dataTransformer.getUserSettings(), cleanStateParameters, constraintAndFitnessSettings,
 				scenarioRunner.getExecutorService(), lngScenarioModel, Collections.emptyList());
 
 		return slotInserter;

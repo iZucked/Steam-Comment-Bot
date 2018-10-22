@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.parameters.impl;
 
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
@@ -31,6 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl#getConstraintAndFitnessSettings <em>Constraint And Fitness Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl#getSeed <em>Seed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl#getAnnealingSettings <em>Annealing Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl#getCleanStateSettings <em>Clean State Settings</em>}</li>
  * </ul>
  *
  * @generated
@@ -75,6 +77,16 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * @ordered
 	 */
 	protected AnnealingSettings annealingSettings;
+
+	/**
+	 * The cached value of the '{@link #getCleanStateSettings() <em>Clean State Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCleanStateSettings()
+	 * @generated
+	 * @ordered
+	 */
+	protected CleanStateOptimisationSettings cleanStateSettings;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -164,6 +176,49 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CleanStateOptimisationSettings getCleanStateSettings() {
+		return cleanStateSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCleanStateSettings(CleanStateOptimisationSettings newCleanStateSettings, NotificationChain msgs) {
+		CleanStateOptimisationSettings oldCleanStateSettings = cleanStateSettings;
+		cleanStateSettings = newCleanStateSettings;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS, oldCleanStateSettings, newCleanStateSettings);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCleanStateSettings(CleanStateOptimisationSettings newCleanStateSettings) {
+		if (newCleanStateSettings != cleanStateSettings) {
+			NotificationChain msgs = null;
+			if (cleanStateSettings != null)
+				msgs = ((InternalEObject)cleanStateSettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS, null, msgs);
+			if (newCleanStateSettings != null)
+				msgs = ((InternalEObject)newCleanStateSettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS, null, msgs);
+			msgs = basicSetCleanStateSettings(newCleanStateSettings, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS, newCleanStateSettings, newCleanStateSettings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ConstraintAndFitnessSettings getConstraintAndFitnessSettings() {
 		return constraintAndFitnessSettings;
 	}
@@ -214,6 +269,8 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 				return basicSetConstraintAndFitnessSettings(null, msgs);
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
 				return basicSetAnnealingSettings(null, msgs);
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS:
+				return basicSetCleanStateSettings(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -232,6 +289,8 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 				return getSeed();
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
 				return getAnnealingSettings();
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS:
+				return getCleanStateSettings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -252,6 +311,9 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 				return;
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
 				setAnnealingSettings((AnnealingSettings)newValue);
+				return;
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS:
+				setCleanStateSettings((CleanStateOptimisationSettings)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -274,6 +336,9 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
 				setAnnealingSettings((AnnealingSettings)null);
 				return;
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS:
+				setCleanStateSettings((CleanStateOptimisationSettings)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -292,6 +357,8 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 				return seed != SEED_EDEFAULT;
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
 				return annealingSettings != null;
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS:
+				return cleanStateSettings != null;
 		}
 		return super.eIsSet(featureID);
 	}

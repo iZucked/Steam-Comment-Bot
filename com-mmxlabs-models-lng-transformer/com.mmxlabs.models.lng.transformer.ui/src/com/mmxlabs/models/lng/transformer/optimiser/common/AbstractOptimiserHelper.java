@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -169,7 +170,7 @@ abstract public class AbstractOptimiserHelper {
 	 * @param virtualVesselSlotProvider
 	 * @param vesselProvider
 	 */
-	public static void updateVirtualSequences(@NonNull IModifiableSequences rawSequences, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal,
+	public static void updateVirtualSequences(@NonNull IModifiableSequences rawSequences, @NonNull List<List<IPortSlot>> cargoes, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal,
 			IPortSlotProvider portSlotProvider, IVirtualVesselSlotProvider virtualVesselSlotProvider, IVesselProvider vesselProvider, ShippingType shippingType) {
 		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
 		int insertIndex = 0;
@@ -180,7 +181,15 @@ abstract public class AbstractOptimiserHelper {
 			insertIndex++;
 		}
 		List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
-		for (ILoadOption loadOption : pairingsMap.keySet()) {
+		for (List<IPortSlot> cargo : cargoes) {
+			Optional<ILoadOption> load = cargo.stream()
+					.filter(s->s instanceof ILoadOption)
+					.map(s->(ILoadOption) s)
+					.findFirst();
+			if (!load.isPresent()) {
+				continue;
+			}
+			ILoadOption loadOption = load.get();
 			IDischargeOption dischargeOption = pairingsMap.get(loadOption);
 			// skip if unallocated
 			if (dischargeOption == null)

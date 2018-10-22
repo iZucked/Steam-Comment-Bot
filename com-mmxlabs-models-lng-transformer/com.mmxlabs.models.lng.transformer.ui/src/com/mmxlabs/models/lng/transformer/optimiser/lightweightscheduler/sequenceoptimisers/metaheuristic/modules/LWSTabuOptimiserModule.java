@@ -7,12 +7,18 @@ package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequen
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings;
 
 public class LWSTabuOptimiserModule extends AbstractModule {
 	public static final String GLOBAL_ITERATIONS = "TABU_GLOBAL_ITERATIONS";
 	public static final String NEIGHBOURHOOD_ITERATIONS = "TABU_NEIGHBOURHOOD_ITERATIONS";
 	public static final String TABU_LIST_SIZE = "TABU_TABU_LIST_SIZE";
 	public static final String SEED = "TABU_SEED";
+	private CleanStateOptimisationSettings cleanStateOptimisationSettings;
+	
+	public LWSTabuOptimiserModule(CleanStateOptimisationSettings cleanStateOptimisationSettings) {
+		this.cleanStateOptimisationSettings = cleanStateOptimisationSettings;
+	}
 	
 	@Override
 	protected void configure() {
@@ -21,24 +27,24 @@ public class LWSTabuOptimiserModule extends AbstractModule {
 	@Provides
 	@Named(GLOBAL_ITERATIONS)
 	private int getIterations() {
-		return 10_000;
+		return cleanStateOptimisationSettings.getGlobalIterations();
 	}
 	
 	@Provides
 	@Named(NEIGHBOURHOOD_ITERATIONS)
 	private int getLocalIterations() {
-		return 1_000;
+		return cleanStateOptimisationSettings.getLocalIterations();
 	}
 	
 	@Provides
 	@Named(TABU_LIST_SIZE)
 	private int getTabuSize() {
-		return 15;
+		return cleanStateOptimisationSettings.getTabuSize();
 	}
 
 	@Provides
 	@Named(SEED)
 	private int getSeed(/*@Named(LocalSearchOptimiserModule.RANDOM_SEED) long seed*/) {
-		return (int) 0;
+		return cleanStateOptimisationSettings.getSeed();
 	}	
 }

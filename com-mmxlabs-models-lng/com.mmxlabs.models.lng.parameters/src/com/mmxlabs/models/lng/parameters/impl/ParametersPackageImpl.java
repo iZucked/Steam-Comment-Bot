@@ -19,6 +19,7 @@ import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -235,6 +236,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	private EClass parallelMultiobjectiveSimilarityOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass cleanStateOptimisationSettingsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -732,6 +740,15 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCleanStateOptimisationStage_CleanStateSettings() {
+		return (EReference)cleanStateOptimisationStageEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getLocalSearchOptimisationStage() {
 		return localSearchOptimisationStageEClass;
@@ -1054,6 +1071,51 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getCleanStateOptimisationSettings() {
+		return cleanStateOptimisationSettingsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCleanStateOptimisationSettings_GlobalIterations() {
+		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCleanStateOptimisationSettings_LocalIterations() {
+		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCleanStateOptimisationSettings_TabuSize() {
+		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCleanStateOptimisationSettings_Seed() {
+		return (EAttribute)cleanStateOptimisationSettingsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EEnum getSimilarityMode() {
 		return similarityModeEEnum;
@@ -1152,6 +1214,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		cleanStateOptimisationStageEClass = createEClass(CLEAN_STATE_OPTIMISATION_STAGE);
 		createEAttribute(cleanStateOptimisationStageEClass, CLEAN_STATE_OPTIMISATION_STAGE__SEED);
 		createEReference(cleanStateOptimisationStageEClass, CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS);
+		createEReference(cleanStateOptimisationStageEClass, CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS);
 
 		localSearchOptimisationStageEClass = createEClass(LOCAL_SEARCH_OPTIMISATION_STAGE);
 		createEAttribute(localSearchOptimisationStageEClass, LOCAL_SEARCH_OPTIMISATION_STAGE__SEED);
@@ -1188,6 +1251,12 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		multiobjectiveSimilarityOptimisationStageEClass = createEClass(MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE);
 
 		parallelMultiobjectiveSimilarityOptimisationStageEClass = createEClass(PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE);
+
+		cleanStateOptimisationSettingsEClass = createEClass(CLEAN_STATE_OPTIMISATION_SETTINGS);
+		createEAttribute(cleanStateOptimisationSettingsEClass, CLEAN_STATE_OPTIMISATION_SETTINGS__SEED);
+		createEAttribute(cleanStateOptimisationSettingsEClass, CLEAN_STATE_OPTIMISATION_SETTINGS__GLOBAL_ITERATIONS);
+		createEAttribute(cleanStateOptimisationSettingsEClass, CLEAN_STATE_OPTIMISATION_SETTINGS__LOCAL_ITERATIONS);
+		createEAttribute(cleanStateOptimisationSettingsEClass, CLEAN_STATE_OPTIMISATION_SETTINGS__TABU_SIZE);
 
 		// Create enums
 		similarityModeEEnum = createEEnum(SIMILARITY_MODE);
@@ -1316,6 +1385,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEClass(cleanStateOptimisationStageEClass, CleanStateOptimisationStage.class, "CleanStateOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCleanStateOptimisationStage_Seed(), ecorePackage.getEInt(), "seed", null, 1, 1, CleanStateOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCleanStateOptimisationStage_AnnealingSettings(), this.getAnnealingSettings(), null, "annealingSettings", null, 1, 1, CleanStateOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCleanStateOptimisationStage_CleanStateSettings(), this.getCleanStateOptimisationSettings(), null, "cleanStateSettings", null, 1, 1, CleanStateOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(localSearchOptimisationStageEClass, LocalSearchOptimisationStage.class, "LocalSearchOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLocalSearchOptimisationStage_Seed(), ecorePackage.getEInt(), "seed", null, 1, 1, LocalSearchOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1352,6 +1422,12 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEClass(multiobjectiveSimilarityOptimisationStageEClass, MultiobjectiveSimilarityOptimisationStage.class, "MultiobjectiveSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(parallelMultiobjectiveSimilarityOptimisationStageEClass, ParallelMultiobjectiveSimilarityOptimisationStage.class, "ParallelMultiobjectiveSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(cleanStateOptimisationSettingsEClass, CleanStateOptimisationSettings.class, "CleanStateOptimisationSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCleanStateOptimisationSettings_Seed(), ecorePackage.getEInt(), "seed", null, 1, 1, CleanStateOptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCleanStateOptimisationSettings_GlobalIterations(), ecorePackage.getEInt(), "globalIterations", null, 1, 1, CleanStateOptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCleanStateOptimisationSettings_LocalIterations(), ecorePackage.getEInt(), "localIterations", null, 1, 1, CleanStateOptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCleanStateOptimisationSettings_TabuSize(), ecorePackage.getEInt(), "tabuSize", null, 1, 1, CleanStateOptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(similarityModeEEnum, SimilarityMode.class, "SimilarityMode");

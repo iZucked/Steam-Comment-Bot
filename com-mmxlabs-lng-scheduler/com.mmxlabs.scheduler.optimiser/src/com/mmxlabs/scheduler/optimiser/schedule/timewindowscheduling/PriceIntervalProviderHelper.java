@@ -332,7 +332,7 @@ public class PriceIntervalProviderHelper {
 	 * @param canalTransitTime
 	 * @param durationAtPort
 	 * @param isLaden
-	 *                                TODO
+	 * TODO
 	 * @return
 	 */
 	public static long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVessel vessel, final int cv, final int[] times, final long distance, final int equivalenceFactor,

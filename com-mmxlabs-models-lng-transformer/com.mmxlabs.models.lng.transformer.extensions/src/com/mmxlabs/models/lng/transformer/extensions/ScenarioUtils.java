@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -299,10 +300,19 @@ public class ScenarioUtils {
 		params.setAnnealingSettings(annealingSettings);
 
 		params.setSeed(0);
-
+		params.setCleanStateSettings(createDefaultCleanStateOptimisationSettings());
 		params.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
 
 		return params;
+	}
+
+	private static CleanStateOptimisationSettings createDefaultCleanStateOptimisationSettings() {
+		CleanStateOptimisationSettings cleanStateOptimisationSettings = ParametersFactory.eINSTANCE.createCleanStateOptimisationSettings();
+		cleanStateOptimisationSettings.setSeed(0);
+		cleanStateOptimisationSettings.setGlobalIterations(10_000);
+		cleanStateOptimisationSettings.setLocalIterations(1_000);
+		cleanStateOptimisationSettings.setTabuSize(15);
+		return cleanStateOptimisationSettings;
 	}
 
 	@NonNull

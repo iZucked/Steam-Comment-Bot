@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.tabu;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import java.util.stream.IntStream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -22,10 +24,7 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightW
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightSequenceOptimiser;
-import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.CargoWindowData;
-import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightCargoDetails;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.modules.LWSTabuOptimiserModule;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOptimiser {
 	@Inject
@@ -51,28 +50,32 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		
 		List<List<Integer>> schedule = lightWeightOptimisationData.getVessels()
 				.stream().map(v -> new LinkedList<Integer>()).collect(Collectors.toList());
-		List<List<Integer>> bestSchedule = new ArrayList<>(schedule);
+		TabuSolution currentSolution = new TabuSolution(schedule, null);
+		TabuSolution bestSolution = new TabuSolution(new ArrayList<>(schedule), null);
+		long currentFitness = evaluate(currentSolution.schedule, cargoCount, lightWeightOptimisationData,
+				constraintCheckers, fitnessFunctions, false);
+		
+		currentSolution.fitness = currentFitness;
+		bestSolution.fitness = currentFitness;
 
 		Set<Integer> allCargoes = IntStream.range(0, cargoCount).boxed()
 				.collect(Collectors.toSet());
 
 		Random random = new Random(this.seed);
 
-		double[] neighbourhoodFitnesses = new double[search];
-		CargoMap mapping = new CargoMap(schedule);
+		long[] neighbourhoodFitnesses = new long[search];
+		CargoMap mapping = new CargoMap(currentSolution.schedule);
 
 		int bestIteration = 0;
-
-		Double bestFitness = -Double.MAX_VALUE;
 
 		System.out.println("Tabu search starting...\n");
 		monitor.beginTask("Search", iterations);
 		try {
 			for (int iteration = 0; iteration < iterations; iteration++) {
 				// init data
-				List<Integer> unusedCargoes = updateUnusedList(schedule, allCargoes);
-				List<Integer> usedCargoes = updateUsedList(schedule);
-				mapping.setMapping(schedule);
+				List<Integer> unusedCargoes = updateUnusedList(currentSolution.schedule, allCargoes);
+				List<Integer> usedCargoes = updateUsedList(currentSolution.schedule);
+				mapping.setMapping(currentSolution.schedule);
 
 				// Remove tabu element from the list of "movable" elements
 				Set<Integer> currentTabuSolutions = tabuList.getTabuSet();
@@ -89,39 +92,26 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 					tabuList.removeOldestEntry();
 				}
 
-				// Forced first move, meaning we'll always make a change
-				TabuSolution currentSolution = TabuLightWeightSequenceOptimiserMoves.move(schedule, unusedCargoes, usedCargoes, mapping, random);
-
-				double currentFitness = evaluate(currentSolution.schedule, cargoCount, lightWeightOptimisationData,
-						constraintCheckers, fitnessFunctions, false);
-
 				// Create new candidate schedules
 				// TODO: not threadsafe. Cannot use a parallel stream due to the random object being reused.
-				List<TabuSolution> tabuSolutions = getNewCandidateSolutions(schedule, unusedCargoes, usedCargoes, random, mapping);
+				List<TabuSolution> tabuSolutions = getNewCandidateSolutions(currentSolution.schedule, unusedCargoes, usedCargoes, random, mapping);
 
 				// Evaluate solutions
-				neighbourhoodFitnesses = tabuSolutions.parallelStream().mapToDouble(s -> evaluate(s.schedule, cargoCount, lightWeightOptimisationData,
-						constraintCheckers, fitnessFunctions, false))
-						.toArray();
+				evaluateTabuSolutions(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, cargoCount, tabuSolutions);
 
 				// Set the new base solution for the next iteration
-				int currentIndex = getBestIndex(neighbourhoodFitnesses, currentFitness);
-
+				int currentIndex = getBestUniqueValidIndex(currentSolution, tabuSolutions);
 				// set the new schedule and add the tabuList to the master set
-				if (currentIndex == -1) {
-					schedule = copySolution(currentSolution.schedule);
-					tabuList.addToTabu(currentSolution.tabu);
-				} else {
-					schedule = copySolution(tabuSolutions.get(currentIndex).schedule);
+				if (currentIndex != -1) {
 					// Add the tabuList to the master set
 					tabuList.addToTabu(tabuSolutions.get(currentIndex).tabu);
-					currentFitness = neighbourhoodFitnesses[currentIndex];
+					currentFitness = tabuSolutions.get(currentIndex).fitness;
+					currentSolution = tabuSolutions.get(currentIndex);
 				}
 
 				// Record the overall best solution (a Tabu search will necessarily lose it) 
-				if (currentFitness > bestFitness) {
-					bestSchedule = copySolution(schedule);
-					bestFitness = currentFitness;
+				if (currentFitness > bestSolution.fitness) {
+					bestSolution = currentSolution.copy();
 					bestIteration = iteration;
 					System.out.println("best found:" + iteration);
 				}
@@ -132,23 +122,34 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				monitor.worked(1);
 			}
 
-			System.out.printf("\n\nFitness best : %f\n", bestFitness);
-			System.out.printf("Iteration best: %d it\n", bestIteration);
+			System.out.println("\n\nFitness best : " + bestSolution.fitness);
+			System.out.println("Iteration best: %d it\n" + bestIteration);
 
-			annotateSolution(bestSchedule, cargoCount, vesselCount, lightWeightOptimisationData, constraintCheckers, fitnessFunctions, allCargoes);
+			annotateSolution(bestSolution.schedule, cargoCount, vesselCount, lightWeightOptimisationData, constraintCheckers, fitnessFunctions, allCargoes);
 
-			return bestSchedule;
+			return bestSolution.schedule;
 		} finally {
 			monitor.done();
 		}
 	}
 
-	private int getBestIndex(double[] neighbourhoodFitnesses, double currentFitness) {
+	private void evaluateTabuSolutions(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers,
+			List<ILightWeightFitnessFunction> fitnessFunctions, int cargoCount, List<TabuSolution> tabuSolutions) {
+		tabuSolutions.parallelStream().forEach(s -> {
+			s.fitness = evaluate(s.schedule, cargoCount, lightWeightOptimisationData,
+				constraintCheckers, fitnessFunctions, false);
+			}
+		);
+	}
+
+	private int getBestUniqueValidIndex(TabuSolution currentSolution, List<TabuSolution> tabuSolutions) {
 		int currentIndex = -1;
-		double bestNeighbourhoodFitness = currentFitness;
-		for (int i = 0; i < neighbourhoodFitnesses.length; i++) {
-			if (neighbourhoodFitnesses[i] > bestNeighbourhoodFitness) {
-				bestNeighbourhoodFitness = neighbourhoodFitnesses[i];
+		long bestNeighbourhoodFitness = Long.MIN_VALUE;
+		for (int i = 0; i < tabuSolutions.size(); i++) {
+			TabuSolution solution = tabuSolutions.get(i);
+			if (solution.fitness > bestNeighbourhoodFitness
+					&& !currentSolution.equals(solution)) {
+				bestNeighbourhoodFitness = solution.fitness;
 				currentIndex = i;
 			}
 		}
@@ -232,7 +233,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 		return cargoesSet;
 	}
 
-	private List<List<Integer>> copySolution(List<List<Integer>> solution) {
+	private List<List<Integer>> copySchedule(List<List<Integer>> solution) {
 		List<List<Integer>> clone = new ArrayList<>(solution.size());
 
 		for (int i = 0; i < solution.size(); i++) {
@@ -256,4 +257,29 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 			System.out.println();
 		}
 	}
+	
+	private void printSolutionToFile(List<List<Integer>> solution) {
+		DateTime date = DateTime.now();
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(String.format("c:/temp/sequenceTABU-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+	
+			writer.println("\nOrdering");
+			for (List<Integer> vessel : solution) {
+				writer.print("Ship " + solution.indexOf(vessel) + ": ");
+				if (vessel.isEmpty()) {
+					writer.print("empty");
+				} else {
+					for (Object i : vessel) {
+						writer.print(i + " ");
+					}
+				}
+				writer.println();
+			}
+			writer.close();
+		} catch (Exception e) {
+			
+		}
+	}
+
 }

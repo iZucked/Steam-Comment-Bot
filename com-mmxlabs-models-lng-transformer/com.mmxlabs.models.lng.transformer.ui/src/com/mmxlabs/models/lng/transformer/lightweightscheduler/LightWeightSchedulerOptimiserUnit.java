@@ -84,6 +84,8 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	private @NonNull final Collection<String> hints;
 
+	private CleanStateOptimisationStage stage;
+
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final LNGScenarioToOptimiserBridge optimiserBridge, @NonNull final String stage,
 			@NonNull final UserSettings userSettings, @NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService,
@@ -124,7 +126,7 @@ public class LightWeightSchedulerOptimiserUnit {
 					final CleanStateOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
 					copyStageSettings.setSeed(seed);
 
-					final LightWeightSchedulerOptimiserUnit t = new LightWeightSchedulerOptimiserUnit(dataTransformer, userSettings, copyStageSettings.getConstraintAndFitnessSettings(),
+					final LightWeightSchedulerOptimiserUnit t = new LightWeightSchedulerOptimiserUnit(dataTransformer, userSettings, copyStageSettings, copyStageSettings.getConstraintAndFitnessSettings(),
 							executorService, (LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), hints);
 
 					final IMultiStateResult result = t.runAll(initialSequencesContainer.getSequences(), monitor);
@@ -159,11 +161,12 @@ public class LightWeightSchedulerOptimiserUnit {
 		return link;
 	}
 
-	public LightWeightSchedulerOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings,
+	public LightWeightSchedulerOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, CleanStateOptimisationStage stage,
 			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final CleanableExecutorService executorService, final LNGScenarioModel initialScenario,
 			@NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.userSettings = userSettings;
+		this.stage = stage;
 		this.constraintAndFitnessSettings = constraintAndFitnessSettings;
 		this.hints = hints;
 	}
@@ -236,7 +239,7 @@ public class LightWeightSchedulerOptimiserUnit {
 				bind(ILightWeightOptimisationData.class).toInstance(lwOptimsdationData);
 			}
 		});
-		modules.add(new LWSTabuOptimiserModule());
+		modules.add(new LWSTabuOptimiserModule(stage.getCleanStateSettings()));
 		modules.add(new LightWeightSchedulerStage2Module(threadCache));
 
 		return stage1Injector.createChildInjector(modules);

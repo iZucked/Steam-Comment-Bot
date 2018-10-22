@@ -83,6 +83,7 @@
     <genClasses ecoreClass="parameters.ecore#//CleanStateOptimisationStage">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationStage/seed"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//CleanStateOptimisationStage/annealingSettings"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//CleanStateOptimisationStage/cleanStateSettings"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//LocalSearchOptimisationStage">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//LocalSearchOptimisationStage/seed"/>
@@ -113,5 +114,11 @@
     <genClasses ecoreClass="parameters.ecore#//ParallelLocalSearchOptimisationStage"/>
     <genClasses ecoreClass="parameters.ecore#//MultiobjectiveSimilarityOptimisationStage"/>
     <genClasses ecoreClass="parameters.ecore#//ParallelMultiobjectiveSimilarityOptimisationStage"/>
+    <genClasses ecoreClass="parameters.ecore#//CleanStateOptimisationSettings">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationSettings/seed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationSettings/globalIterations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationSettings/localIterations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationSettings/tabuSize"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

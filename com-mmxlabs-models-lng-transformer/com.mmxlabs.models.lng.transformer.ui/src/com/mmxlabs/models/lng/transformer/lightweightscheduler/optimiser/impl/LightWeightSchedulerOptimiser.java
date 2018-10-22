@@ -5,14 +5,20 @@
 package com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -26,6 +32,7 @@ import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelp
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -99,19 +106,18 @@ public class LightWeightSchedulerOptimiser {
 		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getVessels(), lightWeightOptimisationData.getPairingsMap());
 		
 		// (b) update non-shipped
-		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getPairingsMap(), vesselProvider.getResource(pnlVessel), portSlotProvider,
+		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getCargoes(), lightWeightOptimisationData.getPairingsMap(), vesselProvider.getResource(pnlVessel), portSlotProvider,
 				virtualVesselSlotProvider, vesselProvider, ShippingType.NON_SHIPPED);
 		
-		// (c) update unused
-		HashMap<ILoadOption, IDischargeOption> unusedMap = new HashMap<>(lightWeightOptimisationData.getPairingsMap());
+		// (c) update unscheduled and put on nominal
+		HashMap<ILoadOption, IDischargeOption> unscheduleddMap = new HashMap<>(lightWeightOptimisationData.getPairingsMap());
 		for (List<Integer> sequence : sequences) {
 			for (Integer idx : sequence) {
-				unusedMap.remove(lightWeightOptimisationData.getCargoes().get(idx).get(0));
+				unscheduleddMap.remove(lightWeightOptimisationData.getCargoes().get(idx).get(0));
 			}
 		}
-		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, unusedMap, vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider,
+		LightWeightOptimiserHelper.updateVirtualSequences(rawSequences, lightWeightOptimisationData.getCargoes(), unscheduleddMap, vesselProvider.getResource(pnlVessel), portSlotProvider, virtualVesselSlotProvider, vesselProvider,
 				ShippingType.SHIPPED);
-		
 		return new Pair<>(rawSequences, 0L);
 	}
 
@@ -192,4 +198,28 @@ public class LightWeightSchedulerOptimiser {
 		return readCase.sequences;
 	}
 
+	private void printSequencesToFile(ISequences sequences) {
+		DateTime date = DateTime.now();
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(String.format("c:/temp/sequence-%s-%s-%s.txt", date.getHourOfDay(), date.getMinuteOfHour(), date.getSecondOfMinute()), "UTF-8");
+			for (IResource iResource : sequences.getResources()) {
+				ISequence sequence = sequences.getSequence(iResource);
+				String seqString = StreamSupport.stream(sequence.spliterator(), false).map(s->s.getName()).collect(Collectors.joining("-"));
+				writer.println(seqString);
+			}
+			String seqString = StreamSupport.stream(sequences.getUnusedElements().spliterator(), false)
+					.sorted((a,b)->a.getName().compareTo(b.getName()))
+					.map(s->s.getName())
+					.collect(Collectors.joining("-"));
+			writer.println(seqString);
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

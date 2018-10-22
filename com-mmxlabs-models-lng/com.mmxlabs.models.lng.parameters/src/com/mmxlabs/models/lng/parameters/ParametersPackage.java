@@ -773,13 +773,22 @@ public interface ParametersPackage extends EPackage {
 	int CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Clean State Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Clean State Optimisation Stage</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CLEAN_STATE_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+	int CLEAN_STATE_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1385,6 +1394,61 @@ public interface ParametersPackage extends EPackage {
 	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT = MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationSettingsImpl <em>Clean State Optimisation Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationSettingsImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getCleanStateOptimisationSettings()
+	 * @generated
+	 */
+	int CLEAN_STATE_OPTIMISATION_SETTINGS = 26;
+
+	/**
+	 * The feature id for the '<em><b>Seed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_SETTINGS__SEED = 0;
+
+	/**
+	 * The feature id for the '<em><b>Global Iterations</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_SETTINGS__GLOBAL_ITERATIONS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Local Iterations</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_SETTINGS__LOCAL_ITERATIONS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Tabu Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_SETTINGS__TABU_SIZE = 3;
+
+	/**
+	 * The number of structural features of the '<em>Clean State Optimisation Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_SETTINGS_FEATURE_COUNT = 4;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1392,7 +1456,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
 	 * @generated
 	 */
-	int SIMILARITY_MODE = 26;
+	int SIMILARITY_MODE = 27;
 
 
 	/**
@@ -1847,6 +1911,17 @@ public interface ParametersPackage extends EPackage {
 	EReference getCleanStateOptimisationStage_AnnealingSettings();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getCleanStateSettings <em>Clean State Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Clean State Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getCleanStateSettings()
+	 * @see #getCleanStateOptimisationStage()
+	 * @generated
+	 */
+	EReference getCleanStateOptimisationStage_CleanStateSettings();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage <em>Local Search Optimisation Stage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2193,6 +2268,60 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getParallelMultiobjectiveSimilarityOptimisationStage();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings <em>Clean State Optimisation Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Clean State Optimisation Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings
+	 * @generated
+	 */
+	EClass getCleanStateOptimisationSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getGlobalIterations <em>Global Iterations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Global Iterations</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getGlobalIterations()
+	 * @see #getCleanStateOptimisationSettings()
+	 * @generated
+	 */
+	EAttribute getCleanStateOptimisationSettings_GlobalIterations();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getLocalIterations <em>Local Iterations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Local Iterations</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getLocalIterations()
+	 * @see #getCleanStateOptimisationSettings()
+	 * @generated
+	 */
+	EAttribute getCleanStateOptimisationSettings_LocalIterations();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getTabuSize <em>Tabu Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Tabu Size</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getTabuSize()
+	 * @see #getCleanStateOptimisationSettings()
+	 * @generated
+	 */
+	EAttribute getCleanStateOptimisationSettings_TabuSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getSeed <em>Seed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Seed</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings#getSeed()
+	 * @see #getCleanStateOptimisationSettings()
+	 * @generated
+	 */
+	EAttribute getCleanStateOptimisationSettings_Seed();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}'.
@@ -2585,6 +2714,14 @@ public interface ParametersPackage extends EPackage {
 		EReference CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS = eINSTANCE.getCleanStateOptimisationStage_AnnealingSettings();
 
 		/**
+		 * The meta object literal for the '<em><b>Clean State Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS = eINSTANCE.getCleanStateOptimisationStage_CleanStateSettings();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.LocalSearchOptimisationStageImpl <em>Local Search Optimisation Stage</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2877,6 +3014,48 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = eINSTANCE.getParallelMultiobjectiveSimilarityOptimisationStage();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationSettingsImpl <em>Clean State Optimisation Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationSettingsImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getCleanStateOptimisationSettings()
+		 * @generated
+		 */
+		EClass CLEAN_STATE_OPTIMISATION_SETTINGS = eINSTANCE.getCleanStateOptimisationSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Global Iterations</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CLEAN_STATE_OPTIMISATION_SETTINGS__GLOBAL_ITERATIONS = eINSTANCE.getCleanStateOptimisationSettings_GlobalIterations();
+
+		/**
+		 * The meta object literal for the '<em><b>Local Iterations</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CLEAN_STATE_OPTIMISATION_SETTINGS__LOCAL_ITERATIONS = eINSTANCE.getCleanStateOptimisationSettings_LocalIterations();
+
+		/**
+		 * The meta object literal for the '<em><b>Tabu Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CLEAN_STATE_OPTIMISATION_SETTINGS__TABU_SIZE = eINSTANCE.getCleanStateOptimisationSettings_TabuSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Seed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CLEAN_STATE_OPTIMISATION_SETTINGS__SEED = eINSTANCE.getCleanStateOptimisationSettings_Seed();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
