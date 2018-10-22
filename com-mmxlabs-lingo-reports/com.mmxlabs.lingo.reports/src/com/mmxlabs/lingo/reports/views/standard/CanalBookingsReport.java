@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -71,6 +73,8 @@ public class CanalBookingsReport extends AbstractReportView {
 	protected Image pinImage;
 	private final CanalBookingsReportTransformer transformer = new CanalBookingsReportTransformer();
 
+	private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+
 	@Override
 	protected Object doSelectionChanged(final TransformedSelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others) {
 		final List<RowData> rows = new LinkedList<>();
@@ -97,7 +101,7 @@ public class CanalBookingsReport extends AbstractReportView {
 							if (rowData.event instanceof SlotVisit) {
 								final SlotVisit slotVisit = (SlotVisit) rowData.event;
 								equivalents.add(slotVisit.getSlotAllocation().getCargoAllocation());
-								Slot slot = slotVisit.getSlotAllocation().getSlot();
+								final Slot slot = slotVisit.getSlotAllocation().getSlot();
 								if (slot != null) {
 									equivalents.add(slot);
 									equivalents.add(slot.getCargo());
@@ -186,7 +190,20 @@ public class CanalBookingsReport extends AbstractReportView {
 
 		createColumn(sortingSupport, "Event", rowData -> (rowData.event == null) ? "" : rowData.event.name(), rowData -> (rowData.event == null) ? "" : rowData.event.name());
 
-		createColumn(sortingSupport, "Next Slot", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getName()), rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getName()));
+		createColumn(sortingSupport, "Next Slot", rowData -> {
+			if (rowData.nextSlot == null) {
+				return "";
+			} else {
+				final StringBuilder sb = new StringBuilder();
+				sb.append(rowData.nextSlot.getName());
+				if (rowData.nextSlot.getWindowStart() != null) {
+					sb.append(" ");
+					sb.append(rowData.nextSlot.getWindowStart().format(dateFormatter));
+				}
+				return sb.toString();
+			}
+
+		}, rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getName()));
 
 		createColumn(sortingSupport, "Next Slot Port", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()),
 				rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()));
@@ -214,7 +231,7 @@ public class CanalBookingsReport extends AbstractReportView {
 		return createColumn(tv, false, title, labelProvider, sortFunction);
 	}
 
-	private GridViewerColumn createColumn(final EObjectTableViewerSortingSupport tv, boolean pinColumn, final String title, final Function<RowData, String> labelProvider,
+	private GridViewerColumn createColumn(final EObjectTableViewerSortingSupport tv, final boolean pinColumn, final String title, final Function<RowData, String> labelProvider,
 			final Function<RowData, Comparable> sortFunction) {
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		GridViewerHelper.configureLookAndFeel(column);
